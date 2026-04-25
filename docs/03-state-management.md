@@ -284,7 +284,127 @@ Forms are owned by the component that renders them, using typed Reactive Forms.
 
 - Do not lift form state into a store unless the form spans multiple routes (e.g., a multi-step enrollment wizard — then a route-scoped store holds the partial draft).
 - Form values may flow into a store on submit (`store.enroll(this.form.getRawValue())`), not during editing.
-- Long-running drafts (exam answers) are auto-saved by the store to the server at a debounced interval. The form remains the source of truth for the current edit; the store holds the server's last-acknowledged state.
+- Long-running drafts (exam answers) are auto-saved by the store to the server at a debounced interval. The form remains the source of truth for the current edit; the store holds the server's last-acknowledged state. For exam answers specifically, drafts are *also* persisted to IndexedDB to survive disconnections — see §11.1.
+
+### 11.1 Exam Answer Drafts (Offline-First with IndexedDB)
+
+Exam sessions are the one place in the app where we explicitly engineer for **temporary disconnection**. The acceptance scenario is **~60 seconds of internet loss** mid-exam: the learner must continue answering, and answers must reliably reach the backend once connectivity returns.
+
+**Pattern (route-scoped `ExamSessionStore`):**
+
+```ts
+// src/app/features/assessments/data-access/exam-session.store.ts
+@Injectable() // route-scoped — provided in the exam route's `providers`
+export class ExamSessionStore {
+  private readonly api = inject(ExamsApi);
+  private readonly draftDb = inject(ExamDraftStore); // IndexedDB wrapper (see below)
+  private readonly online = inject(NetworkStatusService).online; // signal<boolean>
+
+  // --- state ---
+  private readonly _sessionId   = signal<string | null>(null);
+  private readonly _answers     = signal<Record<string, AnswerValue>>({});
+  private readonly _pendingOps  = signal<AnswerOp[]>([]); // queued sync operations
+  private readonly _syncStatus  = signal<'idle' | 'syncing' | 'synced' | 'queued' | 'error'>('idle');
+
+  readonly answers     = this._answers.asReadonly();
+  readonly syncStatus  = this._syncStatus.asReadonly();
+  readonly hasPending  = computed(() => this._pendingOps().length > 0);
+
+  // --- actions ---
+  async setAnswer(questionId: string, value: AnswerValue): Promise<void> {
+    // 1) Update local signal immediately — UI never blocks on the network.
+    this._answers.update(a => ({ ...a, [questionId]: value }));
+
+    // 2) Persist to IndexedDB (debounced upstream by the form).
+    await this.draftDb.put(this._sessionId()!, questionId, value);
+
+    // 3) Enqueue a sync op with a monotonic clientSeq for ordering.
+    const op: AnswerOp = {
+      sessionId:  this._sessionId()!,
+      questionId,
+      value,
+      clientSeq:  Date.now(),       // monotonic-ish; backend tie-breaks per session
+      attempts:   0,
+    };
+    this._pendingOps.update(q => [...q, op]);
+    void this.flushQueue();
+  }
+
+  // Sync the queue to the backend; safe to call repeatedly.
+  private async flushQueue(): Promise<void> {
+    if (!this.online() || this._syncStatus() === 'syncing') {
+      this._syncStatus.set('queued');
+      return;
+    }
+    this._syncStatus.set('syncing');
+    try {
+      while (this._pendingOps().length > 0 && this.online()) {
+        const [head, ...rest] = this._pendingOps();
+        await this.api.upsertAnswer(head); // idempotent: backend keys on (sessionId, questionId, clientSeq)
+        this._pendingOps.set(rest);
+        await this.draftDb.markSynced(head.sessionId, head.questionId, head.clientSeq);
+      }
+      this._syncStatus.set(this._pendingOps().length === 0 ? 'synced' : 'queued');
+    } catch {
+      this._syncStatus.set('error');
+      // Retries are driven by the online effect below + retryInterceptor.
+    }
+  }
+
+  // Reactive: when network comes back, flush immediately.
+  constructor() {
+    effect(() => {
+      if (this.online() && this.hasPending()) void this.flushQueue();
+    });
+  }
+
+  // Resume an in-progress session (e.g., the learner reloads the tab).
+  async resume(sessionId: string): Promise<void> {
+    this._sessionId.set(sessionId);
+
+    // 1) Load the server-acknowledged state of record.
+    const server = await this.api.getSession(sessionId);
+
+    // 2) Load any locally-queued ops that haven't been acknowledged.
+    const localPending = await this.draftDb.loadPending(sessionId);
+
+    // 3) Merge: server is the baseline, local pending overrides per-question.
+    const merged = { ...server.answers };
+    for (const op of localPending) merged[op.questionId] = op.value;
+
+    this._answers.set(merged);
+    this._pendingOps.set(localPending);
+    void this.flushQueue();
+  }
+}
+```
+
+**`ExamDraftStore` — thin IndexedDB wrapper (`core/storage/exam-draft.store.ts`):**
+
+- Object store keyed on `[sessionId, questionId, clientSeq]`.
+- Stores the answer payload, `clientSeq`, and a `synced: boolean` flag.
+- `put()` writes a new pending row; `markSynced()` flips the flag (or deletes the row).
+- `loadPending(sessionId)` returns rows where `synced === false`, ordered by `clientSeq`.
+- Wrapped behind a small interface so it can be mocked or swapped for in-memory in tests.
+- Optional **client-side encryption** for high-stakes exams: payloads are encrypted with `crypto.subtle.encrypt` (AES-GCM) using a per-session key derived from a server-issued nonce. The local DB never holds plaintext answers when this mode is active. Decryption is lazy — only when the store needs to render or sync. See [04 — API Integration §6.2 Heartbeat & §6.3 Offline-First Exam Answers](./04-api-integration-data-flow.md#62-heartbeat-30-seconds) and [06 — Performance, Security & Accessibility §2.7](./06-performance-security-accessibility.md#27-sensitive-data-handling).
+
+**Conflict-resolution rules (frontend perspective):**
+
+- The **backend is authoritative** for what the official answer is. The frontend's job is only to deliver each `(questionId, clientSeq)` reliably and in order per session.
+- Per question, the highest accepted `clientSeq` wins on the server. The frontend never deletes a pending op without an explicit server acknowledgement.
+- On submit, the frontend blocks the "Submit exam" button until `pendingOps.length === 0` **and** `syncStatus === 'synced'`. If the learner is still offline at deadline, the auto-submit (server-driven) takes over and any final queued ops are accepted up to the server-side cutoff.
+- The exam timer is **never** stored or computed locally — it's read from the server's WebSocket tick (see [04 §6.1](./04-api-integration-data-flow.md#61-connection--auth)) so a learner with a manipulated clock cannot extend the exam.
+
+**Why IndexedDB and not `localStorage`:**
+
+- `localStorage` is synchronous (blocks the main thread), small (~5 MB), and a known XSS exfiltration target — banned for tokens (see §13).
+- IndexedDB is asynchronous, large enough for any plausible exam payload, structured (we can index by `sessionId`), and visible to the same origin only.
+- Optional encryption further reduces the value of the local data to an attacker.
+
+**Lifecycle:**
+
+- Drafts for a session are deleted from IndexedDB when the server confirms final submission (`POST /exams/{id}/submit` returns OK).
+- A maintenance pass (on next exam open) prunes any IndexedDB rows older than 7 days that are not associated with an active session — defensive cleanup if a previous tab crashed.
 
 ---
 

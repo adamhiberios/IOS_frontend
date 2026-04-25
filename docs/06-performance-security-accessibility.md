@@ -8,16 +8,23 @@ The SOW commits the LMS to ≤ 3 s page load, 99.9% uptime, WCAG 2.1 AA, and OWA
 
 ### 1.1 Targets
 
+The SOW §8 commitment is **≤ 3 s page load**. We interpret "page load" precisely as **initial loading** — the time from navigation start until the page is meaningfully usable — and we measure it via two industry-standard signals: **First Contentful Paint (FCP)** and **Largest Contentful Paint (LCP)**. Interaction responsiveness (INP) and layout stability (CLS) are tracked separately as quality signals and are not part of the contractual figure.
+
 Baseline (from SOW §8):
 
-- **First load** (cold, median mobile over 4G): **≤ 3 s**.
+- **Initial load — FCP** (cold, median mid-range mobile over 4G): **≤ 1.8 s**.
+- **Initial load — LCP** (cold, median mid-range mobile over 4G): **≤ 2.5 s**.
+- **End-to-end "first usable page"**: **≤ 3 s**, encompassing FCP + LCP + the first idle frame.
 - **Uptime**: **99.9%** (achieved at infra/CDN layer — frontend contributes by being cache-friendly and resilient).
+
+The two architectural pillars that make these numbers achievable are **lazy loading** and **code splitting** (see §1.3). Without them, an Angular app of this scope cannot meet a 3-second budget on 4G. With them, the initial download is a small shell plus only the code for the route the user actually opened.
 
 Stretch goals (internal targets, not contractual):
 
 | Metric                          | Target      | Notes                                                |
 | ------------------------------- | ----------- | ---------------------------------------------------- |
-| LCP (Largest Contentful Paint)  | ≤ 2.5 s     | Google "Good" threshold                              |
+| FCP (First Contentful Paint)    | ≤ 1.8 s     | Initial loading floor                                |
+| LCP (Largest Contentful Paint)  | ≤ 2.5 s     | Google "Good" threshold; main contractual metric     |
 | INP (Interaction to Next Paint) | ≤ 200 ms    | Replaces FID; measured on real interactions          |
 | CLS (Cumulative Layout Shift)   | ≤ 0.1       | Layout stability                                     |
 | TTFB                            | ≤ 600 ms    | CDN-served static assets                             |
@@ -37,14 +44,17 @@ Stretch goals (internal targets, not contractual):
 
 A PR that breaks these budgets does not merge.
 
-### 1.3 Loading Strategy
+### 1.3 Loading Strategy (Lazy Loading + Code Splitting)
 
-- **Lazy routes** for every feature. Initial shell is only: app root, auth, router, core interceptors, layout skeleton.
-- **Route-level code splitting** is automatic via `loadComponent` / `loadChildren`.
-- **`@defer`** for heavy, below-the-fold content: charts, rich-text editors, video players, file pickers. Use `@placeholder` and `@loading` blocks with skeletons.
-- **Preloading**: `withPreloading(PreloadAllModules)` in production builds — preload after shell is idle.
-- **Image optimization**: `<img>` tags always carry `loading="lazy"` (unless above the fold), `decoding="async"`, and explicit `width`/`height` (prevents CLS). Use WebP/AVIF from the CDN; keep a PNG/JPEG fallback only if the CDN can't negotiate.
-- **Fonts**: self-hosted (not Google Fonts) with `font-display: swap`. Preload the primary weight in `index.html`. Subset Arabic separately.
+Lazy loading and code splitting are the two techniques that let us hit the **≤ 3 s FCP/LCP** target on 4G. They are non-negotiable architectural decisions, not optimisations applied after the fact.
+
+- **Lazy routes** for every feature. The initial shell is only: app root, auth, router, core interceptors, and the layout skeleton. Course catalogue, exam engine, certifications, admin panels, dashboards, and reporting are all loaded on demand.
+- **Route-level code splitting** is automatic via `loadComponent` / `loadChildren`. Each lazy route emits its own chunk; chunk filenames are content-hashed so they are immutable and safely long-cached at the CDN.
+- **Component-level code splitting via `@defer`** for heavy, below-the-fold content: charts, rich-text editors, video players, file pickers, exam-result analytics. Use `@placeholder` and `@loading` blocks with skeletons. `@defer` triggers (`on viewport`, `on interaction`, `on idle`) are chosen per case so the deferred chunk arrives just in time.
+- **Heavy libraries are isolated** to the routes that need them. Examples: chart library only in dashboards/reports; PDF generation only in the certificate route; rich text only in the authoring route. These are imported inside lazy components, never at the app shell.
+- **Preloading**: `withPreloading(PreloadAllModules)` (or a custom strategy preloading common next-routes per role) is enabled in production. Preloading runs **after** the shell is idle so it never competes with FCP/LCP.
+- **Image optimization**: `<img>` tags always carry `loading="lazy"` (unless above the fold), `decoding="async"`, and explicit `width`/`height` (prevents CLS). Use WebP/AVIF from the CDN; keep a PNG/JPEG fallback only if the CDN can't negotiate. The hero image of the landing page is preloaded with `<link rel="preload" as="image">` to nail LCP.
+- **Fonts**: self-hosted (not Google Fonts) with `font-display: swap`. Preload the primary weight in `index.html`. Subset Arabic separately so English-locale users don't pay for the Arabic font.
 - **Critical CSS**: Tailwind's production build is already compact; no separate critical-CSS extraction is needed at this scale.
 
 ### 1.4 Runtime Performance
@@ -142,6 +152,31 @@ Frontend is not a security boundary — the backend is. But the frontend must no
 - Do not log tokens, passwords, or PII — not to console, not to error reporter.
 - Treat any field labelled "confidential" in the BRD as tainted: don't persist to cookies, localStorage, or analytics.
 - Analytics events (if added) never include freeform user input.
+
+#### 2.7.1 Browser storage policy (what may live where)
+
+| Storage                         | Allowed for                                                                  | Banned for                                          |
+| ------------------------------- | ---------------------------------------------------------------------------- | -------------------------------------------------- |
+| **In-memory (signal/service)**  | Access JWT, current user, ephemeral UI state, cached query results.          | (n/a)                                              |
+| **httpOnly Secure cookie**      | Refresh JWT, XSRF token (issued by backend).                                 | Anything readable by JS.                           |
+| **IndexedDB**                   | Exam answer drafts (see [03 §11.1](./03-state-management.md#111-exam-answer-drafts-offline-first-with-indexeddb)). Backend-authoritative; local copy is a transport buffer only. | Tokens, passwords, PII, payment data, full user profiles. |
+| **`localStorage` / `sessionStorage`** | Non-sensitive UI prefs only (e.g., last selected language, sidebar collapsed flag). | **Tokens, passwords, PII, exam answers, anything labelled confidential.** |
+
+#### 2.7.2 Exam answers in IndexedDB (offline buffer)
+
+Exam answers are persisted to IndexedDB so a learner survives a short disconnection (the standing **~60 s** acceptance scenario, [04 §6.4](./04-api-integration-data-flow.md#64-disconnection-test-scenario-60-seconds)). This is **not** a relaxation of the no-PII-in-storage rule — it is a deliberate, scoped exception with the following safeguards:
+
+- **Backend-authoritative grading.** IndexedDB only holds *pending* answers awaiting sync. The server is the single source of truth for what was answered, when, and how it scores. The frontend never reads a "graded" value out of IndexedDB.
+- **Origin-bound.** IndexedDB is same-origin only. The CSP `frame-ancestors 'none'` prevents the LMS being framed by another origin to peek at storage.
+- **No tokens stored alongside.** The IndexedDB schema has only `{ sessionId, questionId, value, clientSeq, synced }`. No JWT, no user object, no email.
+- **Lifecycle-bound.** Drafts are deleted on confirmed final submit, and a defensive sweep prunes anything older than 7 days.
+- **Optional client-side encryption** for high-stakes exams. When the exam config flag `encryptDrafts: true` is set:
+  - On exam start, the server issues a per-session symmetric key (AES-GCM 256-bit) wrapped to the user's session.
+  - The frontend imports the key into the Web Crypto API (`crypto.subtle.importKey`); the raw key bytes never enter a JS variable that lives beyond the session, and never enter `localStorage` or memory dumps written elsewhere.
+  - Each `value` is encrypted before `IndexedDB.put` and decrypted lazily on read or sync.
+  - The key is discarded on submit / logout / route exit (`crypto.subtle` keys are non-extractable; we drop the reference).
+  - Encryption is a **defence-in-depth** measure, not a primary control. The primary controls remain: backend authority, origin isolation, no token co-location, and lifecycle pruning.
+- **Threat-model note.** This pattern raises the cost of two specific attacks: (a) a malicious browser extension scraping IndexedDB on a shared device after the learner walks away, and (b) forensic recovery of disk artefacts. It does not protect against an attacker who has compromised the running page's JS context (XSS) — only OWASP-Top-10 hygiene and CSP do.
 
 ### 2.8 Clickjacking
 
@@ -255,6 +290,7 @@ The bar, per SOW §8, is WCAG 2.1 AA. Practically, we go a step further on perce
 - A root-level `ErrorHandler` logs uncaught exceptions and shows a graceful fallback rather than a blank page.
 - On asset-load failure (chunk hash mismatch after a deploy), the app detects the error (`Failed to fetch dynamically imported module`) and prompts a page reload.
 - WebSocket disconnects are expected and surfaced via a subtle connection indicator; data polling fallback keeps the user productive.
+- **Exam sessions specifically** are engineered to survive short disconnections: answers are queued in IndexedDB, a 30-second heartbeat detects stalled sockets, and the **~60 s disconnection scenario** ([04 §6.4](./04-api-integration-data-flow.md#64-disconnection-test-scenario-60-seconds)) is a standing acceptance test.
 
 ---
 
@@ -265,17 +301,27 @@ Before any milestone acceptance, these must all be green:
 **Performance**
 
 - [ ] Bundle budgets respected.
-- [ ] LCP ≤ 2.5 s on a throttled mid-range mobile.
+- [ ] FCP ≤ 1.8 s and LCP ≤ 2.5 s on a throttled mid-range mobile (4G).
 - [ ] No layout shift on initial render (CLS ≤ 0.1).
 - [ ] Lazy routes load in ≤ 500 ms on mid-range mobile.
+- [ ] No new heavy library imported into the app shell — heavy code lives behind `loadComponent`/`loadChildren`/`@defer`.
 
 **Security**
 
 - [ ] CSP enforced in PROD.
 - [ ] No `bypassSecurityTrust*` usage without ADR.
 - [ ] No tokens in `localStorage`.
+- [ ] IndexedDB usage limited to exam answer drafts per §2.7.1; no PII or tokens stored there.
+- [ ] If `encryptDrafts: true` is enabled for the release scope, encryption-key handling reviewed by an architect.
 - [ ] `npm audit` clean for high/critical.
 - [ ] HTTPS enforced; HSTS active.
+
+**Exam engine**
+
+- [ ] 30-second heartbeat verified active during exam session.
+- [ ] ~60-second disconnection scenario passes end-to-end ([04 §6.4](./04-api-integration-data-flow.md#64-disconnection-test-scenario-60-seconds)).
+- [ ] Submit blocked while `pendingOps.length > 0`.
+- [ ] On confirmed submit, IndexedDB drafts for that session are deleted.
 
 **Accessibility**
 

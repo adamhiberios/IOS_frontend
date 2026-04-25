@@ -87,11 +87,15 @@ The LMS hosts high-stakes assessments (mock exams, certification exams). The fro
 - Real-time proctoring signals (e.g., tab-switch detection) sent to the backend over a secure live channel.
 - Server-authoritative scoring — the frontend only displays results; it never calculates them.
 - Automatic submission when time expires, with no way for the learner to bypass it client-side.
+- **Offline-friendly exam taking.** As the learner answers each question, their answers are saved on their own device first. If the internet drops mid-exam, the learner can keep going without losing work. As soon as the connection returns, the saved answers automatically sync to the server.
+- **Locked-down local storage.** Answers held on the device are stored in a protected area of the browser that is not easily accessible or editable by the learner. We can additionally encrypt the answers on the device for higher-stakes exams. Either way, the **backend remains the single source of truth** for what counts — local storage exists only to keep the experience smooth, not to decide grades.
+- **Invisible health check.** While an exam is in progress, the app sends a small, lightweight signal to the server every 30 seconds confirming the session is alive. This runs silently in the background and does not slow the user interface.
 
 ### 4.5 Protecting the system (resilience & recovery)
 
 - **99.9% uptime target** per SOW §8. Achieved through CDN distribution (so assets are served near the user), graceful handling of network failures, and automatic retry of transient errors.
 - **Graceful degradation** — if a live channel (e.g., notifications) is temporarily unavailable, the system falls back to regular polling so the user experience is not blocked.
+- **Disconnection-tolerant exams.** The exam screen is designed to survive short internet drops. Our acceptance test scenario is a **~60-second loss of connectivity** mid-exam: the learner continues answering questions normally; once the connection returns the queued answers are sent to the server in order, a friendly "back online" indicator confirms sync, and the exam timer (which lives on the server) is honoured exactly. No work is lost and no double-submissions are possible.
 - **Error transparency** — when something does fail, the user sees a clear message (not a blank page) and a retry option; the technical details are sent to the monitoring system for our team to investigate.
 
 ### 4.6 Protecting the code supply chain
@@ -137,13 +141,20 @@ These are the measurable commitments our frontend work is held against:
 
 | Commitment                                          | Target          | Source                 |
 | --------------------------------------------------- | --------------- | ---------------------- |
-| Page load time (median, mobile on 4G)               | ≤ 3 seconds    | SOW §8                 |
+| **Initial page load** (the time until a learner first sees the page and its main content — measured on a median mid-range mobile on 4G) | **≤ 3 seconds** | SOW §8                 |
 | System uptime                                       | ≥ 99.9%        | SOW §8                 |
 | Concurrent users supported                          | ≥ 1,000        | SOW §6.2.16            |
 | Accessibility level                                 | WCAG 2.1 AA    | SOW §8                 |
 | Browser coverage                                    | Latest 2 versions of Chrome, Edge, Safari, Firefox, plus mobile Safari and Chrome | Agreed |
 | Critical/high-severity defect turnaround (warranty) | ≤ 48 hours     | SOW §13                |
 | Warranty period                                     | 180 days post-launch | SOW §13           |
+
+**How we hit the ≤ 3 s target.** The 3-second commitment refers to **initial loading** — specifically two industry-standard signals: First Contentful Paint (the moment something useful appears on screen) and Largest Contentful Paint (the moment the main page content has rendered). We achieve this through two well-established techniques:
+
+- **Lazy loading** — only the screen the learner is actually visiting is downloaded; other parts of the app are fetched on demand when they're needed.
+- **Code splitting** — the application is automatically broken into small pieces during the build so the browser never has to download more than it needs for the current screen.
+
+Combined, these mean a learner opening the course catalogue does not pay the cost of downloading the exam engine, the admin panels, or the analytics dashboards.
 
 ---
 
@@ -213,10 +224,11 @@ The technical team and Institute of Scrum have aligned on the following foundati
 | Application structure | Single web application, organized by feature                                     |
 | Languages             | English and Arabic, with full right-to-left support                              |
 | Authentication        | Industry-standard JWT tokens with short expiry and secure refresh                |
-| Live updates          | Secure WebSocket channels for notifications and exam events                      |
+| Live updates          | Secure WebSocket channels for notifications and exam events; an invisible 30-second heartbeat keeps the exam channel honest |
+| Exam continuity       | Answers saved on-device first (in a protected, browser-managed area) and auto-synced when the connection returns; backend remains the source of truth for grading; optional encryption available for high-stakes exams |
 | Accessibility         | WCAG 2.1 Level AA                                                                |
 | Browsers              | Latest two versions of Chrome, Edge, Safari, Firefox, plus mobile Safari/Chrome  |
-| Performance           | Under 3 seconds page load, 99.9% uptime                                          |
+| Performance           | Initial page load under 3 seconds (FCP/LCP), achieved via lazy loading and code splitting; 99.9% uptime |
 | Environments          | Four environments: Development, Test, UAT, and Production                        |
 
 ---

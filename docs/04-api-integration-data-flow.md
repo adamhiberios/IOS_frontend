@@ -321,13 +321,145 @@ export class NotificationsWs {
 }
 ```
 
-### 6.2 Rules
+### 6.2 Heartbeat (30 seconds)
+
+Long-lived sockets — particularly the **exam session** channel — emit a lightweight heartbeat every **30 seconds** so the backend can detect silent peer drops, and so the frontend can detect a stalled socket faster than TCP timeouts will.
+
+```ts
+// src/app/features/assessments/data-access/exam-session.ws.ts
+@Injectable() // route-scoped to the exam session route
+export class ExamSessionWs {
+  private readonly auth = inject(AuthStore);
+
+  private socket$ = webSocket<ExamServerEvent | ExamClientEvent>({
+    url: `${environment.wsBaseUrl}/exams/${this.sessionId}?token=${encodeURIComponent(this.auth.accessToken() ?? '')}`,
+    openObserver:  { next: () => this.connection.set('open') },
+    closeObserver: { next: () => this.connection.set('closed') },
+  });
+
+  readonly connection = signal<'idle' | 'open' | 'closed' | 'reconnecting'>('idle');
+  readonly serverTick = signal<ExamTick | null>(null);
+
+  private heartbeatSub?: Subscription;
+  private lastPongAt = 0;
+
+  start(): void {
+    // Inbound: server events.
+    this.socket$.pipe(
+      retry({
+        count: Infinity,
+        delay: (err, attempt) => {
+          this.connection.set('reconnecting');
+          return timer(Math.min(30_000, 1_000 * 2 ** attempt));
+        },
+      }),
+      takeUntilDestroyed(),
+    ).subscribe(evt => this.handleEvent(evt));
+
+    // Outbound: heartbeat every 30s while open.
+    this.heartbeatSub = interval(30_000).pipe(
+      filter(() => this.connection() === 'open'),
+    ).subscribe(() => {
+      this.socket$.next({ type: 'ping', sentAt: Date.now() } as ExamClientEvent);
+      // If we don't see a pong within 2 heartbeat windows, consider the socket dead and force reconnect.
+      if (this.lastPongAt && Date.now() - this.lastPongAt > 70_000) {
+        this.socket$.error(new Error('heartbeat-timeout'));
+      }
+    });
+  }
+
+  private handleEvent(evt: ExamServerEvent): void {
+    switch (evt.type) {
+      case 'pong':         this.lastPongAt = Date.now(); return;
+      case 'tick':         this.serverTick.set(evt);     return;
+      case 'auto-submit':  /* navigate to results */     return;
+      // ...
+    }
+  }
+}
+```
+
+**Properties of the heartbeat:**
+
+- **Lightweight payload** — `{ type: 'ping', sentAt: <ms> }`. No PII, no auth re-send (the socket is already authenticated for its lifetime).
+- **30-second cadence** — chosen to comfortably absorb the **~60 s disconnection scenario** (see §6.4) while still detecting stalls quickly enough for proctoring purposes.
+- **Driven by `rxjs/interval`** with `filter(() => connection === 'open')` so it never queues sends while disconnected.
+- **Does not block UI rendering** — the heartbeat is a single small message dispatched off the change-detection cycle.
+- **One missed pong is normal; two consecutive misses force a reconnect.** This avoids spurious reconnects on a transient hiccup but still recovers quickly from a real stall.
+
+### 6.3 Offline-First Exam Answers (IndexedDB sync queue)
+
+Exam answers must reach the server reliably *even when* the network drops mid-question. The architecture pairs a route-scoped `ExamSessionStore` (signals, see [03 §11.1](./03-state-management.md#111-exam-answer-drafts-offline-first-with-indexeddb)) with **IndexedDB** as the durable local buffer.
+
+```
+[ Question UI ]
+      │  user answers
+      ▼
+[ ExamSessionStore.setAnswer ]  ──►  signals.update()  (UI feedback: instant)
+      │
+      ├──►  IndexedDB.put({ sessionId, questionId, value, clientSeq, synced: false })
+      │
+      └──►  pendingOps.push(op) → flushQueue()
+                     │
+                     │ navigator.onLine === false?
+                     │      └─► status='queued'; do nothing; await reconnect
+                     │
+                     │ online?
+                     ▼
+            POST /exams/{id}/answers  (idempotent on { sessionId, questionId, clientSeq })
+                     │
+                     ├─► 2xx → IndexedDB.markSynced(...) + pendingOps.shift()
+                     │
+                     ├─► 5xx / network → leave op in queue; retryInterceptor handles backoff
+                     │
+                     └─► 409 (server has higher clientSeq) → drop op; refresh from server
+```
+
+**Idempotency contract with the backend:**
+
+- `POST /exams/{sessionId}/answers` with body `{ questionId, value, clientSeq }`.
+- Server stores the answer keyed on `(sessionId, questionId)` and accepts the write iff `clientSeq` is greater than any previously accepted `clientSeq` for that pair.
+- Replays of the same `clientSeq` are safe — the server returns the canonical state without re-writing.
+- On submit, the server reads only its own state of record. The frontend's queue is purely a transport buffer.
+
+**Reconnect flow:**
+
+1. `NetworkStatusService` flips `online` signal `false → true` (driven by `window.online`/`offline` events plus a low-cost `HEAD /health` probe to defeat captive portals).
+2. `effect()` in `ExamSessionStore` sees the change and calls `flushQueue()`.
+3. The queue drains in `clientSeq` order; each accepted op is removed and its IndexedDB row marked `synced`.
+4. The UI's connection indicator transitions: `offline` → `syncing` → `synced`. The submit button stays disabled until `pendingOps.length === 0 && syncStatus === 'synced'`.
+
+**What the frontend never does:**
+
+- It never decides whether an answer "counts" — only the backend grades.
+- It never deletes a pending op without a 2xx server acknowledgement.
+- It never retries non-idempotent calls automatically; only the answer endpoint (idempotent by design) is auto-retried.
+- It never holds tokens or grading data in IndexedDB. IndexedDB is **only** used for exam draft answers and (optionally) encrypted, per [06 §2.7](./06-performance-security-accessibility.md#27-sensitive-data-handling).
+
+### 6.4 Disconnection Test Scenario (~60 seconds)
+
+This is the standing acceptance scenario for the exam engine. It must pass for any release that touches `features/assessments/`.
+
+| Step | Action                                                                                           | Expected behaviour                                                                                                                                                |
+| ---- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Learner is mid-exam, has answered Q1–Q3, currently on Q4. Connection is live.                    | `connection = open`, heartbeat every 30 s, `pendingOps = []`, `syncStatus = 'synced'`.                                                                            |
+| 2    | Tester forces network offline (DevTools → Offline) for **~60 seconds**.                          | UI shows a discreet "offline — your answers are saved locally" indicator. Heartbeat is suppressed (no socket). Timer continues showing the last server tick.       |
+| 3    | Learner answers Q4 and Q5 while offline.                                                         | Both answers visible in UI immediately. Both written to IndexedDB. `pendingOps.length === 2`. No spinner blocking the user.                                       |
+| 4    | Tester restores network.                                                                         | Within ~5 s, socket reconnects (`reconnecting → open`). Heartbeat resumes. `flushQueue()` runs; Q4 then Q5 POST in order; each succeeds with 2xx.                  |
+| 5    | After flush.                                                                                      | `pendingOps = []`, `syncStatus = 'synced'`, indicator transitions to "back online — answers synced". Server-side state reflects Q4 and Q5 with correct `clientSeq`. |
+| 6    | Learner submits exam.                                                                            | Submit button enabled (queue empty, status synced). Submit succeeds; results page renders.                                                                        |
+| 7    | Edge case: learner reloads the tab while offline.                                                | On resume, `ExamSessionStore.resume(sessionId)` loads server baseline + IndexedDB pending. The merged answers reappear in the form. When network returns, sync completes as in step 4. |
+
+If any of these steps fails, the change ships with a regression and must be fixed before merge.
+
+### 6.5 Notifications & Other Channels — Rules
 
 - WebSockets connect only for **authenticated** users. Auth token is passed in the URL query on connect (alternative: first message sends a `{ type: 'auth', token }` frame — backend-dependent).
 - Exponential backoff reconnect, capped at 30 s.
 - On logout, all open sockets are closed explicitly.
 - WS payloads are typed as discriminated unions per channel; unknown event types are logged but do not crash the app.
 - If WS is not available (corporate proxy), fall back to **polling** for notifications every 60 s (`http.get('/notifications?since=...')`). The feature store abstracts over both sources so consumers don't care which is active.
+- The 30-second exam heartbeat (§6.2) does **not** apply to the notifications channel — notifications rely on the standard reconnect-on-error pattern only.
 
 ---
 
