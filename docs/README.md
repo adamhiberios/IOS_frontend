@@ -19,6 +19,10 @@ This directory contains the **frontend engineering foundation** for the Institut
 | 04  | [API Integration & Data Flow](./04-api-integration-data-flow.md)         | Engineering       | HttpClient, interceptors, DTO mapping, WebSockets, error handling.      |
 | 05  | [Engineering Guidelines](./05-engineering-guidelines.md)                 | Engineering       | Coding standards, naming, Git workflow, code review, and PR checklist.  |
 | 06  | [Performance, Security & Accessibility](./06-performance-security-accessibility.md) | Engineering       | Budgets, WCAG 2.1 AA, OWASP Top-10 posture, RTL/i18n, Core Web Vitals.  |
+| 08  | [Authentication & Authorization](./08-authentication-authorization.md)   | Engineering       | JWT model, refresh-race handling, RBAC matrix, idle timeout, threat model. |
+| 09  | [Exam Engine Architecture](./09-exam-engine.md)                          | Engineering       | Lifecycle, IndexedDB schema, 30-second heartbeat, sync queue, optional encryption, 60-second disconnection scenario. |
+
+> Document 07 is reserved for the Figma design review (in progress). Numbering is preserved so authentication and the exam engine keep their own dedicated slots.
 
 ---
 
@@ -31,12 +35,13 @@ This directory contains the **frontend engineering foundation** for the Institut
 | State management        | **Signals + injectable services** (no NgRx)                                                    |
 | Project structure       | **Single Angular app**, **feature-based** folders                                              |
 | Internationalization    | **English + Arabic** with **full RTL** support from day one                                    |
-| Authentication          | **JWT** (access + refresh) with **RBAC** enforced via guards/directives                        |
+| Authentication          | **JWT** (access in-memory + refresh in httpOnly cookie) with **RBAC** enforced via guards/directives — see [08](./08-authentication-authorization.md) |
 | API integration         | **Hybrid**: REST for CRUD, **WebSockets** for real-time (notifications, exam proctoring)       |
+| Exam continuity         | **Offline-first** answers in IndexedDB, **30-second** WS heartbeat, idempotent sync queue, optional AES-GCM encryption — see [09](./09-exam-engine.md) |
 | Testing                 | **Deferred** (noted as contractual follow-up risk — SOW §6.2.14)                               |
 | Accessibility           | **WCAG 2.1 AA**                                                                                |
 | Browser support         | Latest **2 versions** of Chrome, Edge, Safari, Firefox, plus **mobile** Chrome/Safari          |
-| Performance target      | **≤ 3 s** page load, **99.9 %** uptime (SOW §8)                                                |
+| Performance target      | **Initial load (FCP/LCP) ≤ 3 s** via lazy loading + code splitting, **99.9 %** uptime (SOW §8) |
 | Environments            | **DEV / TEST / UAT / PROD** with CDN and feature flags                                         |
 
 ---
@@ -44,8 +49,10 @@ This directory contains the **frontend engineering foundation** for the Institut
 ## How to Use This Documentation
 
 1. **Before writing any code**, read documents 01–06 in order. They build on each other.
-2. Every PR must comply with the rules in [Engineering Guidelines](./05-engineering-guidelines.md) and the checklist in [Performance, Security & Accessibility](./06-performance-security-accessibility.md).
-3. Proposed deviations from these documents must be submitted as a Change Request (per SOW §16) and, if approved, reflected here via PR.
+2. For auth-touching work, read [08 — Authentication & Authorization](./08-authentication-authorization.md) before opening a PR.
+3. For exam-engine work, read [09 — Exam Engine Architecture](./09-exam-engine.md) — it is the single source of truth.
+4. Every PR must comply with the rules in [Engineering Guidelines](./05-engineering-guidelines.md) and the checklist in [Performance, Security & Accessibility](./06-performance-security-accessibility.md).
+5. Proposed deviations from these documents must be submitted as a Change Request (per SOW §16) and, if approved, reflected here via PR.
 
 ---
 

@@ -288,6 +288,8 @@ Forms are owned by the component that renders them, using typed Reactive Forms.
 
 ### 11.1 Exam Answer Drafts (Offline-First with IndexedDB)
 
+> **Full architecture in [09 — Exam Engine](./09-exam-engine.md).** This subsection presents the state-management view (signals, store pattern, signal lifecycles); the lifecycle, IndexedDB schema, encryption, and disconnection scenario are consolidated in 09.
+
 Exam sessions are the one place in the app where we explicitly engineer for **temporary disconnection**. The acceptance scenario is **~60 seconds of internet loss** mid-exam: the learner must continue answering, and answers must reliably reach the backend once connectivity returns.
 
 **Pattern (route-scoped `ExamSessionStore`):**

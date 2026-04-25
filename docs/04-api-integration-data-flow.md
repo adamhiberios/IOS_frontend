@@ -228,7 +228,9 @@ Errors propagate back up the same path. The interceptor decorates the error with
 
 ## 5. Authentication Flow
 
-The LMS uses **JWT access tokens** (short-lived, ~15 min) + **refresh tokens** (long-lived, rotating) with **RBAC** (roles: `learner`, `instructor`, `admin`).
+> **Single source of truth:** [08 — Authentication & Authorization](./08-authentication-authorization.md). This section gives the API-layer view (interceptor wiring, refresh-race handling); the full token model, RBAC matrix, threat model, and operational rules live in 08.
+
+The LMS uses **JWT access tokens** (short-lived, ~15 min) + **refresh tokens** (long-lived, rotating) with **RBAC** (roles: `learner`, `instructor`, `admin`, `support`).
 
 ### 5.1 Token storage
 
@@ -288,6 +290,8 @@ An `IdleService` in `core/` tracks user activity. After N minutes of inactivity:
 ---
 
 ## 6. Real-Time (WebSockets)
+
+> **Exam-engine specifics (heartbeat, sync queue, disconnection scenario) are consolidated in [09 — Exam Engine Architecture](./09-exam-engine.md).** This section covers the API-layer mechanics; 09 is the single source of truth for end-to-end exam behaviour.
 
 Used for features where polling would be wasteful:
 

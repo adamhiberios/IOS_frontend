@@ -103,6 +103,8 @@ Frontend is not a security boundary — the backend is. But the frontend must no
 
 ### 2.2 Authentication & Session (see also [04 §5](./04-api-integration-data-flow.md#5-authentication-flow))
 
+> Full architecture in [08 — Authentication & Authorization](./08-authentication-authorization.md). This subsection records the OWASP-aligned security posture; the token model, refresh-race handling, RBAC matrix, and threat model live in 08.
+
 - Access token: **in-memory signal** only. Never `localStorage` / `sessionStorage`.
 - Refresh token: **httpOnly, Secure, SameSite=Strict** cookie, issued by backend.
 - On logout: backend invalidates refresh token → frontend clears signal → routes to `/auth/login`.
@@ -164,7 +166,9 @@ Frontend is not a security boundary — the backend is. But the frontend must no
 
 #### 2.7.2 Exam answers in IndexedDB (offline buffer)
 
-Exam answers are persisted to IndexedDB so a learner survives a short disconnection (the standing **~60 s** acceptance scenario, [04 §6.4](./04-api-integration-data-flow.md#64-disconnection-test-scenario-60-seconds)). This is **not** a relaxation of the no-PII-in-storage rule — it is a deliberate, scoped exception with the following safeguards:
+> Full architecture in [09 — Exam Engine](./09-exam-engine.md). This subsection records the *security posture*; design and lifecycle live in 09.
+
+Exam answers are persisted to IndexedDB so a learner survives a short disconnection (the standing **~60 s** acceptance scenario, [09 §8](./09-exam-engine.md#8-the-60-second-disconnection-acceptance-scenario)). This is **not** a relaxation of the no-PII-in-storage rule — it is a deliberate, scoped exception with the following safeguards:
 
 - **Backend-authoritative grading.** IndexedDB only holds *pending* answers awaiting sync. The server is the single source of truth for what was answered, when, and how it scores. The frontend never reads a "graded" value out of IndexedDB.
 - **Origin-bound.** IndexedDB is same-origin only. The CSP `frame-ancestors 'none'` prevents the LMS being framed by another origin to peek at storage.
