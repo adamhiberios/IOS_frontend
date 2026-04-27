@@ -1,0 +1,18 @@
+{
+  "printWidth": 100,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "arrowParens": "always",
+  "semi": true,
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": { "parser": "angular" }
+    },
+    {
+      "files": ["*.md", "*.mdx"],
+      "options": { "proseWrap": "preserve" }
+    }
+  ]
+}

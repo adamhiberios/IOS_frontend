@@ -1,0 +1,24 @@
+<!doctype html>
+<!--
+  lang and dir are placeholders. The DirectionService in core/i18n flips both at
+  runtime when the user toggles language. Tailwind v4 logical utilities
+  (ms-*, me-*, ps-*, pe-*, text-start, text-end, border-s, border-e, start-*, end-*)
+  and the rtl:/ltr: variants resolve against the nearest [dir] ancestor — which
+  is always this <html> element.
+-->
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Institute of Scrum — LMS</title>
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Institute of Scrum (IOS) Learning Management System."
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  </head>
+  <body class="min-h-screen bg-ios-surface text-ios-fg antialiased">
+    <ios-root></ios-root>
+  </body>
+</html>

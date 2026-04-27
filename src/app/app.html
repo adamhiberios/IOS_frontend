@@ -1,0 +1,31 @@
+<!--
+  Temporary smoke screen — proves Tailwind v4 + RTL/LTR plumbing works.
+  This view is replaced once /features/auth and /layouts/app-shell land.
+-->
+<main class="mx-auto max-w-3xl ps-6 pe-6 py-12">
+  <header class="mb-8 flex items-center justify-between">
+    <h1 class="text-3xl font-semibold text-ios-fg">{{ title() }}</h1>
+    <button
+      type="button"
+      class="rounded-md bg-ios-primary-500 px-4 py-2 text-white hover:bg-ios-primary-600"
+      (click)="toggleDirection()"
+    >
+      {{ isRtl() ? 'EN (LTR)' : 'AR (RTL)' }}
+    </button>
+  </header>
+
+  <section
+    class="rounded-xl border border-ios-surface-strong bg-ios-surface-muted p-6 ms-0 me-0"
+  >
+    <p class="text-start text-ios-fg-muted">
+      Active locale: <strong>{{ locale() }}</strong> &mdash; direction:
+      <strong>{{ direction() }}</strong>
+    </p>
+    <p class="mt-3 text-start ltr:font-sans rtl:font-arabic">
+      <span class="ltr:hidden">يجب أن يبدو هذا النص بخط عربي عند تفعيل العربية.</span>
+      <span class="rtl:hidden">This sentence renders in the LTR sans-serif stack.</span>
+    </p>
+  </section>
+
+  <router-outlet />
+</main>

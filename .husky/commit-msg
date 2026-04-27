@@ -1,0 +1,5 @@
+#\!/usr/bin/env sh
+# IOS LMS — commit-msg hook
+# Enforces Conventional Commits via commitlint. See CLAUDE.md §5.
+
+npx --no-install commitlint --edit "$1"

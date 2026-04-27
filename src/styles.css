@@ -1,0 +1,114 @@
+/* ============================================================================
+ * IOS LMS — global stylesheet
+ *
+ * Tailwind v4 is configured via the CSS-first `@theme` directive below.
+ * Component-level utility classes flow through `@tailwindcss/postcss`
+ * (see /.postcssrc.json). RTL is handled via Tailwind's logical properties
+ * (ms-*, me-*, ps-*, pe-*, text-start, text-end) — never use `ml-*` / `mr-*`
+ * in templates per CLAUDE.md §3 and §9.
+ *
+ * This file is plain CSS (not SCSS) so that `@import 'tailwindcss'` is treated
+ * as a CSS import rather than a deprecated Sass @import. Component styles can
+ * still use SCSS — see `inlineStyleLanguage` in angular.json.
+ * ========================================================================== */
+
+@import 'tailwindcss';
+
+/* ----------------------------------------------------------------------------
+ * Design tokens — IOS brand palette and primitives.
+ *
+ * Keep this list small and intentional. Every new color must trace back to a
+ * design-system decision, not an ad-hoc template need. See /docs/02 for the
+ * authoritative token catalogue.
+ * -------------------------------------------------------------------------- */
+@theme {
+  /* Brand */
+  --color-ios-primary-50: oklch(0.97 0.02 250);
+  --color-ios-primary-100: oklch(0.93 0.05 250);
+  --color-ios-primary-200: oklch(0.86 0.09 250);
+  --color-ios-primary-300: oklch(0.77 0.13 250);
+  --color-ios-primary-400: oklch(0.66 0.17 250);
+  --color-ios-primary-500: oklch(0.55 0.2 250);
+  --color-ios-primary-600: oklch(0.46 0.18 250);
+  --color-ios-primary-700: oklch(0.38 0.15 250);
+  --color-ios-primary-800: oklch(0.31 0.12 250);
+  --color-ios-primary-900: oklch(0.24 0.09 250);
+  --color-ios-primary-950: oklch(0.16 0.06 250);
+
+  /* Surfaces */
+  --color-ios-surface: oklch(0.99 0.005 250);
+  --color-ios-surface-muted: oklch(0.96 0.008 250);
+  --color-ios-surface-strong: oklch(0.92 0.012 250);
+
+  /* Foreground */
+  --color-ios-fg: oklch(0.22 0.02 250);
+  --color-ios-fg-muted: oklch(0.5 0.015 250);
+
+  /* Status */
+  --color-ios-success: oklch(0.62 0.16 145);
+  --color-ios-warning: oklch(0.72 0.18 75);
+  --color-ios-danger: oklch(0.55 0.22 27);
+  --color-ios-info: oklch(0.62 0.13 220);
+
+  /* Typography */
+  --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-arabic: 'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', SFMono-Regular, Menlo, monospace;
+
+  /* Radius */
+  --radius-ios-sm: 0.25rem;
+  --radius-ios-md: 0.5rem;
+  --radius-ios-lg: 0.75rem;
+  --radius-ios-xl: 1rem;
+
+  /* Motion — kept short to respect prefers-reduced-motion users */
+  --ease-ios: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ----------------------------------------------------------------------------
+ * Base layer — element defaults.
+ * Keep this minimal. Component-level styling goes in the component itself
+ * via Tailwind utility classes; no global cascade soup.
+ * -------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-ios-surface);
+  color: var(--color-ios-fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Arabic typography when <html lang="ar"> is set (DirectionService toggles this). */
+html[lang='ar'] body {
+  font-family: var(--font-arabic);
+}
+
+/* CLAUDE.md §4: every interactive control gets a visible focus ring.
+ * Using :focus-visible avoids ringing on mouse clicks while preserving
+ * keyboard discoverability. */
+:focus-visible {
+  outline: 2px solid var(--color-ios-primary-500);
+  outline-offset: 2px;
+  border-radius: var(--radius-ios-sm);
+}
+
+/* Respect reduced-motion preference globally. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
