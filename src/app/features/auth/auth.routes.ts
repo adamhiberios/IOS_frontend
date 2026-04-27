@@ -15,6 +15,11 @@ export const AUTH_ROUTES: Routes = [
     redirectTo: 'login',
   },
   {
+    path: 'login',
+    loadComponent: () => import('./pages/login.page').then((m) => m.LoginPage),
+    title: 'Login',
+  },
+  {
     path: 'register',
     loadComponent: () => import('./pages/register.page').then((m) => m.RegisterPage),
     title: 'Create your account',
