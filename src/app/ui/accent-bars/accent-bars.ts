@@ -29,21 +29,28 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <span
-      class="absolute start-0 bg-ios-brand-yellow"
-      [style.top]="top()"
-      [style.width]="start()"
-      [style.height]="height()"
-    ></span>
-    <span
-      class="absolute end-0 bg-ios-brand-yellow"
-      [style.top]="top()"
-      [style.width]="end()"
-      [style.height]="height()"
-    ></span>
+    @if (showStart()) {
+      <span
+        class="absolute start-0 bg-ios-brand-yellow"
+        [style.top]="top()"
+        [style.width]="start()"
+        [style.height]="height()"
+      ></span>
+    }
+    @if (showEnd()) {
+      <span
+        class="absolute end-0 bg-ios-brand-yellow"
+        [style.top]="top()"
+        [style.width]="end()"
+        [style.height]="height()"
+      ></span>
+    }
   `,
 })
 export class AccentBars {
+  readonly showStart = input<boolean>(true);
+  readonly showEnd = input<boolean>(true);
+
   /** Width of the start-side bar (left in LTR, right in RTL). Any CSS length.
    * Default ≈ 2/7 of the parent (the original register-page proportion). */
   readonly start = input<string>('28.5714%');
