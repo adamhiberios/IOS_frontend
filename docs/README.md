@@ -21,6 +21,7 @@ This directory contains the **frontend engineering foundation** for the Institut
 | 06  | [Performance, Security & Accessibility](./06-performance-security-accessibility.md) | Engineering       | Budgets, WCAG 2.1 AA, OWASP Top-10 posture, RTL/i18n, Core Web Vitals.  |
 | 08  | [Authentication & Authorization](./08-authentication-authorization.md)   | Engineering       | JWT model, refresh-race handling, RBAC matrix, idle timeout, threat model. |
 | 09  | [Exam Engine Architecture](./09-exam-engine.md)                          | Engineering       | Lifecycle, IndexedDB schema, 30-second heartbeat, sync queue, optional encryption, 60-second disconnection scenario. |
+| 10  | [Application Bootstrap & Foundation](./10-app-bootstrap.md)              | Engineering       | Concrete as-built scaffold from Epic 2 — versions, layout, providers, scripts, lint rules, deferred items. |
 
 > Document 07 is reserved for the Figma design review (in progress). Numbering is preserved so authentication and the exam engine keep their own dedicated slots.
 
@@ -30,8 +31,8 @@ This directory contains the **frontend engineering foundation** for the Institut
 
 | Area                    | Decision                                                                                       |
 | ----------------------- | ---------------------------------------------------------------------------------------------- |
-| Framework               | **Angular 19** (latest stable), Standalone components, Signals, **CSR only** (no SSR)          |
-| Styling                 | **Tailwind CSS** only, with a **custom in-house component library** (no Material / PrimeNG)    |
+| Framework               | **Angular 21** (latest stable), Standalone components, Signals, zoneless change detection, **CSR only** (no SSR) |
+| Styling                 | **Tailwind CSS v4** (CSS-first `@theme`) with a **custom in-house component library** under the `ios-` prefix (no Material / PrimeNG / NG-Zorro) |
 | State management        | **Signals + injectable services** (no NgRx)                                                    |
 | Project structure       | **Single Angular app**, **feature-based** folders                                              |
 | Internationalization    | **English + Arabic** with **full RTL** support from day one                                    |

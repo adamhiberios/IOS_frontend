@@ -1,0 +1,9 @@
+dist/
+.angular/
+node_modules/
+coverage/
+package-lock.json
+.husky/_/
+
+# Generated build output.
+/public/
