@@ -1,12 +1,12 @@
 import { type Routes } from '@angular/router';
 
 /**
- * Auth feature routes — login, password reset, MFA, etc.
+ * Auth feature routes — login, register, password reset, MFA, etc.
  * Lazy-loaded from app.routes.ts; never imported directly elsewhere.
  *
- * Placeholder: concrete pages land in epic 3 (auth). For now the route
- * exists so the lazy chunk boundary is established and the guards / RBAC
- * work in subsequent epics can plug in without restructuring.
+ * EPIC 3 progress:
+ *   - register: UI shipped (mocked submit; real auth wiring is a follow-up).
+ *   - login:    placeholder, lands next.
  */
 export const AUTH_ROUTES: Routes = [
   {
@@ -15,10 +15,9 @@ export const AUTH_ROUTES: Routes = [
     redirectTo: 'login',
   },
   {
-    path: 'login',
-    // TODO(epic-3): loadComponent: () => import('./pages/login.page').then(m => m.LoginPage)
-    title: 'Sign in',
-    children: [],
+    path: 'register',
+    loadComponent: () => import('./pages/register.page').then((m) => m.RegisterPage),
+    title: 'Create your account',
   },
 ];
 
