@@ -35,17 +35,45 @@
   --color-ios-primary-900: oklch(0.24 0.09 250);
   --color-ios-primary-950: oklch(0.16 0.06 250);
 
+  /* ------------------------------------------------------------------------
+   * IOS brand semantic tokens.
+   * - `--color-ios-brand-primary` (#8B0000) — buttons, primary CTAs, focus.
+   * - `--color-ios-brand-dark`    (#272827) — primary fg, dark surfaces.
+   * - `--color-ios-brand-muted`   (#959695) — copy on dark surfaces (footer).
+   * - `--color-ios-brand-yellow`  (#F1D763) — warning surfaces / accents.
+   * Tailwind v4 exposes these as `bg-ios-brand-primary`, `text-ios-brand-dark`,
+   * `text-ios-brand-muted`, `bg-ios-brand-yellow`, etc., automatically. Keep
+   * one source of truth here.
+   * ---------------------------------------------------------------------- */
+  --color-ios-brand-primary: #8b0000;
+  --color-ios-brand-primary-hover: #6f0000;
+  --color-ios-brand-dark: #272827;
+  --color-ios-brand-muted: #959695;
+  --color-ios-brand-yellow: #f1d763;
+  --color-ios-brand-yellow-soft: #fdf6d8;
+
+  /* Backwards-compat alias used by existing templates. Prefer
+   * `bg-ios-brand-primary` going forward. */
+  --color-primary: var(--color-ios-brand-primary);
+
   /* Surfaces */
   --color-ios-surface: oklch(0.99 0.005 250);
   --color-ios-surface-muted: oklch(0.96 0.008 250);
   --color-ios-surface-strong: oklch(0.92 0.012 250);
 
   /* Foreground */
-  --color-ios-fg: oklch(0.22 0.02 250);
-  --color-ios-fg-muted: oklch(0.5 0.015 250);
+  --color-ios-fg: #272827;
+  --color-ios-fg-7: #959695;
+  --color-ios-fg-8: #666766;
+  --color-ios-fg-10: #373837;
+  --color-ios-fg-11: #303130;
+  --color-ios-fg-13: #141514;
+  --color-ios-fg-muted: #666766;
 
   /* Status */
   --color-ios-success: oklch(0.62 0.16 145);
+  --color-warning-50: #fcf9e6;
+  --color-warning-300: #eed454;
   --color-ios-warning: oklch(0.72 0.18 75);
   --color-ios-danger: oklch(0.55 0.22 27);
   --color-ios-info: oklch(0.62 0.13 220);
@@ -55,7 +83,20 @@
   --font-arabic: 'IBM Plex Sans Arabic', 'Tajawal', system-ui, sans-serif;
   --font-mono: ui-monospace, 'JetBrains Mono', SFMono-Regular, Menlo, monospace;
 
+  /* Font families */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Montserrat', sans-serif;
+
+  /* Font sizes */
+  --text-h1: 2.5rem;
+  --text-subtitle: 1.125rem;
+  --text-body-1: 1rem;
+  --text-body-2: 0.875rem;
+
   /* Radius */
+  --radius-x12: 0.75rem;
+  --radius-x8: 0.5rem;
+  --radius-x32: 2rem;
   --radius-ios-sm: 0.25rem;
   --radius-ios-md: 0.5rem;
   --radius-ios-lg: 0.75rem;
