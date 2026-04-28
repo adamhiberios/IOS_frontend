@@ -12,7 +12,9 @@ import { startWith } from 'rxjs/operators';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import {
   AccentBars,
+  Button,
   Checkbox,
+  Dropdown,
   Input as IosInput,
   PasswordStrength,
   SocialButton,
@@ -65,7 +67,9 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
     AuthHeader,
     AuthFooter,
     AccentBars,
+    Button,
     Checkbox,
+    Dropdown,
     IosInput,
     WarningCard,
     PasswordStrength,
@@ -121,24 +125,15 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
             </div>
 
             <div class="flex flex-col">
-              <label for="country" class="mt-1 block text-sm font-medium text-ios-brand-dark">
-                Country / Region
-                <span aria-hidden="true" class="text-ios-brand-primary">*</span>
-              </label>
-              <select
+              <ios-dropdown
                 id="country"
-                formControlName="country"
-                autocomplete="country"
-                class="mt-1 w-full h-10 px-3 rounded-lg bg-gray-50 text-sm text-ios-brand-dark
-                       border border-gray-200 focus:outline-none focus:ring-2
-                       focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary
-                       transition-colors"
-              >
-                <option value="" disabled>Country / Region</option>
-                @for (country of countries; track country.code) {
-                  <option [value]="country.code">{{ country.name }}</option>
-                }
-              </select>
+                label="Country / Region"
+                [options]="countryOptions"
+                placeholder="Country / Region"
+                [required]="true"
+                [value]="form.controls.country.value"
+                (valueChange)="form.controls.country.setValue($event)"
+              />
               @if (hasError('country', 'required')) {
                 <p role="alert" class="mt-1 text-xs text-ios-brand-primary">
                   Country / region is required.
@@ -218,16 +213,15 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
               }
             </div>
 
-            <button
+            <ios-button
               type="submit"
-              class="w-full h-11 mt-2 rounded-lg
-                     bg-ios-brand-primary text-white text-sm font-semibold
-                     hover:bg-ios-brand-primary-hover
-                     focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40
-                     transition-colors"
+              variant="primary"
+              [fullWidth]="true"
+              [loading]="mockSubmitState() === 'pending'"
+              class="mt-2"
             >
               Register
-            </button>
+            </ios-button>
 
             @if (mockSubmitState() === 'submitted') {
               <p
@@ -270,7 +264,10 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 export class RegisterPage {
   private readonly fb = inject(NonNullableFormBuilder);
 
-  protected readonly countries = COUNTRIES;
+  protected readonly countryOptions: { value: string; label: string }[] = COUNTRIES.map((c) => ({
+    value: c.code,
+    label: c.name,
+  }));
   protected readonly socials = SOCIALS;
   protected readonly minLength = STRONG_PASSWORD_MIN_LENGTH;
 

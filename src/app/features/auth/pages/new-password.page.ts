@@ -6,7 +6,7 @@ import { startWith } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
-import { AccentBars, Input as IosInput, PasswordStrength } from '@ui';
+import { AccentBars, Button, IconButton, Input as IosInput, PasswordStrength } from '@ui';
 
 import { matchFieldsValidator } from '../utils/match-fields.validator';
 import {
@@ -29,6 +29,8 @@ import {
     AuthHeader,
     AuthFooter,
     AccentBars,
+    Button,
+    IconButton,
     IosInput,
     PasswordStrength,
   ],
@@ -42,16 +44,18 @@ import {
         <section class="w-full z-2 max-w-xl bg-white border border-gray-200 rounded-xl p-6 md:p-8">
           <!-- Back Button + Header -->
           <div class="flex items-start gap-4 mb-6">
-            <a
+            <ios-icon-button
+              variant="filled"
+              size="md"
+              ariaLabel="Go back"
               routerLink="/auth/login"
-              class="flex items-center justify-center w-11 h-11 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-              aria-label="Go back"
             >
               <svg
-                class="w-5 h-5 text-gray-700"
+                class="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   stroke-linecap="round"
@@ -60,7 +64,7 @@ import {
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-            </a>
+            </ios-icon-button>
             <div>
               <h1 class="text-3xl font-bold text-ios-brand-dark">Set new password</h1>
               <p class="text-base text-gray-500 mt-1">Create a new password for your account</p>
@@ -104,12 +108,15 @@ import {
             />
 
             <!-- Submit Button -->
-            <button
+            <ios-button
               type="submit"
-              class="w-full h-14 bg-red-800 text-white text-base font-semibold rounded-lg mt-2 hover:opacity-90 transition-opacity"
+              variant="primary"
+              [fullWidth]="true"
+              [loading]="mockSubmitState() === 'pending'"
+              class="mt-2"
             >
               Save password
-            </button>
+            </ios-button>
 
             @if (mockSubmitState() === 'submitted') {
               <p class="text-center text-green-600 text-sm p-3 bg-green-50 rounded-lg">
@@ -157,12 +164,9 @@ import {
               </h2>
 
               <!-- Button -->
-              <button
-                (click)="goToLogin()"
-                class="w-full h-14 bg-gray-900 text-white text-base font-semibold rounded-lg hover:opacity-90 transition-opacity"
-              >
+              <ios-button variant="primary" [fullWidth]="true" (clicked)="goToLogin()">
                 Ok, Go to login
-              </button>
+              </ios-button>
             </div>
           </div>
         </div>

@@ -4,7 +4,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
-import { AccentBars, Input as IosInput, SocialButton, type SocialProvider } from '@ui';
+import { AccentBars, Button, Input as IosInput, SocialButton, type SocialProvider } from '@ui';
 
 const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 
@@ -24,6 +24,7 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
     AuthFooter,
     AccentBars,
     IosInput,
+    Button,
     SocialButton,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,12 +84,14 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
             </div>
 
             <!-- Submit Button -->
-            <button
+            <ios-button
               type="submit"
-              class="w-full h-11 bg-red-800 text-white text-sm font-semibold rounded-lg mt-2 hover:opacity-90 transition-opacity"
+              variant="primary"
+              [fullWidth]="true"
+              [loading]="mockSubmitState() === 'pending'"
             >
               Login
-            </button>
+            </ios-button>
 
             @if (mockSubmitState() === 'submitted') {
               <p class="text-center text-green-600 text-sm p-2 bg-green-50 rounded">
