@@ -1,33 +1,35 @@
 import { type Routes } from '@angular/router';
 
-import { roleGuard } from '@core/auth';
+import { publicOnlyGuard, roleGuard } from '@core/auth';
 
 /**
  * App-level routes — every feature is lazy-loaded. The shell (header/sidebar)
  * is composed by `layouts/app-shell` once it lands; for now the routes mount
  * directly to the root <router-outlet />.
  *
- * The root path is currently the temporary RTL/LTR smoke screen rendered by
- * `App` (see src/app/app.html). Once `features/dashboard` ships its first
- * page, this entry redirects to `/dashboard`.
+ * Auth posture (epic 3, /docs/07):
+ *   - `/auth/*` is gated by `publicOnlyGuard` so a signed-in user gets bounced
+ *     to `/dashboard` instead of being shown a login form they don't need.
+ *   - Every protected branch uses `roleGuard(...)` which itself redirects
+ *     unauthenticated visitors to `/auth/login` with `returnUrl` preserved.
+ *   - `roleGuard` runs as `canMatch`, which means the lazy chunk for the
+ *     protected feature is never even fetched when access is denied —
+ *     a small but real perf win for url-bar surfers.
  *
  * Conventions:
  *   - Each feature owns its own `*.routes.ts` and exports it as the default.
  *   - Cross-feature imports are forbidden (CLAUDE.md §5); communication goes
  *     through `core/event-bus` or a `core/` singleton.
- *   - `roleGuard` is wired here even though its body is a stub until epic 3,
- *     so RBAC behavior is added later by editing the guard, not the routes.
  */
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    // Temporarily renders the root component (smoke screen). Will become a
-    // redirect to '/dashboard' once that feature has a real landing page.
-    children: [],
+    redirectTo: '/dashboard',
   },
   {
     path: 'auth',
+    canMatch: [publicOnlyGuard],
     loadChildren: () => import('@features/auth/auth.routes'),
     title: 'Sign in',
   },
@@ -56,9 +58,13 @@ export const routes: Routes = [
     title: 'Admin',
   },
   {
+    path: 'forbidden',
+    loadComponent: () => import('@features/forbidden/forbidden.page').then((m) => m.ForbiddenPage),
+    title: 'Access denied',
+  },
+  {
     path: '**',
-    loadComponent: () =>
-      import('@features/not-found/not-found.page').then((m) => m.NotFoundPage),
+    loadComponent: () => import('@features/not-found/not-found.page').then((m) => m.NotFoundPage),
     title: 'Not found',
   },
 ];

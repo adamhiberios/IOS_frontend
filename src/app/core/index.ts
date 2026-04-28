@@ -6,6 +6,7 @@
  * folder for instantiation, only through DI tokens.
  */
 
+export * from './auth';
 export * from './http';
 export * from './i18n';
 export * from './event-bus';
