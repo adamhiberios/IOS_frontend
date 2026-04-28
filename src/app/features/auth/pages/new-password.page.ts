@@ -1,0 +1,233 @@
+/* eslint-disable @typescript-eslint/unbound-method */
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterLink, Router } from '@angular/router';
+import { startWith } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
+
+import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
+import { AccentBars, Input as IosInput, PasswordStrength } from '@ui';
+
+import { matchFieldsValidator } from '../utils/match-fields.validator';
+import {
+  STRONG_PASSWORD_MIN_LENGTH,
+  strongPasswordValidator,
+} from '../utils/strong-password.validator';
+
+/**
+ * New Password page (EPIC 3 — UI only, backend mocked).
+ *
+ * Composition:
+ *   - `<ios-auth-header>` and `<ios-auth-footer>` from `@layouts/auth-shell`
+ *   - `<ios-input>`, `<ios-accent-bars>`, `<ios-password-strength>` from `@ui`
+ */
+@Component({
+  selector: 'ios-new-password-page',
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    AuthHeader,
+    AuthFooter,
+    AccentBars,
+    IosInput,
+    PasswordStrength,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <div class="min-h-screen flex flex-col bg-white">
+      <ios-auth-header />
+
+      <main class="flex-1 flex items-start md:items-center justify-center px-4 pt-24 pb-10">
+        <ios-accent-bars [showEnd]="false" top="13.5rem" />
+        <section class="w-full z-2 max-w-xl bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+          <!-- Back Button + Header -->
+          <div class="flex items-start gap-4 mb-6">
+            <a
+              routerLink="/auth/login"
+              class="flex items-center justify-center w-11 h-11 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+              aria-label="Go back"
+            >
+              <svg
+                class="w-5 h-5 text-gray-700"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </a>
+            <div>
+              <h1 class="text-3xl font-bold text-ios-brand-dark">Set new password</h1>
+              <p class="text-base text-gray-500 mt-1">Create a new password for your account</p>
+            </div>
+          </div>
+
+          <form
+            [formGroup]="form"
+            (ngSubmit)="onSubmit()"
+            novalidate
+            class="flex flex-col gap-4"
+            aria-labelledby="newpass-heading"
+          >
+            <h2
+              id="newpass-heading"
+              class="sr-only absolute w-px h-px -m-px overflow-hidden clip-0"
+            >
+              Set new password form
+            </h2>
+
+            <!-- New Password -->
+            <ios-input
+              id="password"
+              label="New password"
+              type="password"
+              [control]="form.controls.password"
+              placeholder="New password"
+            />
+
+            <!-- Password Strength -->
+            <ios-password-strength class="mb-2" [rules]="passwordRules()" />
+
+            <!-- Confirm Password -->
+            <ios-input
+              id="confirmPassword"
+              label="Confirm password"
+              type="password"
+              [control]="form.controls.confirmPassword"
+              placeholder="Confirm password"
+              [errorText]="hasError('confirmPassword', 'mismatch') ? 'Passwords do not match' : ''"
+            />
+
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="w-full h-14 bg-red-800 text-white text-base font-semibold rounded-lg mt-2 hover:opacity-90 transition-opacity"
+            >
+              Save password
+            </button>
+
+            @if (mockSubmitState() === 'submitted') {
+              <p class="text-center text-green-600 text-sm p-3 bg-green-50 rounded-lg">
+                Password updated! (Mock)
+              </p>
+            }
+          </form>
+
+          <p class="text-center text-xs text-gray-400 mt-6">
+            © 2026 Institute of Scrum. All rights reserved.
+          </p>
+        </section>
+      </main>
+
+      <!-- Success Popup -->
+      @if (showPopup()) {
+        <div
+          class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="popup-title"
+        >
+          <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 shadow-xl">
+            <div class="flex flex-col items-center gap-6">
+              <!-- Success Icon -->
+              <div class="w-32 h-32 bg-green-50 rounded-full flex items-center justify-center">
+                <svg
+                  class="w-20 h-20 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+
+              <!-- Title -->
+              <h2 id="popup-title" class="text-2xl font-semibold text-center text-gray-800">
+                Your password has been successfully updated
+              </h2>
+
+              <!-- Button -->
+              <button
+                (click)="goToLogin()"
+                class="w-full h-14 bg-gray-900 text-white text-base font-semibold rounded-lg hover:opacity-90 transition-opacity"
+              >
+                Ok, Go to login
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <ios-auth-footer />
+    </div>
+  `,
+})
+export class NewPasswordPage {
+  private readonly fb = inject(NonNullableFormBuilder);
+  private readonly router = inject(Router);
+
+  protected readonly mockSubmitState = signal<'idle' | 'pending' | 'submitted'>('idle');
+  protected readonly showPopup = signal(false);
+
+  protected readonly form = this.fb.group(
+    {
+      password: this.fb.control('', {
+        validators: [Validators.required, strongPasswordValidator()],
+      }),
+      confirmPassword: this.fb.control('', {
+        validators: [Validators.required],
+      }),
+    },
+    {
+      validators: [matchFieldsValidator('password', 'confirmPassword')],
+    },
+  );
+
+  private readonly passwordValue = toSignal(
+    this.form.controls.password.valueChanges.pipe(startWith(this.form.controls.password.value)),
+    { initialValue: this.form.controls.password.value },
+  );
+
+  protected readonly passwordRules = computed(() => {
+    const value = this.passwordValue() ?? '';
+    return {
+      minLength: value.length >= STRONG_PASSWORD_MIN_LENGTH,
+      uppercase: /[A-Z]/.test(value),
+      lowercase: /[a-z]/.test(value),
+      special: /[!@#$%^&*]/.test(value),
+    };
+  });
+
+  protected hasError = (controlName: string, errorKey: string): boolean => {
+    const control = this.form.get(controlName);
+    return !!(control?.touched && control.hasError(errorKey));
+  };
+
+  protected onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    this.mockSubmitState.set('pending');
+    queueMicrotask(() => {
+      this.mockSubmitState.set('submitted');
+      this.showPopup.set(true);
+    });
+  }
+
+  protected goToLogin(): void {
+    void this.router.navigate(['/auth/login']);
+  }
+}
+
+export default NewPasswordPage;
