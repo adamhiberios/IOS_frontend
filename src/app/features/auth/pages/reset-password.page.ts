@@ -4,7 +4,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
-import { AccentBars, Input as IosInput, WarningCard } from '@ui';
+import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '@ui';
 
 /**
  * Reset Password page (EPIC 3 — UI only, backend mocked).
@@ -21,6 +21,8 @@ import { AccentBars, Input as IosInput, WarningCard } from '@ui';
     AuthHeader,
     AuthFooter,
     AccentBars,
+    Button,
+    IconButton,
     IosInput,
     WarningCard,
   ],
@@ -34,16 +36,18 @@ import { AccentBars, Input as IosInput, WarningCard } from '@ui';
         <section class="w-full z-2 max-w-xl bg-white border border-gray-200 rounded-xl p-6 md:p-8">
           <!-- Back Button + Header -->
           <div class="flex items-start gap-4 mb-6">
-            <a
+            <ios-icon-button
+              variant="filled"
+              size="md"
+              ariaLabel="Go back"
               routerLink="/auth/login"
-              class="flex items-center justify-center w-11 h-11 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-              aria-label="Go back"
             >
               <svg
-                class="w-5 h-5 text-gray-700"
+                class="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   stroke-linecap="round"
@@ -52,7 +56,7 @@ import { AccentBars, Input as IosInput, WarningCard } from '@ui';
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-            </a>
+            </ios-icon-button>
             <div>
               <h1 class="text-3xl font-bold text-ios-brand-dark">Reset Password</h1>
               <p class="text-base text-gray-500 mt-1">
@@ -86,12 +90,14 @@ import { AccentBars, Input as IosInput, WarningCard } from '@ui';
             />
 
             <!-- Submit Button -->
-            <button
+            <ios-button
               type="submit"
-              class="w-full h-14 bg-red-800 text-white text-base font-semibold rounded-lg hover:opacity-90 transition-opacity"
+              variant="primary"
+              [fullWidth]="true"
+              [loading]="mockSubmitState() === 'pending'"
             >
               Continue
-            </button>
+            </ios-button>
 
             @if (mockSubmitState() === 'submitted') {
               <p class="text-center text-green-600 text-sm p-3 bg-green-50 rounded-lg">
