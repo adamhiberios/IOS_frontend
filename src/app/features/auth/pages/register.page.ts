@@ -9,6 +9,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { startWith } from 'rxjs/operators';
 
+import { AuthStore } from '@core/auth';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import {
   AccentBars,
@@ -213,25 +214,24 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
               }
             </div>
 
+            @if (errorMessage()) {
+              <p
+                role="alert"
+                class="text-sm p-2 rounded bg-red-50 text-red-700 border border-red-200"
+              >
+                {{ errorMessage() }}
+              </p>
+            }
+
             <ios-button
               type="submit"
               variant="primary"
               [fullWidth]="true"
-              [loading]="mockSubmitState() === 'pending'"
+              [loading]="isPending()"
               class="mt-2"
             >
               Register
             </ios-button>
-
-            @if (mockSubmitState() === 'submitted') {
-              <p
-                role="status"
-                class="text-center text-sm p-2 rounded
-                       bg-emerald-50 text-emerald-700"
-              >
-                Account created — pending verification. (Mocked)
-              </p>
-            }
           </form>
 
           <div class="flex items-center gap-3 my-5">
@@ -263,6 +263,7 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 })
 export class RegisterPage {
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly auth = inject(AuthStore);
 
   protected readonly countryOptions: { value: string; label: string }[] = COUNTRIES.map((c) => ({
     value: c.code,
@@ -314,7 +315,13 @@ export class RegisterPage {
   });
 
   protected readonly submitted = signal(false);
-  protected readonly mockSubmitState = signal<'idle' | 'pending' | 'submitted'>('idle');
+
+  /** UI bindings derived from the AuthStore submit-state machine. */
+  protected readonly isPending = computed(() => this.auth.submitState().status === 'pending');
+  protected readonly errorMessage = computed(() => {
+    const s = this.auth.submitState();
+    return s.status === 'error' ? s.message : '';
+  });
 
   /* ------------------------------------------------------------------------
    * Per-field error text helpers. Centralizing them here keeps the template
@@ -363,14 +370,24 @@ export class RegisterPage {
       this.form.markAllAsTouched();
       return;
     }
-    this.mockSubmitState.set('pending');
-    queueMicrotask(() => this.mockSubmitState.set('submitted'));
+    const v = this.form.getRawValue();
+    void this.auth
+      .register({
+        firstName: v.firstName,
+        lastName: v.lastName,
+        country: v.country,
+        username: v.username,
+        email: v.email,
+        password: v.password,
+        newsletter: v.newsletter,
+      })
+      .catch(() => {
+        /* error already in AuthStore.submitState() */
+      });
   }
 
   protected onSocialSelect(_provider: SocialProvider): void {
     // Mocked — real OAuth handoff lands with the auth API in a later task.
-    this.mockSubmitState.set('pending');
-    queueMicrotask(() => this.mockSubmitState.set('submitted'));
   }
 }
 

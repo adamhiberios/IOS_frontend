@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { map } from 'rxjs/operators';
 
+import { AuthStore } from '@core/auth';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { AccentBars, Button, Input as IosInput, SocialButton, type SocialProvider } from '@ui';
 
@@ -83,21 +86,30 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
               </a>
             </div>
 
-            <!-- Submit Button -->
-            <ios-button
-              type="submit"
-              variant="primary"
-              [fullWidth]="true"
-              [loading]="mockSubmitState() === 'pending'"
-            >
-              Login
-            </ios-button>
-
-            @if (mockSubmitState() === 'submitted') {
-              <p class="text-center text-green-600 text-sm p-2 bg-green-50 rounded">
-                Login successful! (Mock)
+            <!-- Session-expired / forced-logout banner — set by /auth/login?reason=… -->
+            @if (sessionBanner()) {
+              <p
+                role="status"
+                class="text-sm p-2 rounded bg-amber-50 text-amber-800 border border-amber-200"
+              >
+                {{ sessionBanner() }}
               </p>
             }
+
+            <!-- Server-side error (invalid credentials, network, etc.) -->
+            @if (errorMessage()) {
+              <p
+                role="alert"
+                class="text-sm p-2 rounded bg-red-50 text-red-700 border border-red-200"
+              >
+                {{ errorMessage() }}
+              </p>
+            }
+
+            <!-- Submit Button -->
+            <ios-button type="submit" variant="primary" [fullWidth]="true" [loading]="isPending()">
+              Login
+            </ios-button>
           </form>
 
           <!-- Divider -->
@@ -134,9 +146,10 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 })
 export class LoginPage {
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly auth = inject(AuthStore);
+  private readonly route = inject(ActivatedRoute);
 
   protected readonly socials = SOCIALS;
-  protected readonly mockSubmitState = signal<'idle' | 'pending' | 'submitted'>('idle');
 
   protected readonly form = this.fb.group({
     identifier: this.fb.control('', {
@@ -145,6 +158,36 @@ export class LoginPage {
     password: this.fb.control('', {
       validators: [Validators.required],
     }),
+  });
+
+  /** UI bindings derived from the AuthStore submit-state machine. */
+  protected readonly isPending = computed(() => this.auth.submitState().status === 'pending');
+  protected readonly errorMessage = computed(() => {
+    const s = this.auth.submitState();
+    return s.status === 'error' ? s.message : '';
+  });
+
+  /** Banner copy driven by `?reason=` per /docs/07 §2.4 (logout reasons). */
+  private readonly reason = toSignal(this.route.queryParamMap.pipe(map((p) => p.get('reason'))), {
+    initialValue: null,
+  });
+  /** Where the user was trying to go before the auth gate redirected them. */
+  private readonly returnUrl = toSignal(
+    this.route.queryParamMap.pipe(map((p) => p.get('returnUrl'))),
+    { initialValue: null },
+  );
+
+  protected readonly sessionBanner = computed(() => {
+    switch (this.reason()) {
+      case 'idle':
+        return 'You were signed out due to inactivity.';
+      case 'refresh-failed':
+        return 'Your session expired. Please sign in again.';
+      case 'forced':
+        return 'Your account was signed out. Contact support if this is unexpected.';
+      default:
+        return '';
+    }
   });
 
   protected hasError = (controlName: string): boolean => {
@@ -157,12 +200,15 @@ export class LoginPage {
       this.form.markAllAsTouched();
       return;
     }
-    this.mockSubmitState.set('pending');
-    queueMicrotask(() => this.mockSubmitState.set('submitted'));
+    // AuthStore handles state transitions, navigation on success, and error
+    // surfacing via the submitState signal — the page just kicks the call.
+    void this.auth.login(this.form.getRawValue(), this.returnUrl()).catch(() => {
+      /* error already in AuthStore.submitState() */
+    });
   }
 
-  protected onSocialLogin(provider: SocialProvider): void {
-    console.log('Social login:', provider);
+  protected onSocialLogin(_provider: SocialProvider): void {
+    // Social OAuth handoff lands with the real auth API; mocked for now.
   }
 }
 
