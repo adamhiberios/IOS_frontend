@@ -6,6 +6,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs/operators';
 
 import { AuthStore } from '@core/auth';
+import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { AccentBars, Button, Input as IosInput, SocialButton, type SocialProvider } from '@ui';
 
@@ -39,9 +40,11 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
         <ios-accent-bars top="10.4rem" />
         <section class="w-full z-2 max-w-xl bg-white border border-gray-200 rounded-xl p-6 md:p-8">
           <header class="mb-6">
-            <h1 class="text-2xl font-bold text-ios-brand-dark">Hello again, login to continue</h1>
+            <h1 class="text-2xl font-bold text-ios-brand-dark">
+              {{ lang.t('auth.login.title') }}
+            </h1>
             <p class="text-sm text-gray-500 mt-1">
-              Please enter your email and password to continue.
+              {{ lang.t('auth.login.subtitle') }}
             </p>
           </header>
 
@@ -53,40 +56,40 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
             aria-labelledby="login-heading"
           >
             <h2 id="login-heading" class="sr-only absolute w-px h-px -m-px overflow-hidden clip-0">
-              Login credentials
+              {{ lang.t('auth.login.title') }}
             </h2>
 
             <!-- Email or Username -->
             <ios-input
               id="identifier"
-              label="Email or username"
+              [label]="lang.t('auth.login.emailLabel')"
               type="text"
               [control]="form.controls.identifier"
-              placeholder="Email or username"
-              [errorText]="hasError('identifier') ? 'Email or username required' : ''"
+              [placeholder]="lang.t('auth.login.emailPlaceholder')"
+              [errorText]="hasError('identifier') ? lang.t('auth.login.emailError') : ''"
             />
 
             <!-- Password -->
             <ios-input
               id="password"
-              label="Password"
+              [label]="lang.t('auth.login.passwordLabel')"
               type="password"
               [control]="form.controls.password"
-              placeholder="Password"
-              [errorText]="hasError('password') ? 'Password required' : ''"
+              [placeholder]="lang.t('auth.login.passwordPlaceholder')"
+              [errorText]="hasError('password') ? lang.t('auth.login.passwordError') : ''"
             />
 
             <!-- Forgot password link -->
-            <div class="text-right -mt-2">
+            <div class="text-end -mt-2">
               <a
                 routerLink="/auth/forgot-password"
                 class="text-sm text-gray-600 hover:text-gray-900"
               >
-                Forget password?
+                {{ lang.t('auth.login.forgotPassword') }}
               </a>
             </div>
 
-            <!-- Session-expired / forced-logout banner — set by /auth/login?reason=… -->
+            <!-- Session-expired / forced-logout banner — set by /auth/login?reason=... -->
             @if (sessionBanner()) {
               <p
                 role="status"
@@ -108,14 +111,16 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 
             <!-- Submit Button -->
             <ios-button type="submit" variant="primary" [fullWidth]="true" [loading]="isPending()">
-              Login
+              {{ lang.t('auth.login.submit') }}
             </ios-button>
           </form>
 
           <!-- Divider -->
           <div class="flex items-center gap-3 my-5">
             <div class="flex-1 h-px bg-gray-300"></div>
-            <p class="text-sm text-gray-600 whitespace-nowrap">Or continue with</p>
+            <p class="text-sm text-gray-600 whitespace-nowrap">
+              {{ lang.t('common.orContinueWith') }}
+            </p>
             <div class="flex-1 h-px bg-gray-300"></div>
           </div>
 
@@ -128,14 +133,14 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 
           <!-- Register Link -->
           <p class="text-center text-sm text-gray-600 mt-5">
-            Haven't account?
+            {{ lang.t('auth.login.noAccount') }}
             <a routerLink="/auth/register" class="text-red-700 font-medium underline">
-              Register now
+              {{ lang.t('auth.login.registerLink') }}
             </a>
           </p>
 
           <p class="text-center text-xs text-gray-400 mt-5">
-            © 2026 Institute of Scrum. All rights reserved.
+            {{ lang.t('common.copyright') }}
           </p>
         </section>
       </main>
@@ -149,6 +154,7 @@ export class LoginPage {
   private readonly auth = inject(AuthStore);
   private readonly route = inject(ActivatedRoute);
 
+  protected readonly lang = inject(LanguageService);
   protected readonly socials = SOCIALS;
 
   protected readonly form = this.fb.group({
@@ -180,11 +186,11 @@ export class LoginPage {
   protected readonly sessionBanner = computed(() => {
     switch (this.reason()) {
       case 'idle':
-        return 'You were signed out due to inactivity.';
+        return this.lang.t('auth.login.session.idle');
       case 'refresh-failed':
-        return 'Your session expired. Please sign in again.';
+        return this.lang.t('auth.login.session.refreshFailed');
       case 'forced':
-        return 'Your account was signed out. Contact support if this is unexpected.';
+        return this.lang.t('auth.login.session.forced');
       default:
         return '';
     }
@@ -200,8 +206,6 @@ export class LoginPage {
       this.form.markAllAsTouched();
       return;
     }
-    // AuthStore handles state transitions, navigation on success, and error
-    // surfacing via the submitState signal — the page just kicks the call.
     void this.auth.login(this.form.getRawValue(), this.returnUrl()).catch(() => {
       /* error already in AuthStore.submitState() */
     });

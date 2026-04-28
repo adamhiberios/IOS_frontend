@@ -1,0 +1,103 @@
+{
+  "common": {
+    "brand": "Institute of Scrum",
+    "copyright": "© 2026 Institute of Scrum. All rights reserved.",
+    "orContinueWith": "Or continue with",
+    "back": "Go back"
+  },
+  "lang": {
+    "en": "English",
+    "ar": "العربية",
+    "fr": "Français"
+  },
+  "password": {
+    "hint": "Must include uppercase, lowercase, number and special character.",
+    "weak": "Weak — keep going",
+    "medium": "Almost there",
+    "strong": "Strong password"
+  },
+  "auth": {
+    "login": {
+      "title": "Hello again, login to continue",
+      "subtitle": "Please enter your email and password to continue.",
+      "emailLabel": "Email or username",
+      "emailPlaceholder": "Email or username",
+      "emailError": "Email or username required",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Password",
+      "passwordError": "Password required",
+      "forgotPassword": "Forget password?",
+      "submit": "Login",
+      "noAccount": "Haven't account?",
+      "registerLink": "Register now",
+      "session": {
+        "idle": "You were signed out due to inactivity.",
+        "refreshFailed": "Your session expired. Please sign in again.",
+        "forced": "Your account was signed out. Contact support if this is unexpected."
+      }
+    },
+    "register": {
+      "title": "Hello, Register to continue",
+      "subtitle": "Please fill all fields to complete the process.",
+      "nameCertWarning": {
+        "pre": "Please make sure of your ",
+        "bold": "name",
+        "post": ", as it will be on your certificate."
+      },
+      "firstNameLabel": "First Name",
+      "firstNamePlaceholder": "First Name",
+      "firstNameError": "First name is required.",
+      "lastNameLabel": "Last Name",
+      "lastNamePlaceholder": "Last Name",
+      "lastNameError": "Last name is required.",
+      "countryLabel": "Country / Region",
+      "countryPlaceholder": "Country / Region",
+      "countryError": "Country / region is required.",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "Username",
+      "usernameRequired": "Username is required.",
+      "usernameMinLength": "Username must be at least 3 characters.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Email",
+      "emailRequired": "Email is required.",
+      "emailInvalid": "Enter a valid email address.",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Password",
+      "passwordRequired": "Password is required.",
+      "passwordWeak": "Use at least 8 characters with uppercase, lowercase, a digit, and a special character.",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm password",
+      "confirmPasswordRequired": "Please re-enter your password.",
+      "confirmPasswordMismatch": "Passwords do not match.",
+      "newsletter": "I would like to receive email updates from IOS products, services, and events.",
+      "privacy": "I have read and agree to IOS's",
+      "privacyLink": "Privacy Policy",
+      "privacyRequired": "You must agree to the Privacy Policy to continue.",
+      "submit": "Register",
+      "hasAccount": "Already registered?",
+      "loginLink": "Log in now"
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "subtitle": "Please enter your email to continue Reset Password",
+      "warningText": "Will send link to reset password",
+      "emailLabel": "Email",
+      "emailPlaceholder": "Email",
+      "emailError": "Email required",
+      "submit": "Continue",
+      "successMessage": "Reset link sent! Check your email."
+    },
+    "newPassword": {
+      "title": "Set new password",
+      "subtitle": "Create a new password for your account",
+      "passwordLabel": "New password",
+      "passwordPlaceholder": "New password",
+      "confirmLabel": "Confirm password",
+      "confirmPlaceholder": "Confirm password",
+      "confirmMismatch": "Passwords do not match",
+      "submit": "Save password",
+      "popupTitle": "Your password has been successfully updated",
+      "popupButton": "Ok, Go to login"
+    }
+  }
+}

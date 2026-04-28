@@ -5,6 +5,7 @@ import { RouterLink, Router } from '@angular/router';
 import { startWith } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 
+import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { AccentBars, Button, IconButton, Input as IosInput, PasswordStrength } from '@ui';
 
@@ -47,7 +48,7 @@ import {
             <ios-icon-button
               variant="filled"
               size="md"
-              ariaLabel="Go back"
+              [ariaLabel]="lang.t('common.back')"
               routerLink="/auth/login"
             >
               <svg
@@ -66,8 +67,12 @@ import {
               </svg>
             </ios-icon-button>
             <div>
-              <h1 class="text-3xl font-bold text-ios-brand-dark">Set new password</h1>
-              <p class="text-base text-gray-500 mt-1">Create a new password for your account</p>
+              <h1 class="text-3xl font-bold text-ios-brand-dark">
+                {{ lang.t('auth.newPassword.title') }}
+              </h1>
+              <p class="text-base text-gray-500 mt-1">
+                {{ lang.t('auth.newPassword.subtitle') }}
+              </p>
             </div>
           </div>
 
@@ -82,16 +87,16 @@ import {
               id="newpass-heading"
               class="sr-only absolute w-px h-px -m-px overflow-hidden clip-0"
             >
-              Set new password form
+              {{ lang.t('auth.newPassword.title') }}
             </h2>
 
             <!-- New Password -->
             <ios-input
               id="password"
-              label="New password"
+              [label]="lang.t('auth.newPassword.passwordLabel')"
               type="password"
               [control]="form.controls.password"
-              placeholder="New password"
+              [placeholder]="lang.t('auth.newPassword.passwordPlaceholder')"
             />
 
             <!-- Password Strength -->
@@ -100,11 +105,15 @@ import {
             <!-- Confirm Password -->
             <ios-input
               id="confirmPassword"
-              label="Confirm password"
+              [label]="lang.t('auth.newPassword.confirmLabel')"
               type="password"
               [control]="form.controls.confirmPassword"
-              placeholder="Confirm password"
-              [errorText]="hasError('confirmPassword', 'mismatch') ? 'Passwords do not match' : ''"
+              [placeholder]="lang.t('auth.newPassword.confirmPlaceholder')"
+              [errorText]="
+                hasError('confirmPassword', 'mismatch')
+                  ? lang.t('auth.newPassword.confirmMismatch')
+                  : ''
+              "
             />
 
             <!-- Submit Button -->
@@ -115,18 +124,12 @@ import {
               [loading]="mockSubmitState() === 'pending'"
               class="mt-2"
             >
-              Save password
+              {{ lang.t('auth.newPassword.submit') }}
             </ios-button>
-
-            @if (mockSubmitState() === 'submitted') {
-              <p class="text-center text-green-600 text-sm p-3 bg-green-50 rounded-lg">
-                Password updated! (Mock)
-              </p>
-            }
           </form>
 
           <p class="text-center text-xs text-gray-400 mt-6">
-            © 2026 Institute of Scrum. All rights reserved.
+            {{ lang.t('common.copyright') }}
           </p>
         </section>
       </main>
@@ -160,12 +163,12 @@ import {
 
               <!-- Title -->
               <h2 id="popup-title" class="text-2xl font-semibold text-center text-gray-800">
-                Your password has been successfully updated
+                {{ lang.t('auth.newPassword.popupTitle') }}
               </h2>
 
               <!-- Button -->
               <ios-button variant="primary" [fullWidth]="true" (clicked)="goToLogin()">
-                Ok, Go to login
+                {{ lang.t('auth.newPassword.popupButton') }}
               </ios-button>
             </div>
           </div>
@@ -180,6 +183,7 @@ export class NewPasswordPage {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
 
+  protected readonly lang = inject(LanguageService);
   protected readonly mockSubmitState = signal<'idle' | 'pending' | 'submitted'>('idle');
   protected readonly showPopup = signal(false);
 
@@ -208,6 +212,7 @@ export class NewPasswordPage {
       minLength: value.length >= STRONG_PASSWORD_MIN_LENGTH,
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
+      digit: /[0-9]/.test(value),
       special: /[!@#$%^&*]/.test(value),
     };
   });

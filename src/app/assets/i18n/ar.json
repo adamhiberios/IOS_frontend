@@ -1,0 +1,103 @@
+{
+  "common": {
+    "brand": "معهد سكرم",
+    "copyright": "© 2026 معهد سكرم. جميع الحقوق محفوظة.",
+    "orContinueWith": "أو تابع باستخدام",
+    "back": "رجوع"
+  },
+  "lang": {
+    "en": "English",
+    "ar": "العربية",
+    "fr": "Français"
+  },
+  "password": {
+    "hint": "يجب أن تتضمن حرفاً كبيراً وصغيراً ورقماً ورمزاً خاصاً.",
+    "weak": "ضعيفة — استمر",
+    "medium": "تكاد تكتمل",
+    "strong": "كلمة مرور قوية"
+  },
+  "auth": {
+    "login": {
+      "title": "مرحباً مجدداً، سجّل دخولك للمتابعة",
+      "subtitle": "يرجى إدخال بريدك الإلكتروني وكلمة المرور للمتابعة.",
+      "emailLabel": "البريد الإلكتروني أو اسم المستخدم",
+      "emailPlaceholder": "البريد الإلكتروني أو اسم المستخدم",
+      "emailError": "البريد الإلكتروني أو اسم المستخدم مطلوب",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور",
+      "passwordError": "كلمة المرور مطلوبة",
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "submit": "تسجيل الدخول",
+      "noAccount": "ليس لديك حساب؟",
+      "registerLink": "سجّل الآن",
+      "session": {
+        "idle": "تم تسجيل خروجك بسبب عدم النشاط.",
+        "refreshFailed": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مجدداً.",
+        "forced": "تم تسجيل خروج حسابك. تواصل مع الدعم إذا كان هذا غير متوقع."
+      }
+    },
+    "register": {
+      "title": "مرحباً، سجّل للمتابعة",
+      "subtitle": "يرجى ملء جميع الحقول لإتمام العملية.",
+      "nameCertWarning": {
+        "pre": "يرجى التأكد من ",
+        "bold": "اسمك",
+        "post": "، إذ سيظهر على شهادتك."
+      },
+      "firstNameLabel": "الاسم الأول",
+      "firstNamePlaceholder": "الاسم الأول",
+      "firstNameError": "الاسم الأول مطلوب.",
+      "lastNameLabel": "اسم العائلة",
+      "lastNamePlaceholder": "اسم العائلة",
+      "lastNameError": "اسم العائلة مطلوب.",
+      "countryLabel": "الدولة / المنطقة",
+      "countryPlaceholder": "الدولة / المنطقة",
+      "countryError": "الدولة / المنطقة مطلوبة.",
+      "usernameLabel": "اسم المستخدم",
+      "usernamePlaceholder": "اسم المستخدم",
+      "usernameRequired": "اسم المستخدم مطلوب.",
+      "usernameMinLength": "يجب أن يتكون اسم المستخدم من 3 أحرف على الأقل.",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "البريد الإلكتروني",
+      "emailRequired": "البريد الإلكتروني مطلوب.",
+      "emailInvalid": "أدخل عنوان بريد إلكتروني صحيح.",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور",
+      "passwordRequired": "كلمة المرور مطلوبة.",
+      "passwordWeak": "استخدم 8 أحرف على الأقل تتضمن حرفاً كبيراً وصغيراً ورقماً ورمزاً خاصاً.",
+      "confirmPasswordLabel": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "تأكيد كلمة المرور",
+      "confirmPasswordRequired": "يرجى إعادة إدخال كلمة المرور.",
+      "confirmPasswordMismatch": "كلمتا المرور غير متطابقتين.",
+      "newsletter": "أرغب في تلقي تحديثات عبر البريد الإلكتروني حول منتجات وخدمات وفعاليات IOS.",
+      "privacy": "لقد قرأت وأوافق على",
+      "privacyLink": "سياسة الخصوصية",
+      "privacyRequired": "يجب الموافقة على سياسة الخصوصية للمتابعة.",
+      "submit": "تسجيل",
+      "hasAccount": "مسجّل مسبقاً؟",
+      "loginLink": "سجّل دخولك الآن"
+    },
+    "resetPassword": {
+      "title": "إعادة تعيين كلمة المرور",
+      "subtitle": "يرجى إدخال بريدك الإلكتروني لمتابعة إعادة تعيين كلمة المرور",
+      "warningText": "سيتم إرسال رابط لإعادة تعيين كلمة المرور",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "البريد الإلكتروني",
+      "emailError": "البريد الإلكتروني مطلوب",
+      "submit": "متابعة",
+      "successMessage": "تم إرسال رابط إعادة التعيين! تحقق من بريدك الإلكتروني."
+    },
+    "newPassword": {
+      "title": "تعيين كلمة مرور جديدة",
+      "subtitle": "أنشئ كلمة مرور جديدة لحسابك",
+      "passwordLabel": "كلمة المرور الجديدة",
+      "passwordPlaceholder": "كلمة المرور الجديدة",
+      "confirmLabel": "تأكيد كلمة المرور",
+      "confirmPlaceholder": "تأكيد كلمة المرور",
+      "confirmMismatch": "كلمتا المرور غير متطابقتين",
+      "submit": "حفظ كلمة المرور",
+      "popupTitle": "تم تحديث كلمة مرورك بنجاح",
+      "popupButton": "حسناً، انتقل إلى تسجيل الدخول"
+    }
+  }
+}

@@ -3,11 +3,13 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 
 /**
  * Locale codes the app understands. Extend cautiously — every new locale needs:
- *  - Transloco translation files (EN + AR ship from day one)
+ *  - A JSON translation file under src/assets/i18n/<locale>.json
  *  - QA review of the layout in that direction
  *  - A professional translator pass for shipped content (CLAUDE.md §9)
+ *
+ * RTL locales: 'ar' only. All others are LTR.
  */
-export type AppLocale = 'en' | 'ar';
+export type AppLocale = 'en' | 'ar' | 'fr';
 
 /**
  * Writing direction. Always derived from the locale; never set directly.
@@ -57,13 +59,6 @@ export class DirectionService {
     this.applyToDocument(next, this.direction());
   }
 
-  /**
-   * Convenience helper for a binary EN/AR toggle in the header.
-   */
-  toggle(): void {
-    this.setLocale(this._locale() === 'en' ? 'ar' : 'en');
-  }
-
   private applyToDocument(locale: AppLocale, direction: AppDirection): void {
     const html = this.document.documentElement;
     if (html.lang !== locale) {
@@ -79,6 +74,7 @@ export class DirectionService {
     // so this default is effectively `en` until a persisted preference arrives
     // via the auth profile fetch (handled outside this service).
     const fromDom = this.document.documentElement.lang as AppLocale | '';
-    return fromDom === 'ar' ? 'ar' : 'en';
+    if (fromDom === 'ar' || fromDom === 'fr') return fromDom;
+    return 'en';
   }
 }
