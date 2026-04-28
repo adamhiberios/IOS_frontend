@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '@ui';
 
@@ -39,7 +40,7 @@ import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '
             <ios-icon-button
               variant="filled"
               size="md"
-              ariaLabel="Go back"
+              [ariaLabel]="lang.t('common.back')"
               routerLink="/auth/login"
             >
               <svg
@@ -58,9 +59,11 @@ import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '
               </svg>
             </ios-icon-button>
             <div>
-              <h1 class="text-3xl font-bold text-ios-brand-dark">Reset Password</h1>
+              <h1 class="text-3xl font-bold text-ios-brand-dark">
+                {{ lang.t('auth.resetPassword.title') }}
+              </h1>
               <p class="text-base text-gray-500 mt-1">
-                Please enter your email to continue Reset Password
+                {{ lang.t('auth.resetPassword.subtitle') }}
               </p>
             </div>
           </div>
@@ -73,20 +76,22 @@ import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '
             aria-labelledby="reset-heading"
           >
             <h2 id="reset-heading" class="sr-only absolute w-px h-px -m-px overflow-hidden clip-0">
-              Reset password form
+              {{ lang.t('auth.resetPassword.title') }}
             </h2>
 
             <!-- Warning Card -->
-            <ios-warning-card> Will send link to reset password </ios-warning-card>
+            <ios-warning-card>
+              {{ lang.t('auth.resetPassword.warningText') }}
+            </ios-warning-card>
 
             <!-- Email -->
             <ios-input
               id="email"
-              label="Email"
+              [label]="lang.t('auth.resetPassword.emailLabel')"
               type="email"
               [control]="form.controls.email"
-              placeholder="Email"
-              [errorText]="hasError() ? 'Email required' : ''"
+              [placeholder]="lang.t('auth.resetPassword.emailPlaceholder')"
+              [errorText]="hasError() ? lang.t('auth.resetPassword.emailError') : ''"
             />
 
             <!-- Submit Button -->
@@ -96,18 +101,18 @@ import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '
               [fullWidth]="true"
               [loading]="mockSubmitState() === 'pending'"
             >
-              Continue
+              {{ lang.t('auth.resetPassword.submit') }}
             </ios-button>
 
             @if (mockSubmitState() === 'submitted') {
               <p class="text-center text-green-600 text-sm p-3 bg-green-50 rounded-lg">
-                Reset link sent! Check your email. (Mock)
+                {{ lang.t('auth.resetPassword.successMessage') }}
               </p>
             }
           </form>
 
           <p class="text-center text-xs text-gray-400 mt-6">
-            © 2026 Institute of Scrum. All rights reserved.
+            {{ lang.t('common.copyright') }}
           </p>
         </section>
       </main>
@@ -119,6 +124,7 @@ import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '
 export class ResetPasswordPage {
   private readonly fb = inject(NonNullableFormBuilder);
 
+  protected readonly lang = inject(LanguageService);
   protected readonly mockSubmitState = signal<'idle' | 'pending' | 'submitted'>('idle');
 
   protected readonly form = this.fb.group({

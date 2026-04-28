@@ -1,0 +1,103 @@
+{
+  "common": {
+    "brand": "Institut Scrum",
+    "copyright": "© 2026 Institut Scrum. Tous droits réservés.",
+    "orContinueWith": "Ou continuer avec",
+    "back": "Retour"
+  },
+  "lang": {
+    "en": "English",
+    "ar": "العربية",
+    "fr": "Français"
+  },
+  "password": {
+    "hint": "Doit contenir une majuscule, une minuscule, un chiffre et un caractère spécial.",
+    "weak": "Faible — continuez",
+    "medium": "Presque suffisant",
+    "strong": "Mot de passe fort"
+  },
+  "auth": {
+    "login": {
+      "title": "Bonjour, connectez-vous pour continuer",
+      "subtitle": "Veuillez entrer votre e-mail et votre mot de passe pour continuer.",
+      "emailLabel": "E-mail ou nom d'utilisateur",
+      "emailPlaceholder": "E-mail ou nom d'utilisateur",
+      "emailError": "E-mail ou nom d'utilisateur requis",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Mot de passe",
+      "passwordError": "Mot de passe requis",
+      "forgotPassword": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "noAccount": "Pas de compte ?",
+      "registerLink": "S'inscrire maintenant",
+      "session": {
+        "idle": "Vous avez été déconnecté en raison d'inactivité.",
+        "refreshFailed": "Votre session a expiré. Veuillez vous reconnecter.",
+        "forced": "Votre compte a été déconnecté. Contactez le support si cela est inattendu."
+      }
+    },
+    "register": {
+      "title": "Bonjour, inscrivez-vous pour continuer",
+      "subtitle": "Veuillez remplir tous les champs pour compléter le processus.",
+      "nameCertWarning": {
+        "pre": "Veuillez vérifier votre ",
+        "bold": "nom",
+        "post": ", car il apparaîtra sur votre certificat."
+      },
+      "firstNameLabel": "Prénom",
+      "firstNamePlaceholder": "Prénom",
+      "firstNameError": "Le prénom est requis.",
+      "lastNameLabel": "Nom de famille",
+      "lastNamePlaceholder": "Nom de famille",
+      "lastNameError": "Le nom de famille est requis.",
+      "countryLabel": "Pays / Région",
+      "countryPlaceholder": "Pays / Région",
+      "countryError": "Le pays / la région est requis.",
+      "usernameLabel": "Nom d'utilisateur",
+      "usernamePlaceholder": "Nom d'utilisateur",
+      "usernameRequired": "Le nom d'utilisateur est requis.",
+      "usernameMinLength": "Le nom d'utilisateur doit comporter au moins 3 caractères.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "E-mail",
+      "emailRequired": "L'e-mail est requis.",
+      "emailInvalid": "Entrez une adresse e-mail valide.",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Mot de passe",
+      "passwordRequired": "Le mot de passe est requis.",
+      "passwordWeak": "Utilisez au moins 8 caractères avec des majuscules, minuscules, un chiffre et un caractère spécial.",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Confirmer le mot de passe",
+      "confirmPasswordRequired": "Veuillez re-saisir votre mot de passe.",
+      "confirmPasswordMismatch": "Les mots de passe ne correspondent pas.",
+      "newsletter": "Je souhaite recevoir des mises à jour par e-mail sur les produits, services et événements IOS.",
+      "privacy": "J'ai lu et j'accepte la",
+      "privacyLink": "Politique de confidentialité",
+      "privacyRequired": "Vous devez accepter la politique de confidentialité pour continuer.",
+      "submit": "S'inscrire",
+      "hasAccount": "Déjà inscrit ?",
+      "loginLink": "Se connecter maintenant"
+    },
+    "resetPassword": {
+      "title": "Réinitialiser le mot de passe",
+      "subtitle": "Veuillez entrer votre e-mail pour continuer la réinitialisation du mot de passe",
+      "warningText": "Un lien de réinitialisation sera envoyé",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "E-mail",
+      "emailError": "E-mail requis",
+      "submit": "Continuer",
+      "successMessage": "Lien de réinitialisation envoyé ! Vérifiez votre e-mail."
+    },
+    "newPassword": {
+      "title": "Définir un nouveau mot de passe",
+      "subtitle": "Créez un nouveau mot de passe pour votre compte",
+      "passwordLabel": "Nouveau mot de passe",
+      "passwordPlaceholder": "Nouveau mot de passe",
+      "confirmLabel": "Confirmer le mot de passe",
+      "confirmPlaceholder": "Confirmer le mot de passe",
+      "confirmMismatch": "Les mots de passe ne correspondent pas",
+      "submit": "Enregistrer le mot de passe",
+      "popupTitle": "Votre mot de passe a été mis à jour avec succès",
+      "popupButton": "OK, aller à la connexion"
+    }
+  }
+}

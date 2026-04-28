@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
 import { startWith } from 'rxjs/operators';
 
 import { AuthStore } from '@core/auth';
+import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import {
   AccentBars,
@@ -55,10 +56,6 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
  *   - `<ios-auth-header>` and `<ios-auth-footer>` from `@layouts/auth-shell`
  *   - `<ios-input>`, `<ios-warning-card>`, `<ios-password-strength>`,
  *     `<ios-social-button>` from `@ui`
- *
- * The page itself owns: form definition, validators, submit lifecycle, and
- * the password-rule bridge from the form value to a signal so the strength
- * meter stays reactive under OnPush + zoneless change detection.
  */
 @Component({
   selector: 'ios-register-page',
@@ -85,14 +82,18 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
         <ios-accent-bars />
         <section class="w-full z-2 max-w-xl bg-white border border-gray-200 rounded-xl p-6 md:p-8">
           <header class="mb-6">
-            <h1 class="text-2xl font-bold text-ios-brand-dark">Hello, Register to continue</h1>
+            <h1 class="text-2xl font-bold text-ios-brand-dark">
+              {{ lang.t('auth.register.title') }}
+            </h1>
             <p class="text-sm text-gray-500 mt-1">
-              Please fill all fields to complete the process.
+              {{ lang.t('auth.register.subtitle') }}
             </p>
           </header>
 
           <ios-warning-card class="block mb-5">
-            Please make sure of your <strong>name</strong>, as it will be on your certificate.
+            {{ lang.t('auth.register.nameCertWarning.pre')
+            }}<strong>{{ lang.t('auth.register.nameCertWarning.bold') }}</strong
+            >{{ lang.t('auth.register.nameCertWarning.post') }}
           </ios-warning-card>
 
           <form
@@ -102,50 +103,50 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
             class="flex flex-col gap-4"
             aria-labelledby="register-heading"
           >
-            <h2 id="register-heading" class="sr-only">Account details</h2>
+            <h2 id="register-heading" class="sr-only">{{ lang.t('auth.register.title') }}</h2>
 
             <div class="grid grid-cols-2 gap-3">
               <ios-input
                 id="firstName"
-                label="First Name"
-                placeholder="First Name"
+                [label]="lang.t('auth.register.firstNameLabel')"
+                [placeholder]="lang.t('auth.register.firstNamePlaceholder')"
                 autocomplete="given-name"
                 [required]="true"
                 [control]="form.controls.firstName"
-                errorText="First name is required."
+                [errorText]="lang.t('auth.register.firstNameError')"
               />
               <ios-input
                 id="lastName"
-                label="Last Name"
-                placeholder="Last Name"
+                [label]="lang.t('auth.register.lastNameLabel')"
+                [placeholder]="lang.t('auth.register.lastNamePlaceholder')"
                 autocomplete="family-name"
                 [required]="true"
                 [control]="form.controls.lastName"
-                errorText="Last name is required."
+                [errorText]="lang.t('auth.register.lastNameError')"
               />
             </div>
 
             <div class="flex flex-col">
               <ios-dropdown
                 id="country"
-                label="Country / Region"
+                [label]="lang.t('auth.register.countryLabel')"
                 [options]="countryOptions"
-                placeholder="Country / Region"
+                [placeholder]="lang.t('auth.register.countryPlaceholder')"
                 [required]="true"
                 [value]="form.controls.country.value"
                 (valueChange)="form.controls.country.setValue($event)"
               />
               @if (hasError('country', 'required')) {
                 <p role="alert" class="mt-1 text-xs text-ios-brand-primary">
-                  Country / region is required.
+                  {{ lang.t('auth.register.countryError') }}
                 </p>
               }
             </div>
 
             <ios-input
               id="username"
-              label="Username"
-              placeholder="Username"
+              [label]="lang.t('auth.register.usernameLabel')"
+              [placeholder]="lang.t('auth.register.usernamePlaceholder')"
               autocomplete="username"
               [required]="true"
               [control]="form.controls.username"
@@ -154,9 +155,9 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 
             <ios-input
               id="email"
-              label="Email"
+              [label]="lang.t('auth.register.emailLabel')"
               type="email"
-              placeholder="Email"
+              [placeholder]="lang.t('auth.register.emailPlaceholder')"
               autocomplete="email"
               [required]="true"
               [control]="form.controls.email"
@@ -166,9 +167,9 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
             <div class="flex flex-col">
               <ios-input
                 id="password"
-                label="Password"
+                [label]="lang.t('auth.register.passwordLabel')"
                 type="password"
-                placeholder="Password"
+                [placeholder]="lang.t('auth.register.passwordPlaceholder')"
                 autocomplete="new-password"
                 [required]="true"
                 [control]="form.controls.password"
@@ -179,9 +180,9 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 
             <ios-input
               id="confirmPassword"
-              label="Confirm password"
+              [label]="lang.t('auth.register.confirmPasswordLabel')"
               type="password"
-              placeholder="Confirm password"
+              [placeholder]="lang.t('auth.register.confirmPasswordPlaceholder')"
               autocomplete="new-password"
               [required]="true"
               [control]="form.controls.confirmPassword"
@@ -190,7 +191,7 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 
             <div class="flex flex-col gap-2 mt-2">
               <ios-checkbox id="newsletter" formControlName="newsletter">
-                I would like to receive email updates from IOS products, services, and events.
+                {{ lang.t('auth.register.newsletter') }}
               </ios-checkbox>
 
               <ios-checkbox
@@ -198,18 +199,18 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
                 formControlName="privacy"
                 [describedBy]="hasError('privacy', 'required') ? 'privacy-error' : ''"
               >
-                I have read and agree to IOS&#39;s
+                {{ lang.t('auth.register.privacy') }}
                 <a
                   routerLink="/privacy"
                   class="underline font-medium text-ios-brand-primary"
                   target="_blank"
                   rel="noopener"
-                  >Privacy Policy</a
+                  >{{ lang.t('auth.register.privacyLink') }}</a
                 >.
               </ios-checkbox>
               @if (hasError('privacy', 'required')) {
                 <p id="privacy-error" role="alert" class="text-xs text-ios-brand-primary">
-                  You must agree to the Privacy Policy to continue.
+                  {{ lang.t('auth.register.privacyRequired') }}
                 </p>
               }
             </div>
@@ -230,13 +231,15 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
               [loading]="isPending()"
               class="mt-2"
             >
-              Register
+              {{ lang.t('auth.register.submit') }}
             </ios-button>
           </form>
 
           <div class="flex items-center gap-3 my-5">
             <span class="flex-1 h-px bg-gray-200"></span>
-            <span class="text-sm text-gray-500 whitespace-nowrap"> Or continue with </span>
+            <span class="text-sm text-gray-500 whitespace-nowrap">
+              {{ lang.t('common.orContinueWith') }}
+            </span>
             <span class="flex-1 h-px bg-gray-200"></span>
           </div>
 
@@ -249,10 +252,10 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
           </ul>
 
           <p class="text-center text-sm text-gray-600 mt-6">
-            Already registered?
-            <a routerLink="/auth/login" class="text-ios-brand-primary font-medium underline"
-              >Log in now</a
-            >
+            {{ lang.t('auth.register.hasAccount') }}
+            <a routerLink="/auth/login" class="text-ios-brand-primary font-medium underline">
+              {{ lang.t('auth.register.loginLink') }}
+            </a>
           </p>
         </section>
       </main>
@@ -265,6 +268,7 @@ export class RegisterPage {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthStore);
 
+  protected readonly lang = inject(LanguageService);
   protected readonly countryOptions: { value: string; label: string }[] = COUNTRIES.map((c) => ({
     value: c.code,
     label: c.name,
@@ -310,6 +314,7 @@ export class RegisterPage {
       minLength: value.length >= STRONG_PASSWORD_MIN_LENGTH,
       uppercase: /[A-Z]/.test(value),
       lowercase: /[a-z]/.test(value),
+      digit: /[0-9]/.test(value),
       special: /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(value),
     };
   });
@@ -324,36 +329,35 @@ export class RegisterPage {
   });
 
   /* ------------------------------------------------------------------------
-   * Per-field error text helpers. Centralizing them here keeps the template
-   * tidy and gives one place to localize when Transloco lands.
+   * Per-field error text helpers. Reads from LanguageService so they are
+   * reactive to locale changes.
    * ---------------------------------------------------------------------- */
 
   protected readonly usernameErrorText = computed(() => {
     const c = this.form.controls.username;
-    if (c.hasError('required')) return 'Username is required.';
-    if (c.hasError('minlength')) return 'Username must be at least 3 characters.';
+    if (c.hasError('required')) return this.lang.t('auth.register.usernameRequired');
+    if (c.hasError('minlength')) return this.lang.t('auth.register.usernameMinLength');
     return '';
   });
 
   protected readonly emailErrorText = computed(() => {
     const c = this.form.controls.email;
-    if (c.hasError('required')) return 'Email is required.';
-    if (c.hasError('email')) return 'Enter a valid email address.';
+    if (c.hasError('required')) return this.lang.t('auth.register.emailRequired');
+    if (c.hasError('email')) return this.lang.t('auth.register.emailInvalid');
     return '';
   });
 
   protected readonly passwordErrorText = computed(() => {
     const c = this.form.controls.password;
-    if (c.hasError('required')) return 'Password is required.';
-    if (c.hasError('strongPassword'))
-      return 'Use at least 8 characters with uppercase, lowercase, a digit, and a special character.';
+    if (c.hasError('required')) return this.lang.t('auth.register.passwordRequired');
+    if (c.hasError('strongPassword')) return this.lang.t('auth.register.passwordWeak');
     return '';
   });
 
   protected readonly confirmPasswordErrorText = computed(() => {
     const c = this.form.controls.confirmPassword;
-    if (c.hasError('required')) return 'Please re-enter your password.';
-    if (c.hasError('mismatch')) return 'Passwords do not match.';
+    if (c.hasError('required')) return this.lang.t('auth.register.confirmPasswordRequired');
+    if (c.hasError('mismatch')) return this.lang.t('auth.register.confirmPasswordMismatch');
     return '';
   });
 
