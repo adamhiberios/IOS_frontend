@@ -1,58 +1,100 @@
-import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
-import { LucideChevronDown } from '@lucide/angular';
+import { ChangeDetectionStrategy, Component, inject, output, signal } from '@angular/core';
+import { LucideGlobe } from '@lucide/angular';
 
 import { LanguageService, type AppLocale } from '@core/i18n';
 
 /**
- * `ios-language-selector` — EN / AR / FR dropdown that drives `LanguageService`.
+ * `ios-language-selector` — icon-only button with a popover for EN / AR / FR.
  *
- * Why a `<select>` instead of a custom popover:
- *  - It's keyboard-native and screen-reader-perfect on every platform.
- *  - It handles RTL automatically.
- *  - It defers visual polish (caret styling, option heights) to system UI.
- *
- * Options are derived from `LanguageService.supportedLocales` so adding a new
- * locale only requires updating that constant — no template changes needed here.
+ * Shows only a globe icon; clicking opens a small dropdown with locale options.
  */
 @Component({
   selector: 'ios-language-selector',
-  imports: [LucideChevronDown],
+  imports: [LucideGlobe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <label class="relative inline-flex items-center">
-      <span class="sr-only">Select language</span>
-      <svg
-        lucideChevronDown
-        class="absolute end-4 h-4 w-4 text-ios-brand-dark/70 pointer-events-none"
-        aria-hidden="true"
-      ></svg>
-      <select
-        [value]="locale()"
-        (change)="onChange($event)"
+    <div class="relative">
+      <button
+        type="button"
+        (click)="toggle()"
         [attr.aria-label]="lang.t('common.selectLanguage')"
-        class="h-9 ps-4 pe-8 min-w-[112px] appearance-none rounded-lg
-               border border-gray-200 bg-gray-50 text-sm font-medium
-               text-ios-brand-dark hover:bg-gray-100 focus:outline-none
-               focus:ring-2 focus:ring-ios-brand-primary/40 transition-colors"
+        [attr.aria-expanded]="isOpen()"
+        class="w-10 h-10 rounded-lg flex items-center justify-center
+               border border-gray-200 bg-gray-50 text-ios-brand-dark/70
+               hover:bg-gray-100 hover:text-ios-brand-dark
+               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50
+               transition-colors"
       >
-        @for (option of lang.supportedLocales; track option.code) {
-          <option [value]="option.code">{{ option.label }}</option>
-        }
-      </select>
-    </label>
+        <svg lucideGlobe class="w-[18px] h-[18px]" aria-hidden="true"></svg>
+      </button>
+
+      @if (isOpen()) {
+        <div
+          class="absolute end-0 mt-2 w-44 rounded-xl bg-white border border-gray-200 shadow-lg py-1 z-50"
+          role="listbox"
+        >
+          @for (option of lang.supportedLocales; track option.code) {
+            <button
+              type="button"
+              role="option"
+              [attr.aria-selected]="option.code === locale()"
+              (click)="select(option.code)"
+              class="w-full px-4 py-2 text-start text-sm font-medium
+                     hover:bg-gray-50 transition-colors
+                     flex items-center justify-between gap-2"
+              [class.text-ios-brand-primary]="option.code === locale()"
+              [class.bg-gray-50]="option.code === locale()"
+            >
+              <span>{{ option.label }}</span>
+              @if (option.code === locale()) {
+                <svg
+                  class="w-4 h-4 flex-shrink-0"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 8.5l3.5 3.5 6-7"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              }
+            </button>
+          }
+        </div>
+      }
+    </div>
   `,
+  host: {
+    '(document:click)': 'onOutsideClick($event)',
+  },
 })
 export class LanguageSelector {
   protected readonly lang = inject(LanguageService);
 
-  /** Emits whenever the user picks a different locale. */
   readonly localeChange = output<AppLocale>();
 
   protected readonly locale = this.lang.locale;
+  protected readonly isOpen = signal(false);
 
-  protected onChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value as AppLocale;
-    void this.lang.setLocale(value);
-    this.localeChange.emit(value);
+  toggle(): void {
+    this.isOpen.update((v) => !v);
+  }
+
+  select(code: AppLocale): void {
+    void this.lang.setLocale(code);
+    this.isOpen.set(false);
+    this.localeChange.emit(code);
+  }
+
+  onOutsideClick(event: Event): void {
+    if (!this.isOpen()) return;
+    const target = event.target as HTMLElement | null;
+    if (!target?.closest('ios-language-selector')) {
+      this.isOpen.set(false);
+    }
   }
 }

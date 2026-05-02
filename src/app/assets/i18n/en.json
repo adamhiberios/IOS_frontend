@@ -99,5 +99,278 @@
       "popupTitle": "Your password has been successfully updated",
       "popupButton": "Ok, Go to login"
     }
+  },
+  "landing": {
+    "hero": {
+      "badge": "Certifications support your career path.",
+      "headline": "The Scrum Credential",
+      "headlineHighlight": "That Proves Your Expertise",
+      "subtext": "Backed by the Institute of Scrum, our endorsed credentials set a higher standard — recognizing professionals who deliver results in the real world and stand apart through demonstrated skill, judgment, and impact.",
+      "source": "Endorsed certifications require 20+ hours of structured learning and a rigorous 45-question examination — because your credential should prove what you can do.",
+      "cohortLabel": "Next cohort starts",
+      "cohortDate": "June 2, 2026",
+      "graduatesCount": "12,000+",
+      "graduatesLabel": "Certified graduates",
+      "ctaPrimary": "Explore Certifications",
+      "ctaSecondary": "Download Free Guide"
+    },
+    "trustedBy": {
+      "title": "CERTIFIED SCRUM — POWERING THE WORLD'S BEST TEAMS"
+    },
+    "credibility": {
+      "unlimitedAccess": "Unlimited access to the learning materials",
+      "selfPaced": "100% self-paced online training",
+      "affordable": "Affordable Fees",
+      "lifetime": "Lifetime certification"
+    },
+    "valueProp": {
+      "roleSpecialized": {
+        "title": "Role-Specialized Depth",
+        "description": "Dedicated tracks for Scrum Master, Product Owner, and Scrum Facilitator. Each certification addresses the specific competencies, challenges, and career outcomes of your chosen role — not a one-size-fits-all overview."
+      },
+      "masteryPath": {
+        "title": "Three-Level Mastery Path",
+        "description": "Progress from Foundation through Practitioner to Authority as your experience grows. Each level builds on the last, creating a clear career trajectory that employers recognize and reward."
+      },
+      "practicalFocus": {
+        "title": "Practical Application Focus",
+        "description": "Every certification requires 20+ hours of structured self-paced learning and a rigorous 45-question examination. You earn your Endorsed credential by demonstrating what you know and can apply."
+      }
+    },
+    "levels": {
+      "foundation": {
+        "tabLabel": "Foundation",
+        "title": "Foundation Level",
+        "description": "Perfect for those new to Scrum or transitioning into Agile roles. Validates your understanding of core Scrum principles, roles, events, and artifacts.",
+        "audience": {
+          "careerChangers": "Career changers entering Agile",
+          "newPractitioners": "New Scrum practitioners",
+          "teamMembers": "Team members seeking structure"
+        },
+        "explorePath": "Explore Foundation Path",
+        "audienceDesc": "Ideal for professionals entering Agile environments who want to build a solid Scrum foundation with a recognized, role-specific credential."
+      },
+      "practitioner": {
+        "tabLabel": "Intermediate",
+        "title": "Practitioner Level",
+        "description": "For experienced professionals who facilitate Scrum events and coach teams. Demonstrates ability to apply Scrum in complex, real-world environments.",
+        "audience": {
+          "professionals": "Active Scrum Masters & coaches"
+        },
+        "explorePath": "Explore Practitioner Path",
+        "audienceDesc": "Designed for experienced Scrum practitioners who actively facilitate events, coach teams, and apply the framework in complex real-world environments."
+      },
+      "authority": {
+        "tabLabel": "Advanced",
+        "title": "Authority Level",
+        "description": "The highest tier — for senior practitioners shaping Agile strategy at the organizational level. Validates deep expertise and thought leadership.",
+        "audience": {
+          "senior": "Senior Agile leaders & strategists"
+        },
+        "explorePath": "Explore Authority Path",
+        "audienceDesc": "For senior Agile leaders shaping organizational strategy, mentoring Scrum teams, and driving enterprise-level transformation."
+      },
+      "passMark": "Pass mark: 75%",
+      "whoShouldPursue": "Who Should Pursue This",
+      "cert": {
+        "startingAt": "Starting at",
+        "downloadGuide": "Download Guide",
+        "enrollNow": "Enroll Now",
+        "hours": "+20 hrs",
+        "online": "Fully Online",
+        "exam": "45-question Test"
+      }
+    },
+    "certs": {
+      "esm": "Endorsed Scrum Master",
+      "epo": "Endorsed Product Owner",
+      "esf": "Endorsed Scrum Facilitator",
+      "psm": "Professional Scrum Master",
+      "ppo": "Professional Product Owner",
+      "psf": "Professional Scrum Facilitator",
+      "asm": "Authority Scrum Master",
+      "apo": "Authority Product Owner",
+      "asf": "Authority Scrum Facilitator"
+    },
+    "howItWorks": {
+      "choose": {
+        "title": "Choose Your Certification",
+        "description": "Select the Scrum track and level that best aligns with your experience and career goals."
+      },
+      "review": {
+        "title": "Review the Learning Materials",
+        "description": "Study the provided learning materials to build your knowledge and prepare for the exam."
+      },
+      "practice": {
+        "title": "Practice with Mock Tests",
+        "description": "Complete practice exams to assess your readiness and strengthen your understanding."
+      },
+      "access": {
+        "title": "Receive Access to the Final Exam",
+        "description": "Obtain access to the official proctored certification exam when you are ready."
+      },
+      "complete": {
+        "title": "Complete the Online Exam",
+        "description": "Take and complete the certification exam online at your own pace."
+      },
+      "earn": {
+        "title": "Earn Your Credential",
+        "description": "Successfully pass the exam and receive your digital Scrum certification."
+      },
+      "cta": "Start Your Journey Today"
+    },
+    "blog": {
+      "posts": [
+        {
+          "date": "Apr 15, 2026",
+          "title": "Why Employers Now Require Scrum Certification",
+          "excerpt": "The shift from \"nice to have\" to \"must have\" — how Canadian employers are using Scrum credentials to filter candidates.",
+          "readMore": "Read more",
+          "readTime": "5 min read",
+          "image": "/assets/images/blog_1.png"
+        },
+        {
+          "date": "Mar 28, 2026",
+          "title": "Foundation vs. Practitioner: Which Is Right for You?",
+          "excerpt": "A practical comparison of our two most popular certification levels, with guidance on choosing the right starting point.",
+          "readMore": "Read more",
+          "readTime": "5 min read",
+          "image": "/assets/images/blog_2.png"
+        },
+        {
+          "date": "Mar 10, 2026",
+          "title": "5 Scenario-Based Questions to Expect on Exam Day",
+          "excerpt": "We break down the most commonly tested scenarios and show you how to approach them with the Scrum framework.",
+          "readMore": "Read more",
+          "readTime": "5 min read",
+          "image": "/assets/images/blog_3.png"
+        }
+      ],
+      "readMore": "Read more",
+      "viewAll": "View all articles"
+    },
+    "sections": {
+      "whyChooseUs": {
+        "badge": "Why Choose Us",
+        "why": "Why",
+        "scrumCertifications": "Scrum Certifications",
+        "description": "A credential from Institute of Scrum is a validation that you have proven practical, role-specific mastery through rigorous assessment. When employers see this designation, they know the holder has earned standards that go far beyond attendance and memorization."
+      },
+      "credibilityIndicators": "Why Scrum Certification Matters",
+      "whyMatters": "Credibility Indicators",
+      "valueProposition": "Value Proposition",
+      "rolePlay": "Scrum Certification",
+      "rolePlayHighlight": "Built for the Role You Actually Play",
+      "rolePlaySubtitle": "Most Scrum certifications treat every role the same. Institute of Scrum takes a fundamentally different approach. Our certification system provides dedicated learning tracks for each Scrum role, with three progressive levels that mirror how professionals actually develop expertise. Whether you facilitate sprints, own the product vision, or design collaborative workshops, your certification should reflect the depth of what you do.",
+      "levelsExplained": "Certification Path",
+      "threeLevels": "Choose Your",
+      "threeLevelsHighlight": "Certification Path",
+      "threeLevelsSubtitle": "Three distinct professional tracks. Three levels of mastery. One rigorous standard of excellence.",
+      "scrumJournalPart1": "Latest from the",
+      "scrumJournalPart2": "Scrum Journal",
+      "howItWorks": "How It Works",
+      "pathToCertification": "Your Path to",
+      "pathToCertificationSuffixes": "Endorsed Certification",
+      "insightsResources": "Insights & Resources",
+      "scrumJournal": "From the Scrum Journal",
+      "allCertsAtGlance": {
+        "badge": "All Certifications at a Glance",
+        "all": "All",
+        "scrumCertifications": "Scrum Certifications",
+        "description": "Your next career milestone starts here. Choose your role, select your level, and begin earning the Endorsed credential that proves what you can actually do. With 20+ hours of structured self-paced learning, no prerequisites, and a rigorous examination, you are investing in a credential built for the long term.",
+        "downloadGuide": "Download Certification Guide",
+        "exploreCerts": "Explore Certifications"
+      }
+    },
+    "ctaBanner": {
+      "eyebrow": "Start Your Journey",
+      "headline": "Ready to Validate Your Scrum Expertise?",
+      "description": "Join thousands of professionals who've advanced their careers with Institute of Scrum certifications.",
+      "ctaPrimary": "Get Certified Today",
+      "ctaSecondary": "Contact Us"
+    },
+    "marketStats": {
+      "badge": "Certification Levels Explained",
+      "headline": "Three Levels. One Clear",
+      "headlineHighlight": "Path to Mastery",
+      "itsFor": "It's for:",
+      "passMark": "75% Pass mark",
+      "tableIntro": "Present a grid showcasing our certifications organized by role (rows) and level (columns). Each cell displays the full certification name and links directly to its dedicated detail page, giving visitors a clear path to explore every credential available across our learning framework.",
+      "foundation": {
+        "tag": "CORE KNOWLEDGE",
+        "name": "FOUNDATION",
+        "desc": "The Foundation level establishes essential Scrum knowledge and core principles for those entering the field. Candidates demonstrate understanding of foundational frameworks, terminology, and practices required to participate effectively in agile teams and begin their professional journey."
+      },
+      "practitioner": {
+        "tag": "APPLIED PRACTICE",
+        "name": "PRACTITIONER",
+        "desc": "The Practitioner level validates the ability to facilitate Scrum events, coach teams, and apply the framework in complex environments. Candidates demonstrate active mastery through scenario-based assessment grounded in real-world practice.",
+        "audience": {
+          "a0": "Active Scrum Masters.",
+          "a1": "Team coaches & facilitators.",
+          "a2": "Experienced Agile practitioners."
+        }
+      },
+      "authority": {
+        "tag": "STRATEGIC MASTERY",
+        "name": "AUTHORITY",
+        "desc": "The Authority level confirms senior-level expertise and thought leadership in Scrum. Candidates demonstrate the capacity to shape Agile strategy at an organizational level, mentor practitioners, and drive sustainable transformation across enterprise contexts.",
+        "audience": {
+          "a0": "Senior Agile leaders.",
+          "a1": "Organizational coaches.",
+          "a2": "Enterprise transformation leads."
+        }
+      },
+      "table": {
+        "roleHeader": "Role",
+        "foundationHeader": "Foundation",
+        "practitionerHeader": "Practitioner",
+        "authorityHeader": "Authority",
+        "smRole": "Scrum Master",
+        "poRole": "Product Owner",
+        "sfRole": "Scrum Facilitator"
+      }
+    },
+    "whyChooseUs": {
+      "badge": "Why Choose Us",
+      "headlineStart": "Why",
+      "headlineHighlight": "Scrum Certifications",
+      "description": "A credential from Institute of Scrum is a validation that you have proven practical, role-specific mastery through rigorous assessment. When employers see this designation, they know the holder has earned standards that go far beyond attendance and memorization."
+    },
+    "nav": {
+      "certifications": "Certifications",
+      "about": "About",
+      "blog": "Blog",
+      "contact": "Contact",
+      "login": "Login",
+      "register": "Register"
+    },
+    "footer": {
+      "tagline": "Canada's premier provider of industry-recognized Scrum certifications.",
+      "copyright": "\u00a9 2026 Institute of Scrum. All rights reserved.",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "certifications": {
+        "title": "Certifications",
+        "foundation": "Foundation Level",
+        "practitioner": "Practitioner Level",
+        "authority": "Authority Level"
+      },
+      "resources": {
+        "title": "Resources",
+        "journal": "Scrum Journal",
+        "guides": "Study Guides"
+      },
+      "company": {
+        "title": "Company",
+        "about": "About Us",
+        "contact": "Contact"
+      },
+      "legal": {
+        "title": "Legal",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service"
+      }
+    }
   }
 }
