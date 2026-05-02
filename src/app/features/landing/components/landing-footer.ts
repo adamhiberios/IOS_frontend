@@ -1,10 +1,9 @@
 import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideDynamicIcon } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { MapleLeafIcon } from '@ui';
+import { CanadaFlag } from '@ui';
 
 /**
  * `ios-landing-footer` — full website footer for the public landing page.
@@ -15,7 +14,7 @@ import { MapleLeafIcon } from '@ui';
  */
 @Component({
   selector: 'ios-landing-footer',
-  imports: [NgOptimizedImage, RouterLink, LucideDynamicIcon],
+  imports: [NgOptimizedImage, RouterLink, CanadaFlag],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="bg-ios-brand-dark text-white">
@@ -189,16 +188,11 @@ import { MapleLeafIcon } from '@ui';
       <!-- Bottom bar -->
       <div class="flex items-center justify-center gap-1 px-6 pb-4">
         <small class="text-ios-brand-muted text-xs">{{ lang.t('landing.footer.copyright') }}</small>
-        <span class="inline-flex items-center" role="img" aria-label="Made in Canada">
-          <span class="block w-1.5 h-3 bg-red-600 rounded-sm"></span>
-          <svg [lucideIcon]="mapleLeaf" class="w-4 h-4 text-red-600" aria-hidden="true"></svg>
-          <span class="block w-1.5 h-3 bg-red-600 rounded-sm"></span>
-        </span>
+        <ios-canada-flag />
       </div>
     </footer>
   `,
 })
 export class LandingFooter {
-  protected readonly mapleLeaf = MapleLeafIcon;
   protected readonly lang = inject(LanguageService);
 }
