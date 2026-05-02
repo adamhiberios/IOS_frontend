@@ -366,5 +366,33 @@
         "terms": "Conditions d'utilisation"
       }
     }
+  },
+  "contact": {
+    "hero": {
+      "back": "Retour à l'accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      },
+      "title": "Contact"
+    },
+    "heading": {
+      "intro": "N'hésitez pas à ",
+      "cta": "nous contacter",
+      "subtitle": "Informations importantes concernant nos certifications"
+    },
+    "form": {
+      "subject": "Sujet",
+      "subjectPlaceholder": "Sélectionnez un sujet",
+      "message": "Message",
+      "submit": "Envoyer un message"
+    },
+    "subjects": {
+      "general": "Demande générale",
+      "certifications": "Certifications",
+      "support": "Support technique",
+      "partnership": "Partenariat",
+      "other": "Autre"
+    },
+    "scrollToTop": "Retour en haut"
   }
 }

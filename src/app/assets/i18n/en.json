@@ -372,5 +372,33 @@
         "terms": "Terms of Service"
       }
     }
+  },
+  "contact": {
+    "hero": {
+      "back": "Back to home",
+      "breadcrumb": {
+        "home": "Home"
+      },
+      "title": "Contact"
+    },
+    "heading": {
+      "intro": "Feel free to ",
+      "cta": "get in touch",
+      "subtitle": "Important Information Regarding Our Credentials"
+    },
+    "form": {
+      "subject": "Subject",
+      "subjectPlaceholder": "Select a subject",
+      "message": "Message",
+      "submit": "Send a message"
+    },
+    "subjects": {
+      "general": "General inquiry",
+      "certifications": "Certifications",
+      "support": "Technical support",
+      "partnership": "Partnership",
+      "other": "Other"
+    },
+    "scrollToTop": "Scroll to top"
   }
 }
