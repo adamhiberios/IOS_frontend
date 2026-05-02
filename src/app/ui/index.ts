@@ -15,3 +15,7 @@ export { PasswordStrength, type PasswordRules } from './password-strength/passwo
 export { Select, type SelectOption, type SelectState } from './select';
 export { SocialButton, type SocialProvider } from './social-button/social-button';
 export { AppleIcon, GoogleIcon, LinkedinIcon, MapleLeafIcon } from './social-button/social-icons';
+export { IosIcon } from './icon/icon';
+export { provideIcons, type LucideIconClass } from './icon/icon-registry';
+export type { LucideIconName } from './icon/icon-names';
+export { SectionBadge, type SectionBadgeVariant } from './section-badge/section-badge';

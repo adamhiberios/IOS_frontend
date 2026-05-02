@@ -23,9 +23,12 @@ import { publicOnlyGuard, roleGuard } from '@core/auth';
  */
 export const routes: Routes = [
   {
+    // Public landing page — no guard, visible to everyone.
+    // Authenticated users navigate to their dashboard from within the page;
+    // unauthenticated users are directed to /auth/login or /auth/register.
     path: '',
-    pathMatch: 'full',
-    redirectTo: '/dashboard',
+    loadChildren: () => import('@features/landing/landing.routes'),
+    title: 'Institute of Scrum — Learn, Certify, Advance',
   },
   {
     path: 'auth',
