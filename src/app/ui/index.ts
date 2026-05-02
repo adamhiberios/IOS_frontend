@@ -4,6 +4,7 @@
 // Tailwind utility classes only; design tokens live in src/styles.css under @theme.
 
 export { AccentBars } from './accent-bars/accent-bars';
+export { CanadaFlag } from './canada-flag/canada-flag';
 export { Button, type ButtonVariant, type ButtonSize, type ButtonType } from './button';
 export { Checkbox } from './checkbox/checkbox';
 export { Dropdown, type DropdownOption } from './dropdown';
