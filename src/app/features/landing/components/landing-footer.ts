@@ -112,7 +112,7 @@ import { CanadaFlag } from '@ui';
             <ul class="space-y-3">
               <li>
                 <a
-                  routerLink="/blog"
+                  routerLink="/insights"
                   class="text-ios-brand-muted text-[14px] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
                   >{{ lang.t('landing.footer.resources.journal') }}</a

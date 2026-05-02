@@ -394,5 +394,18 @@
       "other": "Autre"
     },
     "scrollToTop": "Retour en haut"
+  },
+  "insights": {
+    "hero": {
+      "back": "Retour à l'accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      },
+      "title": "Perspectives"
+    },
+    "search": {
+      "placeholder": "Rechercher des articles..."
+    },
+    "loadMore": "Charger plus"
   }
 }

@@ -57,7 +57,7 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
             {{ lang.t('landing.nav.about') }}
           </button>
           <a
-            routerLink="/blog"
+            routerLink="/insights"
             class="text-center px-4 py-2 rounded-lg
                    font-heading font-semibold text-[15px]
                    text-ios-fg-10 hover:bg-ios-surface-strong transition-colors"

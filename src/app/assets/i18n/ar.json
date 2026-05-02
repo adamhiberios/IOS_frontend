@@ -400,5 +400,18 @@
       "other": "أخرى"
     },
     "scrollToTop": "العودة إلى الأعلى"
+  },
+  "insights": {
+    "hero": {
+      "back": "العودة إلى الرئيسية",
+      "breadcrumb": {
+        "home": "الرئيسية"
+      },
+      "title": "الرؤى"
+    },
+    "search": {
+      "placeholder": "ابحث في المقالات..."
+    },
+    "loadMore": "عرض المزيد"
   }
 }

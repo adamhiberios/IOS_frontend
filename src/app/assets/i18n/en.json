@@ -340,7 +340,7 @@
     "nav": {
       "certifications": "Certifications",
       "about": "About",
-      "blog": "Blog",
+      "blog": "Insights",
       "contact": "Contact",
       "login": "Login",
       "register": "Register"
@@ -400,5 +400,18 @@
       "other": "Other"
     },
     "scrollToTop": "Scroll to top"
+  },
+  "insights": {
+    "hero": {
+      "back": "Back to home",
+      "breadcrumb": {
+        "home": "Home"
+      },
+      "title": "Insights"
+    },
+    "search": {
+      "placeholder": "Search articles..."
+    },
+    "loadMore": "Load more"
   }
 }
