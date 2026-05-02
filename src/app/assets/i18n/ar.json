@@ -372,5 +372,33 @@
         "terms": "شروط الخدمة"
       }
     }
+  },
+  "contact": {
+    "hero": {
+      "back": "العودة إلى الرئيسية",
+      "breadcrumb": {
+        "home": "الرئيسية"
+      },
+      "title": "اتصل بنا"
+    },
+    "heading": {
+      "intro": "لا تتردد في ",
+      "cta": "التواصل معنا",
+      "subtitle": "معلومات مهمة بخصوص شهاداتنا"
+    },
+    "form": {
+      "subject": "الموضوع",
+      "subjectPlaceholder": "اختر موضوعًا",
+      "message": "الرسالة",
+      "submit": "إرسال رسالة"
+    },
+    "subjects": {
+      "general": "استفسار عام",
+      "certifications": "الشهادات",
+      "support": "الدعم الفني",
+      "partnership": "الشراكة",
+      "other": "أخرى"
+    },
+    "scrollToTop": "العودة إلى الأعلى"
   }
 }
