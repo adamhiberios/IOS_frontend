@@ -61,6 +61,11 @@ export const routes: Routes = [
     title: 'Admin',
   },
   {
+    path: 'insights',
+    loadChildren: () => import('@features/insights/insights.routes'),
+    title: 'Insights',
+  },
+  {
     path: 'forbidden',
     loadComponent: () => import('@features/forbidden/forbidden.page').then((m) => m.ForbiddenPage),
     title: 'Access denied',
