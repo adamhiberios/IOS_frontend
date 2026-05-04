@@ -68,7 +68,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
         [class]="triggerClasses()"
       >
         <span class="flex-1 truncate" [class.text-gray-400]="!selectedValue()">
-          {{ selectedValue() ?? placeholder() ?? '' }}
+          {{ selectedValue() ?? placeholder() }}
         </span>
         <ios-icon name="chevron-down" class="w-5 h-5 text-ios-fg-7 flex-shrink-0" />
       </button>

@@ -23,3 +23,24 @@ export interface InsightPost {
 export interface InsightsPageData {
   posts: InsightPost[];
 }
+
+/** A single content block inside a detail article. */
+export type InsightContentBlock =
+  | { type: 'paragraph'; text: string }
+  | { type: 'heading'; text: string }
+  | { type: 'quote'; text: string; attribution?: string }
+  | { type: 'list'; items: string[] };
+
+/** Full article returned from the detail endpoint. */
+export interface InsightDetailPost extends InsightPost {
+  /** URL slug, e.g. "why-employers-require-scrum-certification". */
+  slug: string;
+  /** Category label, e.g. "Career". */
+  category: string;
+  /** Author display name. */
+  author: string;
+  /** Author role/title. */
+  authorRole: string;
+  /** Ordered content blocks that make up the article body. */
+  body: InsightContentBlock[];
+}

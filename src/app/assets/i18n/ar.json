@@ -413,5 +413,23 @@
       "placeholder": "ابحث في المقالات..."
     },
     "loadMore": "عرض المزيد"
+  },
+  "insight": {
+    "detail": {
+      "back": "العودة إلى الرؤى",
+      "breadcrumb": {
+        "home": "الرئيسية",
+        "insights": "الرؤى"
+      },
+      "share": "شارك هذا المقال:",
+      "shareLinkedIn": "شارك على لينكدإن",
+      "shareX": "شارك على منصة X",
+      "copyLink": "نسخ الرابط",
+      "copied": "تم النسخ!",
+      "related": "مقالات ذات صلة",
+      "notFound": "المقال غير موجود.",
+      "backToInsights": "العودة إلى الرؤى",
+      "scrollToTop": "العودة إلى الأعلى"
+    }
   }
 }
