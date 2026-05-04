@@ -407,5 +407,18 @@
       "placeholder": "Rechercher des articles..."
     },
     "loadMore": "Charger plus"
+  },
+  "insight": {
+    "detail": {
+      "back": "Retour aux perspectives",
+      "breadcrumb": {
+        "home": "Accueil",
+        "insights": "Perspectives"
+      },
+      "related": "Vous aimerez aussi",
+      "notFound": "Article introuvable.",
+      "backToInsights": "Retour aux perspectives",
+      "scrollToTop": "Retour en haut"
+    }
   }
 }

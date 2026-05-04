@@ -4,13 +4,73 @@
  * Exposes read-only signals that the insights page consumes.
  * Currently backed by static fallback data; call `load()` to replace with
  * live API data once the backend endpoint is available.
+ *
+ * Also supports detail view via `loadBySlug(slug)` / `currentDetail` signal.
  */
 
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { InsightsApi } from './insights.api';
-import type { InsightPost, InsightsPageData } from './insights.model';
+import type { InsightDetailPost, InsightPost, InsightsPageData } from './insights.model';
 
+/** Fallback body used when the detail API endpoint is not yet available. */
+const FALLBACK_DETAIL_BODY: InsightDetailPost['body'] = [
+  {
+    type: 'paragraph',
+    text: 'Over the past three years, Scrum certification has undergone a quiet but seismic shift in the Canadian job market. Where hiring managers once treated it as a "nice-to-have" line on a résumé, a growing number of organizations now list it as a mandatory requirement — right alongside a degree or years of experience.',
+  },
+  {
+    type: 'heading',
+    text: 'What Changed?',
+  },
+  {
+    type: 'paragraph',
+    text: 'The pandemic accelerated remote work, which placed an enormous premium on self-organizing teams and asynchronous delivery. Companies that had never heard of a Sprint Retrospective suddenly found themselves running distributed teams across time zones. Those that leaned on Scrum came out ahead — and their competitors noticed.',
+  },
+  {
+    type: 'quote',
+    text: 'Certification is no longer a proxy for commitment. It is a proxy for a shared vocabulary — and that vocabulary is what makes remote collaboration possible.',
+    attribution: 'VP Engineering, Toronto-based fintech',
+  },
+  {
+    type: 'heading',
+    text: 'The Data Behind the Trend',
+  },
+  {
+    type: 'paragraph',
+    text: 'A review of 2,400 Canadian tech job postings from Q1 2025 found that 61 % explicitly mentioned Agile or Scrum experience, up from 38 % in 2022. More striking: 29 % listed a recognized Scrum certification as a formal requirement — not merely preferred.',
+  },
+  {
+    type: 'list',
+    items: [
+      'Scrum Master and Product Owner roles: certification required in 74 % of listings.',
+      'Senior developer roles: Agile experience required in 55 % of listings.',
+      'Project manager titles being replaced by Scrum Master in 1 in 5 new postings.',
+    ],
+  },
+  {
+    type: 'heading',
+    text: 'Which Certification Levels Are Employers Looking For?',
+  },
+  {
+    type: 'paragraph',
+    text: 'Foundational certifications (IOS-SF, IOS-PF) satisfy a majority of entry-level and mid-level requirements. Practitioner-level credentials are increasingly demanded for team leads and delivery managers. Expert-level certifications remain rare requirements but carry significant salary premiums — often 15–25 % above the market median.',
+  },
+  {
+    type: 'paragraph',
+    text: 'For professionals currently weighing their next step, the calculus is straightforward: starting at the Foundation level costs far less time and money than the salary differential you capture within the first twelve months of certification.',
+  },
+  {
+    type: 'heading',
+    text: 'What This Means for You',
+  },
+  {
+    type: 'paragraph',
+    text: 'Whether you are entering the workforce, pivoting roles, or preparing for a promotion conversation, Scrum certification is now among the highest-ROI credentials available in the Canadian technology market. The Institute of Scrum exists precisely to make that credential accessible, rigorous, and recognized.',
+  },
+];
+
+/** Slugs derived from FALLBACK_DATA posts, used to seed detail fallback. */
 const FALLBACK_DATA: InsightsPageData = {
   posts: [
     {
@@ -118,10 +178,20 @@ export class InsightsStore {
   private readonly _searchQuery = signal('');
   private readonly _visibleCount = signal(6);
 
+  // ── Detail state ────────────────────────────────────────────────────────
+  private readonly _detail = signal<InsightDetailPost | null>(null);
+  private readonly _detailStatus = signal<LoadStatus>('idle');
+
   readonly status = this._status.asReadonly();
   readonly error = this._error.asReadonly();
   readonly isLoading = computed(() => this._status() === 'loading');
   readonly searchQuery = this._searchQuery.asReadonly();
+
+  readonly currentDetail = this._detail.asReadonly();
+  readonly isDetailLoading = computed(() => this._detailStatus() === 'loading');
+  readonly detailNotFound = computed(
+    () => this._detailStatus() === 'error' && this._detail() === null,
+  );
 
   readonly allPosts = computed<InsightPost[]>(() => this._data().posts);
 
@@ -139,6 +209,15 @@ export class InsightsStore {
   );
 
   readonly hasMore = computed(() => this._visibleCount() < this.filteredPosts().length);
+
+  /** Up to 3 posts related to the current detail post (excludes the current one). */
+  readonly relatedPosts = computed<InsightPost[]>(() => {
+    const current = this._detail();
+    if (!current) return [];
+    return this.allPosts()
+      .filter((p) => p.id !== current.id)
+      .slice(0, 3);
+  });
 
   setSearchQuery(query: string): void {
     this._searchQuery.set(query);
@@ -165,5 +244,42 @@ export class InsightsStore {
       this._status.set('error');
       this._error.set(err instanceof Error ? err.message : 'Failed to load insights content');
     }
+  }
+
+  /**
+   * Load a single post by its URL slug.
+   *
+   * ── Current state ───────────────────────────────────────────────────────
+   * Backend detail endpoint not yet available. Falls back to matching the
+   * slug against the list data, then injects the static body copy. When the
+   * endpoint is ready, replace the null-check block with an actual API call.
+   */
+  async loadBySlug(slug: string): Promise<void> {
+    // Reset when navigating between posts.
+    this._detail.set(null);
+    this._detailStatus.set('loading');
+
+    // Ensure the list is populated so we can match by slug.
+    if (this._status() === 'idle') {
+      await this.load();
+    }
+
+    const match = this.allPosts().find((p) => p.link === `/insights/${slug}`);
+    if (!match) {
+      this._detailStatus.set('error');
+      return;
+    }
+
+    const detail: InsightDetailPost = {
+      ...match,
+      slug,
+      category: 'Agile & Scrum',
+      author: 'IOS Editorial Team',
+      authorRole: 'Institute of Scrum',
+      body: FALLBACK_DETAIL_BODY,
+    };
+
+    this._detail.set(detail);
+    this._detailStatus.set('success');
   }
 }

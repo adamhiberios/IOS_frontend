@@ -347,7 +347,7 @@
     },
     "footer": {
       "tagline": "Canada's premier provider of industry-recognized Scrum certifications.",
-      "copyright": "\u00a9 2026 Institute of Scrum. All rights reserved.",
+      "copyright": "© 2026 Institute of Scrum. All rights reserved.",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "certifications": {
@@ -413,5 +413,23 @@
       "placeholder": "Search articles..."
     },
     "loadMore": "Load more"
+  },
+  "insight": {
+    "detail": {
+      "back": "Back to Insights",
+      "breadcrumb": {
+        "home": "Home",
+        "insights": "Insights"
+      },
+      "share": "Share this article:",
+      "shareLinkedIn": "Share on LinkedIn",
+      "shareX": "Share on X (Twitter)",
+      "copyLink": "Copy link",
+      "copied": "Copied!",
+      "related": "Related Articles",
+      "notFound": "Article not found.",
+      "backToInsights": "Back to Insights",
+      "scrollToTop": "Scroll to top"
+    }
   }
 }
