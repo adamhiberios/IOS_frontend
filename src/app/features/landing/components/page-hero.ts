@@ -29,13 +29,13 @@ import { IosIcon, provideIcons } from '@ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="relative bg-ios-brand-primary overflow-hidden">
-      <!-- Decorative circles -->
+      <!-- Decorative circles — logical start/end so they mirror correctly in RTL -->
       <div
-        class="absolute top-[-157px] right-[-160px] w-[320px] h-[320px] rounded-full bg-ios-brand-primary-mid opacity-50"
+        class="absolute top-[-157px] end-[-160px] w-[320px] h-[320px] rounded-full bg-ios-brand-primary-mid opacity-50"
         aria-hidden="true"
       ></div>
       <div
-        class="absolute bottom-[-127px] left-[-128px] w-[256px] h-[256px] rounded-full bg-ios-brand-primary-deep opacity-50"
+        class="absolute bottom-[-127px] start-[-128px] w-[256px] h-[256px] rounded-full bg-ios-brand-primary-deep opacity-50"
         aria-hidden="true"
       ></div>
 
@@ -47,7 +47,7 @@ import { IosIcon, provideIcons } from '@ui';
             class="flex items-center justify-center w-10 h-10 rounded-lg bg-ios-brand-primary-soft hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
             [attr.aria-label]="ariaBackLabel()"
           >
-            <ios-icon name="arrow-left" class="w-5 h-5 text-ios-brand-primary" />
+            <ios-icon name="arrow-left" class="w-5 h-5 text-ios-brand-primary rtl:rotate-180" />
           </a>
           <div class="flex flex-col gap-1">
             @if (showBreadcrumb()) {
