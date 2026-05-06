@@ -3,7 +3,8 @@
     "brand": "Institut Scrum",
     "copyright": "© 2026 Institut Scrum. Tous droits réservés.",
     "orContinueWith": "Ou continuer avec",
-    "back": "Retour"
+    "back": "Retour",
+    "scrollToTop": "Retour en haut"
   },
   "lang": {
     "en": "English",
@@ -395,6 +396,105 @@
     },
     "scrollToTop": "Retour en haut"
   },
+  "mockExam": {
+    "hero": {
+      "back": "Retour à l'accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      },
+      "title": "À propos de l'examen blanc"
+    },
+    "whatIs": {
+      "badge": "À propos de l'examen blanc",
+      "heading1": "Qu'est-ce qu'un ",
+      "heading2": "examen blanc ?",
+      "description": "Un examen blanc est un test d'entraînement qui reflète le vrai examen de certification. Il aide les candidats à comprendre le format, les types de questions et les contraintes de temps à l'avance.",
+      "passRate": "90% de réussite",
+      "passRateLocation": "Diplômés au Canada",
+      "imageAlt": "Professionnel se préparant à un examen de certification"
+    },
+    "why": {
+      "badge": "Avantages",
+      "heading1": "Pourquoi passer un ",
+      "heading2": "examen blanc ?",
+      "pills": {
+        "questions": "50-90 questions",
+        "timer": "Minuterie 30-60 min",
+        "score": "Score instantané"
+      },
+      "benefits": {
+        "anxiety": "Aide à réduire l'anxiété liée à l'examen",
+        "gaps": "Identifie les lacunes avant le jour de l'examen",
+        "time": "Améliore la gestion du temps sous pression",
+        "simulate": "Simule fidèlement l'environnement du vrai examen",
+        "confidence": "Renforce la confiance avant l'examen final",
+        "progress": "Suit votre progression avec des rapports de performance détaillés"
+      }
+    },
+    "howItWorks": {
+      "badge": "Comment ça marche",
+      "heading1": "Comment fonctionnent nos ",
+      "heading2": "examens blancs",
+      "description": "Nos examens blancs sont conçus pour refléter le vrai examen de certification. Chaque test suit la même structure, le même timing et le même niveau de difficulté.",
+      "steps": {
+        "01": {
+          "title": "Commencer l'examen blanc",
+          "body": "Sélectionnez votre certification et lancez le test chronométré — structuré exactement comme le vrai examen."
+        },
+        "02": {
+          "title": "Répondez aux questions dans le temps imparti",
+          "body": "Travaillez sur des questions basées sur des scénarios dans des conditions réelles, en gérant le compte à rebours."
+        },
+        "03": {
+          "title": "Révisez chaque question attentivement",
+          "body": "Signalez les questions dont vous n'êtes pas sûr et revenez-y avant de soumettre — comme lors du vrai examen."
+        },
+        "04": {
+          "title": "Soumettre le test",
+          "body": "Quand vous êtes prêt, soumettez vos réponses et recevez votre score instantanément."
+        },
+        "05": {
+          "title": "Examinez vos résultats et performances",
+          "body": "Obtenez une analyse complète par domaine — identifiez où vous excellez et où vous devez vous concentrer."
+        }
+      },
+      "preview": {
+        "title": "Exemple d'examen blanc",
+        "subtitle": "Question 12 sur 50",
+        "questionLabel": "Question",
+        "question": "Une équipe Scrum a du mal à atteindre ses objectifs de Sprint. Quelle est l'action la plus appropriée pour le Scrum Master ?",
+        "optionA": "Assigner des tâches directement aux développeurs",
+        "optionB": "Faciliter une rétrospective pour identifier les causes profondes",
+        "optionC": "Prolonger la durée du Sprint",
+        "optionD": "Retirer le Product Owner de la planification",
+        "progressLabel": "Progression",
+        "cta": "Commencer votre examen blanc"
+      }
+    },
+    "training": {
+      "heading1": "Entraînement avec ",
+      "heading2": "l'examen blanc",
+      "description": "Testez vos connaissances et familiarisez-vous avec le format avant de passer le vrai examen de certification.",
+      "cta": "En savoir plus"
+    },
+    "contact": {
+      "heading1": "N'hésitez pas à ",
+      "heading2": "nous contacter",
+      "subtitle": "Informations importantes concernant nos accréditations",
+      "form": {
+        "name": "Votre nom",
+        "email": "Votre e-mail",
+        "message": "Message",
+        "submit": "Envoyer un message",
+        "sending": "Envoi en cours…",
+        "success": "✓ Merci ! Nous vous contacterons bientôt.",
+        "nameError": "Le nom est requis.",
+        "emailError": "Une adresse e-mail valide est requise.",
+        "messageError": "Le message est requis."
+      }
+    },
+    "scrollToTop": "Retour en haut"
+  },
   "insights": {
     "hero": {
       "back": "Retour à l'accueil",
@@ -419,6 +519,263 @@
       "notFound": "Article introuvable.",
       "backToInsights": "Retour aux perspectives",
       "scrollToTop": "Retour en haut"
+    }
+  },
+  "scrumMaster": {
+    "hero": {
+      "back": "Retour à l'accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      },
+      "title": "À propos du Scrum Master"
+    },
+    "intro": {
+      "headingPart1": "À propos du",
+      "headingPart2": "Scrum Master",
+      "description": "Le Scrum Master est un leader serviteur et un coach Agile qui permet aux équipes de s'auto-organiser, d'éliminer les obstacles et de s'améliorer continuellement. Il fait le lien entre la théorie Scrum et la livraison réelle.",
+      "badgesAlt": "Badges de certification ESM, ESM-P et ESM-A"
+    },
+    "imageAlt": {
+      "certificate": "Certification de l'Institut of Scrum"
+    },
+    "whyMatters": {
+      "title": "Pourquoi le Scrum Master est essentiel",
+      "point1": "Les organisations perdent en moyenne 11,4 % de leur investissement à cause d'une mauvaise gestion de projet — le Scrum Master réduit directement ce risque.",
+      "point2": "Le Scrum Master agit comme un bouclier pour son équipe, permettant aux développeurs de se concentrer sur la livraison de valeur sans distraction.",
+      "point3": "Il favorise une culture de transparence, d'inspection et d'adaptation — les piliers fondamentaux qui rendent la transformation Agile durable.",
+      "point4": "Les Scrum Masters certifiés sont constamment associés à des cycles de livraison plus rapides, un moral d'équipe plus élevé et des gains de productivité mesurables."
+    },
+    "whoShouldLearn": {
+      "title": "Qui devrait se former",
+      "point1": "Pas besoin d'un diplôme spécifique — toute personne passionnée par la collaboration et l'amélioration continue peut devenir Scrum Master.",
+      "point2": "Les chefs d'équipe et gestionnaires de projet souhaitant passer d'un management directif à un leadership de service.",
+      "point3": "Les développeurs ou ingénieurs QA désirant élargir leur impact au-delà des tâches techniques.",
+      "point4": "Les analystes métier et parties prenantes produit souhaitant mieux comprendre et soutenir la livraison Agile.",
+      "point5": "Les professionnels RH et coachs organisationnels pilotant des programmes de culture et de gestion du changement.",
+      "point6": "Les récents diplômés et reconvertis professionnels cherchant une certification Agile reconnue mondialement."
+    },
+    "careerOpportunities": {
+      "title": "Opportunités de carrière",
+      "point1": "La demande pour des gestionnaires de projet et Scrum Masters qualifiés est en croissance dans tous les secteurs — technologie, santé, finance et au-delà.",
+      "point2": "Les Scrum Masters certifiés bénéficient d'un avantage salarial significatif par rapport aux praticiens non certifiés.",
+      "point3": "Le rôle ouvre des voies vers des postes de Coach Agile, d'Ingénieur de Release Train et de Responsable Delivery.",
+      "point4": "Les organisations mondiales recrutent activement des détenteurs d'ESM pour diriger les programmes de transformation numérique et Agile hybride.",
+      "point5": "Avec ESM, ESM-P et ESM-A, vous construisez un parcours de carrière structuré avec une certification reconnue à chaque étape."
+    },
+    "faq": {
+      "badge": "FAQ",
+      "headingPart1": "De la compréhension ",
+      "headingPart2": "à l'action",
+      "description": "Tout ce que vous devez savoir sur le rôle de Scrum Master, le parcours de certification et ce à quoi s'attendre une fois certifié — expliqué en langage simple."
+    },
+    "certPath": {
+      "badge": "Parcours de certification",
+      "headingPart1": "Parcours ",
+      "headingPart2": "Scrum Master",
+      "description": "Trois certifications progressivement avancées conçues pour vous faire passer des connaissances Scrum fondamentales au leadership Agile au niveau organisationnel.",
+      "trackDesc": "Chaque certification de ce parcours est entièrement en ligne, à votre rythme et reconnue par des organisations du monde entier. Commencez au niveau Fondation et progressez à votre propre rythme.",
+      "whoShouldPursue": "Qui devrait poursuivre ce parcours",
+      "whoShouldPursueDesc": "Dirigez des équipes grâce au cadre Scrum avec un leadership de service, une maîtrise de la facilitation et une amélioration continue.",
+      "foundationLevel": "Niveau Fondation",
+      "practitionerLevel": "Niveau Praticien",
+      "authorityLevel": "Niveau Autorité",
+      "esmName": "Endorsed Scrum Master",
+      "esmpName": "Endorsed Scrum Master Practitioner",
+      "esmaName": "Endorsed Scrum Master Authority",
+      "hours": "+20 hrs",
+      "online": "Entièrement en ligne",
+      "questions": "Test de 45 questions",
+      "startingAt": "À partir de",
+      "price": "180 $ CAD",
+      "download": "Télécharger",
+      "enroll": "S'inscrire",
+      "exploreOthers": "Explorer d'autres certifications"
+    },
+    "contact": {
+      "heading1": "N'hésitez pas à ",
+      "heading2": "nous contacter",
+      "subtitle": "Vous avez des questions sur les certifications Scrum Master ? Notre équipe est là pour vous guider à chaque étape.",
+      "form": {
+        "name": "Nom complet",
+        "nameError": "Ce champ est obligatoire.",
+        "email": "Adresse e-mail",
+        "emailError": "Veuillez saisir une adresse e-mail valide.",
+        "message": "Message",
+        "messageError": "Ce champ est obligatoire.",
+        "submit": "Envoyer le message",
+        "sending": "Envoi en cours...",
+        "success": "Message envoyé !"
+      }
+    }
+  },
+  "productOwner": {
+    "hero": {
+      "back": "Retour à l accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      },
+      "title": "À propos du Product Owner"
+    },
+    "intro": {
+      "headingPart1": "À propos du",
+      "headingPart2": "Product Owner",
+      "description": "Le Product Owner est responsable de maximiser la valeur du produit résultant du travail de l équipe Scrum. Il définit les priorités du backlog produit et aligne les attentes des parties prenantes avec les objectifs métier et la feuille de route de développement réelle.",
+      "badgesAlt": "Badges de certification EPO, EPO-P et EPO-A"
+    },
+    "imageAlt": {
+      "certificate": "Certification de l Institut of Scrum"
+    },
+    "whyMatters": {
+      "title": "Pourquoi le Product Owner est essentiel",
+      "point1": "Les organisations gaspillent des millions à cause de mauvaises priorités produit — le Product Owner prévient directement ces pertes.",
+      "point2": "Le PO fait le lien entre la stratégie commerciale et les équipes de livraison, garantissant que chaque sprint génère une valeur réelle.",
+      "point3": "Il maintient un backlog produit clair et ordonné qui concentre les équipes sur le travail à plus fort impact.",
+      "point4": "Les Product Owners certifiés relient constamment les objectifs métier aux résultats de développement, accélérant l adéquation produit-marché."
+    },
+    "whoShouldLearn": {
+      "title": "Qui devrait se former",
+      "point1": "Toute personne passionnée par la stratégie produit et la création de valeur client peut devenir Product Owner.",
+      "point2": "Les analystes métier et responsables des exigences souhaitant prendre en main la direction du produit.",
+      "point3": "Les chefs de projet en transition vers des modes de travail centrés sur le produit et les résultats.",
+      "point4": "Les entrepreneurs et fondateurs de startups souhaitant structurer leur développement produit avec la discipline Agile.",
+      "point5": "Les professionnels marketing et UX désirant un rôle formel pour définir ce qui est construit et pourquoi.",
+      "point6": "Les récents diplômés et reconvertis professionnels recherchant une certification de leadership produit reconnue mondialement."
+    },
+    "careerOpportunities": {
+      "title": "Opportunités de carrière",
+      "point1": "Les rôles de Product Owner figurent parmi les postes à la croissance la plus rapide dans la tech, la finance et la transformation numérique.",
+      "point2": "Les POs certifiés bénéficient de salaires premium et sont souvent promus rapidement vers des postes Senior PO ou Head of Product.",
+      "point3": "Le rôle ouvre des voies vers les postes de Product Manager, Chief Product Officer et Agile Portfolio Manager.",
+      "point4": "Les organisations mondiales recherchent activement des titulaires d EPO pour aligner les feuilles de route produit avec la stratégie commerciale.",
+      "point5": "Avec EPO, EPO-P et EPO-A, vous construisez un parcours de carrière complet avec une certification reconnue à chaque étape."
+    },
+    "faq": {
+      "badge": "FAQ",
+      "headingPart1": "De la compréhension ",
+      "headingPart2": "à l action",
+      "description": "Tout ce que vous devez savoir sur le rôle de Product Owner, le parcours de certification et ce à quoi s attendre une fois certifié — expliqué en langage simple."
+    },
+    "certPath": {
+      "badge": "Parcours de certification",
+      "headingPart1": "Parcours ",
+      "headingPart2": "Product Owner",
+      "description": "Trois certifications progressivement avancées conçues pour vous faire passer des connaissances fondamentales du Product Owner au leadership Agile au niveau organisationnel.",
+      "trackDesc": "Chaque certification de ce parcours est entièrement en ligne, à votre rythme et reconnue par des organisations du monde entier. Commencez au niveau Fondation et progressez à votre propre rythme.",
+      "whoShouldPursue": "Qui devrait poursuivre ce parcours",
+      "whoShouldPursueDesc": "Définissez la vision produit, gérez le backlog et maximisez la valeur livrée avec l alignement des parties prenantes et l acuité commerciale.",
+      "foundationLevel": "Niveau Fondation",
+      "practitionerLevel": "Niveau Praticien",
+      "authorityLevel": "Niveau Autorité",
+      "epoName": "Endorsed Product Owner",
+      "epopName": "Endorsed Product Owner Practitioner",
+      "epoaName": "Endorsed Product Owner Authority",
+      "hours": "+20 hrs",
+      "online": "Entièrement en ligne",
+      "questions": "Test de 45 questions",
+      "startingAt": "À partir de",
+      "price": "180 $ CAD",
+      "download": "Télécharger",
+      "enroll": "S inscrire",
+      "exploreOthers": "Explorer d autres certifications"
+    },
+    "contact": {
+      "heading1": "N hésitez pas à ",
+      "heading2": "nous contacter",
+      "subtitle": "Vous avez des questions sur les certifications Product Owner ? Notre équipe est là pour vous guider à chaque étape.",
+      "form": {
+        "name": "Nom complet",
+        "nameError": "Ce champ est obligatoire.",
+        "email": "Adresse e-mail",
+        "emailError": "Veuillez saisir une adresse e-mail valide.",
+        "message": "Message",
+        "messageError": "Ce champ est obligatoire.",
+        "submit": "Envoyer le message",
+        "sending": "Envoi en cours...",
+        "success": "Message envoyé !"
+      }
+    }
+  },
+  "scrumFacilitator": {
+    "hero": {
+      "back": "Retour à l accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      },
+      "title": "À propos du Scrum Facilitateur"
+    },
+    "intro": {
+      "headingPart1": "À propos du",
+      "headingPart2": "Scrum Facilitateur",
+      "description": "Le Scrum Facilitateur est l expert en conception et en animation d événements Scrum efficaces. Il crée des environnements psychologiquement sûrs qui favorisent la collaboration, la prise de décision collective et l amélioration continue au sein des équipes Agile.",
+      "badgesAlt": "Badge de certification ESF"
+    },
+    "imageAlt": {
+      "certificate": "Certification de l Institut of Scrum"
+    },
+    "whyMatters": {
+      "title": "Pourquoi le Scrum Facilitateur est essentiel",
+      "point1": "Une mauvaise facilitation conduit à des réunions improductives et des équipes déconnectées — le Scrum Facilitateur transforme les sessions en conversations ciblées et alignées.",
+      "point2": "Le Scrum Facilitateur crée les conditions pour des équipes performantes en veillant à ce que chaque voix soit entendue et chaque décision éclairée.",
+      "point3": "Il applique des techniques de facilitation éprouvées lors des sprint plannings, revues et rétrospectives pour générer des améliorations réelles et mesurables.",
+      "point4": "Les organisations dotées de Scrum Facilitateurs qualifiés signalent une plus grande implication des équipes, une prise de décision plus rapide et moins de conflits."
+    },
+    "whoShouldLearn": {
+      "title": "Qui devrait se former",
+      "point1": "Toute personne qui anime ou participe régulièrement à des événements Scrum et souhaite les rendre plus efficaces.",
+      "point2": "Les Scrum Masters souhaitant approfondir leur boîte à outils de facilitation au-delà des bases du framework.",
+      "point3": "Les coachs Agile et responsables du changement organisationnel recherchant des certifications structurées en facilitation.",
+      "point4": "Les chefs d équipe et managers qui animent des ateliers, rétrospectives ou sessions d alignement transversal.",
+      "point5": "Les professionnels RH et spécialistes en formation qui conçoivent des expériences d apprentissage collaboratif.",
+      "point6": "Les consultants et coachs désirant une certification reconnue en facilitation professionnelle."
+    },
+    "careerOpportunities": {
+      "title": "Opportunités de carrière",
+      "point1": "Les facilitateurs qualifiés sont très recherchés dans les disciplines Agile, développement organisationnel et gestion du changement.",
+      "point2": "La certification ESF distingue les praticiens capables d animer des événements efficaces de ceux qui y participent simplement.",
+      "point3": "Les Scrum Facilitateurs certifiés progressent vers des rôles de Coach Agile Senior, Responsable du Changement Organisationnel et Concepteur d Ateliers.",
+      "point4": "Les grandes entreprises investissent dans la capacité de facilitation comme levier stratégique de transformation numérique et de changement culturel.",
+      "point5": "La certification ESF est votre point d entrée vers un parcours de carrière en facilitation reconnu au sein de l écosystème Institut of Scrum."
+    },
+    "faq": {
+      "badge": "FAQ",
+      "headingPart1": "De la compréhension ",
+      "headingPart2": "à l action",
+      "description": "Tout ce que vous devez savoir sur le rôle de Scrum Facilitateur, le parcours de certification et ce à quoi s attendre une fois certifié — expliqué en langage simple."
+    },
+    "certPath": {
+      "badge": "Parcours de certification",
+      "headingPart1": "Parcours ",
+      "headingPart2": "Scrum Facilitateur",
+      "description": "Une certification spécialisée conçue pour vous équiper des outils de facilitation professionnels nécessaires pour animer des événements Scrum efficaces.",
+      "trackDesc": "Cette certification est entièrement en ligne, à votre rythme et reconnue par des organisations du monde entier. Acquérez les compétences en facilitation dont vous avez besoin pour diriger des équipes Agile performantes.",
+      "whoShouldPursue": "Qui devrait poursuivre ce parcours",
+      "whoShouldPursueDesc": "Concevez et animez des événements Scrum à fort impact avec des techniques de facilitation expertes, la sécurité psychologique et la prise de décision collaborative.",
+      "foundationLevel": "Niveau Fondation",
+      "esfName": "Endorsed Scrum Facilitateur",
+      "hours": "+20 hrs",
+      "online": "Entièrement en ligne",
+      "questions": "Test de 45 questions",
+      "startingAt": "À partir de",
+      "price": "180 $ CAD",
+      "download": "Télécharger",
+      "enroll": "S inscrire",
+      "exploreOthers": "Explorer d autres certifications"
+    },
+    "contact": {
+      "heading1": "N hésitez pas à ",
+      "heading2": "nous contacter",
+      "subtitle": "Vous avez des questions sur la certification Scrum Facilitateur ? Notre équipe est là pour vous guider à chaque étape.",
+      "form": {
+        "name": "Nom complet",
+        "nameError": "Ce champ est obligatoire.",
+        "email": "Adresse e-mail",
+        "emailError": "Veuillez saisir une adresse e-mail valide.",
+        "message": "Message",
+        "messageError": "Ce champ est obligatoire.",
+        "submit": "Envoyer le message",
+        "sending": "Envoi en cours...",
+        "success": "Message envoyé !"
+      }
     }
   }
 }
