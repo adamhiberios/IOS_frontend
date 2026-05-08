@@ -706,6 +706,116 @@
       }
     }
   },
+  "allCertifications": {
+    "hero": {
+      "back": "Go back to home",
+      "breadcrumb": {
+        "home": "Home"
+      },
+      "title": "All Certifications"
+    },
+    "intro": {
+      "badge": "All Certifications",
+      "headingPart1": "What is ",
+      "headingPart2": "this?",
+      "description": "The CIPM certification framework offers a structured pathway across Project Management and Scrum Master disciplines, covering Foundation, Core, and Advanced levels. Each certificate is designed to build practical capability, validate professional competence, and support career progression—from essential fundamentals to advanced leadership and delivery mastery.",
+      "imageAlt": "Institute of Scrum certification",
+      "stat1Value": "12,000+",
+      "stat1Label": "Graduates across Canada",
+      "stat2Value": "6,000+",
+      "stat2Label": "Certificate generated"
+    },
+    "tracks": {
+      "scrumMaster": {
+        "titlePart1": "Scrum Master ",
+        "titlePart2": "Track",
+        "description": "Lead teams through the Scrum framework with servant leadership, facilitation mastery, and continuous improvement.",
+        "foundationLevel": "Foundation Level",
+        "practitionerLevel": "Practitioner Level",
+        "authorityLevel": "Authority Level",
+        "esmName": "Endorsed Scrum Master",
+        "esmpName": "Endorsed Scrum Master Practitioner",
+        "esmaName": "Endorsed Scrum Master Authority"
+      },
+      "productOwner": {
+        "titlePart1": "Product Owner ",
+        "titlePart2": "Track",
+        "description": "Define product vision, manage the backlog, and maximize value delivery with stakeholder alignment and business acumen.",
+        "foundationLevel": "Foundation Level",
+        "practitionerLevel": "Practitioner Level",
+        "authorityLevel": "Authority Level",
+        "epoName": "Endorsed Product Owner",
+        "epopName": "Endorsed Product Owner Practitioner",
+        "epoaName": "Endorsed Product Owner Authority"
+      },
+      "scrumFacilitator": {
+        "titlePart1": "Scrum Facilitator ",
+        "titlePart2": "Track",
+        "description": "Design and lead powerful collaborative sessions that help Scrum teams achieve better outcomes together.",
+        "foundationLevel": "Foundation Level",
+        "esfName": "Endorsed Scrum Facilitator"
+      }
+    },
+    "shared": {
+      "hours": "+20 hrs",
+      "online": "Fully Online",
+      "questions": "45-question Test",
+      "startingAt": "Starting at",
+      "price": "CAD $180",
+      "download": "Download",
+      "enroll": "Enroll Now"
+    },
+    "comparison": {
+      "badge": "Side-by-Side Comparison",
+      "headingPart1": "Compare ",
+      "headingPart2": "All Certifications",
+      "featureLabel": "Feature",
+      "levelLabel": "Level",
+      "durationLabel": "Duration",
+      "priceLabel": "Price",
+      "certExpiryLabel": "Cert. Expiry",
+      "mockExamLabel": "Mock Exam",
+      "testIncludedLabel": "Test Included",
+      "prerequisiteLabel": "Prerequisite",
+      "foundationLevel": "Foundation",
+      "practitionerLevel": "Practitioner",
+      "authorityLevel": "Authority",
+      "prerequisiteNone": "—",
+      "prerequisiteCsm": "CSM Required",
+      "prerequisiteExp": "Exp. Rec."
+    },
+    "faq": {
+      "badge": "FAQ",
+      "headingPart1": "Frequently Asked ",
+      "headingPart2": "Questions",
+      "q1": "Are your certifications recognized internationally?",
+      "a1": "Yes. Institute of Scrum certifications are recognized by organizations across Canada, the US, and internationally within the Agile and Scrum community.",
+      "q2": "What happens if I don't pass the test on my first attempt?",
+      "a2": "You can retake the test. We offer a second attempt at no additional cost. Additional attempts may be purchased if needed.",
+      "q3": "Can I pay in installments?",
+      "a3": "Yes, we offer flexible payment options. Contact our team to discuss an installment plan that works for you.",
+      "q4": "How long do I have access to course materials?",
+      "a4": "You have lifetime access to all course materials after enrollment, including any future updates to the content.",
+      "q5": "Do you offer corporate or team pricing?",
+      "a5": "Absolutely. We offer discounted rates for teams of 5 or more. Reach out to us to get a customized quote for your organization."
+    },
+    "contact": {
+      "heading1": "Feel free to ",
+      "heading2": "get in touch",
+      "subtitle": "Have questions about which certification is right for you? Our team is here to help you choose the path that fits your goals.",
+      "form": {
+        "name": "Full Name",
+        "nameError": "This field is required.",
+        "email": "Email Address",
+        "emailError": "Please enter a valid email address.",
+        "message": "Message",
+        "messageError": "This field is required.",
+        "submit": "Send Message",
+        "sending": "Sending...",
+        "success": "Message Sent!"
+      }
+    }
+  },
   "scrumFacilitator": {
     "hero": {
       "back": "Go back to home",

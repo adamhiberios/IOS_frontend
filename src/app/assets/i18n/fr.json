@@ -695,6 +695,116 @@
       }
     }
   },
+  "allCertifications": {
+    "hero": {
+      "back": "Retour à l'accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      },
+      "title": "Toutes les Certifications"
+    },
+    "intro": {
+      "badge": "Toutes les Certifications",
+      "headingPart1": "Qu'est-ce que ",
+      "headingPart2": "c'est?",
+      "description": "Le cadre de certification CIPM offre un parcours structuré à travers les disciplines de gestion de projet et de Scrum Master, couvrant les niveaux Fondation, Cœur et Avancé. Chaque certificat est conçu pour développer des compétences pratiques, valider la compétence professionnelle et soutenir la progression de carrière—des fondamentaux essentiels au leadership avancé et à la maîtrise de la livraison.",
+      "imageAlt": "Certification Institute of Scrum",
+      "stat1Value": "12 000+",
+      "stat1Label": "Diplômés au Canada",
+      "stat2Value": "6 000+",
+      "stat2Label": "Certificats générés"
+    },
+    "tracks": {
+      "scrumMaster": {
+        "titlePart1": "Parcours ",
+        "titlePart2": "Scrum Master",
+        "description": "Guidez les équipes à travers le cadre Scrum avec un leadership serviteur, une maîtrise de la facilitation et une amélioration continue.",
+        "foundationLevel": "Niveau Fondation",
+        "practitionerLevel": "Niveau Praticien",
+        "authorityLevel": "Niveau Autorité",
+        "esmName": "Scrum Master Endorsé",
+        "esmpName": "Praticien Scrum Master Endorsé",
+        "esmaName": "Autorité Scrum Master Endorsée"
+      },
+      "productOwner": {
+        "titlePart1": "Parcours ",
+        "titlePart2": "Product Owner",
+        "description": "Définissez la vision produit, gérez le backlog et maximisez la livraison de valeur avec l'alignement des parties prenantes et l'acuité commerciale.",
+        "foundationLevel": "Niveau Fondation",
+        "practitionerLevel": "Niveau Praticien",
+        "authorityLevel": "Niveau Autorité",
+        "epoName": "Product Owner Endorsé",
+        "epopName": "Praticien Product Owner Endorsé",
+        "epoaName": "Autorité Product Owner Endorsée"
+      },
+      "scrumFacilitator": {
+        "titlePart1": "Parcours ",
+        "titlePart2": "Scrum Facilitateur",
+        "description": "Concevez et animez des sessions collaboratives puissantes qui aident les équipes Scrum à obtenir de meilleurs résultats ensemble.",
+        "foundationLevel": "Niveau Fondation",
+        "esfName": "Scrum Facilitateur Endorsé"
+      }
+    },
+    "shared": {
+      "hours": "+20 hrs",
+      "online": "Entièrement en ligne",
+      "questions": "Test de 45 questions",
+      "startingAt": "À partir de",
+      "price": "180 $ CAD",
+      "download": "Télécharger",
+      "enroll": "S'inscrire"
+    },
+    "comparison": {
+      "badge": "Comparaison Côte à Côte",
+      "headingPart1": "Comparer ",
+      "headingPart2": "Toutes les Certifications",
+      "featureLabel": "Caractéristique",
+      "levelLabel": "Niveau",
+      "durationLabel": "Durée",
+      "priceLabel": "Prix",
+      "certExpiryLabel": "Expiration Cert.",
+      "mockExamLabel": "Examen Pratique",
+      "testIncludedLabel": "Test Inclus",
+      "prerequisiteLabel": "Prérequis",
+      "foundationLevel": "Fondation",
+      "practitionerLevel": "Praticien",
+      "authorityLevel": "Autorité",
+      "prerequisiteNone": "—",
+      "prerequisiteCsm": "CSM Requis",
+      "prerequisiteExp": "Exp. Recommandée"
+    },
+    "faq": {
+      "badge": "FAQ",
+      "headingPart1": "Questions ",
+      "headingPart2": "Fréquentes",
+      "q1": "Vos certifications sont-elles reconnues internationalement?",
+      "a1": "Oui. Les certifications de l'Institute of Scrum sont reconnues par des organisations au Canada, aux États-Unis et internationalement au sein de la communauté Agile et Scrum.",
+      "q2": "Que se passe-t-il si je ne réussis pas le test à ma première tentative?",
+      "a2": "Vous pouvez repasser le test. Nous offrons une deuxième tentative sans frais supplémentaires. Des tentatives supplémentaires peuvent être achetées si nécessaire.",
+      "q3": "Puis-je payer en plusieurs fois?",
+      "a3": "Oui, nous offrons des options de paiement flexibles. Contactez notre équipe pour discuter d'un plan de versements qui vous convient.",
+      "q4": "Combien de temps ai-je accès aux supports de cours?",
+      "a4": "Vous avez un accès à vie à tous les supports de cours après l'inscription, y compris les mises à jour futures du contenu.",
+      "q5": "Proposez-vous des tarifs pour les entreprises ou les équipes?",
+      "a5": "Absolument. Nous offrons des tarifs réduits pour les équipes de 5 personnes ou plus. Contactez-nous pour obtenir un devis personnalisé pour votre organisation."
+    },
+    "contact": {
+      "heading1": "N'hésitez pas à ",
+      "heading2": "nous contacter",
+      "subtitle": "Des questions sur la certification qui vous convient? Notre équipe est là pour vous aider à choisir le parcours adapté à vos objectifs.",
+      "form": {
+        "name": "Nom complet",
+        "nameError": "Ce champ est requis.",
+        "email": "Adresse e-mail",
+        "emailError": "Veuillez saisir une adresse e-mail valide.",
+        "message": "Message",
+        "messageError": "Ce champ est requis.",
+        "submit": "Envoyer le message",
+        "sending": "Envoi en cours...",
+        "success": "Message envoyé!"
+      }
+    }
+  },
   "scrumFacilitator": {
     "hero": {
       "back": "Retour à l accueil",
