@@ -40,6 +40,12 @@ const routes: Routes = [
       import('./pages/about-scrum-facilitator.page').then((m) => m.AboutScrumFacilitatorPage),
     title: 'About Scrum Facilitator — Institute of Scrum',
   },
+  {
+    path: 'certifications',
+    loadComponent: () =>
+      import('./pages/all-certifications.page').then((m) => m.AllCertificationsPage),
+    title: 'All Certifications — Institute of Scrum',
+  },
 ];
 
 export default routes;

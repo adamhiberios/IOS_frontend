@@ -53,7 +53,7 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
-      class="flex-1 min-w-[280px] bg-white border border-ios-border-light rounded-xl px-4 py-6 flex flex-col gap-4 overflow-hidden"
+      class="w-full h-full bg-white border border-ios-border-light rounded-xl px-4 py-6 flex flex-col gap-4 overflow-hidden"
     >
       <!-- Badge + details row — flex follows inline direction (mirrors in RTL) -->
       <div class="flex items-start gap-4">
@@ -63,25 +63,43 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
         </div>
 
         <!-- Level pill + code + name -->
-        <div class="flex flex-col gap-2 pt-1 flex-1 min-w-0">
+        <div class="flex flex-col gap-2 pt-1 flex-1 min-w-0 overflow-hidden">
           <span
             class="self-start inline-flex items-center justify-center px-3 py-1 rounded-full
                    font-heading font-medium text-[14px] leading-[1.4] whitespace-nowrap"
-            style="background-color: #426981; color: #e8edf0;"
+            [style.background-color]="levelBgColor()"
+            [style.color]="levelTextColor()"
           >
             {{ level() }}
           </span>
           <div class="flex flex-col">
             <span
-              class="font-heading font-bold text-[28px] leading-[1.2] whitespace-nowrap"
-              style="color: #143d56;"
+              class="font-heading font-bold text-[28px] leading-[1.2]"
+              [style.color]="codeColor()"
             >
               {{ code() }}
             </span>
-            <span class="font-body font-medium text-[16px] leading-[1.4]" style="color: #113348;">
+            <span
+              class="font-body font-medium text-[16px] leading-[1.4] break-words"
+              [style.color]="fullNameColor()"
+            >
               {{ fullName() }}
             </span>
           </div>
+          <!-- Inline price shown directly under fullName when showStartingAtPrice is true -->
+          @if (showStartingAtPrice()) {
+            <div class="flex flex-col mt-1">
+              <span class="font-heading font-medium text-[13px] leading-[1.4] text-ios-brand-muted">
+                {{ startingAtLabel() }}
+              </span>
+              <span
+                class="font-heading font-extrabold text-[18px] leading-[1.2]"
+                [style.color]="priceColor()"
+              >
+                {{ price() }}
+              </span>
+            </div>
+          }
         </div>
       </div>
 
@@ -120,18 +138,23 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
         </div>
       </div>
 
-      <!-- Divider -->
-      <div class="h-px w-full bg-ios-border-light" aria-hidden="true"></div>
+      @if (!showStartingAtPrice()) {
+        <!-- Divider -->
+        <div class="h-px w-full bg-ios-border-light" aria-hidden="true"></div>
 
-      <!-- Price -->
-      <div class="flex flex-col ps-2">
-        <span class="font-heading font-medium text-[14px] leading-[1.4] text-ios-brand-muted">
-          {{ startingAtLabel() }}
-        </span>
-        <span class="font-heading font-extrabold text-[20px] leading-[1.2]" style="color: #184865;">
-          {{ price() }}
-        </span>
-      </div>
+        <!-- Price -->
+        <div class="flex flex-col ps-2">
+          <span class="font-heading font-medium text-[14px] leading-[1.4] text-ios-brand-muted">
+            {{ startingAtLabel() }}
+          </span>
+          <span
+            class="font-heading font-extrabold text-[20px] leading-[1.2]"
+            [style.color]="priceColor()"
+          >
+            {{ price() }}
+          </span>
+        </div>
+      }
 
       <!-- Actions — flex row mirrors automatically in RTL -->
       <div class="flex gap-3 items-center">
@@ -142,7 +165,8 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
                  font-body font-semibold text-[16px] leading-[1.4] whitespace-nowrap
                  hover:opacity-80 transition-opacity
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
-          style="background-color: #e8edf0; color: #0b202d;"
+          [style.background-color]="downloadBgColor()"
+          [style.color]="downloadTextColor()"
         >
           <ios-icon name="download" class="w-5 h-5" aria-hidden="true" />
           {{ downloadLabel() }}
@@ -155,7 +179,7 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
                  font-body font-semibold text-[16px] leading-[1.4] text-white whitespace-nowrap
                  hover:opacity-90 transition-opacity
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/50"
-          style="background-color: #184865;"
+          [style.background-color]="enrollBgColor()"
         >
           {{ enrollLabel() }}
           <ios-icon name="arrow-right" class="w-5 h-5 rtl:rotate-180" aria-hidden="true" />
@@ -197,4 +221,38 @@ export class CertificationCard {
 
   /** Label for the enroll button. */
   readonly enrollLabel = input<string>('');
+
+  /**
+   * When `true`, displays the "starting at" label + price inline directly
+   * below the `fullName` inside the badge-details block (in addition to the
+   * standard price row below the meta divider).
+   * Default: `false` — existing behaviour is unchanged.
+   */
+  readonly showStartingAtPrice = input<boolean>(false);
+
+  // ── Theming inputs (optional — SM blue defaults match existing pages) ──────
+
+  /** Background colour of the level pill. Default: SM navy #426981. */
+  readonly levelBgColor = input<string>('#426981');
+
+  /** Text colour of the level pill. Default: SM light #e8edf0. */
+  readonly levelTextColor = input<string>('#e8edf0');
+
+  /** Colour of the code string (e.g. "ESM"). Default: #143d56. */
+  readonly codeColor = input<string>('#143d56');
+
+  /** Colour of the full name string. Default: #113348. */
+  readonly fullNameColor = input<string>('#113348');
+
+  /** Colour of the price string. Default: SM navy #184865. */
+  readonly priceColor = input<string>('#184865');
+
+  /** Background colour of the Download button. Default: SM light #e8edf0. */
+  readonly downloadBgColor = input<string>('#e8edf0');
+
+  /** Text colour of the Download button. Default: dark #0b202d. */
+  readonly downloadTextColor = input<string>('#0b202d');
+
+  /** Background colour of the Enroll button. Default: SM navy #184865. */
+  readonly enrollBgColor = input<string>('#184865');
 }
