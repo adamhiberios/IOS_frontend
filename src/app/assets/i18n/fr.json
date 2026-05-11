@@ -887,5 +887,667 @@
         "success": "Message envoyé !"
       }
     }
+  },
+  "certDetails": {
+    "esm": {
+      "fullName": "Endorsed Scrum Master",
+      "trackName": "Scrum Master Certifications",
+      "level": "Foundation Level",
+      "price": "CAD $130",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Scrum Master (ESM) is the foundation-level certification for professionals beginning their journey in Agile and Scrum. It validates your understanding of core Scrum principles, roles, events, and artifacts — equipping you to support Agile teams confidently from day one. Issued by the Institute of Scrum, this lifetime credential establishes your credibility with employers and prepares you for advanced certifications along the Scrum Master path."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "No",
+        "prereqLabel": "previous experience",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "45",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "seekingTitle": "Seeking Credentials",
+        "seekingDesc": "Aspiring Scrum Masters seeking a strong, employer-trusted entry point into Agile.",
+        "leadersTitle": "Leaders",
+        "leadersDesc": "Team leads, coordinators, and project managers transitioning into Agile environments.",
+        "technicalsTitle": "Technicals",
+        "technicalsDesc": "Software developers, testers, and IT professionals working on or joining Scrum teams.",
+        "businessTitle": "Business",
+        "businessDesc": "Business analysts and consultants who want to formalize their Scrum knowledge.",
+        "careerChangerTitle": "The Career Changer",
+        "careerChangerDesc": "Career changers looking to enter one of the fastest-growing roles in tech."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Master the Scrum framework — roles, events, artifacts, and guiding principles.",
+        "point2": "Understand the servant-leadership mindset and the responsibilities of a Scrum Master.",
+        "point3": "Facilitate key Scrum events including Sprint Planning, Daily Scrum, Review, and Retrospective.",
+        "point4": "Apply Agile values and empirical process control to real team scenarios.",
+        "point5": "Identify and remove impediments that block team progress and flow.",
+        "point6": "Build a foundation for continuous improvement and high-performing teams.",
+        "point7": "Prepare confidently for the next step: Endorsed Scrum Master Practitioner (ESM-P)."
+      },
+      "cta": {
+        "headingPart1": "Ready to step into the world of",
+        "headingPart2": "Agile?",
+        "description": "Enroll in the ESM certification today and start building the career you’ve been working toward.",
+        "button": "Enroll in Endorsed Scrum Master (ESM)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "epo": {
+          "fullName": "Endorsed Product Owner",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
+          "learnMore": "Learn More About EPO"
+        },
+        "esf": {
+          "fullName": "Endorsed Scrum Facilitator",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Endorsed Scrum Facilitator (ESF): Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
+          "learnMore": "Learn More About ESF"
+        }
+      }
+    },
+    "esmP": {
+      "fullName": "Maître Scrum Agréé Praticien",
+      "trackName": "Certifications Scrum Master",
+      "level": "Niveau Praticien",
+      "price": "CAD $150",
+      "hero": {
+        "back": "Retour aux certifications",
+        "breadcrumb": {
+          "home": "Accueil",
+          "all": "Toutes les certifications"
+        },
+        "description": "Élevez vos compétences de Maître Scrum de la théorie à la pratique et prouvez que vous pouvez guider de vraies équipes Agile vers un succès mesurable.",
+        "download": "Télécharger la présentation du programme",
+        "enroll": "S'inscrire maintenant",
+        "startingAt": "À partir de"
+      },
+      "overview": {
+        "title": "Aperçu",
+        "body": "Le Maître Scrum Agréé Praticien (ESM-P) est la certification de niveau intermédiaire pour les maîtres Scrum praticants prêts à approfondir leur expertise. En s'appuyant sur la base ESM, elle valide votre capacité à coacher des équipes dans des défis complexes, améliorer la performance de livraison et favoriser une culture d'amélioration continue. Cette credential signale aux employeurs que vous n'êtes pas seulement connaisseur en Scrum — vous êtes capable de l'appliquer avec compétence dans des environnements réels exigeants."
+      },
+      "heroImage": {
+        "alt": "Équipe Scrum collaborant sur un tableau à notes",
+        "languageValue": "Anglais",
+        "languageLabel": "Langue de l'examen",
+        "testingValue": "Examen en ligne",
+        "testingLabel": "Environnement sécurisé"
+      },
+      "stats": {
+        "prereqValue": "(ESM)",
+        "prereqLabel": "Maître Scrum Agréé\nExpérience précédente (Recommandée)",
+        "trainingValue": "15+",
+        "trainingUnit": "/heures",
+        "trainingLabel": "Formation requise",
+        "questionsValue": "45",
+        "questionsLabel": "Questions d'examen",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Durée de l'examen",
+        "validityValue": "À vie",
+        "validityLabel": "Validité"
+      },
+      "audience": {
+        "badge": "Qui devrait s'inscrire",
+        "headingPart1": "Qui devrait investir dans cette",
+        "headingPart2": "certification?",
+        "practitionerTitle": "Diplômés ESM",
+        "practitionerDesc": "Professionnels qui ont obtenu l'ESM et veulent porter leurs compétences au niveau supérieur.",
+        "teamCoachTitle": "Coach d'équipes",
+        "teamCoachDesc": "Maîtres Scrum et coaches Agile cherchant à approfondir leur impact sur la performance de l'équipe.",
+        "optimizationTitle": "Chercheurs d'optimisation",
+        "optimizationDesc": "Praticiens qui veulent maîtriser les métriques, le flux et les améliorations de livraison continue.",
+        "leaderTitle": "Leaders Agile",
+        "leaderDesc": "Chefs d'équipe et managers qui veulent construire des équipes haute performance auto-organisées.",
+        "strategistTitle": "Le Stratégiste",
+        "strategistDesc": "Professionnels Agile seniors se préparant au niveau Autorité (ESM-A)."
+      },
+      "keyLearning": {
+        "title": "Points d'apprentissage clés",
+        "point1": "Coacher les équipes à travers les défis d'adoption Scrum et la résistance organisationnelle.",
+        "point2": "Appliquer des techniques de facilitation avancées pour animer des événements Scrum productifs.",
+        "point3": "Résoudre les conflits d'équipe et les dysfonctionnements avec des outils Agile éprouvés.",
+        "point4": "Mesurer la performance de l'équipe en utilisant la vitesse, les métriques de flux et les données empiriques.",
+        "point5": "Guider les Propriétaires de Produit et les parties prenantes vers une collaboration efficace.",
+        "point6": "Mettre en œuvre des pratiques d'amélioration continue qui s'échelonnent à travers les équipes.",
+        "point7": "Se préparer au coaching de niveau senior avec le Maître Scrum Agréé Autorité (ESM-A)."
+      },
+      "cta": {
+        "headingPart1": "Prêt à entrer dans le monde de",
+        "headingPart2": "l'Agile?",
+        "description": "Inscrivez-vous à la certification ESM-P aujourd'hui et commencez à construire la carrière pour laquelle vous avez travaillé.",
+        "button": "S'inscrire au Maître Scrum Agréé Praticien (ESM-P)",
+        "questions": "Des questions?",
+        "contactLink": "Contactez un conseiller en certification"
+      },
+      "related": {
+        "headingPart1": "Certifications",
+        "headingPart2": "connexes",
+        "startingAt": "À partir de",
+        "esm": {
+          "fullName": "Scrum Master Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $130",
+          "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement qui ouvre des portes vers des rôles de Scrum Master très demandés.",
+          "learnMore": "En savoir plus sur l'ESM"
+        },
+        "esmA": {
+          "fullName": "Maître Scrum Agréé Autorité",
+          "level": "Niveau Autorité",
+          "price": "CAD $185",
+          "description": "Le plus haut niveau de certification pour les Scrum Masters prêts à mentorer d'autres, piloter la transformation organisationnelle et faire avancer la profession.",
+          "learnMore": "En savoir plus sur l'ESM-A"
+        },
+        "esf": {
+          "fullName": "Facilitateur Scrum Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $180",
+          "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
+          "learnMore": "En savoir plus sur l'ESF"
+        }
+      }
+    },
+    "esmA": {
+      "fullName": "Maître Scrum Agréé Autorité",
+      "trackName": "Certifications Scrum Master",
+      "level": "Niveau Autorité",
+      "price": "CAD $185",
+      "hero": {
+        "back": "Retour aux certifications",
+        "breadcrumb": {
+          "home": "Accueil",
+          "all": "Toutes les certifications"
+        },
+        "description": "Établissez-vous comme une autorité Scrum de premier ordre capable de guider les transformations Agile à l'échelle de l'entreprise et de mentorer la prochaine génération.",
+        "download": "Télécharger la présentation du programme",
+        "enroll": "S'inscrire maintenant",
+        "startingAt": "À partir de"
+      },
+      "overview": {
+        "title": "Aperçu",
+        "body": "Le Maître Scrum Agréé Autorité (ESM-A) est la certification de niveau avancé conçue pour les maîtres Scrum seniors, les coaches Agile et les leaders de transformation. Elle valide votre capacité à guider plusieurs équipes, façonner la culture Agile au niveau organisationnel et mentorer d'autres maîtres Scrum. Cette prestigieuse certification à vie vous positionne parmi les professionnels Agile les plus respectés de l'industrie et ouvre des opportunités en coaching d'entreprise, en consulting et en rôles de leadership Agile."
+      },
+      "heroImage": {
+        "alt": "Équipe Scrum collaborant sur un tableau à post-it",
+        "languageValue": "Anglais",
+        "languageLabel": "Langue de l'Examen",
+        "testingValue": "Test en ligne",
+        "testingLabel": "Environnement sécurisé"
+      },
+      "stats": {
+        "prereqValue": "(ESM-P)",
+        "prereqLabel": "Maître Scrum Agréé Praticien\nExpérience Préalable (Recommandée)",
+        "trainingValue": "15+",
+        "trainingUnit": "/heures",
+        "trainingLabel": "Formation Requise",
+        "questionsValue": "30",
+        "questionsLabel": "Questions d'Examen",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Durée de l'Examen",
+        "validityValue": "À Vie",
+        "validityLabel": "Validité"
+      },
+      "audience": {
+        "badge": "Qui Devrait S'inscrire",
+        "headingPart1": "Qui Devrait Investir dans Cette",
+        "headingPart2": "Certification?",
+        "enterpriseTitle": "Enterprise Scrum Leaders",
+        "enterpriseDesc": "Maîtres Scrum seniors prêts à guider des transformations Agile à grande échelle.",
+        "mentorTitle": "Coachs Agile",
+        "mentorDesc": "Professionnels souhaitant formaliser leur expertise en coaching et transformation organisationnelle.",
+        "scalingTitle": "Scaling Practitioners",
+        "scalingDesc": "Praticiens maîtrisant les approches de scaling Scrum à travers plusieurs équipes.",
+        "executiveTitle": "Executive Champions",
+        "executiveDesc": "Leaders senior défendant l'adoption de Scrum au niveau du conseil et de la direction.",
+        "authorityTitle": "The Authority",
+        "authorityDesc": "Professionnels Agile prêts à façonner l'avenir de la profession et à guider les autres."
+      },
+      "keyLearning": {
+        "title": "Points d'Apprentissage Clés",
+        "point1": "Guider plusieurs équipes Scrum et harmoniser leur collaboration à grande échelle.",
+        "point2": "Concevoir et exécuter des programmes de transformation Agile organisationnelle.",
+        "point3": "Mentorer et développer d'autres Scrum Masters et coaches Agile.",
+        "point4": "Appliquer des frameworks de scaling (LeSS, SAFe, Spotify) avec Scrum comme base.",
+        "point5": "Mesurer et améliorer la performance Agile à travers des métriques avancées.",
+        "point6": "Construire une culture de amélioration continue et d'innovation durable.",
+        "point7": "Influencer l'écosystème Scrum en tant que leader de pensée reconnu."
+      },
+      "cta": {
+        "headingPart1": "Prêt à entrer dans le monde de l'",
+        "headingPart2": "Agile?",
+        "description": "Inscrivez-vous à la certification ESM-A aujourd'hui et commencez à construire la carrière pour laquelle vous avez travaillé.",
+        "button": "S'inscrire au Maître Scrum Agréé Autorité (ESM-A)",
+        "questions": "Des questions?",
+        "contactLink": "Contactez un conseiller en certification"
+      },
+      "related": {
+        "headingPart1": "Certifications",
+        "headingPart2": "Connexes",
+        "startingAt": "À partir de",
+        "esmP": {
+          "fullName": "Maître Scrum Agréé Praticien",
+          "level": "Niveau Praticien",
+          "price": "CAD $150",
+          "description": "Élevez vos compétences de Scrum Master de la théorie à la pratique.",
+          "learnMore": "En savoir plus sur l'ESM-P"
+        },
+        "esf": {
+          "fullName": "Facilitateur Scrum Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $180",
+          "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
+          "learnMore": "En savoir plus sur l'ESF"
+        }
+      }
+    },
+    "epo": {
+      "fullName": "Propriétaire de Produit Agréé",
+      "trackName": "Certifications Propriétaire de Produit",
+      "level": "Niveau Fondation",
+      "price": "CAD $180",
+      "hero": {
+        "back": "Retour aux certifications",
+        "breadcrumb": {
+          "home": "Accueil",
+          "all": "Toutes les Certifications"
+        },
+        "description": "Commencez votre parcours vers la création de produits que les gens adorent avec une certification fondamentale.",
+        "download": "Télécharger l'Aperçu du Programme",
+        "enroll": "S'inscrire Maintenant",
+        "startingAt": "À partir de"
+      },
+      "overview": {
+        "title": "Aperçu",
+        "body": "Le Propriétaire de Produit Agréé (EPO) est la certification de niveau fondation pour les professionnels qui font leurs premiers pas dans le monde de la propriété de produit Agile. Elle valide votre compréhension de la vision produit, de la gestion du backlog, de la collaboration avec les parties prenantes et de la livraison pilotée par la valeur. Émise par l'Institute of Scrum, cette certification à vie prouve que vous avez les compétences fondamentales pour maximiser la valeur produit dans les équipes Scrum."
+      },
+      "heroImage": {
+        "alt": "Équipe Scrum collaborant sur un tableau à post-it",
+        "languageValue": "Anglais",
+        "languageLabel": "Langue de l'Examen",
+        "testingValue": "Test en ligne",
+        "testingLabel": "Environnement sécurisé"
+      },
+      "stats": {
+        "prereqValue": "Non",
+        "prereqLabel": "expérience préalable",
+        "trainingValue": "15+",
+        "trainingUnit": "/heures",
+        "trainingLabel": "Formation Requise",
+        "questionsValue": "45",
+        "questionsLabel": "Questions d'Examen",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Durée de l'Examen",
+        "validityValue": "À Vie",
+        "validityLabel": "Validité"
+      },
+      "audience": {
+        "badge": "Qui Devrait S'inscrire",
+        "headingPart1": "Qui Devrait Investir dans Cette",
+        "headingPart2": "Certification?",
+        "aspiringTitle": "Propriétaires de Produit Aspirants",
+        "aspiringDesc": "Professionnels visant à prendre en main le succès produit dans les équipes Scrum.",
+        "businessTitle": "Analystes Métier",
+        "businessDesc": "Membres d'équipe souhaitant traduire les besoins métier en éléments actionnables du backlog.",
+        "startupTitle": "Fondateurs de Startups",
+        "startupDesc": "Entrepreneurs construisant des produits qui doivent prioriser les fonctionnalités et gérer la livraison.",
+        "careerTitle": "Changement de Carrière",
+        "careerDesc": "Professionnels transitionnant vers des rôles produit et cherchant des credentials formels.",
+        "developerTitle": "Professionnels Tech",
+        "developerDesc": "Développeurs et testeurs souhaitant comprendre le côté métier de la livraison produit."
+      },
+      "keyLearning": {
+        "title": "Points d'Apprentissage Clés",
+        "point1": "Définir et communiquer une vision produit alignée avec les objectifs métier.",
+        "point2": "Créer, raffiner et prioriser un Backlog Produit qui maximise la valeur.",
+        "point3": "Rédiger des stories utilisateur claires avec des critères d'acceptation efficaces.",
+        "point4": "Collaborer efficacement avec les parties prenantes, les clients et les équipes de développement.",
+        "point5": "Appliquer des techniques de priorisation basées sur la valeur pour livrer ce qui compte le plus.",
+        "point6": "Comprendre le rôle du Propriétaire de Produit dans tous les événements et artefacts Scrum.",
+        "point7": "Bâtir une base solide pour le Propriétaire de Produit Agréé Praticien (EPO-P)."
+      },
+      "cta": {
+        "headingPart1": "Prêt à entrer dans le monde de",
+        "headingPart2": "l'Agile?",
+        "description": "Inscrivez-vous à la certification EPO aujourd'hui et commencez à construire la carrière pour laquelle vous avez travaillé.",
+        "button": "S'inscrire au Propriétaire de Produit Agréé (EPO)",
+        "questions": "Des questions?",
+        "contactLink": "Contactez un conseiller en certification"
+      },
+      "related": {
+        "headingPart1": "Certifications",
+        "headingPart2": "Connexes",
+        "startingAt": "À partir de",
+        "esm": {
+          "fullName": "Scrum Master Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $130",
+          "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement.",
+          "learnMore": "En savoir plus sur l'ESM"
+        },
+        "esf": {
+          "fullName": "Facilitateur Scrum Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $180",
+          "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
+          "learnMore": "En savoir plus sur l'ESF"
+        }
+      }
+    },
+    "epoP": {
+      "fullName": "Propriétaire de Produit Agréé Praticien",
+      "price": "CAD $150",
+      "hero": {
+        "back": "Retour aux certifications",
+        "breadcrumb": {
+          "home": "Accueil",
+          "all": "Toutes les Certifications"
+        },
+        "description": "Élevez vos compétences de Propriétaire de Produit du niveau fondation à avancé et provezvous capable de stimuler le succès produit dans des environnements Scrum complexes.",
+        "download": "Télécharger l'Aperçu du Programme",
+        "enroll": "S'inscrire Maintenant",
+        "startingAt": "À partir de"
+      },
+      "overview": {
+        "title": "Aperçu",
+        "body": "Le Propriétaire de Produit Agréé Praticien (EPO-P) est la certification de niveau intermédiaire pour les Propriétaires de Produit expérimentés prêts à approfondir leur expertise. En s'appuyant sur la base EPO, elle valide votre capacité à maximiser la valeur produit, à optimiser la livraison et à guider les parties prenantes à travers des défis produit complexes. Cette certification signale aux employeurs que vous n'êtes pas simplement un gestionnaire de backlog — vous êtes un leader produit stratégique capable de générer des résultats mesurables."
+      },
+      "heroImage": {
+        "alt": "Équipe Scrum collaborant sur un tableau à post-it",
+        "languageValue": "Anglais",
+        "languageLabel": "Langue de l'Examen",
+        "testingValue": "Test en ligne",
+        "testingLabel": "Environnement sécurisé"
+      },
+      "stats": {
+        "prereqValue": "(EPO)",
+        "prereqLabel": "Propriétaire de Produit Agréé\nExpérience Préalable (Recommandée)",
+        "trainingValue": "15+",
+        "trainingUnit": "/heures",
+        "trainingLabel": "Formation Requise",
+        "questionsValue": "45",
+        "questionsLabel": "Questions d'Examen",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Durée de l'Examen",
+        "validityValue": "À Vie",
+        "validityLabel": "Validité"
+      },
+      "audience": {
+        "badge": "Qui Devrait S'inscrire",
+        "headingPart1": "Qui Devrait Investir dans Cette",
+        "headingPart2": "Certification?",
+        "graduatesTitle": "Diplômés EPO",
+        "graduatesDesc": "Professionnels ayant obtenu l'EPO et souhaitant élever leurs compétences en propriété de produit.",
+        "seniorTitle": "Chefs de Produit Seniors",
+        "seniorDesc": "Leaders produit cherchant à formaliser leur expertise Scrum avec une certification reconnue.",
+        "leadersTitle": "Leaders Produit",
+        "leadersDesc": "Chefs d'équipe et managers pilotant la stratégie produit et l'alignement des parties prenantes.",
+        "strategyTitle": "Professionnels Orientés Stratégie",
+        "strategyDesc": "Professionnels combinant analyse métier et expertise en livraison produit.",
+        "strategistTitle": "Le Stratège",
+        "strategistDesc": "Professionnels produit seniors se préparant au niveau Autorité (EPO-A)."
+      },
+      "keyLearning": {
+        "title": "Points d'Apprentissage Clés",
+        "point1": "Animer des ateliers de stratégie produit et aligner les parties prenantes sur la vision et la feuille de route.",
+        "point2": "Appliquer des techniques avancées de raffinement du backlog pour maximiser la valeur de livraison.",
+        "point3": "Naviguer les priorités concurrentes des parties prenantes en utilisant des cadres décisionnels basés sur l'évidence.",
+        "point4": "Optimiser l'adéquation produit-marché à travers la découverte continue et l'apprentissage validé.",
+        "point5": "Stimuler la performance de l'équipe à travers la transparence, la confiance et les décisions informées par les données.",
+        "point6": "Mettre en œuvre des pratiques de gouvernance et de mise à l'échelle pour des environnements produit complexes."
+      },
+      "cta": {
+        "headingPart1": "Prêt à entrer dans le monde de l'",
+        "headingPart2": "Agile?",
+        "description": "Inscrivez-vous à la certification EPO-P aujourd'hui et commencez à construire la carrière que vous visez.",
+        "button": "S'inscrire au Propriétaire de Produit Agréé Praticien (EPO-P)",
+        "questions": "Des questions?",
+        "contactLink": "Contacter un conseiller en certification"
+      },
+      "related": {
+        "headingPart1": "Certifications",
+        "headingPart2": "Connexes",
+        "startingAt": "À partir de",
+        "epo": {
+          "fullName": "Propriétaire de Produit Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $180",
+          "description": "Commencez votre parcours vers la création de produits que les gens adorent avec une certification fondamentale.",
+          "learnMore": "En savoir plus sur l'EPO"
+        },
+        "esf": {
+          "fullName": "Facilitateur Scrum Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $180",
+          "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées.",
+          "learnMore": "En savoir plus sur l'ESF"
+        }
+      }
+    },
+    "esf": {
+      "fullName": "Facilitateur Scrum Agréé",
+      "trackName": "Certifications Scrum Master",
+      "level": "Niveau Autorité",
+      "price": "CAD $175",
+      "hero": {
+        "back": "Retour aux certifications",
+        "breadcrumb": {
+          "home": "Accueil",
+          "all": "Toutes les Certifications"
+        },
+        "description": "Maîtrisez l'art de la facilitation et devenez le guide de confiance dont chaque équipe Agile a besoin pour libérer clarté, alignement et résultats durables.",
+        "download": "Télécharger l'Aperçu du Programme",
+        "enroll": "S'inscrire Maintenant",
+        "startingAt": "À partir de"
+      },
+      "overview": {
+        "title": "Aperçu",
+        "body": "La certification Facilitateur Scrum Agréé (ESF) valide votre capacité à animer des événements Scrum efficaces, engageants et orientés résultats. Positionnée exclusivement pour les professionnels ayant des bases en Scrum Master et Product Owner, elle associe la maîtrise de la facilitation à une connaissance approfondie du Scrum. Cette certification prouve que vous pouvez guider les équipes à travers des conversations difficiles, aligner les parties prenantes diverses et transformer chaque événement Scrum en source de valeur réelle — un ensemble de compétences extrêmement demandé dans les organisations agiles aujourd'hui."
+      },
+      "heroImage": {
+        "alt": "Équipe Scrum collaborant sur un tableau d'information",
+        "languageValue": "Anglais",
+        "languageLabel": "Langue de l'Examen",
+        "testingValue": "Test en ligne",
+        "testingLabel": "Environnement sécurisé"
+      },
+      "stats": {
+        "prereqValue": "(ESM) & (EPO)",
+        "prereqLabel": "Expérience Préalable en Scrum Master et Product Owner Agréés (Recommandée)",
+        "trainingValue": "15+",
+        "trainingUnit": "/heures",
+        "trainingLabel": "Formation Requise",
+        "questionsValue": "45",
+        "questionsLabel": "Questions d'Examen",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Durée de l'Examen",
+        "validityValue": "À Vie",
+        "validityLabel": "Validité"
+      },
+      "audience": {
+        "badge": "Qui Devrait S'inscrire",
+        "headingPart1": "Qui Devrait Investir dans Cette",
+        "headingPart2": "Certification?",
+        "consultantTitle": "Le Consultant",
+        "consultantDesc": "Professionnels cherchant à offrir la facilitation experte comme service indépendant.",
+        "leaderTitle": "Le Leader",
+        "leaderDesc": "Chefs d'équipe et managers qui doivent animer des sessions collaboratives à fort impact.",
+        "coachTitle": "Le Coach",
+        "coachDesc": "Coaches Agile et consultants désirant une certification de facilitation reconnue.",
+        "productTitle": "L'Expert Produit",
+        "productDesc": "Product Owners et managers souhaitant concevoir et animer des événements plus efficaces.",
+        "expertTitle": "L'Expert Scrum",
+        "expertDesc": "Scrum Masters et Product Owners cherchant à approfondir leurs compétences en facilitation au-delà des bases."
+      },
+      "keyLearning": {
+        "title": "Points d'Apprentissage Clés",
+        "point1": "Maîtriser les techniques de facilitation qui dynamisent les équipes et poussent à des décisions claires.",
+        "point2": "Concevoir et animer des sessions de Planification, Revue et Rétrospective Sprint puissantes.",
+        "point3": "Construire la sécurité psychologique et favoriser la véritable collaboration dans chaque session.",
+        "point4": "Naviguer les conflits, aligner les parties prenantes et gérer la dynamique de groupe avec confiance.",
+        "point5": "Appliquer des outils avancés comme Liberating Structures, 1-2-4-All et plus pour maximiser la participation."
+      },
+      "cta": {
+        "headingPart1": "Prêt à entrer dans le monde de l'",
+        "headingPart2": "Agile?",
+        "description": "Inscrivez-vous à la certification ESF aujourd'hui et commencez à construire la carrière que vous visez.",
+        "button": "S'inscrire au Facilitateur Scrum Agréé (ESF)",
+        "questions": "Des questions?",
+        "contactLink": "Contacter un conseiller en certification"
+      },
+      "related": {
+        "headingPart1": "Certifications",
+        "headingPart2": "Connexes",
+        "startingAt": "À partir de",
+        "esm": {
+          "fullName": "Scrum Master Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $130",
+          "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement.",
+          "learnMore": "En savoir plus sur l'ESM"
+        },
+        "epo": {
+          "fullName": "Propriétaire de Produit Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $180",
+          "description": "Commencez votre parcours vers la création de produits que les gens adorent.",
+          "learnMore": "En savoir plus sur l'EPO"
+        }
+      }
+    },
+    "epoA": {
+      "fullName": "Propriétaire de Produit Agréé Autorité",
+      "trackName": "Certifications Propriétaire de Produit",
+      "level": "Niveau Autorité",
+      "price": "CAD $275",
+      "hero": {
+        "back": "Retour aux certifications",
+        "breadcrumb": {
+          "home": "Accueil",
+          "all": "Toutes les Certifications"
+        },
+        "description": "Devenez le leader produit dont les organisations ont besoin pour façonner la stratégie, stimuler l'innovation et fournir des résultats métier transformateurs à grande échelle.",
+        "download": "Télécharger l'Aperçu du Programme",
+        "enroll": "S'inscrire Maintenant",
+        "startingAt": "À partir de"
+      },
+      "overview": {
+        "title": "Aperçu",
+        "body": "La certification Propriétaire de Produit Agréé Autorité (EPO-A) est la certification de niveau avancé conçue pour les propriétaires de produit seniors, Directeurs de Produit en chef et leaders produit. Elle valide votre capacité à définir la stratégie produit entreprise, piloter les portefeuilles produit et stimuler l'innovation à grande échelle. Cette prestigieuse certification à vie vous positionne comme un leader produit de premier plan capable d'aligner les produits avec la vision d'entreprise et de façonner l'avenir de votre organisation dans un marché concurrentiel en évolution rapide."
+      },
+      "heroImage": {
+        "alt": "Équipe Scrum collaborant sur un tableau d'information",
+        "languageValue": "Anglais",
+        "languageLabel": "Langue de l'Examen",
+        "testingValue": "Test en ligne",
+        "testingLabel": "Environnement sécurisé"
+      },
+      "stats": {
+        "prereqValue": "(EPO-P)",
+        "prereqLabel": "Propriétaire de Produit Agréé Praticien\nExpérience Préalable (Recommandée)",
+        "trainingValue": "15+",
+        "trainingUnit": "/heures",
+        "trainingLabel": "Formation Requise",
+        "questionsValue": "30",
+        "questionsLabel": "Questions d'Examen",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Durée de l'Examen",
+        "validityValue": "À Vie",
+        "validityLabel": "Validité"
+      },
+      "audience": {
+        "badge": "Qui Devrait S'inscrire",
+        "headingPart1": "Qui Devrait Investir dans Cette",
+        "headingPart2": "Certification?",
+        "enterpriseTitle": "Propriétaires de Produit Seniors",
+        "enterpriseDesc": "Propriétaires de produit seniors avec une expérience significative en multi-produit ou portefeuille.",
+        "chiefProductTitle": "Directeurs de Produit en Chef",
+        "chiefProductDesc": "Directeurs produit, VPs Produit et Directeurs de Produit en chef.",
+        "portfolioTitle": "Managers Stratégiques",
+        "portfolioDesc": "Leaders produit pilotant la stratégie et l'innovation à travers les unités métier.",
+        "executiveTitle": "Professionnels Certifiés",
+        "executiveDesc": "Professionnels certifiés EPO-P atteignant le sommet du parcours Propriétaire de Produit.",
+        "innovatorTitle": "Constructeurs d'Organisation",
+        "innovatorDesc": "Entrepreneurs et exécutifs construisant des organisations orientées produit dès la base."
+      },
+      "keyLearning": {
+        "title": "Points d'Apprentissage Clés",
+        "point1": "Définir une stratégie produit à l'échelle de l'entreprise alignée avec la vision бизнес long terme.",
+        "point2": "Gérer les portefeuilles produit et coordonner plusieurs équipes produit efficacement.",
+        "point3": "Stimuler l'innovation à travers des approches lean, discovery-led et basées sur l'expérimentation.",
+        "point4": "Influencer les parties prenantes exécutives, les conseils et les investisseurs avec une vision produit.",
+        "point5": "Appliquer l'analyse produit avancée et la recherche marché aux décisions stratégiques.",
+        "point6": "Construire, mentorer et mettre à l'échelle des équipes produit de classe mondiale.",
+        "point7": "Se positionner comme une autorité reconnue dans la communauté produit mondiale."
+      },
+      "cta": {
+        "headingPart1": "Entrez dans le rôle d'une",
+        "headingPart2": "autorité produit véritable",
+        "description": "Inscrivez-vous à la certification EPO-A et menez l'avenir produit de votre organisation avec confiance.",
+        "button": "S'inscrire au Propriétaire de Produit Agréé Autorité (EPO-A)",
+        "questions": "Des questions?",
+        "contactLink": "Contacter un conseiller en certification"
+      },
+      "related": {
+        "headingPart1": "Certifications",
+        "headingPart2": "Connexes",
+        "startingAt": "À partir de",
+        "epoP": {
+          "fullName": "Propriétaire de Produit Agréé Praticien",
+          "level": "Niveau Praticien",
+          "price": "CAD $150",
+          "description": "Élevez vos compétences de propriétaire de produit du fondamental à l'avancé et prouvez que vous pouvez piloter le succès produit dans des environnements Scrum complexes.",
+          "learnMore": "En savoir plus sur l'EPO-P"
+        },
+        "esf": {
+          "fullName": "Facilitateur Scrum Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $175",
+          "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées.",
+          "learnMore": "En savoir plus sur l'ESF"
+        }
+      }
+    }
   }
 }

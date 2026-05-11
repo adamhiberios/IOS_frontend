@@ -898,5 +898,662 @@
         "success": "تم الإرسال!"
       }
     }
+  },
+  "certDetails": {
+    "esm": {
+      "fullName": "Endorsed Scrum Master",
+      "trackName": "Scrum Master Certifications",
+      "level": "Foundation Level",
+      "price": "CAD $130",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Scrum Master (ESM) is the foundation-level certification for professionals beginning their journey in Agile and Scrum. It validates your understanding of core Scrum principles, roles, events, and artifacts — equipping you to support Agile teams confidently from day one. Issued by the Institute of Scrum, this lifetime credential establishes your credibility with employers and prepares you for advanced certifications along the Scrum Master path."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "No",
+        "prereqLabel": "previous experience",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "45",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "seekingTitle": "Seeking Credentials",
+        "seekingDesc": "Aspiring Scrum Masters seeking a strong, employer-trusted entry point into Agile.",
+        "leadersTitle": "Leaders",
+        "leadersDesc": "Team leads, coordinators, and project managers transitioning into Agile environments.",
+        "technicalsTitle": "Technicals",
+        "technicalsDesc": "Software developers, testers, and IT professionals working on or joining Scrum teams.",
+        "businessTitle": "Business",
+        "businessDesc": "Business analysts and consultants who want to formalize their Scrum knowledge.",
+        "careerChangerTitle": "The Career Changer",
+        "careerChangerDesc": "Career changers looking to enter one of the fastest-growing roles in tech."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Master the Scrum framework — roles, events, artifacts, and guiding principles.",
+        "point2": "Understand the servant-leadership mindset and the responsibilities of a Scrum Master.",
+        "point3": "Facilitate key Scrum events including Sprint Planning, Daily Scrum, Review, and Retrospective.",
+        "point4": "Apply Agile values and empirical process control to real team scenarios.",
+        "point5": "Identify and remove impediments that block team progress and flow.",
+        "point6": "Build a foundation for continuous improvement and high-performing teams.",
+        "point7": "Prepare confidently for the next step: Endorsed Scrum Master Practitioner (ESM-P)."
+      },
+      "cta": {
+        "headingPart1": "Ready to step into the world of",
+        "headingPart2": "Agile?",
+        "description": "Enroll in the ESM certification today and start building the career you’ve been working toward.",
+        "button": "Enroll in Endorsed Scrum Master (ESM)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "epo": {
+          "fullName": "Endorsed Product Owner",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
+          "learnMore": "Learn More About EPO"
+        },
+        "esf": {
+          "fullName": "Endorsed Scrum Facilitator",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Endorsed Scrum Facilitator (ESF): Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
+          "learnMore": "Learn More About ESF"
+        }
+      }
+    },
+    "esmP": {
+      "fullName": "مدرب سكرم معتمد - الممارس",
+      "trackName": "شهادات مدرب سكرم",
+      "level": "مستوى الممارس",
+      "price": "CAD $150",
+      "hero": {
+        "back": "العودة إلى الشهادات",
+        "breadcrumb": {
+          "home": "الرئيسية",
+          "all": "جميع الشهادات"
+        },
+        "description": "ارتقِ بمهاراتك كمدرب سكرم من النظرية إلى التطبيق وأثبت قدرتك على قيادة فرق أجايل حقيقية نحو نجاح قابل للقياس.",
+        "download": "تحميل نظرة عامة على البرنامج",
+        "enroll": "سجّل الآن",
+        "startingAt": "يبدأ من"
+      },
+      "overview": {
+        "title": "نظرة عامة",
+        "body": "شهادة مدرب سكرم المعتمد - الممارس (ESM-P) هي شهادة متوسطة المستوى لمدربي سكرم الممارسين المستعدين لتعميق خبرتهم. تبنيً على أساس ESM، فإنها تُثبت قدرتك على تدريب الفرق على التحديات المعقدة، وتحسين أداء التسليم، وتعزيز ثقافة التحسين المستمر. هذه الشهادة تُشير إلى أصحاب العمل أنك لست فقط لديك معرفة بسكرم - بل قادر على تطبيقها بمهارة في بيئات حقيقية صعبة."
+      },
+      "heroImage": {
+        "alt": "فريق سكرم يتعاون على لوحة ملاحظات لاصقة",
+        "languageValue": "الإنجليزية",
+        "languageLabel": "لغة الاختبار",
+        "testingValue": "اختبار عبر الإنترنت",
+        "testingLabel": "بيئة آمنة"
+      },
+      "stats": {
+        "prereqValue": "(ESM)",
+        "prereqLabel": "مدرب سكرم معتمد\nالخبرة السابقة (موصى بها)",
+        "trainingValue": "+15",
+        "trainingUnit": "/ساعة",
+        "trainingLabel": "التدريب المطلوب",
+        "questionsValue": "45",
+        "questionsLabel": "أسئلة الاختبار",
+        "durationValue": "60",
+        "durationUnit": "/دقيقة",
+        "durationLabel": "مدة الاختبار",
+        "validityValue": "مدى الحياة",
+        "validityLabel": "صالحة"
+      },
+      "audience": {
+        "badge": "من يجب أن يسجل",
+        "headingPart1": "من يجب أن يستثمر في هذه",
+        "headingPart2": "الشهادة؟",
+        "practitionerTitle": "خريجو ESM",
+        "practitionerDesc": "المحترفون الذين حصلوا على ESM ويريدون أخذ مهاراتهم للمستوى التالي.",
+        "teamCoachTitle": "مدربو الفرق",
+        "teamCoachDesc": "مدربو سكرم وأجايل الذين يسعون لتعميق تأثيرهم على أداء الفريق.",
+        "optimizationTitle": "باحثو التحسين",
+        "optimizationDesc": "الممارسون الذين يريدون إتقان المقاييس والتدفق وتحسينات التسليم المستمر.",
+        "leaderTitle": "القادة الأجايل",
+        "leaderDesc": "قادة الفرق والمديرون الذين يريدون بناء فرق عالية الأداء تعمل ذاتياً.",
+        "strategistTitle": "المخطط الاستراتيجي",
+        "strategistDesc": "محترفو أجايل Seniors الذين يستعدون لمستوى السلطة (ESM-A)."
+      },
+      "keyLearning": {
+        "title": "نقاط التعلم الرئيسية",
+        "point1": "تدريب الفرق على التغلب على تحديات تبني سكرم ومقاومة المنظمة.",
+        "point2": "تطبيق تقنيات تسهيل متقدمة لدفع أحداث سكرم الإنتاجية.",
+        "point3": "حل صراعات الفريق والاختلالات بأدوات أجايل مثبتة.",
+        "point4": "قياس أداء الفريق باستخدام السرعة ومقاييس التدفق والبيانات التجريبية.",
+        "point5": "توجيه مالكي المنتج وأصحاب المصلحة نحو تعاون فعال.",
+        "point6": "تنفيذ ممارسات تحسين مستمر تتوسع عبر الفرق.",
+        "point7": "التحضير للتدريب على مستوى senior مع مدرب سكرم معتمد - السلطة (ESM-A)."
+      },
+      "cta": {
+        "headingPart1": "هل أنت مستعد للدخول في عالم",
+        "headingPart2": "أجايل؟",
+        "description": "سجّل في شهادة ESM-P اليوم وابدأ في بناء المسار الوظيفي الذي عملت من أجله.",
+        "button": "سجّل في مدرب سكرم معتمد - الممارس (ESM-P)",
+        "questions": "أسئلة؟",
+        "contactLink": "تواصل مع مستشار الشهادات"
+      },
+      "related": {
+        "headingPart1": "الشهادات",
+        "headingPart2": "ذات الصلة",
+        "startingAt": "يبدأ من",
+        "esm": {
+          "fullName": "مدرب سكرم معتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $130",
+          "description": "ابدأ مسيرتك في أجايل مع شهادة أساسية معترف بها عالمياً تفتح أبواباً لأدوار مدرب سكرم مطلوبة عالمياً.",
+          "learnMore": "اعرف المزيد عن ESM"
+        },
+        "esmA": {
+          "fullName": "مدرب سكرم معتمد - السلطة",
+          "level": "مستوى السلطة",
+          "price": "CAD $180",
+          "description": "أعلى شهادة لمدربي سكرم المستعدين لإرشاد الآخرين، قيادة التحول التنظيمي، وقيادة المهنة للأمام.",
+          "learnMore": "اعرف المزيد عن ESM-A"
+        }
+      }
+    },
+    "esmA": {
+      "fullName": "مدرب سكرم معتمد - السلطة",
+      "trackName": "شهادات مدرب سكرم",
+      "level": "مستوى السلطة",
+      "price": "CAD $185",
+      "hero": {
+        "back": "العودة إلى الشهادات",
+        "breadcrumb": {
+          "home": "الرئيسية",
+          "all": "جميع الشهادات"
+        },
+        "description": "أثبت نفسك كسلطة سكرم من الطراز الأول قادرة على قيادة التحولات الأجايل على مستوى المؤسسات وتوجيه الجيل القادم.",
+        "download": "تحميل نظرة عامة على البرنامج",
+        "enroll": "سجّل الآن",
+        "startingAt": "يبدأ من"
+      },
+      "overview": {
+        "title": "نظرة عامة",
+        "body": "شهادة مدرب سكرم المعتمد - السلطة (ESM-A) هي شهادة متقدمة مصممة لمدربي سكرم Seniors، ومدربي الأجايل، وقادة التحول. تُثبت قدرتك على توجيه فرق متعددة، وتشكيل ثقافة الأجايل على المستوى التنظيمي، وإرشاد مدربي سكرم الآخرين. تضعك هذه الشهادة المرموقة مدى الحياة بين أكثر المحترفين احترامًا في صناعة الأجايل وتفتح فرصًا في التدريب والاستشارات الأدائية والقيادة الأجايل."
+      },
+      "heroImage": {
+        "alt": "فريق سكرم يتعاون على لوحة ملاحظات لاصقة",
+        "languageValue": "الإنجليزية",
+        "languageLabel": "لغة الاختبار",
+        "testingValue": "اختبار عبر الإنترنت",
+        "testingLabel": "بيئة آمنة"
+      },
+      "stats": {
+        "prereqValue": "(ESM-P)",
+        "prereqLabel": "مدرب سكرم معتمد - الممارس\nالخبرة السابقة (موصى بها)",
+        "trainingValue": "+15",
+        "trainingUnit": "/ساعة",
+        "trainingLabel": "التدريب المطلوب",
+        "questionsValue": "45",
+        "questionsLabel": "أسئلة الاختبار",
+        "durationValue": "60",
+        "durationUnit": "/دقيقة",
+        "durationLabel": "مدة الاختبار",
+        "validityValue": "مدى الحياة",
+        "validityLabel": "صالحة"
+      },
+      "audience": {
+        "badge": "من يجب أن يسجل",
+        "headingPart1": "من يجب أن يستثمر في هذه",
+        "headingPart2": "الشهادة؟",
+        "enterpriseTitle": "قادة المؤسسات",
+        "enterpriseDesc": "مدربو سكرم ومدربو أجايل Seniors المستعدون لقيادة التحولات واسعة النطاق.",
+        "mentorTitle": "المرشدون",
+        "mentorDesc": "الممارسون ذوو الخبرة الذين يريدون تطوير وإرشاد مدربي سكرم الآخرين.",
+        "scalingTitle": "خبراء التوسيع",
+        "scalingDesc": "المحترفون العاملون مع LeSS أو Nexus أو SAFe أو أطر التوسيع المماثلة.",
+        "executiveTitle": "المؤثرون التنفيذيون",
+        "executiveDesc": "القادة الذين يحتاجون لمحاذاة استراتيجية الأجايل مع أهداف الأعمال.",
+        "authorityTitle": "السلطة",
+        "authorityDesc": "المحترفون الساعون لأعلى شهادة لدفع التغيير التنظيمي."
+      },
+      "keyLearning": {
+        "title": "نقاط التعلم الرئيسية",
+        "point1": "قيادة التحولات الأجايل عبر الإدارات ووحدات الأعمال والمناطق الجغرافية.",
+        "point2": "إرشاد وتطوير مدربي سكرم ومدربي أجايل الآخرين.",
+        "point3": "تطبيق أطر التوسيع مثل LeSS وNexus وSAFe بثقة.",
+        "point4": "تأثير أصحاب المصلحة التنفيذيين ومحاذاة الأجايل مع استراتيجية الأعمال.",
+        "point5": "تشخيص العوائق التنظيمية النظامية وتصميم تدخلات فعالة.",
+        "point6": "دفع التغيير الثقافي الذي يستمر بمرور الوقت.",
+        "point7": "بناء إرث كسلطة معترف بها في مجتمع سكرم والأجايل."
+      },
+      "cta": {
+        "headingPart1": "هل أنت مستعد للدخول في عالم",
+        "headingPart2": "أجايل؟",
+        "description": "سجّل في شهادة ESM-A اليوم وابدأ في بناء المسار الوظيفي الذي عملت من أجله.",
+        "button": "سجّل في مدرب سكرم معتمد - السلطة (ESM-A)",
+        "questions": "أسئلة؟",
+        "contactLink": "تواصل مع مستشار الشهادات"
+      },
+      "related": {
+        "headingPart1": "الشهادات",
+        "headingPart2": "ذات الصلة",
+        "startingAt": "يبدأ من",
+        "esmP": {
+          "fullName": "مدرب سكرم معتمد - الممارس",
+          "level": "مستوى الممارس",
+          "price": "CAD $150",
+          "description": "ارتقِ بمهاراتك كمدرب سكرم من النظرية إلى التطبيق وأثبت قدرتك على قيادة فرق أجايل حقيقية نحو نجاح قابل للقياس.",
+          "learnMore": "اعرف المزيد عن ESM-P"
+        },
+        "esf": {
+          "fullName": "ميسر سكرم معتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $180",
+          "description": "تخصص في تصميم ورش العمل وديناميكيات المجموعات وتقنيات التسهيل المتقدمة لفرق سكرم.",
+          "learnMore": "اعرف المزيد عن ESF"
+        }
+      }
+    },
+    "epo": {
+      "fullName": "مالك منتج معتمد",
+      "trackName": "شهادات مالك المنتج",
+      "level": "مستوى التأسيس",
+      "price": "CAD $180",
+      "hero": {
+        "back": "العودة إلى الشهادات",
+        "breadcrumb": {
+          "home": "الرئيسية",
+          "all": "جميع الشهادات"
+        },
+        "description": "ابدأ رحلتك نحو بناء منتجات يحبها الناس مع شهادة تأسيسية.",
+        "download": "تحميل نظرة عامة على البرنامج",
+        "enroll": "سجّل الآن",
+        "startingAt": "يبدأ من"
+      },
+      "overview": {
+        "title": "نظرة عامة",
+        "body": "شهادة مالك المنتج المعتمد (EPO) هي شهادة تأسيسية للمهنيين الذين يدخلون عالم ملكية المنتج الأجايل. تُثبت فهمك لرؤية المنتج وإدارة قائمة المنتج والتعاون مع أصحاب المصلحة والتسليم القائم على القيمة. صادرة من معهد سكرم، هذه الشهادة مدى الحياة تثبت أنك تمتلك المهارات الأساسية لتعظيم قيمة المنتج في فرق سكرم وتضع الأساس للشهادات المتقدمة لمالك المنتج طوال مسيرتك المهنية."
+      },
+      "heroImage": {
+        "alt": "فريق سكرم يتعاون على لوحة ملاحظات لاصقة",
+        "languageValue": "الإنجليزية",
+        "languageLabel": "لغة الاختبار",
+        "testingValue": "اختبار عبر الإنترنت",
+        "testingLabel": "بيئة آمنة"
+      },
+      "stats": {
+        "prereqValue": "لا",
+        "prereqLabel": "الخبرة السابقة",
+        "trainingValue": "+15",
+        "trainingUnit": "/ساعة",
+        "trainingLabel": "التدريب المطلوب",
+        "questionsValue": "45",
+        "questionsLabel": "أسئلة الاختبار",
+        "durationValue": "60",
+        "durationUnit": "/دقيقة",
+        "durationLabel": "مدة الاختبار",
+        "validityValue": "مدى الحياة",
+        "validityLabel": "صالحة"
+      },
+      "audience": {
+        "badge": "من يجب أن يسجل",
+        "headingPart1": "من يجب أن يستثمر في هذه",
+        "headingPart2": "الشهادة؟",
+        "aspiringTitle": "مالك المنتج الطامح",
+        "aspiringDesc": "المهنيون الذين يهدفون لتحمل مسؤولية نجاح المنتج في فرق سكرم.",
+        "businessTitle": "المحللون التجاريون",
+        "businessDesc": "أعضاء الفريق الذين يريدون ترجمة احتياجات العمل إلى عناصر قائمة منتج قابلة للتنفيذ.",
+        "startupTitle": "مؤسسو الشركات الناشئة",
+        "startupDesc": "رواد الأعمال الذين يبون منتجات ويحتاجون لترتيب أولويات الميزات وإدارة التسليم.",
+        "careerTitle": "متغيرو المسار",
+        "careerDesc": "المحترفون الذين ينتقلون إلى أدوار المنتج ويسعون للحصول على أوراق اعتماد رسمية.",
+        "developerTitle": "المحترفون التقنيون",
+        "developerDesc": "المطورون والمختبرون الذين يريدون فهم الجانب التجاري لتسليم المنتج."
+      },
+      "keyLearning": {
+        "title": "نقاط التعلم الرئيسية",
+        "point1": "تحديد وتوصيل رؤية منتج مقنعة تتماشى مع أهداف العمل.",
+        "point2": "إنشاء وتحسين وترتيب قائمة منتج تعظّم القيمة.",
+        "point3": "كتابة قصص مستخدم واضحة وقيمة مع معايير قبول فعالة.",
+        "point4": "التعاون بفعالية مع أصحاب المصلحة والعملاء وفرق التطوير.",
+        "point5": "تطبيق تقنيات الترتيب حسب القيمة لتسليم ما يهم أكثر.",
+        "point6": "فهم دور مالك المنتج في جميع أحداث ووثائق سكرم.",
+        "point7": "بناء أساس قوي لمالك المنتج المعتمد - الممارس (EPO-P)."
+      },
+      "cta": {
+        "headingPart1": "هل أنت مستعد للدخول في عالم",
+        "headingPart2": "أجايل؟",
+        "description": "سجّل في شهادة EPO اليوم وابدأ في بناء المسار الوظيفي الذي عملت من أجله.",
+        "button": "سجّل في مالك منتج معتمد (EPO)",
+        "questions": "أسئلة؟",
+        "contactLink": "تواصل مع مستشار الشهادات"
+      },
+      "related": {
+        "headingPart1": "الشهادات",
+        "headingPart2": "ذات الصلة",
+        "startingAt": "يبدأ من",
+        "esm": {
+          "fullName": "مدرب سكرم معتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $130",
+          "description": "ابدأ مسيرتك في أجايل مع شهادة أساسية معترف بها عالمياً تفتح أبواباً لأدوار مدرب سكرم مطلوبة عالمياً.",
+          "learnMore": "اعرف المزيد عن ESM"
+        },
+        "esf": {
+          "fullName": "ميسر سكرم معتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $180",
+          "description": "تخصص في تصميم ورش العمل وديناميكيات المجموعات وتقنيات التسهيل المتقدمة لفرق سكرم.",
+          "learnMore": "اعرف المزيد عن ESF"
+        }
+      }
+    },
+    "epoP": {
+      "fullName": "مالك المنتج المعتمد الممارس",
+      "trackName": "شهادات مالك المنتج",
+      "level": "مستوى الممارس",
+      "price": "CAD $150",
+      "hero": {
+        "back": "العودة إلى الشهادات",
+        "breadcrumb": {
+          "home": "الرئيسية",
+          "all": "جميع الشهادات"
+        },
+        "description": "ارتقِ بمهارات مالك المنتج من الأساس إلى المتقدم وأثبت قدرتك على قيادة نجاح المنتج في بيئات سكرم المعقدة.",
+        "download": "تحميل نظرة عامة على البرنامج",
+        "enroll": "سجّل الآن",
+        "startingAt": "يبدأ من"
+      },
+      "overview": {
+        "title": "نظرة عامة",
+        "body": "مالك المنتج المعتمد الممارس (EPO-P) هو شهادة المستوى المتوسط لمالكي المنتجات ذوي الخبرة الجاهزين لتعميق خبرتهم. ببناءً على أساس EPO، يؤكد قدرتك على تعظيم قيمة المنتج وتحسين التسليم وتوجيه أصحاب المصلحة خلال تحديات المنتج المعقدة. تشير هذه الشهادة إلى أصحاب العمل أنك لست مجرد مدير قائمة منتج — أنت قائد منتج استراتيجي قادر على قيادة نتائج قابلة للقياس."
+      },
+      "heroImage": {
+        "alt": "فريق سكرم يتعاون على لوحة ملاحظات لاصقة",
+        "languageValue": "الإنجليزية",
+        "languageLabel": "لغة الاختبار",
+        "testingValue": "اختبار عبر الإنترنت",
+        "testingLabel": "بيئة آمنة"
+      },
+      "stats": {
+        "prereqValue": "(EPO)",
+        "prereqLabel": "مالك المنتج المعتمد\nالخبرة السابقة (موصى بها)",
+        "trainingValue": "15+",
+        "trainingUnit": "/ساعة",
+        "trainingLabel": "التدريب المطلوب",
+        "questionsValue": "45",
+        "questionsLabel": "أسئلة الاختبار",
+        "durationValue": "60",
+        "durationUnit": "/دقيقة",
+        "durationLabel": "مدة الاختبار",
+        "validityValue": "مدى الحياة",
+        "validityLabel": "الصلاحية"
+      },
+      "audience": {
+        "badge": "من يجب أن يسجل",
+        "headingPart1": "من يجب أن يستثمر في هذه",
+        "headingPart2": "الشهادة؟",
+        "graduatesTitle": "خريجو EPO",
+        "graduatesDesc": "المحترفون الذين حصلوا على EPO ويريدون الارتقاء بمهاراتهم في ملكية المنتج.",
+        "seniorTitle": "مديرو المنتج الأقدمون",
+        "seniorDesc": "قادة المنتج الذين يسعون لتوثيق خبرتهم في سكرم بشهادة معترف بها.",
+        "leadersTitle": "قادة المنتج",
+        "leadersDesc": "قادة الفريق والمديرين الذين يقودون استراتيجية المنتج ومحاذاة أصحاب المصلحة.",
+        "strategyTitle": "المحترفون الموجهون بالاستراتيجية",
+        "strategyDesc": "المحترفون الذين يجمعون بين تحليل الأعمال وخبرة تسليم المنتج.",
+        "strategistTitle": "المstrategist",
+        "strategistDesc": "محترفو المنتج الأقدمون الذين يستعدون لمستوى السلطة (EPO-A)."
+      },
+      "keyLearning": {
+        "title": "نقاط التعلم الرئيسية",
+        "point1": "قيادة ورش عمل استراتيجية المنتج ومحاذاة أصحاب المصلحة على الرؤية وخارطة الطريق.",
+        "point2": "تطبيق تقنيات تحسين متقدمة لقائمة المنتج لتعظيم قيمة التسليم.",
+        "point3": "التنقل بين أولويات أصحاب المصلحة المتنافسة باستخدام أطر القرار القائمة على الأدلة.",
+        "point4": "تحسين ملاءمة المنتج للسوق من خلال الاكتشاف المستمر والتعلم المُعتمد.",
+        "point5": "قيادة أداء الفريق من خلال الشفافية والثقة والقرارات المستندة إلى البيانات.",
+        "point6": "تنفيذ ممارسات الحوكمة والتوسع لبيئات المنتج المعقدة."
+      },
+      "cta": {
+        "headingPart1": "هل أنت مستعد للدخول في عالم",
+        "headingPart2": "الأجايل؟",
+        "description": "سجّل في شهادة EPO-P اليوم وابدأ في بناء المسار المهني الذي تعمل نحوه.",
+        "button": "سجّل في مالك المنتج المعتمد الممارس (EPO-P)",
+        "questions": "أسئلة؟",
+        "contactLink": "تواصل مع مستشار الشهادات"
+      },
+      "related": {
+        "headingPart1": "الشهادات",
+        "headingPart2": "ذات الصلة",
+        "startingAt": "يبدأ من",
+        "epo": {
+          "fullName": "مالك المنتج المعتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $180",
+          "description": "ابدأ رحلتك نحو بناء منتجات يحبها الناس مع شهادة أساسية.",
+          "learnMore": "اعرف المزيد عن EPO"
+        },
+        "esf": {
+          "fullName": "ميسر سكرم معتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $180",
+          "description": "تخصص في تصميم ورش العمل وديناميكيات المجموعات وتقنيات التسهيل المتقدمة.",
+          "learnMore": "اعرف المزيد عن ESF"
+        }
+      }
+    },
+    "esf": {
+      "fullName": "الميسّر المعتمد في سكروم",
+      "trackName": "شهادات Scrum Master",
+      "level": "مستوى السلطة",
+      "price": "CAD $175",
+      "hero": {
+        "back": "العودة إلى الشهادات",
+        "breadcrumb": {
+          "home": "الرئيسية",
+          "all": "جميع الشهادات"
+        },
+        "description": "أتقن فن التسهيل وأصبح الدليل الموثوق الذي تحتاجه كل فريق Agile لتحقيق الوضوح والمحاذاة والنتائج الدائمة.",
+        "download": "تحميل نظرة عامة على البرنامج",
+        "enroll": "سجل الآن",
+        "startingAt": "يبدأ من"
+      },
+      "overview": {
+        "title": "نظرة عامة",
+        "body": "تؤكد شهادة الميسّر المعتمد في سكروم (ESF) على قدرتك على قيادة أحداث سكروم الفعالة والجذابة وال موجهة نحو النتائج. تم تصميمها حصريًا للمهنيين الذين لديهم أساس في كل من Scrum Master ومنتج Owner، تجمع هذه الشهادة بين إتقان التسهيل والمعرفة العميقة في Scrum. تثبت هذه الشهادة أنك قادر على إرشاد الفرق خلال المحادثات الصعبة، ومحاذاة أصحاب المصلحة المتنوعين، وتحويل كل حدث سكروم إلى مصدر للقيمة الحقيقية — مجموعة مهارات مطلوبة للغاية في المنظمات المرنة اليوم."
+      },
+      "heroImage": {
+        "alt": "فريق سكروم يتعاون على لوحة ملاحظات",
+        "languageValue": "الإنجليزية",
+        "languageLabel": "لغة الاختبار",
+        "testingValue": "اختبار عبر الإنترنت",
+        "testingLabel": "بيئة آمنة"
+      },
+      "stats": {
+        "prereqValue": "(ESM) و (EPO)",
+        "prereqLabel": "الخبرة السابقة الموصى بها في Scrum Master المعتمد و Product Owner المعتمد",
+        "trainingValue": "15+",
+        "trainingUnit": "/ساعات",
+        "trainingLabel": "التدريب المطلوب",
+        "questionsValue": "45",
+        "questionsLabel": "أسئلة الاختبار",
+        "durationValue": "60",
+        "durationUnit": "/دقيقة",
+        "durationLabel": "مدة الاختبار",
+        "validityValue": "مدى الحياة",
+        "validityLabel": "صالحية"
+      },
+      "audience": {
+        "badge": "من يجب أن يسجل",
+        "headingPart1": "من يجب أن يستثمر في هذه",
+        "headingPart2": "الشهادة؟",
+        "consultantTitle": "المستشار",
+        "consultantDesc": "المهنيون الذين يسعون لتقديم التسهيل المتخصص كخدمة مستقلة.",
+        "leaderTitle": "القائد",
+        "leaderDesc": "قادة الفرق والمديرون الذين يحتاجون إلى قيادة جلسات تعاونية عالية التأثير.",
+        "coachTitle": "المدرب",
+        "coachDesc": "مدربو Agile والمستشارون الذين يريدون شهادة تسهيل معترف بها.",
+        "productTitle": "خبير المنتج",
+        "productDesc": "مالكو المنتجات والمديرون الذين يريدون تصميم وقيادة أحداث أكثر فعالية.",
+        "expertTitle": "خبير Scrum",
+        "expertDesc": "Scrum Masters وأصحاب المنتجات الذين يريدون تعميق مهاراتهم في التسهيل beyond basics."
+      },
+      "keyLearning": {
+        "title": "نقاط التعلم الرئيسية",
+        "point1": "أتقن تقنيات التسهيل التي تنشط الفرق وتدفع قرارات واضحة.",
+        "point2": "صمم وشغّل جلسات تخطيط Sprint والمراجعة والاسترجاع الفعالة.",
+        "point3": "بناء الأمان النفسي وتعزيز التعاون الحقيقي في كل جلسة.",
+        "point4": "تنقل فيConflicts، ومحاذاة أصحاب المصلحة، وإدارة ديناميكيات المجموعات الصعبة بالثقة.",
+        "point5": "تطبيق أدوات متقدمة مثل Liberating Structures و1-2-4-All وغيرها لزيادة المشاركة."
+      },
+      "cta": {
+        "headingPart1": "هل أنت مستعد للدخول إلى عالم",
+        "headingPart2": "Agile؟",
+        "description": "سجل في شهادة ESF اليوم وابدأ في بناء المسار الوظيفي الذي تعمل من أجله.",
+        "button": "سجل في الميسّر المعتمد في سكروم (ESF)",
+        "questions": "أسئلة؟",
+        "contactLink": "تواصل مع مستشار الشهادات"
+      },
+      "related": {
+        "headingPart1": "الشهادات",
+        "headingPart2": "ذات الصلة",
+        "startingAt": "يبدأ من",
+        "esm": {
+          "fullName": "Scrum Master المعتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $130",
+          "description": "ابدأ مسيرتك في Agile مع شهادة تأسيس معترف بها عالميًا.",
+          "learnMore": "اعرف المزيد عن ESM"
+        },
+        "epo": {
+          "fullName": "مالك المنتج المعتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $180",
+          "description": "ابدأ رحلتك نحو بناء منتجات يحبها الناس.",
+          "learnMore": "اعرف المزيد عن EPO"
+        }
+      }
+    },
+    "epoA": {
+      "fullName": "مالك المنتج المعتمد - السلطة",
+      "trackName": "شهادات مالك المنتج",
+      "level": "مستوى السلطة",
+      "price": "CAD $275",
+      "hero": {
+        "back": "العودة إلى الشهادات",
+        "breadcrumb": {
+          "home": "الرئيسية",
+          "all": "جميع الشهادات"
+        },
+        "description": "أصبح القائد الذي تعتمد عليه المؤسسات لتشكيل الاستراتيجية ودفع الابتكار وتقديم نتائج أعمال تحويلية على نطاق واسع.",
+        "download": "تحميل نظرة عامة على البرنامج",
+        "enroll": "سجل الآن",
+        "startingAt": "يبدأ من"
+      },
+      "overview": {
+        "title": "نظرة عامة",
+        "body": "شهادة مالك المنتج المعتمد - السلطة (EPO-A) هي شهادة متقدمة مصممة لأصحاب المنتج الأعلى، ومديري المنتجات الرئيسيين، وقادة المنتج. تؤكد قدرتك على تحديد استراتيجية منتج المؤسسة، وقيادة محافظ المنتجات، ودفع الابتكار على نطاق واسع. تضعك هذه الشهادة المرموقة مدى الحياة كقائد منتج من الدرجة الأولى قادر على محاذاة المنتجات مع رؤية الأعمال وتشكيل مستقبل مؤسستك في سوق تنافسي سريع التغير."
+      },
+      "heroImage": {
+        "alt": "فريق سكروم يتعاون على لوحة ملاحظات",
+        "languageValue": "الإنجليزية",
+        "languageLabel": "لغة الاختبار",
+        "testingValue": "اختبار عبر الإنترنت",
+        "testingLabel": "بيئة آمنة"
+      },
+      "stats": {
+        "prereqValue": "(EPO-P)",
+        "prereqLabel": "مالك المنتج المعتمد - الممارس\nالخبرة السابقة (موصى بها)",
+        "trainingValue": "15+",
+        "trainingUnit": "/ساعات",
+        "trainingLabel": "التدريب المطلوب",
+        "questionsValue": "30",
+        "questionsLabel": "أسئلة الاختبار",
+        "durationValue": "60",
+        "durationUnit": "/دقيقة",
+        "durationLabel": "مدة الاختبار",
+        "validityValue": "مدى الحياة",
+        "validityLabel": "صالحية"
+      },
+      "audience": {
+        "badge": "من يجب أن يسجل",
+        "headingPart1": "من يجب أن يستثمر في هذه",
+        "headingPart2": "الشهادة؟",
+        "enterpriseTitle": "أصحاب المنتج الأعلى",
+        "enterpriseDesc": "أصحاب منتج متمرسون لديهم خبرة كبيرة في منتجات متعددة أو محافظ.",
+        "chiefProductTitle": "رؤساء المنتجات",
+        "chiefProductDesc": "مديرو المنتج، ونواب رئيس المنتجات، ورؤساء المنتجات.",
+        "portfolioTitle": "مديرو الاستراتيجية",
+        "portfolioDesc": "قادة المنتج الذين يديرون الاستراتيجية والابتكار عبر وحدات الأعمال.",
+        "executiveTitle": "المحترفون المعتمدون",
+        "executiveDesc": "محترفو EPO-P المعتمدون الذين يصلون إلى قمة مسار مالك المنتج.",
+        "innovatorTitle": "بناة المؤسسات",
+        "innovatorDesc": "رواد ورجال أعمال يبنيون مؤسسات موجهة بالمنتج من الصفر."
+      },
+      "keyLearning": {
+        "title": "نقاط التعلم الرئيسية",
+        "point1": "حدد استراتيجية منتج المؤسسة المتوافقة مع رؤية الأعمال طويلة المدى.",
+        "point2": "إدارة محافظ المنتجات وتنسيق فرق المنتجات المتعددة بكفاءة.",
+        "point3": "دفع الابتكار من خلال الأساليب القائمة على التجربة والاكتشاف.",
+        "point4": "تأثير أصحاب المصلحة التنفيذيين والمجالس والمستثمرين برؤية المنتج.",
+        "point5": "تطبيق التحليلات المتقدمة والبحث السوقي في القرارات الاستراتيجية.",
+        "point6": "بناء فرق منتجات عالمية المستوى وتوجيهها وتوسيعها.",
+        "point7": "وضع نفسك كسلطة معترف بها في مجتمع المنتج العالمي."
+      },
+      "cta": {
+        "headingPart1": "ادخل في دور",
+        "headingPart2": "سلطة المنتج الحقيقية",
+        "description": "سجل في شهادة EPO-A وقم بقيادة مستقبل منتج مؤسستك بثقة.",
+        "button": "سجل في مالك المنتج المعتمد - السلطة (EPO-A)",
+        "questions": "أسئلة؟",
+        "contactLink": "تواصل مع مستشار الشهادات"
+      },
+      "related": {
+        "headingPart1": "الشهادات",
+        "headingPart2": "ذات الصلة",
+        "startingAt": "يبدأ من",
+        "epoP": {
+          "fullName": "مالك المنتج المعتمد - الممارس",
+          "level": "مستوى الممارس",
+          "price": "CAD $150",
+          "description": "ارفع مهارات مالك المنتج من التأسيس إلى المتقدم وأثبت قدرتك على قيادة نجاح المنتج في بيئات سكروم المعقدة.",
+          "learnMore": "اعرف المزيد عن EPO-P"
+        },
+        "esf": {
+          "fullName": "الميسّر المعتمد في سكروم",
+          "level": "مستوى التأسيس",
+          "price": "CAD $175",
+          "description": "تخصص في تصميم ورش العمل وديناميكيات المجموعات والتقنيات المتقدمة في التسهيل.",
+          "learnMore": "اعرف المزيد عن ESF"
+        }
+      }
+    }
   }
 }

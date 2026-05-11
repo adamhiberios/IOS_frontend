@@ -72,6 +72,119 @@
    * Alias kept for components that need the FAF0C8 / FFF9F0 warm tint.
    */
   --color-ios-brand-yellow-soft: #faf0c8;
+
+  /* ------------------------------------------------------------------------
+   * Certification track palettes — used by the reusable
+   * `<ios-cert-details-template>` to theme per cert family.
+   *
+   *  · cer-blue  → ESM family (Endorsed Scrum Master, ESM-P, ESM-A)
+   *  · cer-green → EPO family (Endorsed Product Owner, EPO-P, EPO-A)
+   *  · cer-brown → ESF / Scrum Facilitator (used in related-cert cards)
+   *
+   * Tailwind v4 exposes these as `bg-cer-blue`, `text-cer-green-deep`,
+   * and supports alpha syntax such as `bg-cer-blue/10`.
+   * ---------------------------------------------------------------------- */
+  /* Blue track — ESM family. */
+  --color-cer-blue: #143d56;
+  --color-cer-blue-mid: #426981;
+  --color-cer-blue-strong: #184865;
+  --color-cer-blue-deep: #0b202d;
+  --color-cer-blue-text: #113348;
+  --color-cer-blue-line: #a8b8c2;
+  --color-cer-blue-softer: #c8d3da;
+  --color-cer-blue-soft: #e8edf0;
+
+  /* Green track — EPO family. */
+  --color-cer-green: #455041;
+  --color-cer-green-mid: #707b6d;
+  --color-cer-green-strong: #515e4d;
+  --color-cer-green-deep: #242a23;
+  --color-cer-green-text: #3a4337;
+  --color-cer-green-line: #b8bab7;
+  --color-cer-green-softer: #d5d8d4;
+  --color-cer-green-soft: #eeefed;
+
+  /* Olive variant — used for the "EPO" related card on ESM pages. */
+  --color-cer-olive-mid: #72816d;
+
+  /* Brown track — ESF / authority badge family. */
+  --color-cer-brown: #a69075;
+  --color-cer-brown-dark: #8e6636;
+  --color-cer-brown-deep: #654826;
+
+  /* ------------------------------------------------------------------------
+   * Generic track palette — semantic slots consumed by the cert details
+   * template. The values below are defaults (blue track); the actual track
+   * is selected at runtime by adding `.cert-track-blue`, `.cert-track-green`,
+   * `.cert-track-brown`, `.cert-track-primary`, or `.cert-track-olive` to a
+   * wrapper element, which re-binds these variables.
+   *
+   * Tailwind v4 exposes utilities for every `--color-*` declared in @theme,
+   * so we get `bg-track-bg`, `text-track-soft`, `border-track-mid`,
+   * `bg-track-bg/10`, etc. for free.
+   * ---------------------------------------------------------------------- */
+  --color-track-bg: var(--color-cer-blue);
+  --color-track-mid: var(--color-cer-blue-mid);
+  --color-track-strong: var(--color-cer-blue-strong);
+  --color-track-deep: var(--color-cer-blue-deep);
+  --color-track-text: var(--color-cer-blue-text);
+  --color-track-line: var(--color-cer-blue-line);
+  --color-track-softer: var(--color-cer-blue-softer);
+  --color-track-soft: var(--color-cer-blue-soft);
+}
+
+/* ----------------------------------------------------------------------------
+ * Track switchers — apply one of these classes to a wrapper element to
+ * re-bind every `--color-track-*` variable for its subtree. Used by
+ * `<ios-cert-details-template>` on the page root, and by each related-cert
+ * card on the per-card article.
+ * -------------------------------------------------------------------------- */
+.cert-track-blue {
+  --color-track-bg: var(--color-cer-blue);
+  --color-track-mid: var(--color-cer-blue-mid);
+  --color-track-strong: var(--color-cer-blue-strong);
+  --color-track-deep: var(--color-cer-blue-deep);
+  --color-track-text: var(--color-cer-blue-text);
+  --color-track-line: var(--color-cer-blue-line);
+  --color-track-softer: var(--color-cer-blue-softer);
+  --color-track-soft: var(--color-cer-blue-soft);
+}
+
+.cert-track-green {
+  --color-track-bg: var(--color-cer-green);
+  --color-track-mid: var(--color-cer-green-mid);
+  --color-track-strong: var(--color-cer-green-strong);
+  --color-track-deep: var(--color-cer-green-deep);
+  --color-track-text: var(--color-cer-green-text);
+  --color-track-line: var(--color-cer-green-line);
+  --color-track-softer: var(--color-cer-green-softer);
+  --color-track-soft: var(--color-cer-green-soft);
+}
+
+.cert-track-brown {
+  --color-track-bg: var(--color-cer-brown-dark);
+  --color-track-mid: var(--color-cer-brown);
+  --color-track-strong: var(--color-cer-brown-dark);
+  --color-track-deep: var(--color-cer-brown-deep);
+  --color-track-text: var(--color-cer-brown-deep);
+  --color-track-soft: #f4f0eb;
+  --color-track-softer: #e4dacf;
+  --color-track-line: #c9b99e;
+}
+
+.cert-track-primary {
+  --color-track-bg: var(--color-ios-brand-primary);
+  --color-track-mid: var(--color-ios-brand-primary);
+  --color-track-strong: var(--color-ios-brand-primary-hover);
+  --color-track-text: var(--color-ios-brand-primary);
+  --color-track-soft: #ffffff;
+}
+
+.cert-track-olive {
+  --color-track-bg: var(--color-cer-green-strong);
+  --color-track-mid: var(--color-cer-olive-mid);
+  --color-track-text: var(--color-cer-green-text);
+  --color-track-soft: #ffffff;
 }
 
 @keyframes marquee {

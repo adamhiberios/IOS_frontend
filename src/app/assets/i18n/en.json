@@ -898,5 +898,662 @@
         "success": "Message Sent!"
       }
     }
+  },
+  "certDetails": {
+    "esm": {
+      "fullName": "Endorsed Scrum Master",
+      "trackName": "Scrum Master Certifications",
+      "level": "Foundation Level",
+      "price": "CAD $130",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Scrum Master (ESM) is the foundation-level certification for professionals beginning their journey in Agile and Scrum. It validates your understanding of core Scrum principles, roles, events, and artifacts — equipping you to support Agile teams confidently from day one. Issued by the Institute of Scrum, this lifetime credential establishes your credibility with employers and prepares you for advanced certifications along the Scrum Master path."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "No",
+        "prereqLabel": "previous experience",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "45",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "seekingTitle": "Seeking Credentials",
+        "seekingDesc": "Aspiring Scrum Masters seeking a strong, employer-trusted entry point into Agile.",
+        "leadersTitle": "Leaders",
+        "leadersDesc": "Team leads, coordinators, and project managers transitioning into Agile environments.",
+        "technicalsTitle": "Technicals",
+        "technicalsDesc": "Software developers, testers, and IT professionals working on or joining Scrum teams.",
+        "businessTitle": "Business",
+        "businessDesc": "Business analysts and consultants who want to formalize their Scrum knowledge.",
+        "careerChangerTitle": "The Career Changer",
+        "careerChangerDesc": "Career changers looking to enter one of the fastest-growing roles in tech."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Master the Scrum framework — roles, events, artifacts, and guiding principles.",
+        "point2": "Understand the servant-leadership mindset and the responsibilities of a Scrum Master.",
+        "point3": "Facilitate key Scrum events including Sprint Planning, Daily Scrum, Review, and Retrospective.",
+        "point4": "Apply Agile values and empirical process control to real team scenarios.",
+        "point5": "Identify and remove impediments that block team progress and flow.",
+        "point6": "Build a foundation for continuous improvement and high-performing teams.",
+        "point7": "Prepare confidently for the next step: Endorsed Scrum Master Practitioner (ESM-P)."
+      },
+      "cta": {
+        "headingPart1": "Ready to step into the world of",
+        "headingPart2": "Agile?",
+        "description": "Enroll in the ESM certification today and start building the career you’ve been working toward.",
+        "button": "Enroll in Endorsed Scrum Master (ESM)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "epo": {
+          "fullName": "Endorsed Product Owner",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
+          "learnMore": "Learn More About EPO"
+        },
+        "esf": {
+          "fullName": "Endorsed Scrum Facilitator",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Endorsed Scrum Facilitator (ESF): Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
+          "learnMore": "Learn More About ESF"
+        }
+      }
+    },
+    "esmP": {
+      "fullName": "Endorsed Scrum Master Practitioner",
+      "trackName": "Scrum Master Certifications",
+      "level": "Practitioner Level",
+      "price": "CAD $150",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Elevate your Scrum Master skills from theory to practice and prove you can lead real Agile teams to measurable success.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Scrum Master Practitioner (ESM-P) is the intermediate-level certification for practicing Scrum Masters ready to deepen their expertise. Building on the ESM foundation, it validates your ability to coach teams through complex challenges, improve delivery performance, and foster a culture of continuous improvement. This credential signals to employers that you are not just knowledgeable in Scrum — you are capable of applying it skillfully in demanding, real-world environments."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "(ESM)",
+        "prereqLabel": "Endorsed Scrum Master\nPrevious Experience (Recommended)",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "45",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "practitionerTitle": "ESM Graduates",
+        "practitionerDesc": "Professionals who have earned the ESM and want to take their skills to the next level.",
+        "teamCoachTitle": "Team Coaches",
+        "teamCoachDesc": "Scrum Masters and Agile coaches seeking to deepen their impact on team performance.",
+        "optimizationTitle": "Optimization Seekers",
+        "optimizationDesc": "Practitioners who want to master metrics, flow, and continuous delivery improvements.",
+        "leaderTitle": "Agile Leaders",
+        "leaderDesc": "Team leads and managers who want to build high-performing, self-organizing teams.",
+        "strategistTitle": "The Strategist",
+        "strategistDesc": "Senior Agile professionals preparing for the Authority level (ESM-A)."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Coach teams through Scrum adoption challenges and organizational resistance.",
+        "point2": "Apply advanced facilitation techniques to drive productive Scrum events.",
+        "point3": "Resolve team conflicts and dysfunctions with proven Agile tools.",
+        "point4": "Measure team performance using velocity, flow metrics, and empirical data.",
+        "point5": "Guide Product Owners and stakeholders toward effective collaboration.",
+        "point6": "Implement continuous improvement practices that scale across teams.",
+        "point7": "Prepare for senior-level coaching with the Endorsed Scrum Master Authority (ESM-A)."
+      },
+      "cta": {
+        "headingPart1": "Ready to step into the world of",
+        "headingPart2": "Agile?",
+        "description": "Enroll in the ESM-P certification today and start building the career you've been working toward.",
+        "button": "Enroll in Endorsed Scrum Master Practitioner (ESM-P)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "esm": {
+          "fullName": "Endorsed Scrum Master",
+          "level": "Foundation Level",
+          "price": "CAD $130",
+          "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
+          "learnMore": "Learn More About ESM"
+        },
+        "esmA": {
+          "fullName": "Endorsed Scrum Master Authority",
+          "level": "Authority Level",
+          "price": "CAD $180",
+          "description": "The highest-level credential for Scrum Masters ready to mentor others, drive organizational transformation, and lead the profession forward.",
+          "learnMore": "Learn More About ESM-A"
+        }
+      }
+    },
+    "esmA": {
+      "fullName": "Endorsed Scrum Master Authority",
+      "trackName": "Scrum Master Certifications",
+      "level": "Authority Level",
+      "price": "CAD $185",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Establish yourself as a top-tier Scrum authority capable of leading enterprise-scale Agile transformations and mentoring the next generation.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Scrum Master Authority (ESM-A) is the advanced-level certification designed for senior Scrum Masters, Agile coaches, and transformation leaders. It validates your ability to guide multiple teams, shape Agile culture at the organizational level, and mentor other Scrum Masters. This prestigious lifetime credential positions you among the most respected Agile professionals in the industry and unlocks opportunities in enterprise coaching, consulting, and Agile leadership roles."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "(ESM-P)",
+        "prereqLabel": "Endorsed Scrum Master Practitioner\nPrevious Experience (Recommended)",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "45",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "enterpriseTitle": "Enterprise Leaders",
+        "enterpriseDesc": "Senior Scrum Masters and Agile coaches ready to lead large-scale transformations.",
+        "mentorTitle": "Mentors",
+        "mentorDesc": "Experienced practitioners who want to develop and mentor other Scrum Masters.",
+        "scalingTitle": "Scaling Experts",
+        "scalingDesc": "Professionals working with LeSS, Nexus, SAFe, or similar scaling frameworks.",
+        "executiveTitle": "Executive Influencers",
+        "executiveDesc": "Leaders who need to align Agile strategy with business objectives.",
+        "authorityTitle": "The Authority",
+        "authorityDesc": "Professionals seeking the highest credential to drive organizational change."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Lead Agile transformations across departments, business units, and geographies.",
+        "point2": "Mentor and develop other Scrum Masters and Agile coaches.",
+        "point3": "Apply scaling frameworks such as LeSS, Nexus, and SAFe with confidence.",
+        "point4": "Influence executive stakeholders and align Agile with business strategy.",
+        "point5": "Diagnose systemic organizational impediments and design effective interventions.",
+        "point6": "Drive cultural change that sustains Agility long after transformation ends.",
+        "point7": "Build a legacy as a recognized authority in the Scrum and Agile community."
+      },
+      "cta": {
+        "headingPart1": "Ready to step into the world of",
+        "headingPart2": "Agile?",
+        "description": "Enroll in the ESM-A certification today and start building the career you've been working toward.",
+        "button": "Enroll in Endorsed Scrum Master Authority (ESM-A)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "esmP": {
+          "fullName": "Endorsed Scrum Master Practitioner",
+          "level": "Practitioner Level",
+          "price": "CAD $150",
+          "description": "Elevate your Scrum Master skills from theory to practice and prove you can lead real Agile teams to measurable success.",
+          "learnMore": "Learn More About ESM-P"
+        },
+        "esf": {
+          "fullName": "Endorsed Scrum Facilitator",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
+          "learnMore": "Learn More About ESF"
+        }
+      }
+    },
+    "epo": {
+      "fullName": "Endorsed Product Owner",
+      "trackName": "Product Owner Certifications",
+      "level": "Foundation Level",
+      "price": "CAD $180",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Start your journey toward building products people love with a foundation credential.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Product Owner (EPO) is the foundation-level certification for professionals stepping into the world of Agile product ownership. It validates your understanding of product vision, backlog management, stakeholder collaboration, and value-driven delivery. Issued by the Institute of Scrum, this lifetime credential proves you have the core skills to maximize product value in Scrum teams and sets the stage for advanced Product Owner certifications throughout your career."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "No",
+        "prereqLabel": "previous experience",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "45",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "aspiringTitle": "Aspiring Product Owners",
+        "aspiringDesc": "Professionals aiming to take ownership of product success in Scrum teams.",
+        "businessTitle": "Business Analysts",
+        "businessDesc": "Team members who want to translate business needs into actionable backlog items.",
+        "startupTitle": "Startup Founders",
+        "startupDesc": "Entrepreneurs building products who need to prioritize features and manage delivery.",
+        "careerTitle": "Career Changers",
+        "careerDesc": "Professionals transitioning into product roles and seeking formal credentials.",
+        "developerTitle": "Tech Professionals",
+        "developerDesc": "Developers and testers who want to understand the business side of product delivery."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Define and communicate a compelling product vision aligned with business goals.",
+        "point2": "Create, refine, and prioritize a Product Backlog that maximizes value.",
+        "point3": "Write clear, valuable user stories with effective acceptance criteria.",
+        "point4": "Collaborate effectively with stakeholders, customers, and development teams.",
+        "point5": "Apply value-based prioritization techniques to deliver what matters most.",
+        "point6": "Understand the Product Owner's role in all Scrum events and artifacts.",
+        "point7": "Build a strong foundation for the Endorsed Product Owner Practitioner (EPO-P)."
+      },
+      "cta": {
+        "headingPart1": "Ready to step into the world of",
+        "headingPart2": "Agile?",
+        "description": "Enroll in the EPO certification today and start building the career you've been working toward.",
+        "button": "Enroll in Endorsed Product Owner (EPO)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "esm": {
+          "fullName": "Endorsed Scrum Master",
+          "level": "Foundation Level",
+          "price": "CAD $130",
+          "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
+          "learnMore": "Learn More About ESM"
+        },
+        "esf": {
+          "fullName": "Endorsed Scrum Facilitator",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
+          "learnMore": "Learn More About ESF"
+        }
+      }
+    },
+    "epoP": {
+      "fullName": "Endorsed Product Owner Practitioner",
+      "trackName": "Product Owner Certifications",
+      "level": "Practitioner Level",
+      "price": "CAD $150",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Elevate your Product Owner skills from foundation to advanced and prove you can drive product success in complex Scrum environments.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Product Owner Practitioner (EPO-P) is the intermediate-level certification for experienced Product Owners ready to deepen their expertise. Building on the EPO foundation, it validates your ability to maximize product value, optimize delivery, and lead stakeholders through complex product challenges. This credential signals to employers that you are not just a backlog manager — you are a strategic product leader capable of driving measurable outcomes."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "(EPO)",
+        "prereqLabel": "Endorsed Product Owner\nPrevious Experience (Recommended)",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "45",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "graduatesTitle": "EPO Graduates",
+        "graduatesDesc": "Professionals who have earned the EPO and want to elevate their product ownership skills.",
+        "seniorTitle": "Senior Product Managers",
+        "seniorDesc": "Product leaders seeking to formalize their Scrum expertise with a recognized credential.",
+        "leadersTitle": "Product Leaders",
+        "leadersDesc": "Team leads and managers driving product strategy and stakeholder alignment.",
+        "strategyTitle": "Strategy-Driven Professionals",
+        "strategyDesc": "Professionals who combine business analysis with product delivery expertise.",
+        "strategistTitle": "The Strategist",
+        "strategistDesc": "Senior product professionals preparing for the Authority level (EPO-A)."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Lead product strategy workshops and align stakeholders on product vision and roadmap.",
+        "point2": "Apply advanced backlog refinement techniques to maximize delivery value.",
+        "point3": "Navigate competing stakeholder priorities using evidence-based decision frameworks.",
+        "point4": "Optimize product-market fit through continuous discovery and validated learning.",
+        "point5": "Drive team performance through transparency, trust, and data-informed decisions.",
+        "point6": "Implement governance and scaling practices for complex product environments."
+      },
+      "cta": {
+        "headingPart1": "Ready to step into the world of",
+        "headingPart2": "Agile?",
+        "description": "Enroll in the EPO-P certification today and start building the career you've been working toward.",
+        "button": "Enroll in Endorsed Product Owner Practitioner (EPO-P)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "epo": {
+          "fullName": "Endorsed Product Owner",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Start your journey toward building products people love with a foundation credential.",
+          "learnMore": "Learn More About EPO"
+        },
+        "esf": {
+          "fullName": "Endorsed Scrum Facilitator",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
+          "learnMore": "Learn More About ESF"
+        }
+      }
+    },
+    "esf": {
+      "fullName": "Endorsed Scrum Facilitator",
+      "trackName": "Scrum Master Certifications",
+      "level": "Authority Level",
+      "price": "CAD $175",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Master the art of facilitation and become the trusted guide every Agile team needs to unlock clarity, alignment, and lasting results.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Scrum Facilitator (ESF) certification validates your ability to lead effective, engaging, and outcome-driven Scrum events. Uniquely positioned for professionals with both Scrum Master and Product Owner foundations, it blends facilitation mastery with deep Scrum knowledge. This credential proves you can guide teams through tough conversations, align diverse stakeholders, and turn every Scrum event into a source of genuine value — a skill set in exceptionally high demand across Agile organizations today."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "(ESM) & (EPO)",
+        "prereqLabel": "Endorsed Scrum Master & Endorsed Product Owner Previous Experience (Recommended)",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "45",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "consultantTitle": "The Consultant",
+        "consultantDesc": "Professionals seeking to offer expert facilitation as a standalone service.",
+        "leaderTitle": "The Leader",
+        "leaderDesc": "Team leads and managers who need to run high-impact collaborative sessions.",
+        "coachTitle": "The Coach",
+        "coachDesc": "Agile coaches and consultants who want a recognized facilitation credential.",
+        "productTitle": "The Product Expert",
+        "productDesc": "Product Owners and managers who want to design and lead more effective events.",
+        "expertTitle": "The Scrum Expert",
+        "expertDesc": "Scrum Masters and Product Owners looking to deepen their facilitation skills beyond the basics."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Master facilitation techniques that energize teams and drive clear decisions.",
+        "point2": "Design and run powerful Sprint Planning, Review, and Retrospective sessions.",
+        "point3": "Build psychological safety and foster genuine collaboration in every session.",
+        "point4": "Navigate conflict, align stakeholders, and manage difficult group dynamics with confidence.",
+        "point5": "Apply advanced tools likeLiberating Structures, 1-2-4-All, and more to maximize participation."
+      },
+      "cta": {
+        "headingPart1": "Ready to step into the world of",
+        "headingPart2": "Agile?",
+        "description": "Enroll in the ESF certification today and start building the career you've been working toward.",
+        "button": "Enroll in Endorsed Scrum Facilitator (ESF)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "esm": {
+          "fullName": "Scrum Master Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $130",
+          "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement.",
+          "learnMore": "En savoir plus sur l'ESM"
+        },
+        "epo": {
+          "fullName": "Propriétaire de Produit Agréé",
+          "level": "Niveau Fondation",
+          "price": "CAD $180",
+          "description": "Commencez votre parcours vers la création de produits que les gens adorent.",
+          "learnMore": "En savoir plus sur l'EPO"
+        }
+      }
+    },
+    "epoA": {
+      "fullName": "Endorsed Product Owner Authority",
+      "trackName": "Product Owner Certifications",
+      "level": "Authority Level",
+      "price": "CAD $275",
+      "hero": {
+        "back": "Go back to certifications",
+        "breadcrumb": {
+          "home": "Home",
+          "all": "All Certifications"
+        },
+        "description": "Become the product leader organizations rely on to shape strategy, drive innovation, and deliver transformative business outcomes at scale.",
+        "download": "Download Program Overview",
+        "enroll": "Enroll Now",
+        "startingAt": "Starting at"
+      },
+      "overview": {
+        "title": "Overview",
+        "body": "The Endorsed Product Owner Authority (EPO-A) is the advanced-level certification designed for senior Product Owners, Chief Product Officers, and product leaders. It validates your ability to define enterprise product strategy, lead product portfolios, and drive innovation at scale. This prestigious lifetime credential positions you as a top-tier product leader capable of aligning products with business vision and shaping the future of your organization in a competitive, fast-changing market."
+      },
+      "heroImage": {
+        "alt": "Scrum team collaborating on sticky-note board",
+        "languageValue": "English",
+        "languageLabel": "Test Language",
+        "testingValue": "Online testing",
+        "testingLabel": "Secure environment"
+      },
+      "stats": {
+        "prereqValue": "(EPO-P)",
+        "prereqLabel": "Endorsed Product Owner Practitioner\nPrevious Experience (Recommended)",
+        "trainingValue": "15+",
+        "trainingUnit": "/hours",
+        "trainingLabel": "Required Training",
+        "questionsValue": "30",
+        "questionsLabel": "Test Questions",
+        "durationValue": "60",
+        "durationUnit": "/minutes",
+        "durationLabel": "Test Duration",
+        "validityValue": "Lifetime",
+        "validityLabel": "Validity"
+      },
+      "audience": {
+        "badge": "Who Should Enroll",
+        "headingPart1": "Who Should Invest in This",
+        "headingPart2": "Certificate?",
+        "enterpriseTitle": "Senior Product Owners",
+        "enterpriseDesc": "Senior Product Owners with significant multi-product or portfolio experience.",
+        "chiefProductTitle": "Chief Product Officers",
+        "chiefProductDesc": "Product directors, VPs of Product, and Chief Product Officers.",
+        "portfolioTitle": "Strategy Managers",
+        "portfolioDesc": "Product leaders driving strategy and innovation across business units.",
+        "executiveTitle": "Certified Professionals",
+        "executiveDesc": "EPO-P-certified professionals reaching the pinnacle of the Product Owner path.",
+        "innovatorTitle": "Organization Builders",
+        "innovatorDesc": "Entrepreneurs and executives building product-led organizations from the ground up."
+      },
+      "keyLearning": {
+        "title": "Key Learning Points",
+        "point1": "Define enterprise-wide product strategy aligned with long-term business vision.",
+        "point2": "Manage product portfolios and coordinate multiple product teams effectively.",
+        "point3": "Drive innovation through lean, discovery-led, and experimentation-based approaches.",
+        "point4": "Influence executive stakeholders, boards, and investors with product insight.",
+        "point5": "Apply advanced product analytics and market research to strategic decisions.",
+        "point6": "Build, mentor, and scale world-class product teams and communities.",
+        "point7": "Position yourself as a recognized authority in the global product community."
+      },
+      "cta": {
+        "headingPart1": "Step into the role of a",
+        "headingPart2": "true product authority",
+        "description": "Register for the EPO-A certification and lead your organization's product future with confidence.",
+        "button": "Enroll in Endorsed Product Owner Authority (EPO-A)",
+        "questions": "Questions?",
+        "contactLink": "Contact a certification advisor"
+      },
+      "related": {
+        "headingPart1": "Related",
+        "headingPart2": "Certifications",
+        "startingAt": "Starting at",
+        "epoP": {
+          "fullName": "Endorsed Product Owner Practitioner",
+          "level": "Practitioner Level",
+          "price": "CAD $150",
+          "description": "Elevate your Product Owner skills from foundation to advanced and prove you can drive product success in complex Scrum environments.",
+          "learnMore": "Learn More About EPO-P"
+        },
+        "esf": {
+          "fullName": "Endorsed Scrum Facilitator",
+          "level": "Foundation Level",
+          "price": "CAD $175",
+          "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques.",
+          "learnMore": "Learn More About ESF"
+        }
+      }
+    }
   }
 }

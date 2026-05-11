@@ -46,6 +46,45 @@ const routes: Routes = [
       import('./pages/all-certifications.page').then((m) => m.AllCertificationsPage),
     title: 'All Certifications — Institute of Scrum',
   },
+  {
+    path: 'certifications/esm',
+    loadComponent: () => import('./pages/cert-details-esm.page').then((m) => m.CertDetailsEsmPage),
+    title: 'Endorsed Scrum Master (ESM) — Institute of Scrum',
+  },
+  {
+    path: 'certifications/esm-p',
+    loadComponent: () =>
+      import('./pages/cert-details-esm-p.page').then((m) => m.CertDetailsEsmPPage),
+    title: 'Endorsed Scrum Master Practitioner (ESM-P) — Institute of Scrum',
+  },
+  {
+    path: 'certifications/esm-a',
+    loadComponent: () =>
+      import('./pages/cert-details-esm-a.page').then((m) => m.CertDetailsEsmAPage),
+    title: 'Endorsed Scrum Master Authority (ESM-A) — Institute of Scrum',
+  },
+  {
+    path: 'certifications/epo',
+    loadComponent: () => import('./pages/cert-details-epo.page').then((m) => m.CertDetailsEpoPage),
+    title: 'Endorsed Product Owner (EPO) — Institute of Scrum',
+  },
+  {
+    path: 'certifications/epo-p',
+    loadComponent: () =>
+      import('./pages/cert-details-epo-p.page').then((m) => m.CertDetailsEpoPPage),
+    title: 'Endorsed Product Owner Practitioner (EPO-P) — Institute of Scrum',
+  },
+  {
+    path: 'certifications/epo-a',
+    loadComponent: () =>
+      import('./pages/cert-details-epo-a.page').then((m) => m.CertDetailsEpoAPage),
+    title: 'Endorsed Product Owner Authority (EPO-A) — Institute of Scrum',
+  },
+  {
+    path: 'certifications/esf',
+    loadComponent: () => import('./pages/cert-details-esf.page').then((m) => m.CertDetailsEsmFPage),
+    title: 'Endorsed Scrum Facilitator (ESF) — Institute of Scrum',
+  },
 ];
 
 export default routes;

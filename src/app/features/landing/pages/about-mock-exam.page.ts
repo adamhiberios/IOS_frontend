@@ -17,6 +17,7 @@
  */
 
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core'; // signal kept for benefits/steps/answerOptions
+import { NgOptimizedImage } from '@angular/common';
 import {
   LucideArrowRight,
   LucideBrain,
@@ -69,7 +70,15 @@ interface AnswerOption {
 
 @Component({
   selector: 'ios-about-mock-exam-page',
-  imports: [LandingNavbar, LandingFooter, PageHero, IosIcon, ScrollToTop, LandingContactSection],
+  imports: [
+    NgOptimizedImage,
+    LandingNavbar,
+    LandingFooter,
+    PageHero,
+    IosIcon,
+    ScrollToTop,
+    LandingContactSection,
+  ],
   providers: [
     provideIcons(
       LucideArrowRight,
@@ -146,7 +155,7 @@ interface AnswerOption {
         <!-- Main image -->
         <div class="relative rounded-2xl overflow-hidden shadow-xl">
           <img
-            src="/assets/images/about_mock_test.jpg"
+            [ngSrc]="'/assets/images/about_mock_test.jpg'"
             [attr.alt]="lang.t('mockExam.whatIs.imageAlt')"
             class="w-full h-[440px] object-cover"
             loading="lazy"
@@ -502,7 +511,7 @@ interface AnswerOption {
         <!-- Background image with gradient fade — constrained so CTA card extends beyond it -->
         <div class="relative rounded-2xl overflow-hidden h-[495px] max-w-[700px] mx-auto">
           <img
-            src="/assets/images/about_mock_test.jpg"
+            [ngSrc]="'/assets/images/about_mock_test.jpg'"
             alt=""
             aria-hidden="true"
             class="w-full h-full object-cover object-top"
