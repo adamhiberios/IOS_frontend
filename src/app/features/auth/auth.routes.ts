@@ -5,8 +5,9 @@ import { type Routes } from '@angular/router';
  * Lazy-loaded from app.routes.ts; never imported directly elsewhere.
  *
  * EPIC 3 progress:
- *   - register: UI shipped (mocked submit; real auth wiring is a follow-up).
- *   - login:    placeholder, lands next.
+ *   - register:         UI shipped (mocked submit; real auth wiring is a follow-up).
+ *   - login:            placeholder, lands next.
+ *   - complete-account: 3-step profile wizard shown after registration.
  */
 export const AUTH_ROUTES: Routes = [
   {
@@ -23,6 +24,12 @@ export const AUTH_ROUTES: Routes = [
     path: 'register',
     loadComponent: () => import('./pages/register.page').then((m) => m.RegisterPage),
     title: 'Create your account',
+  },
+  {
+    path: 'complete-account',
+    loadComponent: () =>
+      import('./pages/complete-account.page').then((m) => m.CompleteAccountPage),
+    title: 'Complete your account',
   },
   {
     path: 'forgot-password',
