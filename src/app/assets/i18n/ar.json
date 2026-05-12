@@ -953,96 +953,96 @@
   },
   "certDetails": {
     "esm": {
-      "fullName": "Endorsed Scrum Master",
-      "trackName": "Scrum Master Certifications",
-      "level": "Foundation Level",
+      "fullName": "مدرب سكرم معتمد",
+      "trackName": "شهادات مدرب سكرم",
+      "level": "مستوى التأسيس",
       "price": "CAD $130",
       "hero": {
-        "back": "Go back to certifications",
+        "back": "العودة إلى الشهادات",
         "breadcrumb": {
-          "home": "Home",
-          "all": "All Certifications"
+          "home": "الرئيسية",
+          "all": "جميع الشهادات"
         },
-        "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
-        "download": "Download Program Overview",
-        "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "description": "انطلق في مسيرتك في أجايل مع شهادة أساسية معترف بها عالمياً تفتح أبواباً لأدوار مدرب سكرم عالية الطلب في جميع أنحاء العالم.",
+        "download": "تحميل نظرة عامة على البرنامج",
+        "enroll": "سجّل الآن",
+        "startingAt": "يبدأ من"
       },
       "overview": {
-        "title": "Overview",
-        "body": "The Endorsed Scrum Master (ESM) is the foundation-level certification for professionals beginning their journey in Agile and Scrum. It validates your understanding of core Scrum principles, roles, events, and artifacts — equipping you to support Agile teams confidently from day one. Issued by the Institute of Scrum, this lifetime credential establishes your credibility with employers and prepares you for advanced certifications along the Scrum Master path."
+        "title": "نظرة عامة",
+        "body": "شهادة مدرب سكرم المعتمد (ESM) هي شهادة مستوى التأسيس للمحترفين الذين يبدأون رحلتهم في أجايل وسكرم. إنها تُثبت فهمك لمبادئ سكرم الأساسية والأدوار والأحداث والمصنوعات — مما يُمكنك من دعم فرق أجايل بثقة من اليوم الأول. تصدر عن معهد سكرم، هذه الشهادة مدى الحياة تبني مصداقيتك مع أصحاب العمل وتُعدّك لشهادات متقدمة على طول مسار مدرب سكرم."
       },
       "heroImage": {
-        "alt": "Scrum team collaborating on sticky-note board",
-        "languageValue": "English",
-        "languageLabel": "Test Language",
-        "testingValue": "Online testing",
-        "testingLabel": "Secure environment"
+        "alt": "فريق سكرم يتعاون على لوحة ملاحظات لاصقة",
+        "languageValue": "الإنجليزية",
+        "languageLabel": "لغة الاختبار",
+        "testingValue": "اختبار عبر الإنترنت",
+        "testingLabel": "بيئة آمنة"
       },
       "stats": {
-        "prereqValue": "No",
-        "prereqLabel": "previous experience",
-        "trainingValue": "15+",
-        "trainingUnit": "/hours",
-        "trainingLabel": "Required Training",
+        "prereqValue": "لا",
+        "prereqLabel": "خبرة سابقة",
+        "trainingValue": "+15",
+        "trainingUnit": "/ساعة",
+        "trainingLabel": "التدريب المطلوب",
         "questionsValue": "45",
-        "questionsLabel": "Test Questions",
+        "questionsLabel": "أسئلة الاختبار",
         "durationValue": "60",
-        "durationUnit": "/minutes",
-        "durationLabel": "Test Duration",
-        "validityValue": "Lifetime",
-        "validityLabel": "Validity"
+        "durationUnit": "/دقيقة",
+        "durationLabel": "مدة الاختبار",
+        "validityValue": "مدى الحياة",
+        "validityLabel": "صالحة"
       },
       "audience": {
-        "badge": "Who Should Enroll",
-        "headingPart1": "Who Should Invest in This",
-        "headingPart2": "Certificate?",
-        "seekingTitle": "Seeking Credentials",
-        "seekingDesc": "Aspiring Scrum Masters seeking a strong, employer-trusted entry point into Agile.",
-        "leadersTitle": "Leaders",
-        "leadersDesc": "Team leads, coordinators, and project managers transitioning into Agile environments.",
-        "technicalsTitle": "Technicals",
-        "technicalsDesc": "Software developers, testers, and IT professionals working on or joining Scrum teams.",
-        "businessTitle": "Business",
-        "businessDesc": "Business analysts and consultants who want to formalize their Scrum knowledge.",
-        "careerChangerTitle": "The Career Changer",
-        "careerChangerDesc": "Career changers looking to enter one of the fastest-growing roles in tech."
+        "badge": "من يجب أن يسجل",
+        "headingPart1": "من يجب أن يستثمر في هذه",
+        "headingPart2": "الشهادة؟",
+        "seekingTitle": "باحثو الاعتماد",
+        "seekingDesc": "مدربو سكرم الطموحون الباحثون عن نقطة دخول قوية وموثوقة من قبل أصحاب العمل إلى عالم أجايل.",
+        "leadersTitle": "القادة",
+        "leadersDesc": "قادة الفرق والمنسقون ومديرو المشاريع المنتقلون إلى بيئات أجايل.",
+        "technicalsTitle": "التقنيون",
+        "technicalsDesc": "مطورو البرامج والمختبرون ومحترفو تكنولوجيا المعلومات العاملون أو المنضمون لفرق سكرم.",
+        "businessTitle": "الأعمال",
+        "businessDesc": "محللو الأعمال والاستشاريون الذين يريدون توثيق معرفتهم بسكرم.",
+        "careerChangerTitle": "مغيرو المسار المهني",
+        "careerChangerDesc": "مغيرو المسار المهني الذين يتطلعون لدخول أحد أسرع الأدوار نمواً في مجال التكنولوجيا."
       },
       "keyLearning": {
-        "title": "Key Learning Points",
-        "point1": "Master the Scrum framework — roles, events, artifacts, and guiding principles.",
-        "point2": "Understand the servant-leadership mindset and the responsibilities of a Scrum Master.",
-        "point3": "Facilitate key Scrum events including Sprint Planning, Daily Scrum, Review, and Retrospective.",
-        "point4": "Apply Agile values and empirical process control to real team scenarios.",
-        "point5": "Identify and remove impediments that block team progress and flow.",
-        "point6": "Build a foundation for continuous improvement and high-performing teams.",
-        "point7": "Prepare confidently for the next step: Endorsed Scrum Master Practitioner (ESM-P)."
+        "title": "نقاط التعلم الرئيسية",
+        "point1": "إتقان إطار عمل سكرم — الأدوار والأحداث والمصنوعات والمبادئ التوجيهية.",
+        "point2": "فهم عقلية القيادة الخادمة ومسؤوليات مدرب سكرم.",
+        "point3": "تسهيل أحداث سكرم الرئيسية بما فيها تخطيط السباق، والسكرم اليومي، والمراجعة، والاستعادية.",
+        "point4": "تطبيق قيم أجايل والتحكم التجريبي في العمليات على سيناريوهات فريق حقيقية.",
+        "point5": "تحديد وإزالة العقبات التي تعيق تقدم الفريق وتدفق العمل.",
+        "point6": "بناء أساس للتحسين المستمر وفرق عالية الأداء.",
+        "point7": "الاستعداد بثقة للخطوة التالية: مدرب سكرم معتمد - الممارس (ESM-P)."
       },
       "cta": {
-        "headingPart1": "Ready to step into the world of",
-        "headingPart2": "Agile?",
-        "description": "Enroll in the ESM certification today and start building the career you’ve been working toward.",
-        "button": "Enroll in Endorsed Scrum Master (ESM)",
-        "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "headingPart1": "هل أنت مستعد للدخول في عالم",
+        "headingPart2": "أجايل؟",
+        "description": "سجّل في شهادة ESM اليوم وابدأ في بناء المسار الوظيفي الذي عملت من أجله.",
+        "button": "سجّل في مدرب سكرم معتمد (ESM)",
+        "questions": "أسئلة؟",
+        "contactLink": "تواصل مع مستشار الشهادات"
       },
       "related": {
-        "headingPart1": "Related",
-        "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "headingPart1": "الشهادات",
+        "headingPart2": "ذات الصلة",
+        "startingAt": "يبدأ من",
         "epo": {
-          "fullName": "Endorsed Product Owner",
-          "level": "Foundation Level",
+          "fullName": "مالك منتج معتمد",
+          "level": "مستوى التأسيس",
           "price": "CAD $180",
-          "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
-          "learnMore": "Learn More About EPO"
+          "description": "إتقان رؤية المنتج وإدارة الأعمال المتراكمة والتعاون مع أصحاب المصلحة. مكمل قيم لمهارات مدرب سكرم للمحترفين الذين يريدون فهم ديناميكية فريق سكرم الكاملة.",
+          "learnMore": "اعرف المزيد عن EPO"
         },
         "esf": {
-          "fullName": "Endorsed Scrum Facilitator",
-          "level": "Foundation Level",
+          "fullName": "ميسر سكرم معتمد",
+          "level": "مستوى التأسيس",
           "price": "CAD $180",
-          "description": "Endorsed Scrum Facilitator (ESF): Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
-          "learnMore": "Learn More About ESF"
+          "description": "ميسر سكرم معتمد (ESF): تخصص في تصميم ورش العمل وديناميكيات المجموعات وتقنيات التسهيل المتقدمة لفرق سكرم.",
+          "learnMore": "اعرف المزيد عن ESF"
         }
       }
     },

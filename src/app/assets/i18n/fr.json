@@ -942,96 +942,96 @@
   },
   "certDetails": {
     "esm": {
-      "fullName": "Endorsed Scrum Master",
-      "trackName": "Scrum Master Certifications",
-      "level": "Foundation Level",
+      "fullName": "Maître Scrum Agréé",
+      "trackName": "Certifications Scrum Master",
+      "level": "Niveau Fondation",
       "price": "CAD $130",
       "hero": {
-        "back": "Go back to certifications",
+        "back": "Retour aux certifications",
         "breadcrumb": {
-          "home": "Home",
-          "all": "All Certifications"
+          "home": "Accueil",
+          "all": "Toutes les certifications"
         },
-        "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
-        "download": "Download Program Overview",
-        "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement qui ouvre des portes vers des rôles de Scrum Master très demandés dans le monde entier.",
+        "download": "Télécharger la présentation du programme",
+        "enroll": "S'inscrire maintenant",
+        "startingAt": "À partir de"
       },
       "overview": {
-        "title": "Overview",
-        "body": "The Endorsed Scrum Master (ESM) is the foundation-level certification for professionals beginning their journey in Agile and Scrum. It validates your understanding of core Scrum principles, roles, events, and artifacts — equipping you to support Agile teams confidently from day one. Issued by the Institute of Scrum, this lifetime credential establishes your credibility with employers and prepares you for advanced certifications along the Scrum Master path."
+        "title": "Aperçu",
+        "body": "Le Maître Scrum Agréé (ESM) est la certification de niveau fondamental pour les professionnels débutant leur parcours dans l'Agile et Scrum. Elle valide votre compréhension des principes fondamentaux de Scrum, des rôles, des événements et des artefacts — vous préparant à soutenir les équipes Agile avec confiance dès le premier jour. Délivrée par l'Institute of Scrum, cette certification à vie établit votre crédibilité auprès des employeurs et vous prépare aux certifications avancées sur le parcours Scrum Master."
       },
       "heroImage": {
-        "alt": "Scrum team collaborating on sticky-note board",
-        "languageValue": "English",
-        "languageLabel": "Test Language",
-        "testingValue": "Online testing",
-        "testingLabel": "Secure environment"
+        "alt": "Équipe Scrum collaborant sur un tableau à post-it",
+        "languageValue": "Anglais",
+        "languageLabel": "Langue de l'examen",
+        "testingValue": "Examen en ligne",
+        "testingLabel": "Environnement sécurisé"
       },
       "stats": {
-        "prereqValue": "No",
-        "prereqLabel": "previous experience",
+        "prereqValue": "Aucune",
+        "prereqLabel": "expérience préalable",
         "trainingValue": "15+",
-        "trainingUnit": "/hours",
-        "trainingLabel": "Required Training",
+        "trainingUnit": "/heures",
+        "trainingLabel": "Formation requise",
         "questionsValue": "45",
-        "questionsLabel": "Test Questions",
+        "questionsLabel": "Questions d'examen",
         "durationValue": "60",
         "durationUnit": "/minutes",
-        "durationLabel": "Test Duration",
-        "validityValue": "Lifetime",
-        "validityLabel": "Validity"
+        "durationLabel": "Durée de l'examen",
+        "validityValue": "À vie",
+        "validityLabel": "Validité"
       },
       "audience": {
-        "badge": "Who Should Enroll",
-        "headingPart1": "Who Should Invest in This",
-        "headingPart2": "Certificate?",
-        "seekingTitle": "Seeking Credentials",
-        "seekingDesc": "Aspiring Scrum Masters seeking a strong, employer-trusted entry point into Agile.",
-        "leadersTitle": "Leaders",
-        "leadersDesc": "Team leads, coordinators, and project managers transitioning into Agile environments.",
-        "technicalsTitle": "Technicals",
-        "technicalsDesc": "Software developers, testers, and IT professionals working on or joining Scrum teams.",
-        "businessTitle": "Business",
-        "businessDesc": "Business analysts and consultants who want to formalize their Scrum knowledge.",
-        "careerChangerTitle": "The Career Changer",
-        "careerChangerDesc": "Career changers looking to enter one of the fastest-growing roles in tech."
+        "badge": "Qui devrait s'inscrire",
+        "headingPart1": "Qui devrait investir dans cette",
+        "headingPart2": "certification?",
+        "seekingTitle": "Chercheurs de titres",
+        "seekingDesc": "Futurs Scrum Masters cherchant un point d'entrée solide et reconnu par les employeurs dans l'Agile.",
+        "leadersTitle": "Dirigeants",
+        "leadersDesc": "Chefs d'équipe, coordinateurs et chefs de projet faisant la transition vers des environnements Agile.",
+        "technicalsTitle": "Techniciens",
+        "technicalsDesc": "Développeurs logiciels, testeurs et professionnels IT travaillant dans ou rejoignant des équipes Scrum.",
+        "businessTitle": "Affaires",
+        "businessDesc": "Analystes d'affaires et consultants qui veulent formaliser leurs connaissances Scrum.",
+        "careerChangerTitle": "Le reconverti",
+        "careerChangerDesc": "Personnes en reconversion cherchant à intégrer l'un des rôles technologiques à la croissance la plus rapide."
       },
       "keyLearning": {
-        "title": "Key Learning Points",
-        "point1": "Master the Scrum framework — roles, events, artifacts, and guiding principles.",
-        "point2": "Understand the servant-leadership mindset and the responsibilities of a Scrum Master.",
-        "point3": "Facilitate key Scrum events including Sprint Planning, Daily Scrum, Review, and Retrospective.",
-        "point4": "Apply Agile values and empirical process control to real team scenarios.",
-        "point5": "Identify and remove impediments that block team progress and flow.",
-        "point6": "Build a foundation for continuous improvement and high-performing teams.",
-        "point7": "Prepare confidently for the next step: Endorsed Scrum Master Practitioner (ESM-P)."
+        "title": "Points d'apprentissage clés",
+        "point1": "Maîtriser le framework Scrum — rôles, événements, artefacts et principes directeurs.",
+        "point2": "Comprendre l'état d'esprit de leadership serviteur et les responsabilités d'un Scrum Master.",
+        "point3": "Faciliter les événements Scrum clés, y compris la Sprint Planning, le Daily Scrum, la Review et la Rétrospective.",
+        "point4": "Appliquer les valeurs Agile et le contrôle de processus empirique à des scénarios d'équipe réels.",
+        "point5": "Identifier et supprimer les obstacles qui bloquent la progression et le flux de l'équipe.",
+        "point6": "Bâtir une base pour l'amélioration continue et des équipes haute performance.",
+        "point7": "Se préparer en toute confiance pour l'étape suivante : Maître Scrum Agréé Praticien (ESM-P)."
       },
       "cta": {
-        "headingPart1": "Ready to step into the world of",
-        "headingPart2": "Agile?",
-        "description": "Enroll in the ESM certification today and start building the career you’ve been working toward.",
-        "button": "Enroll in Endorsed Scrum Master (ESM)",
-        "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "headingPart1": "Prêt à entrer dans le monde de",
+        "headingPart2": "l'Agile?",
+        "description": "Inscrivez-vous à la certification ESM aujourd'hui et commencez à bâtir la carrière pour laquelle vous avez travaillé.",
+        "button": "S'inscrire au Maître Scrum Agréé (ESM)",
+        "questions": "Des questions?",
+        "contactLink": "Contactez un conseiller en certification"
       },
       "related": {
-        "headingPart1": "Related",
-        "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "headingPart1": "Certifications",
+        "headingPart2": "connexes",
+        "startingAt": "À partir de",
         "epo": {
-          "fullName": "Endorsed Product Owner",
-          "level": "Foundation Level",
+          "fullName": "Propriétaire de Produit Agréé",
+          "level": "Niveau Fondation",
           "price": "CAD $180",
-          "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
-          "learnMore": "Learn More About EPO"
+          "description": "Maîtrisez la vision produit, la gestion du backlog et la collaboration avec les parties prenantes. Un complément précieux aux compétences de Scrum Master pour les professionnels qui veulent comprendre la dynamique complète d'une équipe Scrum.",
+          "learnMore": "En savoir plus sur l'EPO"
         },
         "esf": {
-          "fullName": "Endorsed Scrum Facilitator",
-          "level": "Foundation Level",
+          "fullName": "Facilitateur Scrum Agréé",
+          "level": "Niveau Fondation",
           "price": "CAD $180",
-          "description": "Endorsed Scrum Facilitator (ESF): Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
-          "learnMore": "Learn More About ESF"
+          "description": "Facilitateur Scrum Agréé (ESF) : Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
+          "learnMore": "En savoir plus sur l'ESF"
         }
       }
     },
