@@ -1745,5 +1745,93 @@
         }
       }
     }
+  },
+  "profile": {
+    "breadcrumb": {
+      "backToDashboard": "Back to dashboard",
+      "dashboard": "Dashboard",
+      "profile": "Profile",
+      "updateInformation": "Update information",
+      "changePassword": "Change Password",
+      "backToProfile": "Back to profile"
+    },
+    "view": {
+      "personalInfo": "Personal informations",
+      "fullName": "Full Name",
+      "username": "Username",
+      "iosId": "IOS ID:",
+      "email": "Email",
+      "cityAddress": "City / Address",
+      "countryRegion": "Country / Region",
+      "professionalInfo": "Professional Information",
+      "occupation": "Occupation",
+      "companyName": "Company name",
+      "position": "Position",
+      "changePassword": "Change Password",
+      "updateInformation": "Update information"
+    },
+    "edit": {
+      "formLabel": "Update profile information",
+      "personalInfo": "Personal informations",
+      "changeImage": "Change image profile",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "locationInfo": "Location informations",
+      "countryLabel": "Country (Mandatory)",
+      "countryPlaceholder": "Select country",
+      "countryError": "Country is required",
+      "cityLabel": "City (Mandatory)",
+      "cityPlaceholder": "Select city",
+      "cityError": "City is required",
+      "streetLabel": "Street (Optional)",
+      "streetPlaceholder": "Street",
+      "addressLabel": "Address (Optional)",
+      "addressPlaceholder": "Address",
+      "postalLabel": "Postal / ZIP Code",
+      "postalPlaceholder": "Postal code",
+      "professionalInfo": "Professional Information",
+      "occupationLabel": "Occupation (Optional)",
+      "occupationPlaceholder": "Select occupation",
+      "positionLabel": "Position (Optional)",
+      "positionPlaceholder": "Select position",
+      "companyLabel": "Company name (Optional)",
+      "companyPlaceholder": "Company name",
+      "cancel": "Cancel",
+      "save": "Save information"
+    },
+    "changePassword": {
+      "formLabel": "Change password",
+      "sectionHeading": "Password informations",
+      "oldPasswordLabel": "Old Password",
+      "oldPasswordPlaceholder": "Old Password",
+      "oldPasswordRequired": "Old password is required.",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "newPasswordLabel": "New Password",
+      "newPasswordPlaceholder": "New Password",
+      "confirmPasswordLabel": "Confirm New Password",
+      "confirmPasswordPlaceholder": "Confirm New Password",
+      "passwordMismatch": "Passwords do not match.",
+      "passwordHint": "password should include special characters, numbers and big letter at least",
+      "cancel": "Cancel",
+      "save": "Save information"
+    },
+    "cancelDialog": {
+      "title": "Are you sure to cancel edit and exit?",
+      "description": "You will lose the information you entered on the screen.",
+      "back": "Back",
+      "confirm": "Cancel and exit"
+    },
+    "infoUpdatedDialog": {
+      "title": "Information update successfully",
+      "description": "Your Information is set successfully.",
+      "ok": "Ok"
+    },
+    "passwordUpdatedDialog": {
+      "title": "Password update successfully",
+      "description": "The password you just changed is your new password.",
+      "ok": "Ok"
+    }
   }
 }

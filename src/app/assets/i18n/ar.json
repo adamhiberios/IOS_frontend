@@ -1745,5 +1745,93 @@
         }
       }
     }
+  },
+  "profile": {
+    "breadcrumb": {
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "dashboard": "لوحة التحكم",
+      "profile": "الملف الشخصي",
+      "updateInformation": "تحديث المعلومات",
+      "changePassword": "تغيير كلمة المرور",
+      "backToProfile": "العودة إلى الملف الشخصي"
+    },
+    "view": {
+      "personalInfo": "المعلومات الشخصية",
+      "fullName": "الاسم الكامل",
+      "username": "اسم المستخدم",
+      "iosId": "رقم IOS:",
+      "email": "البريد الإلكتروني",
+      "cityAddress": "المدينة / العنوان",
+      "countryRegion": "الدولة / المنطقة",
+      "professionalInfo": "المعلومات المهنية",
+      "occupation": "المهنة",
+      "companyName": "اسم الشركة",
+      "position": "المسمى الوظيفي",
+      "changePassword": "تغيير كلمة المرور",
+      "updateInformation": "تحديث المعلومات"
+    },
+    "edit": {
+      "formLabel": "تحديث معلومات الملف الشخصي",
+      "personalInfo": "المعلومات الشخصية",
+      "changeImage": "تغيير صورة الملف الشخصي",
+      "firstName": "الاسم الأول",
+      "lastName": "اسم العائلة",
+      "email": "البريد الإلكتروني",
+      "locationInfo": "معلومات الموقع",
+      "countryLabel": "الدولة (إلزامي)",
+      "countryPlaceholder": "اختر الدولة",
+      "countryError": "الدولة مطلوبة",
+      "cityLabel": "المدينة (إلزامي)",
+      "cityPlaceholder": "اختر المدينة",
+      "cityError": "المدينة مطلوبة",
+      "streetLabel": "الشارع (اختياري)",
+      "streetPlaceholder": "الشارع",
+      "addressLabel": "العنوان (اختياري)",
+      "addressPlaceholder": "العنوان",
+      "postalLabel": "الرمز البريدي",
+      "postalPlaceholder": "الرمز البريدي",
+      "professionalInfo": "المعلومات المهنية",
+      "occupationLabel": "المهنة (اختياري)",
+      "occupationPlaceholder": "اختر المهنة",
+      "positionLabel": "المسمى الوظيفي (اختياري)",
+      "positionPlaceholder": "اختر المسمى الوظيفي",
+      "companyLabel": "اسم الشركة (اختياري)",
+      "companyPlaceholder": "اسم الشركة",
+      "cancel": "إلغاء",
+      "save": "حفظ المعلومات"
+    },
+    "changePassword": {
+      "formLabel": "تغيير كلمة المرور",
+      "sectionHeading": "معلومات كلمة المرور",
+      "oldPasswordLabel": "كلمة المرور الحالية",
+      "oldPasswordPlaceholder": "كلمة المرور الحالية",
+      "oldPasswordRequired": "كلمة المرور الحالية مطلوبة.",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور",
+      "newPasswordLabel": "كلمة المرور الجديدة",
+      "newPasswordPlaceholder": "كلمة المرور الجديدة",
+      "confirmPasswordLabel": "تأكيد كلمة المرور الجديدة",
+      "confirmPasswordPlaceholder": "تأكيد كلمة المرور الجديدة",
+      "passwordMismatch": "كلمتا المرور غير متطابقتين.",
+      "passwordHint": "يجب أن تتضمن كلمة المرور رموزاً خاصة وأرقاماً وحرفاً كبيراً على الأقل",
+      "cancel": "إلغاء",
+      "save": "حفظ المعلومات"
+    },
+    "cancelDialog": {
+      "title": "هل أنت متأكد من الإلغاء والخروج؟",
+      "description": "ستفقد المعلومات التي أدخلتها في هذه الشاشة.",
+      "back": "رجوع",
+      "confirm": "إلغاء والخروج"
+    },
+    "infoUpdatedDialog": {
+      "title": "تم تحديث المعلومات بنجاح",
+      "description": "تم حفظ معلوماتك بنجاح.",
+      "ok": "حسناً"
+    },
+    "passwordUpdatedDialog": {
+      "title": "تم تحديث كلمة المرور بنجاح",
+      "description": "كلمة المرور التي غيّرتها للتو هي كلمة مرورك الجديدة.",
+      "ok": "حسناً"
+    }
   }
 }
