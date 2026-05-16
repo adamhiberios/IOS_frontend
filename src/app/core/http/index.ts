@@ -16,28 +16,30 @@ import { type EnvironmentProviders } from '@angular/core';
 import { authInterceptor } from './auth.interceptor';
 import { errorInterceptor } from './error.interceptor';
 import { localeInterceptor } from './locale.interceptor';
+import { mockApiInterceptor } from './mock-api.interceptor';
 import { retryInterceptor } from './retry.interceptor';
 
-export {
-  RETRY_ATTEMPTS,
-  SKIP_AUTH,
-  SKIP_RETRY,
-  SUPPRESS_ERROR_TOAST,
-} from './http.tokens';
+export { RETRY_ATTEMPTS, SKIP_AUTH, SKIP_RETRY, SUPPRESS_ERROR_TOAST } from './http.tokens';
 
 /**
  * Wire the HttpClient with the canonical interceptor chain.
  *
  * Called once from `app.config.ts`. Order is fixed by CLAUDE.md §6:
- *   auth → locale → retry → error
+ *   mock → auth → locale → retry → error
  *
- * Use the fetch backend (withFetch) for streaming and HTTP/2 friendliness;
- * the legacy XHR backend is incompatible with the SSR-disabled CSR posture
- * we plan around in /docs/04 §2.
+ * The mock interceptor runs first so it can short-circuit requests
+ * before auth headers are added. In production the mock is a no-op
+ * pass-through.
  */
 export function provideAppHttp(): EnvironmentProviders {
   return provideHttpClient(
     withFetch(),
-    withInterceptors([authInterceptor, localeInterceptor, retryInterceptor, errorInterceptor]),
+    withInterceptors([
+      mockApiInterceptor,
+      authInterceptor,
+      localeInterceptor,
+      retryInterceptor,
+      errorInterceptor,
+    ]),
   );
 }

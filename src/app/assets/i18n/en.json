@@ -1,7 +1,7 @@
 {
   "common": {
     "brand": "Institute of Scrum",
-    "copyright": "© 2026 Institute of Scrum. All rights reserved.",
+    "copyright": "© {year} Institute of Scrum. All rights reserved.",
     "orContinueWith": "Or continue with",
     "back": "Go back",
     "scrollToTop": "Scroll to top"
@@ -453,6 +453,143 @@
       "other": "Other"
     },
     "scrollToTop": "Scroll to top"
+  },
+  "dashboard": {
+    "nav": {
+      "overview": "Overview",
+      "myCertificates": "My certificates",
+      "profile": "Profile",
+      "settings": "Settings",
+      "dashboardLabel": "Institute of Scrum"
+    },
+    "menu": {
+      "userMenuLabel": "User menu",
+      "openUserMenu": "Open user menu",
+      "dashboard": "Dashboard",
+      "certificates": "Certificates",
+      "log": "Log",
+      "profile": "Profile",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "breadcrumb": {
+      "dashboard": "Dashboard",
+      "overview": "Overview",
+      "general": "General"
+    },
+    "stats": {
+      "programsEnrolled": "Programs Enrolled",
+      "averageScore": "Average Mock Score",
+      "totalTimeSpent": "Total Time Spent"
+    },
+    "certs": {
+      "validCertification": "Valid certification",
+      "percentCompleted": "% Completed",
+      "showDetails": "Show details",
+      "active": "Active",
+      "passed": "Passed:",
+      "fail": "Fail:",
+      "revoked": "Revoked",
+      "earned": "Earned",
+      "notAttempted": "Not attempted",
+      "badgeAlt": "{code} badge",
+      "startFinalTest": "Start Final Test",
+      "startMockTest": "Start mock test",
+      "startTestExam": "Start test exam",
+      "overallCompletion": "Overall Completion",
+      "averageMockScore": "Average Mock Score",
+      "timeSpent": "Time Spent",
+      "trend": "Trend",
+      "certification": "Certification",
+      "backToCertificates": "Back to My certificates",
+      "backToCertDetail": "Back to certificate detail",
+      "mockTestNav": "Mock test",
+      "learningMaterialsNav": "Learning Materials",
+      "files": "Files",
+      "pagesProgress": "{current}/{total} pages",
+      "completed": "Completed",
+      "questions": "Questions",
+      "sessionChapters": "Session chapters",
+      "mockExamSettingsTitle": "Choose mock exam settings to start",
+      "timeLimit": "Time limit",
+      "noTimeLimit": "No time limit",
+      "minutesShort": "{count} min",
+      "numberOfQuestions": "Number of questions",
+      "closeSettings": "Close settings",
+      "tests": "{count} tests",
+      "badgeAlt": "{code} badge",
+      "hoursAbbr": "{count}h",
+      "minutesAbbr": "{count}m",
+      "materialOpen": "Open",
+      "materialContinue": "Continue",
+      "materialInProgress": "In Progress",
+      "materialNotStarted": "Not Started",
+      "materialCompleted": "Completed"
+    },
+    "learning": {
+      "title": "Complete your learning",
+      "firstFileReady": "First file is ready to explore!",
+      "agileOverview": "Agile Methodologies Overview",
+      "pagesCount": "{count} pages",
+      "ctaStart": "Start learning",
+      "readyToPass": "We think you are ready to pass Test! ({code})",
+      "amazingResults": "You achieved amazing results in the mock exam, and reviewed all the attached files.",
+      "ctaFinalTest": "Start Final Test",
+      "ctaStartExam": "Start Exam"
+    },
+    "charts": {
+      "mockTestScores": "Mock test scores",
+      "thisYear": "This year",
+      "lastYear": "Last year",
+      "thisWeek": "This Week",
+      "lastWeek": "Last Week",
+      "score": "Score",
+      "noData": "No data",
+      "filterLabel": "Filter: {label}",
+      "totalMockTests": "Total Mock Tests Taken",
+      "passedExams": "Passed Exams",
+      "failedExams": "Fail Exams"
+    },
+    "notifications": {
+      "label": "Notifications"
+    },
+    "examRunner": {
+      "question": "Question {number}",
+      "of": "of",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "hint": "Hint",
+      "hideHint": "Hide hint",
+      "progress": "Progress",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "resultLabel": "Result:",
+      "trueLabel": "True",
+      "falseLabel": "False",
+      "historyOfMockTest": "History of mock test",
+      "examAttempts": "Exam attempts",
+      "bestScore": "Best Score",
+      "avgScore": "Avg Score",
+      "timeSpent": "Time Spent",
+      "failed": "Failed",
+      "startFinalTestCta": "Start final test",
+      "readyCtaHeading1": "I guess you are ready! let's start",
+      "readyCtaHeading2": "Final test?",
+      "noResultsFound": "No mock test results found for this certificate.",
+      "noResultsAction": "Complete a mock test to see your results here, or",
+      "startNewMockTest": "start a new mock test",
+      "filterLabel": "Filter:",
+      "startExam": "Start",
+      "timeupTitle": "Time's up!",
+      "timeupBody": "You can continue adding more time, this is only available in the mock exam!",
+      "continueWithTime": "Continue with +3 minutes",
+      "exit": "Exit",
+      "goBack": "Go back",
+      "exitDialogTitle": "Exit?",
+      "exitDialogBody": "Are you sure you want to cancel the exam and leave? This exam will be graded based on the marks you have received so far."
+    },
+    "allCertifications": "All certifications"
   },
   "mockExam": {
     "hero": {
@@ -1423,7 +1560,7 @@
     },
     "esf": {
       "fullName": "Endorsed Scrum Facilitator",
-      "trackName": "Scrum Master Certifications",
+      "trackName": "Scrum Facilitator Certifications",
       "level": "Authority Level",
       "price": "CAD $175",
       "hero": {
@@ -1498,18 +1635,18 @@
         "headingPart2": "Certifications",
         "startingAt": "Starting at",
         "esm": {
-          "fullName": "Scrum Master Agréé",
-          "level": "Niveau Fondation",
+          "fullName": "Endorsed Scrum Master",
+          "level": "Foundation Level",
           "price": "CAD $130",
-          "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement.",
-          "learnMore": "En savoir plus sur l'ESM"
+          "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
+          "learnMore": "Learn More About ESM"
         },
         "epo": {
-          "fullName": "Propriétaire de Produit Agréé",
-          "level": "Niveau Fondation",
+          "fullName": "Endorsed Product Owner",
+          "level": "Foundation Level",
           "price": "CAD $180",
-          "description": "Commencez votre parcours vers la création de produits que les gens adorent.",
-          "learnMore": "En savoir plus sur l'EPO"
+          "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
+          "learnMore": "Learn More About EPO"
         }
       }
     },
