@@ -4,7 +4,8 @@
     "copyright": "© {year} Institute of Scrum. All rights reserved.",
     "orContinueWith": "Or continue with",
     "back": "Go back",
-    "scrollToTop": "Scroll to top"
+    "scrollToTop": "Scroll to top",
+    "selectLanguage": "Select language"
   },
   "lang": {
     "en": "English",
