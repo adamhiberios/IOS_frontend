@@ -43,7 +43,9 @@ import {
   input,
   output,
   signal,
+  PLATFORM_ID,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EMPTY, switchMap } from 'rxjs';
@@ -62,12 +64,12 @@ export type SelectState = 'default' | 'error' | 'success';
 
 const BASE_CLASSES =
   'w-full h-12 px-4 rounded-lg bg-gray-50 text-sm text-ios-brand-dark ' +
-  'border transition-colors focus:outline-none focus:ring-2 text-start';
+  'border transition-colors focus:outline-none focus:ring-0 text-start';
 
 const STATE_CLASSES: Record<SelectState, string> = {
-  default: 'border-gray-200 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary',
-  error: 'border-ios-brand-primary focus:ring-ios-brand-primary/40',
-  success: 'border-emerald-500 focus:ring-emerald-500/40',
+  default: 'border-gray-200 focus:border-[#272827]',
+  error: 'border-ios-brand-primary',
+  success: 'border-emerald-500',
 };
 
 @Component({
@@ -115,14 +117,15 @@ const STATE_CLASSES: Record<SelectState, string> = {
       <!-- Dropdown popover -->
       @if (isOpen()) {
         <div
-          class="absolute start-0 top-full mt-1 w-full rounded-xl bg-white
-                 border border-gray-200 shadow-xl z-[200] flex flex-col"
+          [class]="dropdownClasses()"
           role="listbox"
           [attr.aria-label]="label() || placeholder()"
         >
           <!-- Search / filter input -->
           <div class="p-2 border-b border-gray-100">
-            <div class="flex items-center gap-2 px-3 h-9 rounded-lg bg-gray-50 border border-gray-200">
+            <div
+              class="flex items-center gap-2 px-3 h-9 rounded-lg bg-gray-50 border border-gray-200"
+            >
               <ios-icon name="search" class="w-4 h-4 text-gray-400 flex-shrink-0" />
               <input
                 type="text"
@@ -130,9 +133,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
                 [value]="filterQuery()"
                 (input)="filterQuery.set($any($event.target).value)"
                 class="flex-1 min-w-0 bg-transparent text-sm text-ios-brand-dark
-                       placeholder:text-gray-400
-                       outline-none ring-0 border-0
-                       focus:outline-none focus:ring-0 focus:border-0"
+                       placeholder:text-gray-400 outline-none focus:outline-none focus:shadow-none border-0"
                 style="box-shadow: none; outline: none"
                 aria-label="Filter options"
                 autocomplete="off"
@@ -182,7 +183,11 @@ const STATE_CLASSES: Record<SelectState, string> = {
 
       <!-- Error message -->
       @if (resolvedState() === 'error' && errorText()) {
-        <p [id]="id() + '-error'" role="alert" class="mt-1 text-xs text-ios-brand-primary text-start">
+        <p
+          [id]="id() + '-error'"
+          role="alert"
+          class="mt-1 text-xs text-ios-brand-primary text-start"
+        >
           {{ errorText() }}
         </p>
       }
@@ -197,6 +202,7 @@ export class Select {
   /** Used by `onOutsideClick` to test containment against THIS instance only. */
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   private readonly hostEl: ElementRef<HTMLElement> = inject(ElementRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   readonly id = input.required<string>();
   /** Pass an empty string to suppress the label element. */
@@ -225,8 +231,16 @@ export class Select {
 
   protected readonly isOpen = signal(false);
   protected readonly filterQuery = signal('');
+  protected readonly placement = signal<'top' | 'bottom'>('bottom');
 
   readonly selected = output<string>();
+
+  /** Classes for the dropdown popover — flips upward when there's not enough room below. */
+  protected readonly dropdownClasses = computed(() => {
+    const base =
+      'absolute start-0 w-full rounded-xl bg-white border border-gray-200 shadow-xl z-[200] flex flex-col';
+    return this.placement() === 'top' ? `${base} bottom-full mb-1` : `${base} top-full mt-1`;
+  });
 
   /** Options filtered by the current search query (case-insensitive). */
   protected readonly filteredOptions = computed(() => {
@@ -267,8 +281,31 @@ export class Select {
     if (this.isOpen()) {
       this.close();
     } else {
+      this.detectPlacement();
       this.isOpen.set(true);
     }
+  }
+
+  /**
+   * Decides whether the dropdown should open upward or downward based on the
+   * available viewport space below the trigger button. Falls back to 'bottom'
+   * outside the browser (SSR / unit tests).
+   */
+  private detectPlacement(): void {
+    if (!isPlatformBrowser(this.platformId)) {
+      this.placement.set('bottom');
+      return;
+    }
+    const triggerEl = this.hostEl.nativeElement.querySelector('button');
+    if (!triggerEl) {
+      this.placement.set('bottom');
+      return;
+    }
+    const rect = triggerEl.getBoundingClientRect();
+    // Estimate dropdown height: search bar ~52 px + up to 7 options × ~40 px + padding
+    const estimatedDropdownHeight = 52 + Math.min(this.options().length, 7) * 40 + 8;
+    const spaceBelow = window.innerHeight - rect.bottom;
+    this.placement.set(spaceBelow < estimatedDropdownHeight ? 'top' : 'bottom');
   }
 
   close(): void {

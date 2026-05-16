@@ -1750,5 +1750,93 @@
         }
       }
     }
+  },
+  "profile": {
+    "breadcrumb": {
+      "backToDashboard": "Retour au tableau de bord",
+      "dashboard": "Tableau de bord",
+      "profile": "Profil",
+      "updateInformation": "Mettre à jour les informations",
+      "changePassword": "Changer le mot de passe",
+      "backToProfile": "Retour au profil"
+    },
+    "view": {
+      "personalInfo": "Informations personnelles",
+      "fullName": "Nom complet",
+      "username": "Nom d'utilisateur",
+      "iosId": "ID IOS :",
+      "email": "E-mail",
+      "cityAddress": "Ville / Adresse",
+      "countryRegion": "Pays / Région",
+      "professionalInfo": "Informations professionnelles",
+      "occupation": "Profession",
+      "companyName": "Nom de l'entreprise",
+      "position": "Poste",
+      "changePassword": "Changer le mot de passe",
+      "updateInformation": "Mettre à jour les informations"
+    },
+    "edit": {
+      "formLabel": "Mettre à jour les informations du profil",
+      "personalInfo": "Informations personnelles",
+      "changeImage": "Changer la photo de profil",
+      "firstName": "Prénom",
+      "lastName": "Nom de famille",
+      "email": "E-mail",
+      "locationInfo": "Informations de localisation",
+      "countryLabel": "Pays (Obligatoire)",
+      "countryPlaceholder": "Sélectionner le pays",
+      "countryError": "Le pays est requis",
+      "cityLabel": "Ville (Obligatoire)",
+      "cityPlaceholder": "Sélectionner la ville",
+      "cityError": "La ville est requise",
+      "streetLabel": "Rue (Optionnel)",
+      "streetPlaceholder": "Rue",
+      "addressLabel": "Adresse (Optionnel)",
+      "addressPlaceholder": "Adresse",
+      "postalLabel": "Code postal / ZIP",
+      "postalPlaceholder": "Code postal",
+      "professionalInfo": "Informations professionnelles",
+      "occupationLabel": "Profession (Optionnel)",
+      "occupationPlaceholder": "Sélectionner la profession",
+      "positionLabel": "Poste (Optionnel)",
+      "positionPlaceholder": "Sélectionner le poste",
+      "companyLabel": "Nom de l'entreprise (Optionnel)",
+      "companyPlaceholder": "Nom de l'entreprise",
+      "cancel": "Annuler",
+      "save": "Enregistrer les informations"
+    },
+    "changePassword": {
+      "formLabel": "Changer le mot de passe",
+      "sectionHeading": "Informations sur le mot de passe",
+      "oldPasswordLabel": "Ancien mot de passe",
+      "oldPasswordPlaceholder": "Ancien mot de passe",
+      "oldPasswordRequired": "L'ancien mot de passe est requis.",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "newPasswordPlaceholder": "Nouveau mot de passe",
+      "confirmPasswordLabel": "Confirmer le nouveau mot de passe",
+      "confirmPasswordPlaceholder": "Confirmer le nouveau mot de passe",
+      "passwordMismatch": "Les mots de passe ne correspondent pas.",
+      "passwordHint": "Le mot de passe doit inclure des caractères spéciaux, des chiffres et au moins une lettre majuscule",
+      "cancel": "Annuler",
+      "save": "Enregistrer les informations"
+    },
+    "cancelDialog": {
+      "title": "Êtes-vous sûr de vouloir annuler et quitter ?",
+      "description": "Vous perdrez les informations que vous avez saisies.",
+      "back": "Retour",
+      "confirm": "Annuler et quitter"
+    },
+    "infoUpdatedDialog": {
+      "title": "Informations mises à jour avec succès",
+      "description": "Vos informations ont été enregistrées avec succès.",
+      "ok": "OK"
+    },
+    "passwordUpdatedDialog": {
+      "title": "Mot de passe mis à jour avec succès",
+      "description": "Le mot de passe que vous venez de modifier est votre nouveau mot de passe.",
+      "ok": "OK"
+    }
   }
 }

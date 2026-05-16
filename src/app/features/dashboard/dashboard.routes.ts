@@ -21,8 +21,12 @@ const DASHBOARD_ROUTES: Routes = [
     title: 'My Certificates',
     loadChildren: () => import('@features/certificates/certificates.routes'),
   },
-  // Stub routes for nav tabs — redirect to overview until the pages land.
-  { path: 'profile', redirectTo: '' },
+  {
+    path: 'profile',
+    title: 'Profile',
+    loadChildren: () => import('@features/profile/profile.routes'),
+  },
+  // Stub route for settings tab — redirect to overview until the page lands.
   { path: 'settings', redirectTo: '' },
   { path: 'log', redirectTo: '' },
 ];
