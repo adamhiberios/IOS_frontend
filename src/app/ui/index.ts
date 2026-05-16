@@ -23,3 +23,6 @@ export { SectionBadge, type SectionBadgeVariant } from './section-badge/section-
 export { ScrollToTop } from './scroll-to-top/scroll-to-top';
 export { CertificatesBadge } from './certificates-badge/certificates-badge';
 export { BulletStepList } from './bullet-step-list/bullet-step-list';
+export { BarChart } from './bar-chart/bar-chart';
+export { LineChart } from './line-chart/line-chart';
+export { DonutChart } from './donut-chart/donut-chart';

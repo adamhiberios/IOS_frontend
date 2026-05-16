@@ -4,3 +4,5 @@
 // Layouts are presentational only; auth state is read from core/auth via DI.
 
 export { AuthHeader, AuthFooter } from './auth-shell';
+export { DashboardNavbar } from './app-shell/dashboard-navbar';
+export { UserMenuDropdown } from './app-shell/user-menu-dropdown';
