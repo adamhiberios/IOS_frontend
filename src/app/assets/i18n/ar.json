@@ -1,7 +1,7 @@
 {
   "common": {
     "brand": "معهد سكرم",
-    "copyright": "© 2026 معهد سكرم. جميع الحقوق محفوظة.",
+    "copyright": "© {year} معهد سكرم. جميع الحقوق محفوظة.",
     "orContinueWith": "أو تابع باستخدام",
     "back": "رجوع",
     "scrollToTop": "العودة إلى الأعلى"
@@ -453,6 +453,143 @@
       "other": "أخرى"
     },
     "scrollToTop": "العودة إلى الأعلى"
+  },
+  "dashboard": {
+    "nav": {
+      "overview": "نظرة عامة",
+      "myCertificates": "شهاداتي",
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات",
+      "dashboardLabel": "معهد سكروم"
+    },
+    "menu": {
+      "userMenuLabel": "قائمة المستخدم",
+      "openUserMenu": "فتح قائمة المستخدم",
+      "dashboard": "لوحة التحكم",
+      "certificates": "الشهادات",
+      "log": "السجل",
+      "profile": "الملف الشخصي",
+      "settings": "الإعدادات",
+      "logout": "تسجيل الخروج"
+    },
+    "breadcrumb": {
+      "dashboard": "لوحة التحكم",
+      "overview": "نظرة عامة",
+      "general": "عام"
+    },
+    "stats": {
+      "programsEnrolled": "البرامج المسجلة",
+      "averageScore": "متوسط درجة الاختبار التجريبي",
+      "totalTimeSpent": "إجمالي الوقت المستغرق"
+    },
+    "certs": {
+      "validCertification": "الشهادات سارية المفعول",
+      "percentCompleted": "% مكتمل",
+      "showDetails": "عرض التفاصيل",
+      "active": "نشط",
+      "passed": "ناجح:",
+      "fail": "راسب:",
+      "revoked": "ملغاة",
+      "earned": "مكتسبة",
+      "notAttempted": "لم يُحاول",
+      "badgeAlt": "شارة {code}",
+      "startFinalTest": "ابدأ الاختبار النهائي",
+      "startMockTest": "ابدأ الاختبار التجريبي",
+      "startTestExam": "ابدأ اختبار الشهادة",
+      "overallCompletion": "الإنجاز الكلي",
+      "averageMockScore": "متوسط الدرجات",
+      "timeSpent": "الوقت المستغرق",
+      "trend": "الاتجاه",
+      "certification": "الشهادة",
+      "backToCertificates": "العودة إلى شهاداتي",
+      "backToCertDetail": "العودة إلى تفاصيل الشهادة",
+      "mockTestNav": "اختبار تجريبي",
+      "learningMaterialsNav": "المواد التعليمية",
+      "files": "الملفات",
+      "pagesProgress": "{current}/{total} صفحة",
+      "completed": "مكتمل",
+      "questions": "أسئلة",
+      "sessionChapters": "فصول الجلسة",
+      "mockExamSettingsTitle": "اختر إعدادات الاختبار التجريبي للبدء",
+      "timeLimit": "الحد الزمني",
+      "noTimeLimit": "بدون حد زمني",
+      "minutesShort": "{count} دقيقة",
+      "numberOfQuestions": "عدد الأسئلة",
+      "closeSettings": "إغلاق الإعدادات",
+      "tests": "{count} اختبارات",
+      "badgeAlt": "شارة {code}",
+      "hoursAbbr": "{count} س",
+      "minutesAbbr": "{count} د",
+      "materialOpen": "فتح",
+      "materialContinue": "متابعة",
+      "materialInProgress": "قيد التقدم",
+      "materialNotStarted": "لم يبدأ",
+      "materialCompleted": "مكتمل"
+    },
+    "learning": {
+      "title": "أكمل تعلمك",
+      "firstFileReady": "الملف الأول جاهز للاستكشاف!",
+      "agileOverview": "نظرة عامة على منهجيات أجايل",
+      "pagesCount": "{count} صفحة",
+      "ctaStart": "ابدأ التعلم",
+      "readyToPass": "نعتقد أنك مستعد لاجتياز الاختبار! ({code})",
+      "amazingResults": "لقد حققت نتائج مذهلة في الاختبار التجريبي، وراجعت جميع الملفات المرفقة.",
+      "ctaFinalTest": "ابدأ الاختبار النهائي",
+      "ctaStartExam": "ابدأ الامتحان"
+    },
+    "charts": {
+      "mockTestScores": "نتائج الاختبار التجريبي",
+      "thisYear": "هذه السنة",
+      "lastYear": "السنة الماضية",
+      "thisWeek": "هذا الأسبوع",
+      "lastWeek": "الأسبوع الماضي",
+      "score": "الدرجة",
+      "noData": "لا توجد بيانات",
+      "filterLabel": "تصفية: {label}",
+      "totalMockTests": "إجمالي الاختبارات التجريبية",
+      "passedExams": "اختبارات ناجحة",
+      "failedExams": "اختبارات راسبة"
+    },
+    "notifications": {
+      "label": "الإشعارات"
+    },
+    "examRunner": {
+      "question": "سؤال {number}",
+      "of": "من",
+      "back": "رجوع",
+      "next": "التالي",
+      "finish": "إنهاء",
+      "hint": "تلميح",
+      "hideHint": "إخفاء التلميح",
+      "progress": "التقدم",
+      "correct": "صحيح",
+      "incorrect": "خطأ",
+      "resultLabel": "النتيجة:",
+      "trueLabel": "صحيح",
+      "falseLabel": "خطأ",
+      "historyOfMockTest": "سجل الاختبارات التجريبية",
+      "examAttempts": "محاولات الاختبار",
+      "bestScore": "أفضل درجة",
+      "avgScore": "متوسط الدرجة",
+      "timeSpent": "الوقت المستغرق",
+      "failed": "راسب",
+      "startFinalTestCta": "ابدأ الاختبار النهائي",
+      "readyCtaHeading1": "أعتقد أنك مستعد! لنبدأ",
+      "readyCtaHeading2": "الاختبار النهائي؟",
+      "noResultsFound": "لم يتم العثور على نتائج اختبار تجريبي لهذه الشهادة.",
+      "noResultsAction": "أكمل اختبارًا تجريبيًا لرؤية نتائجك هنا، أو",
+      "startNewMockTest": "ابدأ اختبارًا تجريبيًا جديدًا",
+      "filterLabel": "تصفية:",
+      "startExam": "ابدأ",
+      "timeupTitle": "انتهى الوقت!",
+      "timeupBody": "يمكنك الاستمرار بإضافة المزيد من الوقت، هذا متاح فقط في الاختبار التجريبي!",
+      "continueWithTime": "استمر مع +3 دقائق",
+      "exit": "خروج",
+      "goBack": "العودة",
+      "exitDialogTitle": "خروج؟",
+      "exitDialogBody": "هل أنت متأكد أنك تريد إلغاء الاختبار والمغادرة؟ سيتم تقييم هذا الاختبار بناءً على العلامات التي حصلت عليها حتى الآن."
+    },
+    "allCertifications": "جميع الشهادات"
   },
   "mockExam": {
     "hero": {
@@ -1423,7 +1560,7 @@
     },
     "esf": {
       "fullName": "الميسّر المعتمد في سكروم",
-      "trackName": "شهادات Scrum Master",
+      "trackName": "شهادات ميسّر Scrum",
       "level": "مستوى السلطة",
       "price": "CAD $175",
       "hero": {
@@ -1498,7 +1635,7 @@
         "headingPart2": "ذات الصلة",
         "startingAt": "يبدأ من",
         "esm": {
-          "fullName": "Scrum Master المعتمد",
+          "fullName": "Endorsed Scrum Master",
           "level": "مستوى التأسيس",
           "price": "CAD $130",
           "description": "ابدأ مسيرتك في Agile مع شهادة تأسيس معترف بها عالميًا.",

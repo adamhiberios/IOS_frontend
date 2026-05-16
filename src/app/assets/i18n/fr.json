@@ -1,7 +1,7 @@
 {
   "common": {
     "brand": "Institut Scrum",
-    "copyright": "© 2026 Institut Scrum. Tous droits réservés.",
+    "copyright": "© {year} Institut Scrum. Tous droits réservés.",
     "orContinueWith": "Ou continuer avec",
     "back": "Retour",
     "scrollToTop": "Retour en haut"
@@ -276,18 +276,24 @@
       "posts": [
         {
           "date": "15 avr. 2026",
+          "readTime": "5 min de lecture",
+          "image": "/assets/images/blog_1.png",
           "title": "Pourquoi les employeurs exigent maintenant la certification Scrum",
           "excerpt": "Le passage du \"plus c'est mieux\" au \"indispensable\" — comment les employeurs canadiens utilisent les certifications Scrum pour filtrer les candidats.",
           "readMore": "Lire la suite"
         },
         {
           "date": "28 mars 2026",
+          "readTime": "5 min de lecture",
+          "image": "/assets/images/blog_2.png",
           "title": "Fondamental vs Praticien : lequel vous convient ?",
           "excerpt": "Une comparaison pratique de nos deux niveaux de certification les plus populaires, avec des conseils pour choisir le bon point de départ.",
           "readMore": "Lire la suite"
         },
         {
           "date": "10 mars 2026",
+          "readTime": "5 min de lecture",
+          "image": "/assets/images/blog_3.png",
           "title": "5 questions scénarisées à attendre le jour de l'examen",
           "excerpt": "Nous détaillons les scénarios les plus fréquemment testés et vous montrons comment les aborder avec le cadre Scrum.",
           "readMore": "Lire la suite"
@@ -448,6 +454,143 @@
     },
     "scrollToTop": "Retour en haut"
   },
+  "dashboard": {
+    "nav": {
+      "overview": "Aperçu",
+      "myCertificates": "Mes certificats",
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "dashboardLabel": "Institut de Scrum"
+    },
+    "menu": {
+      "userMenuLabel": "Menu utilisateur",
+      "openUserMenu": "Ouvrir le menu utilisateur",
+      "dashboard": "Tableau de bord",
+      "certificates": "Certificats",
+      "log": "Journal",
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "logout": "Déconnexion"
+    },
+    "breadcrumb": {
+      "dashboard": "Tableau de bord",
+      "overview": "Aperçu",
+      "general": "Général"
+    },
+    "stats": {
+      "programsEnrolled": "Programmes inscrits",
+      "averageScore": "Score moyen des tests blancs",
+      "totalTimeSpent": "Temps total passé"
+    },
+    "certs": {
+      "validCertification": "Certification valide",
+      "percentCompleted": "% terminé",
+      "showDetails": "Voir les détails",
+      "active": "Actif",
+      "passed": "Réussi :",
+      "fail": "Échoué :",
+      "revoked": "Révoqué",
+      "earned": "Obtenu",
+      "notAttempted": "Non tenté",
+      "badgeAlt": "Badge {code}",
+      "startFinalTest": "Commencer l'examen final",
+      "startMockTest": "Commencer l'examen blanc",
+      "startTestExam": "Commencer l'examen de certification",
+      "overallCompletion": "Achèvement global",
+      "averageMockScore": "Score moyen",
+      "timeSpent": "Temps passé",
+      "trend": "Tendance",
+      "certification": "Certification",
+      "backToCertificates": "Retour à Mes certificats",
+      "backToCertDetail": "Retour aux détails du certificat",
+      "mockTestNav": "Examen blanc",
+      "learningMaterialsNav": "Matériel pédagogique",
+      "files": "Fichiers",
+      "pagesProgress": "{current}/{total} pages",
+      "completed": "Terminé",
+      "questions": "Questions",
+      "sessionChapters": "Chapitres de la session",
+      "mockExamSettingsTitle": "Choisissez les paramètres de l'examen blanc pour commencer",
+      "timeLimit": "Limite de temps",
+      "noTimeLimit": "Pas de limite de temps",
+      "minutesShort": "{count} min",
+      "numberOfQuestions": "Nombre de questions",
+      "closeSettings": "Fermer les paramètres",
+      "tests": "{count} tests",
+      "badgeAlt": "Badge {code}",
+      "hoursAbbr": "{count}h",
+      "minutesAbbr": "{count}m",
+      "materialOpen": "Ouvrir",
+      "materialContinue": "Continuer",
+      "materialInProgress": "En cours",
+      "materialNotStarted": "Pas commencé",
+      "materialCompleted": "Terminé"
+    },
+    "learning": {
+      "title": "Complétez votre apprentissage",
+      "firstFileReady": "Premier fichier prêt à être exploré !",
+      "agileOverview": "Aperçu des méthodologies Agile",
+      "pagesCount": "{count} pages",
+      "ctaStart": "Commencer l'apprentissage",
+      "readyToPass": "Nous pensons que vous êtes prêt à réussir le test ! ({code})",
+      "amazingResults": "Vous avez obtenu des résultats exceptionnels à l'examen blanc et révisé tous les fichiers joints.",
+      "ctaFinalTest": "Commencer l'examen final",
+      "ctaStartExam": "Commencer l'examen"
+    },
+    "charts": {
+      "mockTestScores": "Scores des tests blancs",
+      "thisYear": "Cette année",
+      "lastYear": "L'année dernière",
+      "thisWeek": "Cette semaine",
+      "lastWeek": "La semaine dernière",
+      "score": "Score",
+      "noData": "Aucune donnée",
+      "filterLabel": "Filtrer : {label}",
+      "totalMockTests": "Total des tests blancs",
+      "passedExams": "Tests réussis",
+      "failedExams": "Tests échoués"
+    },
+    "notifications": {
+      "label": "Notifications"
+    },
+    "examRunner": {
+      "question": "Question {number}",
+      "of": "sur",
+      "back": "Retour",
+      "next": "Suivant",
+      "finish": "Terminer",
+      "hint": "Indice",
+      "hideHint": "Masquer l'indice",
+      "progress": "Progression",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "resultLabel": "Résultat :",
+      "trueLabel": "Vrai",
+      "falseLabel": "Faux",
+      "historyOfMockTest": "Historique des examens blancs",
+      "examAttempts": "Tentatives d'examen",
+      "bestScore": "Meilleur score",
+      "avgScore": "Score moyen",
+      "timeSpent": "Temps passé",
+      "failed": "Échoué",
+      "startFinalTestCta": "Commencer l'examen final",
+      "readyCtaHeading1": "Vous êtes prêt ! commençons le",
+      "readyCtaHeading2": "Examen final ?",
+      "noResultsFound": "Aucun résultat d'examen blanc trouvé pour ce certificat.",
+      "noResultsAction": "Terminez un examen blanc pour voir vos résultats ici, ou",
+      "startNewMockTest": "commencer un nouvel examen blanc",
+      "filterLabel": "Filtrer :",
+      "startExam": "Commencer",
+      "timeupTitle": "Temps écoulé !",
+      "timeupBody": "Vous pouvez continuer en ajoutant plus de temps, ceci n'est disponible que dans l'examen blanc !",
+      "continueWithTime": "Continuer avec +3 minutes",
+      "exit": "Quitter",
+      "goBack": "Retour",
+      "exitDialogTitle": "Quitter ?",
+      "exitDialogBody": "Êtes-vous sûr de vouloir annuler l'examen et partir ? Cet examen sera noté en fonction des points que vous avez obtenus jusqu'à présent."
+    },
+    "allCertifications": "Toutes les certifications"
+  },
   "mockExam": {
     "hero": {
       "back": "Retour à l'accueil",
@@ -567,6 +710,11 @@
         "home": "Accueil",
         "insights": "Perspectives"
       },
+      "share": "Partager cet article :",
+      "shareLinkedIn": "Partager sur LinkedIn",
+      "shareX": "Partager sur X (Twitter)",
+      "copyLink": "Copier le lien",
+      "copied": "Copié !",
       "related": "Vous aimerez aussi",
       "notFound": "Article introuvable.",
       "backToInsights": "Retour aux perspectives",
@@ -1417,7 +1565,7 @@
     },
     "esf": {
       "fullName": "Facilitateur Scrum Agréé",
-      "trackName": "Certifications Scrum Master",
+      "trackName": "Certifications Scrum Facilitateur",
       "level": "Niveau Autorité",
       "price": "CAD $175",
       "hero": {
