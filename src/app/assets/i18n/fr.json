@@ -1855,5 +1855,71 @@
       "description": "Le mot de passe que vous venez de modifier est votre nouveau mot de passe.",
       "ok": "OK"
     }
+  },
+  "notifications": {
+    "pageTitle": "Notifications",
+    "sectionTitle": "Toutes les notifications",
+    "sortAriaLabel": "Changer l'ordre de tri",
+    "sortLatest": "Tri : Plus récent",
+    "sortEarliest": "Tri : Plus ancien",
+    "empty": "Vous n'avez pas encore de notifications.",
+    "items": {
+      "welcome": {
+        "title": "Bienvenue sur IOS",
+        "description": "Votre compte est prêt—commencez à explorer vos certifications dès aujourd'hui."
+      },
+      "courseRecommendation": {
+        "title": "Formation recommandée pour vous",
+        "description": "En fonction de votre progression, nous recommandons cette prochaine certification."
+      },
+      "security": {
+        "title": "Avis de sécurité",
+        "description": "Nous avons détecté une activité importante liée à la sécurité de votre compte."
+      },
+      "passwordUpdate": {
+        "title": "Mot de passe mis à jour avec succès",
+        "description": "Votre mot de passe a été modifié et votre compte est sécurisé."
+      },
+      "courseProgress": {
+        "title": "Vous êtes à 75%",
+        "description": "Bonne progression—il ne reste que quelques étapes pour terminer votre cours."
+      },
+      "discount": {
+        "title": "Réduction limitée dans le temps",
+        "description": "Utilisez ce code exclusif pour économiser sur votre prochaine certification."
+      },
+      "newMaterial": {
+        "title": "Nouveau matériel pédagogique ajouté",
+        "description": "Du contenu supplémentaire a été téléversé dans votre cours inscrit."
+      },
+      "profileUpdate": {
+        "title": "Profil mis à jour",
+        "description": "Vos informations de profil ont été mises à jour avec succès."
+      },
+      "payment": {
+        "title": "Paiement réussi",
+        "description": "Votre transaction est complétée et l'inscription est confirmée."
+      },
+      "examAccess": {
+        "title": "Accès à l'examen activé",
+        "description": "Votre examen est maintenant disponible pour les 24 prochaines heures."
+      },
+      "verifyAccount": {
+        "title": "Vérifiez votre compte",
+        "description": "Veuillez confirmer votre e-mail pour activer votre compte."
+      },
+      "enrollment": {
+        "title": "Inscription confirmée",
+        "description": "Vous êtes maintenant officiellement inscrit à votre cours sélectionné."
+      },
+      "examCode": {
+        "title": "Votre code d'examen est prêt",
+        "description": "Utilisez ce code dans les 48 heures pour accéder à votre examen."
+      },
+      "paymentReceipt": {
+        "title": "Reçu de paiement disponible",
+        "description": "Votre reçu officiel est prêt à être téléchargé dans votre tableau de bord."
+      }
+    }
   }
 }

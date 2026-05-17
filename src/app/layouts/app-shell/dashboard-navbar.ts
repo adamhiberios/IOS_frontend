@@ -90,13 +90,13 @@ const NAV_TABS: readonly NavTab[] = [
         <!-- Bell + User -->
         <div class="flex items-center gap-4">
           <!-- Notification bell -->
-          <button
-            type="button"
+          <a
+            routerLink="/dashboard/notifications"
             class="flex items-center justify-center w-11 h-11 rounded-full bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
             [attr.aria-label]="lang.t('dashboard.notifications.label')"
           >
             <ios-icon name="bell" class="w-5 h-5" aria-hidden="true" />
-          </button>
+          </a>
 
           <!-- User menu trigger -->
           <div class="relative">

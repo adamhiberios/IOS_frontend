@@ -1855,5 +1855,71 @@
       "description": "The password you just changed is your new password.",
       "ok": "Ok"
     }
+  },
+  "notifications": {
+    "pageTitle": "Notifications",
+    "sectionTitle": "All notifications",
+    "sortAriaLabel": "Toggle sort order",
+    "sortLatest": "Sort: Last date",
+    "sortEarliest": "Sort: Earliest",
+    "empty": "You have no notifications yet.",
+    "items": {
+      "welcome": {
+        "title": "Welcome to THE IOS",
+        "description": "Your account is ready—start exploring your certifications today."
+      },
+      "courseRecommendation": {
+        "title": "Recommended Course for You",
+        "description": "Based on your progress, we recommend this next certification."
+      },
+      "security": {
+        "title": "Security Notice",
+        "description": "We detected important activity related to your account security."
+      },
+      "passwordUpdate": {
+        "title": "Password Updated Successfully",
+        "description": "Your password has been changed and your account is secure."
+      },
+      "courseProgress": {
+        "title": "You're 75% Complete",
+        "description": "Great progress—only a few steps left to finish your course."
+      },
+      "discount": {
+        "title": "Limited-Time Discount",
+        "description": "Use this exclusive code to save on your next certification."
+      },
+      "newMaterial": {
+        "title": "New Learning Material Added",
+        "description": "Additional content has been uploaded to your enrolled course."
+      },
+      "profileUpdate": {
+        "title": "Profile Updated",
+        "description": "Your profile information has been successfully updated."
+      },
+      "payment": {
+        "title": "Payment Successful",
+        "description": "Your transaction has been completed and enrollment is confirmed."
+      },
+      "examAccess": {
+        "title": "Exam Access Activated",
+        "description": "Your exam is now available for the next 24 hours."
+      },
+      "verifyAccount": {
+        "title": "Verify Your Account",
+        "description": "Please confirm your email to activate your account."
+      },
+      "enrollment": {
+        "title": "Enrollment Confirmed",
+        "description": "You are now officially enrolled in your selected course."
+      },
+      "examCode": {
+        "title": "Your Exam Code is Ready",
+        "description": "Use this code within 48 hours to access your exam."
+      },
+      "paymentReceipt": {
+        "title": "Payment Receipt Available",
+        "description": "Your official receipt is ready for download in your dashboard."
+      }
+    }
   }
 }

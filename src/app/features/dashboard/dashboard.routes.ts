@@ -30,6 +30,11 @@ const DASHBOARD_ROUTES: Routes = [
     title: 'Settings',
     loadChildren: () => import('@features/settings/settings.routes'),
   },
+  {
+    path: 'notifications',
+    title: 'Notifications',
+    loadChildren: () => import('@features/notifications/notifications.routes'),
+  },
   { path: 'log', redirectTo: '' },
 ];
 
