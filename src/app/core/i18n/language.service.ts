@@ -174,7 +174,13 @@ export class LanguageService {
    * renders.
    */
   async init(): Promise<void> {
-    await this.loadTranslations(this._locale());
+    const locale = this._locale();
+    await this.loadTranslations(locale);
+    // Sync the persisted locale into DirectionService so <html lang dir> is
+    // correct on first paint after a refresh. Without this, DirectionService
+    // initialises from index.html's hardcoded lang="en" and stays LTR even
+    // when the user had switched to Arabic before refreshing.
+    this.dir.setLocale(locale);
   }
 
   // ---- Locale switching ----------------------------------------------------
