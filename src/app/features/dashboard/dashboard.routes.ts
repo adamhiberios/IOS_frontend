@@ -3,11 +3,10 @@ import { type Routes } from '@angular/router';
 /**
  * Dashboard routes — the post-login landing surface for students.
  *
- * `/dashboard` → Overview page (root route)
- *
- * Additional sub-routes (My certificates, Profile, Settings, Log) will be
- * added in future epics. For now they redirect to the overview so the
- * nav tabs are clickable without 404s.
+ * `/dashboard`              → Overview page (root route)
+ * `/dashboard/certificates` → Certificates feature
+ * `/dashboard/profile`      → Profile feature
+ * `/dashboard/settings`     → Settings feature (notification prefs, newsletter, account)
  */
 const DASHBOARD_ROUTES: Routes = [
   {
@@ -26,8 +25,11 @@ const DASHBOARD_ROUTES: Routes = [
     title: 'Profile',
     loadChildren: () => import('@features/profile/profile.routes'),
   },
-  // Stub route for settings tab — redirect to overview until the page lands.
-  { path: 'settings', redirectTo: '' },
+  {
+    path: 'settings',
+    title: 'Settings',
+    loadChildren: () => import('@features/settings/settings.routes'),
+  },
   { path: 'log', redirectTo: '' },
 ];
 

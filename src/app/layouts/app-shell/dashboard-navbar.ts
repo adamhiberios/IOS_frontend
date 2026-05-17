@@ -22,6 +22,7 @@ import { AuthStore } from '@core/auth';
 import { IosIcon, provideIcons } from '@ui';
 
 import { UserMenuDropdown } from './user-menu-dropdown';
+import { LogoutDialog } from './logout-dialog';
 
 interface NavTab {
   readonly labelKey: string;
@@ -57,7 +58,14 @@ const NAV_TABS: readonly NavTab[] = [
  */
 @Component({
   selector: 'ios-dashboard-navbar',
-  imports: [NgOptimizedImage, RouterLink, RouterLinkActive, IosIcon, UserMenuDropdown],
+  imports: [
+    NgOptimizedImage,
+    RouterLink,
+    RouterLinkActive,
+    IosIcon,
+    UserMenuDropdown,
+    LogoutDialog,
+  ],
   providers: [
     provideIcons(LucideLayoutDashboard, LucideBell, LucideUser, LucideSettings, LucideAward),
   ],
@@ -147,6 +155,11 @@ const NAV_TABS: readonly NavTab[] = [
         </div>
       </nav>
     </header>
+
+    <!-- ── Logout confirmation dialog ────────────────────────────────────── -->
+    @if (logoutDialogOpen()) {
+      <ios-logout-dialog (cancelled)="logoutDialogOpen.set(false)" (confirmed)="confirmLogout()" />
+    }
   `,
 })
 export class DashboardNavbar {
@@ -156,6 +169,7 @@ export class DashboardNavbar {
 
   protected readonly tabs = NAV_TABS;
   protected readonly menuOpen = signal(false);
+  protected readonly logoutDialogOpen = signal(false);
 
   protected readonly displayName = computed(() => {
     const u = this.auth.user();
@@ -181,6 +195,12 @@ export class DashboardNavbar {
 
   protected onLogout(): void {
     this.menuOpen.set(false);
+    // Show confirmation dialog instead of logging out immediately.
+    this.logoutDialogOpen.set(true);
+  }
+
+  protected confirmLogout(): void {
+    this.logoutDialogOpen.set(false);
     void this.auth.logout({ reason: 'user-initiated' });
   }
 
