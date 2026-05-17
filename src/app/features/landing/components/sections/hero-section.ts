@@ -1,9 +1,14 @@
 /**
  * `ios-hero-section` — landing page hero (section 1).
  *
- * Renders the headline, subtext, CTAs, cohort badge, graduate count badge,
- * and the hero image. All content strings come from the `data` input so the
- * section is fully data-driven and backend-ready.
+ * ## Data split
+ * • Static copy (headline, subtext, badge, CTA labels, source attribution,
+ *   cohort label, graduates label, image alt) — rendered via `lang.t()`.
+ *   These strings never change without a new deploy and are not backend-driven.
+ *
+ * • Dynamic values — received through the `heroDynamic` input:
+ *   - `cohortDate`      ("June 2, 2026")  — changes every cohort cycle
+ *   - `graduatesCount`  ("12,000+")       — live stat, updated by the backend
  */
 
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
@@ -13,7 +18,7 @@ import { LucideArrowRight, LucideDownload, LucideCalendar } from '@lucide/angula
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
-import type { HeroData } from '../../data-access/landing.model';
+import type { HeroDynamicData } from '../../data-access/landing.model';
 
 @Component({
   selector: 'ios-hero-section',
@@ -21,7 +26,10 @@ import type { HeroData } from '../../data-access/landing.model';
   providers: [provideIcons(LucideArrowRight, LucideDownload, LucideCalendar)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section aria-label="Hero" class="relative overflow-hidden">
+    <section
+      [attr.aria-label]="lang.t('landing.hero.sectionAriaLabel')"
+      class="relative overflow-hidden"
+    >
       <!-- Decorative blobs -->
       <div
         class="absolute -top-32 end-0 w-80 h-80 rounded-full opacity-10 bg-ios-brand-primary blur-3xl"
@@ -37,16 +45,20 @@ import type { HeroData } from '../../data-access/landing.model';
           <!-- Copy -->
           <div class="flex-1 max-w-[560px]">
             <div class="mb-6">
-              <ios-section-badge [text]="data().badge" variant="amber" />
+              <ios-section-badge [text]="lang.t('landing.hero.badge')" variant="amber" />
             </div>
 
             <h1 class="font-heading font-bold text-[clamp(2rem,4vw,3rem)] leading-[1.15] mb-5">
-              <span class="text-ios-brand-primary block">{{ data().headline }}</span>
-              <span class="text-ios-brand-dark">{{ data().headlineHighlight }}</span>
+              <span class="text-ios-brand-primary block">{{
+                lang.t('landing.hero.headline')
+              }}</span>
+              <span class="text-ios-brand-dark">{{
+                lang.t('landing.hero.headlineHighlight')
+              }}</span>
             </h1>
 
             <p class="text-[17px] leading-relaxed text-ios-fg-8 mb-8 max-w-[520px]">
-              {{ data().subtext }}
+              {{ lang.t('landing.hero.subtext') }}
             </p>
 
             <!-- CTAs -->
@@ -73,7 +85,9 @@ import type { HeroData } from '../../data-access/landing.model';
               </a>
             </div>
 
-            <p class="text-[12px] text-ios-fg-7 leading-relaxed">{{ data().source }}</p>
+            <p class="text-[12px] text-ios-fg-7 leading-relaxed">
+              {{ lang.t('landing.hero.source') }}
+            </p>
           </div>
 
           <!-- Hero image + floating badges -->
@@ -81,7 +95,7 @@ import type { HeroData } from '../../data-access/landing.model';
             <div class="relative rounded-2xl overflow-hidden aspect-[16/9]">
               <img
                 ngSrc="/assets/images/landing_hero.png"
-                alt="A professional earning their Scrum certification"
+                [alt]="lang.t('landing.hero.imageAlt')"
                 width="1672"
                 height="941"
                 class="w-full h-full object-cover rounded-2xl"
@@ -89,7 +103,7 @@ import type { HeroData } from '../../data-access/landing.model';
               />
             </div>
 
-            <!-- Cohort date badge -->
+            <!-- Cohort date badge — value from server -->
             <div
               class="absolute -bottom-4 start-6 bg-white rounded-xl shadow-lg p-4 flex items-center gap-3"
             >
@@ -104,20 +118,26 @@ import type { HeroData } from '../../data-access/landing.model';
               </div>
               <div>
                 <p class="font-heading font-semibold text-[14px] text-ios-fg-10">
-                  {{ data().cohortLabel }}
+                  {{ lang.t('landing.hero.cohortLabel') }}
                 </p>
-                <p class="text-[15px] text-ios-fg-13 font-semibold">{{ data().cohortDate }}</p>
+                <!-- cohortDate is server-driven -->
+                <p class="text-[15px] text-ios-fg-13 font-semibold">
+                  {{ heroDynamic().cohortDate }}
+                </p>
               </div>
             </div>
 
-            <!-- Graduate count badge -->
+            <!-- Graduate count badge — value from server -->
             <div
               class="absolute -top-4 -end-4 bg-ios-brand-primary text-white rounded-xl shadow-lg p-4 text-center"
             >
+              <!-- graduatesCount is server-driven -->
               <p class="font-heading font-bold text-[28px] leading-none">
-                {{ data().graduatesCount }}
+                {{ heroDynamic().graduatesCount }}
               </p>
-              <p class="text-[13px] font-medium mt-1 opacity-90">{{ data().graduatesLabel }}</p>
+              <p class="text-[13px] font-medium mt-1 opacity-90">
+                {{ lang.t('landing.hero.graduatesLabel') }}
+              </p>
             </div>
           </div>
         </div>
@@ -126,6 +146,7 @@ import type { HeroData } from '../../data-access/landing.model';
   `,
 })
 export class HeroSection {
-  readonly data = input.required<HeroData>();
+  /** Server-driven values: cohort date and graduate count. */
+  readonly heroDynamic = input.required<HeroDynamicData>();
   protected readonly lang = inject(LanguageService);
 }

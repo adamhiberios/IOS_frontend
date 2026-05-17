@@ -3,13 +3,19 @@
  *
  * This is a **thin orchestrator**: it injects `LandingStore`, triggers a
  * content load on init, and delegates rendering to the section components.
- * No content data is hardcoded here — all data flows through the store.
  *
- * ── Data flow ─────────────────────────────────────────────────────────────
+ * ## Data flow
+ *
+ * ```
  * LandingStore (signal store)
- *   ← LandingApi (HTTP stub, falls back to static data until backend is live)
- *   → section components via signal inputs
- * ─────────────────────────────────────────────────────────────────────────
+ *   ← LandingApi (returns null until backend is live → store uses fallback)
+ *   → [heroDynamic]   → HeroSection        (cohortDate, graduatesCount)
+ *   → [posts] [badge] → BlogSection        (CMS posts + section badge label)
+ * ```
+ *
+ * All other sections (credibility, value-prop, cert-levels, how-it-works,
+ * market-stats) are **fully self-contained** — they own their static content
+ * via local `computed()` signals and `lang.t()`, and receive no store data.
  */
 
 import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
@@ -49,37 +55,34 @@ import { LandingStore } from '../data-access/landing.store';
     <ios-landing-navbar />
 
     <main class="min-h-screen flex flex-col">
-      <!-- 1. Hero -->
-      <ios-hero-section [data]="store.hero()" />
+      <!-- 1. Hero — dynamic: cohort date + graduate count from store -->
+      <ios-hero-section [heroDynamic]="store.hero()" />
 
-      <!-- 2. Trusted by / marquee -->
+      <!-- 2. Trusted by / marquee — fully static -->
       <ios-trusted-by-section />
 
-      <!-- 3. Why Scrum Certification Matters -->
-      <ios-credibility-section [cards]="store.credibilityCards()" />
+      <!-- 3. Why Scrum Certification Matters — fully static -->
+      <ios-credibility-section />
 
-      <!-- 4. Value Proposition -->
-      <ios-value-prop-section [cards]="store.valuePropCards()" />
+      <!-- 4. Value Proposition — fully static -->
+      <ios-value-prop-section />
 
-      <!-- 5. Certification Levels -->
-      <ios-cert-levels-section [levels]="store.certificationLevels()" />
+      <!-- 5. Certification Levels — fully static -->
+      <ios-cert-levels-section />
 
-      <!-- 6. Why Choose Us -->
+      <!-- 6. Why Choose Us — fully static -->
       <ios-why-choose-us-section />
 
-      <!-- 7. Certification Levels Explained (market stats) -->
-      <ios-market-stats-section
-        [marketLevels]="store.marketLevels()"
-        [certTableRows]="store.certTableRows()"
-      />
+      <!-- 7. Certification Levels Explained (market stats) — fully static -->
+      <ios-market-stats-section />
 
-      <!-- 8. How It Works -->
-      <ios-how-it-works-section [steps]="store.howItWorksSteps()" />
+      <!-- 8. How It Works — fully static -->
+      <ios-how-it-works-section />
 
-      <!-- 9. Blog / Scrum Journal -->
-      <ios-blog-section [posts]="store.blogPosts()" />
+      <!-- 9. Blog / Scrum Journal — dynamic: posts + badge label from store -->
+      <ios-blog-section [posts]="store.blogPosts()" [badge]="store.blogSectionBadge()" />
 
-      <!-- 10. All Certifications CTA -->
+      <!-- 10. All Certifications CTA — fully static -->
       <ios-all-certs-cta-section />
     </main>
 

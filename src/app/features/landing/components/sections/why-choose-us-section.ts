@@ -16,7 +16,7 @@ import { SectionBadge } from '@ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      aria-label="Why Choose Us"
+      [attr.aria-label]="lang.t('landing.sections.whyChooseUsSectionAriaLabel')"
       class="relative overflow-hidden bg-ios-brand-primary py-16 lg:py-20"
     >
       <!-- Decorative circles -->

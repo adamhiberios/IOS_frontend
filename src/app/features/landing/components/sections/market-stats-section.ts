@@ -2,16 +2,37 @@
  * `ios-market-stats-section` — "Certification Levels Explained" (section 8).
  *
  * Renders three level cards with floating arrows, a pass-mark note, and a
- * certification grid table. All content data comes from inputs.
+ * certification grid table.
+ *
+ * ## Data ownership
+ * All content is static. Level tags/names, audience items, descriptions, and
+ * cert table cell labels are locale-reactive via `lang.t()`. Cert route links
+ * are structural constants. No store input needed.
  */
 
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideArrowRight } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
-import type { CertTableRow, MarketLevel } from '../../data-access/landing.model';
+
+interface MarketLevel {
+  tag: string;
+  name: string;
+  audience: string[];
+  description: string;
+}
+
+interface CertTableCell {
+  name: string;
+  link: string;
+}
+
+interface CertTableRow {
+  role: string;
+  cells: CertTableCell[];
+}
 
 @Component({
   selector: 'ios-market-stats-section',
@@ -19,7 +40,10 @@ import type { CertTableRow, MarketLevel } from '../../data-access/landing.model'
   providers: [provideIcons(LucideArrowRight)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section aria-label="Certification Levels Explained" class="bg-white py-[72px]">
+    <section
+      [attr.aria-label]="lang.t('landing.sections.marketStatsSectionAriaLabel')"
+      class="bg-white py-[72px]"
+    >
       <div class="px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-8">
         <!-- Header -->
         <div class="flex flex-col items-center text-center gap-4">
@@ -158,7 +182,72 @@ import type { CertTableRow, MarketLevel } from '../../data-access/landing.model'
   `,
 })
 export class MarketStatsSection {
-  readonly marketLevels = input.required<MarketLevel[]>();
-  readonly certTableRows = input.required<CertTableRow[]>();
   protected readonly lang = inject(LanguageService);
+
+  /**
+   * Static market level definitions. All text is locale-reactive via `lang.t()`.
+   */
+  protected readonly marketLevels = computed<MarketLevel[]>(() => [
+    {
+      tag: this.lang.t('landing.marketStats.foundation.tag'),
+      name: this.lang.t('landing.marketStats.foundation.name'),
+      audience: [
+        this.lang.t('landing.levels.foundation.audience.careerChangers'),
+        this.lang.t('landing.levels.foundation.audience.newPractitioners'),
+        this.lang.t('landing.levels.foundation.audience.teamMembers'),
+      ],
+      description: this.lang.t('landing.marketStats.foundation.desc'),
+    },
+    {
+      tag: this.lang.t('landing.marketStats.practitioner.tag'),
+      name: this.lang.t('landing.marketStats.practitioner.name'),
+      audience: [
+        this.lang.t('landing.marketStats.practitioner.audience.a0'),
+        this.lang.t('landing.marketStats.practitioner.audience.a1'),
+        this.lang.t('landing.marketStats.practitioner.audience.a2'),
+      ],
+      description: this.lang.t('landing.marketStats.practitioner.desc'),
+    },
+    {
+      tag: this.lang.t('landing.marketStats.authority.tag'),
+      name: this.lang.t('landing.marketStats.authority.name'),
+      audience: [
+        this.lang.t('landing.marketStats.authority.audience.a0'),
+        this.lang.t('landing.marketStats.authority.audience.a1'),
+        this.lang.t('landing.marketStats.authority.audience.a2'),
+      ],
+      description: this.lang.t('landing.marketStats.authority.desc'),
+    },
+  ]);
+
+  /**
+   * Static cert table rows. Role labels and cert names are locale-reactive;
+   * route links are structural constants.
+   */
+  protected readonly certTableRows = computed<CertTableRow[]>(() => [
+    {
+      role: this.lang.t('landing.marketStats.table.smRole'),
+      cells: [
+        { name: this.lang.t('landing.certs.esm'), link: '/certifications/esm' },
+        { name: this.lang.t('landing.certs.psm'), link: '/certifications/psm' },
+        { name: this.lang.t('landing.certs.asm'), link: '/certifications/asm' },
+      ],
+    },
+    {
+      role: this.lang.t('landing.marketStats.table.poRole'),
+      cells: [
+        { name: this.lang.t('landing.certs.epo'), link: '/certifications/epo' },
+        { name: this.lang.t('landing.certs.ppo'), link: '/certifications/ppo' },
+        { name: this.lang.t('landing.certs.apo'), link: '/certifications/apo' },
+      ],
+    },
+    {
+      role: this.lang.t('landing.marketStats.table.sfRole'),
+      cells: [
+        { name: this.lang.t('landing.certs.esf'), link: '/certifications/esf' },
+        { name: this.lang.t('landing.certs.psf'), link: '/certifications/psf' },
+        { name: this.lang.t('landing.certs.asf'), link: '/certifications/asf' },
+      ],
+    },
+  ]);
 }

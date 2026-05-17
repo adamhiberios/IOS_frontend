@@ -1,126 +1,39 @@
 /**
  * Landing page domain models.
  *
- * All string fields hold already-resolved, locale-appropriate text.
- * When the backend API is wired, these come directly from the API response
- * (localised server-side via Accept-Language). The static fallback in
- * `landing.store.ts` pre-populates them in English.
+ * ## Design principle
+ * Only data that the **server will provide** lives here.
+ * Static copy (headings, descriptions, cert names, icons, prices, links) lives
+ * directly in each section component — either as `lang.t()` calls for
+ * translatable text, or as hardcoded constants for structural/visual values.
  *
- * Icon names stay as `LucideIconName` — the backend can supply them as
- * strings and the type constrains what is valid.
+ * ## Server-driven fields
+ * | Field              | Example value       | Why server-driven                        |
+ * |--------------------|---------------------|------------------------------------------|
+ * | cohortDate         | "June 2, 2026"      | Changes every cohort cycle               |
+ * | graduatesCount     | "12,000+"           | Live stat, updated by backend            |
+ * | blogSectionBadge   | "Insights"          | Admins may relabel the section           |
+ * | blogPosts          | [{…}, …]            | Real CMS content                         |
  */
 
-import type { LucideIconName } from '@ui';
-
 // ---------------------------------------------------------------------------
-// Hero
+// Hero dynamic data
 // ---------------------------------------------------------------------------
 
-export interface HeroData {
-  badge: string;
-  headline: string;
-  headlineHighlight: string;
-  subtext: string;
-  source: string;
-  cohortLabel: string;
+/**
+ * The only hero values that change at runtime.
+ * All other hero text (headline, subtext, CTA labels, etc.) is static copy
+ * translated via `lang.t()` inside `HeroSection`.
+ */
+export interface HeroDynamicData {
   /** Human-readable cohort start date, e.g. "June 2, 2026". */
   cohortDate: string;
   /** Display string for graduate count, e.g. "12,000+". */
   graduatesCount: string;
-  graduatesLabel: string;
 }
 
 // ---------------------------------------------------------------------------
-// Credibility strip (section 3)
-// ---------------------------------------------------------------------------
-
-export interface CredibilityCard {
-  icon: LucideIconName;
-  title: string;
-}
-
-// ---------------------------------------------------------------------------
-// Value proposition (section 4)
-// ---------------------------------------------------------------------------
-
-export interface ValuePropCard {
-  icon: LucideIconName;
-  title: string;
-  description: string;
-}
-
-// ---------------------------------------------------------------------------
-// Certification levels & cert cards (section 5)
-// ---------------------------------------------------------------------------
-
-export interface CertCard {
-  /** URL-safe abbreviation, e.g. "ESM". Used as a track id. */
-  id: string;
-  abbreviation: string;
-  fullName: string;
-  /** Short level label shown in the badge chip, e.g. "Foundation". */
-  levelBadge: string;
-  /** Hex or CSS color for the badge chip background, e.g. "#426981". */
-  badgeColor: string;
-  /** Formatted price string, e.g. "CAD $180". */
-  price: string;
-  /** Deep-link to the certification detail page, e.g. "/certifications/esm". */
-  detailLink: string;
-}
-
-export interface CertificationLevel {
-  /** Stable identifier, e.g. "FOUNDATION". */
-  id: string;
-  icon: LucideIconName;
-  tabLabel: string;
-  description: string;
-  /** Call-to-action label, e.g. "Explore Foundation Path". */
-  explorePath: string;
-  /** Router link for the explore CTA. */
-  exploreLink: string;
-  /** Audience description paragraph. */
-  audienceDesc: string;
-  certCards: CertCard[];
-}
-
-// ---------------------------------------------------------------------------
-// How It Works (section 9)
-// ---------------------------------------------------------------------------
-
-export interface HowItWorksStep {
-  /** Display number, e.g. "01". */
-  number: string;
-  icon: LucideIconName;
-  title: string;
-  description: string;
-}
-
-// ---------------------------------------------------------------------------
-// Market stats / certification levels explained (section 8)
-// ---------------------------------------------------------------------------
-
-export interface MarketLevel {
-  /** Short uppercase tag, e.g. "CORE KNOWLEDGE". */
-  tag: string;
-  /** Level name, e.g. "FOUNDATION". */
-  name: string;
-  /** Bullet items for the "It's for" list. */
-  audience: string[];
-  description: string;
-}
-
-export interface CertTableCell {
-  name: string;
-  link: string;
-}
-
-export interface CertTableRow {
-  role: string;
-  cells: CertTableCell[];
-}
-
-// ---------------------------------------------------------------------------
-// Blog posts (section 9 / Scrum Journal)
+// Blog posts
 // ---------------------------------------------------------------------------
 
 export interface BlogPost {
@@ -137,21 +50,20 @@ export interface BlogPost {
 }
 
 // ---------------------------------------------------------------------------
-// Aggregate page payload
+// Aggregate dynamic payload
 // ---------------------------------------------------------------------------
 
 /**
- * Everything the landing page needs in one object.
- * `LandingApi.getPageData()` will return this once the backend is ready.
- * `LandingStore` currently populates it from static fallback data.
+ * Everything the landing page fetches from the backend.
+ * `LandingApi.getPageData()` will return this once the endpoint is live.
+ * `LandingStore` falls back to static defaults when the API is unavailable.
  */
-export interface LandingPageData {
-  hero: HeroData;
-  credibilityCards: CredibilityCard[];
-  valuePropCards: ValuePropCard[];
-  certificationLevels: CertificationLevel[];
-  howItWorksSteps: HowItWorksStep[];
-  marketLevels: MarketLevel[];
-  certTableRows: CertTableRow[];
+export interface LandingDynamicData {
+  hero: HeroDynamicData;
+  /**
+   * Label for the blog / insights section badge, e.g. "Insights".
+   * Kept server-driven so admins can rename the section without a deploy.
+   */
+  blogSectionBadge: string;
   blogPosts: BlogPost[];
 }

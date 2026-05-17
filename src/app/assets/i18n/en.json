@@ -5,7 +5,9 @@
     "orContinueWith": "Or continue with",
     "back": "Go back",
     "scrollToTop": "Scroll to top",
-    "selectLanguage": "Select language"
+    "selectLanguage": "Select language",
+    "previousLevel": "Previous level",
+    "nextLevel": "Next level"
   },
   "lang": {
     "en": "English",
@@ -166,10 +168,13 @@
       "graduatesCount": "12,000+",
       "graduatesLabel": "Certified graduates",
       "ctaPrimary": "Explore Certifications",
-      "ctaSecondary": "Download Free Guide"
+      "ctaSecondary": "Download Free Guide",
+      "sectionAriaLabel": "Hero",
+      "imageAlt": "A professional earning their Scrum certification"
     },
     "trustedBy": {
-      "title": "CERTIFIED SCRUM — POWERING THE WORLD'S BEST TEAMS"
+      "title": "CERTIFIED SCRUM — POWERING THE WORLD'S BEST TEAMS",
+      "sectionAriaLabel": "Certified Scrum — powering the world's best teams"
     },
     "credibility": {
       "unlimitedAccess": "Unlimited access to the learning materials",
@@ -311,22 +316,31 @@
         "description": "A credential from Institute of Scrum is a validation that you have proven practical, role-specific mastery through rigorous assessment. When employers see this designation, they know the holder has earned standards that go far beyond attendance and memorization."
       },
       "credibilityIndicators": "Why Scrum Certification Matters",
+      "credibilitySectionAriaLabel": "Why Scrum Certification Matters",
       "whyMatters": "Credibility Indicators",
       "valueProposition": "Value Proposition",
+      "valuePropSectionAriaLabel": "Value Proposition",
+      "valuePropImageAlt": "Professionals applying Scrum in their roles",
       "rolePlay": "Scrum Certification",
       "rolePlayHighlight": "Built for the Role You Actually Play",
       "rolePlaySubtitle": "Most Scrum certifications treat every role the same. Institute of Scrum takes a fundamentally different approach. Our certification system provides dedicated learning tracks for each Scrum role, with three progressive levels that mirror how professionals actually develop expertise. Whether you facilitate sprints, own the product vision, or design collaborative workshops, your certification should reflect the depth of what you do.",
       "levelsExplained": "Certification Path",
+      "certLevelsSectionAriaLabel": "Certification Path",
       "threeLevels": "Choose Your",
       "threeLevelsHighlight": "Certification Path",
       "threeLevelsSubtitle": "Three distinct professional tracks. Three levels of mastery. One rigorous standard of excellence.",
       "scrumJournalPart1": "Latest from the",
       "scrumJournalPart2": "Scrum Journal",
       "howItWorks": "How It Works",
+      "howItWorksSectionAriaLabel": "How It Works",
+      "whyChooseUsSectionAriaLabel": "Why Choose Us",
+      "marketStatsSectionAriaLabel": "Certification Levels Explained",
       "pathToCertification": "Your Path to",
       "pathToCertificationSuffixes": "Endorsed Certification",
       "insightsResources": "Insights & Resources",
       "scrumJournal": "From the Scrum Journal",
+      "allCertsAtGlanceSectionAriaLabel": "All Certifications at a Glance",
+      "blogSectionAriaLabel": "Latest from the Scrum Journal",
       "allCertsAtGlance": {
         "badge": "All Certifications at a Glance",
         "all": "All",
@@ -397,7 +411,9 @@
       "blog": "Insights",
       "contact": "Contact",
       "login": "Login",
-      "register": "Register"
+      "register": "Register",
+      "mainNavAriaLabel": "Main navigation",
+      "homeAriaLabel": "Institute of Scrum — home"
     },
     "footer": {
       "tagline": "Canada's premier provider of industry-recognized Scrum certifications.",
@@ -518,7 +534,6 @@
       "numberOfQuestions": "Number of questions",
       "closeSettings": "Close settings",
       "tests": "{count} tests",
-      "badgeAlt": "{code} badge",
       "hoursAbbr": "{count}h",
       "minutesAbbr": "{count}m",
       "materialOpen": "Open",
@@ -1275,6 +1290,13 @@
           "price": "CAD $180",
           "description": "The highest-level credential for Scrum Masters ready to mentor others, drive organizational transformation, and lead the profession forward.",
           "learnMore": "Learn More About ESM-A"
+        },
+        "esf": {
+          "fullName": "Endorsed Scrum Facilitator",
+          "level": "Foundation Level",
+          "price": "CAD $180",
+          "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
+          "learnMore": "Learn More About ESF"
         }
       }
     },

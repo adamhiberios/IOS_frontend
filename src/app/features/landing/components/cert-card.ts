@@ -4,8 +4,8 @@
  * Displays one certification offering: badge image, level chip, abbreviation,
  * full name, key stats (hours, format, exam questions), price, and two CTAs.
  *
- * Lives in `features/landing/components/` (not `ui/`) because it imports the
- * `CertCard` domain model from the landing data-access layer.
+ * Lives in `features/landing/components/` (not `ui/`) because it is
+ * tightly coupled to the landing feature's cert card structure.
  *
  * ── Usage ─────────────────────────────────────────────────────────────────
  * ```html
@@ -30,7 +30,21 @@ import {
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, provideIcons } from '@ui';
-import type { CertCard as CertCardModel } from '../data-access/landing.model';
+
+/**
+ * Shape of one certification card.
+ * Owned by the component — never server-driven; only structural constants
+ * (abbreviation, colors, price, links) and locale-resolved full name.
+ */
+export interface CertCardData {
+  id: string;
+  abbreviation: string;
+  fullName: string;
+  levelBadge: string;
+  badgeColor: string;
+  price: string;
+  detailLink: string;
+}
 
 @Component({
   selector: 'ios-cert-card',
@@ -140,12 +154,12 @@ import type { CertCard as CertCardModel } from '../data-access/landing.model';
   `,
 })
 export class CertCard {
-  readonly cert = input.required<CertCardModel>();
+  readonly cert = input.required<CertCardData>();
 
-  /** Emits the cert model when "Download Guide" is clicked. */
-  readonly downloadGuide = output<CertCardModel>();
-  /** Emits the cert model when "Enroll Now" is clicked. */
-  readonly enrollNow = output<CertCardModel>();
+  /** Emits the cert data when "Download Guide" is clicked. */
+  readonly downloadGuide = output<CertCardData>();
+  /** Emits the cert data when "Enroll Now" is clicked. */
+  readonly enrollNow = output<CertCardData>();
 
   protected readonly lang = inject(LanguageService);
 }

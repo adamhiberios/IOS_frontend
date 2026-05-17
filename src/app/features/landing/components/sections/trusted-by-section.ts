@@ -17,7 +17,7 @@ import { LanguageService } from '@core/i18n';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      aria-label="Certified Scrum powering the world's best teams"
+      [attr.aria-label]="lang.t('landing.trustedBy.sectionAriaLabel')"
       class="bg-ios-surface-muted py-10 overflow-hidden"
     >
       <p
@@ -28,7 +28,7 @@ import { LanguageService } from '@core/i18n';
 
       <!-- Marquee strip — two copies for seamless infinite loop -->
       <div class="overflow-hidden" aria-hidden="true">
-        <div class="flex w-max animate-marquee">
+        <div class="flex w-max animate-marquee rtl:animate-marquee-rtl">
           <img
             ngSrc="/assets/images/landing_worlds_best_teams.png"
             alt=""

@@ -25,11 +25,15 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
       class="sticky top-0 z-50
              backdrop-blur-[9px] bg-white/95
              border-b-2 border-ios-border-light border-solid"
-      aria-label="Main navigation"
+      [attr.aria-label]="lang.t('landing.nav.mainNavAriaLabel')"
     >
       <div class="flex items-center justify-between px-6 md:px-16 lg:px-[120px] py-4">
         <!-- Brand -->
-        <a routerLink="/" aria-label="Institute of Scrum — home" class="flex-shrink-0">
+        <a
+          routerLink="/"
+          [attr.aria-label]="lang.t('landing.nav.homeAriaLabel')"
+          class="flex-shrink-0"
+        >
           <img
             ngSrc="/assets/icons/logo_institute_of_scrum.png"
             alt="Institute of Scrum"

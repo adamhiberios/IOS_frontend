@@ -5,7 +5,9 @@
     "orContinueWith": "Ou continuer avec",
     "back": "Retour",
     "scrollToTop": "Retour en haut",
-    "selectLanguage": "Choisir la langue"
+    "selectLanguage": "Choisir la langue",
+    "previousLevel": "Niveau précédent",
+    "nextLevel": "Niveau suivant"
   },
   "lang": {
     "en": "English",
@@ -166,10 +168,13 @@
       "graduatesCount": "12 000+",
       "graduatesLabel": "Diplômés certifiés",
       "ctaPrimary": "Explorer les certifications",
-      "ctaSecondary": "Télécharger le guide gratuit"
+      "ctaSecondary": "Télécharger le guide gratuit",
+      "sectionAriaLabel": "Section héros",
+      "imageAlt": "Un professionnel obtenant sa certification Scrum"
     },
     "trustedBy": {
-      "title": "SCRUM CERTIFIÉ — AU CŒUR DES MEILLEURES ÉQUIPES MONDIALES"
+      "title": "SCRUM CERTIFIÉ — AU CŒUR DES MEILLEURES ÉQUIPES MONDIALES",
+      "sectionAriaLabel": "Scrum certifié — au cœur des meilleures équipes mondiales"
     },
     "credibility": {
       "unlimitedAccess": "Accès illimité aux ressources pédagogiques",
@@ -305,16 +310,23 @@
     },
     "sections": {
       "credibilityIndicators": "Pourquoi la certification Scrum compte",
+      "credibilitySectionAriaLabel": "Pourquoi la certification Scrum compte",
       "whyMatters": "Indicateurs de crédibilité",
       "valueProposition": "Proposition de valeur",
+      "valuePropSectionAriaLabel": "Proposition de valeur",
+      "valuePropImageAlt": "Des professionnels appliquant Scrum dans leurs rôles",
       "rolePlay": "Certification Scrum",
       "rolePlayHighlight": "Conçue pour le rôle que vous exercez réellement",
       "rolePlaySubtitle": "La plupart des certifications Scrum traitent chaque rôle de la même façon. L'Institute of Scrum adopte une approche fondamentalement différente. Notre système de certification propose des parcours d'apprentissage dédiés à chaque rôle Scrum, avec trois niveaux progressifs qui reflètent comment les professionnels développent réellement leur expertise. Que vous facilitiez des sprints, portiez la vision produit ou conceviez des ateliers collaboratifs, votre certification doit refléter la profondeur de ce que vous faites.",
       "levelsExplained": "Parcours de certification",
+      "certLevelsSectionAriaLabel": "Parcours de certification",
       "threeLevels": "Choisissez votre",
       "threeLevelsHighlight": "Parcours de certification",
       "threeLevelsSubtitle": "Trois parcours professionnels distincts. Trois niveaux de maîtrise. Un seul standard rigoureux d'excellence.",
       "howItWorks": "Comment ça marche",
+      "howItWorksSectionAriaLabel": "Comment ça marche",
+      "whyChooseUsSectionAriaLabel": "Pourquoi nous choisir",
+      "marketStatsSectionAriaLabel": "Niveaux de certification expliqués",
       "pathToCertification": "Votre parcours vers",
       "pathToCertificationSuffixes": "la certification approuvée",
       "insightsResources": "Perspectives et ressources",
@@ -327,6 +339,8 @@
         "scrumCertifications": "les certifications Scrum",
         "description": "Un credential de l'Institute of Scrum valide que vous avez démontré une maîtrise pratique et spécialisée par rôle à travers une évaluation rigoureuse. Lorsque les employeurs voient cette désignation, ils savent que son titulaire a satisfait à des exigences qui vont bien au-delà de la simple présence et de la mémorisation."
       },
+      "allCertsAtGlanceSectionAriaLabel": "Toutes les certifications en un coup d'œil",
+      "blogSectionAriaLabel": "Dernières actualités du Journal Scrum",
       "allCertsAtGlance": {
         "badge": "Toutes les certifications en un coup d'œil",
         "all": "Toutes les",
@@ -397,7 +411,9 @@
       "blog": "Blogue",
       "contact": "Contact",
       "login": "Connexion",
-      "register": "Inscription"
+      "register": "Inscription",
+      "mainNavAriaLabel": "Navigation principale",
+      "homeAriaLabel": "Institute of Scrum — accueil"
     },
     "footer": {
       "tagline": "Le fournisseur de premier plan au Canada de certifications Scrum reconnues par l'industrie.",
@@ -518,7 +534,6 @@
       "numberOfQuestions": "Nombre de questions",
       "closeSettings": "Fermer les paramètres",
       "tests": "{count} tests",
-      "badgeAlt": "Badge {code}",
       "hoursAbbr": "{count}h",
       "minutesAbbr": "{count}m",
       "materialOpen": "Ouvrir",
@@ -1475,6 +1490,8 @@
     },
     "epoP": {
       "fullName": "Propriétaire de Produit Agréé Praticien",
+      "trackName": "Certifications Product Owner",
+      "level": "Niveau Praticien",
       "price": "CAD $150",
       "hero": {
         "back": "Retour aux certifications",

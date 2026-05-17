@@ -19,7 +19,7 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      aria-label="All Certifications at a Glance"
+      [attr.aria-label]="lang.t('landing.sections.allCertsAtGlanceSectionAriaLabel')"
       class="relative overflow-hidden bg-ios-brand-primary py-20 lg:py-24"
     >
       <!-- Decorative circles -->

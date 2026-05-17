@@ -2,16 +2,25 @@
  * `ios-value-prop-section` — "Scrum Certification Built for the Role You Actually Play" (section 4).
  *
  * Displays a full-width image beside three value proposition cards.
- * Card data comes from the `cards` input; section labels are i18n.
+ *
+ * ## Data ownership
+ * All content is static. Card icons are structural constants; titles and
+ * descriptions are translated via `lang.t()`. No store input needed.
  */
 
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { LucideStar } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
-import type { ValuePropCard } from '../../data-access/landing.model';
+import type { LucideIconName } from '@ui';
+
+interface ValuePropCard {
+  icon: LucideIconName;
+  title: string;
+  description: string;
+}
 
 @Component({
   selector: 'ios-value-prop-section',
@@ -19,7 +28,10 @@ import type { ValuePropCard } from '../../data-access/landing.model';
   providers: [provideIcons(LucideStar)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section aria-label="Value Proposition" class="bg-ios-surface-muted py-18 lg:py-16">
+    <section
+      [attr.aria-label]="lang.t('landing.sections.valuePropSectionAriaLabel')"
+      class="bg-ios-surface-muted py-18 lg:py-16"
+    >
       <div class="px-6 md:px-16 lg:px-[120px]">
         <!-- Section header -->
         <div class="text-center max-w-[1100px] mx-auto mb-14">
@@ -49,7 +61,7 @@ import type { ValuePropCard } from '../../data-access/landing.model';
           <div class="lg:w-[45%] flex-shrink-0 rounded-2xl overflow-hidden">
             <img
               ngSrc="/assets/images/landing_value_proposition.png"
-              alt="Professionals applying Scrum in their roles"
+              [alt]="lang.t('landing.sections.valuePropImageAlt')"
               width="2400"
               height="1792"
               class="w-full h-full object-cover"
@@ -83,6 +95,27 @@ import type { ValuePropCard } from '../../data-access/landing.model';
   `,
 })
 export class ValuePropSection {
-  readonly cards = input.required<ValuePropCard[]>();
   protected readonly lang = inject(LanguageService);
+
+  /**
+   * Static card definitions. Icon name is a structural constant; title and
+   * description are locale-reactive via `lang.t()`.
+   */
+  protected readonly cards = computed<ValuePropCard[]>(() => [
+    {
+      icon: 'star',
+      title: this.lang.t('landing.valueProp.roleSpecialized.title'),
+      description: this.lang.t('landing.valueProp.roleSpecialized.description'),
+    },
+    {
+      icon: 'star',
+      title: this.lang.t('landing.valueProp.masteryPath.title'),
+      description: this.lang.t('landing.valueProp.masteryPath.description'),
+    },
+    {
+      icon: 'star',
+      title: this.lang.t('landing.valueProp.practicalFocus.title'),
+      description: this.lang.t('landing.valueProp.practicalFocus.description'),
+    },
+  ]);
 }

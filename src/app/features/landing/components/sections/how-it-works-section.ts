@@ -1,11 +1,13 @@
 /**
  * `ios-how-it-works-section` — "Your Path to Endorsed Certification" zigzag timeline (section 9).
  *
- * Steps come from the `steps` input; all UI labels are i18n-driven.
- * The zigzag alternates text left/right using even/odd index.
+ * ## Data ownership
+ * All step data is static. Step numbers and icon names are structural constants;
+ * titles and descriptions are locale-reactive via `lang.t()`.
+ * No store input needed.
  */
 
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   LucideArrowRight,
@@ -19,7 +21,14 @@ import {
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
-import type { HowItWorksStep } from '../../data-access/landing.model';
+import type { LucideIconName } from '@ui';
+
+interface HowItWorksStep {
+  number: string;
+  icon: LucideIconName;
+  title: string;
+  description: string;
+}
 
 @Component({
   selector: 'ios-how-it-works-section',
@@ -37,7 +46,10 @@ import type { HowItWorksStep } from '../../data-access/landing.model';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section aria-label="How It Works" class="bg-ios-surface-warm py-[72px]">
+    <section
+      [attr.aria-label]="lang.t('landing.sections.howItWorksSectionAriaLabel')"
+      class="bg-ios-surface-warm py-[72px]"
+    >
       <div class="px-6 md:px-16 lg:px-[120px]">
         <!-- Header -->
         <div class="flex flex-col items-center gap-3 mb-16">
@@ -135,6 +147,48 @@ import type { HowItWorksStep } from '../../data-access/landing.model';
   `,
 })
 export class HowItWorksSection {
-  readonly steps = input.required<HowItWorksStep[]>();
   protected readonly lang = inject(LanguageService);
+
+  /**
+   * Static step definitions. Numbers and icon names are structural constants;
+   * titles and descriptions are locale-reactive via `lang.t()`.
+   */
+  protected readonly steps = computed<HowItWorksStep[]>(() => [
+    {
+      number: '01',
+      icon: 'target',
+      title: this.lang.t('landing.howItWorks.choose.title'),
+      description: this.lang.t('landing.howItWorks.choose.description'),
+    },
+    {
+      number: '02',
+      icon: 'book-open-text',
+      title: this.lang.t('landing.howItWorks.review.title'),
+      description: this.lang.t('landing.howItWorks.review.description'),
+    },
+    {
+      number: '03',
+      icon: 'list-checks',
+      title: this.lang.t('landing.howItWorks.practice.title'),
+      description: this.lang.t('landing.howItWorks.practice.description'),
+    },
+    {
+      number: '04',
+      icon: 'key',
+      title: this.lang.t('landing.howItWorks.access.title'),
+      description: this.lang.t('landing.howItWorks.access.description'),
+    },
+    {
+      number: '05',
+      icon: 'square-check',
+      title: this.lang.t('landing.howItWorks.complete.title'),
+      description: this.lang.t('landing.howItWorks.complete.description'),
+    },
+    {
+      number: '06',
+      icon: 'badge-check',
+      title: this.lang.t('landing.howItWorks.earn.title'),
+      description: this.lang.t('landing.howItWorks.earn.description'),
+    },
+  ]);
 }

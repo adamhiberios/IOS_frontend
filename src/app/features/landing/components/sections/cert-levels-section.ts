@@ -1,18 +1,22 @@
 /**
  * `ios-cert-levels-section` — "Choose Your Certification Path" tabbed carousel (section 5).
  *
- * Manages active-tab state locally (UI state). Certification level data comes
- * from the `levels` input so the section is fully backend-driven.
+ * Manages active-tab state locally (UI state).
  *
- * Uses `ios-cert-card` for each individual certification card.
+ * ## Data ownership
+ * All certification structure is static — cert abbreviations, full names, badge
+ * colors, prices, and route links are structural constants that only change with
+ * a new product release.  Translatable strings (tab labels, descriptions, CTA
+ * text, audience descriptions) are locale-reactive via `lang.t()`.
+ * No store input is needed.
  */
 
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   type ElementRef,
   inject,
-  input,
   signal,
   viewChild,
 } from '@angular/core';
@@ -21,8 +25,23 @@ import { LucideArrowLeft, LucideArrowRight, LucideCircleQuestionMark } from '@lu
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
-import { CertCard } from '../cert-card';
-import type { CertificationLevel } from '../../data-access/landing.model';
+import type { LucideIconName } from '@ui';
+import { CertCard, type CertCardData } from '../cert-card';
+
+// ---------------------------------------------------------------------------
+// Local shape (structural only — never goes to the API)
+// ---------------------------------------------------------------------------
+
+interface CertLevelDef {
+  id: string;
+  icon: LucideIconName;
+  tabLabel: string;
+  description: string;
+  explorePath: string;
+  exploreLink: string;
+  audienceDesc: string;
+  certCards: CertCardData[];
+}
 
 @Component({
   selector: 'ios-cert-levels-section',
@@ -30,7 +49,10 @@ import type { CertificationLevel } from '../../data-access/landing.model';
   providers: [provideIcons(LucideArrowLeft, LucideArrowRight, LucideCircleQuestionMark)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section aria-label="Certification Path" class="bg-ios-surface-warm py-20 lg:py-28">
+    <section
+      [attr.aria-label]="lang.t('landing.sections.certLevelsSectionAriaLabel')"
+      class="bg-ios-surface-warm py-20 lg:py-28"
+    >
       <div class="px-6 md:px-16 lg:px-[120px]">
         <!-- Header -->
         <div class="mb-10">
@@ -161,12 +183,139 @@ import type { CertificationLevel } from '../../data-access/landing.model';
   `,
 })
 export class CertLevelsSection {
-  readonly levels = input.required<CertificationLevel[]>();
-
   protected readonly lang = inject(LanguageService);
   protected readonly activeLevelIdx = signal(0);
 
   private readonly carouselTrack = viewChild<ElementRef<HTMLDivElement>>('carouselTrack');
+
+  /**
+   * Static certification level definitions.
+   * Tab labels, descriptions, CTA text, and audience descriptions are
+   * locale-reactive (read via `lang.t()`). Badge colors, prices, abbreviations,
+   * and route links are structural constants.
+   */
+  protected readonly levels = computed<CertLevelDef[]>(() => {
+    const foundationLabel = this.lang.t('landing.levels.foundation.tabLabel');
+    const practitionerLabel = this.lang.t('landing.levels.practitioner.tabLabel');
+    const authorityLabel = this.lang.t('landing.levels.authority.tabLabel');
+
+    return [
+      {
+        id: 'FOUNDATION',
+        icon: 'book-open',
+        tabLabel: foundationLabel,
+        description: this.lang.t('landing.levels.foundation.description'),
+        explorePath: this.lang.t('landing.levels.foundation.explorePath'),
+        exploreLink: '/certifications',
+        audienceDesc: this.lang.t('landing.levels.foundation.audienceDesc'),
+        certCards: [
+          {
+            id: 'esm',
+            abbreviation: 'ESM',
+            fullName: this.lang.t('landing.certs.esm'),
+            levelBadge: foundationLabel,
+            badgeColor: '#426981',
+            price: 'CAD $180',
+            detailLink: '/certifications/esm',
+          },
+          {
+            id: 'epo',
+            abbreviation: 'EPO',
+            fullName: this.lang.t('landing.certs.epo'),
+            levelBadge: foundationLabel,
+            badgeColor: '#426981',
+            price: 'CAD $180',
+            detailLink: '/certifications/epo',
+          },
+          {
+            id: 'esf',
+            abbreviation: 'ESF',
+            fullName: this.lang.t('landing.certs.esf'),
+            levelBadge: foundationLabel,
+            badgeColor: '#426981',
+            price: 'CAD $180',
+            detailLink: '/certifications/esf',
+          },
+        ],
+      },
+      {
+        id: 'PRACTITIONER',
+        icon: 'zap',
+        tabLabel: practitionerLabel,
+        description: this.lang.t('landing.levels.practitioner.description'),
+        explorePath: this.lang.t('landing.levels.practitioner.explorePath'),
+        exploreLink: '/certifications',
+        audienceDesc: this.lang.t('landing.levels.practitioner.audienceDesc'),
+        certCards: [
+          {
+            id: 'psm',
+            abbreviation: 'PSM',
+            fullName: this.lang.t('landing.certs.psm'),
+            levelBadge: practitionerLabel,
+            badgeColor: '#2d5f7a',
+            price: 'CAD $220',
+            detailLink: '/certifications/psm',
+          },
+          {
+            id: 'ppo',
+            abbreviation: 'PPO',
+            fullName: this.lang.t('landing.certs.ppo'),
+            levelBadge: practitionerLabel,
+            badgeColor: '#2d5f7a',
+            price: 'CAD $220',
+            detailLink: '/certifications/ppo',
+          },
+          {
+            id: 'psf',
+            abbreviation: 'PSF',
+            fullName: this.lang.t('landing.certs.psf'),
+            levelBadge: practitionerLabel,
+            badgeColor: '#2d5f7a',
+            price: 'CAD $220',
+            detailLink: '/certifications/psf',
+          },
+        ],
+      },
+      {
+        id: 'AUTHORITY',
+        icon: 'shield-check',
+        tabLabel: authorityLabel,
+        description: this.lang.t('landing.levels.authority.description'),
+        explorePath: this.lang.t('landing.levels.authority.explorePath'),
+        exploreLink: '/certifications',
+        audienceDesc: this.lang.t('landing.levels.authority.audienceDesc'),
+        certCards: [
+          {
+            id: 'asm',
+            abbreviation: 'ASM',
+            fullName: this.lang.t('landing.certs.asm'),
+            levelBadge: authorityLabel,
+            badgeColor: '#1a3a4a',
+            price: 'CAD $260',
+            detailLink: '/certifications/asm',
+          },
+          {
+            id: 'apo',
+            abbreviation: 'APO',
+            fullName: this.lang.t('landing.certs.apo'),
+            levelBadge: authorityLabel,
+            badgeColor: '#1a3a4a',
+            price: 'CAD $260',
+            detailLink: '/certifications/apo',
+          },
+          {
+            id: 'asf',
+            abbreviation: 'ASF',
+            fullName: this.lang.t('landing.certs.asf'),
+            levelBadge: authorityLabel,
+            badgeColor: '#1a3a4a',
+            price: 'CAD $260',
+            detailLink: '/certifications/asf',
+          },
+        ],
+      },
+    ];
+  });
 
   protected selectLevel(idx: number): void {
     this.activeLevelIdx.set(idx);

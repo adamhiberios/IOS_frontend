@@ -5,7 +5,9 @@
     "orContinueWith": "أو تابع باستخدام",
     "back": "رجوع",
     "scrollToTop": "العودة إلى الأعلى",
-    "selectLanguage": "اختر اللغة"
+    "selectLanguage": "اختر اللغة",
+    "previousLevel": "المستوى السابق",
+    "nextLevel": "المستوى التالي"
   },
   "lang": {
     "en": "English",
@@ -166,10 +168,13 @@
       "graduatesCount": "+١٢,٠٠٠",
       "graduatesLabel": "خريج معتمد",
       "ctaPrimary": "استكشف الشهادات",
-      "ctaSecondary": "تحميل الدليل المجاني"
+      "ctaSecondary": "تحميل الدليل المجاني",
+      "sectionAriaLabel": "القسم الرئيسي",
+      "imageAlt": "محترف يحصل على شهادة سكرم المعتمدة"
     },
     "trustedBy": {
-      "title": "سكرم المعتمد — يُشغّل أفضل الفرق في العالم"
+      "title": "سكرم المعتمد — يُشغّل أفضل الفرق في العالم",
+      "sectionAriaLabel": "سكرم المعتمد — يُشغّل أفضل الفرق في العالم"
     },
     "credibility": {
       "unlimitedAccess": "وصول غير محدود لمواد التعلم",
@@ -311,22 +316,31 @@
         "description": "اعتماد من معهد سكرم هو تأكيد على إثبات كفاءتك العملية والمتخصصة من خلال تقييم صارم. عندما يرى أصحاب العمل هذا الاعتماد، فإنهم يعلمون أن حامله قد حقق معايير تتجاوز بكثير الحضور والحفظ."
       },
       "credibilityIndicators": "لماذا تهم شهادة سكرم",
+      "credibilitySectionAriaLabel": "لماذا تهم شهادة سكرم",
       "whyMatters": "مؤشرات المصداقية",
       "valueProposition": "قيمة العرض",
+      "valuePropSectionAriaLabel": "قيمة العرض",
+      "valuePropImageAlt": "محترفون يطبقون سكرم في أدوارهم",
       "rolePlay": "شهادة سكرم",
       "rolePlayHighlight": "مبنية للدور الذي تؤديه فعلاً",
       "rolePlaySubtitle": "معظم شهادات سكرم تعامل كل الأدوار بنفس الطريقة. يتخذ معهد سكرم نهجاً مختلفاً جوهرياً. يوفر نظام شهاداتنا مسارات تعلم مخصصة لكل دور في سكرم، مع ثلاثة مستويات تدريجية تعكس كيفية تطوير المحترفين لخبراتهم فعلياً. سواء كنت تيسّر السباقات أو تمتلك رؤية المنتج أو تصمم ورش عمل تعاونية، يجب أن تعكس شهادتك عمق ما تقوم به.",
       "levelsExplained": "مسار الشهادة",
+      "certLevelsSectionAriaLabel": "مسار الشهادة",
       "threeLevels": "اختر",
       "threeLevelsHighlight": "مسار شهادتك",
       "threeLevelsSubtitle": "ثلاثة مسارات مهنية متميزة. ثلاثة مستويات من الإتقان. معيار واحد صارم من التميز.",
       "scrumJournalPart1": "آخر من",
       "scrumJournalPart2": "مجلة سكرم",
       "howItWorks": "كيف يعمل",
+      "howItWorksSectionAriaLabel": "كيف يعمل",
+      "whyChooseUsSectionAriaLabel": "لماذا تختارنا",
+      "marketStatsSectionAriaLabel": "شرح مستويات الشهادة",
       "pathToCertification": "مسارك نحو",
       "pathToCertificationSuffixes": "الشهادة المعتمدة",
       "insightsResources": "رؤى وموارد",
       "scrumJournal": "من مجلة سكرم",
+      "allCertsAtGlanceSectionAriaLabel": "جميع الشهادات بنظرة واحدة",
+      "blogSectionAriaLabel": "آخر المقالات من مجلة سكرم",
       "allCertsAtGlance": {
         "badge": "جميع الشهادات بنظرة واحدة",
         "all": "جميع",
@@ -397,7 +411,9 @@
       "blog": "المدونة",
       "contact": "اتصل بنا",
       "login": "تسجيل الدخول",
-      "register": "تسجيل"
+      "register": "تسجيل",
+      "mainNavAriaLabel": "التنقل الرئيسي",
+      "homeAriaLabel": "معهد سكرم — الصفحة الرئيسية"
     },
     "footer": {
       "tagline": "المزود الرائد في كندا لشهادات سكرم المعتمدة في المجال.",
@@ -518,7 +534,6 @@
       "numberOfQuestions": "عدد الأسئلة",
       "closeSettings": "إغلاق الإعدادات",
       "tests": "{count} اختبارات",
-      "badgeAlt": "شارة {code}",
       "hoursAbbr": "{count} س",
       "minutesAbbr": "{count} د",
       "materialOpen": "فتح",
@@ -1275,6 +1290,13 @@
           "price": "CAD $180",
           "description": "أعلى شهادة لمدربي سكرم المستعدين لإرشاد الآخرين، قيادة التحول التنظيمي، وقيادة المهنة للأمام.",
           "learnMore": "اعرف المزيد عن ESM-A"
+        },
+        "esf": {
+          "fullName": "ميسر سكرم معتمد",
+          "level": "مستوى التأسيس",
+          "price": "CAD $180",
+          "description": "تخصص في تصميم ورش العمل وديناميكيات المجموعات وتقنيات التسهيل المتقدمة لفرق سكرم.",
+          "learnMore": "اعرف المزيد عن ESF"
         }
       }
     },

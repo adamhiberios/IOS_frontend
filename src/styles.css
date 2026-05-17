@@ -197,8 +197,22 @@
   }
 }
 
+/* RTL mirror: scroll right so logos emerge from the left — matching RTL reading direction */
+@keyframes marquee-rtl {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(50%);
+  }
+}
+
 @utility animate-marquee {
   animation: marquee 40s linear infinite;
+}
+
+@utility animate-marquee-rtl {
+  animation: marquee-rtl 40s linear infinite;
 }
 
 @keyframes slideInRight {

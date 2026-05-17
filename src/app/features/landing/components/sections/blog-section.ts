@@ -2,7 +2,12 @@
  * `ios-blog-section` — "Latest from the Scrum Journal" (section 10).
  *
  * Renders up to three blog post cards using the shared `InsightsCard` component.
- * Post data comes from the `posts` input.
+ *
+ * ## Data split
+ * • `posts`  — server-driven CMS content (titles, dates, excerpts, images).
+ * • `badge`  — server-driven section badge label (e.g. "Insights"), so admins
+ *              can relabel the section without a deploy.
+ * • All other labels (heading, "View all" link) are static via `lang.t()`.
  */
 
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
@@ -21,7 +26,10 @@ import type { BlogPost } from '../../data-access/landing.model';
   providers: [provideIcons(LucideArrowRight)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section aria-label="Latest from the Scrum Journal" class="bg-white py-[72px]">
+    <section
+      [attr.aria-label]="lang.t('landing.sections.blogSectionAriaLabel')"
+      class="bg-white py-[72px]"
+    >
       <div class="px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-8">
         <!-- Header row -->
         <div
@@ -29,10 +37,8 @@ import type { BlogPost } from '../../data-access/landing.model';
         >
           <!-- Left: badge + heading + gold line -->
           <div class="flex flex-col items-start gap-3">
-            <ios-section-badge
-              [text]="lang.t('landing.sections.insightsResources')"
-              variant="warm-red"
-            />
+            <!-- badge comes from server so admins can relabel the section -->
+            <ios-section-badge [text]="badge()" variant="warm-red" />
             <h2 class="font-heading font-extrabold text-[36px] leading-tight">
               <span class="text-ios-fg-10">{{ lang.t('landing.sections.scrumJournalPart1') }}</span>
               <span class="ms-2 text-ios-brand-primary">{{
@@ -56,7 +62,7 @@ import type { BlogPost } from '../../data-access/landing.model';
           </a>
         </div>
 
-        <!-- Blog post cards -->
+        <!-- Blog post cards — server-driven content -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
           @for (post of posts(); track post.id) {
             <ios-insights-card [post]="post" />
@@ -67,6 +73,10 @@ import type { BlogPost } from '../../data-access/landing.model';
   `,
 })
 export class BlogSection {
+  /** CMS blog posts — fetched from server. */
   readonly posts = input.required<BlogPost[]>();
+  /** Admin-configurable section badge label — fetched from server. */
+  readonly badge = input.required<string>();
+
   protected readonly lang = inject(LanguageService);
 }

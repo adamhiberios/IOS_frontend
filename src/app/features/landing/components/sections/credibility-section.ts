@@ -2,10 +2,14 @@
  * `ios-credibility-section` — "Why Scrum Certification Matters" strip (section 3).
  *
  * Renders four credibility indicator cards on the primary-brand background.
- * Card data (icon + title) comes from the `cards` input; UI labels are i18n.
+ *
+ * ## Data ownership
+ * All content is static. Card icons are structural constants; card titles are
+ * translated via `lang.t()`. No store input needed — this section is
+ * self-contained and never fetches from the backend.
  */
 
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import {
   LucideFiles,
   LucideLaptop,
@@ -15,7 +19,12 @@ import {
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
-import type { CredibilityCard } from '../../data-access/landing.model';
+import type { LucideIconName } from '@ui';
+
+interface CredibilityCard {
+  icon: LucideIconName;
+  title: string;
+}
 
 @Component({
   selector: 'ios-credibility-section',
@@ -24,7 +33,7 @@ import type { CredibilityCard } from '../../data-access/landing.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      aria-label="Why Scrum Certification Matters"
+      [attr.aria-label]="lang.t('landing.sections.credibilitySectionAriaLabel')"
       class="relative overflow-hidden bg-ios-brand-primary py-8 lg:py-12"
     >
       <!-- Decorative circles -->
@@ -56,7 +65,7 @@ import type { CredibilityCard } from '../../data-access/landing.model';
 
         <!-- Four cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          @for (card of cards(); track card.title) {
+          @for (card of cards(); track card.icon) {
             <div class="flex flex-row items-center gap-4">
               <div
                 class="w-14 h-14 rounded-xl bg-white/80 flex items-center justify-center flex-shrink-0"
@@ -78,6 +87,16 @@ import type { CredibilityCard } from '../../data-access/landing.model';
   `,
 })
 export class CredibilitySection {
-  readonly cards = input.required<CredibilityCard[]>();
   protected readonly lang = inject(LanguageService);
+
+  /**
+   * Static card definitions. Icon names are structural constants; titles are
+   * locale-reactive because `lang.t()` reads the translations signal.
+   */
+  protected readonly cards = computed<CredibilityCard[]>(() => [
+    { icon: 'files', title: this.lang.t('landing.credibility.unlimitedAccess') },
+    { icon: 'laptop', title: this.lang.t('landing.credibility.selfPaced') },
+    { icon: 'badge-dollar-sign', title: this.lang.t('landing.credibility.affordable') },
+    { icon: 'badge-check', title: this.lang.t('landing.credibility.lifetime') },
+  ]);
 }
