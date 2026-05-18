@@ -7,7 +7,30 @@
     "scrollToTop": "العودة إلى الأعلى",
     "selectLanguage": "اختر اللغة",
     "previousLevel": "المستوى السابق",
-    "nextLevel": "المستوى التالي"
+    "nextLevel": "المستوى التالي",
+    "loading": "جارٍ التحميل...",
+    "error": "حدث خطأ",
+    "retry": "إعادة المحاولة",
+    "close": "إغلاق",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "yes": "نعم",
+    "no": "لا",
+    "ok": "حسنًا",
+    "search": "بحث",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "all": "الكل",
+    "none": "لا شيء",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "or": "أو",
+    "and": "و",
+    "more": "المزيد",
+    "less": "أقل",
+    "viewAll": "عرض الكل",
+    "learnMore": "اعرف المزيد"
   },
   "lang": {
     "en": "English",
@@ -39,6 +62,14 @@
         "refreshFailed": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مجدداً.",
         "forced": "تم تسجيل خروج حسابك. تواصل مع الدعم إذا كان هذا غير متوقع."
       }
+    },
+    "errors": {
+      "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة. حاول مرة أخرى.",
+      "accountLocked": "تم قفل حسابك. يرجى التواصل مع الدعم.",
+      "tooManyAttempts": "محاولات تسجيل دخول كثيرة. يرجى المحاولة مرة أخرى لاحقًا.",
+      "networkError": "حدث خطأ في الشبكة. يرجى التحقق من اتصالك.",
+      "unknownError": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.",
+      "sessionExpired": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى."
     },
     "register": {
       "title": "مرحباً، سجّل للمتابعة",
@@ -417,7 +448,9 @@
       "register": "تسجيل",
       "mainNavAriaLabel": "التنقل الرئيسي",
       "homeAriaLabel": "معهد سكرم — الصفحة الرئيسية",
-      "logoAlt": "معهد سكرم"
+      "logoAlt": "معهد سكرم",
+      "languageToggle": "تبديل اللغة",
+      "userMenuAriaLabel": "قائمة المستخدم"
     },
     "footer": {
       "tagline": "المزود الرائد في كندا لشهادات سكرم المعتمدة في المجال.",
@@ -449,7 +482,8 @@
       "xAriaLabel": "إكس / تويتر",
       "facebookAriaLabel": "فيسبوك",
       "youtubeAriaLabel": "يوتيوب",
-      "logoAlt": "معهد سكرم"
+      "logoAlt": "معهد سكرم",
+      "socialLinksTitle": "روابط التواصل الاجتماعي"
     }
   },
   "contact": {
@@ -489,7 +523,8 @@
       "dashboardLabel": "معهد سكروم",
       "logoAriaLabel": "معهد سكرم — لوحة التحكم",
       "notificationsAriaLabel": "الإشعارات",
-      "navigationAriaLabel": "تنقل لوحة التحكم"
+      "navigationAriaLabel": "تنقل لوحة التحكم",
+      "logoutAriaLabel": "تسجيل الخروج من حسابك"
     },
     "menu": {
       "userMenuLabel": "قائمة المستخدم",
@@ -1959,6 +1994,48 @@
       "historyCount": "({count} اختبارات)",
       "subtitleBefore": "أصبح لديك الآن ",
       "subtitleAfter": "، يمكنك مشاركته على ملفك الشخصي"
+    },
+    "verify": {
+      "pageNavAriaLabel": "التنقل في الصفحة",
+      "backAriaLabel": "العودة إلى لوحة التحكم",
+      "title": "تحقق لاجتياز الامتحان",
+      "emailNotice": "سنرسل لك رابطًا لتوجيهك إلى امتحانك، يرجى التحقق من بريدك الإلكتروني:",
+      "instruction1Pre": "يرسل النظام ",
+      "instruction1Link": "رابطًا",
+      "instruction1Post": " آمنًا ومخصصًا إلى عنوان بريدك الإلكتروني المسجل.",
+      "instruction2Pre": "إذا ",
+      "instruction2Loses": "فقدت أو أضعت",
+      "instruction2Post": " الرمز، فستكون ملزمًا ",
+      "instruction2Repurchase": "بإعادة الشراء",
+      "instruction2End": " للحصول على رابط جديد.",
+      "instruction3Pre": "الرابط نشط فقط لمدة ",
+      "instruction3Hours": "24 ساعة",
+      "instruction3Post": " لاجتياز الاختبار.",
+      "continue": "متابعة",
+      "resendLink": "فقدت الرابط، أعد إرساله"
+    },
+    "ready": {
+      "heading": "مرحبًا آدم، هل أنت مستعد؟",
+      "instruction1Pre": "لديك ",
+      "instruction1Time": "12 ساعة و43 دقيقة",
+      "instruction1Post": " لاجتياز الامتحان.",
+      "instruction2Pre": "بعد هذه الفترة، ستحتاج إلى ",
+      "instruction2Repurchase": "إعادة شراء الوصول",
+      "instruction2Post": " للحصول على رابط جديد.",
+      "letsStart": "لنبدأ",
+      "certAriaLabelPrefix": "شهادة الامتحان:"
+    },
+    "confirmDialog": {
+      "title": "هل أنت متأكد من المتابعة في الامتحان؟",
+      "body": "سنرسل لك رابطًا لتوجيهك إلى امتحانك، يرجى التحقق من بريدك الإلكتروني:",
+      "goBack": "رجوع",
+      "sendLink": "إرسال الرابط"
+    },
+    "sentDialog": {
+      "title": "تم إرسال الرابط بنجاح",
+      "body": "يرجى التحقق من بريدك الإلكتروني: لإجراء امتحانك",
+      "goBack": "رجوع",
+      "openEmail": "حسنًا، افتح البريد الإلكتروني"
     }
   },
   "termsOfUse": {
@@ -2145,7 +2222,9 @@
     "noResults": "لا توجد نتائج",
     "filterOptionsAriaLabel": "تصفية الخيارات",
     "clearFilterAriaLabel": "مسح التصفية",
-    "searchPlaceholder": "بحث..."
+    "searchPlaceholder": "بحث...",
+    "selectPlaceholder": "اختر خيارًا",
+    "filterPlaceholderAria": "تصفية الخيارات"
   },
   "settings": {
     "breadcrumb": {
@@ -2209,6 +2288,40 @@
       "description": "سيتم تسجيل خروجك من هذا المتصفح. يمكنك تسجيل الدخول لاحقاً للوصول إلى معلوماتك.",
       "goBack": "رجوع",
       "confirm": "تسجيل الخروج"
+    }
+  },
+  "logout": {
+    "dialogTitle": "هل أنت متأكد من تسجيل الخروج؟",
+    "dialogDescription": "سيتم تسجيل خروجك من هذا المتصفح، ويمكنك تسجيل الدخول لاحقًا لاستعادة معلوماتك.",
+    "goBack": "رجوع",
+    "confirm": "تسجيل الخروج",
+    "closeAriaLabel": "إغلاق مربع الحوار"
+  },
+  "social": {
+    "google": "المتابعة عبر Google",
+    "apple": "المتابعة عبر Apple",
+    "linkedin": "المتابعة عبر LinkedIn"
+  },
+  "certificates": {
+    "certDetail": {
+      "aria": {
+        "enrollNow": "سجّل الآن في {name}",
+        "downloadGuide": "تحميل نظرة عامة على البرنامج لـ {name}",
+        "learnMore": "اعرف المزيد عن {name}"
+      }
+    },
+    "mockExam": {
+      "aria": {
+        "startExam": "ابدأ الامتحان التجريبي لـ {name}",
+        "viewResult": "عرض نتيجة {name}",
+        "retakeExam": "أعد الامتحان التجريبي لـ {name}"
+      }
+    },
+    "learningMaterials": {
+      "aria": {
+        "openMaterial": "فتح {title}",
+        "downloadFile": "تنزيل {filename}"
+      }
     }
   }
 }

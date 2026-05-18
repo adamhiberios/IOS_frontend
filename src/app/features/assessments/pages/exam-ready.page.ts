@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
+import { LanguageService } from '@core/i18n';
 
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { CertificatesBadge } from '@ui';
@@ -34,7 +36,12 @@ import { CertificatesBadge } from '@ui';
           <!-- ── Certification badge card ──────────────────────────────── -->
           <div
             class="flex items-center gap-4 rounded-2xl bg-cer-green-soft px-6 py-4"
-            aria-label="Exam certification: EPO-P — Endorsed Product Owner Practitioner"
+            [attr.aria-label]="
+              lang.t('assessments.ready.certAriaLabel', {
+                code: 'EPO-P',
+                name: 'Endorsed Product Owner Practitioner',
+              })
+            "
           >
             <div class="w-24 shrink-0">
               <ios-certificates-badge
@@ -60,13 +67,15 @@ import { CertificatesBadge } from '@ui';
                 class="text-[40px] font-bold text-ios-fg-13 leading-snug"
                 dir="auto"
               >
-                Hi Adam, Are you ready?
+                {{ lang.t('assessments.ready.heading') }}
               </h1>
 
               <ul class="space-y-4 text-lg font-medium text-ios-fg-8 list-disc ps-5">
                 <li class="leading-relaxed">
                   You have
-                  <strong class="font-bold text-ios-brand-primary-mid">12 hours and 43 minutes</strong>
+                  <strong class="font-bold text-ios-brand-primary-mid"
+                    >12 hours and 43 minutes</strong
+                  >
                   to pass the exam.
                 </li>
                 <li class="leading-relaxed">
@@ -86,7 +95,7 @@ import { CertificatesBadge } from '@ui';
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                      focus-visible:ring-ios-brand-primary/50"
             >
-              Let's start
+              {{ lang.t('assessments.ready.letsStart') }}
             </a>
           </div>
         </div>
@@ -96,6 +105,8 @@ import { CertificatesBadge } from '@ui';
     </div>
   `,
 })
-export class ExamReadyPage {}
+export class ExamReadyPage {
+  protected readonly lang = inject(LanguageService);
+}
 
 export default ExamReadyPage;

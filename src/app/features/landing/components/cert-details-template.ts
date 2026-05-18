@@ -172,7 +172,7 @@ export interface CertDetailsConfig {
                   />
                 </a>
                 <div class="flex flex-col gap-2 flex-1 min-w-0">
-                  <nav aria-label="Breadcrumb">
+                  <nav [attr.aria-label]="lang.t('common.breadcrumbAriaLabel')">
                     <ol
                       class="flex items-center gap-2 font-heading font-medium text-[13px] lg:text-[14px] leading-[1.4] text-ios-border-light"
                     >
@@ -203,7 +203,7 @@ export interface CertDetailsConfig {
               <div class="relative self-start lg:self-auto lg:absolute lg:bottom-0 lg:end-28">
                 <div
                   class="h-[60px] lg:h-[68px] px-5 lg:px-6 pt-3 lg:pt-4 bg-track-mid"
-                  aria-label="Starting price"
+                  [attr.aria-label]="lang.t('certDetails.startingPriceAriaLabel')"
                 >
                   <span
                     class="font-heading font-medium text-[13px] lg:text-[14px] leading-[1.4] whitespace-nowrap block text-track-softer"
@@ -408,7 +408,7 @@ export interface CertDetailsConfig {
       ═══════════════════════════════════════════════════════════ -->
       <section
         class="relative overflow-hidden px-6 md:px-10 lg:px-16 xl:px-[242px] py-[56px] lg:py-[72px] bg-track-softer"
-        aria-label="Certification facts"
+        [attr.aria-label]="lang.t('certDetails.certFactsAriaLabel')"
       >
         <!-- Decorative side bars — desktop only -->
         <div

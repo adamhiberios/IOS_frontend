@@ -25,9 +25,10 @@
  * ```
  */
 
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { LucideArrowLeft } from '@lucide/angular';
 
+import { LanguageService } from '@core/i18n';
 import { IosIcon, provideIcons } from '@ui';
 
 @Component({
@@ -74,7 +75,7 @@ import { IosIcon, provideIcons } from '@ui';
 
           <!-- Breadcrumb + title -->
           <div class="flex flex-col gap-1">
-            <nav aria-label="Breadcrumb">
+            <nav [attr.aria-label]="lang.t('common.breadcrumbAriaLabel')">
               <ol
                 class="flex items-center gap-2 text-[14px] font-heading font-medium"
                 class="text-ios-border-light"
@@ -101,6 +102,8 @@ import { IosIcon, provideIcons } from '@ui';
   `,
 })
 export class CertPageHero {
+  protected readonly lang = inject(LanguageService);
+
   /** CSS colour for the section background, e.g. `#184865`. */
   readonly bgColor = input<string>('#184865');
 

@@ -7,6 +7,29 @@
     "scrollToTop": "Scroll to top",
     "selectLanguage": "Select language",
     "previousLevel": "Previous level",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "Ok",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "all": "All",
+    "none": "None",
+    "email": "Email",
+    "password": "Password",
+    "or": "Or",
+    "and": "And",
+    "more": "More",
+    "less": "Less",
+    "viewAll": "View all",
+    "learnMore": "Learn more",
     "nextLevel": "Next level"
   },
   "lang": {
@@ -157,6 +180,14 @@
       "searchPlaceholder": "Search…",
       "clearAriaLabel": "Clear",
       "formAriaLabel": "Complete your account"
+    },
+    "errors": {
+      "invalidCredentials": "Invalid email or password. Please try again.",
+      "accountLocked": "Your account has been locked. Please contact support.",
+      "tooManyAttempts": "Too many login attempts. Please try again later.",
+      "networkError": "A network error occurred. Please check your connection.",
+      "unknownError": "An unexpected error occurred. Please try again.",
+      "sessionExpired": "Your session has expired. Please log in again."
     }
   },
   "landing": {
@@ -417,6 +448,8 @@
       "register": "Register",
       "mainNavAriaLabel": "Main navigation",
       "homeAriaLabel": "Institute of Scrum — home",
+      "languageToggle": "Switch language",
+      "userMenuAriaLabel": "User menu",
       "logoAlt": "Institute of Scrum"
     },
     "footer": {
@@ -449,6 +482,7 @@
       "xAriaLabel": "X / Twitter",
       "facebookAriaLabel": "Facebook",
       "youtubeAriaLabel": "YouTube",
+      "socialLinksTitle": "Social links",
       "logoAlt": "Institute of Scrum"
     }
   },
@@ -489,7 +523,8 @@
       "dashboardLabel": "Institute of Scrum",
       "logoAriaLabel": "Institute of Scrum — Dashboard",
       "notificationsAriaLabel": "Notifications",
-      "navigationAriaLabel": "Dashboard navigation"
+      "navigationAriaLabel": "Dashboard navigation",
+      "logoutAriaLabel": "Log out of your account"
     },
     "menu": {
       "userMenuLabel": "User menu",
@@ -1959,6 +1994,48 @@
       "historyCount": "({count} tests)",
       "subtitleBefore": "Now you have ",
       "subtitleAfter": ", can now share it on your profile"
+    },
+    "verify": {
+      "pageNavAriaLabel": "Page navigation",
+      "backAriaLabel": "Go back to dashboard",
+      "title": "Verify to go through exam",
+      "emailNotice": "We will send you a link to direct you to your exam, please check your Email:",
+      "instruction1Pre": "The system send a secure, personalized ",
+      "instruction1Link": "link",
+      "instruction1Post": " to you registered email address.",
+      "instruction2Pre": "If you ",
+      "instruction2Loses": "loses or misses",
+      "instruction2Post": " the code, they will be required to ",
+      "instruction2Repurchase": "repurchase",
+      "instruction2End": " access to obtain a new one.",
+      "instruction3Pre": "The link is only active for ",
+      "instruction3Hours": "24 hours",
+      "instruction3Post": " to pass the test.",
+      "continue": "Continue",
+      "resendLink": "I lost link, Resend link"
+    },
+    "ready": {
+      "heading": "Hi Adam, Are you ready?",
+      "instruction1Pre": "You have ",
+      "instruction1Time": "12 hours and 43 minutes",
+      "instruction1Post": " to pass the exam.",
+      "instruction2Pre": "After this period, you will need to ",
+      "instruction2Repurchase": "repurchase access",
+      "instruction2Post": " to get a new one.",
+      "letsStart": "Let's start",
+      "certAriaLabelPrefix": "Exam certification:"
+    },
+    "confirmDialog": {
+      "title": "Are you sure you will proceed with the exam?",
+      "body": "We will send you a link to direct you to your exam, please check your Email:",
+      "goBack": "Go back",
+      "sendLink": "Send link"
+    },
+    "sentDialog": {
+      "title": "Link was sent successfully",
+      "body": "Please check your Email: to take your exam",
+      "goBack": "Go back",
+      "openEmail": "Ok, Open email"
     }
   },
   "termsOfUse": {
@@ -2145,6 +2222,8 @@
     "noResults": "No results",
     "filterOptionsAriaLabel": "Filter options",
     "clearFilterAriaLabel": "Clear filter",
+    "selectPlaceholder": "Select an option",
+    "filterPlaceholderAria": "Filter options",
     "searchPlaceholder": "Search..."
   },
   "settings": {
@@ -2210,5 +2289,39 @@
       "goBack": "Go back",
       "confirm": "Logout"
     }
+  },
+  "certificates": {
+    "certDetail": {
+      "aria": {
+        "enrollNow": "Enroll now for {name}",
+        "downloadGuide": "Download program overview for {name}",
+        "learnMore": "Learn more about {name}"
+      }
+    },
+    "mockExam": {
+      "aria": {
+        "startExam": "Start mock exam for {name}",
+        "viewResult": "View result for {name}",
+        "retakeExam": "Retake mock exam for {name}"
+      }
+    },
+    "learningMaterials": {
+      "aria": {
+        "openMaterial": "Open {title}",
+        "downloadFile": "Download {filename}"
+      }
+    }
+  },
+  "logout": {
+    "dialogTitle": "Are you sure to logout?",
+    "dialogDescription": "You will be logged out of this browser, and you can log back in later to get your information.",
+    "goBack": "Go back",
+    "confirm": "Logout",
+    "closeAriaLabel": "Close dialog"
+  },
+  "social": {
+    "google": "Continue with Google",
+    "apple": "Continue with Apple",
+    "linkedin": "Continue with LinkedIn"
   }
 }

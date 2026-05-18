@@ -16,10 +16,11 @@
  *   />
  */
 
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { LucideArrowLeft } from '@lucide/angular';
 
+import { LanguageService } from '@core/i18n';
 import { IosIcon, provideIcons } from '@ui';
 
 @Component({
@@ -45,7 +46,7 @@ import { IosIcon, provideIcons } from '@ui';
           <a
             [routerLink]="backLink()"
             class="flex items-center justify-center w-10 h-10 rounded-lg bg-ios-brand-primary-soft hover:opacity-90 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-            [attr.aria-label]="ariaBackLabel()"
+            [attr.aria-label]="resolvedAriaBackLabel()"
           >
             <ios-icon name="arrow-left" class="w-5 h-5 text-ios-brand-primary rtl:rotate-180" />
           </a>
@@ -55,7 +56,7 @@ import { IosIcon, provideIcons } from '@ui';
                 class="flex items-center gap-2 text-sm font-heading font-medium text-ios-brand-muted"
               >
                 <a [routerLink]="breadcrumbLink()" class="hover:text-white transition-colors">
-                  {{ breadcrumbLabel() }}
+                  {{ resolvedBreadcrumbLabel() }}
                 </a>
                 <span>/</span>
               </div>
@@ -72,8 +73,20 @@ import { IosIcon, provideIcons } from '@ui';
 export class PageHero {
   readonly title = input.required<string>();
   readonly backLink = input<string>('/');
-  readonly ariaBackLabel = input<string>('Go back');
+  readonly ariaBackLabel = input<string>('');
   readonly showBreadcrumb = input<boolean>(true);
-  readonly breadcrumbLabel = input<string>('Home');
+  readonly breadcrumbLabel = input<string>('');
   readonly breadcrumbLink = input<string>('/');
+
+  protected readonly lang = inject(LanguageService);
+
+  /** Falls back to translated "Go back" when no explicit label is provided. */
+  protected readonly resolvedAriaBackLabel = computed(
+    () => this.ariaBackLabel() || this.lang.t('common.back'),
+  );
+
+  /** Falls back to a generic label when no explicit breadcrumb label is provided. */
+  protected readonly resolvedBreadcrumbLabel = computed(
+    () => this.breadcrumbLabel() || this.lang.t('common.breadcrumbHome'),
+  );
 }

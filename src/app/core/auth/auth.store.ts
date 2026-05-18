@@ -2,6 +2,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { type Observable, defer, finalize, from, map, shareReplay, tap, throwError } from 'rxjs';
 
+import { LanguageService } from '@core/i18n';
 import { AppEventBus } from '@core/event-bus';
 
 import {
@@ -36,6 +37,7 @@ export class AuthStore {
   private readonly mockBackend = inject(MockAuthBackend);
   private readonly router = inject(Router);
   private readonly bus = inject(AppEventBus);
+  private readonly lang = inject(LanguageService);
 
   /* -------------------------- private state -------------------------- */
   private readonly _accessToken = signal<string | null>(null);
@@ -107,7 +109,7 @@ export class AuthStore {
       this._submitState.set({ status: 'success' });
       await this.router.navigateByUrl(returnUrl ?? '/dashboard');
     } catch (err) {
-      const message = humaniseError(err, 'We could not sign you in. Please try again.');
+      const message = humaniseError(err, this.lang.t('auth.errors.invalidCredentials'));
       this._submitState.set({ status: 'error', message });
       throw new Error(message, { cause: err });
     }
@@ -125,7 +127,7 @@ export class AuthStore {
       this._submitState.set({ status: 'success' });
       await this.router.navigateByUrl('/dashboard');
     } catch (err) {
-      const message = humaniseError(err, 'We could not create your account. Please try again.');
+      const message = humaniseError(err, this.lang.t('auth.errors.unknownError'));
       this._submitState.set({ status: 'error', message });
       throw new Error(message, { cause: err });
     }
@@ -183,7 +185,7 @@ export class AuthStore {
    */
   handleRefreshFailure(): Observable<never> {
     void this.logout({ reason: 'refresh-failed' });
-    return throwError(() => new Error('Session expired.'));
+    return throwError(() => new Error(this.lang.t('auth.errors.sessionExpired')));
   }
 
   /** Reset the in-memory submit state (e.g., when navigating away). */

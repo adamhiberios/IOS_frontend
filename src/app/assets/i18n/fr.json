@@ -7,7 +7,30 @@
     "scrollToTop": "Retour en haut",
     "selectLanguage": "Choisir la langue",
     "previousLevel": "Niveau précédent",
-    "nextLevel": "Niveau suivant"
+    "nextLevel": "Niveau suivant",
+    "loading": "Chargement...",
+    "error": "Une erreur est survenue",
+    "retry": "Réessayer",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non",
+    "ok": "OK",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "all": "Tout",
+    "none": "Aucun",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "or": "Ou",
+    "and": "Et",
+    "more": "Plus",
+    "less": "Moins",
+    "viewAll": "Voir tout",
+    "learnMore": "En savoir plus"
   },
   "lang": {
     "en": "English",
@@ -39,6 +62,14 @@
         "refreshFailed": "Votre session a expiré. Veuillez vous reconnecter.",
         "forced": "Votre compte a été déconnecté. Contactez le support si cela est inattendu."
       }
+    },
+    "errors": {
+      "invalidCredentials": "E-mail ou mot de passe incorrect. Veuillez réessayer.",
+      "accountLocked": "Votre compte a été verrouillé. Veuillez contacter le support.",
+      "tooManyAttempts": "Trop de tentatives de connexion. Veuillez réessayer plus tard.",
+      "networkError": "Une erreur réseau s'est produite. Veuillez vérifier votre connexion.",
+      "unknownError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+      "sessionExpired": "Votre session a expiré. Veuillez vous reconnecter."
     },
     "register": {
       "title": "Bonjour, inscrivez-vous pour continuer",
@@ -417,7 +448,9 @@
       "register": "Inscription",
       "mainNavAriaLabel": "Navigation principale",
       "homeAriaLabel": "Institute of Scrum — accueil",
-      "logoAlt": "Institut Scrum"
+      "logoAlt": "Institut Scrum",
+      "languageToggle": "Changer de langue",
+      "userMenuAriaLabel": "Menu utilisateur"
     },
     "footer": {
       "tagline": "Le fournisseur de premier plan au Canada de certifications Scrum reconnues par l'industrie.",
@@ -449,7 +482,8 @@
       "xAriaLabel": "X / Twitter",
       "facebookAriaLabel": "Facebook",
       "youtubeAriaLabel": "YouTube",
-      "logoAlt": "Institut Scrum"
+      "logoAlt": "Institut Scrum",
+      "socialLinksTitle": "Liens sociaux"
     }
   },
   "contact": {
@@ -489,7 +523,8 @@
       "dashboardLabel": "Institut de Scrum",
       "logoAriaLabel": "Institut Scrum — Tableau de bord",
       "notificationsAriaLabel": "Notifications",
-      "navigationAriaLabel": "Navigation du tableau de bord"
+      "navigationAriaLabel": "Navigation du tableau de bord",
+      "logoutAriaLabel": "Se déconnecter de votre compte"
     },
     "menu": {
       "userMenuLabel": "Menu utilisateur",
@@ -1959,6 +1994,48 @@
       "historyCount": "({count} tests)",
       "subtitleBefore": "Vous avez maintenant ",
       "subtitleAfter": ", vous pouvez le partager sur votre profil"
+    },
+    "verify": {
+      "pageNavAriaLabel": "Navigation de la page",
+      "backAriaLabel": "Retour au tableau de bord",
+      "title": "Vérifier pour passer l'examen",
+      "emailNotice": "Nous vous enverrons un lien pour vous diriger vers votre examen, veuillez vérifier votre e-mail :",
+      "instruction1Pre": "Le système envoie un ",
+      "instruction1Link": "lien",
+      "instruction1Post": " sécurisé et personnalisé à votre adresse e-mail enregistrée.",
+      "instruction2Pre": "Si vous ",
+      "instruction2Loses": "perdez ou manquez",
+      "instruction2Post": " le code, vous serez tenu de ",
+      "instruction2Repurchase": "racheter",
+      "instruction2End": " l'accès pour en obtenir un nouveau.",
+      "instruction3Pre": "Le lien n'est actif que pendant ",
+      "instruction3Hours": "24 heures",
+      "instruction3Post": " pour réussir le test.",
+      "continue": "Continuer",
+      "resendLink": "J'ai perdu le lien, renvoyer"
+    },
+    "ready": {
+      "heading": "Bonjour Adam, êtes-vous prêt ?",
+      "instruction1Pre": "Vous avez ",
+      "instruction1Time": "12 heures et 43 minutes",
+      "instruction1Post": " pour réussir l'examen.",
+      "instruction2Pre": "Après cette période, vous devrez ",
+      "instruction2Repurchase": "racheter l'accès",
+      "instruction2Post": " pour en obtenir un nouveau.",
+      "letsStart": "C'est parti",
+      "certAriaLabelPrefix": "Certification d'examen :"
+    },
+    "confirmDialog": {
+      "title": "Êtes-vous sûr de vouloir procéder à l'examen ?",
+      "body": "Nous vous enverrons un lien pour vous diriger vers votre examen, veuillez vérifier votre e-mail :",
+      "goBack": "Retour",
+      "sendLink": "Envoyer le lien"
+    },
+    "sentDialog": {
+      "title": "Lien envoyé avec succès",
+      "body": "Veuillez vérifier votre e-mail : pour passer votre examen",
+      "goBack": "Retour",
+      "openEmail": "OK, ouvrir l'e-mail"
     }
   },
   "termsOfUse": {
@@ -2145,7 +2222,9 @@
     "noResults": "Aucun résultat",
     "filterOptionsAriaLabel": "Filtrer les options",
     "clearFilterAriaLabel": "Effacer le filtre",
-    "searchPlaceholder": "Rechercher..."
+    "searchPlaceholder": "Rechercher...",
+    "selectPlaceholder": "Sélectionnez une option",
+    "filterPlaceholderAria": "Filtrer les options"
   },
   "settings": {
     "breadcrumb": {
@@ -2209,6 +2288,40 @@
       "description": "Vous serez déconnecté de ce navigateur. Vous pourrez vous reconnecter plus tard pour accéder à vos informations.",
       "goBack": "Retour",
       "confirm": "Se déconnecter"
+    }
+  },
+  "social": {
+    "google": "Continuer avec Google",
+    "apple": "Continuer avec Apple",
+    "linkedin": "Continuer avec LinkedIn"
+  },
+  "logout": {
+    "dialogTitle": "Êtes-vous sûr de vouloir vous déconnecter ?",
+    "dialogDescription": "Vous serez déconnecté de ce navigateur et pourrez vous reconnecter plus tard pour retrouver vos informations.",
+    "goBack": "Retour",
+    "confirm": "Se déconnecter",
+    "closeAriaLabel": "Fermer la boîte de dialogue"
+  },
+  "certificates": {
+    "certDetail": {
+      "aria": {
+        "enrollNow": "S'inscrire maintenant pour {name}",
+        "downloadGuide": "Télécharger la présentation du programme pour {name}",
+        "learnMore": "En savoir plus sur {name}"
+      }
+    },
+    "mockExam": {
+      "aria": {
+        "startExam": "Commencer l'examen blanc pour {name}",
+        "viewResult": "Voir le résultat pour {name}",
+        "retakeExam": "Reprendre l'examen blanc pour {name}"
+      }
+    },
+    "learningMaterials": {
+      "aria": {
+        "openMaterial": "Ouvrir {title}",
+        "downloadFile": "Télécharger {filename}"
+      }
     }
   }
 }

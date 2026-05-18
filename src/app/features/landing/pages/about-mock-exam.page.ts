@@ -405,7 +405,9 @@ interface AnswerOption {
             </div>
             <div
               class="flex items-center gap-2 h-8 px-3 py-1.5 rounded-[10px] bg-ios-fg-10"
-              aria-label="Time remaining: 12:00"
+              [attr.aria-label]="
+                lang.t('mockExam.howItWorks.preview.timeRemainingLabel', { time: '12:00' })
+              "
             >
               <ios-icon name="clock" class="w-5 h-5 text-ios-brand-gold" aria-hidden="true" />
               <span class="font-body font-bold text-[14px] text-ios-brand-gold">12:00</span>

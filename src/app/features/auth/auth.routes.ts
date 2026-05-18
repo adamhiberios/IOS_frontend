@@ -1,4 +1,7 @@
+import { inject } from '@angular/core';
 import { type Routes } from '@angular/router';
+
+import { LanguageService } from '@core/i18n';
 
 /**
  * Auth feature routes — login, register, password reset, MFA, etc.
@@ -18,28 +21,27 @@ export const AUTH_ROUTES: Routes = [
   {
     path: 'login',
     loadComponent: () => import('./pages/login.page').then((m) => m.LoginPage),
-    title: 'Login',
+    title: () => inject(LanguageService).t('auth.login.title'),
   },
   {
     path: 'register',
     loadComponent: () => import('./pages/register.page').then((m) => m.RegisterPage),
-    title: 'Create your account',
+    title: () => inject(LanguageService).t('auth.register.title'),
   },
   {
     path: 'complete-account',
-    loadComponent: () =>
-      import('./pages/complete-account.page').then((m) => m.CompleteAccountPage),
-    title: 'Complete your account',
+    loadComponent: () => import('./pages/complete-account.page').then((m) => m.CompleteAccountPage),
+    title: () => inject(LanguageService).t('auth.completeAccount.title'),
   },
   {
     path: 'forgot-password',
     loadComponent: () => import('./pages/reset-password.page').then((m) => m.ResetPasswordPage),
-    title: 'Reset Password',
+    title: () => inject(LanguageService).t('auth.resetPassword.title'),
   },
   {
     path: 'new-password',
     loadComponent: () => import('./pages/new-password.page').then((m) => m.NewPasswordPage),
-    title: 'Set new password',
+    title: () => inject(LanguageService).t('auth.newPassword.title'),
   },
 ];
 

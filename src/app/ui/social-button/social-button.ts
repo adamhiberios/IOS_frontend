@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { LucideDynamicIcon, type LucideIconData } from '@lucide/angular';
+
+import { LanguageService } from '@core/i18n';
 
 import { AppleIcon, GoogleIcon, LinkedinIcon } from './social-icons';
 
@@ -9,12 +11,6 @@ const PROVIDER_ICON: Record<SocialProvider, LucideIconData> = {
   google: GoogleIcon,
   apple: AppleIcon,
   linkedin: LinkedinIcon,
-};
-
-const PROVIDER_LABEL: Record<SocialProvider, string> = {
-  google: 'Continue with Google',
-  apple: 'Continue with Apple',
-  linkedin: 'Continue with LinkedIn',
 };
 
 /**
@@ -52,6 +48,8 @@ export class SocialButton {
    * `select` event — caught by `@angular-eslint/no-output-native`. */
   readonly selected = output<SocialProvider>();
 
+  protected readonly lang = inject(LanguageService);
+
   protected readonly icon = computed(() => PROVIDER_ICON[this.provider()]);
-  protected readonly label = computed(() => PROVIDER_LABEL[this.provider()]);
+  protected readonly label = computed(() => this.lang.t('social.' + this.provider()));
 }

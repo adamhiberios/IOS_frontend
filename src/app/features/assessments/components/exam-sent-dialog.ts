@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 
 /**
  * `ios-exam-sent-dialog` — success modal shown after the exam link has been
@@ -11,6 +11,9 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
  * Outputs:
  *   - `dismissed` — user clicked "Go back"
  */
+
+import { LanguageService } from '@core/i18n';
+
 @Component({
   selector: 'ios-exam-sent-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,10 +58,10 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
             id="exam-sent-dialog-title"
             class="text-2xl font-semibold text-ios-fg-11 leading-snug"
           >
-            Link was sent successfully
+            {{ lang.t('assessments.sentDialog.title') }}
           </h2>
           <p class="text-lg font-medium text-ios-fg-10 leading-relaxed">
-            Please check your Email: ad*********am&#64;gmail.com, to take your exam
+            {{ lang.t('assessments.sentDialog.body', { email: 'ad*********am&#64;gmail.com' }) }}
           </p>
         </div>
 
@@ -72,7 +75,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                    focus-visible:ring-[#d0d0d0]"
           >
-            Go back
+            {{ lang.t('assessments.sentDialog.goBack') }}
           </button>
           <a
             href="mailto:"
@@ -82,7 +85,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                    focus-visible:ring-ios-fg-13/50"
           >
-            Ok, Open email
+            {{ lang.t('assessments.sentDialog.openEmail') }}
           </a>
         </div>
       </div>
@@ -90,6 +93,8 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
   `,
 })
 export class ExamSentDialog {
+  protected readonly lang = inject(LanguageService);
+
   /** Emitted when the user dismisses the dialog by clicking "Go back". */
   readonly dismissed = output<void>();
 }

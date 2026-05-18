@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
+import { LanguageService } from '@core/i18n';
 import { CanadaFlag } from '@ui';
 
 /**
@@ -19,9 +20,11 @@ import { CanadaFlag } from '@ui';
       class="w-full py-4 flex items-center justify-center gap-2
              bg-ios-brand-dark text-ios-brand-muted"
     >
-      <small class="text-xs"> © 2026 Institute of Scrum. All rights reserved. </small>
+      <small class="text-xs"> {{ lang.t('landing.footer.copyright') }} </small>
       <ios-canada-flag />
     </footer>
   `,
 })
-export class AuthFooter {}
+export class AuthFooter {
+  protected readonly lang = inject(LanguageService);
+}

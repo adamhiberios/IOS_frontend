@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 
 /**
  * `ios-confirm-exam-dialog` — modal shown when the learner clicks "Continue"
@@ -14,6 +14,9 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
  *   - `confirmed` — user chose "Send link"
  *   - `cancelled`  — user chose "Go back"
  */
+
+import { LanguageService } from '@core/i18n';
+
 @Component({
   selector: 'ios-confirm-exam-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -102,11 +105,10 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
             id="confirm-exam-dialog-title"
             class="text-2xl font-semibold text-ios-fg-11 leading-snug"
           >
-            Are you sure you will proceed with the exam?
+            {{ lang.t('assessments.confirmDialog.title') }}
           </h2>
           <p class="text-lg font-medium text-ios-fg-10 leading-relaxed">
-            We will send you a link to direct you to your exam, please check your Email:
-            <strong class="font-semibold">ad*********am&#64;gmail.com</strong>
+            {{ lang.t('assessments.confirmDialog.body', { email: 'ad*********am&#64;gmail.com' }) }}
           </p>
         </div>
 
@@ -120,7 +122,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                    focus-visible:ring-[#d0d0d0]"
           >
-            Go back
+            {{ lang.t('assessments.confirmDialog.goBack') }}
           </button>
           <button
             type="button"
@@ -130,7 +132,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                    focus-visible:ring-ios-fg-13/50"
           >
-            Send link
+            {{ lang.t('assessments.confirmDialog.sendLink') }}
           </button>
         </div>
       </div>
@@ -138,6 +140,8 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
   `,
 })
 export class ConfirmExamDialog {
+  protected readonly lang = inject(LanguageService);
+
   /** Emitted when the user confirms by clicking "Send link". */
   readonly confirmed = output<void>();
   /** Emitted when the user cancels by clicking "Go back" or pressing Escape. */

@@ -14,6 +14,8 @@ import { LucideArrowLeft, LucideArrowRight, LucideClock } from '@lucide/angular'
 import { AuthHeader } from '@layouts/auth-shell';
 import { CanadaFlag, CertificatesBadge, IosIcon, provideIcons } from '@ui';
 
+import { LanguageService } from '@core/i18n';
+
 import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-access/exam.model';
 
 /**
@@ -63,16 +65,18 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
         <div
           class="w-full border-b border-ios-surface-soft bg-white flex items-center
                  px-4 md:px-20 h-[70px]"
-          aria-label="Current page"
+          [attr.aria-label]="lang.t('assessments.runner.currentPageAriaLabel')"
         >
-          <span class="font-semibold text-ios-fg-13 text-base leading-tight">Final test</span>
+          <span class="font-semibold text-ios-fg-13 text-base leading-tight">{{
+            lang.t('assessments.runner.finalTest')
+          }}</span>
         </div>
 
         <!-- ── Main content ────────────────────────────────────────────── -->
         <main
           class="flex-1 px-4 md:px-20 py-8 flex flex-col gap-6"
           id="main-content"
-          aria-label="Exam questions"
+          [attr.aria-label]="lang.t('assessments.runner.examQuestionsAriaLabel')"
         >
           <!-- ── Two-column layout ──────────────────────────────────── -->
           <div class="flex flex-col lg:flex-row gap-6 items-start">
@@ -84,7 +88,9 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
             >
               <!-- Question label + text -->
               <div class="flex flex-col gap-1.5">
-                <p class="text-[14px] font-medium leading-[1.4] text-ios-fg-8">Question</p>
+                <p class="text-[14px] font-medium leading-[1.4] text-ios-fg-8">
+                  {{ lang.t('assessments.runner.questionLabel') }}
+                </p>
                 <h1 class="text-[16px] font-medium leading-[1.4] text-ios-fg-11">
                   {{ currentQuestion()?.text }}
                 </h1>
@@ -94,7 +100,11 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
               <div class="h-1 w-[57px] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
 
               <!-- ── Answer options ──────────────────────────────────── -->
-              <div class="flex flex-col gap-3" role="radiogroup" aria-label="Answer options">
+              <div
+                class="flex flex-col gap-3"
+                role="radiogroup"
+                [attr.aria-label]="lang.t('assessments.runner.answerOptionsAriaLabel')"
+              >
                 @for (opt of currentQuestion()?.options ?? []; track opt.id) {
                   <button
                     type="button"
@@ -119,7 +129,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
             <!-- ── Right: EPO-green sidebar ──────────────────────────── -->
             <aside
               class="w-full lg:w-[354px] shrink-0 rounded-2xl bg-cer-green-strong p-6 lg:p-8 flex flex-col gap-6"
-              aria-label="Exam progress"
+              [attr.aria-label]="lang.t('assessments.runner.examProgressAriaLabel')"
             >
               <!-- Badge + cert info -->
               <div class="flex items-center gap-4">
@@ -141,12 +151,13 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
               <!-- Question counter + timer -->
               <div class="flex items-center justify-between gap-3">
                 <p class="text-[16px] font-semibold text-white leading-[1.4]">
-                  Question {{ currentIndex() + 1 }} of {{ questions().length }}
+                  {{ lang.t('dashboard.examRunner.question', { number: currentIndex() + 1 }) }}
+                  {{ lang.t('dashboard.examRunner.of', { total: questions().length }) }}
                 </p>
                 <div
                   class="inline-flex items-center gap-2 rounded-[10px] bg-cer-green-deep
                          px-3 py-1.5 h-8 shrink-0"
-                  aria-label="Time remaining"
+                  [attr.aria-label]="lang.t('assessments.runner.timeRemainingAriaLabel')"
                 >
                   <ios-icon
                     name="clock"
@@ -167,7 +178,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
               <div class="flex flex-col gap-2">
                 <div class="flex items-center justify-between">
                   <span class="text-[14px] font-medium text-ios-border-light leading-[1.4]">
-                    Progress
+                    {{ lang.t('dashboard.examRunner.progress') }}
                   </span>
                   <span
                     class="text-[14px] font-medium text-ios-border-light leading-[1.4] tabular-nums"
@@ -183,7 +194,12 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                   [attr.aria-valuenow]="answeredCount()"
                   [attr.aria-valuemax]="questions().length"
                   aria-valuemin="0"
-                  [attr.aria-label]="'Progress: ' + answeredCount() + ' of ' + questions().length"
+                  [attr.aria-label]="
+                    lang.t('assessments.runner.progressAriaLabel', {
+                      answered: answeredCount(),
+                      total: questions().length,
+                    })
+                  "
                 >
                   <div
                     class="h-full rounded-full bg-ios-brand-yellow-bright transition-all duration-300"
@@ -210,7 +226,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
               (click)="onBack()"
             >
               <ios-icon name="arrow-left" class="w-5 h-5 me-2 rtl:rotate-180" aria-hidden="true" />
-              Back
+              {{ lang.t('dashboard.examRunner.back') }}
             </button>
 
             @if (isLastQuestion()) {
@@ -225,7 +241,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                        disabled:opacity-40 disabled:pointer-events-none"
                 (click)="onSubmit()"
               >
-                Submit exam
+                {{ lang.t('assessments.runner.submitExam') }}
                 <ios-icon
                   name="arrow-right"
                   class="w-5 h-5 ms-2 rtl:rotate-180"
@@ -244,7 +260,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                        disabled:opacity-40 disabled:pointer-events-none"
                 (click)="onNext()"
               >
-                Next
+                {{ lang.t('dashboard.examRunner.next') }}
                 <ios-icon
                   name="arrow-right"
                   class="w-5 h-5 ms-2 rtl:rotate-180"
@@ -262,7 +278,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                    text-ios-fg-7 text-xs"
           >
             <ios-canada-flag aria-hidden="true" />
-            <span>© 2026 Institute of Scrum. All rights reserved.</span>
+            <span>{{ lang.t('common.copyright', { year: '2026' }) }}</span>
           </div>
         </footer>
       </div>
@@ -271,6 +287,8 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
 })
 export class ExamRunnerPage {
   private readonly router = inject(Router);
+
+  protected readonly lang = inject(LanguageService);
 
   // ── Question bank ──────────────────────────────────────────────────────
   // Epic-9: replace with a resolved signal from the backend API.

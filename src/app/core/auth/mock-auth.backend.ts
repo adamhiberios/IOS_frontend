@@ -1,4 +1,6 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+
+import { LanguageService } from '@core/i18n';
 
 import {
   type AuthSession,
@@ -124,6 +126,8 @@ export class MockAuthBackend {
   /** Auto-incrementing id for users created via `register()`. */
   private nextUserSeq = 1000;
 
+  private readonly lang = inject(LanguageService);
+
   constructor() {
     for (const seed of SEED_USERS) {
       this.users.set(seed.email.toLowerCase(), seed);
@@ -140,7 +144,7 @@ export class MockAuthBackend {
 
     const record = this.users.get(creds.identifier.trim().toLowerCase());
     if (!record || record.password !== creds.password) {
-      throw new MockHttpError(401, 'Invalid email/username or password.');
+      throw new MockHttpError(401, this.lang.t('auth.errors.invalidCredentials'));
     }
 
     return this.mintSession(record);
@@ -157,10 +161,10 @@ export class MockAuthBackend {
     const emailKey = payload.email.trim().toLowerCase();
     const usernameKey = payload.username.trim().toLowerCase();
     if (this.users.has(emailKey)) {
-      throw new MockHttpError(409, 'An account with this email already exists.');
+      throw new MockHttpError(409, this.lang.t('auth.errors.unknownError'));
     }
     if (this.users.has(usernameKey)) {
-      throw new MockHttpError(409, 'This username is taken.');
+      throw new MockHttpError(409, this.lang.t('auth.errors.unknownError'));
     }
 
     const record: SeedRecord = {
@@ -187,17 +191,17 @@ export class MockAuthBackend {
     await delay(NETWORK_LATENCY_MS);
 
     if (!refreshToken) {
-      throw new MockHttpError(401, 'No refresh token.');
+      throw new MockHttpError(401, this.lang.t('auth.errors.sessionExpired'));
     }
     const userId = this.refreshTokens.get(refreshToken);
     if (!userId) {
-      throw new MockHttpError(401, 'Refresh token expired or already used.');
+      throw new MockHttpError(401, this.lang.t('auth.errors.sessionExpired'));
     }
     this.refreshTokens.delete(refreshToken);
 
     const record = [...this.users.values()].find((u) => u.id === userId);
     if (!record) {
-      throw new MockHttpError(401, 'User no longer exists.');
+      throw new MockHttpError(401, this.lang.t('auth.errors.accountLocked'));
     }
     return this.mintSession(record);
   }

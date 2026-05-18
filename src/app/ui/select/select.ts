@@ -130,7 +130,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
               <ios-icon name="search" class="w-4 h-4 text-gray-400 flex-shrink-0" />
               <input
                 type="text"
-                [placeholder]="searchPlaceholder()"
+                [placeholder]="resolvedSearchPlaceholder()"
                 [value]="filterQuery()"
                 (input)="filterQuery.set($any($event.target).value)"
                 class="flex-1 min-w-0 bg-transparent text-sm text-ios-brand-dark
@@ -246,6 +246,11 @@ export class Select {
   });
 
   /** Options filtered by the current search query (case-insensitive). */
+  /** Resolved search placeholder — uses i18n default when no explicit value is provided. */
+  protected readonly resolvedSearchPlaceholder = computed(
+    () => this.searchPlaceholder() || this.lang.t('ui.searchPlaceholder'),
+  );
+
   protected readonly filteredOptions = computed(() => {
     const q = this.filterQuery().trim().toLowerCase();
     const all = this.options();

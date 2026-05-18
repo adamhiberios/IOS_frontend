@@ -1,8 +1,10 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { AccentBars } from '@ui';
+
+import { LanguageService } from '@core/i18n';
 
 import { ConfirmExamDialog } from '../components/confirm-exam-dialog';
 import { ExamSentDialog } from '../components/exam-sent-dialog';
@@ -42,7 +44,7 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
         <nav
           class="w-full border-b border-ios-surface-soft bg-white flex items-center
                  px-4 md:px-20 h-[70px]"
-          aria-label="Page navigation"
+          [attr.aria-label]="lang.t('assessments.verify.pageNavAriaLabel')"
         >
           <div class="flex items-center gap-4">
             <!-- Back button -->
@@ -53,7 +55,7 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
 hover:bg-ios-surface-hover
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                      focus-visible:ring-ios-brand-primary/50"
-              aria-label="Go back to dashboard"
+              [attr.aria-label]="lang.t('assessments.verify.backAriaLabel')"
             >
               <svg
                 width="20"
@@ -72,7 +74,7 @@ hover:bg-ios-surface-hover
             </a>
 
             <span class="font-semibold text-ios-fg-13 text-base leading-tight" dir="auto">
-              Verify to go through exam
+              {{ lang.t('assessments.verify.title') }}
             </span>
           </div>
         </nav>
@@ -159,8 +161,9 @@ hover:bg-ios-surface-hover
           <div class="relative z-10 w-full max-w-[606px]">
             <!-- Email notice -->
             <p class="text-lg font-medium text-ios-fg-8 leading-relaxed mb-6">
-              We will send you a link to direct you to your exam, please check your Email:
-              <strong class="font-bold text-ios-fg-10">ad*********am&#64;gmail.com</strong>
+              {{
+                lang.t('assessments.verify.emailNotice', { email: 'ad*********am&#64;gmail.com' })
+              }}
             </p>
 
             <!-- Instruction bullets -->
@@ -196,7 +199,7 @@ hover:bg-ios-surface-hover
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                        focus-visible:ring-ios-brand-primary/50"
               >
-                Continue
+                {{ lang.t('assessments.verify.continue') }}
               </button>
 
               <button
@@ -207,7 +210,7 @@ hover:bg-ios-surface-hover
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                        focus-visible:ring-[#d0d0d0]"
               >
-                I lost link, Resend link
+                {{ lang.t('assessments.verify.resendLink') }}
               </button>
             </div>
           </div>
@@ -228,6 +231,8 @@ hover:bg-ios-surface-hover
   `,
 })
 export class ExamVerifyPage {
+  protected readonly lang = inject(LanguageService);
+
   /** Controls visibility of the "Are you sure?" confirmation dialog. */
   protected readonly showConfirm = signal(false);
 

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 
 /**
  * `ios-logout-dialog` — Confirmation modal for logging out.
@@ -21,6 +21,9 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
  *  · The panel is role="dialog" aria-modal="true" with a labelled heading.
  *  · Escape anywhere in the wrapper emits `cancelled`.
  */
+
+import { LanguageService } from '@core/i18n';
+
 @Component({
   selector: 'ios-logout-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +34,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
       <button
         type="button"
         class="absolute inset-0 bg-black/60 cursor-default w-full h-full"
-        aria-label="Close dialog"
+        [attr.aria-label]="lang.t('logout.closeAriaLabel')"
         tabindex="-1"
         (click)="cancelled.emit()"
       ></button>
@@ -71,11 +74,10 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                 id="logout-dialog-title"
                 class="font-semibold leading-[1.2] text-ios-fg-11 text-[24px] w-full"
               >
-                Are you sure to logout?
+                {{ lang.t('logout.dialogTitle') }}
               </h2>
               <p class="font-medium leading-[1.4] text-ios-fg-10 text-[18px] w-full">
-                You will be logged out of this browser, and you can log back in later to get your
-                information.
+                {{ lang.t('logout.dialogDescription') }}
               </p>
             </div>
 
@@ -87,7 +89,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                 class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-surface-soft text-ios-fg text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30 w-[139px]"
                 (click)="cancelled.emit()"
               >
-                Go back
+                {{ lang.t('logout.goBack') }}
               </button>
 
               <!-- Logout — dark red -->
@@ -96,7 +98,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                 class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-brand-primary text-white text-[18px] font-semibold leading-[1.4] hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 w-[230px]"
                 (click)="confirmed.emit()"
               >
-                Logout
+                {{ lang.t('logout.confirm') }}
               </button>
             </div>
           </div>
@@ -106,6 +108,8 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
   `,
 })
 export class LogoutDialog {
+  protected readonly lang = inject(LanguageService);
+
   /** Emitted when the user cancels or clicks the backdrop. */
   readonly cancelled = output<void>();
   /** Emitted when the user confirms logout. */
