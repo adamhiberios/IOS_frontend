@@ -128,7 +128,7 @@ interface CompCert {
         <!-- Wrapper carries absolute positioning; fill img fills 100% of it -->
         <div
           class="absolute rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5"
-          style="left: 16.61%; top: 0%; width: 66.78%; height: 100%; z-index: 2;"
+          style="inset-inline-start: 16.61%; top: 0%; width: 66.78%; height: 100%; z-index: 2;"
         >
           <img
             ngSrc="/assets/images/certification.png"
@@ -142,7 +142,7 @@ interface CompCert {
         <!-- Left front cert — Cert Template 3 (SM-Practitioner): 640x452 at (74, 63) -->
         <div
           class="absolute rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5"
-          style="left: 6.34%; top: 11.43%; width: 51.54%; height: 77.13%; z-index: 1;"
+          style="inset-inline-start: 6.34%; top: 11.43%; width: 51.54%; height: 77.13%; z-index: 1;"
         >
           <img
             ngSrc="/assets/images/certification.png"
@@ -156,7 +156,7 @@ interface CompCert {
         <!-- Right front cert — Cert Template 2: 602x425 at (491, 63) -->
         <div
           class="absolute rounded-2xl overflow-hidden shadow-2xl ring-1 ring-black/5"
-          style="left: 42.04%; top: 11.43%; width: 51.54%; height: 77.13%; z-index: 1;"
+          style="inset-inline-start: 42.04%; top: 11.43%; width: 51.54%; height: 77.13%; z-index: 1;"
         >
           <img
             ngSrc="/assets/images/certification.png"
@@ -171,7 +171,7 @@ interface CompCert {
         <!-- Stat 1: 12,000+ — bottom-left, 254x84 at (0, 417) -->
         <div
           class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6"
-          style="left: 0%; top: 75.68%; width: 21.75%; height: 15.25%; border-color: #d4a017; z-index: 4;"
+          style="inset-inline-start: 0%; top: 75.68%; width: 21.75%; height: 15.25%; border-color: #d4a017; z-index: 4;"
         >
           <span class="font-heading font-black text-[24px] leading-[1.2]" style="color: #8b0000;">
             {{ lang.t('allCertifications.intro.stat1Value') }}
@@ -184,7 +184,7 @@ interface CompCert {
         <!-- Stat 2: 6,000+ — middle-right, 249x84 at (919, 223) -->
         <div
           class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6"
-          style="left: 78.68%; top: 40.47%; width: 21.32%; height: 15.25%; border-color: #d4a017; z-index: 4;"
+          style="inset-inline-start: 78.68%; top: 40.47%; width: 21.32%; height: 15.25%; border-color: #d4a017; z-index: 4;"
         >
           <span class="font-heading font-black text-[24px] leading-[1.2]" style="color: #8b0000;">
             {{ lang.t('allCertifications.intro.stat2Value') }}
