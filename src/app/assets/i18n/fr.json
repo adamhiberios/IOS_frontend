@@ -1946,5 +1946,174 @@
       "subtitleBefore": "Vous avez maintenant ",
       "subtitleAfter": ", vous pouvez le partager sur votre profil"
     }
+  },
+  "termsOfUse": {
+    "hero": {
+      "title": "Conditions d'utilisation",
+      "back": "Retour à l'accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      }
+    },
+    "sections": {
+      "eligibility": {
+        "heading": "Admissibilité",
+        "body": "Vous devez avoir au moins 18 ans (ou l'âge de la majorité dans votre juridiction) pour créer un compte et vous inscrire aux programmes de certification. En vous inscrivant, vous confirmez que les informations que vous fournissez sont exactes et complètes."
+      },
+      "accountRegistration": {
+        "heading": "Création de compte",
+        "intro": "Pour accéder à certaines fonctionnalités, vous devez créer un compte. Vous acceptez de :",
+        "items": [
+          "Fournir des informations exactes et à jour",
+          "Maintenir la confidentialité de vos identifiants de connexion",
+          "Assumer la responsabilité de toutes les activités effectuées depuis votre compte"
+        ],
+        "outro": "Nous nous réservons le droit de suspendre ou de résilier les comptes qui enfreignent ces Conditions."
+      },
+      "useOfServices": {
+        "heading": "Utilisation des services",
+        "intro": "Vous acceptez d'utiliser les Services uniquement à des fins légales. Vous ne pouvez pas :",
+        "items": [
+          "Copier, reproduire ou distribuer des supports de cours sans autorisation",
+          "Partager le contenu des examens, les questions ou les supports de certification",
+          "Tenter de perturber la sécurité ou le fonctionnement de la plateforme",
+          "Usurper l'identité d'une autre personne ou organisation"
+        ],
+        "outro": "Tous les supports d'apprentissage, examens et certifications sont protégés par les lois sur la propriété intellectuelle."
+      },
+      "certification": {
+        "heading": "Certification et examens",
+        "intro": "La certification est accordée après l'achèvement réussi de la formation requise et la réussite de l'examen officiel.",
+        "reserveIntro": "Nous nous réservons le droit de :",
+        "items": [
+          "Vérifier l'identité du candidat",
+          "Annuler ou invalider les résultats d'examen en cas de mauvaise conduite",
+          "Mettre à jour les exigences de certification"
+        ],
+        "outro": "La certification ne garantit pas l'emploi ni l'avancement professionnel."
+      },
+      "payments": {
+        "heading": "Paiements et remboursements",
+        "intro": "Tous les frais sont clairement affichés avant l'achat. En vous inscrivant, vous acceptez de payer les frais indiqués.",
+        "body": "Les politiques de remboursement, le cas échéant, sont régies par les conditions spécifiques fournies au moment de l'achat. Les frais d'examen peuvent être non remboursables une fois que l'examen a été accédé ou planifié."
+      },
+      "intellectualProperty": {
+        "heading": "Propriété intellectuelle",
+        "body": "Tout le contenu de la plateforme — y compris les textes, graphiques, vidéos, supports d'examen, logos et certificats — est la propriété de l'organisation ou de ses concédants de licence. Toute utilisation, duplication ou distribution non autorisée est strictement interdite."
+      },
+      "liability": {
+        "heading": "Limitation de responsabilité",
+        "intro": "Les Services sont fournis « tels quels » sans garantie d'aucune sorte. Nous ne garantissons pas un accès ininterrompu ni des fonctionnalités sans erreur.",
+        "reserveIntro": "Dans la mesure maximale permise par la loi, nous ne sommes pas responsables de :",
+        "items": [
+          "Dommages indirects ou consécutifs",
+          "Perte de données ou de profits",
+          "Interruptions techniques hors de notre contrôle"
+        ]
+      },
+      "indemnification": {
+        "heading": "Indemnisation",
+        "body": "Vous acceptez d'indemniser, de défendre et de dégager de toute responsabilité nous-mêmes, nos affiliés et nos dirigeants, directeurs, employés et agents respectifs contre toute réclamation, dommage, responsabilité, coût ou dépense découlant de votre utilisation des Services."
+      },
+      "termination": {
+        "heading": "Résiliation",
+        "body": "Nous nous réservons le droit de suspendre ou de résilier votre accès aux Services à tout moment, sans préavis, si nous pensons que vous avez violé ces Conditions ou la loi applicable."
+      },
+      "governingLaw": {
+        "heading": "Droit applicable",
+        "body": "Ces Conditions sont régies et interprétées conformément aux lois de la juridiction dans laquelle nous opérons, sans égard à ses principes de conflit de lois."
+      }
+    }
+  },
+  "privacyPolicy": {
+    "hero": {
+      "title": "Politique de confidentialité",
+      "back": "Retour à l'accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      }
+    },
+    "sections": {
+      "infoWeCollect": {
+        "heading": "Informations que nous collectons",
+        "body": "Nous collectons les informations nécessaires pour fournir et améliorer nos Services."
+      },
+      "personalInfo": {
+        "heading": "Informations personnelles",
+        "items": [
+          "Nom complet",
+          "Adresse e-mail",
+          "Numéro de téléphone",
+          "Informations sur le pays et l'adresse",
+          "Identifiants de compte",
+          "Informations de paiement (traitées en toute sécurité via des prestataires tiers)"
+        ]
+      },
+      "learningData": {
+        "heading": "Données d'apprentissage et de certification",
+        "items": [
+          "Historique d'inscription aux cours",
+          "Suivi de la progression et données d'achèvement",
+          "Tentatives d'examens blancs et scores",
+          "Résultats de l'examen final",
+          "Dossiers de certification"
+        ]
+      },
+      "technicalInfo": {
+        "heading": "Informations techniques",
+        "items": [
+          "Adresse IP",
+          "Type de navigateur et informations sur l'appareil",
+          "Données de journal et analyses d'utilisation",
+          "Cookies et technologies de suivi"
+        ]
+      },
+      "howWeUse": {
+        "heading": "Comment nous utilisons vos informations",
+        "intro": "Nous utilisons les informations collectées pour :",
+        "items": [
+          "Fournir l'accès aux cours et aux examens de certification",
+          "Traiter les paiements et délivrer les certificats",
+          "Suivre la progression de l'apprentissage et les analyses de performance",
+          "Communiquer les mises à jour importantes et les réponses d'assistance",
+          "Améliorer les fonctionnalités de la plateforme et l'expérience utilisateur",
+          "Assurer l'intégrité des examens et prévenir les mauvaises conduites",
+          "Se conformer aux obligations légales"
+        ],
+        "outro": "Nous ne vendons pas vos données personnelles."
+      },
+      "dataRetention": {
+        "heading": "Politique de conservation des données",
+        "body": "Nous conservons vos informations aussi longtemps que nécessaire pour remplir les objectifs décrits dans cette politique. Lorsque vos données ne sont plus nécessaires, nous les supprimerons ou les anonymiserons en toute sécurité."
+      },
+      "thirdParty": {
+        "heading": "Partage avec des tiers",
+        "body": "Nous pouvons partager vos informations avec des tiers pour aider à fournir nos services, notamment les processeurs de paiement et l'assistance clientèle. Nous veillons à ce que ces parties respectent des normes strictes de protection des données."
+      },
+      "security": {
+        "heading": "Mesures de sécurité",
+        "body": "Nous mettons en œuvre des mesures de sécurité robustes pour protéger vos données personnelles contre l'accès non autorisé, la modification, la divulgation ou la destruction, notamment par le chiffrement et les contrôles d'accès."
+      },
+      "yourRights": {
+        "heading": "Vos droits",
+        "body": "Vous avez le droit d'accéder à vos données personnelles, de les corriger ou de les supprimer. Vous pouvez également demander des restrictions de traitement et retirer votre consentement à tout moment."
+      },
+      "cookies": {
+        "heading": "Cookies et technologies de suivi",
+        "body": "Nous utilisons des cookies et des technologies similaires pour améliorer l'expérience utilisateur, analyser l'utilisation du site et diffuser des publicités ciblées. Vous pouvez gérer les préférences de cookies via les paramètres de votre navigateur."
+      },
+      "international": {
+        "heading": "Transferts internationaux de données",
+        "body": "Vos informations peuvent être transférées et traitées dans des pays autres que le vôtre. Nous veillons à ce que ces transferts soient conformes aux lois applicables sur la protection des données."
+      },
+      "changes": {
+        "heading": "Modifications de cette politique",
+        "body": "Nous pouvons mettre à jour cette politique de confidentialité de temps à autre. Nous vous informerons de tout changement important et vous encourageons à consulter régulièrement la politique."
+      },
+      "contactUs": {
+        "heading": "Contactez-nous",
+        "body": "Si vous avez des questions ou des préoccupations concernant cette politique ou nos pratiques en matière de données, veuillez contacter directement notre équipe d'assistance via la plateforme."
+      }
+    }
   }
 }

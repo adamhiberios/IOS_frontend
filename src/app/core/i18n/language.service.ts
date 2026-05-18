@@ -161,6 +161,41 @@ export class LanguageService {
   }
 
   /**
+   * Looks up `key` in the active translation tree and returns it as a
+   * `readonly string[]`.  Intended for translation values that are JSON arrays
+   * (e.g. bullet-point lists on legal / info pages).
+   *
+   * Returns `[]` when the key is missing or the value is not an array.
+   *
+   * **Signal-tracked**: reads `this._translations()` so template expressions
+   * using this method automatically re-evaluate on locale changes.
+   *
+   * @example
+   * ```html
+   * @for (item of lang.tArray('termsOfUse.sections.accountRegistration.items'); track item) {
+   *   <li>{{ item }}</li>
+   * }
+   * ```
+   */
+  tArray(key: string): readonly string[] {
+    const segments = key.split('.');
+    // Use `unknown` (not `any`) so every narrowing step is explicit and safe.
+    // Arrays are valid JSON values but fall outside the recursive TranslationTree
+    // type alias; we validate element types at runtime with Array.isArray() below.
+    let node: unknown = this._translations();
+
+    for (const seg of segments) {
+      if (typeof node !== 'object' || node === null || !(seg in node)) {
+        return [];
+      }
+      node = (node as Record<string, unknown>)[seg];
+    }
+
+    if (!Array.isArray(node)) return [];
+    return (node as unknown[]).filter((item): item is string => typeof item === 'string');
+  }
+
+  /**
    * Returns all supported locale options (code + display label).
    * Suitable for populating a language-selector dropdown.
    */

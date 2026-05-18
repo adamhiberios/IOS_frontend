@@ -164,7 +164,7 @@ import { CanadaFlag } from '@ui';
             <ul class="space-y-3">
               <li>
                 <a
-                  routerLink="/privacy"
+                  routerLink="/privacy-policy"
                   class="text-ios-brand-muted text-[14px] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
                   >{{ lang.t('landing.footer.legal.privacy') }}</a
@@ -172,7 +172,7 @@ import { CanadaFlag } from '@ui';
               </li>
               <li>
                 <a
-                  routerLink="/terms"
+                  routerLink="/terms-of-use"
                   class="text-ios-brand-muted text-[14px] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
                   >{{ lang.t('landing.footer.legal.terms') }}</a

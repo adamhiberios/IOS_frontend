@@ -1946,5 +1946,174 @@
       "subtitleBefore": "Now you have ",
       "subtitleAfter": ", can now share it on your profile"
     }
+  },
+  "termsOfUse": {
+    "hero": {
+      "title": "Terms of Use",
+      "back": "Back to home",
+      "breadcrumb": {
+        "home": "Home"
+      }
+    },
+    "sections": {
+      "eligibility": {
+        "heading": "Eligibility",
+        "body": "You must be at least 18 years old (or the age of majority in your jurisdiction) to create an account and enroll in certification programs. By registering, you confirm that the information you provide is accurate and complete."
+      },
+      "accountRegistration": {
+        "heading": "Account Registration",
+        "intro": "To access certain features, you must create an account. You agree to:",
+        "items": [
+          "Provide accurate and current information",
+          "Maintain the confidentiality of your login credentials",
+          "Accept responsibility for all activities under your account"
+        ],
+        "outro": "We reserve the right to suspend or terminate accounts that violate these Terms."
+      },
+      "useOfServices": {
+        "heading": "Use of Services",
+        "intro": "You agree to use the Services only for lawful purposes. You may not:",
+        "items": [
+          "Copy, reproduce, or distribute course materials without authorization",
+          "Share exam content, questions, or certification materials",
+          "Attempt to disrupt platform security or functionality",
+          "Impersonate another individual or organization"
+        ],
+        "outro": "All learning materials, exams, and certifications are protected by intellectual property laws."
+      },
+      "certification": {
+        "heading": "Certification and Examinations",
+        "intro": "Certification is granted upon successful completion of required training and passing the official examination.",
+        "reserveIntro": "We reserve the right to:",
+        "items": [
+          "Verify candidate identity",
+          "Cancel or invalidate exam results in cases of misconduct",
+          "Update certification requirements"
+        ],
+        "outro": "Certification does not guarantee employment or professional advancement."
+      },
+      "payments": {
+        "heading": "Payments and Refunds",
+        "intro": "All fees are clearly displayed prior to purchase. By enrolling, you agree to pay the listed fees.",
+        "body": "Refund policies, where applicable, are governed by the specific terms provided at the time of purchase. Examination fees may be non-refundable once the exam has been accessed or scheduled."
+      },
+      "intellectualProperty": {
+        "heading": "Intellectual Property",
+        "body": "All content on the platform—including text, graphics, videos, exam materials, logos, and certificates—is the property of the organization or its licensors. Unauthorized use, duplication, or distribution is strictly prohibited."
+      },
+      "liability": {
+        "heading": "Limitation of Liability",
+        "intro": "The Services are provided “as is” without warranties of any kind. We do not guarantee uninterrupted access or error-free functionality.",
+        "reserveIntro": "To the maximum extent permitted by law, we are not liable for:",
+        "items": [
+          "Indirect or consequential damages",
+          "Loss of data or profits",
+          "Technical interruptions beyond our control"
+        ]
+      },
+      "indemnification": {
+        "heading": "Indemnification",
+        "body": "You agree to indemnify, defend, and hold harmless us, our affiliates, and our respective officers, directors, employees, and agents from any claims, damages, liabilities, costs, or expenses arising out of your use of the Services."
+      },
+      "termination": {
+        "heading": "Termination",
+        "body": "We reserve the right to suspend or terminate your access to the Services at any time, without notice, if we believe you have violated these Terms or applicable law."
+      },
+      "governingLaw": {
+        "heading": "Governing Law",
+        "body": "These Terms shall be governed by and construed in accordance with the laws of the jurisdiction in which we operate, without regard to its conflict of law principles."
+      }
+    }
+  },
+  "privacyPolicy": {
+    "hero": {
+      "title": "Privacy Policy",
+      "back": "Back to home",
+      "breadcrumb": {
+        "home": "Home"
+      }
+    },
+    "sections": {
+      "infoWeCollect": {
+        "heading": "Information We Collect",
+        "body": "We collect information necessary to provide and improve our Services."
+      },
+      "personalInfo": {
+        "heading": "Personal Information",
+        "items": [
+          "Full name",
+          "Email address",
+          "Phone number",
+          "Country and address information",
+          "Account credentials",
+          "Payment information (processed securely via third-party providers)"
+        ]
+      },
+      "learningData": {
+        "heading": "Learning & Certification Data",
+        "items": [
+          "Course enrollment history",
+          "Progress tracking and completion data",
+          "Mock exam attempts and scores",
+          "Final exam results",
+          "Certification records"
+        ]
+      },
+      "technicalInfo": {
+        "heading": "Technical Information",
+        "items": [
+          "IP address",
+          "Browser type and device information",
+          "Log data and usage analytics",
+          "Cookies and tracking technologies"
+        ]
+      },
+      "howWeUse": {
+        "heading": "How We Use Your Information",
+        "intro": "We use collected information to:",
+        "items": [
+          "Provide access to courses and certification exams",
+          "Process payments and issue certificates",
+          "Track learning progress and performance analytics",
+          "Communicate important updates and support responses",
+          "Improve platform functionality and user experience",
+          "Ensure exam integrity and prevent misconduct",
+          "Comply with legal obligations"
+        ],
+        "outro": "We do not sell your personal data."
+      },
+      "dataRetention": {
+        "heading": "Data Retention Policy",
+        "body": "We retain your information for as long as necessary to fulfill the purposes outlined in this policy. When your data is no longer needed, we will securely delete or anonymize it."
+      },
+      "thirdParty": {
+        "heading": "Third-Party Sharing",
+        "body": "We may share your information with third parties to assist in providing our services, including payment processors and customer support. We ensure these parties comply with strict data protection standards."
+      },
+      "security": {
+        "heading": "Security Measures",
+        "body": "We implement robust security measures to protect your personal data from unauthorized access, alteration, disclosure, or destruction, including encryption and access controls."
+      },
+      "yourRights": {
+        "heading": "Your Rights",
+        "body": "You have the right to access, correct, or delete your personal data. You can also request restrictions on processing and withdraw consent at any time."
+      },
+      "cookies": {
+        "heading": "Cookies and Tracking Technologies",
+        "body": "We use cookies and similar technologies to enhance user experience, analyze site usage, and deliver targeted advertisements. You can manage cookie preferences through your browser settings."
+      },
+      "international": {
+        "heading": "International Data Transfers",
+        "body": "Your information may be transferred to and processed in countries outside your own. We ensure that such transfers are compliant with applicable data protection laws."
+      },
+      "changes": {
+        "heading": "Changes to This Policy",
+        "body": "We may update this privacy policy from time to time. We will notify you of any significant changes and encourage you to review the policy periodically."
+      },
+      "contactUs": {
+        "heading": "Contact Us",
+        "body": "If you have any questions or concerns regarding this policy or our data practices, please contact our support team directly through the platform."
+      }
+    }
   }
 }

@@ -85,6 +85,16 @@ const routes: Routes = [
     loadComponent: () => import('./pages/cert-details-esf.page').then((m) => m.CertDetailsEsmFPage),
     title: 'Endorsed Scrum Facilitator (ESF) — Institute of Scrum',
   },
+  {
+    path: 'terms-of-use',
+    loadComponent: () => import('./pages/terms-of-use.page').then((m) => m.TermsOfUsePage),
+    title: 'Terms of Use — Institute of Scrum',
+  },
+  {
+    path: 'privacy-policy',
+    loadComponent: () => import('./pages/privacy-policy.page').then((m) => m.PrivacyPolicyPage),
+    title: 'Privacy Policy — Institute of Scrum',
+  },
 ];
 
 export default routes;
