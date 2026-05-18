@@ -80,7 +80,9 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
 
       <main class="flex-1 flex items-start md:items-center justify-center px-4 pt-24 pb-10">
         <ios-accent-bars />
-        <section class="w-full z-2 max-w-xl bg-white border border-gray-200 rounded-xl p-6 md:p-8">
+        <section
+          class="w-full z-[2] max-w-xl bg-white border border-gray-200 rounded-xl p-6 md:p-8"
+        >
           <header class="mb-6">
             <h1 class="text-2xl font-bold text-ios-brand-dark">
               {{ lang.t('auth.register.title') }}
@@ -105,7 +107,7 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
           >
             <h2 id="register-heading" class="sr-only">{{ lang.t('auth.register.title') }}</h2>
 
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <ios-input
                 id="firstName"
                 [label]="lang.t('auth.register.firstNameLabel')"

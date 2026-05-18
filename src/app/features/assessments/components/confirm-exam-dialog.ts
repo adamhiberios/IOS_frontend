@@ -111,11 +111,11 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
         </div>
 
         <!-- Action buttons -->
-        <div class="flex items-end justify-end gap-6">
+        <div class="flex flex-col sm:flex-row items-end justify-end gap-3 sm:gap-6 w-full">
           <button
             type="button"
             (click)="cancelled.emit()"
-            class="h-14 w-[189px] rounded-xl bg-ios-surface-soft text-ios-fg font-semibold text-lg
+            class="h-14 w-full sm:w-[189px] rounded-xl bg-ios-surface-soft text-ios-fg font-semibold text-lg
                    transition-colors hover:bg-ios-surface-hover
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                    focus-visible:ring-[#d0d0d0]"
@@ -125,7 +125,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
           <button
             type="button"
             (click)="confirmed.emit()"
-            class="h-14 w-[254px] rounded-xl bg-ios-fg-13 text-white font-semibold text-lg
+            class="h-14 w-full sm:w-[254px] rounded-xl bg-ios-fg-13 text-white font-semibold text-lg
                    transition-colors hover:bg-[#2a2b2a]
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                    focus-visible:ring-ios-fg-13/50"

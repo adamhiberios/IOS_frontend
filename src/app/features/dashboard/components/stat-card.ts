@@ -36,7 +36,7 @@ import { IosIcon } from '@ui';
         >
           {{ value() }}
         </span>
-        <span class="text-base font-medium leading-[1.4] text-ios-fg whitespace-nowrap">
+        <span class="text-base font-medium leading-[1.4] text-ios-fg">
           {{ label() }}
         </span>
       </div>

@@ -34,7 +34,7 @@ const PROVIDER_LABEL: Record<SocialProvider, string> = {
       type="button"
       [attr.aria-label]="label()"
       (click)="selected.emit(provider())"
-      class="w-10 h-10 inline-flex items-center justify-center
+      class="w-11 h-11 inline-flex items-center justify-center
              rounded-full border border-gray-200 bg-white
              text-ios-brand-dark hover:border-ios-brand-dark/40
              hover:bg-gray-50 focus:outline-none focus:ring-2

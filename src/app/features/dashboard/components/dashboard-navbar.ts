@@ -29,7 +29,7 @@ interface NavTab {
   readonly route: string;
 }
 
-const NAV_TABS: readonly NavTab[] = [
+const _NAV_TABS: readonly NavTab[] = [
   { label: 'Overview', icon: 'layout-dashboard', route: '/dashboard' },
   { label: 'My certificates', icon: 'award', route: '/dashboard/certificates' },
   { label: 'Profile', icon: 'user', route: '/dashboard/profile' },
@@ -65,7 +65,7 @@ const NAV_TABS: readonly NavTab[] = [
   template: `
     <header class="bg-white w-full">
       <!-- ── Top strip: logo + icon actions ────────────────────────────── -->
-      <div class="max-w-[1400px] mx-auto px-8 flex items-center justify-between h-16">
+      <div class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-between h-16">
         <!-- Logo -->
         <a routerLink="/dashboard" [attr.aria-label]="lang.t('dashboard.nav.logoAriaLabel')">
           <img
@@ -117,8 +117,11 @@ const NAV_TABS: readonly NavTab[] = [
       </div>
 
       <!-- ── Tab nav — tabs span full container width ───────────────────── -->
-      <nav class="w-full border-b border-ios-surface-soft" [attr.aria-label]="lang.t('dashboard.nav.navigationAriaLabel')">
-        <div class="max-w-[1400px] mx-auto px-8">
+      <nav
+        class="w-full border-b border-ios-surface-soft overflow-x-auto"
+        [attr.aria-label]="lang.t('dashboard.nav.navigationAriaLabel')"
+      >
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 min-w-max">
           <ul class="flex items-stretch w-full" role="list">
             @for (tab of tabs(); track tab.route) {
               <li class="flex-1">
@@ -127,7 +130,7 @@ const NAV_TABS: readonly NavTab[] = [
                   [routerLinkActiveOptions]="{ exact: tab.route === '/dashboard' }"
                   routerLinkActive
                   #rla="routerLinkActive"
-                  class="flex items-center justify-center gap-3 w-full py-4 text-base text-ios-fg-13 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ios-brand-primary/50 whitespace-nowrap"
+                  class="flex items-center justify-center gap-1 md:gap-3 w-full py-4 text-sm md:text-base text-ios-fg-13 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ios-brand-primary/50 whitespace-nowrap"
                   [class.font-bold]="rla.isActive"
                   [class.font-semibold]="!rla.isActive"
                   [class.border-b-[5px]]="rla.isActive"
@@ -135,7 +138,11 @@ const NAV_TABS: readonly NavTab[] = [
                   [class.-mb-px]="rla.isActive"
                   [attr.aria-current]="rla.isActive ? 'page' : null"
                 >
-                  <ios-icon [name]="tab.icon" class="w-6 h-6 shrink-0" aria-hidden="true" />
+                  <ios-icon
+                    [name]="tab.icon"
+                    class="w-5 h-5 md:w-6 md:h-6 shrink-0"
+                    aria-hidden="true"
+                  />
                   {{ tab.label }}
                 </a>
               </li>
@@ -153,9 +160,17 @@ export class DashboardNavbar {
 
   protected readonly tabs = computed<readonly NavTab[]>(() => [
     { label: this.lang.t('dashboard.nav.overview'), icon: 'layout-dashboard', route: '/dashboard' },
-    { label: this.lang.t('dashboard.nav.myCertificates'), icon: 'award', route: '/dashboard/certificates' },
+    {
+      label: this.lang.t('dashboard.nav.myCertificates'),
+      icon: 'award',
+      route: '/dashboard/certificates',
+    },
     { label: this.lang.t('dashboard.nav.profile'), icon: 'user', route: '/dashboard/profile' },
-    { label: this.lang.t('dashboard.nav.settings'), icon: 'settings', route: '/dashboard/settings' },
+    {
+      label: this.lang.t('dashboard.nav.settings'),
+      icon: 'settings',
+      route: '/dashboard/settings',
+    },
   ]);
   protected readonly menuOpen = signal(false);
 

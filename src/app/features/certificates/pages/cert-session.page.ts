@@ -47,7 +47,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
       <ios-dashboard-navbar />
 
       <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-6">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
           <!-- ── Breadcrumb row ── -->
           <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
@@ -181,7 +181,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
 
       <footer class="bg-ios-brand-dark w-full py-4">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
+          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>

@@ -40,7 +40,7 @@ import { ProfileStore } from '../data-access/profile.store';
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
       <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
           <div class="flex items-center gap-4">
             <!-- Back button -->
             <a
@@ -78,21 +78,23 @@ import { ProfileStore } from '../data-access/profile.store';
 
       <!-- ── Main content ───────────────────────────────────────────────── -->
       <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-8 flex flex-col gap-6">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 flex flex-col gap-6">
           @if (profile(); as p) {
             <!-- ── Personal informations ────────────────────────────────── -->
             <section aria-labelledby="personal-info-heading">
-              <div class="flex gap-6 items-start">
+              <div class="flex flex-col lg:flex-row gap-6 items-start">
                 <!-- Section label -->
                 <h2
                   id="personal-info-heading"
-                  class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                  class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
                 >
                   {{ lang.t('profile.view.personalInfo') }}
                 </h2>
 
                 <!-- Card -->
-                <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex gap-8 items-start">
+                <div
+                  class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col md:flex-row gap-6 md:gap-8 items-start"
+                >
                   <!-- Avatar circle -->
                   <div
                     class="shrink-0 size-[82px] rounded-full border border-ios-line bg-[#fdfdfd] flex items-center justify-center"
@@ -104,58 +106,59 @@ import { ProfileStore } from '../data-access/profile.store';
                   </div>
 
                   <!-- Info grid -->
-                  <div class="flex-1 flex flex-col gap-6 text-[18px] text-ios-fg">
+                  <div class="flex-1 flex flex-col gap-6 text-[16px] md:text-[18px] text-ios-fg">
                     <!-- Row 1: Full Name | Username | IOS ID -->
-                    <div class="flex gap-6 items-start">
+                    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
                       <div class="flex-1 flex flex-col gap-1">
-                        <span class="text-[18px] font-medium leading-[1.4]">{{
+                        <span class="text-[16px] md:text-[18px] font-medium leading-[1.4]">{{
                           lang.t('profile.view.fullName')
                         }}</span>
-                        <span class="text-[18px] font-bold leading-[1.2]"
+                        <span class="text-[16px] md:text-[18px] font-bold leading-[1.2]"
                           >{{ p.personal.firstName }} {{ p.personal.lastName }}</span
                         >
                       </div>
                       <div class="flex-1 flex flex-col gap-1">
-                        <span class="text-[18px] font-medium leading-[1.4]">{{
+                        <span class="text-[16px] md:text-[18px] font-medium leading-[1.4]">{{
                           lang.t('profile.view.username')
                         }}</span>
-                        <span class="text-[18px] font-bold leading-[1.2]">{{
+                        <span class="text-[16px] md:text-[18px] font-bold leading-[1.2]">{{
                           p.personal.username
                         }}</span>
                       </div>
                       <div class="flex-1 flex flex-col gap-1">
-                        <span class="text-[18px] font-medium leading-[1.4]">{{
+                        <span class="text-[16px] md:text-[18px] font-medium leading-[1.4]">{{
                           lang.t('profile.view.iosId')
                         }}</span>
-                        <span class="text-[18px] font-bold leading-[1.2]">{{
+                        <span class="text-[16px] md:text-[18px] font-bold leading-[1.2]">{{
                           p.personal.iosId
                         }}</span>
                       </div>
                     </div>
 
                     <!-- Row 2: Email | City/Address | Country -->
-                    <div class="flex flex-wrap gap-6 items-start">
-                      <div class="flex-1 flex flex-col gap-1 min-w-0 whitespace-nowrap">
-                        <span class="text-[18px] font-medium leading-[1.4]">{{
+                    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start">
+                      <div class="flex-1 flex flex-col gap-1 min-w-0">
+                        <span class="text-[16px] md:text-[18px] font-medium leading-[1.4]">{{
                           lang.t('profile.view.email')
                         }}</span>
-                        <span class="text-[18px] font-bold leading-[1.2]">{{
-                          p.personal.email
-                        }}</span>
+                        <span
+                          class="text-[16px] md:text-[18px] font-bold leading-[1.2] break-all"
+                          >{{ p.personal.email }}</span
+                        >
                       </div>
                       <div class="flex-1 flex flex-col gap-1 min-w-0">
-                        <span class="text-[18px] font-medium leading-[1.4] whitespace-nowrap">{{
+                        <span class="text-[16px] md:text-[18px] font-medium leading-[1.4]">{{
                           lang.t('profile.view.cityAddress')
                         }}</span>
-                        <span class="text-[18px] font-bold leading-[1.2]"
+                        <span class="text-[16px] md:text-[18px] font-bold leading-[1.2]"
                           >{{ p.personal.city }} - {{ p.personal.address }}</span
                         >
                       </div>
-                      <div class="flex-1 flex flex-col gap-1 min-w-0 whitespace-nowrap">
-                        <span class="text-[18px] font-medium leading-[1.4]">{{
+                      <div class="flex-1 flex flex-col gap-1 min-w-0">
+                        <span class="text-[16px] md:text-[18px] font-medium leading-[1.4]">{{
                           lang.t('profile.view.countryRegion')
                         }}</span>
-                        <span class="text-[18px] font-bold leading-[1.2]">{{
+                        <span class="text-[16px] md:text-[18px] font-bold leading-[1.2]">{{
                           p.personal.country
                         }}</span>
                       </div>
@@ -167,33 +170,33 @@ import { ProfileStore } from '../data-access/profile.store';
 
             <!-- ── Professional Information ─────────────────────────────── -->
             <section aria-labelledby="professional-info-heading">
-              <div class="flex gap-6 items-start">
+              <div class="flex flex-col lg:flex-row gap-6 items-start">
                 <!-- Section label -->
                 <h2
                   id="professional-info-heading"
-                  class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                  class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
                 >
                   {{ lang.t('profile.view.professionalInfo') }}
                 </h2>
 
                 <!-- Card -->
-                <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6">
-                  <div class="flex gap-6 items-start text-[18px] text-ios-fg">
+                <div class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-6">
+                  <div
+                    class="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start text-[16px] md:text-[18px] text-ios-fg"
+                  >
                     <div class="flex-1 flex flex-col gap-1">
-                      <span class="font-medium leading-[1.4] whitespace-nowrap">{{
+                      <span class="font-medium leading-[1.4]">{{
                         lang.t('profile.view.occupation')
                       }}</span>
-                      <span class="font-bold leading-[1.2] whitespace-nowrap">{{
-                        p.professional.occupation
-                      }}</span>
+                      <span class="font-bold leading-[1.2]">{{ p.professional.occupation }}</span>
                     </div>
-                    <div class="flex-1 flex flex-col gap-1 whitespace-nowrap">
+                    <div class="flex-1 flex flex-col gap-1">
                       <span class="font-medium leading-[1.4]">{{
                         lang.t('profile.view.companyName')
                       }}</span>
                       <span class="font-bold leading-[1.2]">{{ p.professional.companyName }}</span>
                     </div>
-                    <div class="flex-1 flex flex-col gap-1 whitespace-nowrap">
+                    <div class="flex-1 flex flex-col gap-1">
                       <span class="font-medium leading-[1.4]">{{
                         lang.t('profile.view.position')
                       }}</span>
@@ -228,7 +231,7 @@ import { ProfileStore } from '../data-access/profile.store';
       <!-- ── Footer ────────────────────────────────────────────────────── -->
       <footer class="bg-ios-fg w-full py-4 shrink-0">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
+          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>

@@ -10,7 +10,7 @@ import { EMPTY, switchMap } from 'rxjs';
 export type InputState = 'default' | 'error' | 'success';
 
 const BASE_CLASSES =
-  'mt-1 w-full h-10 px-3 rounded-lg bg-gray-50 text-sm text-ios-brand-dark ' +
+  'mt-1 w-full h-11 px-3 rounded-lg bg-gray-50 text-sm text-ios-brand-dark ' +
   'placeholder:text-gray-400 transition-colors focus:outline-none focus:ring-2';
 
 const STATE_CLASSES: Record<InputState, string> = {

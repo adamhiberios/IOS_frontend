@@ -19,7 +19,7 @@ import { LanguageService, type AppLocale } from '@core/i18n';
         (click)="toggle()"
         [attr.aria-label]="lang.t('common.selectLanguage')"
         [attr.aria-expanded]="isOpen()"
-        class="w-10 h-10 rounded-lg flex items-center justify-center
+        class="w-11 h-11 rounded-lg flex items-center justify-center
                border border-gray-200 bg-gray-50 text-ios-brand-dark/70
                hover:bg-gray-100 hover:text-ios-brand-dark
                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50

@@ -35,7 +35,7 @@ export class IconButton {
       'inline-flex items-center justify-center rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
 
     const sizes: Record<IconButtonSize, string> = {
-      sm: 'w-8 h-8',
+      sm: 'w-10 h-10',
       md: 'w-11 h-11',
       lg: 'w-14 h-14',
     };

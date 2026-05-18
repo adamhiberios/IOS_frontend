@@ -49,7 +49,7 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
       <ios-dashboard-navbar />
 
       <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-6">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
           <!-- ── Breadcrumb + demo switcher ── -->
           <div class="flex items-center justify-between mb-6">
             <nav aria-label="Breadcrumb">
@@ -84,7 +84,10 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
           </div>
 
           <!-- ── Stat cards ── -->
-          <section aria-label="Overview statistics" class="grid grid-cols-3 gap-4 mb-8">
+          <section
+            aria-label="Overview statistics"
+            class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8"
+          >
             <ios-dashboard-stat-card
               icon="file-text"
               [value]="store.programsEnrolled().toString()"
@@ -110,13 +113,13 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
               · col 1 (flex-1) : [charts row] stacked above [cert section]
               · col 2 (280px)  : learning card spanning full height
             -->
-            <div class="grid grid-cols-[1fr_280px] gap-6 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6 items-start">
               <!-- ── Col 1 ── -->
               <div class="flex flex-col gap-6">
                 <!-- Row 1: Bar + Donut — equal height via items-stretch -->
                 <section
                   aria-label="Performance charts"
-                  class="grid grid-cols-[1fr_240px] gap-4 items-stretch"
+                  class="grid grid-cols-1 sm:grid-cols-[1fr_240px] gap-4 items-stretch"
                 >
                   <ios-bar-chart
                     [scores]="store.monthlyScores()"
@@ -137,7 +140,7 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
                         <ios-cert-progress-card [cert]="certs()[0]" />
                       </div>
                     } @else {
-                      <div class="grid grid-cols-2 gap-4">
+                      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         @for (cert of certs(); track cert.code) {
                           <ios-cert-progress-card [cert]="cert" />
                         }
@@ -152,7 +155,10 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
             </div>
           } @else {
             <!-- Empty state: simple 2-col charts only -->
-            <section aria-label="Performance charts" class="grid grid-cols-[1fr_320px] gap-4">
+            <section
+              aria-label="Performance charts"
+              class="grid grid-cols-1 sm:grid-cols-[1fr_320px] gap-4"
+            >
               <ios-bar-chart
                 [scores]="store.monthlyScores()"
                 [yearFilter]="store.yearFilter()"
@@ -167,7 +173,7 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
       @if (store.demoMode() !== 'empty') {
         <footer class="bg-ios-brand-dark w-full py-4">
           <div
-            class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
+            class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
           >
             <ios-canada-flag aria-hidden="true" />
             <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>

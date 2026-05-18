@@ -80,7 +80,7 @@ export interface DropdownOption {
                 type="text"
                 [formControl]="searchControl"
                 [placeholder]="lang.t('ui.searchPlaceholder')"
-                class="w-full h-9 px-3 text-sm rounded-md border border-gray-200 bg-gray-50
+                class="w-full h-11 px-3 text-sm rounded-md border border-gray-200 bg-gray-50
                        focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary
                        placeholder:text-gray-400"
                 (keydown)="onSearchKeydown($event)"
@@ -160,7 +160,7 @@ export class Dropdown {
 
   readonly triggerClasses = computed(() => {
     const base =
-      'w-full h-10 px-3 flex items-center justify-between rounded-lg bg-gray-50 text-sm ' +
+      'w-full h-11 px-3 flex items-center justify-between rounded-lg bg-gray-50 text-sm ' +
       'border transition-colors focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 ' +
       'focus:border-ios-brand-primary text-start';
     const state = this.isOpen() || this.value() ? 'border-ios-brand-primary' : 'border-gray-200';
@@ -178,7 +178,7 @@ export class Dropdown {
 
   readonly optionClasses = (option: DropdownOption, _index: number): string => {
     const base =
-      'flex items-center justify-between px-3 py-2 text-sm cursor-pointer rounded-md transition-colors';
+      'flex items-center justify-between px-3 py-3 text-sm cursor-pointer rounded-md transition-colors';
     const selected =
       option.value === this.value()
         ? 'bg-ios-primary-50 text-ios-brand-primary'

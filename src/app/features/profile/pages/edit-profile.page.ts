@@ -100,7 +100,7 @@ const POSITION_OPTIONS: SelectOption[] = [
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
       <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
           <div class="flex items-center gap-4">
             <a
               routerLink="/dashboard/profile"
@@ -147,20 +147,22 @@ const POSITION_OPTIONS: SelectOption[] = [
           [formGroup]="form"
           (ngSubmit)="onSubmit()"
           novalidate
-          class="max-w-[1400px] mx-auto px-8 py-8 flex flex-col gap-6"
+          class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 flex flex-col gap-6"
           [attr.aria-label]="lang.t('profile.edit.formLabel')"
         >
           <!-- ── Personal informations ──────────────────────────────────── -->
           <section aria-labelledby="edit-personal-heading">
-            <div class="flex gap-6 items-start">
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
               <h2
                 id="edit-personal-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
               >
                 {{ lang.t('profile.edit.personalInfo') }}
               </h2>
 
-              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex gap-8 items-start">
+              <div
+                class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col md:flex-row gap-6 md:gap-8 items-start"
+              >
                 <!-- Avatar + change image -->
                 <div class="flex flex-col gap-4 items-center shrink-0">
                   <div
@@ -187,7 +189,9 @@ const POSITION_OPTIONS: SelectOption[] = [
                 <!-- Fields — first/last name + email are display-only (opacity-40) -->
                 <div class="flex-1 flex flex-col gap-6">
                   <!-- First Name + Last Name (read-only per Figma; opacity-40) -->
-                  <div class="flex gap-4 items-start opacity-40 pointer-events-none">
+                  <div
+                    class="flex flex-col sm:flex-row gap-4 items-start opacity-40 pointer-events-none"
+                  >
                     <div class="flex-1 flex flex-col gap-1">
                       <label
                         for="firstName"
@@ -254,17 +258,19 @@ const POSITION_OPTIONS: SelectOption[] = [
 
           <!-- ── Location informations ──────────────────────────────────── -->
           <section aria-labelledby="edit-location-heading">
-            <div class="flex gap-6 items-start">
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
               <h2
                 id="edit-location-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
               >
                 {{ lang.t('profile.edit.locationInfo') }}
               </h2>
 
-              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex flex-col gap-8">
+              <div
+                class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col gap-8"
+              >
                 <!-- Country + City row -->
-                <div class="flex gap-4 items-start">
+                <div class="flex flex-col sm:flex-row gap-4 items-start">
                   <div class="flex-1">
                     <ios-select
                       id="country"
@@ -290,7 +296,7 @@ const POSITION_OPTIONS: SelectOption[] = [
                 </div>
 
                 <!-- Street + Address + Postal row -->
-                <div class="flex gap-2.5 items-start">
+                <div class="flex flex-col sm:flex-row gap-2.5 items-start">
                   <ios-input
                     class="flex-1"
                     id="street"
@@ -319,16 +325,16 @@ const POSITION_OPTIONS: SelectOption[] = [
 
           <!-- ── Professional Information ───────────────────────────────── -->
           <section aria-labelledby="edit-professional-heading">
-            <div class="flex gap-6 items-start">
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
               <h2
                 id="edit-professional-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
               >
                 {{ lang.t('profile.edit.professionalInfo') }}
               </h2>
 
-              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6">
-                <div class="flex gap-8 items-start">
+              <div class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 items-start">
                   <div class="flex-1">
                     <ios-select
                       id="occupation"
@@ -390,7 +396,7 @@ const POSITION_OPTIONS: SelectOption[] = [
       <!-- ── Footer ────────────────────────────────────────────────────── -->
       <footer class="bg-ios-fg w-full py-4 shrink-0">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
+          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>

@@ -20,7 +20,7 @@ import { type CertDemoMode, CertificatesStore } from '../data-access/certificate
       <main class="flex-1 bg-white" id="main-content">
         <!-- Breadcrumb -->
         <div class="w-full border-b border-ios-border-light">
-          <div class="max-w-[1400px] mx-auto px-8 py-4 flex items-center justify-between">
+          <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
             <nav aria-label="Breadcrumb">
               <ol class="flex items-center gap-1.5 text-sm text-ios-fg-7" role="list">
                 <li>
@@ -63,11 +63,11 @@ import { type CertDemoMode, CertificatesStore } from '../data-access/certificate
         }
 
         <!-- All certifications -->
-        <section aria-label="All certifications" class="max-w-[1400px] mx-auto px-8 py-6">
+        <section aria-label="All certifications" class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
           <h2 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 mb-3">
             {{ lang.t('dashboard.allCertifications') }}
           </h2>
-          <div class="grid grid-cols-2 gap-6">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             @for (card of store.allCerts(); track card.code) {
               <ios-cert-grid-card [card]="card" (viewDetails)="onViewDetails($event)" />
             }
@@ -77,7 +77,7 @@ import { type CertDemoMode, CertificatesStore } from '../data-access/certificate
 
       <footer class="bg-ios-brand-dark w-full py-4">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
+          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>

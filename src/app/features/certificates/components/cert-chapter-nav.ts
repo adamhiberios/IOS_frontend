@@ -23,7 +23,7 @@ import type { SessionChapter } from '../data-access/certificates.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav
-      class="flex flex-col w-[354px] shrink-0"
+      class="hidden lg:flex flex-col w-[354px] shrink-0"
       [attr.aria-label]="lang.t('dashboard.certs.sessionChapters')"
     >
       @for (chapter of chapters(); track chapter.id) {
