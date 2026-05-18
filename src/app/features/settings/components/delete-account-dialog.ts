@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { LanguageService } from '@core/i18n';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
 /**
@@ -43,7 +44,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
       <button
         type="button"
         class="absolute inset-0 bg-black/60 cursor-default w-full h-full"
-        aria-label="Close dialog"
+        [attr.aria-label]="lang.t('settings.deleteDialog.closeAriaLabel')"
         tabindex="-1"
         (click)="cancelled.emit()"
       ></button>
@@ -83,10 +84,10 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
                 id="delete-dialog-title"
                 class="font-semibold leading-[1.2] text-[#303130] text-[24px] w-full"
               >
-                Are you sure to delete your account?
+                {{ lang.t('settings.deleteDialog.heading') }}
               </h2>
               <p class="font-medium leading-[1.4] text-[#373837] text-[18px] w-full">
-                You will lose all information especially your certificates
+                {{ lang.t('settings.deleteDialog.description') }}
               </p>
             </div>
 
@@ -97,13 +98,13 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
                   for="delete-confirm-input"
                   class="font-semibold leading-[1.4] text-[#272827] text-[16px]"
                 >
-                  Type "Delete" to continue process
+                  {{ lang.t('settings.deleteDialog.typeLabel') }}
                 </label>
               </div>
               <input
                 id="delete-confirm-input"
                 type="text"
-                placeholder='Type "Delete"'
+[attr.placeholder]="lang.t('settings.deleteDialog.typePlaceholder')"
                 [formControl]="confirmControl"
                 autocomplete="off"
                 class="w-full px-3 py-3 rounded-lg bg-[#f6f6f6] border border-[#c4c5c4] text-[16px] text-[#373837] font-medium leading-[1.4] placeholder:text-[#959695] focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary transition-colors"
@@ -118,7 +119,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
                 class="flex items-center justify-center h-14 px-6 rounded-xl bg-[#f1f1f1] text-[#272827] text-[18px] font-semibold leading-[1.4] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#272827]/30 w-[139px]"
                 (click)="cancelled.emit()"
               >
-                Go back
+                {{ lang.t('settings.deleteDialog.goBack') }}
               </button>
 
               <!-- Delete account — disabled until "Delete" typed -->
@@ -131,7 +132,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
                 [attr.aria-disabled]="!canDelete()"
                 (click)="onDeleteClick()"
               >
-                Delete account
+                {{ lang.t('settings.deleteDialog.confirm') }}
               </button>
             </div>
           </div>
@@ -141,6 +142,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
   `,
 })
 export class DeleteAccountDialog {
+  protected readonly lang = inject(LanguageService);
   /** Emitted when the user cancels or clicks the backdrop. */
   readonly cancelled = output<void>();
   /** Emitted when the user confirms deletion (typed "Delete" and clicked). */

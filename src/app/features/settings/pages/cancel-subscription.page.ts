@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LucideArrowLeft, LucideCheck } from '@lucide/angular';
 
 import { CanadaFlag, IosIcon, provideIcons } from '@ui';
 import { DashboardNavbar } from '@layouts';
+import { LanguageService } from '@core/i18n';
 
 /**
  * `ios-cancel-subscription-page` — Newsletter cancellation reason survey.
@@ -42,7 +43,7 @@ import { DashboardNavbar } from '@layouts';
             <a
               routerLink="/dashboard/settings"
               class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
-              aria-label="Back to Settings"
+              [attr.aria-label]="lang.t('settings.cancelSubscription.backAriaLabel')"
             >
               <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
             </a>
@@ -53,7 +54,7 @@ import { DashboardNavbar } from '@layouts';
               >
                 <li>
                   <span class="font-semibold text-[#141514]" aria-current="page">
-                    Cancel subscription
+                    {{ lang.t('settings.breadcrumb.cancelSubscription') }}
                   </span>
                 </li>
               </ol>
@@ -67,7 +68,7 @@ import { DashboardNavbar } from '@layouts';
         <div class="max-w-[1400px] mx-auto px-8 py-8 flex flex-col gap-8">
           <!-- Question -->
           <h1 class="text-[18px] font-semibold leading-[1.4] text-[#141514]">
-            Why you Cancel subscription?
+            {{ lang.t('settings.cancelSubscription.title') }}
           </h1>
 
           <!-- Radio option cards -->
@@ -76,9 +77,9 @@ import { DashboardNavbar } from '@layouts';
             role="radiogroup"
             aria-labelledby="cancel-reason-heading"
           >
-            <span id="cancel-reason-heading" class="sr-only">Select a reason for cancellation</span>
+            <span id="cancel-reason-heading" class="sr-only">{{ lang.t('settings.cancelSubscription.selectReasonSrOnly') }}</span>
 
-            @for (option of cancelReasons; track option.id) {
+            @for (option of cancelReasons(); track option.id) {
               <label
                 class="flex items-center gap-4 p-2 rounded-[72px] bg-[#f1f1f1] cursor-pointer hover:bg-[#e8e8e8] transition-colors focus-within:ring-2 focus-within:ring-ios-brand-primary/30"
                 [for]="option.id"
@@ -131,7 +132,7 @@ import { DashboardNavbar } from '@layouts';
               class="w-[378px] flex items-center justify-center h-14 rounded-xl bg-[#8b0000] text-[#f1e6e8] text-[18px] font-semibold leading-[1.4] hover:bg-[#6f0000] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b0000]/50"
               (click)="onSubmit()"
             >
-              Send, and Cancel subscription
+              {{ lang.t('settings.cancelSubscription.submit') }}
             </button>
           </div>
         </div>
@@ -143,7 +144,7 @@ import { DashboardNavbar } from '@layouts';
           class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
         >
           <ios-canada-flag aria-hidden="true" />
-          <span>© {{ year }} Institute of Scrum. All rights reserved.</span>
+          <span>{{ lang.t('common.copyright', { year: year }) }}</span>
         </div>
       </footer>
     </div>
@@ -151,18 +152,16 @@ import { DashboardNavbar } from '@layouts';
 })
 export class CancelSubscriptionPage {
   private readonly router = inject(Router);
+  protected readonly lang = inject(LanguageService);
 
   protected readonly year = new Date().getFullYear().toString();
 
-  protected readonly cancelReasons = [
-    { id: 'once-a-week', label: 'Once a week sounds about right.' },
-    {
-      id: 'once-a-month',
-      label: `Let's slow it down-only once a month, please.`,
-    },
-    { id: 'keep-coming', label: 'I take it back! Keep the inspiration coming.' },
-    { id: 'unsubscribe', label: `It's just not working out. Unsubscribe me.` },
-  ] as const;
+  protected readonly cancelReasons = computed(() => [
+    { id: 'once-a-week', label: this.lang.t('settings.cancelSubscription.reason1') },
+    { id: 'once-a-month', label: this.lang.t('settings.cancelSubscription.reason2') },
+    { id: 'keep-coming', label: this.lang.t('settings.cancelSubscription.reason3') },
+    { id: 'unsubscribe', label: this.lang.t('settings.cancelSubscription.reason4') },
+  ]);
 
   protected readonly selectedReason = signal<string>('once-a-week');
 

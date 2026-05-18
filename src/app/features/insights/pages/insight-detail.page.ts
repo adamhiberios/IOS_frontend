@@ -198,8 +198,8 @@ import { InsightsStore } from '../data-access/insights.store';
           <!-- Section header -->
           <div class="flex flex-col gap-2 mb-10">
             <h2 class="font-heading font-extrabold text-[24px]">
-              <span class="text-[#272827]">You Might Also </span
-              ><span class="text-[#8B0000]">Enjoy</span>
+              <span class="text-[#272827]">{{ lang.t('insight.detail.youMightAlsoEnjoyPart1') }}</span
+              ><span class="text-[#8B0000]">{{ lang.t('insight.detail.youMightAlsoEnjoyPart2') }}</span>
             </h2>
             <div class="w-10 h-1 rounded-full bg-[#D9BD4C]"></div>
           </div>

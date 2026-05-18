@@ -36,7 +36,7 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
         >
           <img
             ngSrc="/assets/icons/logo_institute_of_scrum.png"
-            alt="Institute of Scrum"
+            [attr.alt]="lang.t('landing.nav.logoAlt')"
             width="368"
             height="122"
             class="h-[44px] w-auto"

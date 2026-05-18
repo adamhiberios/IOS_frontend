@@ -79,7 +79,8 @@
       "privacyRequired": "Vous devez accepter la politique de confidentialité pour continuer.",
       "submit": "S'inscrire",
       "hasAccount": "Déjà inscrit ?",
-      "loginLink": "Se connecter maintenant"
+      "loginLink": "Se connecter maintenant",
+      "socialProviderAriaLabel": "Continuer avec un fournisseur social"
     },
     "resetPassword": {
       "title": "Réinitialiser le mot de passe",
@@ -153,7 +154,9 @@
       "searchCountry": "Rechercher un pays…",
       "selectCountryCode": "Sélectionner l'indicatif",
       "noResults": "Aucun résultat",
-      "searchPlaceholder": "Rechercher…"
+      "searchPlaceholder": "Rechercher…",
+      "clearAriaLabel": "Effacer",
+      "formAriaLabel": "Complétez votre compte"
     }
   },
   "landing": {
@@ -413,7 +416,8 @@
       "login": "Connexion",
       "register": "Inscription",
       "mainNavAriaLabel": "Navigation principale",
-      "homeAriaLabel": "Institute of Scrum — accueil"
+      "homeAriaLabel": "Institute of Scrum — accueil",
+      "logoAlt": "Institut Scrum"
     },
     "footer": {
       "tagline": "Le fournisseur de premier plan au Canada de certifications Scrum reconnues par l'industrie.",
@@ -440,7 +444,12 @@
         "title": "Légal",
         "privacy": "Politique de confidentialité",
         "terms": "Conditions d'utilisation"
-      }
+      },
+      "linkedinAriaLabel": "LinkedIn",
+      "xAriaLabel": "X / Twitter",
+      "facebookAriaLabel": "Facebook",
+      "youtubeAriaLabel": "YouTube",
+      "logoAlt": "Institut Scrum"
     }
   },
   "contact": {
@@ -477,7 +486,10 @@
       "myCertificates": "Mes certificats",
       "profile": "Profil",
       "settings": "Paramètres",
-      "dashboardLabel": "Institut de Scrum"
+      "dashboardLabel": "Institut de Scrum",
+      "logoAriaLabel": "Institut Scrum — Tableau de bord",
+      "notificationsAriaLabel": "Notifications",
+      "navigationAriaLabel": "Navigation du tableau de bord"
     },
     "menu": {
       "userMenuLabel": "Menu utilisateur",
@@ -734,7 +746,9 @@
       "related": "Vous aimerez aussi",
       "notFound": "Article introuvable.",
       "backToInsights": "Retour aux perspectives",
-      "scrollToTop": "Retour en haut"
+      "scrollToTop": "Retour en haut",
+      "youMightAlsoEnjoyPart1": "Vous pourriez aussi ",
+      "youMightAlsoEnjoyPart2": "apprécier"
     }
   },
   "scrumMaster": {
@@ -2114,6 +2128,87 @@
         "heading": "Contactez-nous",
         "body": "Si vous avez des questions ou des préoccupations concernant cette politique ou nos pratiques en matière de données, veuillez contacter directement notre équipe d'assistance via la plateforme."
       }
+    }
+  },
+  "forbidden": {
+    "heading": "Accès refusé",
+    "description": "Vous êtes connecté, mais vous n'avez pas la permission d'accéder à cette page.",
+    "backToDashboard": "Retour au tableau de bord"
+  },
+  "notFound": {
+    "heading": "Page introuvable",
+    "description": "La page que vous avez essayé d'atteindre n'existe pas ou vous n'avez pas accès à celle-ci.",
+    "backHome": "Retour à l'accueil"
+  },
+  "ui": {
+    "noOptionsFound": "Aucune option trouvée",
+    "noResults": "Aucun résultat",
+    "filterOptionsAriaLabel": "Filtrer les options",
+    "clearFilterAriaLabel": "Effacer le filtre",
+    "searchPlaceholder": "Rechercher..."
+  },
+  "settings": {
+    "breadcrumb": {
+      "backToDashboard": "Retour au tableau de bord",
+      "dashboard": "Tableau de bord",
+      "settings": "Paramètres",
+      "cancelSubscription": "Annuler l'abonnement",
+      "backToSettings": "Retour aux paramètres"
+    },
+    "nav": {
+      "navigationAriaLabel": "Navigation du tableau de bord"
+    },
+    "notifications": {
+      "heading": "Préférences de notification",
+      "all": "Recevoir des notifications pour toutes les mises à jour",
+      "insights": "Recevoir des notifications pour les nouvelles publications de blog",
+      "recommended": "Cours recommandés",
+      "completion": "Notification de fin de cours",
+      "material": "Nouveau matériel pédagogique ajouté"
+    },
+    "newsletter": {
+      "heading": "Newsletter",
+      "checkbox": "Notification d'abonnement à la newsletter",
+      "enabled": "Activé",
+      "enabledAriaLabel": "Statut de l'abonnement : Activé",
+      "cancelLink": "Annuler l'abonnement"
+    },
+    "account": {
+      "heading": "Préférences du compte",
+      "delete": "Supprimer le compte"
+    },
+    "cancelSubscription": {
+      "backAriaLabel": "Retour aux paramètres",
+      "title": "Pourquoi annulez-vous votre abonnement ?",
+      "selectReasonSrOnly": "Sélectionner une raison d'annulation",
+      "reason1": "Une fois par semaine me semble approprié.",
+      "reason2": "Ralentissons — une fois par mois seulement, s'il vous plaît.",
+      "reason3": "Je retire ce que j'ai dit ! Continuez à envoyer du contenu.",
+      "reason4": "Ça ne fonctionne pas pour moi. Désabonnez-moi.",
+      "submit": "Envoyer et annuler l'abonnement"
+    },
+    "cancelled": {
+      "heading": "Votre abonnement a été annulé.",
+      "line1": "Nous avons appris que vous avez annulé votre abonnement, ce qui est regrettable.",
+      "line2": "Nous vous souhaitons un agréable voyage.",
+      "resubscribe": "S'abonner à nouveau",
+      "goHome": "Accueil"
+    },
+    "deleteDialog": {
+      "closeAriaLabel": "Fermer la boîte de dialogue",
+      "heading": "Êtes-vous sûr de vouloir supprimer votre compte ?",
+      "description": "Vous perdrez toutes vos informations, en particulier vos certificats.",
+      "typeLabel": "Tapez « Delete » pour continuer",
+      "typePlaceholder": "Tapez « Delete »",
+      "goBack": "Retour",
+      "confirm": "Supprimer le compte"
+    },
+    "logoutDialog": {
+      "closeAriaLabel": "Fermer la boîte de dialogue",
+      "heading": "Êtes-vous sûr de vouloir vous déconnecter ?",
+      "description": "Vous serez déconnecté de ce navigateur. Vous pourrez vous reconnecter plus tard pour accéder à vos informations.",
+      "goBack": "Retour",
+      "confirm": "Se déconnecter"
     }
   }
 }

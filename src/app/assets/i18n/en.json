@@ -79,7 +79,8 @@
       "privacyRequired": "You must agree to the Privacy Policy to continue.",
       "submit": "Register",
       "hasAccount": "Already registered?",
-      "loginLink": "Log in now"
+      "loginLink": "Log in now",
+      "socialProviderAriaLabel": "Continue with a social provider"
     },
     "resetPassword": {
       "title": "Reset Password",
@@ -153,7 +154,9 @@
       "searchCountry": "Search country…",
       "selectCountryCode": "Select country code",
       "noResults": "No results",
-      "searchPlaceholder": "Search…"
+      "searchPlaceholder": "Search…",
+      "clearAriaLabel": "Clear",
+      "formAriaLabel": "Complete your account"
     }
   },
   "landing": {
@@ -413,7 +416,8 @@
       "login": "Login",
       "register": "Register",
       "mainNavAriaLabel": "Main navigation",
-      "homeAriaLabel": "Institute of Scrum — home"
+      "homeAriaLabel": "Institute of Scrum — home",
+      "logoAlt": "Institute of Scrum"
     },
     "footer": {
       "tagline": "Canada's premier provider of industry-recognized Scrum certifications.",
@@ -440,7 +444,12 @@
         "title": "Legal",
         "privacy": "Privacy Policy",
         "terms": "Terms of Service"
-      }
+      },
+      "linkedinAriaLabel": "LinkedIn",
+      "xAriaLabel": "X / Twitter",
+      "facebookAriaLabel": "Facebook",
+      "youtubeAriaLabel": "YouTube",
+      "logoAlt": "Institute of Scrum"
     }
   },
   "contact": {
@@ -477,7 +486,10 @@
       "myCertificates": "My certificates",
       "profile": "Profile",
       "settings": "Settings",
-      "dashboardLabel": "Institute of Scrum"
+      "dashboardLabel": "Institute of Scrum",
+      "logoAriaLabel": "Institute of Scrum — Dashboard",
+      "notificationsAriaLabel": "Notifications",
+      "navigationAriaLabel": "Dashboard navigation"
     },
     "menu": {
       "userMenuLabel": "User menu",
@@ -734,7 +746,9 @@
       "related": "Related Articles",
       "notFound": "Article not found.",
       "backToInsights": "Back to Insights",
-      "scrollToTop": "Scroll to top"
+      "scrollToTop": "Scroll to top",
+      "youMightAlsoEnjoyPart1": "You Might Also ",
+      "youMightAlsoEnjoyPart2": "Enjoy"
     }
   },
   "scrumMaster": {
@@ -2114,6 +2128,87 @@
         "heading": "Contact Us",
         "body": "If you have any questions or concerns regarding this policy or our data practices, please contact our support team directly through the platform."
       }
+    }
+  },
+  "forbidden": {
+    "heading": "Access denied",
+    "description": "You're signed in, but you don't have permission to view this page.",
+    "backToDashboard": "Back to dashboard"
+  },
+  "notFound": {
+    "heading": "Page not found",
+    "description": "The route you tried to reach does not exist or you do not have access to it.",
+    "backHome": "Back home"
+  },
+  "ui": {
+    "noOptionsFound": "No options found",
+    "noResults": "No results",
+    "filterOptionsAriaLabel": "Filter options",
+    "clearFilterAriaLabel": "Clear filter",
+    "searchPlaceholder": "Search..."
+  },
+  "settings": {
+    "breadcrumb": {
+      "backToDashboard": "Back to Dashboard",
+      "dashboard": "Dashboard",
+      "settings": "Settings",
+      "cancelSubscription": "Cancel subscription",
+      "backToSettings": "Back to Settings"
+    },
+    "nav": {
+      "navigationAriaLabel": "Dashboard navigation"
+    },
+    "notifications": {
+      "heading": "Notification Preferences",
+      "all": "Get notification for all updates",
+      "insights": "Get notification for new Insights / blog publications",
+      "recommended": "Recommended courses",
+      "completion": "Course completion notification",
+      "material": "New learning material added"
+    },
+    "newsletter": {
+      "heading": "Newsletter",
+      "checkbox": "Newsletter subscription notification",
+      "enabled": "Enabled",
+      "enabledAriaLabel": "Subscription status: Enabled",
+      "cancelLink": "Cancel subscription"
+    },
+    "account": {
+      "heading": "Account Preferences",
+      "delete": "Delete account"
+    },
+    "cancelSubscription": {
+      "backAriaLabel": "Back to Settings",
+      "title": "Why are you cancelling your subscription?",
+      "selectReasonSrOnly": "Select a reason for cancellation",
+      "reason1": "Once a week sounds about right.",
+      "reason2": "Let's slow it down — only once a month, please.",
+      "reason3": "I take it back! Keep the inspiration coming.",
+      "reason4": "It's just not working out. Unsubscribe me.",
+      "submit": "Send and cancel subscription"
+    },
+    "cancelled": {
+      "heading": "Your subscription has been cancelled.",
+      "line1": "We heard you cancelled your subscription, which is unfortunate.",
+      "line2": "We wish you a pleasant journey.",
+      "resubscribe": "Subscribe again",
+      "goHome": "Go Home"
+    },
+    "deleteDialog": {
+      "closeAriaLabel": "Close dialog",
+      "heading": "Are you sure you want to delete your account?",
+      "description": "You will lose all information, especially your certificates.",
+      "typeLabel": "Type \"Delete\" to continue",
+      "typePlaceholder": "Type \"Delete\"",
+      "goBack": "Go back",
+      "confirm": "Delete account"
+    },
+    "logoutDialog": {
+      "closeAriaLabel": "Close dialog",
+      "heading": "Are you sure you want to logout?",
+      "description": "You will be logged out of this browser. You can log back in later to access your information.",
+      "goBack": "Go back",
+      "confirm": "Logout"
     }
   }
 }
