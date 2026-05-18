@@ -66,7 +66,7 @@ import { NgOptimizedImage } from '@angular/common';
           <span
             class="inline-flex items-center justify-center px-6 py-2 rounded-full border
                    font-heading font-semibold text-[14px] text-ios-brand-primary whitespace-nowrap"
-            style="background-color: #faf0c8; border-color: #d9bd4c;"
+            class="bg-ios-brand-yellow-soft border-ios-brand-gold"
           >
             {{ badge() }}
           </span>
@@ -83,7 +83,7 @@ import { NgOptimizedImage } from '@angular/common';
               </h2>
               <p
                 class="font-body font-medium text-[16px] leading-[1.4] w-full max-w-[940px]"
-                style="color: #f6f6f6;"
+                class="text-ios-surface-mid"
               >
                 {{ description() }}
               </p>

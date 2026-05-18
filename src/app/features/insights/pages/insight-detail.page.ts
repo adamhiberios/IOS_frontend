@@ -35,7 +35,7 @@ import { InsightsStore } from '../data-access/insights.store';
     <ios-landing-navbar />
 
     <!-- 2. Hero banner -->
-    <section class="relative bg-[#272827] overflow-hidden">
+    <section class="relative bg-ios-fg overflow-hidden">
       <!-- Decorative circles -->
       <div
         class="absolute top-[-157px] end-[-160px] w-[320px] h-[320px] rounded-full bg-white/5"
@@ -83,7 +83,7 @@ import { InsightsStore } from '../data-access/insights.store';
               </h1>
               <!-- Read time under title -->
               <div class="flex items-center gap-1.5 mt-3">
-                <ios-icon name="clock" class="w-4 h-4 text-[#D9BD4C]" aria-hidden="true" />
+                <ios-icon name="clock" class="w-4 h-4 text-ios-brand-gold" aria-hidden="true" />
                 <span class="text-[13px] font-body text-white/70">{{ post.readTime }}</span>
               </div>
             }
@@ -155,7 +155,7 @@ import { InsightsStore } from '../data-access/insights.store';
                 }
                 @case ('quote') {
                   <blockquote
-                    class="relative border-s-4 border-[#D9BD4C] rounded-xl bg-[#FFFCEE] ps-6 pe-6 py-5 my-2"
+                    class="relative border-s-4 border-ios-brand-gold rounded-xl bg-[#FFFCEE] ps-6 pe-6 py-5 my-2"
                   >
                     <p
                       class="font-heading font-semibold italic text-[17px] leading-relaxed text-[#736428]"
@@ -198,10 +198,10 @@ import { InsightsStore } from '../data-access/insights.store';
           <!-- Section header -->
           <div class="flex flex-col gap-2 mb-10">
             <h2 class="font-heading font-extrabold text-[24px]">
-              <span class="text-[#272827]">{{ lang.t('insight.detail.youMightAlsoEnjoyPart1') }}</span
-              ><span class="text-[#8B0000]">{{ lang.t('insight.detail.youMightAlsoEnjoyPart2') }}</span>
+              <span class="text-ios-fg">{{ lang.t('insight.detail.youMightAlsoEnjoyPart1') }}</span
+              ><span class="text-ios-brand-primary">{{ lang.t('insight.detail.youMightAlsoEnjoyPart2') }}</span>
             </h2>
-            <div class="w-10 h-1 rounded-full bg-[#D9BD4C]"></div>
+            <div class="w-10 h-1 rounded-full bg-ios-brand-gold"></div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">

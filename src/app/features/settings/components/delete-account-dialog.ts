@@ -61,7 +61,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
         >
           <!-- Icon -->
           <div
-            class="flex items-center justify-center p-4 rounded-[56px] bg-[#f1f1f1]"
+            class="flex items-center justify-center p-4 rounded-[56px] bg-ios-surface-soft"
             aria-hidden="true"
           >
             <!-- Trash icon — external Figma asset, not an app image -->
@@ -82,11 +82,11 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
             <div class="flex flex-col gap-1 items-start w-full text-center">
               <h2
                 id="delete-dialog-title"
-                class="font-semibold leading-[1.2] text-[#303130] text-[24px] w-full"
+                class="font-semibold leading-[1.2] text-ios-fg-11 text-[24px] w-full"
               >
                 {{ lang.t('settings.deleteDialog.heading') }}
               </h2>
-              <p class="font-medium leading-[1.4] text-[#373837] text-[18px] w-full">
+              <p class="font-medium leading-[1.4] text-ios-fg-10 text-[18px] w-full">
                 {{ lang.t('settings.deleteDialog.description') }}
               </p>
             </div>
@@ -96,7 +96,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
               <div class="flex items-center px-2 w-full">
                 <label
                   for="delete-confirm-input"
-                  class="font-semibold leading-[1.4] text-[#272827] text-[16px]"
+                  class="font-semibold leading-[1.4] text-ios-fg text-[16px]"
                 >
                   {{ lang.t('settings.deleteDialog.typeLabel') }}
                 </label>
@@ -107,7 +107,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 [attr.placeholder]="lang.t('settings.deleteDialog.typePlaceholder')"
                 [formControl]="confirmControl"
                 autocomplete="off"
-                class="w-full px-3 py-3 rounded-lg bg-[#f6f6f6] border border-[#c4c5c4] text-[16px] text-[#373837] font-medium leading-[1.4] placeholder:text-[#959695] focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary transition-colors"
+                class="w-full px-3 py-3 rounded-lg bg-ios-surface-mid border border-ios-line text-[16px] text-ios-fg-10 font-medium leading-[1.4] placeholder:text-ios-fg-7 focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary transition-colors"
               />
             </div>
 
@@ -116,7 +116,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
               <!-- Go back -->
               <button
                 type="button"
-                class="flex items-center justify-center h-14 px-6 rounded-xl bg-[#f1f1f1] text-[#272827] text-[18px] font-semibold leading-[1.4] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#272827]/30 w-[139px]"
+                class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-surface-soft text-ios-fg text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30 w-[139px]"
                 (click)="cancelled.emit()"
               >
                 {{ lang.t('settings.deleteDialog.goBack') }}
@@ -125,7 +125,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
               <!-- Delete account — disabled until "Delete" typed -->
               <button
                 type="button"
-                class="flex items-center justify-center h-14 px-6 rounded-xl bg-[#d63d13] text-white text-[18px] font-semibold leading-[1.4] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d63d13]/50 w-[230px]"
+                class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-danger-mid text-white text-[18px] font-semibold leading-[1.4] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50 w-[230px]"
                 [class.opacity-40]="!canDelete()"
                 [class.cursor-not-allowed]="!canDelete()"
                 [disabled]="!canDelete()"

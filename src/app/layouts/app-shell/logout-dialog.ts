@@ -48,7 +48,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
         >
           <!-- Icon — door in soft danger background circle -->
           <div
-            class="flex items-center justify-center p-4 rounded-[56px] bg-[#fbece7]"
+            class="flex items-center justify-center p-4 rounded-[56px] bg-ios-danger-soft"
             aria-hidden="true"
           >
             <!-- Door icon — external Figma asset, not an app image -->
@@ -69,11 +69,11 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
             <div class="flex flex-col gap-1 items-center w-full text-center">
               <h2
                 id="logout-dialog-title"
-                class="font-semibold leading-[1.2] text-[#303130] text-[24px] w-full"
+                class="font-semibold leading-[1.2] text-ios-fg-11 text-[24px] w-full"
               >
                 Are you sure to logout?
               </h2>
-              <p class="font-medium leading-[1.4] text-[#373837] text-[18px] w-full">
+              <p class="font-medium leading-[1.4] text-ios-fg-10 text-[18px] w-full">
                 You will be logged out of this browser, and you can log back in later to get your
                 information.
               </p>
@@ -84,7 +84,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
               <!-- Go back -->
               <button
                 type="button"
-                class="flex items-center justify-center h-14 px-6 rounded-xl bg-[#f1f1f1] text-[#272827] text-[18px] font-semibold leading-[1.4] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#272827]/30 w-[139px]"
+                class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-surface-soft text-ios-fg text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30 w-[139px]"
                 (click)="cancelled.emit()"
               >
                 Go back
@@ -93,7 +93,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
               <!-- Logout — dark red -->
               <button
                 type="button"
-                class="flex items-center justify-center h-14 px-6 rounded-xl bg-[#8b0000] text-white text-[18px] font-semibold leading-[1.4] hover:bg-[#6f0000] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b0000]/50 w-[230px]"
+                class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-brand-primary text-white text-[18px] font-semibold leading-[1.4] hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 w-[230px]"
                 (click)="confirmed.emit()"
               >
                 Logout

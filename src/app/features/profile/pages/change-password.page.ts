@@ -62,12 +62,12 @@ import { ProfileStore } from '../data-access/profile.store';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-[#f1f1f1]">
+      <div class="w-full bg-white border-b border-ios-surface-soft">
         <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
           <div class="flex items-center gap-4">
             <a
               routerLink="/dashboard/profile"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none"
+              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none"
               [attr.aria-label]="lang.t('profile.breadcrumb.backToProfile')"
             >
               <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
@@ -80,21 +80,21 @@ import { ProfileStore } from '../data-access/profile.store';
                 <li>
                   <a
                     routerLink="/dashboard"
-                    class="font-medium text-[#666766] hover:text-[#141514] transition-colors"
+                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
                     >{{ lang.t('profile.breadcrumb.dashboard') }}</a
                   >
                 </li>
-                <li class="font-medium text-[#666766]" aria-hidden="true">/</li>
+                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
                   <a
                     routerLink="/dashboard/profile"
-                    class="font-medium text-[#666766] hover:text-[#141514] transition-colors"
+                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
                     >{{ lang.t('profile.breadcrumb.profile') }}</a
                   >
                 </li>
-                <li class="font-medium text-[#666766]" aria-hidden="true">/</li>
+                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
-                  <span class="font-semibold text-[#141514]" aria-current="page">{{
+                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
                     lang.t('profile.breadcrumb.changePassword')
                   }}</span>
                 </li>
@@ -118,25 +118,25 @@ import { ProfileStore } from '../data-access/profile.store';
             <div class="flex gap-6 items-start">
               <h2
                 id="pwd-section-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
               >
                 {{ lang.t('profile.changePassword.sectionHeading') }}
               </h2>
 
-              <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6 flex flex-col gap-6">
+              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex flex-col gap-6">
                 <!-- Old Password -->
                 <div class="flex flex-col gap-1 h-[86px]">
                   <div class="flex items-center px-2">
                     <label
                       for="oldPassword"
-                      class="text-[18px] font-semibold leading-[1.4] text-[#272827]"
+                      class="text-[18px] font-semibold leading-[1.4] text-ios-fg"
                     >
                       {{ lang.t('profile.changePassword.oldPasswordLabel') }}
                     </label>
                   </div>
                   <div class="relative">
                     <div
-                      class="bg-[#f6f6f6] border border-[#c4c5c4] rounded-lg p-4 flex items-center gap-2 focus-within:border-[#272827] transition-colors"
+                      class="bg-ios-surface-mid border border-ios-line rounded-lg p-4 flex items-center gap-2 focus-within:border-ios-fg transition-colors"
                       [class.border-ios-brand-primary]="
                         hasError('oldPassword', 'required') ||
                         hasError('oldPassword', 'wrongPassword')
@@ -147,7 +147,7 @@ import { ProfileStore } from '../data-access/profile.store';
                         [type]="showOld() ? 'text' : 'password'"
                         formControlName="oldPassword"
                         [placeholder]="lang.t('profile.changePassword.oldPasswordPlaceholder')"
-                        class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-[#272827] placeholder:text-[#959695] outline-none focus:outline-none focus:shadow-none"
+                        class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
                         [attr.aria-describedby]="
                           hasError('oldPassword', 'required') ? 'oldPassword-error' : null
                         "
@@ -160,7 +160,7 @@ import { ProfileStore } from '../data-access/profile.store';
                       />
                       <button
                         type="button"
-                        class="text-[#959695] hover:text-[#272827] transition-colors focus-visible:outline-none"
+                        class="text-ios-fg-7 hover:text-ios-fg transition-colors focus-visible:outline-none"
                         [attr.aria-label]="
                           showOld()
                             ? lang.t('profile.changePassword.hidePassword')
@@ -193,14 +193,14 @@ import { ProfileStore } from '../data-access/profile.store';
                     <div class="flex items-center px-2">
                       <label
                         for="newPassword"
-                        class="text-[18px] font-semibold leading-[1.4] text-[#272827]"
+                        class="text-[18px] font-semibold leading-[1.4] text-ios-fg"
                       >
                         {{ lang.t('profile.changePassword.newPasswordLabel') }}
                       </label>
                     </div>
                     <div class="relative">
                       <div
-                        class="bg-[#f6f6f6] border border-[#c4c5c4] rounded-lg p-4 flex items-center gap-2 focus-within:border-[#272827] transition-colors"
+                        class="bg-ios-surface-mid border border-ios-line rounded-lg p-4 flex items-center gap-2 focus-within:border-ios-fg transition-colors"
                         [class.border-ios-brand-primary]="
                           hasError('newPassword', 'required') ||
                           hasError('newPassword', 'weakPassword')
@@ -211,7 +211,7 @@ import { ProfileStore } from '../data-access/profile.store';
                           [type]="showNew() ? 'text' : 'password'"
                           formControlName="newPassword"
                           [placeholder]="lang.t('profile.changePassword.newPasswordPlaceholder')"
-                          class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-[#272827] placeholder:text-[#959695] outline-none focus:outline-none focus:shadow-none"
+                          class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
                           [attr.aria-describedby]="'pwd-hint newPassword-error'"
                           [attr.aria-invalid]="
                             hasError('newPassword', 'weakPassword') ? 'true' : null
@@ -219,7 +219,7 @@ import { ProfileStore } from '../data-access/profile.store';
                         />
                         <button
                           type="button"
-                          class="text-[#959695] hover:text-[#272827] transition-colors focus-visible:outline-none"
+                          class="text-ios-fg-7 hover:text-ios-fg transition-colors focus-visible:outline-none"
                           [attr.aria-label]="
                             showNew()
                               ? lang.t('profile.changePassword.hidePassword')
@@ -249,7 +249,7 @@ import { ProfileStore } from '../data-access/profile.store';
 
                   <!-- Hint text -->
                   <div class="px-2" id="pwd-hint">
-                    <p class="text-[16px] font-medium leading-[1.4] text-[#959695]">
+                    <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-7">
                       {{ lang.t('profile.changePassword.passwordHint') }}
                     </p>
                   </div>
@@ -260,14 +260,14 @@ import { ProfileStore } from '../data-access/profile.store';
                   <div class="flex items-center px-2">
                     <label
                       for="confirmPassword"
-                      class="text-[18px] font-semibold leading-[1.4] text-[#272827]"
+                      class="text-[18px] font-semibold leading-[1.4] text-ios-fg"
                     >
                       {{ lang.t('profile.changePassword.confirmPasswordLabel') }}
                     </label>
                   </div>
                   <div class="relative">
                     <div
-                      class="bg-[#f6f6f6] border border-[#c4c5c4] rounded-lg p-4 flex items-center gap-2 focus-within:border-[#272827] transition-colors"
+                      class="bg-ios-surface-mid border border-ios-line rounded-lg p-4 flex items-center gap-2 focus-within:border-ios-fg transition-colors"
                       [class.border-ios-brand-primary]="hasError('confirmPassword', 'mismatch')"
                     >
                       <input
@@ -275,7 +275,7 @@ import { ProfileStore } from '../data-access/profile.store';
                         [type]="showConfirm() ? 'text' : 'password'"
                         formControlName="confirmPassword"
                         [placeholder]="lang.t('profile.changePassword.confirmPasswordPlaceholder')"
-                        class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-[#272827] placeholder:text-[#959695] outline-none focus:outline-none focus:shadow-none"
+                        class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
                         [attr.aria-describedby]="
                           hasError('confirmPassword', 'mismatch') ? 'confirmPassword-error' : null
                         "
@@ -285,7 +285,7 @@ import { ProfileStore } from '../data-access/profile.store';
                       />
                       <button
                         type="button"
-                        class="text-[#959695] hover:text-[#272827] transition-colors focus-visible:outline-none"
+                        class="text-ios-fg-7 hover:text-ios-fg transition-colors focus-visible:outline-none"
                         [attr.aria-label]="
                           showConfirm()
                             ? lang.t('profile.changePassword.hidePassword')
@@ -319,7 +319,7 @@ import { ProfileStore } from '../data-access/profile.store';
             <!-- Cancel -->
             <button
               type="button"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-[#f1f1f1] text-[#373837] text-[16px] font-semibold leading-[1.4] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none whitespace-nowrap"
+              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-surface-soft text-ios-fg-10 text-[16px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none whitespace-nowrap"
               (click)="showCancelDialog.set(true)"
             >
               {{ lang.t('profile.changePassword.cancel') }}
@@ -327,7 +327,7 @@ import { ProfileStore } from '../data-access/profile.store';
             <!-- Save information -->
             <button
               type="submit"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-[#141514] text-white text-[16px] font-semibold leading-[1.4] hover:bg-[#272827] transition-colors focus-visible:outline-none whitespace-nowrap disabled:opacity-50 disabled:pointer-events-none"
+              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg-13 text-white text-[16px] font-semibold leading-[1.4] hover:bg-ios-fg transition-colors focus-visible:outline-none whitespace-nowrap disabled:opacity-50 disabled:pointer-events-none"
               [disabled]="store.passwordSubmitStatus() === 'pending'"
             >
               @if (store.passwordSubmitStatus() === 'pending') {
@@ -343,9 +343,9 @@ import { ProfileStore } from '../data-access/profile.store';
       </main>
 
       <!-- ── Footer ────────────────────────────────────────────────────── -->
-      <footer class="bg-[#272827] w-full py-4 shrink-0">
+      <footer class="bg-ios-fg w-full py-4 shrink-0">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-[#959695] text-sm"
+          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>
@@ -430,7 +430,7 @@ export class ChangePasswordPage implements OnInit {
             ? 'bg-yellow-400'
             : 'bg-emerald-500';
     return Array.from({ length: 4 }, (_u, i) =>
-      i < filled ? `${activeColor} opacity-100` : 'bg-[#dcdcdc] opacity-100',
+      i < filled ? `${activeColor} opacity-100` : 'bg-ios-border-light opacity-100',
     );
   });
 

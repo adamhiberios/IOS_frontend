@@ -59,7 +59,7 @@ import { IosIcon, provideIcons } from '@ui';
           <!-- Back button — arrow flips in RTL to point toward the reading start -->
           <a
             href="/"
-            class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#f1f1f1]
+            class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft
                    hover:opacity-90 transition-opacity shrink-0
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
             [attr.aria-label]="backLabel()"
@@ -77,7 +77,7 @@ import { IosIcon, provideIcons } from '@ui';
             <nav aria-label="Breadcrumb">
               <ol
                 class="flex items-center gap-2 text-[14px] font-heading font-medium"
-                style="color: #dcdcdc;"
+                class="text-ios-border-light"
               >
                 <li>
                   <a href="/" class="hover:text-white transition-colors">
@@ -90,7 +90,7 @@ import { IosIcon, provideIcons } from '@ui';
             <h1
               [id]="headingId()"
               class="font-heading font-semibold text-[24px] leading-[1.2]"
-              style="color: #f6f6f6;"
+              class="text-ios-surface-mid"
             >
               {{ title() }}
             </h1>

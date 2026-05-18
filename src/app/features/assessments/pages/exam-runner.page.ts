@@ -61,11 +61,11 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
       <div class="flex flex-col flex-1 pt-16">
         <!-- ── Breadcrumb ─────────────────────────────────────────────── -->
         <div
-          class="w-full border-b border-[#f1f1f1] bg-white flex items-center
+          class="w-full border-b border-ios-surface-soft bg-white flex items-center
                  px-4 md:px-20 h-[70px]"
           aria-label="Current page"
         >
-          <span class="font-semibold text-[#141514] text-base leading-tight">Final test</span>
+          <span class="font-semibold text-ios-fg-13 text-base leading-tight">Final test</span>
         </div>
 
         <!-- ── Main content ────────────────────────────────────────────── -->
@@ -78,20 +78,20 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
           <div class="flex gap-6 items-start">
             <!-- ── Left: Question panel ──────────────────────────────── -->
             <div
-              class="flex-1 min-w-0 flex flex-col gap-6 rounded-xl bg-[#f1f1f1] p-6"
+              class="flex-1 min-w-0 flex flex-col gap-6 rounded-xl bg-ios-surface-soft p-6"
               aria-live="polite"
               aria-atomic="true"
             >
               <!-- Question label + text -->
               <div class="flex flex-col gap-1.5">
-                <p class="text-[14px] font-medium leading-[1.4] text-[#666766]">Question</p>
-                <h1 class="text-[16px] font-medium leading-[1.4] text-[#303130]">
+                <p class="text-[14px] font-medium leading-[1.4] text-ios-fg-8">Question</p>
+                <h1 class="text-[16px] font-medium leading-[1.4] text-ios-fg-11">
                   {{ currentQuestion()?.text }}
                 </h1>
               </div>
 
               <!-- Gold accent line -->
-              <div class="h-1 w-[57px] rounded-full bg-[#d9bd4c]" aria-hidden="true"></div>
+              <div class="h-1 w-[57px] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
 
               <!-- ── Answer options ──────────────────────────────────── -->
               <div class="flex flex-col gap-3" role="radiogroup" aria-label="Answer options">
@@ -118,7 +118,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
 
             <!-- ── Right: EPO-green sidebar ──────────────────────────── -->
             <aside
-              class="w-[354px] shrink-0 rounded-2xl bg-[#515e4d] p-8 flex flex-col gap-6"
+              class="w-[354px] shrink-0 rounded-2xl bg-cer-green-strong p-8 flex flex-col gap-6"
               aria-label="Exam progress"
             >
               <!-- Badge + cert info -->
@@ -132,7 +132,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                 </div>
                 <div class="flex flex-col min-w-0">
                   <p class="font-bold text-white text-lg leading-tight whitespace-nowrap">EPO-P</p>
-                  <p class="font-medium text-[#dcdcdc] text-sm leading-relaxed">
+                  <p class="font-medium text-ios-border-light text-sm leading-relaxed">
                     Endorsed Product Owner Practitioner
                   </p>
                 </div>
@@ -144,39 +144,39 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                   Question {{ currentIndex() + 1 }} of {{ questions().length }}
                 </p>
                 <div
-                  class="inline-flex items-center gap-2 rounded-[10px] bg-[#2e362c]
+                  class="inline-flex items-center gap-2 rounded-[10px] bg-cer-green-deep
                          px-3 py-1.5 h-8 shrink-0"
                   aria-label="Time remaining"
                 >
                   <ios-icon
                     name="clock"
-                    class="w-5 h-5 text-[#eeefed] shrink-0"
+                    class="w-5 h-5 text-cer-green-soft shrink-0"
                     aria-hidden="true"
                   />
                   <span
-                    class="text-[14px] font-semibold text-[#eeefed] tabular-nums leading-[1.4]"
+                    class="text-[14px] font-semibold text-cer-green-soft tabular-nums leading-[1.4]"
                     >{{ formattedTime() }}</span
                   >
                 </div>
               </div>
 
               <!-- Divider -->
-              <div class="h-px w-full bg-[#3a4337]" aria-hidden="true"></div>
+              <div class="h-px w-full bg-cer-green-text" aria-hidden="true"></div>
 
               <!-- Progress -->
               <div class="flex flex-col gap-2">
                 <div class="flex items-center justify-between">
-                  <span class="text-[14px] font-medium text-[#dcdcdc] leading-[1.4]">
+                  <span class="text-[14px] font-medium text-ios-border-light leading-[1.4]">
                     Progress
                   </span>
-                  <span class="text-[14px] font-medium text-[#dcdcdc] leading-[1.4] tabular-nums">
+                  <span class="text-[14px] font-medium text-ios-border-light leading-[1.4] tabular-nums">
                     {{ answeredCount() }} / {{ questions().length }}
                   </span>
                 </div>
 
                 <!-- Progress bar -->
                 <div
-                  class="h-2 rounded-full bg-[#3a4337] overflow-hidden"
+                  class="h-2 rounded-full bg-cer-green-text overflow-hidden"
                   role="progressbar"
                   [attr.aria-valuenow]="answeredCount()"
                   [attr.aria-valuemax]="questions().length"
@@ -184,7 +184,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                   [attr.aria-label]="'Progress: ' + answeredCount() + ' of ' + questions().length"
                 >
                   <div
-                    class="h-full rounded-full bg-[#ffde59] transition-all duration-300"
+                    class="h-full rounded-full bg-ios-brand-yellow-bright transition-all duration-300"
                     [style.width.%]="progressPercent()"
                   ></div>
                 </div>
@@ -200,8 +200,8 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
               type="button"
               [disabled]="currentIndex() === 0"
               class="flex h-14 w-[190px] items-center justify-center rounded-xl
-                     bg-[#f1f1f1] text-[#373837] font-semibold text-lg
-                     transition-colors hover:bg-[#e5e5e5]
+                     bg-ios-surface-soft text-ios-fg-10 font-semibold text-lg
+                     transition-colors hover:bg-ios-surface-hover
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                      focus-visible:ring-[#d0d0d0]
                      disabled:opacity-40 disabled:pointer-events-none"
@@ -216,10 +216,10 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                 type="button"
                 [disabled]="selectedOptionId() === null"
                 class="flex h-14 w-[238px] items-center justify-center rounded-xl
-                       bg-[#141514] text-white font-semibold text-lg
+                       bg-ios-fg-13 text-white font-semibold text-lg
                        transition-colors hover:bg-[#2a2b2a]
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-                       focus-visible:ring-[#141514]/50
+                       focus-visible:ring-ios-fg-13/50
                        disabled:opacity-40 disabled:pointer-events-none"
                 (click)="onSubmit()"
               >
@@ -235,10 +235,10 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                 type="button"
                 [disabled]="selectedOptionId() === null"
                 class="flex h-14 w-[238px] items-center justify-center rounded-xl
-                       bg-[#141514] text-white font-semibold text-lg
+                       bg-ios-fg-13 text-white font-semibold text-lg
                        transition-colors hover:bg-[#2a2b2a]
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-                       focus-visible:ring-[#141514]/50
+                       focus-visible:ring-ios-fg-13/50
                        disabled:opacity-40 disabled:pointer-events-none"
                 (click)="onNext()"
               >
@@ -254,10 +254,10 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
         </main>
 
         <!-- ── Footer ─────────────────────────────────────────────────── -->
-        <footer class="bg-[#272827] w-full py-4">
+        <footer class="bg-ios-fg w-full py-4">
           <div
             class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2
-                   text-[#959695] text-xs"
+                   text-ios-fg-7 text-xs"
           >
             <ios-canada-flag aria-hidden="true" />
             <span>© 2026 Institute of Scrum. All rights reserved.</span>
@@ -345,9 +345,9 @@ export class ExamRunnerPage {
 
     // Selected state — dark gray, NO correct/wrong colours shown during exam
     if (this.selectedOptionId() === optId) {
-      return `${base} bg-[#373837] text-white font-semibold`;
+      return `${base} bg-ios-fg-10 text-white font-semibold`;
     }
-    return `${base} bg-white text-[#272827] hover:bg-[#f8f8f8]`;
+    return `${base} bg-white text-ios-fg hover:bg-[#f8f8f8]`;
   }
 
   /** Letter badge class inside an option button. */
@@ -356,9 +356,9 @@ export class ExamRunnerPage {
       'inline-flex items-center justify-center w-6 h-6 rounded-full text-[14px] font-semibold shrink-0';
 
     if (this.selectedOptionId() === optId) {
-      return `${base} bg-[#f6f6f6] text-[#272827]`;
+      return `${base} bg-ios-surface-mid text-ios-fg`;
     }
-    return `${base} bg-[#535453] text-[#f1f1f1]`;
+    return `${base} bg-ios-fg-mid text-ios-surface-soft`;
   }
 
   // ── Actions ────────────────────────────────────────────────────────────

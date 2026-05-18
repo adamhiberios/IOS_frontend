@@ -61,7 +61,7 @@ const FAMILY_BG: Record<string, string> = {
 
               @if (result.status === 'earned' || result.status === 'failed') {
                 <span
-                  class="w-[6px] h-[6px] rounded-full bg-[#c4c5c4] shrink-0"
+                  class="w-[6px] h-[6px] rounded-full bg-ios-line shrink-0"
                   aria-hidden="true"
                 ></span>
               }
@@ -72,7 +72,7 @@ const FAMILY_BG: Record<string, string> = {
                   >{{ lang.t('dashboard.certs.earned') }}</span
                 >
                 <span
-                  class="w-[6px] h-[6px] rounded-full bg-[#c4c5c4] shrink-0"
+                  class="w-[6px] h-[6px] rounded-full bg-ios-line shrink-0"
                   aria-hidden="true"
                 ></span>
               }
@@ -112,7 +112,7 @@ const FAMILY_BG: Record<string, string> = {
               {{ result.date }}
             </span>
             <span
-              class="w-[7px] h-[7px] rounded-full bg-[#c4c5c4] shrink-0"
+              class="w-[7px] h-[7px] rounded-full bg-ios-line shrink-0"
               aria-hidden="true"
             ></span>
             <div class="flex items-center gap-2">
@@ -122,7 +122,7 @@ const FAMILY_BG: Record<string, string> = {
               </span>
             </div>
             <span
-              class="w-[7px] h-[7px] rounded-full bg-[#c4c5c4] shrink-0"
+              class="w-[7px] h-[7px] rounded-full bg-ios-line shrink-0"
               aria-hidden="true"
             ></span>
             <div class="flex items-center gap-2">

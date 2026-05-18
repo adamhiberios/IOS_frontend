@@ -73,7 +73,7 @@ import { InsightsStore } from '../data-access/insights.store';
             type="button"
             (click)="onLoadMore()"
             class="inline-flex items-center justify-center gap-2 w-full  h-12 rounded-lg
-                   bg-white border-[1.5px] border-[#D9BD4C] border-solid
+                   bg-white border-[1.5px] border-ios-brand-gold border-solid
                    text-[#736428] font-heading font-semibold text-[15px] transition-colors"
           >
             {{ lang.t('insights.loadMore') }}

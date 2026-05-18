@@ -1,6 +1,5 @@
-/* This file is intentionally empty.
- * Global styles and Tailwind v4 imports live in `src/styles.css` so that the
- * `@import 'tailwindcss'` directive is treated as a CSS import (not a
- * deprecated Sass @import).
- * Component-level SCSS still works via inlineStyleLanguage in angular.json.
- */
+/* Intentionally empty — global styles live in `src/styles.css`.
+ * This file exists only because `@schematics/angular:component` sets
+ * `"style": "scss"` in angular.json, making SCSS the default for
+ * component inline styles. See `src/styles.css` for the Tailwind v4
+ * CSS-first configuration and all design tokens. */

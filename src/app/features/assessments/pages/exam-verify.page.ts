@@ -40,7 +40,7 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
       <div class="flex flex-col flex-1 pt-16">
         <!-- Breadcrumb nav -->
         <nav
-          class="w-full border-b border-[#f1f1f1] bg-white flex items-center
+          class="w-full border-b border-ios-surface-soft bg-white flex items-center
                  px-4 md:px-20 h-[70px]"
           aria-label="Page navigation"
         >
@@ -49,8 +49,8 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
             <a
               routerLink="/dashboard"
               class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl
-                     bg-[#f1f1f1] text-[#141514] transition-colors
-                     hover:bg-[#e5e5e5]
+                     bg-ios-surface-soft text-ios-fg-13 transition-colors
+hover:bg-ios-surface-hover
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                      focus-visible:ring-ios-brand-primary/50"
               aria-label="Go back to dashboard"
@@ -71,7 +71,7 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
               </svg>
             </a>
 
-            <span class="font-semibold text-[#141514] text-base leading-tight" dir="auto">
+            <span class="font-semibold text-ios-fg-13 text-base leading-tight" dir="auto">
               Verify to go through exam
             </span>
           </div>
@@ -85,7 +85,7 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
           <!-- Emergency icon circle -->
           <div
             class="relative z-10 mb-8 flex h-28 w-28 items-center justify-center
-                   rounded-full bg-[#f1f1f1]"
+                   rounded-full bg-ios-surface-soft"
             aria-hidden="true"
           >
             <svg
@@ -158,29 +158,29 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
           <!-- Content block (centered, 606 px wide in design) -->
           <div class="relative z-10 w-full max-w-[606px]">
             <!-- Email notice -->
-            <p class="text-lg font-medium text-[#666766] leading-relaxed mb-6">
+            <p class="text-lg font-medium text-ios-fg-8 leading-relaxed mb-6">
               We will send you a link to direct you to your exam, please check your Email:
-              <strong class="font-bold text-[#373837]">ad*********am&#64;gmail.com</strong>
+              <strong class="font-bold text-ios-fg-10">ad*********am&#64;gmail.com</strong>
             </p>
 
             <!-- Instruction bullets -->
-            <ul class="space-y-4 text-lg font-medium text-[#666766] list-disc ps-5 mb-10">
+            <ul class="space-y-4 text-lg font-medium text-ios-fg-8 list-disc ps-5 mb-10">
               <li class="leading-relaxed">
                 The system send a secure, personalized
-                <strong class="font-bold text-[#a02e2e]">link</strong>
+                <strong class="font-bold text-ios-brand-primary-mid">link</strong>
                 to you registered
-                <strong class="font-bold text-[#373837]">email address</strong>.
+                <strong class="font-bold text-ios-fg-10">email address</strong>.
               </li>
               <li class="leading-relaxed">
                 If you
-                <strong class="font-bold text-[#a02e2e]">loses or misses</strong>
+                <strong class="font-bold text-ios-brand-primary-mid">loses or misses</strong>
                 the code, they will be ! required to
-                <strong class="font-bold text-[#373837]">repurchase</strong>
+                <strong class="font-bold text-ios-fg-10">repurchase</strong>
                 access to obtain a new one.
               </li>
               <li class="leading-relaxed">
                 The link is only active for
-                <strong class="font-bold text-[#a02e2e]">24 hours</strong>
+                <strong class="font-bold text-ios-brand-primary-mid">24 hours</strong>
                 to pass the test.
               </li>
             </ul>
@@ -191,7 +191,7 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
                 type="button"
                 (click)="showConfirm.set(true)"
                 class="flex h-14 w-full items-center justify-center rounded-xl
-                       bg-ios-brand-primary text-[#f1e6e8] font-semibold text-lg
+                       bg-ios-brand-primary text-ios-brand-primary-soft font-semibold text-lg
                        transition-colors hover:bg-ios-brand-primary-hover
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                        focus-visible:ring-ios-brand-primary/50"
@@ -202,8 +202,8 @@ import { ExamSentDialog } from '../components/exam-sent-dialog';
               <button
                 type="button"
                 class="flex h-14 w-full items-center justify-center rounded-xl
-                       bg-[#f1f1f1] text-[#272827] font-semibold text-lg
-                       transition-colors hover:bg-[#e5e5e5]
+                       bg-ios-surface-soft text-ios-fg font-semibold text-lg
+                       transition-colors hover:bg-ios-surface-hover
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                        focus-visible:ring-[#d0d0d0]"
               >

@@ -167,7 +167,7 @@ interface AnswerOption {
         <div
           class="absolute bottom-[-8px] start-0
                  flex items-center gap-4
-                 bg-white border-2 border-[#d4a017] rounded-[14px]
+                 bg-white border-2 border-ios-brand-amber rounded-[14px]
                  shadow-[0_20px_25px_0_rgba(0,0,0,0.1),0_8px_10px_0_rgba(0,0,0,0.1)]
                  px-5 py-4"
           role="img"
@@ -203,7 +203,7 @@ interface AnswerOption {
       <div class="flex flex-col lg:flex-row gap-12 items-stretch">
         <!-- Left panel — dark red -->
         <div
-          class="relative bg-[#760000] rounded-2xl overflow-hidden
+          class="relative bg-ios-brand-primary-deep rounded-2xl overflow-hidden
                  flex flex-col gap-5 p-8 flex-1 min-w-0"
         >
           <!-- Decorative circles -->
@@ -218,7 +218,7 @@ interface AnswerOption {
 
           <!-- Mock exam icon -->
           <div
-            class="relative bg-[#a02e2e] rounded-2xl flex items-center justify-center
+            class="relative bg-ios-brand-primary-mid rounded-2xl flex items-center justify-center
                    w-full max-w-[163px] h-[176px] mx-auto"
             aria-hidden="true"
           >
@@ -253,7 +253,7 @@ interface AnswerOption {
           <div class="flex gap-3" role="list" [attr.aria-label]="lang.t('mockExam.why.badge')">
             <div
               class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                     bg-[#a02e2e] border border-[#b65e5e] text-center"
+                     bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
               role="listitem"
             >
               <span
@@ -264,7 +264,7 @@ interface AnswerOption {
             </div>
             <div
               class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                     bg-[#a02e2e] border border-[#b65e5e] text-center"
+                     bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
               role="listitem"
             >
               <span
@@ -275,7 +275,7 @@ interface AnswerOption {
             </div>
             <div
               class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                     bg-[#a02e2e] border border-[#b65e5e] text-center"
+                     bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
               role="listitem"
             >
               <span
@@ -404,7 +404,7 @@ interface AnswerOption {
               </p>
             </div>
             <div
-              class="flex items-center gap-2 h-8 px-3 py-1.5 rounded-[10px] bg-[#373837]"
+              class="flex items-center gap-2 h-8 px-3 py-1.5 rounded-[10px] bg-ios-fg-10"
               aria-label="Time remaining: 12:00"
             >
               <ios-icon name="clock" class="w-5 h-5 text-ios-brand-gold" aria-hidden="true" />
@@ -443,15 +443,15 @@ interface AnswerOption {
                 class="flex items-center gap-3 p-[9px] rounded-[14px] border"
                 [class.bg-[#736428]]="option.selected"
                 [class.border-ios-brand-gold]="option.selected"
-                [class.bg-[#303130]]="!option.selected"
-                [class.border-[#535453]]="!option.selected"
+                [class.bg-ios-fg-11]="!option.selected"
+                [class.border-ios-fg-mid]="!option.selected"
               >
                 <div
                   class="flex items-center justify-center w-6 h-6 rounded-full shrink-0"
                   [class.bg-ios-brand-yellow-bright]="option.selected"
                   [class.text-[#736428]]="option.selected"
-                  [class.bg-[#535453]]="!option.selected"
-                  [class.text-[#c4c5c4]]="!option.selected"
+                  [class.bg-ios-fg-mid]="!option.selected"
+                  [class.text-ios-line]="!option.selected"
                   aria-hidden="true"
                 >
                   <span class="font-heading font-medium text-[14px] leading-[1.4]">
@@ -461,9 +461,9 @@ interface AnswerOption {
                 <p
                   class="flex-1 font-heading text-[14px] leading-[1.4]"
                   [class.font-semibold]="option.selected"
-                  [class.text-[#fffcee]]="option.selected"
+                  [class.text-ios-surface-warm]="option.selected"
                   [class.font-medium]="!option.selected"
-                  [class.text-[#f1f1f1]]="!option.selected"
+                  [class.text-ios-surface-soft]="!option.selected"
                 >
                   {{ lang.t('mockExam.howItWorks.preview.option' + option.key) }}
                 </p>
@@ -479,7 +479,7 @@ interface AnswerOption {
               <span>{{ lang.t('mockExam.howItWorks.preview.progressLabel') }}</span>
               <span>12 / 50</span>
             </div>
-            <div class="w-full h-2 rounded-full bg-[#373837]">
+            <div class="w-full h-2 rounded-full bg-ios-fg-10">
               <div class="h-2 w-[24%] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
             </div>
           </div>

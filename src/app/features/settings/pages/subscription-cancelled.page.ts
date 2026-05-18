@@ -37,19 +37,19 @@ import { DashboardNavbar } from '@layouts';
       <main class="flex-1 bg-white flex flex-col" id="main-content">
         <div class="max-w-[1400px] mx-auto px-8 py-12 flex flex-col gap-6 w-full">
           <!-- ":(" emoji heading -->
-          <p class="font-semibold text-[46px] leading-[1.2] text-[#959695]" aria-hidden="true">
+          <p class="font-semibold text-[46px] leading-[1.2] text-ios-fg-7" aria-hidden="true">
             :(
           </p>
 
           <!-- Message block -->
           <div class="flex flex-col gap-1 max-w-[608px]">
-            <h1 class="font-bold text-[20px] leading-[1.2] text-[#272827]">
+            <h1 class="font-bold text-[20px] leading-[1.2] text-ios-fg">
               {{ lang.t('settings.cancelled.heading') }}
             </h1>
-            <p class="font-medium text-[16px] leading-[1.4] text-[#666766]">
+            <p class="font-medium text-[16px] leading-[1.4] text-ios-fg-8">
               {{ lang.t('settings.cancelled.line1') }}
             </p>
-            <p class="font-medium text-[16px] leading-[1.4] text-[#666766]">
+            <p class="font-medium text-[16px] leading-[1.4] text-ios-fg-8">
               {{ lang.t('settings.cancelled.line2') }}
             </p>
           </div>
@@ -59,7 +59,7 @@ import { DashboardNavbar } from '@layouts';
             <!-- Subscription again — primary dark red -->
             <a
               routerLink="/dashboard/settings"
-              class="flex items-center justify-center w-full h-14 rounded-xl bg-[#8b0000] text-[#f1e6e8] text-[18px] font-semibold leading-[1.4] hover:bg-[#6f0000] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b0000]/50"
+              class="flex items-center justify-center w-full h-14 rounded-xl bg-ios-brand-primary text-ios-brand-primary-soft text-[18px] font-semibold leading-[1.4] hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
             >
               {{ lang.t('settings.cancelled.resubscribe') }}
             </a>
@@ -67,7 +67,7 @@ import { DashboardNavbar } from '@layouts';
             <!-- Go home — ghost / text-only -->
             <a
               routerLink="/dashboard"
-              class="flex items-center justify-center w-full h-14 rounded-xl text-[#373837] text-[18px] font-semibold leading-[1.4] hover:bg-[#f1f1f1] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#272827]/20"
+              class="flex items-center justify-center w-full h-14 rounded-xl text-ios-fg-10 text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-soft transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/20"
             >
               {{ lang.t('settings.cancelled.goHome') }}
             </a>

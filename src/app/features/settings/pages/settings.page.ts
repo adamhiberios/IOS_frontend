@@ -47,12 +47,12 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-[#f1f1f1]">
+      <div class="w-full bg-white border-b border-ios-surface-soft">
         <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
           <div class="flex items-center gap-4">
             <a
               routerLink="/dashboard"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
+              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
               [attr.aria-label]="lang.t('settings.breadcrumb.backToDashboard')"
             >
               <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
@@ -65,14 +65,14 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                 <li>
                   <a
                     routerLink="/dashboard"
-                    class="font-medium text-[#666766] hover:text-[#141514] transition-colors"
+                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
                   >
                     {{ lang.t('settings.breadcrumb.dashboard') }}
                   </a>
                 </li>
-                <li class="font-medium text-[#666766]" aria-hidden="true">/</li>
+                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
-                  <span class="font-semibold text-[#141514]" aria-current="page">{{ lang.t('settings.breadcrumb.settings') }}</span>
+                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{ lang.t('settings.breadcrumb.settings') }}</span>
                 </li>
               </ol>
             </nav>
@@ -88,12 +88,12 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
             <div class="flex gap-6 items-start">
               <h2
                 id="notif-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
               >
                 {{ lang.t('settings.notifications.heading') }}
               </h2>
 
-              <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6 flex flex-col gap-8">
+              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex flex-col gap-8">
                 <ios-checkbox id="notif-all" [formControl]="notifAllCtrl">
                   {{ lang.t('settings.notifications.all') }}
                 </ios-checkbox>
@@ -122,12 +122,12 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
             <div class="flex gap-6 items-start">
               <h2
                 id="newsletter-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
               >
                 {{ lang.t('settings.newsletter.heading') }}
               </h2>
 
-              <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6 flex flex-col gap-4">
+              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex flex-col gap-4">
                 <!-- Newsletter subscription checkbox -->
                 <ios-checkbox id="newsletter-check" [formControl]="newsletterEnabledCtrl">
                   {{ lang.t('settings.newsletter.checkbox') }}
@@ -138,16 +138,16 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                   <div class="flex items-stretch">
                     <!-- Email display field -->
                     <div
-                      class="flex-1 bg-[#f6f6f6] border border-[#c4c5c4] border-e-0 rounded-s-lg px-4 py-4 flex items-center"
+                      class="flex-1 bg-ios-surface-mid border border-ios-line border-e-0 rounded-s-lg px-4 py-4 flex items-center"
                     >
-                      <span class="font-bold text-[16px] text-[#373837] leading-[1.3] truncate">
+                      <span class="font-bold text-[16px] text-ios-fg-10 leading-[1.3] truncate">
                         {{ newsletterEmail() }}
                       </span>
                     </div>
 
                     <!-- Enabled badge -->
                     <div
-                      class="flex items-center gap-3 bg-[#f1f1f1] px-6 py-4 rounded-e-xl shrink-0"
+                      class="flex items-center gap-3 bg-ios-surface-soft px-6 py-4 rounded-e-xl shrink-0"
                       [attr.aria-label]="lang.t('settings.newsletter.enabledAriaLabel')"
                     >
                       <svg
@@ -157,12 +157,12 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="w-5 h-5 text-[#272827] shrink-0"
+                        class="w-5 h-5 text-ios-fg shrink-0"
                         aria-hidden="true"
                       >
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
-                      <span class="font-semibold text-[16px] text-[#272827] whitespace-nowrap">
+                      <span class="font-semibold text-[16px] text-ios-fg whitespace-nowrap">
                         {{ lang.t('settings.newsletter.enabled') }}
                       </span>
                     </div>
@@ -171,7 +171,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                   <!-- Cancel subscription link -->
                   <a
                     routerLink="/dashboard/settings/cancel-subscription"
-                    class="font-semibold text-[16px] text-[#c33811] leading-[1.4] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c33811]/40 rounded-sm w-fit"
+                    class="font-semibold text-[16px] text-ios-danger-strong leading-[1.4] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-strong/40 rounded-sm w-fit"
                   >
                     {{ lang.t('settings.newsletter.cancelLink') }}
                   </a>
@@ -185,7 +185,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
             <div class="flex gap-6 items-start">
               <h2
                 id="account-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
               >
                 {{ lang.t('settings.account.heading') }}
               </h2>
@@ -193,15 +193,15 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
               <!-- Delete account pill -->
               <button
                 type="button"
-                class="flex items-center gap-4 bg-[#fbece7] ps-8 pe-6 py-4 rounded-2xl hover:bg-[#f8ddd5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c33811]/40"
+                class="flex items-center gap-4 bg-ios-danger-soft ps-8 pe-6 py-4 rounded-2xl hover:bg-[#f8ddd5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-strong/40"
                 (click)="showDeleteDialog.set(true)"
               >
                 <span
-                  class="font-semibold text-[16px] text-[#c33811] leading-[1.4] whitespace-nowrap"
+                  class="font-semibold text-[16px] text-ios-danger-strong leading-[1.4] whitespace-nowrap"
                 >
                   {{ lang.t('settings.account.delete') }}
                 </span>
-                <ios-icon name="arrow-right" class="w-6 h-6 text-[#c33811]" aria-hidden="true" />
+                <ios-icon name="arrow-right" class="w-6 h-6 text-ios-danger-strong" aria-hidden="true" />
               </button>
             </div>
           </section>

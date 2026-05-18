@@ -29,7 +29,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
       <div class="w-full max-w-[724px] rounded-2xl bg-white p-8 flex flex-col items-center gap-9">
         <!-- Emergency icon -->
         <div
-          class="flex h-28 w-28 items-center justify-center rounded-full bg-[#f1f1f1]"
+          class="flex h-28 w-28 items-center justify-center rounded-full bg-ios-surface-soft"
           aria-hidden="true"
         >
           <svg
@@ -100,11 +100,11 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
         <div class="w-full flex flex-col items-center gap-1 text-center">
           <h2
             id="confirm-exam-dialog-title"
-            class="text-2xl font-semibold text-[#303130] leading-snug"
+            class="text-2xl font-semibold text-ios-fg-11 leading-snug"
           >
             Are you sure you will proceed with the exam?
           </h2>
-          <p class="text-lg font-medium text-[#373837] leading-relaxed">
+          <p class="text-lg font-medium text-ios-fg-10 leading-relaxed">
             We will send you a link to direct you to your exam, please check your Email:
             <strong class="font-semibold">ad*********am&#64;gmail.com</strong>
           </p>
@@ -115,8 +115,8 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
           <button
             type="button"
             (click)="cancelled.emit()"
-            class="h-14 w-[189px] rounded-xl bg-[#f1f1f1] text-[#272827] font-semibold text-lg
-                   transition-colors hover:bg-[#e5e5e5]
+            class="h-14 w-[189px] rounded-xl bg-ios-surface-soft text-ios-fg font-semibold text-lg
+                   transition-colors hover:bg-ios-surface-hover
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                    focus-visible:ring-[#d0d0d0]"
           >
@@ -125,10 +125,10 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
           <button
             type="button"
             (click)="confirmed.emit()"
-            class="h-14 w-[254px] rounded-xl bg-[#141514] text-white font-semibold text-lg
+            class="h-14 w-[254px] rounded-xl bg-ios-fg-13 text-white font-semibold text-lg
                    transition-colors hover:bg-[#2a2b2a]
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-                   focus-visible:ring-[#141514]/50"
+                   focus-visible:ring-ios-fg-13/50"
           >
             Send link
           </button>

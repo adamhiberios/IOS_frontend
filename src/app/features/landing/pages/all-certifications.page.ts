@@ -82,16 +82,16 @@ interface CompCert {
                   at bottom-left and middle-right
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-[#fffcee] px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]"
+      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]"
       aria-labelledby="all-certs-intro-heading"
     >
       <!-- ── Centered header ──────────────────────────────────────── -->
       <div class="flex flex-col items-center gap-5 text-center mx-auto max-w-[1236px]">
         <!-- Badge pill -->
         <span
-          class="inline-flex items-center px-4 py-1.5 rounded-full border
-                 font-heading font-semibold text-[13px] leading-[1.4]"
-          style="background-color: #faf0c8; border-color: #d9bd4c; color: #8b0000;"
+class="inline-flex items-center px-4 py-1.5 rounded-full border
+                  font-heading font-semibold text-[13px] leading-[1.4]
+                  bg-ios-brand-yellow-soft border-ios-brand-gold text-ios-brand-primary"
         >
           {{ lang.t('allCertifications.intro.badge') }}
         </span>
@@ -101,22 +101,20 @@ interface CompCert {
           id="all-certs-intro-heading"
           class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2]"
         >
-          <span style="color: #272827;">{{ lang.t('allCertifications.intro.headingPart1') }}</span>
-          <span style="color: #8b0000;">{{ lang.t('allCertifications.intro.headingPart2') }}</span>
+          <span class="text-ios-fg">{{ lang.t('allCertifications.intro.headingPart1') }}</span>
+          <span class="text-ios-brand-primary">{{ lang.t('allCertifications.intro.headingPart2') }}</span>
         </h2>
 
         <!-- Description -->
         <p
-          class="font-body font-medium text-[15px] md:text-[16px] leading-[1.6]"
-          style="color: #666766;"
+          class="font-body font-medium text-[15px] md:text-[16px] leading-[1.6] text-ios-fg-8"
         >
           {{ lang.t('allCertifications.intro.description') }}
         </p>
 
         <!-- Gold bar -->
         <div
-          class="h-[4px] w-[180px] rounded-full"
-          style="background-color: #d9bd4c;"
+          class="h-[4px] w-[180px] rounded-full bg-ios-brand-gold"
           aria-hidden="true"
         ></div>
       </div>
@@ -171,9 +169,9 @@ interface CompCert {
         <!-- Stat 1: 12,000+ — bottom-left, 254x84 at (0, 417) -->
         <div
           class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6"
-          style="inset-inline-start: 0%; top: 75.68%; width: 21.75%; height: 15.25%; border-color: #d4a017; z-index: 4;"
+          class="border-ios-brand-amber" style="inset-inline-start: 0%; top: 75.68%; width: 21.75%; height: 15.25%; z-index: 4;"
         >
-          <span class="font-heading font-black text-[24px] leading-[1.2]" style="color: #8b0000;">
+          <span class="font-heading font-black text-[24px] leading-[1.2] text-ios-brand-primary">
             {{ lang.t('allCertifications.intro.stat1Value') }}
           </span>
           <span class="font-body text-[13px] leading-[1.4]" style="color: #6a7282;">
@@ -184,9 +182,9 @@ interface CompCert {
         <!-- Stat 2: 6,000+ — middle-right, 249x84 at (919, 223) -->
         <div
           class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6"
-          style="inset-inline-start: 78.68%; top: 40.47%; width: 21.32%; height: 15.25%; border-color: #d4a017; z-index: 4;"
+          class="border-ios-brand-amber" style="inset-inline-start: 78.68%; top: 40.47%; width: 21.32%; height: 15.25%; z-index: 4;"
         >
-          <span class="font-heading font-black text-[24px] leading-[1.2]" style="color: #8b0000;">
+          <span class="font-heading font-black text-[24px] leading-[1.2] text-ios-brand-primary">
             {{ lang.t('allCertifications.intro.stat2Value') }}
           </span>
           <span class="font-body text-[13px] leading-[1.4]" style="color: #6a7282;">
@@ -209,10 +207,9 @@ interface CompCert {
         </div>
         <div class="grid grid-cols-2 gap-4 w-full max-w-[480px]">
           <div
-            class="bg-white border-2 rounded-[14px] shadow-md p-4 flex flex-col gap-1"
-            style="border-color: #d4a017;"
+            class="bg-white border-2 rounded-[14px] shadow-md p-4 flex flex-col gap-1 border-ios-brand-amber"
           >
-            <span class="font-heading font-black text-[22px] leading-[1.2]" style="color: #8b0000;">
+            <span class="font-heading font-black text-[22px] leading-[1.2] text-ios-brand-primary">
               {{ lang.t('allCertifications.intro.stat1Value') }}
             </span>
             <span class="font-body text-[12px] leading-[1.4]" style="color: #6a7282;">
@@ -220,10 +217,9 @@ interface CompCert {
             </span>
           </div>
           <div
-            class="bg-white border-2 rounded-[14px] shadow-md p-4 flex flex-col gap-1"
-            style="border-color: #d4a017;"
+            class="bg-white border-2 rounded-[14px] shadow-md p-4 flex flex-col gap-1 border-ios-brand-amber"
           >
-            <span class="font-heading font-black text-[22px] leading-[1.2]" style="color: #8b0000;">
+            <span class="font-heading font-black text-[22px] leading-[1.2] text-ios-brand-primary">
               {{ lang.t('allCertifications.intro.stat2Value') }}
             </span>
             <span class="font-body text-[12px] leading-[1.4]" style="color: #6a7282;">
@@ -238,7 +234,7 @@ interface CompCert {
          4. Scrum Master Track — #e8edf0, navy accent #184865
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-[#e8edf0] border-b border-[#c4c5c4]
+      class="bg-cer-blue-soft border-b border-ios-line
              px-6 md:px-10 lg:px-[120px] py-[72px]
              flex flex-col items-center gap-[24px]"
       aria-labelledby="all-certs-sm-heading"
@@ -246,22 +242,20 @@ interface CompCert {
       <!-- Centered heading block -->
       <div class="flex flex-col items-center gap-4 text-center">
         <h2 id="all-certs-sm-heading" class="font-heading font-extrabold text-[36px] leading-[1.2]">
-          <span style="color: #272827;">{{
+          <span class="text-ios-fg">{{
             lang.t('allCertifications.tracks.scrumMaster.titlePart1')
           }}</span>
-          <span style="color: #8b0000;">{{
+          <span class="text-ios-brand-primary">{{
             lang.t('allCertifications.tracks.scrumMaster.titlePart2')
           }}</span>
         </h2>
         <p
-          class="font-body font-medium text-[16px] leading-[1.6] max-w-[560px]"
-          style="color: #666766;"
+          class="font-body font-medium text-[16px] leading-[1.6] max-w-[560px] text-ios-fg-8"
         >
           {{ lang.t('allCertifications.tracks.scrumMaster.description') }}
         </p>
         <div
-          class="h-[4px] w-[274px] rounded-full"
-          style="background-color: #d9bd4c;"
+          class="h-[4px] w-[274px] rounded-full bg-ios-brand-gold"
           aria-hidden="true"
         ></div>
       </div>
@@ -320,7 +314,7 @@ interface CompCert {
          5. Product Owner Track — white, green accent #515e4d
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-white border-b border-[#c4c5c4]
+      class="bg-white border-b border-ios-line
              px-6 md:px-10 lg:px-[120px] py-[72px]
              flex flex-col items-center gap-[24px]"
       aria-labelledby="all-certs-po-heading"
@@ -328,22 +322,20 @@ interface CompCert {
       <!-- Centered heading block -->
       <div class="flex flex-col items-center gap-4 text-center">
         <h2 id="all-certs-po-heading" class="font-heading font-extrabold text-[36px] leading-[1.2]">
-          <span style="color: #272827;">{{
+          <span class="text-ios-fg">{{
             lang.t('allCertifications.tracks.productOwner.titlePart1')
           }}</span>
-          <span style="color: #8b0000;">{{
+          <span class="text-ios-brand-primary">{{
             lang.t('allCertifications.tracks.productOwner.titlePart2')
           }}</span>
         </h2>
         <p
-          class="font-body font-medium text-[16px] leading-[1.6] max-w-[560px]"
-          style="color: #666766;"
+          class="font-body font-medium text-[16px] leading-[1.6] max-w-[560px] text-ios-fg-8"
         >
           {{ lang.t('allCertifications.tracks.productOwner.description') }}
         </p>
         <div
-          class="h-[4px] w-[274px] rounded-full"
-          style="background-color: #d9bd4c;"
+          class="h-[4px] w-[274px] rounded-full bg-ios-brand-gold"
           aria-hidden="true"
         ></div>
       </div>
@@ -417,7 +409,7 @@ interface CompCert {
          6. Scrum Facilitator Track — #f4f0eb, amber accent #8e6636
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-[#f4f0eb] border-b border-[#c4c5c4]
+      class="bg-cer-brown-soft border-b border-ios-line
              px-6 md:px-10 lg:px-[120px] py-[72px]
              flex flex-col items-center gap-[24px]"
       aria-labelledby="all-certs-sf-heading"
@@ -425,22 +417,20 @@ interface CompCert {
       <!-- Centered heading block -->
       <div class="flex flex-col items-center gap-4 text-center">
         <h2 id="all-certs-sf-heading" class="font-heading font-extrabold text-[36px] leading-[1.2]">
-          <span style="color: #272827;">{{
+          <span class="text-ios-fg">{{
             lang.t('allCertifications.tracks.scrumFacilitator.titlePart1')
           }}</span>
-          <span style="color: #8b0000;">{{
+          <span class="text-ios-brand-primary">{{
             lang.t('allCertifications.tracks.scrumFacilitator.titlePart2')
           }}</span>
         </h2>
         <p
-          class="font-body font-medium text-[16px] leading-[1.6] max-w-[560px]"
-          style="color: #666766;"
+          class="font-body font-medium text-[16px] leading-[1.6] max-w-[560px] text-ios-fg-8"
         >
           {{ lang.t('allCertifications.tracks.scrumFacilitator.description') }}
         </p>
         <div
-          class="h-[4px] w-[274px] rounded-full"
-          style="background-color: #d9bd4c;"
+          class="h-[4px] w-[274px] rounded-full bg-ios-brand-gold"
           aria-hidden="true"
         ></div>
       </div>
@@ -485,7 +475,7 @@ interface CompCert {
         <span
           class="self-start inline-flex items-center px-4 py-1.5 rounded-full border
                  font-heading font-semibold text-[13px] leading-[1.4]"
-          style="background-color: #faf0c8; border-color: #d9bd4c; color: #8b0000;"
+          class="bg-ios-brand-yellow-soft border-ios-brand-gold text-ios-brand-primary"
         >
           {{ lang.t('allCertifications.comparison.badge') }}
         </span>
@@ -494,17 +484,16 @@ interface CompCert {
           id="all-certs-comparison-heading"
           class="font-heading font-extrabold text-[36px] leading-[1.2]"
         >
-          <span style="color: #272827;">{{
+          <span class="text-ios-fg">{{
             lang.t('allCertifications.comparison.headingPart1')
           }}</span>
-          <span style="color: #8b0000;">{{
+          <span class="text-ios-brand-primary">{{
             lang.t('allCertifications.comparison.headingPart2')
           }}</span>
         </h2>
 
         <div
-          class="h-[4px] w-[274px] rounded-full"
-          style="background-color: #d9bd4c;"
+          class="h-[4px] w-[274px] rounded-full bg-ios-brand-gold"
           aria-hidden="true"
         ></div>
       </div>
@@ -515,51 +504,50 @@ interface CompCert {
         role="region"
         aria-label="Certification comparison table"
       >
-        <div class="flex min-w-[680px] border border-[#dcdcdc] rounded-[12px] overflow-clip">
+        <div class="flex min-w-[680px] border border-ios-border-light rounded-[12px] overflow-clip">
           <!-- ── Feature labels column ───────────────────────── -->
           <div class="flex flex-col w-[150px] shrink-0">
             <!-- header -->
             <div
-              class="h-[50px] flex items-center px-4 border-b border-[#dcdcdc]"
-              style="background-color: #8b0000;"
+class="h-[50px] flex items-center px-4 border-b border-ios-border-light bg-ios-brand-primary"
             >
               <span class="font-heading font-semibold text-[13px] text-white">
                 {{ lang.t('allCertifications.comparison.featureLabel') }}
               </span>
             </div>
             <!-- rows -->
-            <div class="h-[48px] flex items-center px-4 border-b border-[#dcdcdc]">
-              <span class="font-body text-[13px]" style="color: #272827;">{{
+            <div class="h-[48px] flex items-center px-4 border-b border-ios-border-light">
+              <span class="font-body text-[13px] text-ios-fg">{{
                 lang.t('allCertifications.comparison.levelLabel')
               }}</span>
             </div>
-            <div class="h-[48px] flex items-center px-4 border-b border-[#dcdcdc]">
-              <span class="font-body text-[13px]" style="color: #272827;">{{
+            <div class="h-[48px] flex items-center px-4 border-b border-ios-border-light">
+              <span class="font-body text-[13px] text-ios-fg">{{
                 lang.t('allCertifications.comparison.durationLabel')
               }}</span>
             </div>
-            <div class="h-[48px] flex items-center px-4 border-b border-[#dcdcdc]">
-              <span class="font-body text-[13px]" style="color: #272827;">{{
+            <div class="h-[48px] flex items-center px-4 border-b border-ios-border-light">
+              <span class="font-body text-[13px] text-ios-fg">{{
                 lang.t('allCertifications.comparison.priceLabel')
               }}</span>
             </div>
-            <div class="h-[48px] flex items-center px-4 border-b border-[#dcdcdc]">
-              <span class="font-body text-[13px]" style="color: #272827;">{{
+            <div class="h-[48px] flex items-center px-4 border-b border-ios-border-light">
+              <span class="font-body text-[13px] text-ios-fg">{{
                 lang.t('allCertifications.comparison.certExpiryLabel')
               }}</span>
             </div>
-            <div class="h-[48px] flex items-center px-4 border-b border-[#dcdcdc]">
-              <span class="font-body text-[13px]" style="color: #272827;">{{
+            <div class="h-[48px] flex items-center px-4 border-b border-ios-border-light">
+              <span class="font-body text-[13px] text-ios-fg">{{
                 lang.t('allCertifications.comparison.mockExamLabel')
               }}</span>
             </div>
-            <div class="h-[48px] flex items-center px-4 border-b border-[#dcdcdc]">
-              <span class="font-body text-[13px]" style="color: #272827;">{{
+            <div class="h-[48px] flex items-center px-4 border-b border-ios-border-light">
+              <span class="font-body text-[13px] text-ios-fg">{{
                 lang.t('allCertifications.comparison.testIncludedLabel')
               }}</span>
             </div>
             <div class="h-[48px] flex items-center px-4">
-              <span class="font-body text-[13px]" style="color: #272827;">{{
+              <span class="font-body text-[13px] text-ios-fg">{{
                 lang.t('allCertifications.comparison.prerequisiteLabel')
               }}</span>
             </div>
@@ -567,18 +555,17 @@ interface CompCert {
 
           <!-- ── Cert data columns (one per certification) ──── -->
           @for (cert of compCerts; track cert.code) {
-            <div class="flex flex-col flex-1 border-s border-[#dcdcdc]">
+            <div class="flex flex-col flex-1 border-s border-ios-border-light">
               <!-- header -->
               <div
-                class="h-[50px] flex items-center justify-center px-2 border-b border-[#8b0000]/30"
-                style="background-color: #8b0000;"
+                class="h-[50px] flex items-center justify-center px-2 border-b border-ios-brand-primary/30 bg-ios-brand-primary"
               >
                 <span class="font-heading font-semibold text-[13px] text-white text-center">{{
                   cert.code
                 }}</span>
               </div>
               <!-- Level badge -->
-              <div class="h-[48px] flex items-center justify-center px-2 border-b border-[#dcdcdc]">
+              <div class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light">
                 <span
                   class="inline-flex items-center justify-center px-2 py-0.5 rounded-full
                          font-heading font-medium text-[11px] text-white whitespace-nowrap"
@@ -589,30 +576,28 @@ interface CompCert {
               </div>
               <!-- Duration -->
               <div
-                class="h-[48px] flex items-center justify-center px-2 border-b border-[#dcdcdc]
-                          font-heading text-[13px]"
-                style="color: #959695;"
+                class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light
+                          font-heading text-[13px] text-ios-brand-muted"
               >
                 16 hrs
               </div>
               <!-- Price -->
               <div
-                class="h-[48px] flex items-center justify-center px-2 border-b border-[#dcdcdc]
-                          font-heading font-extrabold text-[14px]"
-                style="color: #8b0000;"
+                class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light
+                          font-heading font-extrabold text-[14px] text-ios-brand-primary"
               >
                 $299
               </div>
               <!-- Cert. Expiry ✓ -->
-              <div class="h-[48px] flex items-center justify-center px-2 border-b border-[#dcdcdc]">
+              <div class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light">
                 <ios-icon name="check" class="w-4 h-4 text-green-600" aria-label="Included" />
               </div>
               <!-- Mock Exam ✓ -->
-              <div class="h-[48px] flex items-center justify-center px-2 border-b border-[#dcdcdc]">
+              <div class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light">
                 <ios-icon name="check" class="w-4 h-4 text-green-600" aria-label="Included" />
               </div>
               <!-- Test Included ✓ -->
-              <div class="h-[48px] flex items-center justify-center px-2 border-b border-[#dcdcdc]">
+              <div class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light">
                 <ios-icon name="check" class="w-4 h-4 text-green-600" aria-label="Included" />
               </div>
               <!-- Prerequisite -->
@@ -631,16 +616,16 @@ interface CompCert {
          8. FAQ — cream bg #fffcee, 5 accordion items
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-[#fffcee] px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] flex flex-col gap-8"
+      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] flex flex-col gap-8"
       aria-labelledby="all-certs-faq-heading"
     >
       <!-- Section header -->
       <div class="flex flex-col items-center text-center gap-4">
         <!-- Badge pill -->
         <span
-          class="inline-flex items-center px-4 py-1.5 rounded-full border
-                 font-heading font-semibold text-[13px] leading-[1.4]"
-          style="background-color: #faf0c8; border-color: #d9bd4c; color: #8b0000;"
+class="inline-flex items-center px-4 py-1.5 rounded-full border
+                  font-heading font-semibold text-[13px] leading-[1.4]
+                  bg-ios-brand-yellow-soft border-ios-brand-gold text-ios-brand-primary"
         >
           {{ lang.t('allCertifications.faq.badge') }}
         </span>
@@ -649,13 +634,12 @@ interface CompCert {
           id="all-certs-faq-heading"
           class="font-heading font-extrabold text-[36px] leading-[1.2]"
         >
-          <span style="color: #272827;">{{ lang.t('allCertifications.faq.headingPart1') }}</span>
-          <span style="color: #8b0000;">{{ lang.t('allCertifications.faq.headingPart2') }}</span>
+          <span class="text-ios-fg">{{ lang.t('allCertifications.faq.headingPart1') }}</span>
+          <span class="text-ios-brand-primary">{{ lang.t('allCertifications.faq.headingPart2') }}</span>
         </h2>
 
         <div
-          class="h-[4px] w-[274px] rounded-full"
-          style="background-color: #d9bd4c;"
+          class="h-[4px] w-[274px] rounded-full bg-ios-brand-gold"
           aria-hidden="true"
         ></div>
       </div>
@@ -664,7 +648,7 @@ interface CompCert {
       <div class="flex flex-col gap-3" role="list">
         @for (item of faqItems(); track $index) {
           <div
-            class="bg-white border border-[#f1f1f1] rounded-[12px] overflow-hidden"
+            class="bg-white border border-ios-surface-soft rounded-[12px] overflow-hidden"
             role="listitem"
           >
             <!-- Question row (always visible) -->
@@ -673,9 +657,9 @@ interface CompCert {
               class="w-full h-[64px] flex items-center justify-between gap-4 px-5
                      font-heading font-semibold text-[16px] text-start
                      hover:bg-neutral-50 transition-colors
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#d9bd4c]"
-              style="color: #272827;"
-              [attr.aria-expanded]="openFaq() === $index"
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ios-brand-gold"
+               class="text-ios-fg"
+               [attr.aria-expanded]="openFaq() === $index"
               (click)="toggleFaq($index)"
             >
               <span>{{ item.q }}</span>
@@ -683,7 +667,7 @@ interface CompCert {
                 name="chevron-down"
                 class="w-5 h-5 shrink-0 transition-transform duration-200"
                 [class.rotate-180]="openFaq() === $index"
-                style="color: #272827;"
+                class="text-ios-fg"
                 aria-hidden="true"
               />
             </button>
@@ -691,8 +675,8 @@ interface CompCert {
             <!-- Answer (shown when open) -->
             @if (openFaq() === $index) {
               <div class="px-5 pb-5">
-                <div class="h-px bg-[#f1f1f1] mb-4" aria-hidden="true"></div>
-                <p class="font-body font-medium text-[15px] leading-[1.6]" style="color: #666766;">
+                <div class="h-px bg-ios-surface-soft mb-4" aria-hidden="true"></div>
+                <p class="font-body font-medium text-[15px] leading-[1.6] text-ios-fg-8">
                   {{ item.a }}
                 </p>
               </div>

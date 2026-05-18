@@ -99,12 +99,12 @@ const POSITION_OPTIONS: SelectOption[] = [
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-[#f1f1f1]">
+      <div class="w-full bg-white border-b border-ios-surface-soft">
         <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
           <div class="flex items-center gap-4">
             <a
               routerLink="/dashboard/profile"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none"
+              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none"
               [attr.aria-label]="lang.t('profile.breadcrumb.backToProfile')"
             >
               <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
@@ -117,21 +117,21 @@ const POSITION_OPTIONS: SelectOption[] = [
                 <li>
                   <a
                     routerLink="/dashboard"
-                    class="font-medium text-[#666766] hover:text-[#141514] transition-colors"
+                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
                     >{{ lang.t('profile.breadcrumb.dashboard') }}</a
                   >
                 </li>
-                <li class="font-medium text-[#666766]" aria-hidden="true">/</li>
+                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
                   <a
                     routerLink="/dashboard/profile"
-                    class="font-medium text-[#666766] hover:text-[#141514] transition-colors"
+                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
                     >{{ lang.t('profile.breadcrumb.profile') }}</a
                   >
                 </li>
-                <li class="font-medium text-[#666766]" aria-hidden="true">/</li>
+                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
-                  <span class="font-semibold text-[#141514]" aria-current="page">{{
+                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
                     lang.t('profile.breadcrumb.updateInformation')
                   }}</span>
                 </li>
@@ -155,25 +155,25 @@ const POSITION_OPTIONS: SelectOption[] = [
             <div class="flex gap-6 items-start">
               <h2
                 id="edit-personal-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
               >
                 {{ lang.t('profile.edit.personalInfo') }}
               </h2>
 
-              <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6 flex gap-8 items-start">
+              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex gap-8 items-start">
                 <!-- Avatar + change image -->
                 <div class="flex flex-col gap-4 items-center shrink-0">
                   <div
-                    class="size-[82px] rounded-full border border-[#c4c5c4] bg-[#fdfdfd] flex items-center justify-center"
+                    class="size-[82px] rounded-full border border-ios-line bg-[#fdfdfd] flex items-center justify-center"
                     aria-hidden="true"
                   >
-                    <span class="text-[24px] font-bold leading-[1.2] text-[#272827]">
+                    <span class="text-[24px] font-bold leading-[1.2] text-ios-fg">
                       {{ store.initials() }}
                     </span>
                   </div>
                   <button
                     type="button"
-                    class="flex items-center gap-2 text-[16px] font-semibold leading-[1.4] text-[#272827] hover:text-[#535453] transition-colors focus-visible:outline-none rounded"
+                    class="flex items-center gap-2 text-[16px] font-semibold leading-[1.4] text-ios-fg hover:text-ios-fg-mid transition-colors focus-visible:outline-none rounded"
                     [attr.aria-label]="lang.t('profile.edit.changeImage')"
                   >
                     <ios-icon name="pencil" class="w-5 h-5 shrink-0" aria-hidden="true" />
@@ -182,7 +182,7 @@ const POSITION_OPTIONS: SelectOption[] = [
                 </div>
 
                 <!-- Vertical divider -->
-                <div class="self-stretch w-px bg-[#c4c5c4] shrink-0" aria-hidden="true"></div>
+                <div class="self-stretch w-px bg-ios-line shrink-0" aria-hidden="true"></div>
 
                 <!-- Fields — first/last name + email are display-only (opacity-40) -->
                 <div class="flex-1 flex flex-col gap-6">
@@ -191,17 +191,17 @@ const POSITION_OPTIONS: SelectOption[] = [
                     <div class="flex-1 flex flex-col gap-1">
                       <label
                         for="firstName"
-                        class="px-2 text-[16px] font-semibold leading-[1.4] text-[#272827]"
+                        class="px-2 text-[16px] font-semibold leading-[1.4] text-ios-fg"
                       >
                         {{ lang.t('profile.edit.firstName') }}
                       </label>
-                      <div class="bg-[#f6f6f6] border border-[#c4c5c4] rounded-lg p-3">
+                      <div class="bg-ios-surface-mid border border-ios-line rounded-lg p-3">
                         <input
                           id="firstName"
                           type="text"
                           formControlName="firstName"
                           readonly
-                          class="w-full bg-transparent text-[16px] font-bold leading-[1.3] text-[#272827] outline-none focus:outline-none focus:shadow-none cursor-not-allowed"
+                          class="w-full bg-transparent text-[16px] font-bold leading-[1.3] text-ios-fg outline-none focus:outline-none focus:shadow-none cursor-not-allowed"
                           aria-readonly="true"
                         />
                       </div>
@@ -209,17 +209,17 @@ const POSITION_OPTIONS: SelectOption[] = [
                     <div class="flex-1 flex flex-col gap-1">
                       <label
                         for="lastName"
-                        class="px-2 text-[16px] font-semibold leading-[1.4] text-[#272827]"
+                        class="px-2 text-[16px] font-semibold leading-[1.4] text-ios-fg"
                       >
                         {{ lang.t('profile.edit.lastName') }}
                       </label>
-                      <div class="bg-[#f6f6f6] border border-[#c4c5c4] rounded-lg p-3">
+                      <div class="bg-ios-surface-mid border border-ios-line rounded-lg p-3">
                         <input
                           id="lastName"
                           type="text"
                           formControlName="lastName"
                           readonly
-                          class="w-full bg-transparent text-[16px] font-bold leading-[1.3] text-[#272827] outline-none focus:outline-none focus:shadow-none cursor-not-allowed"
+                          class="w-full bg-transparent text-[16px] font-bold leading-[1.3] text-ios-fg outline-none focus:outline-none focus:shadow-none cursor-not-allowed"
                           aria-readonly="true"
                         />
                       </div>
@@ -231,17 +231,17 @@ const POSITION_OPTIONS: SelectOption[] = [
                     <div class="flex-1 flex flex-col gap-1">
                       <label
                         for="email"
-                        class="px-2 text-[16px] font-semibold leading-[1.4] text-[#272827]"
+                        class="px-2 text-[16px] font-semibold leading-[1.4] text-ios-fg"
                       >
                         {{ lang.t('profile.edit.email') }}
                       </label>
-                      <div class="bg-[#f6f6f6] border border-[#c4c5c4] rounded-lg p-3">
+                      <div class="bg-ios-surface-mid border border-ios-line rounded-lg p-3">
                         <input
                           id="email"
                           type="email"
                           formControlName="email"
                           readonly
-                          class="w-full bg-transparent text-[16px] font-bold leading-[1.3] text-[#272827] outline-none focus:outline-none focus:shadow-none cursor-not-allowed"
+                          class="w-full bg-transparent text-[16px] font-bold leading-[1.3] text-ios-fg outline-none focus:outline-none focus:shadow-none cursor-not-allowed"
                           aria-readonly="true"
                         />
                       </div>
@@ -257,12 +257,12 @@ const POSITION_OPTIONS: SelectOption[] = [
             <div class="flex gap-6 items-start">
               <h2
                 id="edit-location-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
               >
                 {{ lang.t('profile.edit.locationInfo') }}
               </h2>
 
-              <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6 flex flex-col gap-8">
+              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex flex-col gap-8">
                 <!-- Country + City row -->
                 <div class="flex gap-4 items-start">
                   <div class="flex-1">
@@ -322,12 +322,12 @@ const POSITION_OPTIONS: SelectOption[] = [
             <div class="flex gap-6 items-start">
               <h2
                 id="edit-professional-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
               >
                 {{ lang.t('profile.edit.professionalInfo') }}
               </h2>
 
-              <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6">
+              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6">
                 <div class="flex gap-8 items-start">
                   <div class="flex-1">
                     <ios-select
@@ -364,7 +364,7 @@ const POSITION_OPTIONS: SelectOption[] = [
             <!-- Cancel -->
             <button
               type="button"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-[#f1f1f1] text-[#373837] text-[16px] font-semibold leading-[1.4] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none whitespace-nowrap"
+              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-surface-soft text-ios-fg-10 text-[16px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none whitespace-nowrap"
               (click)="showCancelDialog.set(true)"
             >
               {{ lang.t('profile.edit.cancel') }}
@@ -372,7 +372,7 @@ const POSITION_OPTIONS: SelectOption[] = [
             <!-- Save information -->
             <button
               type="submit"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-[#141514] text-white text-[16px] font-semibold leading-[1.4] hover:bg-[#272827] transition-colors focus-visible:outline-none whitespace-nowrap disabled:opacity-50 disabled:pointer-events-none"
+              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg-13 text-white text-[16px] font-semibold leading-[1.4] hover:bg-ios-fg transition-colors focus-visible:outline-none whitespace-nowrap disabled:opacity-50 disabled:pointer-events-none"
               [disabled]="store.submitStatus() === 'pending'"
             >
               @if (store.submitStatus() === 'pending') {
@@ -388,9 +388,9 @@ const POSITION_OPTIONS: SelectOption[] = [
       </main>
 
       <!-- ── Footer ────────────────────────────────────────────────────── -->
-      <footer class="bg-[#272827] w-full py-4 shrink-0">
+      <footer class="bg-ios-fg w-full py-4 shrink-0">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-[#959695] text-sm"
+          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>

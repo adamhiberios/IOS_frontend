@@ -56,13 +56,13 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
             <li>
               <a
                 routerLink="/assessments/run"
-                class="text-[#666766] hover:text-[#303130] transition-colors"
+                class="text-ios-fg-8 hover:text-ios-fg-11 transition-colors"
                 >{{ lang.t('assessments.result.breadcrumbParent') }}</a
               >
             </li>
             <li class="text-[#999]" aria-hidden="true">/</li>
             <li>
-              <span class="font-bold text-[#141514]">
+              <span class="font-bold text-ios-fg-13">
                 {{ lang.t('assessments.result.breadcrumbCurrent') }}
               </span>
             </li>
@@ -78,7 +78,7 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
             <!-- Status badge -->
             <span
               class="inline-flex items-center rounded-full px-4 py-1.5
-                     text-[13px] font-semibold text-white bg-[#515e4d] leading-[1.4]"
+                     text-[13px] font-semibold text-white bg-cer-green-strong leading-[1.4]"
               role="status"
             >
               {{ lang.t('assessments.result.statusBadge') }}
@@ -86,23 +86,23 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
 
             <!-- Heading -->
             @if (scorePercent >= 70) {
-              <h1 class="text-[38px] md:text-[42px] font-bold text-[#141514] leading-snug">
+              <h1 class="text-[38px] md:text-[42px] font-bold text-ios-fg-13 leading-snug">
                 {{ lang.t('assessments.result.congratsHeading') }}
-                <span class="text-[#a02e2e]">
+                <span class="text-ios-brand-primary-mid">
                   {{ lang.t('assessments.result.finalTestLabel') }}</span
                 >
               </h1>
             } @else {
-              <h1 class="text-[38px] md:text-[42px] font-bold text-[#141514] leading-snug">
+              <h1 class="text-[38px] md:text-[42px] font-bold text-ios-fg-13 leading-snug">
                 {{ lang.t('assessments.result.failHeading') }}
-                <span class="text-[#a02e2e]">
+                <span class="text-ios-brand-primary-mid">
                   {{ lang.t('assessments.result.finalTestLabel') }}</span
                 >
               </h1>
             }
 
             <!-- Subtitle -->
-            <p class="text-[15px] font-medium text-[#666766] leading-relaxed max-w-[560px]">
+            <p class="text-[15px] font-medium text-ios-fg-8 leading-relaxed max-w-[560px]">
               {{ lang.t('assessments.result.subtitleBefore')
               }}<strong class="font-semibold text-[#3a5c1a]">{{
                 lang.t('assessments.result.certName')
@@ -111,7 +111,7 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
             </p>
 
             <!-- Gold underline -->
-            <div class="h-[3px] w-20 rounded-full bg-[#d9bd4c]" aria-hidden="true"></div>
+            <div class="h-[3px] w-20 rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
           </div>
 
           <!-- ── Certificate image — full 984 px width ─────────────────── -->
@@ -127,7 +127,7 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
 
           <!-- ── Share Certificate ─────────────────────────────────────── -->
           <div class="flex flex-col gap-4">
-            <p class="text-[14px] font-medium text-[#303130]">
+            <p class="text-[14px] font-medium text-ios-fg-11">
               {{ lang.t('assessments.result.shareCertOn') }}
             </p>
 
@@ -137,7 +137,7 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
                 type="button"
                 (click)="onShareLinkedIn()"
                 class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
-                       border border-[#e5e5e5] bg-white text-[#303130]
+                       border border-ios-surface-hover bg-white text-ios-fg-11
                        font-medium text-[14px] transition-colors hover:bg-[#f8f8f8]
                        focus-visible:outline-none focus-visible:ring-2
                        focus-visible:ring-offset-2 focus-visible:ring-[#0a66c2]/40"
@@ -157,10 +157,10 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
                 type="button"
                 (click)="onShareX()"
                 class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
-                       border border-[#e5e5e5] bg-white text-[#303130]
+                       border border-ios-surface-hover bg-white text-ios-fg-11
                        font-medium text-[14px] transition-colors hover:bg-[#f8f8f8]
                        focus-visible:outline-none focus-visible:ring-2
-                       focus-visible:ring-offset-2 focus-visible:ring-[#141514]/20"
+                       focus-visible:ring-offset-2 focus-visible:ring-ios-fg-13/20"
                 [attr.aria-label]="lang.t('assessments.result.shareX')"
               >
                 <svg
@@ -181,10 +181,10 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
                 type="button"
                 (click)="onDownloadPdf()"
                 class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
-                       border border-[#e5e5e5] bg-white text-[#303130]
+                       border border-ios-surface-hover bg-white text-ios-fg-11
                        font-medium text-[14px] transition-colors hover:bg-[#f8f8f8]
                        focus-visible:outline-none focus-visible:ring-2
-                       focus-visible:ring-offset-2 focus-visible:ring-[#303130]/20"
+                       focus-visible:ring-offset-2 focus-visible:ring-ios-fg-11/20"
                 [attr.aria-label]="lang.t('assessments.result.downloadPdf')"
               >
                 <ios-icon name="download" class="size-[18px]" aria-hidden="true" />
@@ -195,7 +195,7 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
 
           <!-- ── Result summary card ────────────────────────────────────── -->
           <div
-            class="rounded-2xl bg-[#f1f1f1] px-6 py-5
+            class="rounded-2xl bg-ios-surface-soft px-6 py-5
                    flex items-center gap-5 flex-wrap"
             aria-label="Exam result summary"
           >
@@ -210,10 +210,10 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
 
             <!-- Cert label -->
             <div class="flex flex-col gap-0.5 flex-1 min-w-0">
-              <p class="font-bold text-[#141514] text-[15px] leading-tight">
+              <p class="font-bold text-ios-fg-13 text-[15px] leading-tight">
                 {{ lang.t('assessments.result.epoCertCode') }}
               </p>
-              <p class="font-medium text-[#666766] text-[13px] leading-relaxed">
+              <p class="font-medium text-ios-fg-8 text-[13px] leading-relaxed">
                 {{ lang.t('assessments.result.epoCertFullName') }}
               </p>
             </div>
@@ -222,25 +222,25 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
             <div class="flex flex-col gap-1 text-[13px] font-medium shrink-0">
               <div class="flex items-center gap-2">
                 <span
-                  class="inline-flex items-center justify-center size-5 rounded-full bg-[#91c90e]"
+                  class="inline-flex items-center justify-center size-5 rounded-full bg-ios-success-mid"
                   aria-hidden="true"
                 >
                   <ios-icon name="check" class="size-3 text-white" />
                 </span>
-                <span class="font-bold text-[#3d5406]">{{ correctCount }}</span>
-                <span class="text-[#666766]">
+                <span class="font-bold text-ios-success-strong">{{ correctCount }}</span>
+                <span class="text-ios-fg-8">
                   {{ lang.t('assessments.result.successfulAnswers') }}
                 </span>
               </div>
               <div class="flex items-center gap-2">
                 <span
-                  class="inline-flex items-center justify-center size-5 rounded-full bg-[#d63d13]"
+                  class="inline-flex items-center justify-center size-5 rounded-full bg-ios-danger-mid"
                   aria-hidden="true"
                 >
                   <ios-icon name="x" class="size-3 text-white" />
                 </span>
-                <span class="font-bold text-[#d63d13]">{{ incorrectCount }}</span>
-                <span class="text-[#666766]">
+                <span class="font-bold text-ios-danger-mid">{{ incorrectCount }}</span>
+                <span class="text-ios-fg-8">
                   {{ lang.t('assessments.result.incorrectAnswers') }}
                 </span>
               </div>
@@ -249,16 +249,16 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
             <!-- Pass / Fail pill -->
             @if (scorePercent >= 70) {
               <div
-                class="inline-flex items-center rounded-xl bg-[#ddeeb4] px-4 py-2.5
-                       text-[14px] font-bold text-[#3d5406] shrink-0"
+                class="inline-flex items-center rounded-xl bg-ios-success-soft px-4 py-2.5
+                       text-[14px] font-bold text-ios-success-strong shrink-0"
                 role="status"
               >
                 {{ lang.t('assessments.result.passed', { score: scorePercent.toString() }) }}
               </div>
             } @else {
               <div
-                class="inline-flex items-center rounded-xl bg-[#fde8e1] px-4 py-2.5
-                       text-[14px] font-bold text-[#d63d13] shrink-0"
+                class="inline-flex items-center rounded-xl bg-ios-danger-soft px-4 py-2.5
+                       text-[14px] font-bold text-ios-danger-mid shrink-0"
                 role="status"
               >
                 {{ lang.t('assessments.result.failed', { score: scorePercent.toString() }) }}
@@ -268,9 +268,9 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
 
           <!-- ── Question history ────────────────────────────────────────── -->
           <div class="flex flex-col gap-4">
-            <h2 class="text-[16px] font-semibold text-[#141514] leading-[1.4]">
+            <h2 class="text-[16px] font-semibold text-ios-fg-13 leading-[1.4]">
               {{ lang.t('assessments.result.historyTitle') }}
-              <span class="font-medium text-[#666766]">
+              <span class="font-medium text-ios-fg-8">
                 {{
                   lang.t('assessments.result.historyCount', { count: questions.length.toString() })
                 }}
@@ -280,11 +280,11 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
             @for (q of questions; track q.id; let idx = $index) {
               <!-- Question card — bg #F1F1F1 -->
               <div
-                class="rounded-xl bg-[#f1f1f1] p-5 flex flex-col gap-3"
+                class="rounded-xl bg-ios-surface-soft p-5 flex flex-col gap-3"
                 [attr.aria-label]="'Question ' + (idx + 1)"
               >
                 <!-- Question title -->
-                <p class="text-[13px] font-medium text-[#666766] leading-[1.5]">
+                <p class="text-[13px] font-medium text-ios-fg-8 leading-[1.5]">
                   {{ idx + 1 }}.&nbsp; {{ q.text }}
                 </p>
 
@@ -305,7 +305,7 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
                         <!-- Option text -->
                         <span
                           class="flex-1 min-w-px text-[14px] font-medium leading-[1.4]"
-                          [class]="isWrongPick(idx, opt.id) ? 'text-[#aaaaaa]' : 'text-[#303130]'"
+                          [class]="isWrongPick(idx, opt.id) ? 'text-[#aaaaaa]' : 'text-ios-fg-11'"
                           >{{ opt.text }}</span
                         >
 
@@ -313,18 +313,18 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
                         @if (isCorrectAnswer(idx, opt.id)) {
                           <span
                             class="inline-flex items-center justify-center size-7 rounded-full
-                                   border-2 border-[#91c90e] shrink-0"
+                                   border-2 border-ios-success-mid shrink-0"
                             [attr.aria-label]="lang.t('dashboard.examRunner.correct')"
                           >
-                            <ios-icon name="check" class="size-4 text-[#91c90e]" />
+                            <ios-icon name="check" class="size-4 text-ios-success-mid" />
                           </span>
                         } @else {
                           <span
                             class="inline-flex items-center justify-center size-7 rounded-full
-                                   border-2 border-[#d63d13] shrink-0"
+                                   border-2 border-ios-danger-mid shrink-0"
                             [attr.aria-label]="lang.t('dashboard.examRunner.incorrect')"
                           >
-                            <ios-icon name="x" class="size-4 text-[#d63d13]" />
+                            <ios-icon name="x" class="size-4 text-ios-danger-mid" />
                           </span>
                         }
                       </div>
@@ -338,10 +338,10 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
       </main>
 
       <!-- ── Footer ────────────────────────────────────────────────────────── -->
-      <footer class="bg-[#272827] w-full py-4 mt-4">
+      <footer class="bg-ios-fg w-full py-4 mt-4">
         <div
           class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2
-                 text-[#959695] text-xs"
+                 text-ios-fg-7 text-xs"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: currentYear }) }}</span>
@@ -400,9 +400,9 @@ export class ExamResultPage {
 
   /** Letter badge: olive-green for correct, grayed for wrong pick. */
   protected optLetterClass(index: number, optId: string): string {
-    if (this.isCorrectAnswer(index, optId)) return 'bg-[#515e4d] text-white';
+    if (this.isCorrectAnswer(index, optId)) return 'bg-cer-green-strong text-white';
     if (this.isWrongPick(index, optId)) return 'bg-[#e0e0e0] text-[#aaaaaa]';
-    return 'bg-[#535453] text-[#f1f1f1]';
+    return 'bg-ios-fg-mid text-ios-surface-soft';
   }
 
   // ── Share actions ──────────────────────────────────────────────────────

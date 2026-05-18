@@ -493,9 +493,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
                             (input)="phoneCountryFilter.set($any($event.target).value)"
                             class="flex-1 min-w-0 bg-transparent text-sm text-ios-brand-dark
                                    placeholder:text-gray-400
-                                   outline-none ring-0 border-0
-                                   focus:outline-none focus:ring-0 focus:border-0"
-                            style="box-shadow: none; outline: none"
+                                   outline-none ring-0 border-0"
                             autocomplete="off"
                           />
                           @if (phoneCountryFilter()) {

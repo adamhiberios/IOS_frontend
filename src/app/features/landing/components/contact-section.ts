@@ -98,7 +98,7 @@ import { IosIcon, provideIcons } from '@ui';
               </label>
               <div
                 class="flex items-center gap-2 px-3 py-3 rounded-lg
-                       bg-ios-surface-muted border border-[#c4c5c4]
+                       bg-ios-surface-muted border border-ios-line
                        focus-within:border-ios-brand-primary focus-within:ring-1 focus-within:ring-ios-brand-primary/30
                        transition-colors"
               >
@@ -137,7 +137,7 @@ import { IosIcon, provideIcons } from '@ui';
               </label>
               <div
                 class="flex items-center gap-2 px-3 py-3 rounded-lg
-                       bg-ios-surface-muted border border-[#c4c5c4]
+                       bg-ios-surface-muted border border-ios-line
                        focus-within:border-ios-brand-primary focus-within:ring-1 focus-within:ring-ios-brand-primary/30
                        transition-colors"
               >
@@ -176,7 +176,7 @@ import { IosIcon, provideIcons } from '@ui';
               </label>
               <div
                 class="flex items-start gap-2 px-3 py-3 rounded-lg
-                       bg-ios-surface-muted border border-[#c4c5c4]
+                       bg-ios-surface-muted border border-ios-line
                        focus-within:border-ios-brand-primary focus-within:ring-1 focus-within:ring-ios-brand-primary/30
                        transition-colors min-h-[101px]"
               >
@@ -215,7 +215,7 @@ import { IosIcon, provideIcons } from '@ui';
                      hover:opacity-90 transition-opacity
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1
                      disabled:opacity-50 disabled:cursor-not-allowed"
-              style="background-color: #8e6636; color: #f4f0eb; --tw-ring-color: rgb(142 102 54 / 0.5);"
+              class="bg-cer-brown-dark text-cer-brown-soft" style="--tw-ring-color: rgb(142 102 54 / 0.5);"
               [disabled]="submitting()"
             >
               @if (submitting()) {

@@ -68,7 +68,7 @@ const BASE_CLASSES =
   'border transition-colors focus:outline-none focus:ring-0 text-start';
 
 const STATE_CLASSES: Record<SelectState, string> = {
-  default: 'border-gray-200 focus:border-[#272827]',
+  default: 'border-gray-200 focus:border-ios-fg',
   error: 'border-ios-brand-primary',
   success: 'border-emerald-500',
 };
@@ -134,8 +134,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
                 [value]="filterQuery()"
                 (input)="filterQuery.set($any($event.target).value)"
                 class="flex-1 min-w-0 bg-transparent text-sm text-ios-brand-dark
-                       placeholder:text-gray-400 outline-none focus:outline-none focus:shadow-none border-0"
-                style="box-shadow: none; outline: none"
+                       placeholder:text-gray-400 outline-none border-0"
                 [attr.aria-label]="lang.t('ui.filterOptionsAriaLabel')"
                 autocomplete="off"
               />

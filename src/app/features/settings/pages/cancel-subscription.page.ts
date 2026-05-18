@@ -37,12 +37,12 @@ import { LanguageService } from '@core/i18n';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-[#f1f1f1]">
+      <div class="w-full bg-white border-b border-ios-surface-soft">
         <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
           <div class="flex items-center gap-4">
             <a
               routerLink="/dashboard/settings"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
+              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
               [attr.aria-label]="lang.t('settings.cancelSubscription.backAriaLabel')"
             >
               <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
@@ -53,7 +53,7 @@ import { LanguageService } from '@core/i18n';
                 role="list"
               >
                 <li>
-                  <span class="font-semibold text-[#141514]" aria-current="page">
+                  <span class="font-semibold text-ios-fg-13" aria-current="page">
                     {{ lang.t('settings.breadcrumb.cancelSubscription') }}
                   </span>
                 </li>
@@ -67,7 +67,7 @@ import { LanguageService } from '@core/i18n';
       <main class="flex-1 bg-white" id="main-content">
         <div class="max-w-[1400px] mx-auto px-8 py-8 flex flex-col gap-8">
           <!-- Question -->
-          <h1 class="text-[18px] font-semibold leading-[1.4] text-[#141514]">
+          <h1 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13">
             {{ lang.t('settings.cancelSubscription.title') }}
           </h1>
 
@@ -81,7 +81,7 @@ import { LanguageService } from '@core/i18n';
 
             @for (option of cancelReasons(); track option.id) {
               <label
-                class="flex items-center gap-4 p-2 rounded-[72px] bg-[#f1f1f1] cursor-pointer hover:bg-[#e8e8e8] transition-colors focus-within:ring-2 focus-within:ring-ios-brand-primary/30"
+                class="flex items-center gap-4 p-2 rounded-[72px] bg-ios-surface-soft cursor-pointer hover:bg-[#e8e8e8] transition-colors focus-within:ring-2 focus-within:ring-ios-brand-primary/30"
                 [for]="option.id"
               >
                 <input
@@ -98,9 +98,9 @@ import { LanguageService } from '@core/i18n';
                 <span
                   aria-hidden="true"
                   class="shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                  [class.bg-[#272827]]="selectedReason() === option.id"
+                  [class.bg-ios-fg]="selectedReason() === option.id"
                   [class.border-2]="selectedReason() !== option.id"
-                  [class.border-[#959695]]="selectedReason() !== option.id"
+                  [class.border-ios-fg-7]="selectedReason() !== option.id"
                 >
                   @if (selectedReason() === option.id) {
                     <svg
@@ -118,7 +118,7 @@ import { LanguageService } from '@core/i18n';
                   }
                 </span>
 
-                <span class="font-medium text-[18px] text-[#272827] leading-[1.4]">
+                <span class="font-medium text-[18px] text-ios-fg leading-[1.4]">
                   {{ option.label }}
                 </span>
               </label>
@@ -129,7 +129,7 @@ import { LanguageService } from '@core/i18n';
           <div class="max-w-[732px]">
             <button
               type="button"
-              class="w-[378px] flex items-center justify-center h-14 rounded-xl bg-[#8b0000] text-[#f1e6e8] text-[18px] font-semibold leading-[1.4] hover:bg-[#6f0000] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b0000]/50"
+              class="w-[378px] flex items-center justify-center h-14 rounded-xl bg-ios-brand-primary text-ios-brand-primary-soft text-[18px] font-semibold leading-[1.4] hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
               (click)="onSubmit()"
             >
               {{ lang.t('settings.cancelSubscription.submit') }}

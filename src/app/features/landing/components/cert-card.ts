@@ -74,7 +74,7 @@ export interface CertCardData {
         <div class="flex flex-col gap-1 pt-1 min-w-0">
           <!-- Level chip — color comes from backend/store -->
           <span
-            class="inline-block self-start text-[12px] font-medium text-[#E8EDF0] px-3 py-1 rounded-full leading-tight"
+            class="inline-block self-start text-[12px] font-medium text-cer-blue-soft px-3 py-1 rounded-full leading-tight"
             [style.background-color]="cert().badgeColor"
           >
             {{ cert().levelBadge }}
@@ -84,7 +84,7 @@ export interface CertCardData {
             {{ cert().abbreviation }}
           </span>
           <!-- Full name -->
-          <span class="font-body font-medium text-[15px] text-[#113348] leading-snug">
+          <span class="font-body font-medium text-[15px] text-cer-blue-text leading-snug">
             {{ cert().fullName }}
           </span>
         </div>

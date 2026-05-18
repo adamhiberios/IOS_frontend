@@ -65,17 +65,17 @@ import { NotificationCard } from '../components/notification-card';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb / page toolbar ─────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-[#f1f1f1]">
+      <div class="w-full bg-white border-b border-ios-surface-soft">
         <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center justify-between">
           <!-- Page title (acts as breadcrumb label in the Figma) -->
-          <span class="text-[16px] font-semibold leading-[1.4] text-[#141514] whitespace-nowrap">
+          <span class="text-[16px] font-semibold leading-[1.4] text-ios-fg-13 whitespace-nowrap">
             {{ lang.t('notifications.pageTitle') }}
           </span>
 
           <!-- Sort button -->
           <button
             type="button"
-            class="inline-flex items-center justify-center gap-2 h-11 px-4 bg-[#f1f1f1] rounded-2xl text-[16px] font-semibold leading-[1.4] text-[#373837] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 whitespace-nowrap"
+            class="inline-flex items-center justify-center gap-2 h-11 px-4 bg-ios-surface-soft rounded-2xl text-[16px] font-semibold leading-[1.4] text-ios-fg-10 hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 whitespace-nowrap"
             (click)="store.toggleSort()"
             [attr.aria-label]="lang.t('notifications.sortAriaLabel')"
           >
@@ -95,7 +95,7 @@ import { NotificationCard } from '../components/notification-card';
       <main class="flex-1 bg-white" id="main-content">
         <div class="max-w-[1400px] mx-auto px-8 py-6 flex flex-col gap-4">
           <!-- Section heading -->
-          <h1 class="text-[18px] font-semibold leading-[1.4] text-[#141514] whitespace-nowrap">
+          <h1 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 whitespace-nowrap">
             {{ lang.t('notifications.sectionTitle') }}
           </h1>
 
@@ -104,12 +104,12 @@ import { NotificationCard } from '../components/notification-card';
             <!-- Loading skeleton – 3 placeholder rows -->
             @for (_ of skeletonRows; track $index) {
               <div
-                class="h-[76px] rounded-3xl bg-[#f6f6f6] animate-pulse w-full"
+                class="h-[76px] rounded-3xl bg-ios-surface-mid animate-pulse w-full"
                 aria-hidden="true"
               ></div>
             }
           } @else if (notifications().length === 0) {
-            <p class="text-[16px] font-medium leading-[1.4] text-[#959695] py-8 text-center">
+            <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-7 py-8 text-center">
               {{ lang.t('notifications.empty') }}
             </p>
           } @else {
@@ -125,9 +125,9 @@ import { NotificationCard } from '../components/notification-card';
       </main>
 
       <!-- ── Footer ─────────────────────────────────────────────────────── -->
-      <footer class="bg-[#272827] w-full py-4 shrink-0">
+      <footer class="bg-ios-fg w-full py-4 shrink-0">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-[#959695] text-sm"
+          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
         >
           <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>
         </div>

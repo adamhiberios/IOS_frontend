@@ -101,7 +101,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
         >
           <div
             class="absolute top-0 inset-x-0 h-4 rounded-sm"
-            style="background-color: #c8d3da;"
+            class="bg-cer-blue-softer"
             aria-hidden="true"
           ></div>
 
@@ -197,7 +197,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
           <span
             class="self-start inline-flex items-center justify-center px-6 py-2 rounded-full border
                    font-heading font-semibold text-[14px] text-ios-brand-primary whitespace-nowrap"
-            style="background-color: #fff9f0; border-color: #d9bd4c;"
+            class="bg-ios-brand-gold-soft border-ios-brand-gold"
           >
             {{ lang.t('productOwner.certPath.badge') }}
           </span>
@@ -239,13 +239,13 @@ import { CertFaqCta } from '../components/cert-faq-cta';
           >
             <span
               class="font-heading font-bold text-[16px] leading-none"
-              style="color: #373837;"
+              class="text-ios-fg-10"
               aria-hidden="true"
               >?</span
             >
           </div>
           <div class="flex flex-col gap-1">
-            <p class="font-heading font-semibold text-[20px] leading-[1.2]" style="color: #373837;">
+            <p class="font-heading font-semibold text-[20px] leading-[1.2]" class="text-ios-fg-10">
               {{ lang.t('productOwner.certPath.whoShouldPursue') }}
             </p>
             <p class="font-body font-medium text-[16px] leading-[1.4] text-ios-fg-muted">
@@ -308,7 +308,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
                font-body font-semibold text-[16px] leading-[1.4] whitespace-nowrap
                hover:opacity-80 transition-opacity
                focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
-        style="background-color: #fff9f0; border-color: #ffea96; color: #736428;"
+        class="bg-ios-brand-gold-soft" style="border-color: #ffea96; color: #736428;"
       >
         {{ lang.t('productOwner.certPath.exploreOthers') }}
         <ios-icon name="arrow-right" class="w-5 h-5 rtl:rotate-180" aria-hidden="true" />

@@ -73,7 +73,7 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
               {{ lang.t('dashboard.certs.active') }}
             </span>
             <span
-              class="w-[7px] h-[7px] rounded-full bg-[#c4c5c4] shrink-0"
+              class="w-[7px] h-[7px] rounded-full bg-ios-line shrink-0"
               aria-hidden="true"
             ></span>
             <div class="flex items-center gap-2">

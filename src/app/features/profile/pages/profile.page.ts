@@ -39,13 +39,13 @@ import { ProfileStore } from '../data-access/profile.store';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-[#f1f1f1]">
+      <div class="w-full bg-white border-b border-ios-surface-soft">
         <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
           <div class="flex items-center gap-4">
             <!-- Back button -->
             <a
               routerLink="/dashboard"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none"
+              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none"
               [attr.aria-label]="lang.t('profile.breadcrumb.backToDashboard')"
             >
               <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
@@ -59,14 +59,14 @@ import { ProfileStore } from '../data-access/profile.store';
                 <li>
                   <a
                     routerLink="/dashboard"
-                    class="font-medium text-[#666766] hover:text-[#141514] transition-colors"
+                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
                   >
                     {{ lang.t('profile.breadcrumb.dashboard') }}
                   </a>
                 </li>
-                <li class="font-medium text-[#666766]" aria-hidden="true">/</li>
+                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
-                  <span class="font-semibold text-[#141514]" aria-current="page">{{
+                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
                     lang.t('profile.breadcrumb.profile')
                   }}</span>
                 </li>
@@ -86,25 +86,25 @@ import { ProfileStore } from '../data-access/profile.store';
                 <!-- Section label -->
                 <h2
                   id="personal-info-heading"
-                  class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                  class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
                 >
                   {{ lang.t('profile.view.personalInfo') }}
                 </h2>
 
                 <!-- Card -->
-                <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6 flex gap-8 items-start">
+                <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex gap-8 items-start">
                   <!-- Avatar circle -->
                   <div
-                    class="shrink-0 size-[82px] rounded-full border border-[#c4c5c4] bg-[#fdfdfd] flex items-center justify-center"
+                    class="shrink-0 size-[82px] rounded-full border border-ios-line bg-[#fdfdfd] flex items-center justify-center"
                     aria-label="Profile picture initials {{ initials() }}"
                   >
-                    <span class="text-[24px] font-bold leading-[1.2] text-[#272827]">
+                    <span class="text-[24px] font-bold leading-[1.2] text-ios-fg">
                       {{ initials() }}
                     </span>
                   </div>
 
                   <!-- Info grid -->
-                  <div class="flex-1 flex flex-col gap-6 text-[18px] text-[#272827]">
+                  <div class="flex-1 flex flex-col gap-6 text-[18px] text-ios-fg">
                     <!-- Row 1: Full Name | Username | IOS ID -->
                     <div class="flex gap-6 items-start">
                       <div class="flex-1 flex flex-col gap-1">
@@ -171,14 +171,14 @@ import { ProfileStore } from '../data-access/profile.store';
                 <!-- Section label -->
                 <h2
                   id="professional-info-heading"
-                  class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
+                  class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
                 >
                   {{ lang.t('profile.view.professionalInfo') }}
                 </h2>
 
                 <!-- Card -->
-                <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6">
-                  <div class="flex gap-6 items-start text-[18px] text-[#272827]">
+                <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6">
+                  <div class="flex gap-6 items-start text-[18px] text-ios-fg">
                     <div class="flex-1 flex flex-col gap-1">
                       <span class="font-medium leading-[1.4] whitespace-nowrap">{{
                         lang.t('profile.view.occupation')
@@ -210,14 +210,14 @@ import { ProfileStore } from '../data-access/profile.store';
             <!-- Change Password (outlined / ghost style) -->
             <a
               routerLink="/dashboard/profile/change-password"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl text-[16px] font-semibold leading-[1.4] text-[#272827] hover:bg-[#f1f1f1] transition-colors focus-visible:outline-none whitespace-nowrap"
+              class="inline-flex items-center justify-center h-11 px-6 rounded-xl text-[16px] font-semibold leading-[1.4] text-ios-fg hover:bg-ios-surface-soft transition-colors focus-visible:outline-none whitespace-nowrap"
             >
               {{ lang.t('profile.view.changePassword') }}
             </a>
             <!-- Update information (dark filled) -->
             <a
               routerLink="/dashboard/profile/edit"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-[#272827] text-white text-[16px] font-semibold leading-[1.4] hover:bg-[#141514] transition-colors focus-visible:outline-none whitespace-nowrap"
+              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg text-white text-[16px] font-semibold leading-[1.4] hover:bg-ios-fg-13 transition-colors focus-visible:outline-none whitespace-nowrap"
             >
               {{ lang.t('profile.view.updateInformation') }}
             </a>
@@ -226,9 +226,9 @@ import { ProfileStore } from '../data-access/profile.store';
       </main>
 
       <!-- ── Footer ────────────────────────────────────────────────────── -->
-      <footer class="bg-[#272827] w-full py-4 shrink-0">
+      <footer class="bg-ios-fg w-full py-4 shrink-0">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-[#959695] text-sm"
+          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>

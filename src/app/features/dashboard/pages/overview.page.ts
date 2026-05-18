@@ -71,10 +71,10 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
                 <button
                   type="button"
                   class="px-3 py-1 rounded-full text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                  [class.bg-[#d9bd4c]]="store.demoMode() === mode.value"
-                  [class.text-[#141514]]="store.demoMode() === mode.value"
-                  [class.bg-[#f1f1f1]]="store.demoMode() !== mode.value"
-                  [class.text-[#666766]]="store.demoMode() !== mode.value"
+                  [class.bg-ios-brand-gold]="store.demoMode() === mode.value"
+                  [class.text-ios-fg-13]="store.demoMode() === mode.value"
+                  [class.bg-ios-surface-soft]="store.demoMode() !== mode.value"
+                  [class.text-ios-fg-8]="store.demoMode() !== mode.value"
                   (click)="store.setDemoMode(mode.value)"
                 >
                   {{ mode.label }}
@@ -129,7 +129,7 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
                 <!-- Row 2: Valid certification -->
                 @if (certCount() > 0) {
                   <section aria-label="Valid certifications">
-                    <h2 class="text-[18px] font-semibold leading-[1.3] text-[#141514] mb-4">
+                    <h2 class="text-[18px] font-semibold leading-[1.3] text-ios-fg-13 mb-4">
                       {{ lang.t('dashboard.certs.validCertification') }}
                     </h2>
                     @if (certCount() === 1) {

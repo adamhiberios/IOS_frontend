@@ -33,7 +33,7 @@ import { CertificatesBadge } from '@ui';
         <div class="w-full max-w-[606px] flex flex-col gap-14">
           <!-- ── Certification badge card ──────────────────────────────── -->
           <div
-            class="flex items-center gap-4 rounded-2xl bg-[#eeefed] px-6 py-4"
+            class="flex items-center gap-4 rounded-2xl bg-cer-green-soft px-6 py-4"
             aria-label="Exam certification: EPO-P — Endorsed Product Owner Practitioner"
           >
             <div class="w-24 shrink-0">
@@ -44,8 +44,8 @@ import { CertificatesBadge } from '@ui';
               />
             </div>
             <div class="flex flex-col">
-              <p class="font-bold text-[#272827] text-lg leading-tight" dir="auto">EPO-P</p>
-              <p class="font-medium text-[#373837] text-base leading-relaxed">
+              <p class="font-bold text-ios-fg text-lg leading-tight" dir="auto">EPO-P</p>
+              <p class="font-medium text-ios-fg-10 text-base leading-relaxed">
                 Endorsed Product Owner Practitioner
               </p>
             </div>
@@ -57,21 +57,21 @@ import { CertificatesBadge } from '@ui';
             <div class="flex flex-col gap-6">
               <h1
                 id="exam-ready-heading"
-                class="text-[40px] font-bold text-[#141514] leading-snug"
+                class="text-[40px] font-bold text-ios-fg-13 leading-snug"
                 dir="auto"
               >
                 Hi Adam, Are you ready?
               </h1>
 
-              <ul class="space-y-4 text-lg font-medium text-[#666766] list-disc ps-5">
+              <ul class="space-y-4 text-lg font-medium text-ios-fg-8 list-disc ps-5">
                 <li class="leading-relaxed">
                   You have
-                  <strong class="font-bold text-[#a02e2e]">12 hours and 43 minutes</strong>
+                  <strong class="font-bold text-ios-brand-primary-mid">12 hours and 43 minutes</strong>
                   to pass the exam.
                 </li>
                 <li class="leading-relaxed">
                   After this period, you will need to
-                  <strong class="font-bold text-[#a02e2e]">repurchase access</strong>
+                  <strong class="font-bold text-ios-brand-primary-mid">repurchase access</strong>
                   to get a new one.
                 </li>
               </ul>
@@ -81,7 +81,7 @@ import { CertificatesBadge } from '@ui';
             <a
               routerLink="/assessments/run"
               class="flex h-14 w-full max-w-[444px] items-center justify-center rounded-xl
-                     bg-ios-brand-primary text-[#f1e6e8] font-semibold text-lg
+                     bg-ios-brand-primary text-ios-brand-primary-soft font-semibold text-lg
                      transition-colors hover:bg-ios-brand-primary-hover
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                      focus-visible:ring-ios-brand-primary/50"

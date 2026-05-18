@@ -261,6 +261,7 @@
   --color-ios-surface-muted: oklch(0.96 0.008 250);
   --color-ios-surface-soft: #f1f1f1;
   --color-ios-surface-hover: #e5e5e5;
+  --color-ios-surface-mid: #f6f6f6;
   --color-ios-surface-strong: oklch(0.92 0.012 250);
 
   /* Foreground */
@@ -271,6 +272,10 @@
   --color-ios-fg-11: #303130;
   --color-ios-fg-13: #141514;
   --color-ios-fg-muted: #666766;
+
+  /* Border / line palette */
+  --color-ios-line: #c4c5c4;
+  --color-ios-line-strong: #dcdcdc;
 
   /* Status */
   --color-ios-success: oklch(0.62 0.16 145);

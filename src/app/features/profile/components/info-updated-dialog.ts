@@ -32,7 +32,7 @@ import { LanguageService } from '@core/i18n';
         class="bg-white rounded-2xl w-full max-w-[724px] mx-4 p-8 flex flex-col gap-9 items-center shadow-2xl"
       >
         <!-- Icon -->
-        <div class="bg-[#f1f1f1] flex items-center p-4 rounded-full shrink-0" aria-hidden="true">
+        <div class="bg-ios-surface-soft flex items-center p-4 rounded-full shrink-0" aria-hidden="true">
           <!-- Info bubble + green checkmark illustration from Figma -->
           <div class="size-20 shrink-0 flex items-center justify-center">
             <svg
@@ -75,11 +75,11 @@ import { LanguageService } from '@core/i18n';
         <div class="flex flex-col gap-1 items-start text-center w-full">
           <h2
             id="info-updated-title"
-            class="text-[24px] font-semibold leading-[1.2] text-[#303130] w-full"
+            class="text-[24px] font-semibold leading-[1.2] text-ios-fg-11 w-full"
           >
             {{ lang.t('profile.infoUpdatedDialog.title') }}
           </h2>
-          <p class="text-[18px] font-medium leading-[1.4] text-[#373837] w-full">
+          <p class="text-[18px] font-medium leading-[1.4] text-ios-fg-10 w-full">
             {{ lang.t('profile.infoUpdatedDialog.description') }}
           </p>
         </div>
@@ -88,7 +88,7 @@ import { LanguageService } from '@core/i18n';
         <div class="flex items-center justify-center w-full">
           <button
             type="button"
-            class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-[#141514] text-white text-[16px] font-semibold leading-[1.4] w-[206px] hover:bg-[#272827] transition-colors focus-visible:outline-none"
+            class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg-13 text-white text-[16px] font-semibold leading-[1.4] w-[206px] hover:bg-ios-fg transition-colors focus-visible:outline-none"
             (click)="confirmed.emit()"
           >
             {{ lang.t('profile.infoUpdatedDialog.ok') }}

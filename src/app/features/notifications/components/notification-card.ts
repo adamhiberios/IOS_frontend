@@ -56,7 +56,7 @@ import type { Notification } from '../data-access/notification.model';
   host: { class: 'block w-full' },
   template: `
     <article
-      class="flex items-center gap-3 px-4 py-2 bg-[#f6f6f6] rounded-3xl w-full"
+      class="flex items-center gap-3 px-4 py-2 bg-ios-surface-mid rounded-3xl w-full"
       [attr.aria-label]="lang.t(notification().titleKey)"
     >
       <!-- ── Icon container ──────────────────────────────────────────────── -->
@@ -80,7 +80,7 @@ import type { Notification } from '../data-access/notification.model';
         } @else {
           <ios-icon
             [name]="$any(notification().iconName)"
-            class="w-8 h-8 text-[#272827]"
+            class="w-8 h-8 text-ios-fg"
             aria-hidden="true"
           />
         }
@@ -89,19 +89,19 @@ import type { Notification } from '../data-access/notification.model';
       <!-- ── Text content ────────────────────────────────────────────────── -->
       <div class="flex flex-col gap-1 flex-1 min-w-0 py-2" dir="auto">
         <p
-          class="text-[18px] font-semibold leading-[1.4] text-[#272827] w-full"
+          class="text-[18px] font-semibold leading-[1.4] text-ios-fg w-full"
           [class.font-bold]="!notification().isRead"
         >
           {{ lang.t(notification().titleKey) }}
         </p>
-        <p class="text-[16px] font-medium leading-[1.4] text-[#666766] w-full">
+        <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-8 w-full">
           {{ lang.t(notification().descriptionKey) }}
         </p>
       </div>
 
       <!-- ── Timestamp ───────────────────────────────────────────────────── -->
       <p
-        class="text-[14px] font-medium leading-[1.4] text-[#959695] whitespace-nowrap shrink-0"
+        class="text-[14px] font-medium leading-[1.4] text-ios-fg-7 whitespace-nowrap shrink-0"
         dir="auto"
       >
         {{ notification().time }}

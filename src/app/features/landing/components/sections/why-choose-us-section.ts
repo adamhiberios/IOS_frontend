@@ -46,7 +46,7 @@ import { SectionBadge } from '@ui';
 
           <div class="w-[270px] h-1 bg-ios-brand-gold rounded-full" aria-hidden="true"></div>
 
-          <p class="text-[16px] leading-relaxed max-w-[720px] text-[#DCDCDC]">
+          <p class="text-[16px] leading-relaxed max-w-[720px] text-ios-border-light">
             {{ lang.t('landing.sections.whyChooseUs.description') }}
           </p>
         </div>

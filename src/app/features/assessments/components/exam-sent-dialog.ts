@@ -53,11 +53,11 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
         <div class="w-full flex flex-col items-center justify-center gap-1 text-center">
           <h2
             id="exam-sent-dialog-title"
-            class="text-2xl font-semibold text-[#303130] leading-snug"
+            class="text-2xl font-semibold text-ios-fg-11 leading-snug"
           >
             Link was sent successfully
           </h2>
-          <p class="text-lg font-medium text-[#373837] leading-relaxed">
+          <p class="text-lg font-medium text-ios-fg-10 leading-relaxed">
             Please check your Email: ad*********am&#64;gmail.com, to take your exam
           </p>
         </div>
@@ -67,8 +67,8 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
           <button
             type="button"
             (click)="dismissed.emit()"
-            class="h-14 w-[176px] rounded-xl bg-[#f1f1f1] text-[#272827] font-semibold text-lg
-                   transition-colors hover:bg-[#e5e5e5]
+            class="h-14 w-[176px] rounded-xl bg-ios-surface-soft text-ios-fg font-semibold text-lg
+                   transition-colors hover:bg-ios-surface-hover
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                    focus-visible:ring-[#d0d0d0]"
           >
@@ -77,10 +77,10 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
           <a
             href="mailto:"
             class="flex h-14 w-[261px] items-center justify-center rounded-xl
-                   bg-[#141514] text-white font-semibold text-lg
+                   bg-ios-fg-13 text-white font-semibold text-lg
                    transition-colors hover:bg-[#2a2b2a]
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-                   focus-visible:ring-[#141514]/50"
+                   focus-visible:ring-ios-fg-13/50"
           >
             Ok, Open email
           </a>
