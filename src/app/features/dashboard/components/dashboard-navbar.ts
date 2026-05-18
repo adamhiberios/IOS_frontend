@@ -18,6 +18,7 @@ import {
 } from '@lucide/angular';
 
 import { AuthStore } from '@core/auth';
+import { LanguageService } from '@core/i18n';
 import { IosIcon, provideIcons } from '@ui';
 
 import { UserMenuDropdown } from './user-menu-dropdown';
@@ -66,10 +67,10 @@ const NAV_TABS: readonly NavTab[] = [
       <!-- ── Top strip: logo + icon actions ────────────────────────────── -->
       <div class="max-w-[1400px] mx-auto px-8 flex items-center justify-between h-16">
         <!-- Logo -->
-        <a routerLink="/dashboard" aria-label="Institute of Scrum — Dashboard">
+        <a routerLink="/dashboard" [attr.aria-label]="lang.t('dashboard.nav.logoAriaLabel')">
           <img
             ngSrc="assets/icons/logo_institute_of_scrum.png"
-            alt="Institute of Scrum"
+            [attr.alt]="lang.t('dashboard.nav.dashboardLabel')"
             class="h-8 w-auto"
             width="120"
             height="32"
@@ -84,7 +85,7 @@ const NAV_TABS: readonly NavTab[] = [
           <button
             type="button"
             class="flex items-center justify-center w-11 h-11 rounded-full bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-            aria-label="Notifications"
+            [attr.aria-label]="lang.t('dashboard.nav.notificationsAriaLabel')"
           >
             <ios-icon name="bell" class="w-5 h-5" aria-hidden="true" />
           </button>
@@ -96,7 +97,7 @@ const NAV_TABS: readonly NavTab[] = [
               class="flex items-center justify-center w-11 h-11 rounded-full bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
               [attr.aria-expanded]="menuOpen()"
               aria-haspopup="true"
-              aria-label="Open user menu"
+              [attr.aria-label]="lang.t('dashboard.menu.openUserMenu')"
               (click)="toggleMenu($event)"
             >
               <ios-icon name="user" class="w-5 h-5" aria-hidden="true" />
@@ -116,10 +117,10 @@ const NAV_TABS: readonly NavTab[] = [
       </div>
 
       <!-- ── Tab nav — tabs span full container width ───────────────────── -->
-      <nav class="w-full border-b border-[#f1f1f1]" aria-label="Dashboard navigation">
+      <nav class="w-full border-b border-[#f1f1f1]" [attr.aria-label]="lang.t('dashboard.nav.navigationAriaLabel')">
         <div class="max-w-[1400px] mx-auto px-8">
           <ul class="flex items-stretch w-full" role="list">
-            @for (tab of tabs; track tab.route) {
+            @for (tab of tabs(); track tab.route) {
               <li class="flex-1">
                 <a
                   [routerLink]="tab.route"
@@ -148,8 +149,14 @@ const NAV_TABS: readonly NavTab[] = [
 export class DashboardNavbar {
   private readonly auth = inject(AuthStore);
   private readonly elRef = inject(ElementRef);
+  protected readonly lang = inject(LanguageService);
 
-  protected readonly tabs = NAV_TABS;
+  protected readonly tabs = computed<readonly NavTab[]>(() => [
+    { label: this.lang.t('dashboard.nav.overview'), icon: 'layout-dashboard', route: '/dashboard' },
+    { label: this.lang.t('dashboard.nav.myCertificates'), icon: 'award', route: '/dashboard/certificates' },
+    { label: this.lang.t('dashboard.nav.profile'), icon: 'user', route: '/dashboard/profile' },
+    { label: this.lang.t('dashboard.nav.settings'), icon: 'settings', route: '/dashboard/settings' },
+  ]);
   protected readonly menuOpen = signal(false);
 
   protected readonly displayName = computed(() => {

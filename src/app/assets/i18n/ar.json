@@ -79,7 +79,8 @@
       "privacyRequired": "يجب الموافقة على سياسة الخصوصية للمتابعة.",
       "submit": "تسجيل",
       "hasAccount": "مسجّل مسبقاً؟",
-      "loginLink": "سجّل دخولك الآن"
+      "loginLink": "سجّل دخولك الآن",
+      "socialProviderAriaLabel": "المتابعة عبر منصة التواصل الاجتماعي"
     },
     "resetPassword": {
       "title": "إعادة تعيين كلمة المرور",
@@ -153,7 +154,9 @@
       "searchCountry": "ابحث عن دولة…",
       "selectCountryCode": "اختر رمز الدولة",
       "noResults": "لا توجد نتائج",
-      "searchPlaceholder": "بحث…"
+      "searchPlaceholder": "بحث…",
+      "clearAriaLabel": "مسح",
+      "formAriaLabel": "أكمل حسابك"
     }
   },
   "landing": {
@@ -413,7 +416,8 @@
       "login": "تسجيل الدخول",
       "register": "تسجيل",
       "mainNavAriaLabel": "التنقل الرئيسي",
-      "homeAriaLabel": "معهد سكرم — الصفحة الرئيسية"
+      "homeAriaLabel": "معهد سكرم — الصفحة الرئيسية",
+      "logoAlt": "معهد سكرم"
     },
     "footer": {
       "tagline": "المزود الرائد في كندا لشهادات سكرم المعتمدة في المجال.",
@@ -440,7 +444,12 @@
         "title": "قانوني",
         "privacy": "سياسة الخصوصية",
         "terms": "شروط الخدمة"
-      }
+      },
+      "linkedinAriaLabel": "لينكد إن",
+      "xAriaLabel": "إكس / تويتر",
+      "facebookAriaLabel": "فيسبوك",
+      "youtubeAriaLabel": "يوتيوب",
+      "logoAlt": "معهد سكرم"
     }
   },
   "contact": {
@@ -477,7 +486,10 @@
       "myCertificates": "شهاداتي",
       "profile": "الملف الشخصي",
       "settings": "الإعدادات",
-      "dashboardLabel": "معهد سكروم"
+      "dashboardLabel": "معهد سكروم",
+      "logoAriaLabel": "معهد سكرم — لوحة التحكم",
+      "notificationsAriaLabel": "الإشعارات",
+      "navigationAriaLabel": "تنقل لوحة التحكم"
     },
     "menu": {
       "userMenuLabel": "قائمة المستخدم",
@@ -734,7 +746,9 @@
       "related": "مقالات ذات صلة",
       "notFound": "المقال غير موجود.",
       "backToInsights": "العودة إلى الرؤى",
-      "scrollToTop": "العودة إلى الأعلى"
+      "scrollToTop": "العودة إلى الأعلى",
+      "youMightAlsoEnjoyPart1": "قد يعجبك",
+      "youMightAlsoEnjoyPart2": "أيضاً"
     }
   },
   "scrumMaster": {
@@ -2114,6 +2128,87 @@
         "heading": "اتصل بنا",
         "body": "إذا كان لديك أي أسئلة أو مخاوف بشأن هذه السياسة أو ممارسات البيانات لدينا، يرجى الاتصال بفريق الدعم لدينا مباشرة عبر المنصة."
       }
+    }
+  },
+  "forbidden": {
+    "heading": "الوصول مرفوض",
+    "description": "أنت مسجّل دخولك، لكن ليس لديك صلاحية لعرض هذه الصفحة.",
+    "backToDashboard": "العودة إلى لوحة التحكم"
+  },
+  "notFound": {
+    "heading": "الصفحة غير موجودة",
+    "description": "المسار الذي حاولت الوصول إليه غير موجود أو ليس لديك صلاحية الوصول إليه.",
+    "backHome": "العودة إلى الرئيسية"
+  },
+  "ui": {
+    "noOptionsFound": "لا توجد خيارات",
+    "noResults": "لا توجد نتائج",
+    "filterOptionsAriaLabel": "تصفية الخيارات",
+    "clearFilterAriaLabel": "مسح التصفية",
+    "searchPlaceholder": "بحث..."
+  },
+  "settings": {
+    "breadcrumb": {
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "dashboard": "لوحة التحكم",
+      "settings": "الإعدادات",
+      "cancelSubscription": "إلغاء الاشتراك",
+      "backToSettings": "العودة إلى الإعدادات"
+    },
+    "nav": {
+      "navigationAriaLabel": "تنقل لوحة التحكم"
+    },
+    "notifications": {
+      "heading": "تفضيلات الإشعارات",
+      "all": "تلقّي الإشعارات لجميع التحديثات",
+      "insights": "تلقّي الإشعارات لمنشورات المدونة والتقارير الجديدة",
+      "recommended": "الدورات الموصى بها",
+      "completion": "إشعار إتمام الدورة",
+      "material": "إضافة مواد تعليمية جديدة"
+    },
+    "newsletter": {
+      "heading": "النشرة البريدية",
+      "checkbox": "إشعار الاشتراك في النشرة البريدية",
+      "enabled": "مفعّل",
+      "enabledAriaLabel": "حالة الاشتراك: مفعّل",
+      "cancelLink": "إلغاء الاشتراك"
+    },
+    "account": {
+      "heading": "تفضيلات الحساب",
+      "delete": "حذف الحساب"
+    },
+    "cancelSubscription": {
+      "backAriaLabel": "العودة إلى الإعدادات",
+      "title": "لماذا تلغي اشتراكك؟",
+      "selectReasonSrOnly": "اختر سبباً للإلغاء",
+      "reason1": "مرة واحدة في الأسبوع تبدو مناسبة.",
+      "reason2": "دعنا نبطئ — مرة واحدة في الشهر فقط، من فضلك.",
+      "reason3": "لقد غيّرت رأيي! واصل إرسال المحتوى.",
+      "reason4": "الأمر لا يسير كما ينبغي. أوقف اشتراكي.",
+      "submit": "إرسال وإلغاء الاشتراك"
+    },
+    "cancelled": {
+      "heading": "تم إلغاء اشتراكك.",
+      "line1": "سمعنا أنك ألغيت اشتراكك، وهذا أمر مؤسف.",
+      "line2": "نتمنى لك رحلة موفقة.",
+      "resubscribe": "الاشتراك مجدداً",
+      "goHome": "الرئيسية"
+    },
+    "deleteDialog": {
+      "closeAriaLabel": "إغلاق مربع الحوار",
+      "heading": "هل أنت متأكد من حذف حسابك؟",
+      "description": "ستفقد جميع معلوماتك، وخاصة شهاداتك.",
+      "typeLabel": "اكتب \"Delete\" للمتابعة",
+      "typePlaceholder": "اكتب \"Delete\"",
+      "goBack": "رجوع",
+      "confirm": "حذف الحساب"
+    },
+    "logoutDialog": {
+      "closeAriaLabel": "إغلاق مربع الحوار",
+      "heading": "هل أنت متأكد من تسجيل الخروج؟",
+      "description": "سيتم تسجيل خروجك من هذا المتصفح. يمكنك تسجيل الدخول لاحقاً للوصول إلى معلوماتك.",
+      "goBack": "رجوع",
+      "confirm": "تسجيل الخروج"
     }
   }
 }

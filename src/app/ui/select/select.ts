@@ -52,6 +52,7 @@ import { EMPTY, switchMap } from 'rxjs';
 import { LucideCheck, LucideChevronDown, LucideSearch } from '@lucide/angular';
 
 import { IosIcon } from '../icon/icon';
+import { LanguageService } from '@core/i18n';
 import { provideIcons } from '../icon/icon-registry';
 
 export interface SelectOption {
@@ -135,7 +136,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
                 class="flex-1 min-w-0 bg-transparent text-sm text-ios-brand-dark
                        placeholder:text-gray-400 outline-none focus:outline-none focus:shadow-none border-0"
                 style="box-shadow: none; outline: none"
-                aria-label="Filter options"
+                [attr.aria-label]="lang.t('ui.filterOptionsAriaLabel')"
                 autocomplete="off"
               />
               @if (filterQuery()) {
@@ -143,7 +144,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
                   type="button"
                   (click)="clearFilter()"
                   class="text-gray-400 hover:text-gray-600 focus:outline-none"
-                  aria-label="Clear filter"
+                  [attr.aria-label]="lang.t('ui.clearFilterAriaLabel')"
                 >
                   ×
                 </button>
@@ -154,7 +155,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
           <!-- Options list — scrollable, capped at ~7 items -->
           <div class="overflow-y-auto max-h-52 py-1" role="group">
             @if (filteredOptions().length === 0) {
-              <p class="px-4 py-3 text-sm text-gray-400 text-center">No results</p>
+              <p class="px-4 py-3 text-sm text-gray-400 text-center">{{ lang.t('ui.noResults') }}</p>
             }
             @for (option of filteredOptions(); track option.value) {
               <button
@@ -203,6 +204,7 @@ export class Select {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   private readonly hostEl: ElementRef<HTMLElement> = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
+  protected readonly lang = inject(LanguageService);
 
   readonly id = input.required<string>();
   /** Pass an empty string to suppress the label element. */

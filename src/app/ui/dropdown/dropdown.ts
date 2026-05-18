@@ -11,6 +11,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { LanguageService } from '@core/i18n';
 
 export interface DropdownOption {
   value: string;
@@ -78,7 +79,7 @@ export interface DropdownOption {
               <input
                 type="text"
                 [formControl]="searchControl"
-                [placeholder]="'Search...'"
+                [placeholder]="lang.t('ui.searchPlaceholder')"
                 class="w-full h-9 px-3 text-sm rounded-md border border-gray-200 bg-gray-50
                        focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary
                        placeholder:text-gray-400"
@@ -89,7 +90,7 @@ export interface DropdownOption {
 
           <ul class="max-h-60 overflow-y-auto p-1">
             @if (filteredOptions().length === 0) {
-              <li class="px-3 py-2 text-sm text-gray-400">No options found</li>
+              <li class="px-3 py-2 text-sm text-gray-400">{{ lang.t('ui.noOptionsFound') }}</li>
             }
             @for (option of filteredOptions(); track option.value; let idx = $index) {
               <li
@@ -126,6 +127,7 @@ export interface DropdownOption {
 })
 export class Dropdown {
   private readonly el = inject(ElementRef);
+  protected readonly lang = inject(LanguageService);
 
   readonly id = input.required<string>();
   readonly label = input.required<string>();

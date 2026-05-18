@@ -24,7 +24,7 @@ import { CanadaFlag } from '@ui';
           <div class="lg:col-span-2">
             <img
               ngSrc="/assets/icons/logo_institute_of_scrum_white.png"
-              alt="Institute of Scrum"
+              [attr.alt]="lang.t('landing.footer.logoAlt')"
               width="368"
               height="122"
               class="h-[50px] w-auto mb-5"
@@ -38,7 +38,7 @@ import { CanadaFlag } from '@ui';
                 class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center
                        hover:bg-white/20 transition-colors text-sm
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                aria-label="LinkedIn"
+                [attr.aria-label]="lang.t('landing.footer.linkedinAriaLabel')"
                 >in</a
               >
               <a
@@ -46,7 +46,7 @@ import { CanadaFlag } from '@ui';
                 class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center
                        hover:bg-white/20 transition-colors text-sm
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                aria-label="X / Twitter"
+                [attr.aria-label]="lang.t('landing.footer.xAriaLabel')"
                 (click)="$event.preventDefault()"
                 >X</a
               >
@@ -55,7 +55,7 @@ import { CanadaFlag } from '@ui';
                 class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center
                        hover:bg-white/20 transition-colors text-sm
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                aria-label="Facebook"
+                [attr.aria-label]="lang.t('landing.footer.facebookAriaLabel')"
                 (click)="$event.preventDefault()"
                 >f</a
               >
@@ -64,7 +64,7 @@ import { CanadaFlag } from '@ui';
                 class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center
                        hover:bg-white/20 transition-colors text-sm
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                aria-label="YouTube"
+                [attr.aria-label]="lang.t('landing.footer.youtubeAriaLabel')"
                 (click)="$event.preventDefault()"
                 >&#9654;</a
               >

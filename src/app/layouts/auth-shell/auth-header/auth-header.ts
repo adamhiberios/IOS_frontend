@@ -1,7 +1,8 @@
 import { NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { LanguageService } from '@core/i18n';
 import { LanguageSelector } from '@ui';
 
 /**
@@ -25,10 +26,10 @@ import { LanguageSelector } from '@ui';
              border-b border-gray-200 bg-white/90 backdrop-blur-sm"
     >
       <div class="flex items-center justify-between px-4 md:px-8 py-3">
-        <a routerLink="/" aria-label="Institute of Scrum — home">
+        <a routerLink="/" [attr.aria-label]="lang.t('landing.nav.homeAriaLabel')">
           <img
             ngSrc="/assets/icons/logo_institute_of_scrum.png"
-            alt="Institute of Scrum"
+            [attr.alt]="lang.t('landing.nav.logoAlt')"
             width="50"
             height="50"
             class="h-10 w-auto"
@@ -40,4 +41,6 @@ import { LanguageSelector } from '@ui';
     </header>
   `,
 })
-export class AuthHeader {}
+export class AuthHeader {
+  protected readonly lang = inject(LanguageService);
+}

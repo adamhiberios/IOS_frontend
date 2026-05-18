@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
+import { LanguageService } from '@core/i18n';
 
 /**
  * `ios-logout-dialog` — Confirmation modal for logging out.
@@ -26,7 +27,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
       <button
         type="button"
         class="absolute inset-0 bg-black/60 cursor-default w-full h-full"
-        aria-label="Close dialog"
+        [attr.aria-label]="lang.t('settings.logoutDialog.closeAriaLabel')"
         tabindex="-1"
         (click)="cancelled.emit()"
       ></button>
@@ -66,11 +67,10 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                 id="logout-dialog-title"
                 class="font-semibold leading-[1.2] text-[#303130] text-[24px] w-full"
               >
-                Are you sure to logout?
+                {{ lang.t('settings.logoutDialog.heading') }}
               </h2>
               <p class="font-medium leading-[1.4] text-[#373837] text-[18px] w-full">
-                You will be logged out of this browser, and you can log back in later to get your
-                information.
+                {{ lang.t('settings.logoutDialog.description') }}
               </p>
             </div>
 
@@ -81,14 +81,14 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
                 class="flex items-center justify-center h-14 px-6 rounded-xl bg-[#f1f1f1] text-[#272827] text-[18px] font-semibold leading-[1.4] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#272827]/30 w-[139px]"
                 (click)="cancelled.emit()"
               >
-                Go back
+                {{ lang.t('settings.logoutDialog.goBack') }}
               </button>
               <button
                 type="button"
                 class="flex items-center justify-center h-14 px-6 rounded-xl bg-[#8b0000] text-white text-[18px] font-semibold leading-[1.4] hover:bg-[#6f0000] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8b0000]/50 w-[230px]"
                 (click)="confirmed.emit()"
               >
-                Logout
+                {{ lang.t('settings.logoutDialog.confirm') }}
               </button>
             </div>
           </div>
@@ -98,6 +98,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
   `,
 })
 export class LogoutDialog {
+  protected readonly lang = inject(LanguageService);
   readonly cancelled = output<void>();
   readonly confirmed = output<void>();
 }

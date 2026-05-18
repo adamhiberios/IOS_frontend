@@ -6,6 +6,7 @@ import { LucideArrowLeft, LucideArrowRight } from '@lucide/angular';
 import { CanadaFlag, Checkbox, IosIcon, provideIcons } from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { AuthStore } from '@core/auth';
+import { LanguageService } from '@core/i18n';
 
 import { DeleteAccountDialog } from '../components/delete-account-dialog';
 
@@ -52,7 +53,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
             <a
               routerLink="/dashboard"
               class="flex items-center justify-center w-11 h-11 rounded-xl bg-[#f1f1f1] text-[#272827] hover:bg-[#e5e5e5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
-              aria-label="Back to Dashboard"
+              [attr.aria-label]="lang.t('settings.breadcrumb.backToDashboard')"
             >
               <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
             </a>
@@ -66,12 +67,12 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                     routerLink="/dashboard"
                     class="font-medium text-[#666766] hover:text-[#141514] transition-colors"
                   >
-                    Dashboard
+                    {{ lang.t('settings.breadcrumb.dashboard') }}
                   </a>
                 </li>
                 <li class="font-medium text-[#666766]" aria-hidden="true">/</li>
                 <li>
-                  <span class="font-semibold text-[#141514]" aria-current="page">Settings</span>
+                  <span class="font-semibold text-[#141514]" aria-current="page">{{ lang.t('settings.breadcrumb.settings') }}</span>
                 </li>
               </ol>
             </nav>
@@ -89,28 +90,28 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                 id="notif-heading"
                 class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
               >
-                Notification Preferences
+                {{ lang.t('settings.notifications.heading') }}
               </h2>
 
               <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6 flex flex-col gap-8">
                 <ios-checkbox id="notif-all" [formControl]="notifAllCtrl">
-                  Get notification for all updates
+                  {{ lang.t('settings.notifications.all') }}
                 </ios-checkbox>
 
                 <ios-checkbox id="notif-insights" [formControl]="notifInsightsCtrl">
-                  Get notification for new Insights / blog publications
+                  {{ lang.t('settings.notifications.insights') }}
                 </ios-checkbox>
 
                 <ios-checkbox id="notif-recommended" [formControl]="notifRecommendedCtrl">
-                  Recommended courses
+                  {{ lang.t('settings.notifications.recommended') }}
                 </ios-checkbox>
 
                 <ios-checkbox id="notif-completion" [formControl]="notifCompletionCtrl">
-                  Course completion notification
+                  {{ lang.t('settings.notifications.completion') }}
                 </ios-checkbox>
 
                 <ios-checkbox id="notif-material" [formControl]="notifMaterialCtrl">
-                  New learning material added
+                  {{ lang.t('settings.notifications.material') }}
                 </ios-checkbox>
               </div>
             </div>
@@ -123,13 +124,13 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                 id="newsletter-heading"
                 class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
               >
-                Newsletter
+                {{ lang.t('settings.newsletter.heading') }}
               </h2>
 
               <div class="flex-1 bg-[#f6f6f6] rounded-2xl p-6 flex flex-col gap-4">
                 <!-- Newsletter subscription checkbox -->
                 <ios-checkbox id="newsletter-check" [formControl]="newsletterEnabledCtrl">
-                  Newsletter subscription notification
+                  {{ lang.t('settings.newsletter.checkbox') }}
                 </ios-checkbox>
 
                 <!-- Email + Enabled badge row -->
@@ -147,7 +148,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                     <!-- Enabled badge -->
                     <div
                       class="flex items-center gap-3 bg-[#f1f1f1] px-6 py-4 rounded-e-xl shrink-0"
-                      aria-label="Subscription status: Enabled"
+                      [attr.aria-label]="lang.t('settings.newsletter.enabledAriaLabel')"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -162,7 +163,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                       <span class="font-semibold text-[16px] text-[#272827] whitespace-nowrap">
-                        Enabled
+                        {{ lang.t('settings.newsletter.enabled') }}
                       </span>
                     </div>
                   </div>
@@ -172,7 +173,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                     routerLink="/dashboard/settings/cancel-subscription"
                     class="font-semibold text-[16px] text-[#c33811] leading-[1.4] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c33811]/40 rounded-sm w-fit"
                   >
-                    Cancel subscription
+                    {{ lang.t('settings.newsletter.cancelLink') }}
                   </a>
                 </div>
               </div>
@@ -186,7 +187,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                 id="account-heading"
                 class="text-[18px] font-semibold leading-[1.4] text-[#141514] w-[228px] shrink-0"
               >
-                Account Preferences
+                {{ lang.t('settings.account.heading') }}
               </h2>
 
               <!-- Delete account pill -->
@@ -198,7 +199,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                 <span
                   class="font-semibold text-[16px] text-[#c33811] leading-[1.4] whitespace-nowrap"
                 >
-                  Delete account
+                  {{ lang.t('settings.account.delete') }}
                 </span>
                 <ios-icon name="arrow-right" class="w-6 h-6 text-[#c33811]" aria-hidden="true" />
               </button>
@@ -213,7 +214,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
           class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
         >
           <ios-canada-flag aria-hidden="true" />
-          <span>© {{ year }} Institute of Scrum. All rights reserved.</span>
+          <span>{{ lang.t('common.copyright', { year: year }) }}</span>
         </div>
       </footer>
     </div>
@@ -229,6 +230,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
 })
 export class SettingsPage {
   private readonly auth = inject(AuthStore);
+  protected readonly lang = inject(LanguageService);
 
   protected readonly year = new Date().getFullYear().toString();
 
