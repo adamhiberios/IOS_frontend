@@ -70,7 +70,7 @@ import { LucideCheck } from '@lucide/angular';
       <!-- Visual box. aria-hidden because the real input owns the a11y tree. -->
       <span
         aria-hidden="true"
-        class="relative shrink-0 w-5 h-5 rounded-[2px] border bg-white transition-colors
+        class="relative shrink-0 w-5 h-5 rounded-[2px] border bg-white transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center
                peer-focus-visible:ring-2
                peer-focus-visible:ring-ios-brand-primary/40
                peer-focus-visible:ring-offset-2"

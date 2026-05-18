@@ -69,7 +69,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
       <ios-dashboard-navbar />
 
       <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-6">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
           <!-- ── Breadcrumb row ── -->
           <div class="flex items-center justify-between mb-6">
             <!-- Back arrow + breadcrumb -->
@@ -83,7 +83,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
               </a>
               <nav aria-label="Breadcrumb">
                 <ol
-                  class="flex items-center gap-3 text-[16px] font-medium leading-[1.4] text-ios-fg-8"
+                  class="flex items-center gap-1.5 md:gap-3 text-[14px] md:text-[16px] font-medium leading-[1.4] text-ios-fg-8"
                   role="list"
                 >
                   <li>
@@ -132,7 +132,10 @@ import { CertificatesStore } from '../data-access/certificates.store';
               ══════════════════════════════════════════════ -->
               @if (store.activeSection() === 'overview') {
                 <!-- ── 4 Stat cards ── -->
-                <section aria-label="Certification statistics" class="grid grid-cols-4 gap-4">
+                <section
+                  aria-label="Certification statistics"
+                  class="grid grid-cols-2 lg:grid-cols-4 gap-4"
+                >
                   <!-- Overall Completion -->
                   <div class="flex items-center gap-3 bg-ios-surface-muted rounded-2xl px-5 py-3">
                     <ios-icon
@@ -204,7 +207,10 @@ import { CertificatesStore } from '../data-access/certificates.store';
 
                 <!-- ── Row 1: "Complete your learning" + "Certification" ── -->
                 @if (detail()) {
-                  <section aria-label="Learning progress" class="grid grid-cols-[1fr_354px] gap-6">
+                  <section
+                    aria-label="Learning progress"
+                    class="grid grid-cols-1 lg:grid-cols-[1fr_354px] gap-6"
+                  >
                     <!-- "Complete your learning" -->
                     <div class="flex flex-col gap-3">
                       <h2 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13">
@@ -299,7 +305,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
                           </p>
                           <button
                             type="button"
-                            class="inline-flex items-center justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 whitespace-nowrap"
+                            class="inline-flex items-center justify-center gap-1 h-11 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 whitespace-nowrap"
                             (click)="onShowDetails()"
                           >
                             {{ lang.t('dashboard.certs.showDetails') }}
@@ -319,7 +325,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
                 @if (detail()) {
                   <section
                     aria-label="Mock test performance"
-                    class="grid grid-cols-[1fr_354px] gap-6 items-stretch"
+                    class="grid grid-cols-1 lg:grid-cols-[1fr_354px] gap-6 items-stretch"
                   >
                     <ios-line-chart
                       [scores]="detail()!.weeklyScores"
@@ -368,7 +374,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
 
       <footer class="bg-ios-brand-dark w-full py-4">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
+          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>

@@ -75,10 +75,10 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
           aria-label="Exam questions"
         >
           <!-- ── Two-column layout ──────────────────────────────────── -->
-          <div class="flex gap-6 items-start">
+          <div class="flex flex-col lg:flex-row gap-6 items-start">
             <!-- ── Left: Question panel ──────────────────────────────── -->
             <div
-              class="flex-1 min-w-0 flex flex-col gap-6 rounded-xl bg-ios-surface-soft p-6"
+              class="flex-1 min-w-0 w-full flex flex-col gap-6 rounded-xl bg-ios-surface-soft p-4 md:p-6"
               aria-live="polite"
               aria-atomic="true"
             >
@@ -118,7 +118,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
 
             <!-- ── Right: EPO-green sidebar ──────────────────────────── -->
             <aside
-              class="w-[354px] shrink-0 rounded-2xl bg-cer-green-strong p-8 flex flex-col gap-6"
+              class="w-full lg:w-[354px] shrink-0 rounded-2xl bg-cer-green-strong p-6 lg:p-8 flex flex-col gap-6"
               aria-label="Exam progress"
             >
               <!-- Badge + cert info -->
@@ -169,7 +169,9 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
                   <span class="text-[14px] font-medium text-ios-border-light leading-[1.4]">
                     Progress
                   </span>
-                  <span class="text-[14px] font-medium text-ios-border-light leading-[1.4] tabular-nums">
+                  <span
+                    class="text-[14px] font-medium text-ios-border-light leading-[1.4] tabular-nums"
+                  >
                     {{ answeredCount() }} / {{ questions().length }}
                   </span>
                 </div>
@@ -195,11 +197,11 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
           <!-- end 2-col layout -->
 
           <!-- ── Back / Next action row ─────────────────────────────── -->
-          <div class="flex items-center justify-end gap-6">
+          <div class="flex flex-col sm:flex-row items-center justify-end gap-3 sm:gap-6">
             <button
               type="button"
               [disabled]="currentIndex() === 0"
-              class="flex h-14 w-[190px] items-center justify-center rounded-xl
+              class="flex h-14 w-full sm:w-[190px] items-center justify-center rounded-xl
                      bg-ios-surface-soft text-ios-fg-10 font-semibold text-lg
                      transition-colors hover:bg-ios-surface-hover
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
@@ -215,7 +217,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
               <button
                 type="button"
                 [disabled]="selectedOptionId() === null"
-                class="flex h-14 w-[238px] items-center justify-center rounded-xl
+                class="flex h-14 w-full sm:w-[238px] items-center justify-center rounded-xl
                        bg-ios-fg-13 text-white font-semibold text-lg
                        transition-colors hover:bg-[#2a2b2a]
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
@@ -234,7 +236,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
               <button
                 type="button"
                 [disabled]="selectedOptionId() === null"
-                class="flex h-14 w-[238px] items-center justify-center rounded-xl
+                class="flex h-14 w-full sm:w-[238px] items-center justify-center rounded-xl
                        bg-ios-fg-13 text-white font-semibold text-lg
                        transition-colors hover:bg-[#2a2b2a]
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
@@ -256,7 +258,7 @@ import { DEMO_EXAM_QUESTIONS, type ExamQuestion, type OptionId } from '../data-a
         <!-- ── Footer ─────────────────────────────────────────────────── -->
         <footer class="bg-ios-fg w-full py-4">
           <div
-            class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2
+            class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2
                    text-ios-fg-7 text-xs"
           >
             <ios-canada-flag aria-hidden="true" />

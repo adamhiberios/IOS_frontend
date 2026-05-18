@@ -34,7 +34,7 @@ const NAV_ITEMS: readonly { id: CertDetailNavItem['id']; labelKey: string }[] = 
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <nav
-      class="flex flex-col w-[228px] shrink-0"
+      class="hidden lg:flex flex-col w-[228px] shrink-0"
       [attr.aria-label]="lang.t('dashboard.certs.certification')"
     >
       @for (item of navItems; track item.id) {

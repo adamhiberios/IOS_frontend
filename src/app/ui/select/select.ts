@@ -125,7 +125,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
           <!-- Search / filter input -->
           <div class="p-2 border-b border-gray-100">
             <div
-              class="flex items-center gap-2 px-3 h-9 rounded-lg bg-gray-50 border border-gray-200"
+              class="flex items-center gap-2 px-3 h-11 rounded-lg bg-gray-50 border border-gray-200"
             >
               <ios-icon name="search" class="w-4 h-4 text-gray-400 flex-shrink-0" />
               <input
@@ -154,7 +154,9 @@ const STATE_CLASSES: Record<SelectState, string> = {
           <!-- Options list — scrollable, capped at ~7 items -->
           <div class="overflow-y-auto max-h-52 py-1" role="group">
             @if (filteredOptions().length === 0) {
-              <p class="px-4 py-3 text-sm text-gray-400 text-center">{{ lang.t('ui.noResults') }}</p>
+              <p class="px-4 py-3 text-sm text-gray-400 text-center">
+                {{ lang.t('ui.noResults') }}
+              </p>
             }
             @for (option of filteredOptions(); track option.value) {
               <button
@@ -163,7 +165,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
                 [attr.aria-selected]="option.value === resolvedControl.value"
                 [attr.aria-disabled]="option.disabled || null"
                 (click)="select(option.value)"
-                class="w-full px-4 py-2 text-start text-sm font-medium
+                class="w-full px-4 py-3 text-start text-sm font-medium
                        hover:bg-gray-50 transition-colors
                        flex items-center justify-between gap-2"
                 [class.text-ios-brand-primary]="option.value === resolvedControl.value"

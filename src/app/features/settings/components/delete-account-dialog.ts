@@ -104,7 +104,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
               <input
                 id="delete-confirm-input"
                 type="text"
-[attr.placeholder]="lang.t('settings.deleteDialog.typePlaceholder')"
+                [attr.placeholder]="lang.t('settings.deleteDialog.typePlaceholder')"
                 [formControl]="confirmControl"
                 autocomplete="off"
                 class="w-full px-3 py-3 rounded-lg bg-ios-surface-mid border border-ios-line text-[16px] text-ios-fg-10 font-medium leading-[1.4] placeholder:text-ios-fg-7 focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary transition-colors"
@@ -112,11 +112,11 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
             </div>
 
             <!-- Buttons -->
-            <div class="flex gap-6 items-end justify-end w-full">
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-6 items-end justify-end w-full">
               <!-- Go back -->
               <button
                 type="button"
-                class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-surface-soft text-ios-fg text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30 w-[139px]"
+                class="flex items-center justify-center h-14 w-full sm:w-[139px] rounded-xl bg-ios-surface-soft text-ios-fg text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30"
                 (click)="cancelled.emit()"
               >
                 {{ lang.t('settings.deleteDialog.goBack') }}
@@ -125,7 +125,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
               <!-- Delete account — disabled until "Delete" typed -->
               <button
                 type="button"
-                class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-danger-mid text-white text-[18px] font-semibold leading-[1.4] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50 w-[230px]"
+                class="flex items-center justify-center h-14 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[18px] font-semibold leading-[1.4] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50"
                 [class.opacity-40]="!canDelete()"
                 [class.cursor-not-allowed]="!canDelete()"
                 [disabled]="!canDelete()"

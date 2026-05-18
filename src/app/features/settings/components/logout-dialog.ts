@@ -75,17 +75,19 @@ import { LanguageService } from '@core/i18n';
             </div>
 
             <!-- Buttons -->
-            <div class="flex gap-6 items-center justify-center w-full">
+            <div
+              class="flex flex-col sm:flex-row gap-3 sm:gap-6 items-center justify-center w-full"
+            >
               <button
                 type="button"
-                class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-surface-soft text-ios-fg text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30 w-[139px]"
+                class="flex items-center justify-center h-14 w-full sm:w-[139px] rounded-xl bg-ios-surface-soft text-ios-fg text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30"
                 (click)="cancelled.emit()"
               >
                 {{ lang.t('settings.logoutDialog.goBack') }}
               </button>
               <button
                 type="button"
-                class="flex items-center justify-center h-14 px-6 rounded-xl bg-ios-brand-primary text-white text-[18px] font-semibold leading-[1.4] hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 w-[230px]"
+                class="flex items-center justify-center h-14 w-full sm:w-[230px] rounded-xl bg-ios-brand-primary text-white text-[18px] font-semibold leading-[1.4] hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
                 (click)="confirmed.emit()"
               >
                 {{ lang.t('settings.logoutDialog.confirm') }}

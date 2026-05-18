@@ -292,7 +292,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
         <ios-accent-bars />
 
         <section
-          class="w-full z-2 max-w-2xl bg-white border-2 border-gray-100 rounded-xl
+          class="w-full z-[2] max-w-2xl bg-white border-2 border-gray-100 rounded-xl
                  p-6 md:px-14 md:py-12 flex flex-col gap-10"
           aria-label="Complete your account"
         >
@@ -354,7 +354,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
                   {{ lang.t('auth.completeAccount.birthdayLabel') }}
                   <span aria-hidden="true" class="text-ios-brand-primary">*</span>
                 </legend>
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <!-- No label prop — group label comes from <legend> above -->
                   <ios-select
                     id="birthMonth"
@@ -555,7 +555,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
               </div>
 
               <!-- City + Street ------------------------------------------- -->
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <ios-select
                   id="city"
                   [label]="lang.t('auth.completeAccount.cityMandatoryLabel')"
@@ -575,7 +575,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
               </div>
 
               <!-- Address + ZIP Code -------------------------------------- -->
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <ios-input
                   id="address"
                   [label]="lang.t('auth.completeAccount.addressLabel')"
@@ -648,7 +648,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
               />
 
               <!-- Back + Next --------------------------------------------- -->
-              <div class="flex gap-6 mt-2">
+              <div class="flex flex-col sm:flex-row gap-3 sm:gap-6 mt-2">
                 <button
                   type="button"
                   (click)="prevStep()"
@@ -730,7 +730,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
               />
 
               <!-- Back + Save & Continue ---------------------------------- -->
-              <div class="flex gap-6 mt-2">
+              <div class="flex flex-col sm:flex-row gap-3 sm:gap-6 mt-2">
                 <button
                   type="button"
                   (click)="prevStep()"

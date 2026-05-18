@@ -48,7 +48,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
       <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
           <div class="flex items-center gap-4">
             <a
               routerLink="/dashboard"
@@ -72,7 +72,9 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                 </li>
                 <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
-                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{ lang.t('settings.breadcrumb.settings') }}</span>
+                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
+                    lang.t('settings.breadcrumb.settings')
+                  }}</span>
                 </li>
               </ol>
             </nav>
@@ -82,13 +84,13 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
 
       <!-- ── Main content ───────────────────────────────────────────────── -->
       <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-8 flex flex-col gap-6">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 flex flex-col gap-6">
           <!-- ── Notification Preferences ───────────────────────────────── -->
           <section aria-labelledby="notif-heading">
-            <div class="flex gap-6 items-start">
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
               <h2
                 id="notif-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
               >
                 {{ lang.t('settings.notifications.heading') }}
               </h2>
@@ -119,10 +121,10 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
 
           <!-- ── Newsletter ──────────────────────────────────────────────── -->
           <section aria-labelledby="newsletter-heading">
-            <div class="flex gap-6 items-start">
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
               <h2
                 id="newsletter-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
               >
                 {{ lang.t('settings.newsletter.heading') }}
               </h2>
@@ -182,10 +184,10 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
 
           <!-- ── Account Preferences ─────────────────────────────────────── -->
           <section aria-labelledby="account-heading">
-            <div class="flex gap-6 items-start">
+            <div class="flex flex-col lg:flex-row gap-6 items-start">
               <h2
                 id="account-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
               >
                 {{ lang.t('settings.account.heading') }}
               </h2>
@@ -201,7 +203,11 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                 >
                   {{ lang.t('settings.account.delete') }}
                 </span>
-                <ios-icon name="arrow-right" class="w-6 h-6 text-ios-danger-strong" aria-hidden="true" />
+                <ios-icon
+                  name="arrow-right"
+                  class="w-6 h-6 text-ios-danger-strong"
+                  aria-hidden="true"
+                />
               </button>
             </div>
           </section>
@@ -211,7 +217,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
       <!-- ── Footer ────────────────────────────────────────────────────────── -->
       <footer class="bg-ios-brand-dark w-full py-4">
         <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
+          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
         >
           <ios-canada-flag aria-hidden="true" />
           <span>{{ lang.t('common.copyright', { year: year }) }}</span>
