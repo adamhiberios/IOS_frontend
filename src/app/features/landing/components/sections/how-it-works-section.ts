@@ -95,8 +95,8 @@ interface HowItWorksStep {
                 <!-- Number badge -->
                 <div
                   class="absolute w-10 h-10 rounded-full bg-ios-brand-gold border-2 border-white
-                         flex items-center justify-center font-heading font-bold text-[14px] text-white"
-                  style="top: -18px; left: -18px; z-index: 11;"
+                         flex items-center justify-center font-heading font-bold text-[14px] text-white
+                         -top-[18px] -start-[18px] z-[11]"
                   aria-hidden="true"
                 >
                   {{ step.number }}

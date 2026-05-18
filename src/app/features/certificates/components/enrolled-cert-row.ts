@@ -55,7 +55,7 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
             decoding="async"
           />
           @if (cert().isActive) {
-            <span class="absolute" style="top:8.67px; right:0; width:8.69px; height:8.67px;">
+            <span class="absolute top-[8.67px] end-0 w-[8.69px] h-[8.67px]">
               <span
                 class="block w-full h-full rounded-full bg-green-500 border-2 border-white"
               ></span>
@@ -108,18 +108,16 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
         <div class="flex items-start gap-6 shrink-0">
           <button
             type="button"
-            class="inline-flex items-center justify-center h-11 rounded-xl text-[16px] font-semibold leading-[1.4] text-white border border-white/30 hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap"
-            style="padding-left:24px; padding-right:16px; width:177px;"
+            class="inline-flex items-center justify-center h-11 rounded-xl text-[16px] font-semibold leading-[1.4] text-white border border-white/30 hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-[177px]"
             (click)="viewDetails.emit(cert().code)"
           >
             {{ lang.t('dashboard.certs.showDetails') }}
           </button>
           <button
             type="button"
-            class="inline-flex items-center justify-center gap-2 h-11 rounded-xl text-[16px] font-semibold leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap"
+            class="inline-flex items-center justify-center gap-2 h-11 rounded-xl text-[16px] font-semibold leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-[217px]"
             [style.background-color]="buttonBg()"
             [style.color]="buttonText()"
-            style="padding-left:24px; padding-right:16px; width:217px;"
           >
             {{ lang.t('dashboard.certs.startTestExam') }}
             <ios-icon

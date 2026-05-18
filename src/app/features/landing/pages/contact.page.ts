@@ -129,7 +129,7 @@ import { PageHero } from '../components/page-hero';
     <!-- 5. Scroll-to-top button -->
     <button
       (click)="scrollToTop()"
-      class="fixed bottom-8 right-8 z-50 flex items-center justify-center w-11 h-11 rounded-full border-2 border-ios-brand-primary-soft bg-ios-brand-primary-soft hover:bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+      class="fixed bottom-8 end-8 z-50 flex items-center justify-center w-11 h-11 rounded-full border-2 border-ios-brand-primary-soft bg-ios-brand-primary-soft hover:bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
       [attr.aria-label]="lang.t('contact.scrollToTop')"
     >
       <ios-icon name="arrow-up" class="w-5 h-5 text-ios-brand-primary" />
