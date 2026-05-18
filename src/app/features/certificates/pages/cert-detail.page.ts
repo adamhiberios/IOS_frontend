@@ -108,12 +108,12 @@ import { CertificatesStore } from '../data-access/certificates.store';
 
             <!-- Start Final Test CTA — only shown at high completion -->
             @if (showFinalTestCta()) {
-              <button
-                type="button"
+              <a
+                routerLink="/assessments/verify"
                 class="inline-flex items-center justify-center h-11 px-6 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
               >
                 {{ lang.t('dashboard.certs.startFinalTest') }}
-              </button>
+              </a>
             }
           </div>
 

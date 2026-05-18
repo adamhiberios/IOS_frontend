@@ -1921,5 +1921,30 @@
         "description": "Your official receipt is ready for download in your dashboard."
       }
     }
+  },
+  "assessments": {
+    "result": {
+      "breadcrumbParent": "Final test",
+      "breadcrumbCurrent": "Final exam",
+      "statusBadge": "Mock test result",
+      "congratsHeading": "Congrats 🎉 , you just Pass",
+      "failHeading": "You didn't pass the",
+      "finalTestLabel": "Final test",
+      "certName": "Project Management Core Certificate",
+      "shareCertOn": "Share Certificate on:",
+      "shareLinkedin": "Share on Linkedin",
+      "shareX": "Share on X",
+      "downloadPdf": "Download as .PDF",
+      "epoCertCode": "EPO-P",
+      "epoCertFullName": "Endorsed Product Owner Practitioner",
+      "successfulAnswers": "Successful answers:",
+      "incorrectAnswers": "Incorrect answers:",
+      "passed": "Passed: ({score}%)",
+      "failed": "Failed: ({score}%)",
+      "historyTitle": "History of mock test",
+      "historyCount": "({count} tests)",
+      "subtitleBefore": "Now you have ",
+      "subtitleAfter": ", can now share it on your profile"
+    }
   }
 }

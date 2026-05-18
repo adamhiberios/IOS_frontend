@@ -1921,5 +1921,30 @@
         "description": "Votre reçu officiel est prêt à être téléchargé dans votre tableau de bord."
       }
     }
+  },
+  "assessments": {
+    "result": {
+      "breadcrumbParent": "Examen final",
+      "breadcrumbCurrent": "Examen final",
+      "statusBadge": "Résultat de l'examen blanc",
+      "congratsHeading": "Félicitations 🎉 , vous venez de réussir",
+      "failHeading": "Vous n'avez pas réussi",
+      "finalTestLabel": "l'examen final",
+      "certName": "Certificat de base en gestion de projet",
+      "shareCertOn": "Partager le certificat sur :",
+      "shareLinkedin": "Partager sur LinkedIn",
+      "shareX": "Partager sur X",
+      "downloadPdf": "Télécharger en PDF",
+      "epoCertCode": "EPO-P",
+      "epoCertFullName": "Praticien Propriétaire de Produit Approuvé",
+      "successfulAnswers": "Réponses correctes :",
+      "incorrectAnswers": "Réponses incorrectes :",
+      "passed": "Réussi : ({score}%)",
+      "failed": "Échoué : ({score}%)",
+      "historyTitle": "Historique de l'examen blanc",
+      "historyCount": "({count} tests)",
+      "subtitleBefore": "Vous avez maintenant ",
+      "subtitleAfter": ", vous pouvez le partager sur votre profil"
+    }
   }
 }

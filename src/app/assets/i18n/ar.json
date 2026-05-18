@@ -1921,5 +1921,30 @@
         "description": "إيصالك الرسمي جاهز للتنزيل في لوحة التحكم."
       }
     }
+  },
+  "assessments": {
+    "result": {
+      "breadcrumbParent": "الاختبار النهائي",
+      "breadcrumbCurrent": "الامتحان النهائي",
+      "statusBadge": "نتيجة الاختبار التجريبي",
+      "congratsHeading": "مبروك 🎉 ، لقد اجتزت",
+      "failHeading": "لم تجتز",
+      "finalTestLabel": "الاختبار النهائي",
+      "certName": "شهادة إدارة المشاريع الأساسية",
+      "shareCertOn": "شارك الشهادة على:",
+      "shareLinkedin": "مشاركة على لينكدإن",
+      "shareX": "مشاركة على إكس",
+      "downloadPdf": "تحميل بصيغة PDF.",
+      "epoCertCode": "EPO-P",
+      "epoCertFullName": "ممارس المنتج المعتمد المدعوم",
+      "successfulAnswers": "إجابات صحيحة:",
+      "incorrectAnswers": "إجابات خاطئة:",
+      "passed": "ناجح: ({score}٪)",
+      "failed": "راسب: ({score}٪)",
+      "historyTitle": "سجل الاختبارات التجريبية",
+      "historyCount": "({count} اختبارات)",
+      "subtitleBefore": "أصبح لديك الآن ",
+      "subtitleAfter": "، يمكنك مشاركته على ملفك الشخصي"
+    }
   }
 }
