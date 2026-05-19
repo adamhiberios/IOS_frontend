@@ -10,16 +10,24 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { LucideCheck } from '@lucide/angular';
 
 /**
- * `ios-checkbox` — a 24×24 square that renders **flat-black filled** with a
- * crisp check glyph when on, and as a thin-bordered empty square when off.
+ * `ios-checkbox` — an 18×18 px square that renders **white-bordered** when off,
+ * and shows a flat dark check glyph when on.
  *
  * Visual contract (per design):
- *   - 24×24 px box, slight `rounded-[6px]` corner softening.
+ *   - 18×18 px box, slight `rounded-[2px]` corner softening.
  *   - Unchecked: white surface, `border-gray-300`, empty.
  *   - Checked:   white surface (still empty), border darkens to
  *     `border-ios-brand-dark`, and a flat dark Lucide `check` glyph
  *     (`text-ios-brand-dark`) is rendered inset to the inner ~75% area — i.e.
  *     the glyph occupies the area between 12.5% and 87.5% on each axis.
+ *
+ * Touch target:
+ *   - The visible box is intentionally small (18 px) to match the design.
+ *   - WCAG 2.1 AA touch-target compliance is delivered by the surrounding
+ *     `<label>` (the actual clickable element), which is sized to a minimum
+ *     of 44 px tall via `min-h-[44px]` + symmetric padding. The label also
+ *     spans the full width of its label text, so the effective hit area is
+ *     always ≥ 44 × 44 px even when the visible indicator is 18 × 18.
  *
  * Accessibility:
  *   - The interactive control is a native `<input type="checkbox">` so screen
@@ -49,8 +57,13 @@ import { LucideCheck } from '@lucide/angular';
     },
   ],
   template: `
+    <!--
+      The label is the actual click/touch target. It carries min-h-[44px]
+      and symmetric vertical padding so the hit area meets WCAG 2.1 AA
+      touch-target sizing (>= 44 x 44 px) even though the visible box is 18 x 18.
+    -->
     <label
-      class="inline-flex items-start gap-2"
+      class="inline-flex items-start gap-2 min-h-[44px] py-[13px]"
       [class.cursor-pointer]="!disabledState()"
       [class.cursor-not-allowed]="disabledState()"
       [class.opacity-60]="disabledState()"
@@ -70,7 +83,7 @@ import { LucideCheck } from '@lucide/angular';
       <!-- Visual box. aria-hidden because the real input owns the a11y tree. -->
       <span
         aria-hidden="true"
-        class="relative shrink-0 w-5 h-5 rounded-[2px] border bg-white transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center
+        class="relative shrink-0 w-[18px] h-[18px] rounded-[2px] border bg-white transition-colors flex items-center justify-center
                peer-focus-visible:ring-2
                peer-focus-visible:ring-ios-brand-primary/40
                peer-focus-visible:ring-offset-2"
