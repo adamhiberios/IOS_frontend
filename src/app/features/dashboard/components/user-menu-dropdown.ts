@@ -10,14 +10,6 @@ interface MenuItem {
   readonly route: string;
 }
 
-const MENU_ITEMS: readonly MenuItem[] = [
-  { label: 'Dashboard', route: '/dashboard' },
-  { label: 'Certificates', route: '/dashboard/certificates' },
-  { label: 'Log', route: '/dashboard/log' },
-  { label: 'Profile', route: '/dashboard/profile' },
-  { label: 'Settings', route: '/dashboard/settings' },
-];
-
 /**
  * `ios-user-menu-dropdown` — profile card that slides from the user icon.
  *

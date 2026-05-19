@@ -1,3 +1,4 @@
+import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { LucideCheck, LucideX, LucideDownload } from '@lucide/angular';
@@ -43,7 +44,7 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
 @Component({
   selector: 'ios-exam-result-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, DashboardNavbar, CanadaFlag, CertificatesBadge, IosIcon],
+  imports: [NgOptimizedImage, RouterLink, DashboardNavbar, CanadaFlag, CertificatesBadge, IosIcon],
   providers: [provideIcons(LucideCheck, LucideX, LucideDownload)],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -117,11 +118,12 @@ import { DEMO_EXAM_QUESTIONS } from '../data-access/exam.model';
           <!-- ── Certificate image — full 984 px width ─────────────────── -->
           <div class="w-full">
             <img
-              src="/assets/images/certificate.png"
-              [attr.alt]="lang.t('assessments.result.epoCertCode') + ' Certificate'"
+              ngSrc="/assets/images/certificate.png"
+              [alt]="lang.t('assessments.result.epoCertCode') + ' Certificate'"
               class="w-full rounded-xl"
-              loading="eager"
-              decoding="async"
+              width="984"
+              height="700"
+              priority
             />
           </div>
 

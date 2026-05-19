@@ -54,7 +54,10 @@ import { LanguageService } from '@core/i18n';
             class="flex items-center justify-center p-4 rounded-[56px] bg-ios-danger-soft"
             aria-hidden="true"
           >
-            <!-- Door icon — external Figma asset, not an app image -->
+            <!--
+              Door icon — external Figma CDN asset, not an app image. NgOptimizedImage
+              would require a custom image loader for this host, so we keep <img>.
+            -->
             <img
               src="https://www.figma.com/api/mcp/asset/3c28513b-802d-4320-925b-3eef0758c943"
               alt=""

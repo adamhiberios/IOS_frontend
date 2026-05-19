@@ -8,15 +8,16 @@
  *   4. Insights grid — cards from store (paginated, 6 per page)
  *   5. Load more button
  *   6. Footer
- *   7. Scroll-to-top floating button
+ *   7. Scroll-to-top floating button (shared ios-scroll-to-top)
  */
 
-import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, type OnInit, effect, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { LucideArrowDown, LucideArrowUp, LucideSearch } from '@lucide/angular';
+import { LucideArrowDown, LucideSearch } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { IosIcon, provideIcons } from '@ui';
+import { IosIcon, ScrollToTop, provideIcons } from '@ui';
 
 import { LandingNavbar } from '../../landing/components/landing-navbar';
 import { LandingFooter } from '../../landing/components/landing-footer';
@@ -26,8 +27,16 @@ import { InsightsStore } from '../data-access/insights.store';
 
 @Component({
   selector: 'ios-insights-page',
-  imports: [LandingNavbar, LandingFooter, PageHero, InsightsCard, IosIcon, ReactiveFormsModule],
-  providers: [provideIcons(LucideArrowDown, LucideArrowUp, LucideSearch)],
+  imports: [
+    LandingNavbar,
+    LandingFooter,
+    PageHero,
+    InsightsCard,
+    IosIcon,
+    ReactiveFormsModule,
+    ScrollToTop,
+  ],
+  providers: [provideIcons(LucideArrowDown, LucideSearch)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <ios-landing-navbar />
@@ -85,14 +94,8 @@ import { InsightsStore } from '../data-access/insights.store';
 
     <ios-landing-footer />
 
-    <!-- Scroll-to-top button -->
-    <button
-      (click)="scrollToTop()"
-      class="fixed bottom-8 end-8 z-50 flex items-center justify-center w-11 h-11 rounded-full border-2 border-ios-brand-primary-soft bg-ios-brand-primary-soft hover:bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-      [attr.aria-label]="lang.t('contact.scrollToTop')"
-    >
-      <ios-icon name="arrow-up" class="w-5 h-5 text-ios-brand-primary" />
-    </button>
+    <!-- Scroll-to-top button (shared primitive) -->
+    <ios-scroll-to-top />
   `,
 })
 export class InsightsPage implements OnInit {
@@ -101,16 +104,24 @@ export class InsightsPage implements OnInit {
 
   protected readonly searchControl = new FormControl('', { nonNullable: true });
 
+  /**
+   * Reactive bridge from the FormControl's value stream to the store —
+   * replaces a bare `.subscribe()` (banned in components — CLAUDE.md §4)
+   * with a signal-driven effect so unsubscription is owned by the framework.
+   */
+  private readonly searchValue = toSignal(this.searchControl.valueChanges, {
+    initialValue: '',
+  });
+
+  constructor() {
+    effect(() => this.store.setSearchQuery(this.searchValue() ?? ''));
+  }
+
   ngOnInit(): void {
     void this.store.load();
-    this.searchControl.valueChanges.subscribe((value) => this.store.setSearchQuery(value));
   }
 
   protected onLoadMore(): void {
     this.store.loadMore();
-  }
-
-  protected scrollToTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
