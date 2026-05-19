@@ -15,10 +15,10 @@
 
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideArrowUp, LucideArrowUpRight, LucideSend } from '@lucide/angular';
+import { LucideArrowUpRight, LucideSend } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { IosIcon, Select, type SelectOption, provideIcons } from '@ui';
+import { IosIcon, ScrollToTop, Select, type SelectOption, provideIcons } from '@ui';
 
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
@@ -26,8 +26,16 @@ import { PageHero } from '../components/page-hero';
 
 @Component({
   selector: 'ios-contact-page',
-  imports: [LandingNavbar, LandingFooter, PageHero, Select, IosIcon, ReactiveFormsModule],
-  providers: [provideIcons(LucideArrowUpRight, LucideSend, LucideArrowUp)],
+  imports: [
+    LandingNavbar,
+    LandingFooter,
+    PageHero,
+    Select,
+    IosIcon,
+    ReactiveFormsModule,
+    ScrollToTop,
+  ],
+  providers: [provideIcons(LucideArrowUpRight, LucideSend)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!-- 1. Navbar -->
@@ -126,14 +134,8 @@ import { PageHero } from '../components/page-hero';
     <!-- 4. Footer -->
     <ios-landing-footer />
 
-    <!-- 5. Scroll-to-top button -->
-    <button
-      (click)="scrollToTop()"
-      class="fixed bottom-8 end-8 z-50 flex items-center justify-center w-11 h-11 rounded-full border-2 border-ios-brand-primary-soft bg-ios-brand-primary-soft hover:bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-      [attr.aria-label]="lang.t('contact.scrollToTop')"
-    >
-      <ios-icon name="arrow-up" class="w-5 h-5 text-ios-brand-primary" />
-    </button>
+    <!-- 5. Scroll-to-top (shared primitive) -->
+    <ios-scroll-to-top />
   `,
 })
 export class ContactPage {
@@ -167,9 +169,5 @@ export class ContactPage {
       this.form.reset();
       // Navigate to a success page or show a toast in production
     }, 1500);
-  }
-
-  protected scrollToTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

@@ -15,10 +15,10 @@
 import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
-import { LucideArrowLeft, LucideArrowUp, LucideClock } from '@lucide/angular';
+import { LucideArrowLeft, LucideClock } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { IosIcon, provideIcons } from '@ui';
+import { IosIcon, ScrollToTop, provideIcons } from '@ui';
 
 import { LandingNavbar } from '../../landing/components/landing-navbar';
 import { LandingFooter } from '../../landing/components/landing-footer';
@@ -27,8 +27,16 @@ import { InsightsStore } from '../data-access/insights.store';
 
 @Component({
   selector: 'ios-insight-detail-page',
-  imports: [LandingNavbar, LandingFooter, InsightsCard, RouterLink, NgOptimizedImage, IosIcon],
-  providers: [provideIcons(LucideArrowLeft, LucideArrowUp, LucideClock)],
+  imports: [
+    LandingNavbar,
+    LandingFooter,
+    InsightsCard,
+    RouterLink,
+    NgOptimizedImage,
+    IosIcon,
+    ScrollToTop,
+  ],
+  providers: [provideIcons(LucideArrowLeft, LucideClock)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!-- 1. Navbar -->
@@ -199,7 +207,9 @@ import { InsightsStore } from '../data-access/insights.store';
           <div class="flex flex-col gap-2 mb-10">
             <h2 class="font-heading font-extrabold text-[24px]">
               <span class="text-ios-fg">{{ lang.t('insight.detail.youMightAlsoEnjoyPart1') }}</span
-              ><span class="text-ios-brand-primary">{{ lang.t('insight.detail.youMightAlsoEnjoyPart2') }}</span>
+              ><span class="text-ios-brand-primary">{{
+                lang.t('insight.detail.youMightAlsoEnjoyPart2')
+              }}</span>
             </h2>
             <div class="w-10 h-1 rounded-full bg-ios-brand-gold"></div>
           </div>
@@ -216,14 +226,8 @@ import { InsightsStore } from '../data-access/insights.store';
     <!-- 6. Footer -->
     <ios-landing-footer />
 
-    <!-- 7. Scroll-to-top -->
-    <button
-      (click)="scrollToTop()"
-      class="fixed bottom-8 end-8 z-50 flex items-center justify-center w-11 h-11 rounded-full border-2 border-ios-brand-primary-soft bg-ios-brand-primary-soft hover:bg-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-      [attr.aria-label]="lang.t('insight.detail.scrollToTop')"
-    >
-      <ios-icon name="arrow-up" class="w-5 h-5 text-ios-brand-primary" />
-    </button>
+    <!-- 7. Scroll-to-top (shared primitive) -->
+    <ios-scroll-to-top />
   `,
 })
 export class InsightDetailPage implements OnInit {
@@ -234,9 +238,5 @@ export class InsightDetailPage implements OnInit {
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug') ?? '';
     void this.store.loadBySlug(slug);
-  }
-
-  protected scrollToTop(): void {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }

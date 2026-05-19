@@ -64,7 +64,10 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
             class="flex items-center justify-center p-4 rounded-[56px] bg-ios-surface-soft"
             aria-hidden="true"
           >
-            <!-- Trash icon — external Figma asset, not an app image -->
+            <!--
+              Trash icon — external Figma CDN asset, not an app image. NgOptimizedImage
+              would require a custom image loader for this host, so we keep <img>.
+            -->
             <img
               src="https://www.figma.com/api/mcp/asset/10f932c1-7c56-4ba3-abf1-148e20165e9b"
               alt=""

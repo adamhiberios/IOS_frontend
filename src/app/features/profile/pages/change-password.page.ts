@@ -16,12 +16,12 @@ import { LucideArrowLeft, LucideEye, LucideEyeOff } from '@lucide/angular';
 import { CanadaFlag, IosIcon, provideIcons } from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { LanguageService } from '@core/i18n';
-
 import {
   STRONG_PASSWORD_MIN_LENGTH,
+  matchFieldsValidator,
   strongPasswordValidator,
-} from '../../auth/utils/strong-password.validator';
-import { matchFieldsValidator } from '../../auth/utils/match-fields.validator';
+} from '@shared/utils';
+
 import { ProfileCancelEditDialog } from '../components/cancel-edit-dialog';
 import { ProfilePasswordUpdatedDialog } from '../components/password-updated-dialog';
 import { ProfileStore } from '../data-access/profile.store';

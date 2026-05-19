@@ -14,8 +14,12 @@ interface TranslationTree {
   [key: string]: TranslationNode;
 }
 
-/** Named params for interpolation — e.g. `t('key', { name: 'John' })`. */
-type TranslateParams = Record<string, string>;
+/**
+ * Named params for interpolation — e.g. `t('key', { name: 'John' })` or
+ * `t('key', { count: 3 })`. Numbers are coerced to strings before insertion
+ * so callers don't need to wrap counts in `String(...)` at every call site.
+ */
+type TranslateParams = Record<string, string | number>;
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -67,7 +71,10 @@ function resolveKey(tree: TranslationTree, key: string, params?: TranslateParams
 
   if (!params) return node;
 
-  return node.replace(/\{(\w+)\}/g, (_: string, p: string) => params[p] ?? `{${p}}`);
+  return node.replace(/\{(\w+)\}/g, (_: string, p: string) => {
+    const value = params[p];
+    return value === undefined ? `{${p}}` : String(value);
+  });
 }
 
 // ---------------------------------------------------------------------------
