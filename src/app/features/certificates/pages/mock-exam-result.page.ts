@@ -302,8 +302,6 @@ export class MockExamResultPage {
   protected readonly currentYear = new Date().getFullYear();
   protected readonly yearStr = String(this.currentYear);
 
-  // ── Data received via router state ───────────────────────────────────
-
   protected readonly certCode: string;
   protected readonly questions: readonly MockTestQuestion[];
   private readonly _answers: Record<number, 'A' | 'B' | 'C' | 'D' | null>;
@@ -312,17 +310,14 @@ export class MockExamResultPage {
     const route = inject(ActivatedRoute);
     const router = inject(Router);
 
-    // :code from route params always works (direct URL or programmatic navigation)
+    // :code resolves on any entry path (direct URL or programmatic nav); questions/answers only
+    // arrive via router state (programmatic nav from the mock-test page) — empty fallback otherwise.
     this.certCode = route.snapshot.paramMap.get('code') ?? '';
-
-    // questions/answers from router state (only on programmatic nav from mock-test page)
     const nav = router.getCurrentNavigation();
     const data = (nav?.extras?.state ?? {}) as Partial<ExamResultData>;
     this.questions = data.questions ?? [];
     this._answers = data.answers ?? {};
   }
-
-  // ── Score computation ───────────────────────────────────────────────
 
   protected get correctCount(): number {
     return this.questions.filter(
@@ -340,8 +335,6 @@ export class MockExamResultPage {
     if (this.questions.length === 0) return 0;
     return Math.round((this.correctCount / this.questions.length) * 100);
   }
-
-  // ── Helpers ─────────────────────────────────────────────────────────
 
   protected isCorrectAnswer(index: number, optId: string): boolean {
     return this.questions[index]?.correctOptionId === optId;

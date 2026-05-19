@@ -207,7 +207,7 @@ import { IosIcon, provideIcons } from '@ui';
               }
             </div>
 
-            <!-- Submit — warm amber CTA; TODO: promote #8e6636 to a design token -->
+            <!-- TODO(design-tokens): promote the warm amber #8e6636 below to a Tailwind theme token. -->
             <button
               type="submit"
               class="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-2xl
@@ -215,7 +215,8 @@ import { IosIcon, provideIcons } from '@ui';
                      hover:opacity-90 transition-opacity
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1
                      disabled:opacity-50 disabled:cursor-not-allowed"
-              class="bg-cer-brown-dark text-cer-brown-soft" style="--tw-ring-color: rgb(142 102 54 / 0.5);"
+              class="bg-cer-brown-dark text-cer-brown-soft"
+              style="--tw-ring-color: rgb(142 102 54 / 0.5);"
               [disabled]="submitting()"
             >
               @if (submitting()) {

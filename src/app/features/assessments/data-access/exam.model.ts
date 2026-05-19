@@ -7,8 +7,6 @@
  * to `@shared` via an architect ADR.
  */
 
-// ─── Core types ────────────────────────────────────────────────────────────
-
 export type OptionId = 'A' | 'B' | 'C' | 'D';
 
 export interface ExamOption {
@@ -40,9 +38,7 @@ export interface ExamResultNavState {
   readonly answers: Record<number, OptionId | null>;
 }
 
-// ─── Demo question bank ────────────────────────────────────────────────────
-// Replace with backend-resolved data in epic-9.
-
+// Epic-9: replace with backend-resolved data fetched from the assessments API.
 export const DEMO_EXAM_QUESTIONS: readonly ExamQuestion[] = [
   {
     id: 'q-epo-p-01',

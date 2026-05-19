@@ -131,10 +131,7 @@ export class CertMockSettingsDialog {
   /** Emitted with chosen settings when the user clicks "Start". */
   readonly startExam = output<MockTestSettings>();
 
-  // ── Time limit options ──────────────────────────────────────────────────
   protected readonly timeOptions: readonly { value: number | null; label: string }[];
-
-  // ── Question count options ───────────────────────────────────────────────
   protected readonly questionCounts: readonly number[] = [20, 30, 40, 50, 60, 70, 80, 90, 100];
 
   constructor() {
@@ -147,7 +144,7 @@ export class CertMockSettingsDialog {
     ];
   }
 
-  // ── Selected state (default: 20 min, 90 questions) ──────────────────────
+  // Defaults match the most common mock-exam configuration: 20 minutes, 90 questions.
   protected readonly selectedTime = signal<number | null>(20);
   protected readonly selectedCount = signal<number>(90);
 

@@ -15,20 +15,19 @@ const CERTIFICATES_ROUTES: Routes = [
     title: 'My Certificates',
     loadComponent: () => import('./pages/certificates.page').then((m) => m.CertificatesPage),
   },
+  // The three multi-segment `:code/...` routes below MUST stay above the bare `:code` route.
+  // Otherwise the router matches `:code` first and the inner segments never resolve.
   {
-    // Must come before ':code' to prevent it matching as the code segment.
     path: ':code/session/:materialId',
     title: 'Learning Session',
     loadComponent: () => import('./pages/cert-session.page').then((m) => m.CertSessionPage),
   },
   {
-    // Must come before ':code' to prevent it matching as the code segment.
     path: ':code/mock-test/result',
     title: 'Mock Test Results',
     loadComponent: () => import('./pages/mock-exam-result.page').then((m) => m.MockExamResultPage),
   },
   {
-    // Must come before ':code' to prevent it matching as the code segment.
     path: ':code/mock-test',
     title: 'Mock Test',
     loadComponent: () => import('./pages/mock-test.page').then((m) => m.MockTestPage),

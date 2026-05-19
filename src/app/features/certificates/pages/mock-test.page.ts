@@ -372,8 +372,6 @@ export class MockTestPage {
   protected readonly currentYear = new Date().getFullYear();
   protected readonly yearStr = String(this.currentYear);
 
-  // ── Route params ────────────────────────────────────────────────────────
-
   protected readonly certCode = computed(() => {
     return (this.route.snapshot.params['code'] as string) ?? '';
   });
@@ -390,13 +388,12 @@ export class MockTestPage {
     return isNaN(parsed) ? 10 : Math.max(1, parsed);
   });
 
-  // ── Question bank (sliced to requested count) ────────────────────────────
-
   protected readonly questions = computed<readonly MockTestQuestion[]>(() => {
     const bank = this.store.selectedDetail()?.mockTestQuestions ?? [];
     const count = this._questionCountParam();
-    // Repeat the bank if we need more questions than we have (demo data only)
     if (bank.length === 0) return [];
+    // Demo-data fallback: when the bank is shorter than `count`, repeat it so the user always
+    // gets the requested number of questions. Backend-resolved data will be exact in production.
     const result: MockTestQuestion[] = [];
     while (result.length < count) {
       result.push(...bank);
@@ -404,27 +401,19 @@ export class MockTestPage {
     return result.slice(0, count);
   });
 
-  // ── Exam state ──────────────────────────────────────────────────────────
-
   /** 0-based index of the currently displayed question. */
   protected readonly currentIndex = signal<number>(0);
-
-  /** Map from question index → selected option id ('A'|'B'|'C'|'D'|null). */
   private readonly _answers = signal<Record<number, 'A' | 'B' | 'C' | 'D' | null>>({});
 
-  /** Currently selected option for the active question. */
   protected readonly selectedOptionId = computed<'A' | 'B' | 'C' | 'D' | null>(
     () => this._answers()[this.currentIndex()] ?? null,
   );
 
   /**
-   * 'answering' → user hasn't yet been shown the reveal for this question.
-   * 'revealed'  → correct/wrong highlights are shown.
-   * We auto-reveal when user selects an option.
+   * 'answering' → no reveal yet for this question.
+   * 'revealed'  → correct/wrong highlights are shown after the user picks an option.
    */
   protected readonly answerPhase = signal<'answering' | 'revealed'>('answering');
-
-  /** Whether the hint card is visible below the options. */
   protected readonly hintVisible = signal<boolean>(false);
 
   protected readonly currentQuestion = computed<MockTestQuestion | null>(
@@ -444,29 +433,20 @@ export class MockTestPage {
     return total === 0 ? 0 : (this.answeredCount() / total) * 100;
   });
 
-  // ── Dialog visibility ──────────────────────────────────────────────────
-
-  /** Controls the exit-confirmation dialog. */
   protected readonly showExitDialog = signal<boolean>(false);
-
-  /** Controls the time's-up dialog. */
   protected readonly showTimeupDialog = signal<boolean>(false);
 
-  // ── Timer ───────────────────────────────────────────────────────────────
-
-  /** Total seconds for the exam, or null if no time limit. */
+  /** Total seconds for the exam, or null if no time limit was requested. */
   protected readonly timeLimitSeconds = computed<number | null>(() => {
     const mins = this._timeMinutesParam();
     return mins === null ? null : mins * 60;
   });
 
-  /** Whether the timer has reached zero. */
   private readonly _timeUp = signal<boolean>(false);
 
-  /** Extra seconds added via "Continue with +3 minutes". */
+  /** Extra seconds added via the "Continue with +3 minutes" affordance on the time-up dialog. */
   private readonly _extraTimeSeconds = signal<number>(0);
 
-  /** Counts up from 0 each second — used to compute elapsed time. */
   private readonly _tick = toSignal(interval(1000), { initialValue: 0 });
 
   /** Seconds remaining (counts down). Null if no time limit. */
@@ -479,7 +459,7 @@ export class MockTestPage {
     return Math.max(0, totalLimit - elapsed);
   });
 
-  /** Detect when timer reaches zero and show time's up dialog. */
+  /** Fires once when the timer hits zero so the time-up dialog opens exactly once. */
   private readonly _timerEffect = effect(() => {
     const remaining = this._timeRemaining();
     if (remaining === 0 && !this._timeUp() && this.timeLimitSeconds() !== null) {
@@ -495,8 +475,6 @@ export class MockTestPage {
     const s = secs % 60;
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   });
-
-  // ── Styling helpers ─────────────────────────────────────────────────────
 
   /** Full Tailwind class string for an answer option button. */
   protected optionClass(optId: 'A' | 'B' | 'C' | 'D'): string {
@@ -563,12 +541,11 @@ export class MockTestPage {
     return `${base} bg-ios-fg-10 text-ios-fg-7 hover:bg-ios-fg-8`;
   }
 
-  // ── Actions ─────────────────────────────────────────────────────────────
-
   protected onSelectOption(optId: 'A' | 'B' | 'C' | 'D'): void {
     if (this.answerPhase() === 'revealed') return;
     this._answers.update((prev) => ({ ...prev, [this.currentIndex()]: optId }));
-    // Auto-reveal answer
+    // Practice-mode UX: auto-reveal the correct answer immediately on selection.
+    // (The graded final-exam runner in `features/assessments/` deliberately does NOT do this.)
     this.answerPhase.set('revealed');
     this.hintVisible.set(false);
   }
@@ -627,24 +604,21 @@ export class MockTestPage {
     });
   }
 
-  /** Show the exit confirmation dialog when the user clicks the back arrow. */
   protected onBackToCertificates(): void {
     this.showExitDialog.set(true);
   }
 
-  /** User confirmed exit — navigate to results page. */
   protected onExitConfirmed(): void {
     this.showExitDialog.set(false);
     this.navigateToResults();
   }
 
-  /** User chose to exit the time's up dialog. */
   protected onTimeupExit(): void {
     this.showTimeupDialog.set(false);
     this.navigateToResults();
   }
 
-  /** User chose to add 3 more minutes to continue the exam. */
+  /** Time-up dialog action: add 3 extra minutes and let the learner keep going. */
   protected onAddTime(): void {
     this._extraTimeSeconds.update((v) => v + 180);
     this._timeUp.set(false);

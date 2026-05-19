@@ -38,11 +38,11 @@ export class LandingApi {
    * can fall back to static defaults gracefully.
    */
   async getPageData(): Promise<LandingDynamicData | null> {
-    // ── TODO: remove this guard when the backend endpoint is live ──────────
+    // Guard until the backend endpoint is live: returning null lets the store fall back to
+    // static defaults rather than failing the request in non-production builds.
     if (!environment.production) {
       return null;
     }
-    // ────────────────────────────────────────────────────────────────────────
 
     try {
       const dto = await firstValueFrom(

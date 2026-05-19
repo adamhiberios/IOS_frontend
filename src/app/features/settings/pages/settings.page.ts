@@ -240,24 +240,21 @@ export class SettingsPage {
 
   protected readonly year = new Date().getFullYear().toString();
 
-  /** Controls visibility of the delete-account confirmation dialog. */
   protected readonly showDeleteDialog = signal(false);
 
-  // ── Notification preference controls (matches register page FormControl pattern) ──
   protected readonly notifAllCtrl = new FormControl(true);
   protected readonly notifInsightsCtrl = new FormControl(true);
   protected readonly notifRecommendedCtrl = new FormControl(true);
   protected readonly notifCompletionCtrl = new FormControl(true);
   protected readonly notifMaterialCtrl = new FormControl(true);
 
-  // ── Newsletter ──
   protected readonly newsletterEnabledCtrl = new FormControl(true);
-  /** Email address — would come from a SettingsStore in production. */
+  /** Email address — sourced from SettingsStore once the backend endpoint is live. */
   protected readonly newsletterEmail = signal('adam.ama.@gml.co');
 
   protected onDeleteConfirmed(): void {
     this.showDeleteDialog.set(false);
-    // TODO: dispatch delete-account action through a SettingsStore
+    // TODO(epic-X): dispatch delete-account action via a SettingsStore before signing out.
     void this.auth.logout({ reason: 'user-initiated' });
   }
 }

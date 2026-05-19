@@ -4,10 +4,6 @@ import { firstValueFrom } from 'rxjs';
 
 import { DirectionService, type AppLocale } from './direction';
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 /** Flat or nested JSON structure emitted by a translation file / endpoint. */
 type TranslationNode = string | TranslationTree;
 interface TranslationTree {
@@ -21,18 +17,10 @@ interface TranslationTree {
  */
 type TranslateParams = Record<string, string | number>;
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-/** Storage key for persisting the user's locale preference. */
 const LOCALE_STORAGE_KEY = 'ios_locale';
-
-/** Base path for local JSON files. Future: swap to an API endpoint. */
 const I18N_BASE = '/assets/i18n';
 
 /**
- * Supported locales with their human-readable display labels.
  * Display labels are intentionally never translated — they always appear in
  * their own script so users can recognise and select them regardless of the
  * current UI language.
@@ -42,10 +30,6 @@ export const SUPPORTED_LOCALES: readonly { code: AppLocale; label: string }[] = 
   { code: 'ar', label: 'العربية' },
   { code: 'fr', label: 'Français' },
 ] as const;
-
-// ---------------------------------------------------------------------------
-// Helper — key resolver
-// ---------------------------------------------------------------------------
 
 /**
  * Resolves a dot-notation key (e.g. `'auth.login.title'`) against a nested
@@ -76,10 +60,6 @@ function resolveKey(tree: TranslationTree, key: string, params?: TranslateParams
     return value === undefined ? `{${p}}` : String(value);
   });
 }
-
-// ---------------------------------------------------------------------------
-// Service
-// ---------------------------------------------------------------------------
 
 /**
  * `LanguageService` — single source of truth for locale, direction, and
@@ -119,22 +99,14 @@ export class LanguageService {
   private readonly http = inject(HttpClient);
   private readonly dir = inject(DirectionService);
 
-  // ---- Private state -------------------------------------------------------
-
   private readonly _locale = signal<AppLocale>(this.readPersistedLocale());
   private readonly _translations = signal<TranslationTree>({});
   private readonly _loading = signal(false);
 
-  /** Simple in-session cache: locale → loaded tree.  Avoids re-fetching when
-   *  the user toggles back to a previously visited locale. */
+  /** In-session cache: avoids re-fetching when the user toggles back to a previously visited locale. */
   private readonly cache = new Map<AppLocale, TranslationTree>();
 
-  // ---- Public read-only surface --------------------------------------------
-
-  /** The currently active locale code. */
   readonly locale = this._locale.asReadonly();
-
-  /** `true` while a translation file is being fetched. */
   readonly loading = this._loading.asReadonly();
 
   /**
@@ -142,11 +114,7 @@ export class LanguageService {
    * Delegated to `DirectionService` which owns the `<html dir>` attribute.
    */
   readonly direction = this.dir.direction;
-
-  /** Convenience boolean; use in templates for conditional layout adjustments. */
   readonly isRtl = this.dir.isRtl;
-
-  // ---- Translation accessor ------------------------------------------------
 
   /**
    * Looks up `key` (dot-notation) in the active translation tree and
@@ -186,9 +154,8 @@ export class LanguageService {
    */
   tArray(key: string): readonly string[] {
     const segments = key.split('.');
-    // Use `unknown` (not `any`) so every narrowing step is explicit and safe.
-    // Arrays are valid JSON values but fall outside the recursive TranslationTree
-    // type alias; we validate element types at runtime with Array.isArray() below.
+    // `unknown` (not `any`) so each narrowing step stays explicit. Arrays are valid JSON values
+    // but fall outside the recursive TranslationTree type, so we validate at runtime below.
     let node: unknown = this._translations();
 
     for (const seg of segments) {
@@ -202,13 +169,8 @@ export class LanguageService {
     return (node as unknown[]).filter((item): item is string => typeof item === 'string');
   }
 
-  /**
-   * Returns all supported locale options (code + display label).
-   * Suitable for populating a language-selector dropdown.
-   */
+  /** Locale options (code + display label) for populating a language-selector dropdown. */
   readonly supportedLocales = SUPPORTED_LOCALES;
-
-  // ---- Lifecycle -----------------------------------------------------------
 
   /**
    * Loads the initial translation file. Call once from `app.config.ts` via
@@ -218,14 +180,11 @@ export class LanguageService {
   async init(): Promise<void> {
     const locale = this._locale();
     await this.loadTranslations(locale);
-    // Sync the persisted locale into DirectionService so <html lang dir> is
-    // correct on first paint after a refresh. Without this, DirectionService
-    // initialises from index.html's hardcoded lang="en" and stays LTR even
-    // when the user had switched to Arabic before refreshing.
+    // Sync the persisted locale into DirectionService so <html lang dir> is correct on first paint;
+    // without this, DirectionService stays on index.html's hardcoded lang="en" even when the user
+    // had switched to Arabic before refreshing.
     this.dir.setLocale(locale);
   }
-
-  // ---- Locale switching ----------------------------------------------------
 
   /**
    * Switches the active locale. Loads the translation file (or uses cache),
@@ -238,8 +197,6 @@ export class LanguageService {
     this.dir.setLocale(next);
     this.persistLocale(next);
   }
-
-  // ---- Private helpers -----------------------------------------------------
 
   /**
    * Fetches the translation JSON for `locale`.
@@ -259,17 +216,13 @@ export class LanguageService {
 
     this._loading.set(true);
     try {
-      // ── Current source: local JSON assets ──────────────────────────────────
       const url = `${I18N_BASE}/${locale}.json`;
-      // ── Future source: backend endpoint ────────────────────────────────────
-      // const url = `${environment.apiBaseUrl}/i18n/${locale}`;
-      // ───────────────────────────────────────────────────────────────────────
       const tree = await firstValueFrom(this.http.get<TranslationTree>(url));
       this.cache.set(locale, tree);
       this._translations.set(tree);
     } catch (err) {
-      // Log but don't crash the app. The UI will show raw keys, which is
-      // visible enough to surface the issue in development/testing.
+      // Don't crash on missing translations — the UI will show raw keys, which is visible
+      // enough to surface the issue in dev/testing.
       console.error(`[LanguageService] Failed to load translations for "${locale}":`, err);
     } finally {
       this._loading.set(false);
