@@ -290,11 +290,9 @@ export class ExamRunnerPage {
 
   protected readonly lang = inject(LanguageService);
 
-  // ── Question bank ──────────────────────────────────────────────────────
-  // Epic-9: replace with a resolved signal from the backend API.
+  // Epic-9: replace with a resolved signal from the backend API (see CLAUDE.md §10).
   protected readonly questions = signal<readonly ExamQuestion[]>(DEMO_EXAM_QUESTIONS);
 
-  // ── Navigation state ───────────────────────────────────────────────────
   /** 0-based index of the currently displayed question. */
   protected readonly currentIndex = signal<number>(0);
 
@@ -306,7 +304,6 @@ export class ExamRunnerPage {
     () => this.currentIndex() === this.questions().length - 1,
   );
 
-  // ── Answer state ───────────────────────────────────────────────────────
   /**
    * Map from question index → selected option id.
    * No reveal happens here — answers are shown on the result page only.
@@ -326,8 +323,8 @@ export class ExamRunnerPage {
     return total === 0 ? 0 : (this.answeredCount() / total) * 100;
   });
 
-  // ── Timer (display-only countdown) ────────────────────────────────────
-  // Epic-9: replace with serverTick() from the exam WebSocket (CLAUDE.md §10).
+  // Display-only countdown. Epic-9: replace with serverTick() from the exam WebSocket
+  // (CLAUDE.md §10 — never anchor the exam timer to a local clock in production).
   private readonly EXAM_MINUTES = 90;
   private readonly _tick = toSignal(interval(1000), { initialValue: 0 });
 
@@ -356,14 +353,13 @@ export class ExamRunnerPage {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
   });
 
-  // ── Option styling ─────────────────────────────────────────────────────
-
   /** Full class string for an answer option row button. */
   protected optionClass(optId: OptionId): string {
     const base =
       'flex items-center gap-3 w-full rounded-xl px-[13px] py-4 border-2 border-transparent transition-colors text-start focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 cursor-pointer';
 
-    // Selected state — dark gray, NO correct/wrong colours shown during exam
+    // Selected state is intentionally neutral (dark gray) — correct/wrong colours must NOT leak
+    // during the exam, only on the result page.
     if (this.selectedOptionId() === optId) {
       return `${base} bg-ios-fg-10 text-white font-semibold`;
     }
@@ -381,10 +377,7 @@ export class ExamRunnerPage {
     return `${base} bg-ios-fg-mid text-ios-surface-soft`;
   }
 
-  // ── Actions ────────────────────────────────────────────────────────────
-
   protected onSelectOption(optId: OptionId): void {
-    // Allow changing selection before moving to next question
     this._answers.update((prev) => ({ ...prev, [this.currentIndex()]: optId }));
   }
 

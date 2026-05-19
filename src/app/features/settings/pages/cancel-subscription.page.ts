@@ -77,7 +77,9 @@ import { LanguageService } from '@core/i18n';
             role="radiogroup"
             aria-labelledby="cancel-reason-heading"
           >
-            <span id="cancel-reason-heading" class="sr-only">{{ lang.t('settings.cancelSubscription.selectReasonSrOnly') }}</span>
+            <span id="cancel-reason-heading" class="sr-only">{{
+              lang.t('settings.cancelSubscription.selectReasonSrOnly')
+            }}</span>
 
             @for (option of cancelReasons(); track option.id) {
               <label
@@ -166,7 +168,7 @@ export class CancelSubscriptionPage {
   protected readonly selectedReason = signal<string>('once-a-week');
 
   protected onSubmit(): void {
-    // TODO: dispatch cancellation action through a SettingsStore / API
+    // TODO(epic-X): dispatch cancellation via SettingsStore once the API endpoint exists.
     void this.router.navigate(['/dashboard/settings/subscription-cancelled']);
   }
 }

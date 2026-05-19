@@ -27,16 +27,9 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { LandingApi } from './landing.api';
 import type { BlogPost, HeroDynamicData, LandingDynamicData } from './landing.model';
 
-// ---------------------------------------------------------------------------
-// Status type
-// ---------------------------------------------------------------------------
-
 type LoadStatus = 'idle' | 'loading' | 'success' | 'error';
 
-// ---------------------------------------------------------------------------
-// Static fallback (shown while backend is unavailable)
-// ---------------------------------------------------------------------------
-
+/** Static fallback content rendered when the backend endpoint is unavailable. */
 const FALLBACK_BLOG_POSTS: BlogPost[] = [
   {
     id: 'post-1',
@@ -79,43 +72,25 @@ const FALLBACK_DATA: LandingDynamicData = {
   blogPosts: FALLBACK_BLOG_POSTS,
 };
 
-// ---------------------------------------------------------------------------
-// Store
-// ---------------------------------------------------------------------------
-
 @Injectable({ providedIn: 'root' })
 export class LandingStore {
   private readonly api = inject(LandingApi);
-
-  // ── Private mutable state ────────────────────────────────────────────────
 
   /** Live API payload — null until the backend endpoint is available. */
   private readonly _apiData = signal<LandingDynamicData | null>(null);
   private readonly _status = signal<LoadStatus>('idle');
   private readonly _error = signal<string | null>(null);
 
-  /**
-   * Resolved data: API payload when available, static fallback otherwise.
-   * Downstream signals all read from here.
-   */
+  /** Resolved data: API payload when available, static fallback otherwise. */
   private readonly _data = computed<LandingDynamicData>(() => this._apiData() ?? FALLBACK_DATA);
-
-  // ── Public read-only views ───────────────────────────────────────────────
 
   readonly status = this._status.asReadonly();
   readonly error = this._error.asReadonly();
   readonly isLoading = computed(() => this._status() === 'loading');
 
-  /** Dynamic hero fields: cohort date and graduate count. */
   readonly hero = computed<HeroDynamicData>(() => this._data().hero);
-
-  /** Admin-controlled blog section badge label, e.g. "Insights". */
   readonly blogSectionBadge = computed<string>(() => this._data().blogSectionBadge);
-
-  /** Live blog posts from the CMS. */
   readonly blogPosts = computed<BlogPost[]>(() => this._data().blogPosts);
-
-  // ── Actions ──────────────────────────────────────────────────────────────
 
   /**
    * Attempts to load live dynamic data from the backend API.
@@ -131,16 +106,15 @@ export class LandingStore {
     this._error.set(null);
 
     try {
+      // A null return signals "endpoint not yet live"; FALLBACK_DATA stays active in that case.
       const data = await this.api.getPageData();
       if (data) {
         this._apiData.set(data);
       }
-      // null return = endpoint not yet live → FALLBACK_DATA remains active
       this._status.set('success');
     } catch (err) {
       this._status.set('error');
       this._error.set(err instanceof Error ? err.message : 'Failed to load landing content');
-      // FALLBACK_DATA remains active — the page still renders correctly
     }
   }
 }

@@ -356,7 +356,7 @@ export class ExamResultPage {
   protected readonly lang = inject(LanguageService);
   protected readonly currentYear = String(new Date().getFullYear());
 
-  // ── Router state ───────────────────────────────────────────────────────
+  // Snapshot from Router state — set once in the constructor on entry to this page.
   protected readonly questions: readonly ExamQuestion[];
   private readonly _answers: Record<number, OptionId | null>;
 
@@ -370,8 +370,6 @@ export class ExamResultPage {
     this.questions = state.questions ?? DEMO_EXAM_QUESTIONS;
     this._answers = state.answers ?? {};
   }
-
-  // ── Score ──────────────────────────────────────────────────────────────
 
   protected get correctCount(): number {
     return this.questions.filter(
@@ -390,8 +388,6 @@ export class ExamResultPage {
     return Math.round((this.correctCount / this.questions.length) * 100);
   }
 
-  // ── Option helpers ─────────────────────────────────────────────────────
-
   protected isCorrectAnswer(index: number, optId: string): boolean {
     return this.questions[index]?.correctOptionId === optId;
   }
@@ -406,8 +402,6 @@ export class ExamResultPage {
     if (this.isWrongPick(index, optId)) return 'bg-[#e0e0e0] text-[#aaaaaa]';
     return 'bg-ios-fg-mid text-ios-surface-soft';
   }
-
-  // ── Share actions ──────────────────────────────────────────────────────
 
   protected onShareLinkedIn(): void {
     const url = encodeURIComponent(window.location.origin + '/assessments/result');

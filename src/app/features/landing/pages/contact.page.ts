@@ -163,11 +163,11 @@ export class ContactPage {
     if (this.form.invalid) return;
     this.submitting.set(true);
 
-    // TODO: wire up to backend API when available
+    // TODO(contact-api): POST to ContactApi and surface success/error via a toast
+    // (see docs/04-api-integration-data-flow.md). Simulated latency until then.
     setTimeout(() => {
       this.submitting.set(false);
       this.form.reset();
-      // Navigate to a success page or show a toast in production
     }, 1500);
   }
 }

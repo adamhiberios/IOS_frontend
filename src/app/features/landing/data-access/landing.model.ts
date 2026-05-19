@@ -16,10 +16,6 @@
  * | blogPosts          | [{…}, …]            | Real CMS content                         |
  */
 
-// ---------------------------------------------------------------------------
-// Hero dynamic data
-// ---------------------------------------------------------------------------
-
 /**
  * The only hero values that change at runtime.
  * All other hero text (headline, subtext, CTA labels, etc.) is static copy
@@ -31,10 +27,6 @@ export interface HeroDynamicData {
   /** Display string for graduate count, e.g. "12,000+". */
   graduatesCount: string;
 }
-
-// ---------------------------------------------------------------------------
-// Blog posts
-// ---------------------------------------------------------------------------
 
 export interface BlogPost {
   /** Stable slug / backend ID. */
@@ -48,10 +40,6 @@ export interface BlogPost {
   imageUrl: string;
   link: string;
 }
-
-// ---------------------------------------------------------------------------
-// Aggregate dynamic payload
-// ---------------------------------------------------------------------------
 
 /**
  * Everything the landing page fetches from the backend.

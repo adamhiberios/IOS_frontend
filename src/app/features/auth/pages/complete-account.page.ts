@@ -20,18 +20,17 @@ import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { AccentBars, Input as IosInput, Select, type SelectOption } from '@ui';
 
-// ─── Phone number validator ───────────────────────────────────────────────────
+/** Accepts 7–15 digits after stripping separators; empty value defers to Validators.required. */
 function phoneNumberValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const raw = control.value as string;
     const digits = raw.replace(/[\s\-().]/g, '');
-    if (!digits) return null; // Let Validators.required handle empty
+    if (!digits) return null;
     if (!/^\d{7,15}$/.test(digits)) return { phoneInvalid: true };
     return null;
   };
 }
 
-// ─── Phone country dial-code list ─────────────────────────────────────────────
 export interface PhoneCountry {
   code: string; // ISO-3166 alpha-2
   flag: string; // Emoji flag

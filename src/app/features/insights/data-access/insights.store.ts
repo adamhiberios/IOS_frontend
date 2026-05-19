@@ -178,7 +178,6 @@ export class InsightsStore {
   private readonly _searchQuery = signal('');
   private readonly _visibleCount = signal(6);
 
-  // ── Detail state ────────────────────────────────────────────────────────
   private readonly _detail = signal<InsightDetailPost | null>(null);
   private readonly _detailStatus = signal<LoadStatus>('idle');
 
@@ -255,11 +254,11 @@ export class InsightsStore {
    * endpoint is ready, replace the null-check block with an actual API call.
    */
   async loadBySlug(slug: string): Promise<void> {
-    // Reset when navigating between posts.
     this._detail.set(null);
     this._detailStatus.set('loading');
 
-    // Ensure the list is populated so we can match by slug.
+    // Detail endpoint isn't live yet, so we match the slug against the list payload —
+    // populate it first if a deep-link arrived before the list was loaded.
     if (this._status() === 'idle') {
       await this.load();
     }
