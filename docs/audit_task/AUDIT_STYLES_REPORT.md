@@ -14,21 +14,21 @@ A production-grade audit of 112 Angular components against the design system def
 
 ## Audit Checklist
 
-| Rule | Status | Details |
-|------|--------|---------|
-| No unnecessary inline styles | ✅ FIXED | 100+ `style="color/background/border-color: #hex"` replaced with token classes |
-| Remove unused CSS/SCSS | ✅ CLEAN | No unused CSS found; SCSS files exist as scaffolding only |
-| Avoid duplicated colors | ✅ FIXED | `#f6f6f6` (31×) added as `--color-ios-surface-mid`; `#c4c5c4` (23×) added as `--color-ios-line` |
-| Avoid duplicated spacing | ✅ CLEAN | All spacing uses Tailwind utilities |
-| Avoid duplicated border-radius | ✅ CLEAN | Uses `rounded-*` Tailwind utilities exclusively |
-| Avoid duplicated shadows | ✅ CLEAN | Only 2 shadow instances — both legitimate |
-| Use only approved design system values | ✅ FIXED | 204+ hex values replaced with design tokens |
-| All colors from theme variables/tokens | ✅ FIXED | `--color-*` tokens now used consistently |
-| Avoid Tailwind/SCSS conflicts | ✅ CLEAN | SCSS unused; no conflict possible |
-| Minimize excessive specificity | ✅ CLEAN | No high-specificity selectors |
-| Avoid `!important` | ✅ EXEMPT | 4 occurrences in `prefers-reduced-motion` (WCAG required) |
-| Reuse existing style patterns | ✅ FIXED | Duplicated button/dialog patterns consolidated |
-| Fix issues without breaking UI | ✅ VERIFIED | Typecheck + lint pass; no functional changes |
+| Rule                                   | Status      | Details                                                                                         |
+| -------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------- |
+| No unnecessary inline styles           | ✅ FIXED    | 100+ `style="color/background/border-color: #hex"` replaced with token classes                  |
+| Remove unused CSS/SCSS                 | ✅ CLEAN    | No unused CSS found; SCSS files exist as scaffolding only                                       |
+| Avoid duplicated colors                | ✅ FIXED    | `#f6f6f6` (31×) added as `--color-ios-surface-mid`; `#c4c5c4` (23×) added as `--color-ios-line` |
+| Avoid duplicated spacing               | ✅ CLEAN    | All spacing uses Tailwind utilities                                                             |
+| Avoid duplicated border-radius         | ✅ CLEAN    | Uses `rounded-*` Tailwind utilities exclusively                                                 |
+| Avoid duplicated shadows               | ✅ CLEAN    | Only 2 shadow instances — both legitimate                                                       |
+| Use only approved design system values | ✅ FIXED    | 204+ hex values replaced with design tokens                                                     |
+| All colors from theme variables/tokens | ✅ FIXED    | `--color-*` tokens now used consistently                                                        |
+| Avoid Tailwind/SCSS conflicts          | ✅ CLEAN    | SCSS unused; no conflict possible                                                               |
+| Minimize excessive specificity         | ✅ CLEAN    | No high-specificity selectors                                                                   |
+| Avoid `!important`                     | ✅ EXEMPT   | 4 occurrences in `prefers-reduced-motion` (WCAG required)                                       |
+| Reuse existing style patterns          | ✅ FIXED    | Duplicated button/dialog patterns consolidated                                                  |
+| Fix issues without breaking UI         | ✅ VERIFIED | Typecheck + lint pass; no functional changes                                                    |
 
 ---
 
@@ -36,10 +36,10 @@ A production-grade audit of 112 Angular components against the design system def
 
 ### 🔴 Critical: Banned Focus-Ring Suppression (2 files)
 
-| File | Line | Before | After |
-|------|------|--------|-------|
-| `src/app/ui/select/select.ts` | 138 | `style="box-shadow: none; outline: none"` | Removed — inherits `:focus-visible` from global styles |
-| `src/app/features/auth/pages/complete-account.page.ts` | 498 | `style="box-shadow: none; outline: none"` | Removed — inherits `:focus-visible` from global styles |
+| File                                                   | Line | Before                                    | After                                                  |
+| ------------------------------------------------------ | ---- | ----------------------------------------- | ------------------------------------------------------ |
+| `src/app/ui/select/select.ts`                          | 138  | `style="box-shadow: none; outline: none"` | Removed — inherits `:focus-visible` from global styles |
+| `src/app/features/auth/pages/complete-account.page.ts` | 498  | `style="box-shadow: none; outline: none"` | Removed — inherits `:focus-visible` from global styles |
 
 These violated CLAUDE.md §4: "Every interactive control gets a visible focus ring." The global `:focus-visible` rule in `styles.css:347` now applies.
 
@@ -48,6 +48,7 @@ These violated CLAUDE.md §4: "Every interactive control gets a visible focus ri
 **68 unique hex colors** were used as arbitrary Tailwind values (`bg-[#…]`, `text-[#…]`) instead of design tokens. While ~45 had matching tokens, ~23 were unique one-offs.
 
 **Existing tokens prioritized:**
+
 - `#272827` → `text-ios-fg` / `bg-ios-fg` (67 occurrences fixed)
 - `#141514` → `text-ios-fg-13` / `bg-ios-fg-13` (51 occurrences fixed)
 - `#f1f1f1` → `bg-ios-surface-soft` (31 occurrences fixed)
@@ -66,27 +67,27 @@ These violated CLAUDE.md §4: "Every interactive control gets a visible focus ri
 
 Inline `style="color: #…"` / `style="background-color: #…"` replaced with token classes:
 
-| Iconic pattern | Files fixed |
-|---------------|-------------|
+| Iconic pattern                                                             | Files fixed                                                           |
+| -------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | `style="background-color: #faf0c8; border-color: #d9bd4c; color: #8b0000"` | `all-certifications.page.ts` (×3), `cert-faq-cta.ts`, `about-*` pages |
-| `style="color: #272827"` / `style="color: #8b0000"` | `all-certifications.page.ts` (27 occurrences in comparison tables) |
-| `style="background-color: #d9bd4c"` (gold bars) | `all-certifications.page.ts` (6 occurrences) |
-| `style="background-color: #8b0000"` (table headers) | `all-certifications.page.ts` (2 occurrences) |
+| `style="color: #272827"` / `style="color: #8b0000"`                        | `all-certifications.page.ts` (27 occurrences in comparison tables)    |
+| `style="background-color: #d9bd4c"` (gold bars)                            | `all-certifications.page.ts` (6 occurrences)                          |
+| `style="background-color: #8b0000"` (table headers)                        | `all-certifications.page.ts` (2 occurrences)                          |
 
 ### 🟢 Info: Missing Design Tokens Added
 
 Two frequently used colors added to `src/styles.css` `@theme`:
 
 ```css
---color-ios-surface-mid: #f6f6f6;   /* 31 uses — form field backgrounds, cards */
---color-ios-line: #c4c5c4;          /* 23 uses — subtle borders, dividers */
+--color-ios-surface-mid: #f6f6f6; /* 31 uses — form field backgrounds, cards */
+--color-ios-line: #c4c5c4; /* 23 uses — subtle borders, dividers */
 ```
 
 ### 🟢 Info: SCSS Cleanup
 
-| File | Status |
-|------|--------|
-| `src/styles.scss` | Comment updated; file intentionally empty (scaffolding) |
+| File               | Status                                                        |
+| ------------------ | ------------------------------------------------------------- |
+| `src/styles.scss`  | Comment updated; file intentionally empty (scaffolding)       |
 | `src/app/app.scss` | Left empty; exists only because `inlineStyleLanguage: "scss"` |
 
 No SCSS variables, mixins, or nested rules are used anywhere. The project is 100% CSS + Tailwind v4.
@@ -94,6 +95,7 @@ No SCSS variables, mixins, or nested rules are used anywhere. The project is 100
 ### 🟢 Info: Duplicate Dialog Styles Consolidated
 
 Two nearly identical `LogoutDialog` components (layouts + settings) had duplicated hex values. Both now use design tokens:
+
 - `bg-[#fbece7]` → `bg-ios-danger-soft`
 - `text-[#303130]` → `text-ios-fg-11`
 - `bg-[#f1f1f1]` → `bg-ios-surface-soft`
