@@ -12,8 +12,8 @@
  * |--------------------|---------------------|------------------------------------------|
  * | cohortDate         | "June 2, 2026"      | Changes every cohort cycle               |
  * | graduatesCount     | "12,000+"           | Live stat, updated by backend            |
- * | blogSectionBadge   | "Insights"          | Admins may relabel the section           |
- * | blogPosts          | [{…}, …]            | Real CMS content                         |
+ * | insightSectionBadge | "Insights"          | Admins may relabel the section           |
+ * | insightPosts        | [{…}, …]            | Real CMS content                         |
  */
 
 /**
@@ -28,7 +28,7 @@ export interface HeroDynamicData {
   graduatesCount: string;
 }
 
-export interface BlogPost {
+export interface InsightPost {
   /** Stable slug / backend ID. */
   id: string;
   /** Human-readable date, e.g. "Apr 15, 2026". */
@@ -49,9 +49,9 @@ export interface BlogPost {
 export interface LandingDynamicData {
   hero: HeroDynamicData;
   /**
-   * Label for the blog / insights section badge, e.g. "Insights".
+   * Label for the insights section badge, e.g. "Insights".
    * Kept server-driven so admins can rename the section without a deploy.
    */
-  blogSectionBadge: string;
-  blogPosts: BlogPost[];
+  insightSectionBadge: string;
+  insightPosts: InsightPost[];
 }

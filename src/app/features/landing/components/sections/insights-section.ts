@@ -1,7 +1,7 @@
 /**
- * `ios-blog-section` — "Latest from the Scrum Journal" (section 10).
+ * `ios-insights-section` — "Latest from the Scrum Journal" (section 10).
  *
- * Renders up to three blog post cards using the shared `InsightsCard` component.
+ * Renders up to three insight post cards using the shared `InsightsCard` component.
  *
  * ## Data split
  * • `posts`  — server-driven CMS content (titles, dates, excerpts, images).
@@ -18,16 +18,16 @@ import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
 
 import { InsightsCard } from '../../../insights/components/insights-card';
-import type { BlogPost } from '../../data-access/landing.model';
+import type { InsightPost } from '../../data-access/landing.model';
 
 @Component({
-  selector: 'ios-blog-section',
+  selector: 'ios-insights-section',
   imports: [InsightsCard, SectionBadge, RouterLink, IosIcon],
   providers: [provideIcons(LucideArrowRight)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      [attr.aria-label]="lang.t('landing.sections.blogSectionAriaLabel')"
+      [attr.aria-label]="lang.t('landing.sections.insightsSectionAriaLabel')"
       class="bg-white py-[72px]"
     >
       <div class="px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-8">
@@ -57,12 +57,12 @@ import type { BlogPost } from '../../data-access/landing.model';
                    focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50
                    flex-shrink-0"
           >
-            {{ lang.t('landing.blog.viewAll') }}
+            {{ lang.t('landing.insights.viewAll') }}
             <ios-icon name="arrow-right" class="w-5 h-5 rtl:rotate-180" aria-hidden="true" />
           </a>
         </div>
 
-        <!-- Blog post cards — server-driven content -->
+        <!-- Insight post cards — server-driven content -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
           @for (post of posts(); track post.id) {
             <ios-insights-card [post]="post" />
@@ -72,9 +72,9 @@ import type { BlogPost } from '../../data-access/landing.model';
     </section>
   `,
 })
-export class BlogSection {
-  /** CMS blog posts — fetched from server. */
-  readonly posts = input.required<BlogPost[]>();
+export class InsightsSection {
+  /** CMS insight posts — fetched from server. */
+  readonly posts = input.required<InsightPost[]>();
   /** Admin-configurable section badge label — fetched from server. */
   readonly badge = input.required<string>();
 

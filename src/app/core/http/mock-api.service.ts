@@ -207,7 +207,7 @@ export class MockApiService {
             ],
           },
         ],
-        blog_posts: [
+        insight_posts: [
           {
             id: '1',
             date: 'Apr 15, 2026',

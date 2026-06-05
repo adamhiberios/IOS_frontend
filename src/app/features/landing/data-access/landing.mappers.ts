@@ -8,8 +8,8 @@
  * section components.
  */
 
-import type { BlogPost, HeroDynamicData, LandingDynamicData } from './landing.model';
-import type { BlogPostDto, HeroDynamicDto, LandingDynamicDto } from './landing.dto';
+import type { InsightPost, HeroDynamicData, LandingDynamicData } from './landing.model';
+import type { InsightPostDto, HeroDynamicDto, LandingDynamicDto } from './landing.dto';
 
 export function mapHeroDynamic(dto: HeroDynamicDto): HeroDynamicData {
   return {
@@ -18,7 +18,7 @@ export function mapHeroDynamic(dto: HeroDynamicDto): HeroDynamicData {
   };
 }
 
-export function mapBlogPost(dto: BlogPostDto): BlogPost {
+export function mapInsightPost(dto: InsightPostDto): InsightPost {
   return {
     id: dto.id,
     date: dto.date,
@@ -33,7 +33,7 @@ export function mapBlogPost(dto: BlogPostDto): BlogPost {
 export function mapLandingDynamicData(dto: LandingDynamicDto): LandingDynamicData {
   return {
     hero: mapHeroDynamic(dto.hero),
-    blogSectionBadge: dto.blog_section_badge,
-    blogPosts: dto.blog_posts.map(mapBlogPost),
+    insightSectionBadge: dto.insight_section_badge,
+    insightPosts: dto.insight_posts.map(mapInsightPost),
   };
 }

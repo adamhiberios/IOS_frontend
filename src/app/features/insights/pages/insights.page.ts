@@ -1,5 +1,5 @@
 /**
- * `ios-insights-page` — public insights (blog/journal) listing page.
+ * `ios-insights-page` — public insights listing page.
  *
  * Structure:
  *   1. Navbar

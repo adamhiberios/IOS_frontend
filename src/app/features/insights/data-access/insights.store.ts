@@ -1,5 +1,5 @@
 /**
- * InsightsStore — signal store for the insights (blog/journal) page.
+ * InsightsStore — signal store for the insights page.
  *
  * Exposes read-only signals that the insights page consumes.
  * Currently backed by static fallback data; call `load()` to replace with

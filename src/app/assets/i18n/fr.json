@@ -312,7 +312,7 @@
       },
       "cta": "Commencez votre parcours aujourd'hui"
     },
-    "blog": {
+    "insights": {
       "posts": [
         {
           "date": "15 avr. 2026",
@@ -374,7 +374,7 @@
         "description": "Un credential de l'Institute of Scrum valide que vous avez démontré une maîtrise pratique et spécialisée par rôle à travers une évaluation rigoureuse. Lorsque les employeurs voient cette désignation, ils savent que son titulaire a satisfait à des exigences qui vont bien au-delà de la simple présence et de la mémorisation."
       },
       "allCertsAtGlanceSectionAriaLabel": "Toutes les certifications en un coup d'œil",
-      "blogSectionAriaLabel": "Dernières actualités du Journal Scrum",
+      "insightsSectionAriaLabel": "Dernières actualités du Journal Scrum",
       "allCertsAtGlance": {
         "badge": "Toutes les certifications en un coup d'œil",
         "all": "Toutes les",
@@ -442,7 +442,7 @@
     "nav": {
       "certifications": "Certifications",
       "about": "À propos",
-      "blog": "Blogue",
+      "insights": "Perspectives",
       "contact": "Contact",
       "login": "Connexion",
       "register": "Inscription",
@@ -2240,7 +2240,7 @@
     "notifications": {
       "heading": "Préférences de notification",
       "all": "Recevoir des notifications pour toutes les mises à jour",
-      "insights": "Recevoir des notifications pour les nouvelles publications de blog",
+      "insights": "Recevoir des notifications pour les nouvelles publications Perspectives",
       "recommended": "Cours recommandés",
       "completion": "Notification de fin de cours",
       "material": "Nouveau matériel pédagogique ajouté"

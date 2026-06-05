@@ -1,5 +1,5 @@
 /**
- * InsightsApi — HTTP client for the insights/blog content.
+ * InsightsApi — HTTP client for the insights content.
  *
  * ── Current state ─────────────────────────────────────────────────────────
  * The backend endpoint does not exist yet. `getPosts()` returns `null`, which

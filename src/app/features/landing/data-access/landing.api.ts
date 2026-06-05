@@ -12,7 +12,7 @@
  *    consume the mapped domain model regardless of source.
  *
  * The endpoint contract is documented in `landing.dto.ts`.
- * Only dynamic fields are returned (cohort date, graduate count, blog posts).
+ * Only dynamic fields are returned (cohort date, graduate count, insight posts).
  * Static copy lives in the section components and is never fetched.
  * ─────────────────────────────────────────────────────────────────────────
  */

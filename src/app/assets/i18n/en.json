@@ -312,7 +312,7 @@
       },
       "cta": "Start Your Journey Today"
     },
-    "blog": {
+    "insights": {
       "posts": [
         {
           "date": "Apr 15, 2026",
@@ -374,7 +374,7 @@
       "insightsResources": "Insights & Resources",
       "scrumJournal": "From the Scrum Journal",
       "allCertsAtGlanceSectionAriaLabel": "All Certifications at a Glance",
-      "blogSectionAriaLabel": "Latest from the Scrum Journal",
+      "insightsSectionAriaLabel": "Latest from the Scrum Journal",
       "allCertsAtGlance": {
         "badge": "All Certifications at a Glance",
         "all": "All",
@@ -442,7 +442,7 @@
     "nav": {
       "certifications": "Certifications",
       "about": "About",
-      "blog": "Insights",
+      "insights": "Insights",
       "contact": "Contact",
       "login": "Login",
       "register": "Register",
@@ -2240,7 +2240,7 @@
     "notifications": {
       "heading": "Notification Preferences",
       "all": "Get notification for all updates",
-      "insights": "Get notification for new Insights / blog publications",
+      "insights": "Get notification for new Insights publications",
       "recommended": "Recommended courses",
       "completion": "Course completion notification",
       "material": "New learning material added"

@@ -10,7 +10,7 @@
  * LandingStore (signal store)
  *   ← LandingApi (returns null until backend is live → store uses fallback)
  *   → [heroDynamic]   → HeroSection        (cohortDate, graduatesCount)
- *   → [posts] [badge] → BlogSection        (CMS posts + section badge label)
+ *   → [posts] [badge] → InsightsSection     (CMS posts + section badge label)
  * ```
  *
  * All other sections (credibility, value-prop, cert-levels, how-it-works,
@@ -30,7 +30,7 @@ import { CertLevelsSection } from '../components/sections/cert-levels-section';
 import { WhyChooseUsSection } from '../components/sections/why-choose-us-section';
 import { MarketStatsSection } from '../components/sections/market-stats-section';
 import { HowItWorksSection } from '../components/sections/how-it-works-section';
-import { BlogSection } from '../components/sections/blog-section';
+import { InsightsSection } from '../components/sections/insights-section';
 import { AllCertsCtaSection } from '../components/sections/all-certs-cta-section';
 import { LandingStore } from '../data-access/landing.store';
 
@@ -47,7 +47,7 @@ import { LandingStore } from '../data-access/landing.store';
     WhyChooseUsSection,
     MarketStatsSection,
     HowItWorksSection,
-    BlogSection,
+    InsightsSection,
     AllCertsCtaSection,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -79,8 +79,8 @@ import { LandingStore } from '../data-access/landing.store';
       <!-- 8. How It Works — fully static -->
       <ios-how-it-works-section />
 
-      <!-- 9. Blog / Scrum Journal — dynamic: posts + badge label from store -->
-      <ios-blog-section [posts]="store.blogPosts()" [badge]="store.blogSectionBadge()" />
+      <!-- 9. Insights / Scrum Journal — dynamic: posts + badge label from store -->
+      <ios-insights-section [posts]="store.insightPosts()" [badge]="store.insightSectionBadge()" />
 
       <!-- 10. All Certifications CTA — fully static -->
       <ios-all-certs-cta-section />

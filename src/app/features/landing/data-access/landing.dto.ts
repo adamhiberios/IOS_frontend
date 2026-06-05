@@ -22,7 +22,7 @@ export interface HeroDynamicDto {
   graduates_count: string;
 }
 
-export interface BlogPostDto {
+export interface InsightPostDto {
   id: string;
   date: string;
   title: string;
@@ -35,6 +35,6 @@ export interface BlogPostDto {
 export interface LandingDynamicDto {
   hero: HeroDynamicDto;
   /** Admin-controlled section badge, e.g. "Insights". */
-  blog_section_badge: string;
-  blog_posts: BlogPostDto[];
+  insight_section_badge: string;
+  insight_posts: InsightPostDto[];
 }
