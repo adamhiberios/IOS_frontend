@@ -3,8 +3,8 @@
  *
  * Holds **only the server-driven dynamic data** the landing page needs:
  *   • `hero`              — cohort date + graduate count (change each cycle)
- *   • `blogSectionBadge`  — admin-configurable section label ("Insights")
- *   • `blogPosts`         — real CMS content
+ *   • `insightSectionBadge`  — admin-configurable section label ("Insights")
+ *   • `insightPosts`         — real CMS content
  *
  * All static copy (headings, cert names, level descriptions, step text, etc.)
  * lives directly in the section components and is never routed through this
@@ -25,12 +25,12 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { LandingApi } from './landing.api';
-import type { BlogPost, HeroDynamicData, LandingDynamicData } from './landing.model';
+import type { InsightPost, HeroDynamicData, LandingDynamicData } from './landing.model';
 
 type LoadStatus = 'idle' | 'loading' | 'success' | 'error';
 
 /** Static fallback content rendered when the backend endpoint is unavailable. */
-const FALLBACK_BLOG_POSTS: BlogPost[] = [
+const FALLBACK_INSIGHT_POSTS: InsightPost[] = [
   {
     id: 'post-1',
     date: 'Apr 15, 2026',
@@ -39,7 +39,7 @@ const FALLBACK_BLOG_POSTS: BlogPost[] = [
       'Discover why certified Scrum professionals consistently land higher-paying roles and move up faster than their peers.',
     readTime: '5 min read',
     imageUrl: '/assets/images/blog_1.png',
-    link: '/blog/why-employers-require-scrum-certification',
+    link: '/insights/why-employers-require-scrum-certification',
   },
   {
     id: 'post-2',
@@ -49,7 +49,7 @@ const FALLBACK_BLOG_POSTS: BlogPost[] = [
       'Not sure which certification level to start with? We break down each path so you can make a confident choice.',
     readTime: '4 min read',
     imageUrl: '/assets/images/blog_2.png',
-    link: '/blog/foundation-vs-practitioner',
+    link: '/insights/foundation-vs-practitioner',
   },
   {
     id: 'post-3',
@@ -59,7 +59,7 @@ const FALLBACK_BLOG_POSTS: BlogPost[] = [
       'IOS exams go beyond definitions. Work through these five real-world scenarios to sharpen your exam readiness.',
     readTime: '6 min read',
     imageUrl: '/assets/images/blog_3.png',
-    link: '/blog/5-scenario-based-exam-questions',
+    link: '/insights/5-scenario-based-exam-questions',
   },
 ];
 
@@ -68,8 +68,8 @@ const FALLBACK_DATA: LandingDynamicData = {
     cohortDate: 'June 2, 2026',
     graduatesCount: '12,000+',
   },
-  blogSectionBadge: 'Insights',
-  blogPosts: FALLBACK_BLOG_POSTS,
+  insightSectionBadge: 'Insights',
+  insightPosts: FALLBACK_INSIGHT_POSTS,
 };
 
 @Injectable({ providedIn: 'root' })
@@ -89,8 +89,8 @@ export class LandingStore {
   readonly isLoading = computed(() => this._status() === 'loading');
 
   readonly hero = computed<HeroDynamicData>(() => this._data().hero);
-  readonly blogSectionBadge = computed<string>(() => this._data().blogSectionBadge);
-  readonly blogPosts = computed<BlogPost[]>(() => this._data().blogPosts);
+  readonly insightSectionBadge = computed<string>(() => this._data().insightSectionBadge);
+  readonly insightPosts = computed<InsightPost[]>(() => this._data().insightPosts);
 
   /**
    * Attempts to load live dynamic data from the backend API.

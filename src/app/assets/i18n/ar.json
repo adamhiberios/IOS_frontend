@@ -312,7 +312,7 @@
       },
       "cta": "ابدأ رحلتك اليوم"
     },
-    "blog": {
+    "insights": {
       "posts": [
         {
           "date": "١٥ أبريل ٢٠٢٦",
@@ -374,7 +374,7 @@
       "insightsResources": "رؤى وموارد",
       "scrumJournal": "من مجلة سكرم",
       "allCertsAtGlanceSectionAriaLabel": "جميع الشهادات بنظرة واحدة",
-      "blogSectionAriaLabel": "آخر المقالات من مجلة سكرم",
+      "insightsSectionAriaLabel": "آخر المقالات من مجلة سكرم",
       "allCertsAtGlance": {
         "badge": "جميع الشهادات بنظرة واحدة",
         "all": "جميع",
@@ -442,7 +442,7 @@
     "nav": {
       "certifications": "الشهادات",
       "about": "عن المعهد",
-      "blog": "المدونة",
+      "insights": "الرؤى",
       "contact": "اتصل بنا",
       "login": "تسجيل الدخول",
       "register": "تسجيل",
@@ -2240,7 +2240,7 @@
     "notifications": {
       "heading": "تفضيلات الإشعارات",
       "all": "تلقّي الإشعارات لجميع التحديثات",
-      "insights": "تلقّي الإشعارات لمنشورات المدونة والتقارير الجديدة",
+      "insights": "تلقّي الإشعارات لمنشورات الرؤى الجديدة",
       "recommended": "الدورات الموصى بها",
       "completion": "إشعار إتمام الدورة",
       "material": "إضافة مواد تعليمية جديدة"

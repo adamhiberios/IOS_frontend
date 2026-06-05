@@ -1,9 +1,9 @@
 /**
  * Insights feature domain models.
  *
- * Reuses `BlogPost` from the landing feature since insights are blog/journal posts.
+ * Defines `InsightPost` for the insights feature — a journal/article post.
  * This file exists as a feature-boundary marker in case the insights feature
- * diverges from the landing blog section in the future.
+ * diverges from the landing insights section in the future.
  */
 
 export interface InsightPost {

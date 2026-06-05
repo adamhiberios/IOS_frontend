@@ -1,9 +1,9 @@
 /**
- * `ios-insights-card` — single blog/journal post card used on both the
- * insights listing page and the landing-page blog section.
+ * `ios-insights-card` — single insight/journal post card used on both the
+ * insights listing page and the landing-page insights section.
  *
- * Accepts any post object with the common blog fields (id, date, title,
- * excerpt, readTime, imageUrl, link) so it works with both `BlogPost`
+ * Accepts any post object with the common insight fields (id, date, title,
+ * excerpt, readTime, imageUrl, link) so it works with both `InsightPost`
  * (landing) and `InsightPost` (insights feature).
  */
 
@@ -15,8 +15,8 @@ import { LucideArrowRight, LucideClock } from '@lucide/angular';
 import { LanguageService } from '@core/i18n';
 import { IosIcon, provideIcons } from '@ui';
 
-/** Common shape shared by `BlogPost` (landing) and `InsightPost` (insights). */
-export interface BlogCardPost {
+/** Common shape shared by `InsightPost` (landing) and `InsightPost` (insights). */
+export interface InsightCardPost {
   id: string;
   date: string;
   title: string;
@@ -88,6 +88,6 @@ export interface BlogCardPost {
   `,
 })
 export class InsightsCard {
-  readonly post = input.required<BlogCardPost>();
+  readonly post = input.required<InsightCardPost>();
   protected readonly lang = inject(LanguageService);
 }

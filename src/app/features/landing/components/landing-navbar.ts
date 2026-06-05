@@ -10,7 +10,7 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
  * `ios-landing-navbar` — public-facing navbar for the landing page.
  *
  * Distinct from `ios-auth-header` (which is minimal, used on /auth/* pages).
- * This navbar includes full navigation links (Certifications, About, Blog, Contact)
+ * This navbar includes full navigation links (Certifications, About, Insights, Contact)
  * plus Login / Register CTAs.
  *
  * Uses backdrop-blur and a border-bottom to float above page content.
@@ -66,7 +66,7 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
                    font-heading font-semibold text-[15px]
                    text-ios-fg-10 hover:bg-ios-surface-strong transition-colors"
           >
-            {{ lang.t('landing.nav.blog') }}
+            {{ lang.t('landing.nav.insights') }}
           </a>
           <a
             routerLink="/contact"
@@ -148,7 +148,7 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
                    font-heading font-semibold text-[15px]
                    text-ios-fg-10 hover:bg-ios-surface-strong transition-colors"
           >
-            {{ lang.t('landing.nav.blog') }}
+            {{ lang.t('landing.nav.insights') }}
           </a>
           <a
             routerLink="/contact"
