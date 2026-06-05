@@ -56,7 +56,7 @@ import { LandingStore } from '../data-access/landing.store';
 
     <main class="min-h-screen flex flex-col">
       <!-- 1. Hero — dynamic: cohort date + graduate count from store -->
-      <ios-hero-section [heroDynamic]="store.hero()" />
+      <ios-hero-section />
 
       <!-- 2. Trusted by / marquee — fully static -->
       <ios-trusted-by-section />

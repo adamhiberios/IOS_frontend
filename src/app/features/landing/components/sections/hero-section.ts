@@ -1,152 +1,92 @@
 /**
  * `ios-hero-section` — landing page hero (section 1).
  *
- * ## Data split
- * • Static copy (headline, subtext, badge, CTA labels, source attribution,
- *   cohort label, graduates label, image alt) — rendered via `lang.t()`.
- *   These strings never change without a new deploy and are not backend-driven.
- *
- * • Dynamic values — received through the `heroDynamic` input:
- *   - `cohortDate`      ("June 2, 2026")  — changes every cohort cycle
- *   - `graduatesCount`  ("12,000+")       — live stat, updated by the backend
+ * Fully static — all copy rendered via `lang.t()`.
  */
 
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { LucideArrowRight, LucideDownload, LucideCalendar } from '@lucide/angular';
+import { LucideArrowRight, LucideDownload } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
-import type { HeroDynamicData } from '../../data-access/landing.model';
 
 @Component({
   selector: 'ios-hero-section',
   imports: [RouterLink, IosIcon, NgOptimizedImage, SectionBadge],
-  providers: [provideIcons(LucideArrowRight, LucideDownload, LucideCalendar)],
+  providers: [provideIcons(LucideArrowRight, LucideDownload)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
       [attr.aria-label]="lang.t('landing.hero.sectionAriaLabel')"
-      class="relative overflow-hidden"
+      class="relative overflow-hidden min-h-[480px] lg:min-h-[520px] flex items-center"
     >
-      <!-- Decorative blobs -->
-      <div
-        class="absolute -top-32 end-0 w-80 h-80 rounded-full opacity-10 bg-ios-brand-primary blur-3xl"
+      <!-- Full-section background image -->
+      <img
+        ngSrc="/assets/images/landing_hero.png"
+        [alt]="lang.t('landing.hero.imageAlt')"
+        width="1672"
+        height="941"
+        class="absolute inset-0 w-full h-full object-cover"
+        priority
         aria-hidden="true"
-      ></div>
-      <div
-        class="absolute bottom-0 start-0 w-64 h-64 rounded-full opacity-10 bg-ios-brand-yellow blur-3xl"
-        aria-hidden="true"
-      ></div>
+      />
 
-      <div class="relative px-6 md:px-16 lg:px-[120px] pt-16 pb-20 lg:pt-24 lg:pb-28">
-        <div class="flex flex-col lg:flex-row items-start lg:items-center gap-12 lg:gap-16">
-          <!-- Copy -->
-          <div class="flex-1 max-w-[560px]">
-            <div class="mb-6">
-              <ios-section-badge [text]="lang.t('landing.hero.badge')" variant="amber" />
-            </div>
+      <!-- Dark overlay for text contrast -->
+      <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
 
-            <h1 class="font-heading font-bold text-[clamp(2rem,4vw,3rem)] leading-[1.15] mb-5">
-              <span class="text-ios-brand-primary block">{{
-                lang.t('landing.hero.headline')
-              }}</span>
-              <span class="text-ios-brand-dark">{{
-                lang.t('landing.hero.headlineHighlight')
-              }}</span>
-            </h1>
-
-            <p class="text-[17px] leading-relaxed text-ios-fg-8 mb-8 max-w-[520px]">
-              {{ lang.t('landing.hero.subtext') }}
-            </p>
-
-            <!-- CTAs -->
-            <div class="flex flex-wrap items-center gap-4 mb-6">
-              <a
-                routerLink="/certifications"
-                class="bg-ios-brand-primary text-white font-heading font-semibold text-[16px]
-                       h-14 px-8 rounded-xl inline-flex items-center gap-2
-                       hover:bg-ios-brand-primary-hover transition-colors
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-              >
-                {{ lang.t('landing.hero.ctaPrimary') }}
-                <ios-icon name="arrow-right" class="w-5 h-5 rtl:rotate-180" aria-hidden="true" />
-              </a>
-              <a
-                routerLink="/guide"
-                class="bg-ios-brand-primary-soft text-ios-brand-primary font-heading font-semibold text-[16px]
-                       h-14 px-8 rounded-xl inline-flex items-center gap-2
-                       hover:opacity-90 transition-opacity
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-              >
-                {{ lang.t('landing.hero.ctaSecondary') }}
-                <ios-icon name="download" class="w-5 h-5" aria-hidden="true" />
-              </a>
-            </div>
-
-            <p class="text-[12px] text-ios-fg-7 leading-relaxed">
-              {{ lang.t('landing.hero.source') }}
-            </p>
+      <!-- Content card — 80% opaque white, no border radius -->
+      <div class="relative w-full px-6 md:px-16 lg:px-[120px] py-10 lg:py-16">
+        <div class="bg-white/80 backdrop-blur-sm shadow-xl p-6 lg:p-8 max-w-[580px]">
+          <!-- Badge -->
+          <div class="mb-4">
+            <ios-section-badge [text]="lang.t('landing.hero.badge')" variant="amber" />
           </div>
 
-          <!-- Hero image + floating badges -->
-          <div class="hidden lg:block flex-1 relative">
-            <div class="relative rounded-2xl overflow-hidden aspect-[16/9]">
-              <img
-                ngSrc="/assets/images/landing_hero.png"
-                [alt]="lang.t('landing.hero.imageAlt')"
-                width="1672"
-                height="941"
-                class="w-full h-full object-cover rounded-2xl"
-                priority
-              />
-            </div>
+          <!-- Headline -->
+          <h1 class="font-heading font-bold text-[clamp(1.75rem,3.5vw,2.5rem)] leading-[1.15] mb-4">
+            <span class="text-ios-brand-primary block">{{ lang.t('landing.hero.headline') }}</span>
+            <span class="text-ios-brand-dark">{{ lang.t('landing.hero.headlineHighlight') }}</span>
+          </h1>
 
-            <!-- Cohort date badge — value from server -->
-            <div
-              class="absolute -bottom-4 start-6 bg-white rounded-xl shadow-lg p-4 flex items-center gap-3"
-            >
-              <div
-                class="w-12 h-12 rounded-lg bg-ios-brand-primary/10 flex items-center justify-center flex-shrink-0"
-              >
-                <ios-icon
-                  name="calendar"
-                  class="w-6 h-6 text-ios-brand-primary"
-                  aria-hidden="true"
-                />
-              </div>
-              <div>
-                <p class="font-heading font-semibold text-[14px] text-ios-fg-10">
-                  {{ lang.t('landing.hero.cohortLabel') }}
-                </p>
-                <!-- cohortDate is server-driven -->
-                <p class="text-[15px] text-ios-fg-13 font-semibold">
-                  {{ heroDynamic().cohortDate }}
-                </p>
-              </div>
-            </div>
+          <!-- Subtext -->
+          <p class="text-[15px] leading-relaxed text-ios-fg-8 mb-6">
+            {{ lang.t('landing.hero.subtext') }}
+          </p>
 
-            <!-- Graduate count badge — value from server -->
-            <div
-              class="absolute -top-4 -end-4 bg-ios-brand-primary text-white rounded-xl shadow-lg p-4 text-center"
+          <!-- CTAs -->
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <a
+              routerLink="/certifications"
+              class="bg-ios-brand-primary text-white font-heading font-semibold text-[15px]
+                     h-12 px-6 rounded-xl inline-flex items-center gap-2
+                     hover:bg-ios-brand-primary-hover transition-colors
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
             >
-              <!-- graduatesCount is server-driven -->
-              <p class="font-heading font-bold text-[28px] leading-none">
-                {{ heroDynamic().graduatesCount }}
-              </p>
-              <p class="text-[13px] font-medium mt-1 opacity-90">
-                {{ lang.t('landing.hero.graduatesLabel') }}
-              </p>
-            </div>
+              {{ lang.t('landing.hero.ctaPrimary') }}
+              <ios-icon name="arrow-right" class="w-4 h-4 rtl:rotate-180" aria-hidden="true" />
+            </a>
+            <a
+              routerLink="/guide"
+              class="bg-ios-brand-primary-soft text-ios-brand-primary font-heading font-semibold text-[15px]
+                     h-12 px-6 rounded-xl inline-flex items-center gap-2
+                     hover:opacity-90 transition-opacity
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+            >
+              {{ lang.t('landing.hero.ctaSecondary') }}
+              <ios-icon name="download" class="w-4 h-4" aria-hidden="true" />
+            </a>
           </div>
+
+          <p class="text-[11px] text-ios-fg-7 leading-relaxed">
+            {{ lang.t('landing.hero.source') }}
+          </p>
         </div>
       </div>
     </section>
   `,
 })
 export class HeroSection {
-  /** Server-driven values: cohort date and graduate count. */
-  readonly heroDynamic = input.required<HeroDynamicData>();
   protected readonly lang = inject(LanguageService);
 }
