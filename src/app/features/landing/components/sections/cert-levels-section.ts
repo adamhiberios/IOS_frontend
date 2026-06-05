@@ -195,15 +195,15 @@ export class CertLevelsSection {
    * and route links are structural constants.
    */
   protected readonly levels = computed<CertLevelDef[]>(() => {
-    const foundationLabel = this.lang.t('landing.levels.foundation.tabLabel');
-    const practitionerLabel = this.lang.t('landing.levels.practitioner.tabLabel');
-    const authorityLabel = this.lang.t('landing.levels.authority.tabLabel');
+    const foundationLabel = this.lang.t('landing.levels.foundation.levelLabel');
+    const practitionerLabel = this.lang.t('landing.levels.practitioner.levelLabel');
+    const authorityLabel = this.lang.t('landing.levels.authority.levelLabel');
 
     return [
       {
-        id: 'FOUNDATION',
-        icon: 'book-open',
-        tabLabel: foundationLabel,
+        id: 'SCRUM_MASTER',
+        icon: 'users',
+        tabLabel: this.lang.t('landing.levels.foundation.tabLabel'),
         description: this.lang.t('landing.levels.foundation.description'),
         explorePath: this.lang.t('landing.levels.foundation.explorePath'),
         exploreLink: '/certifications',
@@ -219,35 +219,6 @@ export class CertLevelsSection {
             detailLink: '/certifications/esm',
           },
           {
-            id: 'epo',
-            abbreviation: 'EPO',
-            fullName: this.lang.t('landing.certs.epo'),
-            levelBadge: foundationLabel,
-            badgeColor: '#426981',
-            price: 'CAD $180',
-            detailLink: '/certifications/epo',
-          },
-          {
-            id: 'esf',
-            abbreviation: 'ESF',
-            fullName: this.lang.t('landing.certs.esf'),
-            levelBadge: foundationLabel,
-            badgeColor: '#426981',
-            price: 'CAD $180',
-            detailLink: '/certifications/esf',
-          },
-        ],
-      },
-      {
-        id: 'PRACTITIONER',
-        icon: 'zap',
-        tabLabel: practitionerLabel,
-        description: this.lang.t('landing.levels.practitioner.description'),
-        explorePath: this.lang.t('landing.levels.practitioner.explorePath'),
-        exploreLink: '/certifications',
-        audienceDesc: this.lang.t('landing.levels.practitioner.audienceDesc'),
-        certCards: [
-          {
             id: 'psm',
             abbreviation: 'PSM',
             fullName: this.lang.t('landing.certs.psm'),
@@ -255,6 +226,35 @@ export class CertLevelsSection {
             badgeColor: '#2d5f7a',
             price: 'CAD $220',
             detailLink: '/certifications/psm',
+          },
+          {
+            id: 'asm',
+            abbreviation: 'ASM',
+            fullName: this.lang.t('landing.certs.asm'),
+            levelBadge: authorityLabel,
+            badgeColor: '#1a3a4a',
+            price: 'CAD $260',
+            detailLink: '/certifications/asm',
+          },
+        ],
+      },
+      {
+        id: 'PRODUCT_OWNER',
+        icon: 'package',
+        tabLabel: this.lang.t('landing.levels.practitioner.tabLabel'),
+        description: this.lang.t('landing.levels.practitioner.description'),
+        explorePath: this.lang.t('landing.levels.practitioner.explorePath'),
+        exploreLink: '/certifications',
+        audienceDesc: this.lang.t('landing.levels.practitioner.audienceDesc'),
+        certCards: [
+          {
+            id: 'epo',
+            abbreviation: 'EPO',
+            fullName: this.lang.t('landing.certs.epo'),
+            levelBadge: foundationLabel,
+            badgeColor: '#426981',
+            price: 'CAD $180',
+            detailLink: '/certifications/epo',
           },
           {
             id: 'ppo',
@@ -266,35 +266,6 @@ export class CertLevelsSection {
             detailLink: '/certifications/ppo',
           },
           {
-            id: 'psf',
-            abbreviation: 'PSF',
-            fullName: this.lang.t('landing.certs.psf'),
-            levelBadge: practitionerLabel,
-            badgeColor: '#2d5f7a',
-            price: 'CAD $220',
-            detailLink: '/certifications/psf',
-          },
-        ],
-      },
-      {
-        id: 'AUTHORITY',
-        icon: 'shield-check',
-        tabLabel: authorityLabel,
-        description: this.lang.t('landing.levels.authority.description'),
-        explorePath: this.lang.t('landing.levels.authority.explorePath'),
-        exploreLink: '/certifications',
-        audienceDesc: this.lang.t('landing.levels.authority.audienceDesc'),
-        certCards: [
-          {
-            id: 'asm',
-            abbreviation: 'ASM',
-            fullName: this.lang.t('landing.certs.asm'),
-            levelBadge: authorityLabel,
-            badgeColor: '#1a3a4a',
-            price: 'CAD $260',
-            detailLink: '/certifications/asm',
-          },
-          {
             id: 'apo',
             abbreviation: 'APO',
             fullName: this.lang.t('landing.certs.apo'),
@@ -302,6 +273,35 @@ export class CertLevelsSection {
             badgeColor: '#1a3a4a',
             price: 'CAD $260',
             detailLink: '/certifications/apo',
+          },
+        ],
+      },
+      {
+        id: 'SCRUM_FACILITATOR',
+        icon: 'presentation',
+        tabLabel: this.lang.t('landing.levels.authority.tabLabel'),
+        description: this.lang.t('landing.levels.authority.description'),
+        explorePath: this.lang.t('landing.levels.authority.explorePath'),
+        exploreLink: '/certifications',
+        audienceDesc: this.lang.t('landing.levels.authority.audienceDesc'),
+        certCards: [
+          {
+            id: 'esf',
+            abbreviation: 'ESF',
+            fullName: this.lang.t('landing.certs.esf'),
+            levelBadge: foundationLabel,
+            badgeColor: '#426981',
+            price: 'CAD $180',
+            detailLink: '/certifications/esf',
+          },
+          {
+            id: 'psf',
+            abbreviation: 'PSF',
+            fullName: this.lang.t('landing.certs.psf'),
+            levelBadge: practitionerLabel,
+            badgeColor: '#2d5f7a',
+            price: 'CAD $220',
+            detailLink: '/certifications/psf',
           },
           {
             id: 'asf',
