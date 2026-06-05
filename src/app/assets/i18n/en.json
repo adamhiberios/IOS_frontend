@@ -196,7 +196,7 @@
       "headline": "The Scrum Credential",
       "headlineHighlight": "That Proves Your Expertise",
       "subtext": "Backed by the Institute of Scrum, our endorsed credentials set a higher standard — recognizing professionals who deliver results in the real world and stand apart through demonstrated skill, judgment, and impact.",
-      "source": "Endorsed certifications require 20+ hours of structured learning and a rigorous 45-question examination — because your credential should prove what you can do.",
+      "source": "Endorsed certifications require 15+ hours of structured learning and a rigorous 45-question examination — because your credential should prove what you can do.",
       "cohortLabel": "Next cohort starts",
       "cohortDate": "June 2, 2026",
       "graduatesCount": "12,000+",
@@ -227,41 +227,44 @@
       },
       "practicalFocus": {
         "title": "Practical Application Focus",
-        "description": "Every certification requires 20+ hours of structured self-paced learning and a rigorous 45-question examination. You earn your Endorsed credential by demonstrating what you know and can apply."
+        "description": "Every certification requires 15+ hours of structured self-paced learning and a rigorous 45-question examination. You earn your Endorsed credential by demonstrating what you know and can apply."
       }
     },
     "levels": {
       "foundation": {
-        "tabLabel": "Foundation",
+        "tabLabel": "Scrum Master",
+        "levelLabel": "Foundation",
         "title": "Foundation Level",
-        "description": "Perfect for those new to Scrum or transitioning into Agile roles. Validates your understanding of core Scrum principles, roles, events, and artifacts.",
+        "description": "Facilitate Scrum events, remove impediments, and guide your team to consistent delivery. Our Scrum Master certifications progress from foundational facilitation skills through to expert-level coaching and organizational transformation.",
         "audience": {
           "careerChangers": "Career changers entering Agile",
           "newPractitioners": "New Scrum practitioners",
           "teamMembers": "Team members seeking structure"
         },
-        "explorePath": "Explore Foundation Path",
-        "audienceDesc": "Ideal for professionals entering Agile environments who want to build a solid Scrum foundation with a recognized, role-specific credential."
+        "explorePath": "Explore Scrum Master Path",
+        "audienceDesc": "For professionals in the Scrum Master role — from those entering the field through to experienced Agile coaches driving enterprise-level change."
       },
       "practitioner": {
-        "tabLabel": "Intermediate",
+        "tabLabel": "Product Owner",
+        "levelLabel": "Practitioner",
         "title": "Practitioner Level",
-        "description": "For experienced professionals who facilitate Scrum events and coach teams. Demonstrates ability to apply Scrum in complex, real-world environments.",
+        "description": "Own the product vision, prioritize the backlog, and maximize value for your stakeholders. Our Product Owner certifications develop the decision-making and strategic thinking skills your role demands at every level.",
         "audience": {
           "professionals": "Active Scrum Masters & coaches"
         },
-        "explorePath": "Explore Practitioner Path",
-        "audienceDesc": "Designed for experienced Scrum practitioners who actively facilitate events, coach teams, and apply the framework in complex real-world environments."
+        "explorePath": "Explore Product Owner Path",
+        "audienceDesc": "For professionals responsible for product vision and backlog ownership — from those entering product roles through to senior strategists shaping long-term direction."
       },
       "authority": {
-        "tabLabel": "Advanced",
+        "tabLabel": "Scrum Facilitator",
+        "levelLabel": "Authority",
         "title": "Authority Level",
-        "description": "The highest tier — for senior practitioners shaping Agile strategy at the organizational level. Validates deep expertise and thought leadership.",
+        "description": "Design and lead powerful collaborative workshops that drive alignment and unlock team potential. Our Scrum Facilitator certifications build specialized expertise in structured facilitation and organizational engagement.",
         "audience": {
           "senior": "Senior Agile leaders & strategists"
         },
-        "explorePath": "Explore Authority Path",
-        "audienceDesc": "For senior Agile leaders shaping organizational strategy, mentoring Scrum teams, and driving enterprise-level transformation."
+        "explorePath": "Explore Scrum Facilitator Path",
+        "audienceDesc": "For professionals who design and facilitate workshops, retrospectives, and collaborative sessions — from those new to facilitation through to expert change agents."
       },
       "passMark": "Pass mark: 75%",
       "whoShouldPursue": "Who Should Pursue This",
@@ -288,11 +291,11 @@
     "howItWorks": {
       "choose": {
         "title": "Choose Your Certification",
-        "description": "Select the Scrum track and level that best aligns with your experience and career goals."
+        "description": "Select the Scrum track and level that best align with your goals."
       },
       "review": {
         "title": "Review the Learning Materials",
-        "description": "Study the provided learning materials to build your knowledge and prepare for the exam."
+        "description": "Study the provided materials to build your knowledge and prepare for the exam."
       },
       "practice": {
         "title": "Practice with Mock Tests",
@@ -300,15 +303,15 @@
       },
       "access": {
         "title": "Receive Access to the Final Exam",
-        "description": "Obtain access to the official proctored certification exam when you are ready."
+        "description": "Obtain access to the official certification exam."
       },
       "complete": {
         "title": "Complete the Online Exam",
-        "description": "Take and complete the certification exam online at your own pace."
+        "description": "Take and complete the certification exam online."
       },
       "earn": {
         "title": "Earn Your Credential",
-        "description": "Successfully pass the exam and receive your digital Scrum certification."
+        "description": "Successfully pass the exam and receive your Scrum certification."
       },
       "cta": "Start Your Journey Today"
     },
@@ -379,7 +382,7 @@
         "badge": "All Certifications at a Glance",
         "all": "All",
         "scrumCertifications": "Scrum Certifications",
-        "description": "Your next career milestone starts here. Choose your role, select your level, and begin earning the Endorsed credential that proves what you can actually do. With 20+ hours of structured self-paced learning, no prerequisites, and a rigorous examination, you are investing in a credential built for the long term.",
+        "description": "Your next career milestone starts here. Choose your role, select your level, and begin earning the Endorsed credential that proves what you can actually do. With 15+ hours of structured self-paced learning, no prerequisites, and a rigorous examination, you are investing in a credential built for the long term.",
         "downloadGuide": "Download Certification Guide",
         "exploreCerts": "Explore Certifications"
       }
@@ -401,33 +404,38 @@
       "foundation": {
         "tag": "CORE KNOWLEDGE",
         "name": "FOUNDATION",
-        "desc": "The Foundation level establishes essential Scrum knowledge and core principles for those entering the field. Candidates demonstrate understanding of foundational frameworks, terminology, and practices required to participate effectively in agile teams and begin their professional journey."
+        "desc": "The Foundation level establishes essential Scrum knowledge and core principles for those entering the field. Candidates demonstrate understanding of foundational frameworks, terminology, and practices required to participate effectively in agile teams and begin their professional journey.",
+        "audience": {
+          "a0": "Career changers.",
+          "a1": "new Scrum practitioners.",
+          "a2": "team members entering agile roles."
+        }
       },
       "practitioner": {
-        "tag": "APPLIED PRACTICE",
+        "tag": "APPLIED EXPERTISE",
         "name": "PRACTITIONER",
-        "desc": "The Practitioner level validates the ability to facilitate Scrum events, coach teams, and apply the framework in complex environments. Candidates demonstrate active mastery through scenario-based assessment grounded in real-world practice.",
+        "desc": "The Practitioner level validates applied Scrum expertise and real-world capability across role-specific responsibilities. Candidates demonstrate practical competence, sound judgment, and the ability to navigate everyday challenges, proving they can deliver consistent value within experienced agile teams.",
         "audience": {
-          "a0": "Active Scrum Masters.",
-          "a1": "Team coaches & facilitators.",
-          "a2": "Experienced Agile practitioners."
+          "a0": "Practicing professionals with hands-on Scrum experience seeking advancement.",
+          "a1": "",
+          "a2": ""
         }
       },
       "authority": {
-        "tag": "STRATEGIC MASTERY",
+        "tag": "LEADERSHIP & TRANSFORMATION",
         "name": "AUTHORITY",
-        "desc": "The Authority level confirms senior-level expertise and thought leadership in Scrum. Candidates demonstrate the capacity to shape Agile strategy at an organizational level, mentor practitioners, and drive sustainable transformation across enterprise contexts.",
+        "desc": "The Authority level recognizes advanced mastery and the ability to lead, mentor, and shape Scrum practice at scale. Candidates demonstrate deep expertise, strategic thinking, and the proven capability to guide organizations through complex agile transformations confidently.",
         "audience": {
-          "a0": "Senior Agile leaders.",
-          "a1": "Organizational coaches.",
-          "a2": "Enterprise transformation leads."
+          "a0": "Senior practitioners with demonstrated expertise and leadership capability.",
+          "a1": "",
+          "a2": ""
         }
       },
       "table": {
         "roleHeader": "Role",
         "foundationHeader": "Foundation",
-        "practitionerHeader": "Practitioner",
-        "authorityHeader": "Authority",
+        "practitionerHeader": "Intermediate",
+        "authorityHeader": "Advanced",
         "smRole": "Scrum Master",
         "poRole": "Product Owner",
         "sfRole": "Scrum Facilitator"

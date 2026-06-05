@@ -58,14 +58,14 @@ import { LandingStore } from '../data-access/landing.store';
       <!-- 1. Hero — dynamic: cohort date + graduate count from store -->
       <ios-hero-section />
 
-      <!-- 2. Trusted by / marquee — fully static -->
-      <ios-trusted-by-section />
-
       <!-- 3. Why Scrum Certification Matters — fully static -->
       <ios-credibility-section />
 
       <!-- 4. Value Proposition — fully static -->
       <ios-value-prop-section />
+
+      <!-- 2. Trusted by / marquee — fully static -->
+      <ios-trusted-by-section />
 
       <!-- 5. Certification Levels — fully static -->
       <ios-cert-levels-section />

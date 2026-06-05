@@ -232,36 +232,39 @@
     },
     "levels": {
       "foundation": {
-        "tabLabel": "Fondation",
+        "tabLabel": "Scrum Master",
+        "levelLabel": "Fondation",
         "title": "Niveau Fondamental",
-        "description": "Idéal pour les débutants en Scrum ou ceux qui transitionnent vers des rôles Agile. Valide votre compréhension des principes fondamentaux de Scrum, des rôles, événements et artefacts.",
+        "description": "Facilitez les événements Scrum, levez les obstacles et guidez votre équipe vers des résultats constants. Nos certifications Scrum Master progressent des compétences fondamentales de facilitation jusqu'au coaching expert et à la transformation organisationnelle.",
         "audience": {
           "careerChangers": "Reconversion vers l'Agile",
           "newPractitioners": "Nouveaux praticiens Scrum",
           "teamMembers": "Membres d'équipe recherchant une structure"
         },
-        "explorePath": "Explorer le parcours Fondation",
-        "audienceDesc": "Idéal pour les professionnels souhaitant intégrer des environnements Agile et bâtir des bases solides en Scrum avec un credential reconnu et spécialisé par rôle."
+        "explorePath": "Explorer le parcours Scrum Master",
+        "audienceDesc": "Pour les professionnels dans le rôle de Scrum Master — des débutants aux coachs Agile expérimentés qui pilotent le changement à l'échelle de l'entreprise."
       },
       "practitioner": {
-        "tabLabel": "Intermédiaire",
+        "tabLabel": "Product Owner",
+        "levelLabel": "Praticien",
         "title": "Niveau Praticien",
-        "description": "Pour les professionnels expérimentés qui facilitent les événements Scrum et accompagnent les équipes. Démontre la capacité à appliquer Scrum dans des environnements complexes et réels.",
+        "description": "Portez la vision produit, priorisez le backlog et maximisez la valeur pour vos parties prenantes. Nos certifications Product Owner développent les compétences décisionnelles et la pensée stratégique que votre rôle exige à chaque niveau.",
         "audience": {
           "professionals": "Scrum Masters et coachs actifs"
         },
-        "explorePath": "Explorer le parcours Praticien",
-        "audienceDesc": "Conçu pour les praticiens expérimentés qui facilitent activement les événements, accompagnent des équipes et appliquent le cadre dans des environnements complexes."
+        "explorePath": "Explorer le parcours Product Owner",
+        "audienceDesc": "Pour les professionnels responsables de la vision produit et de la gestion du backlog — des nouveaux entrants aux stratèges seniors qui façonnent la direction à long terme."
       },
       "authority": {
-        "tabLabel": "Avancé",
+        "tabLabel": "Scrum Facilitator",
+        "levelLabel": "Autorité",
         "title": "Niveau Autorité",
-        "description": "Le plus haut niveau — pour les praticiens seniors qui façonnent la stratégie Agile au niveau organisationnel. Valide une expertise approfondie et un leadership intellectuel.",
+        "description": "Concevez et animez des ateliers collaboratifs puissants qui favorisent l'alignement et libèrent le potentiel des équipes. Nos certifications Scrum Facilitator bâtissent une expertise spécialisée en facilitation structurée et en engagement organisationnel.",
         "audience": {
           "senior": "Leaders et stratèges Agile seniors"
         },
-        "explorePath": "Explorer le parcours Autorité",
-        "audienceDesc": "Pour les leaders Agile seniors qui façonnent la stratégie organisationnelle, encadrent des équipes Scrum et pilotent la transformation à l'échelle de l'entreprise."
+        "explorePath": "Explorer le parcours Scrum Facilitator",
+        "audienceDesc": "Pour les professionnels qui conçoivent et animent des ateliers, rétrospectives et sessions collaboratives — des nouveaux facilitateurs aux agents de changement experts."
       },
       "passMark": "Seuil de réussite : 75 %",
       "whoShouldPursue": "À qui s'adresse cette certification",
@@ -288,11 +291,11 @@
     "howItWorks": {
       "choose": {
         "title": "Choisissez votre certification",
-        "description": "Sélectionnez le parcours Scrum et le niveau qui correspond le mieux à votre expérience et vos objectifs de carrière."
+        "description": "Sélectionnez le parcours Scrum et le niveau qui correspondent le mieux à vos objectifs."
       },
       "review": {
         "title": "Révisez les supports d'apprentissage",
-        "description": "Étudiez les supports d'apprentissage fournis pour acquérir les connaissances nécessaires et vous préparer à l'examen."
+        "description": "Étudiez les supports fournis pour acquérir les connaissances nécessaires et vous préparer à l'examen."
       },
       "practice": {
         "title": "Entraînez-vous avec des tests blancs",
@@ -300,15 +303,15 @@
       },
       "access": {
         "title": "Accédez à l'examen final",
-        "description": "Obtenez l'accès à l'examen de certification officiel supervisé lorsque vous êtes prêt."
+        "description": "Obtenez l'accès à l'examen de certification officiel."
       },
       "complete": {
         "title": "Complétez l'examen en ligne",
-        "description": "Passez et complétez l'examen de certification en ligne à votre propre rythme."
+        "description": "Passez et complétez l'examen de certification en ligne."
       },
       "earn": {
         "title": "Obtenez votre certification",
-        "description": "Réussissez l'examen et recevez votre certification Scrum numérique."
+        "description": "Réussissez l'examen et recevez votre certification Scrum."
       },
       "cta": "Commencez votre parcours aujourd'hui"
     },
@@ -401,33 +404,38 @@
       "foundation": {
         "tag": "CONNAISSANCES FONDAMENTALES",
         "name": "FONDATION",
-        "desc": "Le niveau Fondation établit les connaissances essentielles de Scrum et les principes de base pour ceux qui débutent dans le domaine. Les candidats démontrent leur compréhension des cadres, de la terminologie et des pratiques nécessaires pour participer efficacement aux équipes agiles."
+        "desc": "Le niveau Fondation établit les connaissances essentielles de Scrum et les principes de base pour ceux qui débutent dans le domaine. Les candidats démontrent leur compréhension des cadres, de la terminologie et des pratiques nécessaires pour participer efficacement aux équipes agiles et commencer leur parcours professionnel.",
+        "audience": {
+          "a0": "Personnes en reconversion.",
+          "a1": "Nouveaux praticiens Scrum.",
+          "a2": "Membres d'équipe intégrant des rôles agiles."
+        }
       },
       "practitioner": {
-        "tag": "PRATIQUE APPLIQUÉE",
+        "tag": "EXPERTISE APPLIQUÉE",
         "name": "PRATICIEN",
-        "desc": "Le niveau Praticien valide la capacité à faciliter les événements Scrum, coacher des équipes et appliquer le cadre dans des environnements complexes. Les candidats démontrent une maîtrise active à travers une évaluation basée sur des scénarios réels.",
+        "desc": "Le niveau Praticien valide l'expertise Scrum appliquée et la capacité réelle dans les responsabilités spécifiques au rôle. Les candidats démontrent une compétence pratique, un jugement sûr et la capacité à naviguer dans les défis quotidiens, prouvant qu'ils peuvent apporter une valeur constante au sein d'équipes agiles expérimentées.",
         "audience": {
-          "a0": "Scrum Masters actifs.",
-          "a1": "Coachs et facilitateurs d'équipes.",
-          "a2": "Praticiens Agile expérimentés."
+          "a0": "Professionnels en activité avec une expérience pratique de Scrum cherchant à progresser.",
+          "a1": "",
+          "a2": ""
         }
       },
       "authority": {
-        "tag": "MAÎTRISE STRATÉGIQUE",
+        "tag": "LEADERSHIP & TRANSFORMATION",
         "name": "AUTORITÉ",
-        "desc": "Le niveau Autorité confirme une expertise senior et un leadership intellectuel en Scrum. Les candidats démontrent leur capacité à façonner la stratégie Agile au niveau organisationnel, à accompagner des praticiens et à piloter des transformations durables.",
+        "desc": "Le niveau Autorité reconnaît la maîtrise avancée et la capacité à diriger, mentorer et façonner la pratique Scrum à grande échelle. Les candidats démontrent une expertise approfondie, une réflexion stratégique et la capacité avérée à guider les organisations à travers des transformations agiles complexes.",
         "audience": {
-          "a0": "Leaders Agile seniors.",
-          "a1": "Coachs organisationnels.",
-          "a2": "Responsables de transformation."
+          "a0": "Praticiens seniors avec une expertise démontrée et une capacité de leadership.",
+          "a1": "",
+          "a2": ""
         }
       },
       "table": {
         "roleHeader": "Rôle",
         "foundationHeader": "Fondation",
-        "practitionerHeader": "Praticien",
-        "authorityHeader": "Autorité",
+        "practitionerHeader": "Intermédiaire",
+        "authorityHeader": "Avancé",
         "smRole": "Scrum Master",
         "poRole": "Product Owner",
         "sfRole": "Scrum Facilitator"

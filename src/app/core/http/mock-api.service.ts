@@ -18,7 +18,7 @@ export class MockApiService {
           subtext:
             'Backed by the Institute of Scrum, our endorsed credentials set a higher standard.',
           source:
-            'Endorsed certifications require 20+ hours of structured learning and a rigorous 45-question examination.',
+            'Endorsed certifications require 15+ hours of structured learning and a rigorous 45-question examination.',
           cohort_label: 'Next cohort starts',
           cohort_date: 'June 2, 2026',
           graduates_count: '12,000+',
@@ -46,7 +46,7 @@ export class MockApiService {
             icon: 'zap',
             title: 'Practical Application Focus',
             description:
-              'Every certification requires 20+ hours of structured self-paced learning.',
+              'Every certification requires 15+ hours of structured self-paced learning.',
           },
         ],
         certification_levels: [
