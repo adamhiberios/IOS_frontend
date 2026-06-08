@@ -37,8 +37,10 @@ import type { InsightPost } from '../../data-access/landing.model';
         >
           <!-- Left: badge + heading + gold line -->
           <div class="flex flex-col items-start gap-3">
-            <!-- badge comes from server so admins can relabel the section -->
-            <ios-section-badge [text]="badge()" variant="warm-red" />
+            <ios-section-badge
+              [text]="lang.t('landing.sections.insightsResources')"
+              variant="warm-red"
+            />
             <h2 class="font-heading font-extrabold text-[36px] leading-tight">
               <span class="text-ios-fg-10">{{ lang.t('landing.sections.scrumJournalPart1') }}</span>
               <span class="ms-2 text-ios-brand-primary">{{

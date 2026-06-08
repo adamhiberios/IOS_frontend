@@ -281,12 +281,13 @@
       "esm": "Endorsed Scrum Master",
       "epo": "Endorsed Product Owner",
       "esf": "Endorsed Scrum Facilitator",
-      "psm": "Professional Scrum Master",
-      "ppo": "Professional Product Owner",
-      "psf": "Professional Scrum Facilitator",
-      "asm": "Authority Scrum Master",
-      "apo": "Authority Product Owner",
-      "asf": "Authority Scrum Facilitator"
+      "psm": "Endorsed Scrum Master Practitioner",
+      "ppo": "Endorsed Product Owner Practitioner",
+      "psf": "Endorsed Scrum Facilitator Practitioner",
+      "asm": "Endorsed Scrum Master Authority",
+      "apo": "Endorsed Product Owner Authority",
+      "asf": "Endorsed Scrum Facilitator Authority",
+      "comingSoon": "قريباً..."
     },
     "howItWorks": {
       "choose": {
@@ -382,7 +383,7 @@
         "badge": "جميع الشهادات بنظرة واحدة",
         "all": "جميع",
         "scrumCertifications": "شهادات سكرم",
-        "description": "محطتك المهنية التالية تبدأ من هنا. اختر دورك، حدد مستواك، وابدأ في الحصول على الاعتماد المعتمد الذي يثبت ما يمكنك فعله فعلياً. مع أكثر من 20 ساعة من التعلم المنظم الذاتي، بدون متطلبات مسببة، وامتحان صارم، أنت تستثمر في اعتماد مبني على المدى الطويل.",
+        "description": "محطتك المهنية التالية تبدأ من هنا. اختر دورك، حدد مستواك، وابدأ في الحصول على الاعتماد المعتمد الذي يثبت ما يمكنك فعله فعلياً. مع أكثر من 15 ساعة من التعلم المنظم الذاتي، بدون متطلبات مسببة، وامتحان صارم، أنت تستثمر في اعتماد مبني على المدى الطويل.",
         "downloadGuide": "تنزيل دليل الشهادة",
         "exploreCerts": "استكشف الشهادات"
       }
@@ -467,19 +468,20 @@
       "terms": "شروط الخدمة",
       "certifications": {
         "title": "الشهادات",
-        "foundation": "مستوى الأساس",
-        "practitioner": "مستوى الممارس",
-        "authority": "مستوى الخبير"
-      },
-      "resources": {
-        "title": "الموارد",
-        "journal": "مجلة سكرم",
-        "guides": "أدلة الدراسة"
+        "scrumMaster": "شهادات Scrum Master",
+        "productOwner": "شهادات مالك المنتج",
+        "scrumFacilitator": "شهادة ميسِّر سكرم"
       },
       "company": {
         "title": "المؤسسة",
-        "about": "من نحن",
-        "contact": "اتصل بنا"
+        "about": "عن معهد سكرم",
+        "whyScrum": "لماذا شهادات سكرم",
+        "support": "الحصول على الدعم"
+      },
+      "resources": {
+        "title": "الموارد",
+        "insights": "الرؤى",
+        "studentPortal": "تسجيل الدخول إلى بوابة الطالب"
       },
       "legal": {
         "title": "قانوني",

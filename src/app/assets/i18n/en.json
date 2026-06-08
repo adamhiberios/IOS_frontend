@@ -272,7 +272,7 @@
         "startingAt": "Starting at",
         "downloadGuide": "Download Guide",
         "enrollNow": "Enroll Now",
-        "hours": "+20 hrs",
+        "hours": "15+ hrs",
         "online": "Fully Online",
         "exam": "45-question Test"
       }
@@ -281,12 +281,13 @@
       "esm": "Endorsed Scrum Master",
       "epo": "Endorsed Product Owner",
       "esf": "Endorsed Scrum Facilitator",
-      "psm": "Professional Scrum Master",
-      "ppo": "Professional Product Owner",
-      "psf": "Professional Scrum Facilitator",
-      "asm": "Authority Scrum Master",
-      "apo": "Authority Product Owner",
-      "asf": "Authority Scrum Facilitator"
+      "psm": "Endorsed Scrum Master Practitioner",
+      "ppo": "Endorsed Product Owner Practitioner",
+      "psf": "Endorsed Scrum Facilitator Practitioner",
+      "asm": "Endorsed Scrum Master Authority",
+      "apo": "Endorsed Product Owner Authority",
+      "asf": "Endorsed Scrum Facilitator Authority",
+      "comingSoon": "Coming Soon..."
     },
     "howItWorks": {
       "choose": {
@@ -400,7 +401,7 @@
       "headlineHighlight": "Path to Mastery",
       "itsFor": "It's for:",
       "passMark": "75% Pass mark",
-      "tableIntro": "Present a grid showcasing our certifications organized by role (rows) and level (columns). Each cell displays the full certification name and links directly to its dedicated detail page, giving visitors a clear path to explore every credential available across our learning framework.",
+      "tableIntro": "Present a grid showcasing Institute of Scrum certifications organized by role (rows) and level (columns). Each cell displays the full certification name and links directly to its dedicated detail page, giving visitors a clear path to explore every credential available across our learning framework.",
       "foundation": {
         "tag": "CORE KNOWLEDGE",
         "name": "FOUNDATION",
@@ -467,19 +468,20 @@
       "terms": "Terms of Service",
       "certifications": {
         "title": "Certifications",
-        "foundation": "Foundation Level",
-        "practitioner": "Practitioner Level",
-        "authority": "Authority Level"
-      },
-      "resources": {
-        "title": "Resources",
-        "journal": "Scrum Journal",
-        "guides": "Study Guides"
+        "scrumMaster": "Scrum Master Certifications",
+        "productOwner": "Product Owner Certifications",
+        "scrumFacilitator": "Scrum Facilitator Certification"
       },
       "company": {
         "title": "Company",
-        "about": "About Us",
-        "contact": "Contact"
+        "about": "About Institute of Scrum",
+        "whyScrum": "Why Scrum Certifications",
+        "support": "Get Support"
+      },
+      "resources": {
+        "title": "Resources",
+        "insights": "Insights",
+        "studentPortal": "Student Portal Login"
       },
       "legal": {
         "title": "Legal",
@@ -855,7 +857,7 @@
       "esmName": "Endorsed Scrum Master",
       "esmpName": "Endorsed Scrum Master Practitioner",
       "esmaName": "Endorsed Scrum Master Authority",
-      "hours": "+20 hrs",
+      "hours": "15+ hrs",
       "online": "Fully Online",
       "questions": "45-question Test",
       "startingAt": "Starting at",
@@ -942,7 +944,7 @@
       "epoName": "Endorsed Product Owner",
       "epopName": "Endorsed Product Owner Practitioner",
       "epoaName": "Endorsed Product Owner Authority",
-      "hours": "+20 hrs",
+      "hours": "15+ hrs",
       "online": "Fully Online",
       "questions": "45-question Test",
       "startingAt": "Starting at",
@@ -1019,7 +1021,7 @@
       }
     },
     "shared": {
-      "hours": "+20 hrs",
+      "hours": "15+ hrs",
       "online": "Fully Online",
       "questions": "45-question Test",
       "startingAt": "Starting at",
@@ -1135,7 +1137,7 @@
       "whoShouldPursueDesc": "Design and run high-impact Scrum events with expert facilitation techniques, psychological safety, and collaborative decision-making.",
       "foundationLevel": "Foundation Level",
       "esfName": "Endorsed Scrum Facilitator",
-      "hours": "+20 hrs",
+      "hours": "15+ hrs",
       "online": "Fully Online",
       "questions": "45-question Test",
       "startingAt": "Starting at",

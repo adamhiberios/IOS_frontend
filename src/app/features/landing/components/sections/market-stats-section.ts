@@ -12,7 +12,7 @@
 
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideArrowRight } from '@lucide/angular';
+import { LucideArrowRight, LucidePercent, LucideUserRound } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
@@ -20,6 +20,7 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
 interface MarketLevel {
   tag: string;
   name: string;
+  icon: string;
   audience: string[];
   description: string;
 }
@@ -37,7 +38,7 @@ interface CertTableRow {
 @Component({
   selector: 'ios-market-stats-section',
   imports: [RouterLink, IosIcon, SectionBadge],
-  providers: [provideIcons(LucideArrowRight)],
+  providers: [provideIcons(LucideArrowRight, LucidePercent, LucideUserRound)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
@@ -59,49 +60,83 @@ interface CertTableRow {
         <!-- Three level cards with floating arrow dividers -->
         <div class="w-full flex flex-col md:flex-row items-stretch">
           @for (lvl of marketLevels(); track lvl.name; let last = $last) {
-            <div class="flex-1 flex flex-col gap-4 p-6 border border-ios-border-light rounded-xl">
+            <div
+              class="relative flex-1 flex flex-col gap-6 p-6 border border-[#dcdcdc] rounded-lg bg-white"
+            >
+              <!-- Icon badge — top-right corner -->
+              <div
+                class="absolute top-[17px] end-[22px] bg-[#f6f6f6] rounded-[78px] p-3 flex items-center justify-center"
+                aria-hidden="true"
+              >
+                <img
+                  [src]="lvl.icon"
+                  [alt]="lvl.name"
+                  width="70"
+                  height="70"
+                  class="w-[70px] h-[70px] object-contain"
+                  loading="lazy"
+                />
+              </div>
+
               <!-- Tag + Name -->
-              <div>
-                <span
-                  class="text-[12px] font-bold uppercase tracking-widest text-ios-brand-primary-mid"
-                >
+              <div class="pe-[100px]">
+                <span class="text-[14px] font-medium leading-[1.4] text-[#a02e2e] uppercase block">
                   {{ lvl.tag }}
                 </span>
-                <h3 class="font-heading font-bold text-[20px] text-ios-fg-10 mt-1">
+                <h3 class="font-heading font-bold text-[18px] leading-[1.2] text-ios-fg-10 mt-1">
                   {{ lvl.name }}
                 </h3>
               </div>
 
               <!-- It's for -->
-              <div>
-                <p class="text-[14px] font-semibold text-ios-fg-10 mb-2">
+              <div class="flex flex-col gap-1">
+                <p class="text-[14px] font-medium leading-[1.4] text-[#666766] mb-1">
                   {{ lang.t('landing.marketStats.itsFor') }}
                 </p>
-                <ul class="space-y-1">
+                <ul class="flex flex-col gap-1">
                   @for (item of lvl.audience; track item) {
-                    <li class="text-[14px] text-ios-fg-mid">{{ item }}</li>
+                    @if (item) {
+                      <li class="flex items-start gap-2">
+                        <ios-icon
+                          name="user-round"
+                          class="w-5 h-5 flex-shrink-0 text-ios-brand-primary mt-px"
+                          aria-hidden="true"
+                        />
+                        <span class="text-[14px] font-semibold leading-[1.4] text-[#535453]">
+                          {{ item }}
+                        </span>
+                      </li>
+                    }
                   }
                 </ul>
               </div>
 
               <div class="border-t border-ios-border-light"></div>
 
-              <p class="text-[14px] text-ios-fg-mid leading-relaxed flex-1">
+              <p class="text-[14px] font-medium leading-[1.4] text-[#535453] flex-1">
                 {{ lvl.description }}
               </p>
 
               <div class="border-t border-ios-border-light"></div>
 
-              <p class="text-[14px] font-semibold text-ios-fg-10">
-                {{ lang.t('landing.marketStats.passMark') }}
-              </p>
+              <!-- Pass mark -->
+              <div class="flex items-center gap-2">
+                <ios-icon
+                  name="percent"
+                  class="w-5 h-5 flex-shrink-0 text-[#373837]"
+                  aria-hidden="true"
+                />
+                <span class="text-[14px] font-medium leading-[1.4] text-[#373837]">
+                  {{ lang.t('landing.marketStats.passMark') }}
+                </span>
+              </div>
             </div>
 
             <!-- Floating arrow between cards (not after last) -->
             @if (!last) {
               <div class="hidden lg:flex relative flex-shrink-0 w-6 items-center justify-center">
                 <div
-                  class="absolute z-10 w-10 h-10 rounded-full border border-ios-border-light bg-white
+                  class="absolute z-10 w-10 h-10 rounded-full border border-[#dcdcdc] bg-white
                          flex items-center justify-center"
                 >
                   <ios-icon
@@ -120,7 +155,7 @@ interface CertTableRow {
         <div class="w-full h-px bg-ios-brand-gold"></div>
 
         <!-- Table intro -->
-        <p class="text-[15px] text-ios-fg-8 leading-relaxed text-center max-w-[720px]">
+        <p class="text-[15px] text-ios-fg-8 leading-relaxed w-full">
           {{ lang.t('landing.marketStats.tableIntro') }}
         </p>
 
@@ -162,14 +197,18 @@ interface CertTableRow {
                       class="px-6 py-4 border-t border-ios-border-light"
                       [class.border-e]="!lastCell"
                     >
-                      <a
-                        [routerLink]="cell.link"
-                        class="text-ios-brand-primary font-medium hover:underline
-                               focus-visible:outline-none focus-visible:ring-2
-                               focus-visible:ring-ios-brand-primary/50 rounded"
-                      >
-                        {{ cell.name }}
-                      </a>
+                      @if (cell.link) {
+                        <a
+                          [routerLink]="cell.link"
+                          class="text-ios-brand-primary font-medium hover:underline
+                                 focus-visible:outline-none focus-visible:ring-2
+                                 focus-visible:ring-ios-brand-primary/50 rounded"
+                        >
+                          {{ cell.name }}
+                        </a>
+                      } @else {
+                        <span class="text-[#c4c5c4] text-[14px]">{{ cell.name }}</span>
+                      }
                     </td>
                   }
                 </tr>
@@ -191,31 +230,26 @@ export class MarketStatsSection {
     {
       tag: this.lang.t('landing.marketStats.foundation.tag'),
       name: this.lang.t('landing.marketStats.foundation.name'),
+      icon: '/assets/icons/knowledge.svg',
       audience: [
-        this.lang.t('landing.levels.foundation.audience.careerChangers'),
-        this.lang.t('landing.levels.foundation.audience.newPractitioners'),
-        this.lang.t('landing.levels.foundation.audience.teamMembers'),
+        this.lang.t('landing.marketStats.foundation.audience.a0'),
+        this.lang.t('landing.marketStats.foundation.audience.a1'),
+        this.lang.t('landing.marketStats.foundation.audience.a2'),
       ],
       description: this.lang.t('landing.marketStats.foundation.desc'),
     },
     {
       tag: this.lang.t('landing.marketStats.practitioner.tag'),
       name: this.lang.t('landing.marketStats.practitioner.name'),
-      audience: [
-        this.lang.t('landing.marketStats.practitioner.audience.a0'),
-        this.lang.t('landing.marketStats.practitioner.audience.a1'),
-        this.lang.t('landing.marketStats.practitioner.audience.a2'),
-      ],
+      icon: '/assets/icons/expertise.svg',
+      audience: [this.lang.t('landing.marketStats.practitioner.audience.a0')],
       description: this.lang.t('landing.marketStats.practitioner.desc'),
     },
     {
       tag: this.lang.t('landing.marketStats.authority.tag'),
       name: this.lang.t('landing.marketStats.authority.name'),
-      audience: [
-        this.lang.t('landing.marketStats.authority.audience.a0'),
-        this.lang.t('landing.marketStats.authority.audience.a1'),
-        this.lang.t('landing.marketStats.authority.audience.a2'),
-      ],
+      icon: '/assets/icons/leader.svg',
+      audience: [this.lang.t('landing.marketStats.authority.audience.a0')],
       description: this.lang.t('landing.marketStats.authority.desc'),
     },
   ]);
@@ -224,30 +258,33 @@ export class MarketStatsSection {
    * Static cert table rows. Role labels and cert names are locale-reactive;
    * route links are structural constants.
    */
-  protected readonly certTableRows = computed<CertTableRow[]>(() => [
-    {
-      role: this.lang.t('landing.marketStats.table.smRole'),
-      cells: [
-        { name: this.lang.t('landing.certs.esm'), link: '/certifications/esm' },
-        { name: this.lang.t('landing.certs.psm'), link: '/certifications/psm' },
-        { name: this.lang.t('landing.certs.asm'), link: '/certifications/asm' },
-      ],
-    },
-    {
-      role: this.lang.t('landing.marketStats.table.poRole'),
-      cells: [
-        { name: this.lang.t('landing.certs.epo'), link: '/certifications/epo' },
-        { name: this.lang.t('landing.certs.ppo'), link: '/certifications/ppo' },
-        { name: this.lang.t('landing.certs.apo'), link: '/certifications/apo' },
-      ],
-    },
-    {
-      role: this.lang.t('landing.marketStats.table.sfRole'),
-      cells: [
-        { name: this.lang.t('landing.certs.esf'), link: '/certifications/esf' },
-        { name: this.lang.t('landing.certs.psf'), link: '/certifications/psf' },
-        { name: this.lang.t('landing.certs.asf'), link: '/certifications/asf' },
-      ],
-    },
-  ]);
+  protected readonly certTableRows = computed<CertTableRow[]>(() => {
+    const comingSoon = this.lang.t('landing.certs.comingSoon');
+    return [
+      {
+        role: this.lang.t('landing.marketStats.table.smRole'),
+        cells: [
+          { name: `${this.lang.t('landing.certs.esm')} (ESM)`, link: '/certifications/esm' },
+          { name: `${this.lang.t('landing.certs.psm')} (ESM-P)`, link: '/certifications/psm' },
+          { name: `${this.lang.t('landing.certs.asm')} (ESM-A)`, link: '/certifications/asm' },
+        ],
+      },
+      {
+        role: this.lang.t('landing.marketStats.table.poRole'),
+        cells: [
+          { name: `${this.lang.t('landing.certs.epo')} (EPO)`, link: '/certifications/epo' },
+          { name: `${this.lang.t('landing.certs.ppo')} (EPO-P)`, link: '/certifications/ppo' },
+          { name: `${this.lang.t('landing.certs.apo')} (EPO-A)`, link: '/certifications/apo' },
+        ],
+      },
+      {
+        role: this.lang.t('landing.marketStats.table.sfRole'),
+        cells: [
+          { name: comingSoon, link: '' },
+          { name: comingSoon, link: '' },
+          { name: `${this.lang.t('landing.certs.esf')} (ESF)`, link: '/certifications/esf' },
+        ],
+      },
+    ];
+  });
 }
