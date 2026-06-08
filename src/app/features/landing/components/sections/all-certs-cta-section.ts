@@ -36,7 +36,7 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
         <div class="mb-6">
           <ios-section-badge
             [text]="lang.t('landing.sections.allCertsAtGlance.badge')"
-            variant="yellow"
+            variant="cta-dark"
           />
         </div>
 

@@ -201,7 +201,7 @@ export class CertificationCard {
   /** Full certification name, e.g. "Endorsed Scrum Master". */
   readonly fullName = input<string>('');
 
-  /** Duration string, e.g. "+20 hrs". */
+  /** Duration string, e.g. "+15 hrs". */
   readonly hours = input<string>('');
 
   /** Delivery mode label, e.g. "Fully Online". */

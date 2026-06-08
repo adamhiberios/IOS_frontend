@@ -13,6 +13,7 @@
  * | dark         | ios-brand-primary-mid   | none                | ios-brand-gold       | primary-bg secs |
  * | warm-red     | ios-brand-gold-soft     | ios-brand-gold      | ios-brand-primary    | warm/cream secs |
  * | yellow       | ios-brand-yellow-bright | none                | ios-brand-primary    | cta/CTA secs    |
+ * | cta-dark     | ios-brand-primary-mid   | none                | ios-brand-yellow-bright | dark CTA secs |
  * ─────────────────────────────────────────────────────────────────────────
  *
  * Usage:
@@ -25,7 +26,14 @@
 
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-export type SectionBadgeVariant = 'amber' | 'gold' | 'muted-light' | 'dark' | 'warm-red' | 'yellow';
+export type SectionBadgeVariant =
+  | 'amber'
+  | 'gold'
+  | 'muted-light'
+  | 'dark'
+  | 'warm-red'
+  | 'yellow'
+  | 'cta-dark';
 
 @Component({
   selector: 'ios-section-badge',
@@ -47,6 +55,7 @@ export class SectionBadge {
       dark: 'bg-ios-brand-primary-mid text-ios-brand-gold',
       'warm-red': 'bg-ios-brand-gold-soft border border-ios-brand-gold text-ios-brand-primary',
       yellow: 'bg-ios-brand-yellow-bright text-ios-brand-primary',
+      'cta-dark': 'bg-ios-brand-primary-mid text-ios-brand-yellow-bright',
     };
 
     return `${base} ${variants[this.variant()]}`;

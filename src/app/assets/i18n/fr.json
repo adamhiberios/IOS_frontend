@@ -281,12 +281,13 @@
       "esm": "Endorsed Scrum Master",
       "epo": "Endorsed Product Owner",
       "esf": "Endorsed Scrum Facilitator",
-      "psm": "Professional Scrum Master",
-      "ppo": "Professional Product Owner",
-      "psf": "Professional Scrum Facilitator",
-      "asm": "Authority Scrum Master",
-      "apo": "Authority Product Owner",
-      "asf": "Authority Scrum Facilitator"
+      "psm": "Endorsed Scrum Master Praticien",
+      "ppo": "Endorsed Product Owner Praticien",
+      "psf": "Endorsed Scrum Facilitator Praticien",
+      "asm": "Endorsed Scrum Master Autorité",
+      "apo": "Endorsed Product Owner Autorité",
+      "asf": "Endorsed Scrum Facilitator Autorité",
+      "comingSoon": "Bientôt disponible..."
     },
     "howItWorks": {
       "choose": {
@@ -467,19 +468,20 @@
       "terms": "Conditions d'utilisation",
       "certifications": {
         "title": "Certifications",
-        "foundation": "Niveau Fondamental",
-        "practitioner": "Niveau Praticien",
-        "authority": "Niveau Autorité"
-      },
-      "resources": {
-        "title": "Ressources",
-        "journal": "Journal Scrum",
-        "guides": "Guides d'étude"
+        "scrumMaster": "Certifications Scrum Master",
+        "productOwner": "Certifications Product Owner",
+        "scrumFacilitator": "Certification Scrum Facilitator"
       },
       "company": {
         "title": "Entreprise",
-        "about": "À propos de nous",
-        "contact": "Contact"
+        "about": "À propos de l'Institute of Scrum",
+        "whyScrum": "Pourquoi les certifications Scrum",
+        "support": "Obtenir de l'aide"
+      },
+      "resources": {
+        "title": "Ressources",
+        "insights": "Perspectives",
+        "studentPortal": "Connexion portail étudiant"
       },
       "legal": {
         "title": "Légal",
@@ -855,7 +857,7 @@
       "esmName": "Endorsed Scrum Master",
       "esmpName": "Endorsed Scrum Master Practitioner",
       "esmaName": "Endorsed Scrum Master Authority",
-      "hours": "+20 hrs",
+      "hours": "15+ hrs",
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "startingAt": "À partir de",
@@ -942,7 +944,7 @@
       "epoName": "Endorsed Product Owner",
       "epopName": "Endorsed Product Owner Practitioner",
       "epoaName": "Endorsed Product Owner Authority",
-      "hours": "+20 hrs",
+      "hours": "15+ hrs",
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "startingAt": "À partir de",
@@ -1019,7 +1021,7 @@
       }
     },
     "shared": {
-      "hours": "+20 hrs",
+      "hours": "15+ hrs",
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "startingAt": "À partir de",
@@ -1135,7 +1137,7 @@
       "whoShouldPursueDesc": "Concevez et animez des événements Scrum à fort impact avec des techniques de facilitation expertes, la sécurité psychologique et la prise de décision collaborative.",
       "foundationLevel": "Niveau Fondation",
       "esfName": "Endorsed Scrum Facilitateur",
-      "hours": "+20 hrs",
+      "hours": "15+ hrs",
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "startingAt": "À partir de",

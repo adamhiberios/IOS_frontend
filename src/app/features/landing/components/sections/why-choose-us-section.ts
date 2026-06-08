@@ -33,7 +33,7 @@ import { SectionBadge } from '@ui';
         <div class="flex flex-col items-center text-center gap-5">
           <ios-section-badge
             [text]="lang.t('landing.sections.whyChooseUs.badge')"
-            variant="yellow"
+            variant="muted-light"
           />
 
           <!-- Heading: "Why" (white) + "Scrum Certifications" (yellow-bright) -->

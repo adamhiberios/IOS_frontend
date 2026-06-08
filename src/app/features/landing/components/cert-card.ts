@@ -22,7 +22,6 @@ import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
   LucideClock,
-  LucideDownload,
   LucideArrowRight,
   LucideMonitor,
   LucideCircleQuestionMark,
@@ -49,15 +48,7 @@ export interface CertCardData {
 @Component({
   selector: 'ios-cert-card',
   imports: [NgOptimizedImage, RouterLink, IosIcon],
-  providers: [
-    provideIcons(
-      LucideClock,
-      LucideDownload,
-      LucideArrowRight,
-      LucideMonitor,
-      LucideCircleQuestionMark,
-    ),
-  ],
+  providers: [provideIcons(LucideClock, LucideArrowRight, LucideMonitor, LucideCircleQuestionMark)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex flex-col gap-4 border border-ios-border-light rounded-xl p-4 bg-white h-full">
@@ -120,26 +111,14 @@ export interface CertCardData {
         </span>
       </div>
 
-      <!-- Action buttons -->
-      <div class="flex gap-3 mt-auto">
-        <button
-          type="button"
-          (click)="downloadGuide.emit(cert())"
-          class="flex-1 flex items-center justify-center gap-2 px-3 py-2.5
-                 bg-ios-surface-strong text-ios-brand-dark
-                 font-heading font-semibold text-[14px] rounded-xl
-                 hover:opacity-90 transition-opacity
-                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-        >
-          <ios-icon name="download" class="w-4 h-4 flex-shrink-0" aria-hidden="true" />
-          {{ lang.t('landing.levels.cert.downloadGuide') }}
-        </button>
+      <!-- Action button -->
+      <div class="mt-auto">
         <a
           [routerLink]="cert().detailLink"
-          class="flex-1 flex items-center justify-center gap-2 px-3 py-2.5
-                 bg-ios-brand-primary text-white
+          class="w-full flex items-center justify-center gap-2 px-3 py-2.5
+                 bg-cer-blue-strong text-white
                  font-heading font-semibold text-[14px] rounded-xl
-                 hover:bg-ios-brand-primary-hover transition-colors
+                 hover:bg-cer-blue-deep transition-colors
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
         >
           {{ lang.t('landing.levels.cert.enrollNow') }}
@@ -156,8 +135,6 @@ export interface CertCardData {
 export class CertCard {
   readonly cert = input.required<CertCardData>();
 
-  /** Emits the cert data when "Download Guide" is clicked. */
-  readonly downloadGuide = output<CertCardData>();
   /** Emits the cert data when "Enroll Now" is clicked. */
   readonly enrollNow = output<CertCardData>();
 
