@@ -2334,5 +2334,32 @@
         "downloadFile": "تنزيل {filename}"
       }
     }
+  },
+  "admin": {
+    "login": {
+      "badge": "بوابة المشرف",
+      "title": "تسجيل دخول المشرف",
+      "subtitle": "سجّل الدخول بحساب الموظفين لإدارة المنصة.",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "you@instituteofscrum.org",
+      "emailError": "أدخل عنوان بريد إلكتروني صالح.",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور الخاصة بك",
+      "passwordError": "كلمة المرور مطلوبة.",
+      "submit": "تسجيل الدخول"
+    },
+    "shell": {
+      "brand": "إدارة IOS",
+      "signOut": "تسجيل الخروج",
+      "nav": {
+        "home": "الرئيسية"
+      }
+    },
+    "home": {
+      "title": "لوحة تحكم المشرف",
+      "subtitle": "مرحباً بعودتك. استخدم شريط التنقل لإدارة المنصة.",
+      "signedInAs": "مسجّل الدخول باسم",
+      "role": "الدور"
+    }
   }
 }

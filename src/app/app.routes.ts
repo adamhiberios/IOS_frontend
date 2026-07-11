@@ -1,6 +1,6 @@
 import { type Routes } from '@angular/router';
 
-import { authGuard, publicOnlyGuard, roleGuard } from '@core/auth';
+import { authGuard, publicOnlyGuard } from '@core/auth';
 
 /**
  * App-level routes — every feature is lazy-loaded. The shell (header/sidebar)
@@ -57,18 +57,11 @@ export const routes: Routes = [
     title: 'Assessments',
   },
   {
-    // Admin panel — gated to admin staff roles (backend `AdminRole`).
+    // Admin app — the feature owns its own gating: `/admin/login` is public,
+    // everything under the admin shell is protected by `adminAuthGuard`
+    // (see features/admin/admin.routes.ts). Staff roles = backend `AdminRole`.
     path: 'admin',
     loadChildren: () => import('@features/admin/admin.routes'),
-    canMatch: [
-      roleGuard([
-        'super_admin',
-        'learning_admin',
-        'content_creator',
-        'finance_admin',
-        'support_admin',
-      ]),
-    ],
     title: 'Admin',
   },
   {

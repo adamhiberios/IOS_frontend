@@ -14,16 +14,17 @@ starting with authentication.
 
 ## Current phase
 
-**Phase 2 — Infrastructure & mock removal.**
-Milestone in flight: _Remove mock backend + wire real Auth API_.
+**Phase 3 — Admin application (page by page).** Phase 2 infrastructure (mock
+removal + real auth) is complete and committed. Admin **Login** page is built and
+awaiting review before the next admin page.
 
 ## Phases at a glance
 
-| Phase | Description                                                                           | Status                              |
-| ----- | ------------------------------------------------------------------------------------- | ----------------------------------- |
-| 1     | Study backend → `backend-analysis.md`                                                 | ✅ Complete                         |
-| 2     | Frontend infrastructure (remove mocks, real API services, auth, interceptors, models) | 🚧 In progress                      |
-| 3     | Admin application, page by page (starting with Login)                                 | ⛔ Not started (blocked on Phase 2) |
+| Phase | Description                                                                           | Status                             |
+| ----- | ------------------------------------------------------------------------------------- | ---------------------------------- |
+| 1     | Study backend → `backend-analysis.md`                                                 | ✅ Complete                        |
+| 2     | Frontend infrastructure (remove mocks, real API services, auth, interceptors, models) | 🚧 Auth done; feature APIs pending |
+| 3     | Admin application, page by page (starting with Login)                                 | 🚧 In progress — Login built       |
 
 ---
 
@@ -109,9 +110,39 @@ not modified.
 
 ## Admin pages status
 
-⛔ **Not started.** The `features/admin` folder currently contains only an empty
-`admin.routes.ts`. Admin build begins after infrastructure, page by page, with a
-review gate after each page. First page: **Admin Login**.
+🚧 **In progress — page 1 of N complete (awaiting review).**
+
+| #   | Admin page                       | Status                    | Backend                             |
+| --- | -------------------------------- | ------------------------- | ----------------------------------- |
+| 1   | **Admin Login** (`/admin/login`) | ✅ Built (review pending) | `POST /auth/admin/login`            |
+| 2   | Catalog (certificates) list/CRUD | ⬜ Next candidate         | `/admin/catalog*`                   |
+| 3   | Curriculum (modules/lessons)     | ⬜                        | `/admin/modules`, `/admin/lessons`  |
+| 4   | Exam authoring                   | ⬜                        | `/admin/certs/:id/exams*`           |
+| 5   | Exam assignment                  | ⬜                        | `/admin/exam/assign`, `/admin/exam` |
+| 6   | Mock questions                   | ⬜                        | `/admin/mock*`                      |
+| 7   | Users / student oversight        | ⬜                        | `/admin/users*`                     |
+| 8   | Audit logs                       | ⬜                        | `/admin/audit-logs`                 |
+| 9   | Certificate revocation           | ⬜                        | `/admin/certs/issued/:id/revoke`    |
+
+**Admin app structure created this milestone:**
+
+- `AuthStore.loginAdmin()` → `POST /auth/admin/login`; `logout({ redirectTo })`
+  so admin sign-out returns to `/admin/login`.
+- `features/admin/guards/admin-auth.guard.ts` — `adminAuthGuard` (unauth →
+  `/admin/login`; non-admin → `/forbidden`) + `adminLoginGuard` (signed-in admin
+  → `/admin`). `ADMIN_ROLES` = backend `AdminRole` set.
+- `features/admin/pages/admin-login.page.ts` — staff sign-in, reuses the auth
+  shell + design-system primitives; inline RFC-7807 error via submit state.
+- `features/admin/components/admin-layout.ts` — admin shell (sidebar nav that
+  grows page-by-page, top bar with signed-in staff + sign-out, `<router-outlet>`).
+- `features/admin/pages/admin-home.page.ts` — minimal landing (real session info;
+  no metrics — backend has no analytics endpoints, BE-I-07).
+- `admin.routes.ts` rewritten (login public, shell + children gated); `/admin`
+  in `app.routes.ts` no longer carries a top-level guard (gating moved into the
+  feature). Added `admin.*` i18n namespace (en/fr/ar).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓. Live browser
+  check deferred — port 4200 held by an existing dev server, and a full login
+  test needs real staff credentials against the deployed API.
 
 ---
 
@@ -150,9 +181,9 @@ Highlights that constrain the frontend:
    `POST /auth/reset-password`, but for the SPA flow to run end-to-end the reset
    email must point at `…/auth/new-password?token=` (a backend/infra config
    choice — backend is read-only). Confirm which page should own the reset UX.
-5. **Arabic i18n:** I added `auth.login.session.registered` to `ar.json`. Per
-   CLAUDE.md §9 shipped Arabic must be professionally reviewed — please have this
-   one string reviewed (en/fr added too).
+5. **Arabic i18n:** I added `auth.login.session.registered` and the whole
+   `admin.*` namespace to `ar.json` (en/fr too). Per CLAUDE.md §9 shipped Arabic
+   must be professionally reviewed — please have these strings reviewed.
 
 ## Blockers
 
@@ -181,7 +212,10 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-Mock removal + auth-route mapping are complete and verified (typecheck / lint /
-build green). **Stop for review.** On approval, begin **Phase 3 — Admin app**
-with the first page (**Admin Login**, `POST /auth/admin/login`), then stop for
-review after that page.
+**Admin Login (page 1) is built and verified (typecheck / lint / build green) —
+stop for review.** On approval: commit it, then build the next admin page. Per
+CLAUDE.md the design system already exists to reuse. Suggested next page:
+**Catalog (certificates) list** — a read-first page (`GET /admin/catalog`) that
+also establishes the reusable cursor-pagination + `{ data, meta }` list plumbing
+every other admin table will use. Confirm the order, and whether to keep the
+per-page review gate or proceed through several pages before the next review.

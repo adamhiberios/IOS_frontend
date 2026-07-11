@@ -2334,5 +2334,32 @@
         "downloadFile": "Télécharger {filename}"
       }
     }
+  },
+  "admin": {
+    "login": {
+      "badge": "Espace administrateur",
+      "title": "Connexion administrateur",
+      "subtitle": "Connectez-vous avec votre compte personnel pour gérer la plateforme.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "vous@instituteofscrum.org",
+      "emailError": "Saisissez une adresse e-mail valide.",
+      "passwordLabel": "Mot de passe",
+      "passwordPlaceholder": "Votre mot de passe",
+      "passwordError": "Le mot de passe est requis.",
+      "submit": "Se connecter"
+    },
+    "shell": {
+      "brand": "IOS Admin",
+      "signOut": "Se déconnecter",
+      "nav": {
+        "home": "Accueil"
+      }
+    },
+    "home": {
+      "title": "Tableau de bord administrateur",
+      "subtitle": "Bon retour. Utilisez la navigation pour gérer la plateforme.",
+      "signedInAs": "Connecté en tant que",
+      "role": "Rôle"
+    }
   }
 }

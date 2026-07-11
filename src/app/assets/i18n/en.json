@@ -2334,5 +2334,32 @@
     "google": "Continue with Google",
     "apple": "Continue with Apple",
     "linkedin": "Continue with LinkedIn"
+  },
+  "admin": {
+    "login": {
+      "badge": "Admin portal",
+      "title": "Admin sign in",
+      "subtitle": "Sign in with your staff account to manage the platform.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@instituteofscrum.org",
+      "emailError": "Enter a valid email address.",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Your password",
+      "passwordError": "Password is required.",
+      "submit": "Sign in"
+    },
+    "shell": {
+      "brand": "IOS Admin",
+      "signOut": "Sign out",
+      "nav": {
+        "home": "Home"
+      }
+    },
+    "home": {
+      "title": "Admin dashboard",
+      "subtitle": "Welcome back. Use the navigation to manage the platform.",
+      "signedInAs": "Signed in as",
+      "role": "Role"
+    }
   }
 }

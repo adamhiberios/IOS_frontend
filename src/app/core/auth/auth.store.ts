@@ -100,6 +100,25 @@ export class AuthStore {
   }
 
   /**
+   * Authenticate a member of staff with email + password against
+   * `POST /auth/admin/login`. On success navigates into the admin app (or the
+   * intended `returnUrl` the admin guard captured).
+   */
+  async loginAdmin(creds: LoginCredentials, returnUrl?: string | null): Promise<void> {
+    this._submitState.set({ status: 'pending' });
+    try {
+      const session = await firstValueFrom(this.api.loginAdmin(creds));
+      this.adoptSession(session);
+      this._submitState.set({ status: 'success' });
+      await this.router.navigateByUrl(returnUrl ?? '/admin');
+    } catch (err) {
+      const message = this.humaniseError(err, this.lang.t('auth.errors.invalidCredentials'));
+      this._submitState.set({ status: 'error', message });
+      throw new Error(message, { cause: err });
+    }
+  }
+
+  /**
    * Create a new student account. The real backend does NOT issue a session on
    * register — the account starts `emailVerified=false` and the user must click
    * the verification link before logging in. So we create the account, then
@@ -120,11 +139,13 @@ export class AuthStore {
   }
 
   /**
-   * End the session. Always navigates to /auth/login regardless of whether the
-   * backend logout call succeeded — never leave the user on a protected screen
-   * with a half-cleared session.
+   * End the session. Always navigates to the login page regardless of whether
+   * the backend logout call succeeded — never leave the user on a protected
+   * screen with a half-cleared session. `redirectTo` lets the admin app land
+   * on `/admin/login` instead of the learner `/auth/login`.
    */
-  async logout(opts: { reason: LogoutReason } = { reason: 'user-initiated' }): Promise<void> {
+  async logout(opts: { reason?: LogoutReason; redirectTo?: string } = {}): Promise<void> {
+    const reason = opts.reason ?? 'user-initiated';
     this.clearSession();
     try {
       await firstValueFrom(this.api.logout());
@@ -133,10 +154,10 @@ export class AuthStore {
     }
     this.bus.emit({
       type: 'user.logged-out',
-      reason: opts.reason === 'user-initiated' ? 'manual' : 'session-expired',
+      reason: reason === 'user-initiated' ? 'manual' : 'session-expired',
     });
-    await this.router.navigate(['/auth/login'], {
-      queryParams: opts.reason === 'user-initiated' ? null : { reason: opts.reason },
+    await this.router.navigate([opts.redirectTo ?? '/auth/login'], {
+      queryParams: reason === 'user-initiated' ? null : { reason },
     });
   }
 
