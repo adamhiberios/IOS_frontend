@@ -5,6 +5,7 @@
  * files. Internals (mock backend, helpers) intentionally stay private.
  */
 
+export { AuthApi } from './auth.api';
 export { AuthStore, type SubmitState } from './auth.store';
 export { authGuard, publicOnlyGuard } from './auth.guard';
 export { roleGuard, type AppRole } from './role.guard';

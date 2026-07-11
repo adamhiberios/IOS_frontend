@@ -89,6 +89,16 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
               </a>
             </div>
 
+            <!-- Post-registration notice — set by /auth/login?registered=1 -->
+            @if (showRegisteredNotice()) {
+              <p
+                role="status"
+                class="text-sm p-2 rounded bg-green-50 text-green-800 border border-green-200"
+              >
+                {{ lang.t('auth.login.session.registered') }}
+              </p>
+            }
+
             <!-- Session-expired / forced-logout banner — set by /auth/login?reason=... -->
             @if (sessionBanner()) {
               <p
@@ -181,6 +191,11 @@ export class LoginPage {
   private readonly returnUrl = toSignal(
     this.route.queryParamMap.pipe(map((p) => p.get('returnUrl'))),
     { initialValue: null },
+  );
+  /** Set by `register()` after a successful sign-up (`?registered=1`). */
+  protected readonly showRegisteredNotice = toSignal(
+    this.route.queryParamMap.pipe(map((p) => p.get('registered') === '1')),
+    { initialValue: false },
   );
 
   protected readonly sessionBanner = computed(() => {

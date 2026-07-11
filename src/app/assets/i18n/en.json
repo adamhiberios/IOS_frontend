@@ -60,7 +60,8 @@
       "session": {
         "idle": "You were signed out due to inactivity.",
         "refreshFailed": "Your session expired. Please sign in again.",
-        "forced": "Your account was signed out. Contact support if this is unexpected."
+        "forced": "Your account was signed out. Contact support if this is unexpected.",
+        "registered": "Account created. Check your email to verify your address, then sign in."
       }
     },
     "register": {

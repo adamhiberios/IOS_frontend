@@ -43,10 +43,36 @@ Milestone in flight: _Remove mock backend + wire real Auth API_.
   - Updated `app.routes.ts` guards; pointed all environments at the deployed dev/prod API.
   - **Verification:** `npm run typecheck` ✓ · `npm run lint` ✓ (0 errors; 3 pre-existing `prefer-ngsrc` warnings, untouched files) · `npm run build` ✓ (pre-existing raw-size budget warning only; gzip initial 91.82 kB).
   - Residual mock references in `src/`: **none**.
+  - **Committed** on branch `feat/real-backend-integration` (`e2f7029`).
+- ✅ **Auth routes mapped to the real backend** (the existing `features/auth` pages):
+  - `/auth/login` → `AuthStore.login` → `POST /auth/login` (already wired) + a
+    post-registration "check your email" notice on `?registered=1`.
+  - `/auth/register` → `AuthStore.register` → `POST /auth/register` (no auto-login).
+  - `/auth/forgot-password` (`reset-password.page`) → `AuthApi.requestPasswordReset`
+    → `POST /auth/forgot-password` (was a simulated submit).
+  - `/auth/new-password` (`new-password.page`) → `AuthApi.resetPassword` →
+    `POST /auth/reset-password`, reading the reset `token` from `?token=` via
+    component-input binding (was a simulated submit).
+  - Added `AuthApi.resendVerification` (`POST /auth/resend-verification`) for future use.
+  - New shared `core/http/problem-details.ts` helper (`problemDetailMessage` /
+    `problemDetailCode`) to surface RFC-7807 errors inline; exported from `@core/http`.
+  - Added `auth.login.session.registered` i18n key to en/fr/ar.
+  - **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓.
 
 ## Tasks currently in progress
 
-- (none — awaiting review before starting the Admin app)
+- (none — auth-routes mapping done; awaiting review before starting the Admin app)
+
+## Auth-route → backend endpoint map
+
+| Frontend route           | Page                    | Backend call                                                                    |
+| ------------------------ | ----------------------- | ------------------------------------------------------------------------------- |
+| `/auth/login`            | `login.page`            | `POST /auth/login`                                                              |
+| `/auth/register`         | `register.page`         | `POST /auth/register`                                                           |
+| `/auth/forgot-password`  | `reset-password.page`   | `POST /auth/forgot-password`                                                    |
+| `/auth/new-password`     | `new-password.page`     | `POST /auth/reset-password`                                                     |
+| `/auth/complete-account` | `complete-account.page` | **Not yet wired** — profile wizard; maps to `PATCH /me` after login (deferred). |
+| (app boot / 401)         | `AuthStore`             | `POST /auth/refresh` · `POST /auth/logout`                                      |
 
 ## Remaining tasks (high level)
 
@@ -76,7 +102,8 @@ not modified.
 - HTTP core (interceptors auth → locale → retry → error) real-backend-ready.
   **Mock interceptor removed.**
 - Auth core **fully wired to the real `/auth/*` API** (login, register, refresh,
-  logout; cookie-based refresh; RBAC in the real role space).
+  logout, forgot-password, reset-password, resend-verification; cookie-based
+  refresh; RBAC in the real role space). All existing `features/auth` pages mapped.
 - Feature API services (catalog, learning, exam, mock, payments, certificates,
   profile, admin): not yet built (Phase 2 continuation).
 
@@ -117,6 +144,15 @@ Highlights that constrain the frontend:
    (a) leave them until wired page-by-page, or (b) prioritise wiring the ones
    with real backend equivalents (catalog, profile)? Current plan: (a), and focus
    on the Admin app next per the mission.
+4. **Password-reset link target:** the backend password-reset email links to the
+   **backend-hosted** page (`APP_BASE_URL/reset-password?token=`), not the SPA
+   `/auth/new-password`. The SPA page is now correctly wired to
+   `POST /auth/reset-password`, but for the SPA flow to run end-to-end the reset
+   email must point at `…/auth/new-password?token=` (a backend/infra config
+   choice — backend is read-only). Confirm which page should own the reset UX.
+5. **Arabic i18n:** I added `auth.login.session.registered` to `ar.json`. Per
+   CLAUDE.md §9 shipped Arabic must be professionally reviewed — please have this
+   one string reviewed (en/fr added too).
 
 ## Blockers
 
@@ -139,9 +175,13 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 - **Route guards:** "any authenticated" branches (dashboard/courses/assessments)
   now use `authGuard`; `/admin` is gated to the five admin roles.
 - **Auth interceptor:** public-path regex broadened to also skip `/auth/admin/*`.
+- **Password-reset pages** call `AuthApi` directly (stateless, no session) and
+  manage their own local submit/error state — the shared
+  `problemDetailMessage()` helper renders RFC-7807 errors inline.
 
 ## Next recommended step
 
-Finish the mock-removal milestone, verify `npm run typecheck` / `build` / `lint`
-are green, update this file, then **stop for review** before building the first
-Admin page (Admin Login).
+Mock removal + auth-route mapping are complete and verified (typecheck / lint /
+build green). **Stop for review.** On approval, begin **Phase 3 — Admin app**
+with the first page (**Admin Login**, `POST /auth/admin/login`), then stop for
+review after that page.

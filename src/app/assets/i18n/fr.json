@@ -60,7 +60,8 @@
       "session": {
         "idle": "Vous avez été déconnecté en raison d'inactivité.",
         "refreshFailed": "Votre session a expiré. Veuillez vous reconnecter.",
-        "forced": "Votre compte a été déconnecté. Contactez le support si cela est inattendu."
+        "forced": "Votre compte a été déconnecté. Contactez le support si cela est inattendu.",
+        "registered": "Compte créé. Vérifiez votre e-mail pour confirmer votre adresse, puis connectez-vous."
       }
     },
     "errors": {

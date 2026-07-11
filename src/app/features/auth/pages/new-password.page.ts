@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { startWith } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 
+import { AuthApi } from '@core/auth';
+import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { AccentBars, Button, IconButton, Input as IosInput, PasswordStrength } from '@ui';
@@ -16,7 +18,10 @@ import {
 } from '../utils/strong-password.validator';
 
 /**
- * New Password page (EPIC 3 — UI only, backend mocked).
+ * New-password page — submits a new password with the reset `token` (read from
+ * the `?token=` query param, bound via `withComponentInputBinding()`) against
+ * `POST /auth/reset-password`. On success the account's sessions are revoked
+ * server-side, so the confirmation routes the user back to login.
  *
  * Composition:
  *   - `<ios-auth-header>` and `<ios-auth-footer>` from `@layouts/auth-shell`
@@ -121,11 +126,21 @@ import {
               type="submit"
               variant="primary"
               [fullWidth]="true"
-              [loading]="mockSubmitState() === 'pending'"
+              [loading]="submitState() === 'pending'"
               class="mt-2"
             >
               {{ lang.t('auth.newPassword.submit') }}
             </ios-button>
+
+            @if (errorMessage()) {
+              <p
+                class="text-center text-red-600 text-sm p-3 bg-red-50 rounded-lg"
+                role="alert"
+                aria-live="polite"
+              >
+                {{ errorMessage() }}
+              </p>
+            }
           </form>
 
           <p class="text-center text-xs text-gray-400 mt-6">
@@ -182,10 +197,15 @@ import {
 export class NewPasswordPage {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
+  private readonly authApi = inject(AuthApi);
+
+  /** Reset token from the `?token=` query param (component input binding). */
+  readonly token = input('');
 
   protected readonly lang = inject(LanguageService);
-  protected readonly mockSubmitState = signal<'idle' | 'pending' | 'submitted'>('idle');
+  protected readonly submitState = signal<'idle' | 'pending' | 'submitted'>('idle');
   protected readonly showPopup = signal(false);
+  protected readonly errorMessage = signal('');
 
   protected readonly form = this.fb.group(
     {
@@ -227,10 +247,25 @@ export class NewPasswordPage {
       this.form.markAllAsTouched();
       return;
     }
-    this.mockSubmitState.set('pending');
-    queueMicrotask(() => {
-      this.mockSubmitState.set('submitted');
-      this.showPopup.set(true);
+
+    const token = this.token().trim();
+    if (!token) {
+      // Reached without a valid reset link (missing/blank `?token=`).
+      this.errorMessage.set(this.lang.t('auth.errors.unknownError'));
+      return;
+    }
+
+    this.submitState.set('pending');
+    this.errorMessage.set('');
+    this.authApi.resetPassword(token, this.form.controls.password.value).subscribe({
+      next: () => {
+        this.submitState.set('submitted');
+        this.showPopup.set(true);
+      },
+      error: (err: unknown) => {
+        this.submitState.set('idle');
+        this.errorMessage.set(problemDetailMessage(err) ?? this.lang.t('auth.errors.unknownError'));
+      },
     });
   }
 

@@ -76,6 +76,39 @@ export class AuthApi {
     });
   }
 
+  /**
+   * Request a password-reset link — `POST /auth/forgot-password`. The backend
+   * always responds 200 regardless of whether the email exists (anti-
+   * enumeration); a valid address is emailed a 1-hour reset token.
+   */
+  requestPasswordReset(email: string): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.base}/forgot-password`, {
+      email: email.trim().toLowerCase(),
+    });
+  }
+
+  /**
+   * Submit a new password with a reset token — `POST /auth/reset-password`.
+   * Revokes all of the account's refresh tokens on success (forces re-login).
+   */
+  resetPassword(token: string, newPassword: string): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.base}/reset-password`, {
+      token,
+      newPassword,
+    });
+  }
+
+  /**
+   * Re-send the email-verification link — `POST /auth/resend-verification`.
+   * Anti-enumeration: the response is identical whether or not the email exists
+   * or is already verified.
+   */
+  resendVerification(email: string): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.base}/resend-verification`, {
+      email: email.trim().toLowerCase(),
+    });
+  }
+
   /** Rotate the refresh cookie and mint a new access token — `POST /auth/refresh`. */
   refresh(): Observable<AuthSession> {
     return this.http

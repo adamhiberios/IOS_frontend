@@ -3,12 +3,18 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
+import { AuthApi } from '@core/auth';
+import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
 import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '@ui';
 
 /**
- * Reset Password page (EPIC 3 — UI only, backend mocked).
+ * Forgot-password page — requests a reset link via `POST /auth/forgot-password`.
+ *
+ * The backend always responds 200 (anti-enumeration), so a successful call
+ * always shows the same "check your email" confirmation regardless of whether
+ * the address is registered.
  *
  * Composition:
  *   - `<ios-auth-header>` and `<ios-auth-footer>` from `@layouts/auth-shell`
@@ -99,14 +105,24 @@ import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '
               type="submit"
               variant="primary"
               [fullWidth]="true"
-              [loading]="mockSubmitState() === 'pending'"
+              [loading]="submitState() === 'pending'"
             >
               {{ lang.t('auth.resetPassword.submit') }}
             </ios-button>
 
-            @if (mockSubmitState() === 'submitted') {
+            @if (submitState() === 'submitted') {
               <p class="text-center text-green-600 text-sm p-3 bg-green-50 rounded-lg">
                 {{ lang.t('auth.resetPassword.successMessage') }}
+              </p>
+            }
+
+            @if (errorMessage()) {
+              <p
+                class="text-center text-red-600 text-sm p-3 bg-red-50 rounded-lg"
+                role="alert"
+                aria-live="polite"
+              >
+                {{ errorMessage() }}
               </p>
             }
           </form>
@@ -123,9 +139,11 @@ import { AccentBars, Button, IconButton, Input as IosInput, WarningCard } from '
 })
 export class ResetPasswordPage {
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly authApi = inject(AuthApi);
 
   protected readonly lang = inject(LanguageService);
-  protected readonly mockSubmitState = signal<'idle' | 'pending' | 'submitted'>('idle');
+  protected readonly submitState = signal<'idle' | 'pending' | 'submitted'>('idle');
+  protected readonly errorMessage = signal('');
 
   protected readonly form = this.fb.group({
     email: this.fb.control('', {
@@ -143,8 +161,15 @@ export class ResetPasswordPage {
       this.form.markAllAsTouched();
       return;
     }
-    this.mockSubmitState.set('pending');
-    queueMicrotask(() => this.mockSubmitState.set('submitted'));
+    this.submitState.set('pending');
+    this.errorMessage.set('');
+    this.authApi.requestPasswordReset(this.form.controls.email.value).subscribe({
+      next: () => this.submitState.set('submitted'),
+      error: (err: unknown) => {
+        this.submitState.set('idle');
+        this.errorMessage.set(problemDetailMessage(err) ?? this.lang.t('auth.errors.unknownError'));
+      },
+    });
   }
 }
 
