@@ -26,6 +26,12 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     exact: false,
     roles: ['content_creator', 'learning_admin'],
   },
+  {
+    labelKey: 'admin.shell.nav.users',
+    route: '/admin/users',
+    exact: false,
+    roles: ['learning_admin', 'support_admin'],
+  },
 ];
 
 /**

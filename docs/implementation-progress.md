@@ -15,8 +15,9 @@ starting with authentication.
 ## Current phase
 
 **Phase 3 — Admin application (page by page).** Phase 2 infrastructure (mock
-removal + real auth) complete and committed. Admin **Login** + **Catalog list**
-committed; **Catalog create/edit/deactivate** built and awaiting review (uncommitted).
+removal + real auth) complete and committed. Admin **Login** + full **Catalog**
+management committed. **Users list + student detail** built, awaiting review
+(uncommitted).
 
 ## Phases at a glance
 
@@ -110,20 +111,36 @@ not modified.
 
 ## Admin pages status
 
-🚧 **In progress — pages 1–2 built (page 2 awaiting review).**
+🚧 **In progress — Login + Catalog committed; Users list+detail awaiting review.**
 
-| #   | Admin page                                         | Status                    | Backend                                |
-| --- | -------------------------------------------------- | ------------------------- | -------------------------------------- |
-| 1   | **Admin Login** (`/admin/login`)                   | ✅ Built & committed      | `POST /auth/admin/login`               |
-| 2   | **Catalog — certificates list** (`/admin/catalog`) | ✅ Built & committed      | `GET /admin/catalog`                   |
-| 2b  | **Catalog — create / edit / deactivate**           | ✅ Built (review pending) | `GET/POST/PATCH/DELETE /admin/catalog` |
-| 3   | Curriculum (modules/lessons)                       | ⬜                        | `/admin/modules`, `/admin/lessons`     |
-| 4   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`              |
-| 5   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam`    |
-| 6   | Mock questions                                     | ⬜                        | `/admin/mock*`                         |
-| 7   | Users / student oversight                          | ⬜                        | `/admin/users*`                        |
-| 8   | Audit logs                                         | ⬜                        | `/admin/audit-logs`                    |
-| 9   | Certificate revocation                             | ⬜                        | `/admin/certs/issued/:id/revoke`       |
+| #   | Admin page                                         | Status                    | Backend                                                       |
+| --- | -------------------------------------------------- | ------------------------- | ------------------------------------------------------------- |
+| 1   | **Admin Login** (`/admin/login`)                   | ✅ Built & committed      | `POST /auth/admin/login`                                      |
+| 2   | **Catalog — certificates list** (`/admin/catalog`) | ✅ Built & committed      | `GET /admin/catalog`                                          |
+| 2b  | **Catalog — create / edit / deactivate**           | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/catalog`                        |
+| 3   | **Users — list + student detail** (`/admin/users`) | ✅ Built (review pending) | `GET /admin/users`, `GET /admin/users/:id`                    |
+| 3b  | Users — attempts / access codes / revoke           | ⬜ Next (follow-up to #3) | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke` |
+| 4   | Curriculum (modules/lessons)                       | ⬜                        | `/admin/modules`, `/admin/lessons`                            |
+| 5   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`                                     |
+| 6   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam`                           |
+| 7   | Mock questions                                     | ⬜                        | `/admin/mock*`                                                |
+| 8   | Audit logs                                         | ⬜                        | `/admin/audit-logs`                                           |
+| 9   | Certificate revocation                             | ⬜                        | `/admin/certs/issued/:id/revoke`                              |
+
+**Page 3 — Users list + student detail (uncommitted, awaiting review):**
+
+- `features/admin/data-access/` users layer: `users.dto.ts`, `users.model.ts`,
+  `users.mappers.ts`, `users.api.ts` (`AdminUsersApi.list` → `GET /admin/users`,
+  `getDetail` → `GET /admin/users/:id`), `AdminUsersStore` (list signal store,
+  reuses the pagination helper; search + load-more).
+- `pages/admin-users-list.page.ts` — searchable, paginated student table; each
+  row links to the detail view.
+- `pages/admin-user-detail.page.ts` — safe profile projection + activity counts
+  (purchases / exam attempts / certificates earned); `userId` from route snapshot.
+- Nav item **Students** gated to `learning_admin` / `support_admin`; added
+  `admin.users.*` + `admin.userDetail.*` i18n (en/fr/ar).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓. Live check needs a
+  real admin session against the deployed API.
 
 **Page 2 — Catalog list (uncommitted, awaiting review):**
 
@@ -257,10 +274,9 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Catalog management is complete** — list (committed) + create/edit/deactivate
-(built, verified, **uncommitted** per "don't commit till I agree"). Certificate
-admin is now full CRUD. On approval: commit, then continue one by one. Suggested
-next page: **Users / student oversight** (`/admin/users*`) — read-heavy
-(list → detail → attempts → access codes), reuses the pagination plumbing, and
-covers a different backend surface. Or pick another (Audit logs, Exam authoring,
-Curriculum) if you prefer.
+**Users list + student detail built and verified** (typecheck / lint / build
+green) — **uncommitted** per "don't commit till I agree". Browse → drill into a
+student → see profile + activity counts. On approval: commit, then continue.
+Suggested next: **Users 3b — attempt history + access codes + revoke** on the
+detail page (`/admin/users/:id/attempts`, `/access-codes`, `/access-codes/:codeId/revoke`)
+to complete oversight — or jump to another page (Audit logs, Curriculum, Exam).

@@ -2353,7 +2353,8 @@
       "signOut": "Sign out",
       "nav": {
         "home": "Home",
-        "catalog": "Certificates"
+        "catalog": "Certificates",
+        "users": "Students"
       }
     },
     "home": {
@@ -2423,6 +2424,39 @@
         "backToList": "Back to certificates",
         "genericError": "Couldn’t save the certificate. Please check the fields and try again."
       }
+    },
+    "users": {
+      "title": "Students",
+      "subtitle": "Search and review student accounts.",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Name or email…",
+      "searchButton": "Search",
+      "colName": "Name",
+      "colEmail": "Email",
+      "colVerified": "Verified",
+      "colJoined": "Joined",
+      "verifiedYes": "Verified",
+      "verifiedNo": "Unverified",
+      "loading": "Loading students…",
+      "empty": "No students found.",
+      "error": "Couldn’t load students. Please try again.",
+      "retry": "Retry",
+      "loadMore": "Load more"
+    },
+    "userDetail": {
+      "back": "← Back to students",
+      "loading": "Loading student…",
+      "error": "Couldn’t load this student.",
+      "emailVerified": "Email verified",
+      "yes": "Yes",
+      "no": "No",
+      "country": "Country",
+      "locale": "Locale",
+      "joined": "Joined",
+      "activity": "Activity",
+      "purchases": "Purchases",
+      "attempts": "Exam attempts",
+      "certificates": "Certificates"
     }
   }
 }

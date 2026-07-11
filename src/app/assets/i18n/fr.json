@@ -2353,7 +2353,8 @@
       "signOut": "Se déconnecter",
       "nav": {
         "home": "Accueil",
-        "catalog": "Certifications"
+        "catalog": "Certifications",
+        "users": "Étudiants"
       }
     },
     "home": {
@@ -2423,6 +2424,39 @@
         "backToList": "Retour aux certifications",
         "genericError": "Impossible d’enregistrer la certification. Vérifiez les champs et réessayez."
       }
+    },
+    "users": {
+      "title": "Étudiants",
+      "subtitle": "Rechercher et consulter les comptes étudiants.",
+      "searchLabel": "Rechercher",
+      "searchPlaceholder": "Nom ou e-mail…",
+      "searchButton": "Rechercher",
+      "colName": "Nom",
+      "colEmail": "E-mail",
+      "colVerified": "Vérifié",
+      "colJoined": "Inscrit le",
+      "verifiedYes": "Vérifié",
+      "verifiedNo": "Non vérifié",
+      "loading": "Chargement des étudiants…",
+      "empty": "Aucun étudiant trouvé.",
+      "error": "Impossible de charger les étudiants. Veuillez réessayer.",
+      "retry": "Réessayer",
+      "loadMore": "Charger plus"
+    },
+    "userDetail": {
+      "back": "← Retour aux étudiants",
+      "loading": "Chargement de l’étudiant…",
+      "error": "Impossible de charger cet étudiant.",
+      "emailVerified": "E-mail vérifié",
+      "yes": "Oui",
+      "no": "Non",
+      "country": "Pays",
+      "locale": "Langue",
+      "joined": "Inscrit le",
+      "activity": "Activité",
+      "purchases": "Achats",
+      "attempts": "Tentatives d’examen",
+      "certificates": "Certificats"
     }
   }
 }

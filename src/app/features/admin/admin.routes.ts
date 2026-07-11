@@ -53,6 +53,18 @@ export const ADMIN_ROUTES: Routes = [
           import('./pages/admin-catalog-form.page').then((m) => m.AdminCatalogFormPage),
         title: () => inject(LanguageService).t('admin.catalog.form.editTitle'),
       },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./pages/admin-users-list.page').then((m) => m.AdminUsersListPage),
+        title: () => inject(LanguageService).t('admin.users.title'),
+      },
+      {
+        path: 'users/:id',
+        loadComponent: () =>
+          import('./pages/admin-user-detail.page').then((m) => m.AdminUserDetailPage),
+        title: () => inject(LanguageService).t('admin.users.title'),
+      },
     ],
   },
 ];
