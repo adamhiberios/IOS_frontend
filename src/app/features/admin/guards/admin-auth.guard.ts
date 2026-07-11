@@ -28,12 +28,18 @@ export const ADMIN_ROLES: readonly AppRole[] = [
  * have their own entry point, so unauthenticated access lands on `/admin/login`.
  * Frontend RBAC only hides UI — the backend re-authorizes every action.
  */
-export const adminAuthGuard: CanMatchFn = (_route, segments) => {
+export const adminAuthGuard: CanMatchFn = () => {
   const auth = inject(AuthStore);
   const router = inject(Router);
 
   if (!auth.isAuthenticated()) {
-    const returnUrl = '/' + segments.map((s) => s.path).join('/');
+    // Use the full URL being navigated to. The `segments` a CanMatch guard
+    // receives are RELATIVE to where the guard is mounted (under `/admin`), so
+    // rebuilding from them drops the `/admin` prefix (e.g. `/admin/catalog`
+    // became `/catalog`). `getCurrentNavigation().extractedUrl` is the absolute
+    // target.
+    const target = router.getCurrentNavigation()?.extractedUrl;
+    const returnUrl = target ? router.serializeUrl(target) : '/admin';
     return router.createUrlTree(['/admin/login'], { queryParams: { returnUrl } });
   }
 

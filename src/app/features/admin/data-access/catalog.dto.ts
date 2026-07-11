@@ -25,3 +25,14 @@ export interface CatalogItemDto {
 
 /** `GET /admin/catalog` response — list envelope with `locale` + pagination meta. */
 export type CatalogListResponseDto = PagedResponse<CatalogItemDto, { locale: string }>;
+
+/** One certificate for the admin detail view (`CatalogDetailDto`) — includes raw translations. */
+export interface CatalogDetailDto extends CatalogItemDto {
+  readonly translations?: Record<string, Record<string, string>>;
+}
+
+/** `GET /admin/catalog/:id` response. */
+export interface CatalogDetailResponseDto {
+  readonly data: CatalogDetailDto;
+  readonly meta: { readonly locale: string };
+}

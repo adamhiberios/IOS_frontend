@@ -30,6 +30,8 @@ export class AdminCatalogStore {
   private readonly _hasMore = signal(false);
   private readonly _search = signal('');
   private readonly _active = signal<ActiveFilter>(undefined);
+  private readonly _actionPendingId = signal<string | null>(null);
+  private readonly _actionError = signal<string | null>(null);
 
   readonly items = this._items.asReadonly();
   readonly loading = this._loading.asReadonly();
@@ -38,6 +40,8 @@ export class AdminCatalogStore {
   readonly hasMore = this._hasMore.asReadonly();
   readonly search = this._search.asReadonly();
   readonly activeFilter = this._active.asReadonly();
+  readonly actionPendingId = this._actionPendingId.asReadonly();
+  readonly actionError = this._actionError.asReadonly();
   readonly isEmpty = computed(
     () => !this._loading() && this._error() === null && this._items().length === 0,
   );
@@ -66,6 +70,35 @@ export class AdminCatalogStore {
     if (value === this._active()) return;
     this._active.set(value);
     await this.fetch(false);
+  }
+
+  /**
+   * Soft-delete (deactivate) a certificate, then refresh the current page so
+   * the list reflects the new state. Returns `true` on success; on failure the
+   * reason is exposed via {@link actionError}. Requires `learning_admin`
+   * (backend-enforced — a 403 surfaces here as an action error).
+   */
+  async deactivate(id: string): Promise<boolean> {
+    if (this._actionPendingId() !== null) return false;
+    this._actionPendingId.set(id);
+    this._actionError.set(null);
+    try {
+      await firstValueFrom(this.api.softDelete(id));
+      await this.fetch(false);
+      return true;
+    } catch (err) {
+      this._actionError.set(
+        problemDetailMessage(err) ?? this.lang.t('admin.catalog.deactivateError'),
+      );
+      return false;
+    } finally {
+      this._actionPendingId.set(null);
+    }
+  }
+
+  /** Clear a lingering row-action error (e.g. when the confirm dialog closes). */
+  clearActionError(): void {
+    this._actionError.set(null);
   }
 
   private async fetch(append: boolean): Promise<void> {

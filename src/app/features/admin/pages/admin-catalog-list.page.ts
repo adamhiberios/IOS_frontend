@@ -1,11 +1,20 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  type OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
+import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { Button, Input as IosInput } from '@ui';
 
-import { type ActiveFilter } from '../data-access/catalog.model';
+import { type ActiveFilter, type AdminCertificate } from '../data-access/catalog.model';
 import { AdminCatalogStore } from '../data-access/catalog.store';
 
 interface FilterOption {
@@ -23,24 +32,35 @@ const FILTERS: readonly FilterOption[] = [
 /**
  * Admin catalog — certificates list (`GET /admin/catalog`, includes inactive).
  *
- * Read-only listing with free-text search, active-state filter and cursor
- * "load more" pagination. All server state + actions live in
- * {@link AdminCatalogStore}; this component only binds signals to the view.
- * Create/edit/deactivate land as follow-up pages.
+ * Listing with free-text search, active-state filter and cursor "load more"
+ * pagination, plus New / Edit links and a role-gated Deactivate action (confirm
+ * dialog). All server state + actions live in {@link AdminCatalogStore}; this
+ * component only binds signals. Row actions are hidden for roles the backend
+ * would reject (frontend RBAC hides UI; the backend still enforces).
  */
 @Component({
   selector: 'ios-admin-catalog-list-page',
-  imports: [ReactiveFormsModule, DatePipe, IosInput, Button],
+  imports: [ReactiveFormsModule, RouterLink, DatePipe, IosInput, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="max-w-5xl">
-      <header class="mb-6">
-        <h1 class="text-2xl font-bold text-ios-brand-dark">
-          {{ lang.t('admin.catalog.title') }}
-        </h1>
-        <p class="text-sm text-gray-500 mt-1">
-          {{ lang.t('admin.catalog.subtitle') }}
-        </p>
+      <header class="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 class="text-2xl font-bold text-ios-brand-dark">
+            {{ lang.t('admin.catalog.title') }}
+          </h1>
+          <p class="text-sm text-gray-500 mt-1">
+            {{ lang.t('admin.catalog.subtitle') }}
+          </p>
+        </div>
+        @if (canManage()) {
+          <a
+            routerLink="/admin/catalog/new"
+            class="shrink-0 inline-flex items-center rounded-lg bg-ios-brand-primary px-4 py-2 text-sm font-semibold text-white hover:opacity-90"
+          >
+            {{ lang.t('admin.catalog.new') }}
+          </a>
+        }
       </header>
 
       <!-- Toolbar: search + active filter -->
@@ -119,6 +139,11 @@ const FILTERS: readonly FilterOption[] = [
                 <th scope="col" class="text-start font-medium px-4 py-3">
                   {{ lang.t('admin.catalog.colUpdated') }}
                 </th>
+                @if (canManage()) {
+                  <th scope="col" class="text-end font-medium px-4 py-3">
+                    {{ lang.t('admin.catalog.colActions') }}
+                  </th>
+                }
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
@@ -143,6 +168,27 @@ const FILTERS: readonly FilterOption[] = [
                     </span>
                   </td>
                   <td class="px-4 py-3 text-gray-500">{{ c.updatedAt | date: 'mediumDate' }}</td>
+                  @if (canManage()) {
+                    <td class="px-4 py-3">
+                      <div class="flex items-center justify-end gap-3">
+                        <a
+                          [routerLink]="['/admin/catalog', c.id, 'edit']"
+                          class="text-sm text-ios-brand-primary underline"
+                        >
+                          {{ lang.t('admin.catalog.edit') }}
+                        </a>
+                        @if (canDeactivate() && c.active) {
+                          <button
+                            type="button"
+                            (click)="askDeactivate(c)"
+                            class="text-sm text-red-600 hover:text-red-700"
+                          >
+                            {{ lang.t('admin.catalog.deactivate') }}
+                          </button>
+                        }
+                      </div>
+                    </td>
+                  }
                 </tr>
               }
             </tbody>
@@ -162,15 +208,71 @@ const FILTERS: readonly FilterOption[] = [
           </div>
         }
       }
+
+      <!-- Deactivate confirmation -->
+      @if (pendingDeactivate(); as pending) {
+        <div
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="deactivate-title"
+        >
+          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+            <h2 id="deactivate-title" class="text-lg font-semibold text-ios-brand-dark">
+              {{ lang.t('admin.catalog.confirmTitle') }}
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+              {{ lang.t('admin.catalog.confirmBody') }}
+              <span class="font-medium text-ios-brand-dark">{{ pending.title }}</span>
+            </p>
+
+            @if (store.actionError()) {
+              <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
+            }
+
+            <div class="mt-5 flex justify-end gap-3">
+              <button
+                type="button"
+                (click)="cancelDeactivate()"
+                class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+              >
+                {{ lang.t('admin.catalog.confirmCancel') }}
+              </button>
+              <ios-button
+                variant="danger"
+                [loading]="store.actionPendingId() === pending.id"
+                (clicked)="confirmDeactivate()"
+              >
+                {{ lang.t('admin.catalog.confirmConfirm') }}
+              </ios-button>
+            </div>
+          </div>
+        </div>
+      }
     </section>
   `,
 })
 export class AdminCatalogListPage implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly auth = inject(AuthStore);
 
   protected readonly store = inject(AdminCatalogStore);
   protected readonly lang = inject(LanguageService);
   protected readonly filters = FILTERS;
+
+  /** Create/edit gate — backend allows content_creator + learning_admin. */
+  protected readonly canManage = computed(
+    () =>
+      this.auth.hasRole('super_admin') ||
+      this.auth.hasAnyRole(['content_creator', 'learning_admin']),
+  );
+  /** Deactivate gate — backend restricts DELETE to learning_admin. */
+  protected readonly canDeactivate = computed(
+    () => this.auth.hasRole('super_admin') || this.auth.hasRole('learning_admin'),
+  );
+
+  /** The certificate awaiting deactivate confirmation, or `null`. */
+  protected readonly pendingDeactivate = signal<AdminCertificate | null>(null);
 
   protected readonly form = this.fb.group({
     search: this.fb.control(''),
@@ -179,6 +281,23 @@ export class AdminCatalogListPage implements OnInit {
   ngOnInit(): void {
     this.form.controls.search.setValue(this.store.search());
     void this.store.load();
+  }
+
+  protected askDeactivate(cert: AdminCertificate): void {
+    this.store.clearActionError();
+    this.pendingDeactivate.set(cert);
+  }
+
+  protected cancelDeactivate(): void {
+    this.store.clearActionError();
+    this.pendingDeactivate.set(null);
+  }
+
+  protected async confirmDeactivate(): Promise<void> {
+    const pending = this.pendingDeactivate();
+    if (!pending) return;
+    const ok = await this.store.deactivate(pending.id);
+    if (ok) this.pendingDeactivate.set(null);
   }
 
   protected onSearch(): void {

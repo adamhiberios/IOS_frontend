@@ -15,8 +15,8 @@ starting with authentication.
 ## Current phase
 
 **Phase 3 — Admin application (page by page).** Phase 2 infrastructure (mock
-removal + real auth) complete and committed. Admin **Login** committed; **Catalog
-list** built and awaiting review (uncommitted).
+removal + real auth) complete and committed. Admin **Login** + **Catalog list**
+committed; **Catalog create/edit/deactivate** built and awaiting review (uncommitted).
 
 ## Phases at a glance
 
@@ -112,18 +112,18 @@ not modified.
 
 🚧 **In progress — pages 1–2 built (page 2 awaiting review).**
 
-| #   | Admin page                                         | Status                    | Backend                             |
-| --- | -------------------------------------------------- | ------------------------- | ----------------------------------- |
-| 1   | **Admin Login** (`/admin/login`)                   | ✅ Built & committed      | `POST /auth/admin/login`            |
-| 2   | **Catalog — certificates list** (`/admin/catalog`) | ✅ Built (review pending) | `GET /admin/catalog`                |
-| 2b  | Catalog — create / edit / deactivate               | ⬜ Next (follow-up to #2) | `POST/PATCH/DELETE /admin/catalog*` |
-| 3   | Curriculum (modules/lessons)                       | ⬜                        | `/admin/modules`, `/admin/lessons`  |
-| 4   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`           |
-| 5   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam` |
-| 6   | Mock questions                                     | ⬜                        | `/admin/mock*`                      |
-| 7   | Users / student oversight                          | ⬜                        | `/admin/users*`                     |
-| 8   | Audit logs                                         | ⬜                        | `/admin/audit-logs`                 |
-| 9   | Certificate revocation                             | ⬜                        | `/admin/certs/issued/:id/revoke`    |
+| #   | Admin page                                         | Status                    | Backend                                |
+| --- | -------------------------------------------------- | ------------------------- | -------------------------------------- |
+| 1   | **Admin Login** (`/admin/login`)                   | ✅ Built & committed      | `POST /auth/admin/login`               |
+| 2   | **Catalog — certificates list** (`/admin/catalog`) | ✅ Built & committed      | `GET /admin/catalog`                   |
+| 2b  | **Catalog — create / edit / deactivate**           | ✅ Built (review pending) | `GET/POST/PATCH/DELETE /admin/catalog` |
+| 3   | Curriculum (modules/lessons)                       | ⬜                        | `/admin/modules`, `/admin/lessons`     |
+| 4   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`              |
+| 5   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam`    |
+| 6   | Mock questions                                     | ⬜                        | `/admin/mock*`                         |
+| 7   | Users / student oversight                          | ⬜                        | `/admin/users*`                        |
+| 8   | Audit logs                                         | ⬜                        | `/admin/audit-logs`                    |
+| 9   | Certificate revocation                             | ⬜                        | `/admin/certs/issued/:id/revoke`       |
 
 **Page 2 — Catalog list (uncommitted, awaiting review):**
 
@@ -141,6 +141,33 @@ not modified.
   item gated to `content_creator` / `learning_admin`. Added `admin.catalog.*` i18n.
 - **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓. Live check needs
   a real admin session (deployed API, no test creds) — deferred.
+
+**Page 2b — Catalog create / edit / deactivate (uncommitted, awaiting review):**
+
+- Extended `AdminCatalogApi`: `getById`, `create` (`POST`), `update` (`PATCH`),
+  `softDelete` (`DELETE`). Added `CertificateWritePayload` + detail DTO.
+- `AdminCatalogStore.deactivate()` (+ `actionPendingId` / `actionError` signals):
+  soft-deletes then refreshes the current page; surfaces 403/errors inline.
+- `pages/admin-catalog-form.page.ts` — one form for **create** (`/admin/catalog/new`)
+  and **edit** (`/admin/catalog/:id/edit`, `id` from the route param). Fields mirror
+  `CreateCertificateDto` exactly (BE-I-04 extras + translations intentionally out);
+  validation, load/submit states, RFC-7807 errors.
+- List page: **New certificate** button, per-row **Edit** link, role-gated
+  **Deactivate** action with a confirm dialog. `canManage` (content_creator /
+  learning_admin) and `canDeactivate` (learning_admin) gate the UI; the backend
+  still enforces. Added `admin.catalog.form.*` + action/confirm i18n (en/fr/ar).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓.
+- **Runtime bugs fixed** (reported on the live dev server):
+  - Catalog form read its `:id` from a signal `input('')`, but with
+    `withComponentInputBinding()` an **absent** optional param resolves to
+    `undefined` (not the `''` default), so `isEdit`'s `id().length` threw on the
+    `/new` route. Now read from `route.snapshot.paramMap`. Same pattern hardened
+    in the auth `new-password` page (`token()` read).
+  - `adminAuthGuard` built `returnUrl` from the guard's `segments`, which are
+    **relative** to the `/admin` mount, so a redirect from `/admin/catalog`
+    produced `returnUrl=/catalog` and login landed on a non-existent route
+    ("sometimes goes to /catalog"). Now uses `router.getCurrentNavigation()
+.extractedUrl` (absolute), so post-login returns to the exact admin URL.
 
 **Admin app structure created this milestone:**
 
@@ -230,9 +257,10 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Admin Catalog list (page 2) is built and verified (typecheck / lint / build
-green) — stop for review.** It is **uncommitted** per the "don't commit till I
-agree" instruction. On approval: commit it, then continue one by one. Suggested
-next: **Catalog create / edit / deactivate** (`POST/PATCH/DELETE /admin/catalog`)
-to complete certificate management, reusing the data-access layer just built —
-or jump to another admin page if you prefer a different order.
+**Catalog management is complete** — list (committed) + create/edit/deactivate
+(built, verified, **uncommitted** per "don't commit till I agree"). Certificate
+admin is now full CRUD. On approval: commit, then continue one by one. Suggested
+next page: **Users / student oversight** (`/admin/users*`) — read-heavy
+(list → detail → attempts → access codes), reuses the pagination plumbing, and
+covers a different backend surface. Or pick another (Audit logs, Exam authoring,
+Curriculum) if you prefer.

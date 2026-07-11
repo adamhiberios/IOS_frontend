@@ -248,7 +248,7 @@ export class NewPasswordPage {
       return;
     }
 
-    const token = this.token().trim();
+    const token = (this.token() ?? '').trim();
     if (!token) {
       // Reached without a valid reset link (missing/blank `?token=`).
       this.errorMessage.set(this.lang.t('auth.errors.unknownError'));
