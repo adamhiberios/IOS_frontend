@@ -1,6 +1,6 @@
 import { type Routes } from '@angular/router';
 
-import { publicOnlyGuard, roleGuard } from '@core/auth';
+import { authGuard, publicOnlyGuard, roleGuard } from '@core/auth';
 
 /**
  * App-level routes — every feature is lazy-loaded. The shell (header/sidebar)
@@ -37,27 +37,38 @@ export const routes: Routes = [
     title: 'Sign in',
   },
   {
+    // Learner-facing app — any authenticated account may enter; the backend
+    // re-authorizes every action (CLAUDE.md §8).
     path: 'dashboard',
     loadChildren: () => import('@features/dashboard/dashboard.routes'),
-    canMatch: [roleGuard(['learner', 'instructor', 'admin', 'support'])],
+    canMatch: [authGuard],
     title: 'Dashboard',
   },
   {
     path: 'courses',
     loadChildren: () => import('@features/courses/courses.routes'),
-    canMatch: [roleGuard(['learner', 'instructor', 'admin', 'support'])],
+    canMatch: [authGuard],
     title: 'Courses',
   },
   {
     path: 'assessments',
     loadChildren: () => import('@features/assessments/assessments.routes'),
-    canMatch: [roleGuard(['learner', 'instructor', 'admin', 'support'])],
+    canMatch: [authGuard],
     title: 'Assessments',
   },
   {
+    // Admin panel — gated to admin staff roles (backend `AdminRole`).
     path: 'admin',
     loadChildren: () => import('@features/admin/admin.routes'),
-    canMatch: [roleGuard(['admin', 'support'])],
+    canMatch: [
+      roleGuard([
+        'super_admin',
+        'learning_admin',
+        'content_creator',
+        'finance_admin',
+        'support_admin',
+      ]),
+    ],
     title: 'Admin',
   },
   {

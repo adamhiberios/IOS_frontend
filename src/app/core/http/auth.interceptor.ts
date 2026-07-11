@@ -24,7 +24,7 @@ import { SKIP_AUTH } from './http.tokens';
  * here and never re-attempted on 401. The same exclusion mirrors the rule
  * in /docs/07 §2.3.
  */
-const AUTH_PUBLIC_PATH = /\/auth\/(login|register|refresh|logout)(\/|$|\?)/;
+const AUTH_PUBLIC_PATH = /\/auth\/(admin\/)?(login|register|refresh|logout)(\/|$|\?)/;
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthStore);

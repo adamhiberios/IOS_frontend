@@ -8,8 +8,8 @@ import type { AppEnvironment } from './environment.model';
 export const environment: AppEnvironment = {
   name: 'development',
   production: false,
-  apiBaseUrl: 'http://localhost:8080/api',
-  wsBaseUrl: 'ws://localhost:8080/ws',
+  apiBaseUrl: 'https://api-dev.instituteofscrum.org/api/v1',
+  wsBaseUrl: 'wss://api-dev.instituteofscrum.org',
   verboseLogging: true,
   featureFlags: {
     examOfflineMode: true,

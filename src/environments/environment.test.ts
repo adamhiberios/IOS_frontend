@@ -8,8 +8,8 @@ import type { AppEnvironment } from './environment.model';
 export const environment: AppEnvironment = {
   name: 'test',
   production: true,
-  apiBaseUrl: 'https://api.test.ios-lms.example/api',
-  wsBaseUrl: 'wss://api.test.ios-lms.example/ws',
+  apiBaseUrl: 'https://api-dev.instituteofscrum.org/api/v1',
+  wsBaseUrl: 'wss://api-dev.instituteofscrum.org',
   verboseLogging: true,
   featureFlags: {
     examOfflineMode: true,

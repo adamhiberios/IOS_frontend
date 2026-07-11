@@ -14,9 +14,9 @@ import { AuthStore } from './auth.store';
  *
  * Usage:
  *
- *   <button *iosHasRole="['admin', 'instructor']">Edit course</button>
+ *   <button *iosHasRole="['learning_admin', 'content_creator']">Edit course</button>
  *
- *   <ng-container *iosHasRole="['admin']">
+ *   <ng-container *iosHasRole="['super_admin']">
  *     <ios-admin-only-widget />
  *   </ng-container>
  *

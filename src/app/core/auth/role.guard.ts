@@ -4,13 +4,23 @@ import { inject } from '@angular/core';
 import { AuthStore } from './auth.store';
 
 /**
- * Roles the frontend understands. Source of truth: /docs/07 §3.1.
- *
- * Adding a role here without also updating the §3.4 permission matrix is a
- * code-review block — the two are kept in lockstep so the shipped UI never
- * disagrees with the backend's enforcement.
+ * Admin staff roles — mirror the backend `AdminRole` enum exactly
+ * (`IOS_Backend/database/entities/admin-user.entity.ts`).
  */
-export type AppRole = 'learner' | 'instructor' | 'admin' | 'support';
+export type AdminRole =
+  | 'super_admin'
+  | 'learning_admin'
+  | 'content_creator'
+  | 'finance_admin'
+  | 'support_admin';
+
+/**
+ * Roles the frontend understands, in the real backend's role space. A student
+ * account carries the synthetic `student` role; an admin account carries its
+ * `AdminRole`. Source of truth: the backend `type` + `role` claims (see
+ * `docs/backend-analysis.md` §2). `roleGuard` / `hasAnyRole` check membership.
+ */
+export type AppRole = 'student' | AdminRole;
 
 /**
  * Frontend role gate (CanMatch). Hides routes a user shouldn't see; the
@@ -26,7 +36,7 @@ export type AppRole = 'learner' | 'instructor' | 'admin' | 'support';
  * past `/admin` URL-bar surfing.
  *
  * Usage:
- *   { path: 'admin', canMatch: [roleGuard(['admin', 'support'])], ... }
+ *   { path: 'admin', canMatch: [roleGuard(['super_admin', 'learning_admin'])], ... }
  */
 export function roleGuard(allowed: readonly AppRole[]): CanMatchFn {
   return (_route, segments) => {

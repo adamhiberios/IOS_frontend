@@ -13,8 +13,8 @@ import type { AppEnvironment } from './environment.model';
 export const environment: AppEnvironment = {
   name: 'development',
   production: false,
-  apiBaseUrl: 'http://localhost:8080/api',
-  wsBaseUrl: 'ws://localhost:8080/ws',
+  apiBaseUrl: 'https://api-dev.instituteofscrum.org/api/v1',
+  wsBaseUrl: 'wss://api-dev.instituteofscrum.org',
   /** Enable verbose console output and the i18n missing-key handler. */
   verboseLogging: true,
   /** Feature flags fall back to backend when undefined; defaults below favour local DX. */

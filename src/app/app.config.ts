@@ -34,13 +34,10 @@ export const appConfig: ApplicationConfig = {
      * Silent re-authentication on app boot — /docs/07 §2.2.
      *
      * Awaits AuthStore.bootstrap() before the first route renders so guards
-     * see a hydrated session if a refresh cookie was still valid. Failures
-     * are swallowed inside the store (the user simply stays signed out);
-     * we never want to block app start on an auth round-trip.
-     *
-     * In Epic 3 the underlying call is mocked: there's no httpOnly cookie
-     * to read, so bootstrap is a no-op and a fresh visitor is just routed
-     * through `/auth/login` like normal.
+     * see a hydrated session if a refresh cookie was still valid. bootstrap()
+     * silently attempts `POST /auth/refresh`; a 401 (no/expired cookie) just
+     * leaves the visitor signed out. Failures are swallowed inside the store,
+     * so app start is never blocked on the auth round-trip.
      */
     provideAppInitializer(() => inject(AuthStore).bootstrap()),
   ],

@@ -11,28 +11,36 @@
  *     (a future epic) and is fetched on demand, not embedded in the session.
  */
 
-import { type AppRole } from './role.guard';
+import { type AdminRole, type AppRole } from './role.guard';
 
 /** Convenience re-export so consumers can import everything from the model. */
 export type Role = AppRole;
 
+/** Backend account type — `student` (learners) or `admin` (staff). */
+export type AccountType = 'student' | 'admin';
+
 /**
- * Authenticated user as the frontend sees them. The backend ships the full
- * profile separately when needed; this is just the session-scoped slice.
+ * Authenticated user as the frontend sees them — mapped from the backend
+ * `AuthUserResponseDto`. Just the session-scoped slice; the full profile is
+ * fetched on demand via `GET /me`.
  */
 export interface User {
   readonly id: string;
   readonly email: string;
-  readonly username: string;
   readonly firstName: string;
   readonly lastName: string;
-  /** ISO-3166 alpha-2 country code (e.g. "SA", "CA"). */
-  readonly country: string;
+  /** Computed `firstName + lastName` from the backend. */
+  readonly fullName: string;
+  readonly locale: string;
+  readonly emailVerified: boolean;
+  readonly type: AccountType;
+  /** Admin role when `type === 'admin'`, otherwise `null`. */
+  readonly role: AdminRole | null;
 }
 
 /**
- * Login form payload. The backend accepts either an email or a username under
- * `identifier`; the frontend never tries to disambiguate which is which.
+ * Login form payload. The form field is called `identifier` for historical
+ * reasons; `AuthApi` maps it to the backend's `email` field.
  */
 export interface LoginCredentials {
   readonly identifier: string;
@@ -51,15 +59,16 @@ export interface RegisterPayload {
 }
 
 /**
- * What the backend returns on a successful auth handshake (login / register /
- * silent refresh). The `refreshToken` is normally invisible to JS — it lives
- * in an httpOnly cookie. The mock backend exposes it here only because we
- * have no real cookie jar to set it into; `AuthStore` keeps it in a private
- * field and never persists it to storage. See CLAUDE.md §8 + /docs/07 §1.1.
+ * Frontend view of a successful auth handshake (login / silent refresh),
+ * mapped from the backend `LoginResponseDto`. The refresh token is NOT here —
+ * it lives in an httpOnly cookie set by the server (invisible to JS). Only the
+ * access token (kept in memory by `AuthStore`) crosses into app state.
+ * See CLAUDE.md §8 + `docs/backend-analysis.md` §5.
  */
 export interface AuthSession {
   readonly accessToken: string;
-  readonly refreshToken: string;
+  /** Access-token TTL in seconds (`LoginResponseDto.expiresIn`). */
+  readonly expiresIn: number;
   readonly user: User;
   readonly roles: readonly Role[];
 }
@@ -69,6 +78,3 @@ export interface AuthSession {
  * login page (see /docs/07 §2.4 for the full table).
  */
 export type LogoutReason = 'user-initiated' | 'idle' | 'refresh-failed' | 'forced';
-
-/** Subset of `User` fields the register form already collected. */
-export type RegisterUserSeed = Omit<User, 'id'>;

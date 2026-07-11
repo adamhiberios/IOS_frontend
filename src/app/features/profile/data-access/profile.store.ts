@@ -61,14 +61,14 @@ export class ProfileStore {
       personal: {
         firstName: user?.firstName ?? 'Adam',
         lastName: user?.lastName ?? 'Adam',
-        username: user?.username ?? 'adam_adam',
+        username: 'adam_adam',
         iosId: '241242',
         email: user?.email ?? 'adam.asdf@ios.com',
         city: 'Victoria',
         street: 'Nshard',
         address: 'Blanshard',
         postalCode: '4323',
-        country: user?.country ?? 'Canada',
+        country: 'Canada',
       },
       professional: {
         occupation: 'Graphic designer',

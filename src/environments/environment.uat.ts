@@ -7,8 +7,8 @@ import type { AppEnvironment } from './environment.model';
 export const environment: AppEnvironment = {
   name: 'uat',
   production: true,
-  apiBaseUrl: 'https://api.uat.ios-lms.example/api',
-  wsBaseUrl: 'wss://api.uat.ios-lms.example/ws',
+  apiBaseUrl: 'https://api-dev.instituteofscrum.org/api/v1',
+  wsBaseUrl: 'wss://api-dev.instituteofscrum.org',
   verboseLogging: false,
   featureFlags: {
     examOfflineMode: true,
