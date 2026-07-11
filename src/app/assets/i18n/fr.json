@@ -2352,7 +2352,8 @@
       "brand": "IOS Admin",
       "signOut": "Se déconnecter",
       "nav": {
-        "home": "Accueil"
+        "home": "Accueil",
+        "catalog": "Certifications"
       }
     },
     "home": {
@@ -2360,6 +2361,29 @@
       "subtitle": "Bon retour. Utilisez la navigation pour gérer la plateforme.",
       "signedInAs": "Connecté en tant que",
       "role": "Rôle"
+    },
+    "catalog": {
+      "title": "Certifications",
+      "subtitle": "Parcourez et gérez les programmes de certification.",
+      "searchLabel": "Rechercher",
+      "searchPlaceholder": "Rechercher par titre…",
+      "searchButton": "Rechercher",
+      "filterLabel": "Filtrer par statut",
+      "filterAll": "Tous",
+      "filterActive": "Actifs",
+      "filterInactive": "Inactifs",
+      "colTitle": "Titre",
+      "colCode": "Code programme",
+      "colPrice": "Prix",
+      "colStatus": "Statut",
+      "colUpdated": "Mis à jour",
+      "statusActive": "Actif",
+      "statusInactive": "Inactif",
+      "loading": "Chargement des certifications…",
+      "empty": "Aucune certification trouvée.",
+      "error": "Impossible de charger les certifications. Veuillez réessayer.",
+      "retry": "Réessayer",
+      "loadMore": "Charger plus"
     }
   }
 }

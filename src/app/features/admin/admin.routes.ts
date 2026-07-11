@@ -35,6 +35,12 @@ export const ADMIN_ROUTES: Routes = [
         loadComponent: () => import('./pages/admin-home.page').then((m) => m.AdminHomePage),
         title: () => inject(LanguageService).t('admin.home.title'),
       },
+      {
+        path: 'catalog',
+        loadComponent: () =>
+          import('./pages/admin-catalog-list.page').then((m) => m.AdminCatalogListPage),
+        title: () => inject(LanguageService).t('admin.catalog.title'),
+      },
     ],
   },
 ];

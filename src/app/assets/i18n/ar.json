@@ -2352,7 +2352,8 @@
       "brand": "إدارة IOS",
       "signOut": "تسجيل الخروج",
       "nav": {
-        "home": "الرئيسية"
+        "home": "الرئيسية",
+        "catalog": "الشهادات"
       }
     },
     "home": {
@@ -2360,6 +2361,29 @@
       "subtitle": "مرحباً بعودتك. استخدم شريط التنقل لإدارة المنصة.",
       "signedInAs": "مسجّل الدخول باسم",
       "role": "الدور"
+    },
+    "catalog": {
+      "title": "الشهادات",
+      "subtitle": "تصفّح وإدارة برامج الشهادات.",
+      "searchLabel": "بحث",
+      "searchPlaceholder": "ابحث بالعنوان…",
+      "searchButton": "بحث",
+      "filterLabel": "تصفية حسب الحالة",
+      "filterAll": "الكل",
+      "filterActive": "نشطة",
+      "filterInactive": "غير نشطة",
+      "colTitle": "العنوان",
+      "colCode": "رمز البرنامج",
+      "colPrice": "السعر",
+      "colStatus": "الحالة",
+      "colUpdated": "آخر تحديث",
+      "statusActive": "نشطة",
+      "statusInactive": "غير نشطة",
+      "loading": "جارٍ تحميل الشهادات…",
+      "empty": "لا توجد شهادات.",
+      "error": "تعذّر تحميل الشهادات. حاول مرة أخرى.",
+      "retry": "إعادة المحاولة",
+      "loadMore": "تحميل المزيد"
     }
   }
 }

@@ -2352,7 +2352,8 @@
       "brand": "IOS Admin",
       "signOut": "Sign out",
       "nav": {
-        "home": "Home"
+        "home": "Home",
+        "catalog": "Certificates"
       }
     },
     "home": {
@@ -2360,6 +2361,29 @@
       "subtitle": "Welcome back. Use the navigation to manage the platform.",
       "signedInAs": "Signed in as",
       "role": "Role"
+    },
+    "catalog": {
+      "title": "Certificates",
+      "subtitle": "Browse and manage certification programs.",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search by title…",
+      "searchButton": "Search",
+      "filterLabel": "Filter by status",
+      "filterAll": "All",
+      "filterActive": "Active",
+      "filterInactive": "Inactive",
+      "colTitle": "Title",
+      "colCode": "Program code",
+      "colPrice": "Price",
+      "colStatus": "Status",
+      "colUpdated": "Updated",
+      "statusActive": "Active",
+      "statusInactive": "Inactive",
+      "loading": "Loading certificates…",
+      "empty": "No certificates found.",
+      "error": "Couldn’t load certificates. Please try again.",
+      "retry": "Retry",
+      "loadMore": "Load more"
     }
   }
 }

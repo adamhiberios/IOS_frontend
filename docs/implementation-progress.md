@@ -15,8 +15,8 @@ starting with authentication.
 ## Current phase
 
 **Phase 3 — Admin application (page by page).** Phase 2 infrastructure (mock
-removal + real auth) is complete and committed. Admin **Login** page is built and
-awaiting review before the next admin page.
+removal + real auth) complete and committed. Admin **Login** committed; **Catalog
+list** built and awaiting review (uncommitted).
 
 ## Phases at a glance
 
@@ -110,19 +110,37 @@ not modified.
 
 ## Admin pages status
 
-🚧 **In progress — page 1 of N complete (awaiting review).**
+🚧 **In progress — pages 1–2 built (page 2 awaiting review).**
 
-| #   | Admin page                       | Status                    | Backend                             |
-| --- | -------------------------------- | ------------------------- | ----------------------------------- |
-| 1   | **Admin Login** (`/admin/login`) | ✅ Built (review pending) | `POST /auth/admin/login`            |
-| 2   | Catalog (certificates) list/CRUD | ⬜ Next candidate         | `/admin/catalog*`                   |
-| 3   | Curriculum (modules/lessons)     | ⬜                        | `/admin/modules`, `/admin/lessons`  |
-| 4   | Exam authoring                   | ⬜                        | `/admin/certs/:id/exams*`           |
-| 5   | Exam assignment                  | ⬜                        | `/admin/exam/assign`, `/admin/exam` |
-| 6   | Mock questions                   | ⬜                        | `/admin/mock*`                      |
-| 7   | Users / student oversight        | ⬜                        | `/admin/users*`                     |
-| 8   | Audit logs                       | ⬜                        | `/admin/audit-logs`                 |
-| 9   | Certificate revocation           | ⬜                        | `/admin/certs/issued/:id/revoke`    |
+| #   | Admin page                                         | Status                    | Backend                             |
+| --- | -------------------------------------------------- | ------------------------- | ----------------------------------- |
+| 1   | **Admin Login** (`/admin/login`)                   | ✅ Built & committed      | `POST /auth/admin/login`            |
+| 2   | **Catalog — certificates list** (`/admin/catalog`) | ✅ Built (review pending) | `GET /admin/catalog`                |
+| 2b  | Catalog — create / edit / deactivate               | ⬜ Next (follow-up to #2) | `POST/PATCH/DELETE /admin/catalog*` |
+| 3   | Curriculum (modules/lessons)                       | ⬜                        | `/admin/modules`, `/admin/lessons`  |
+| 4   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`           |
+| 5   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam` |
+| 6   | Mock questions                                     | ⬜                        | `/admin/mock*`                      |
+| 7   | Users / student oversight                          | ⬜                        | `/admin/users*`                     |
+| 8   | Audit logs                                         | ⬜                        | `/admin/audit-logs`                 |
+| 9   | Certificate revocation                             | ⬜                        | `/admin/certs/issued/:id/revoke`    |
+
+**Page 2 — Catalog list (uncommitted, awaiting review):**
+
+- Reusable `core/http/pagination.ts` — `Page<T>`, `PagedResponse<T,M>`,
+  `CursorQuery`, `toPage()`, `toHttpParams()` (the list plumbing every admin
+  table reuses). Exported from `@core/http`.
+- `features/admin/data-access/` catalog layer: `catalog.dto.ts` (wire),
+  `catalog.model.ts`, `catalog.mappers.ts`, `catalog.api.ts`
+  (`AdminCatalogApi.list` → `GET /admin/catalog`), `catalog.store.ts` (signal
+  store: items, loading/loadingMore, error, cursor, search + active filter).
+- `pages/admin-catalog-list.page.ts` — table with free-text search, All/Active/
+  Inactive filter, loading / empty / error+retry / inline load-more-error states,
+  cursor "Load more". Business logic in the store; component only binds signals.
+- Admin shell nav now **role-filtered** (`super_admin` sees all); Catalog nav
+  item gated to `content_creator` / `learning_admin`. Added `admin.catalog.*` i18n.
+- **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓. Live check needs
+  a real admin session (deployed API, no test creds) — deferred.
 
 **Admin app structure created this milestone:**
 
@@ -212,10 +230,9 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Admin Login (page 1) is built and verified (typecheck / lint / build green) —
-stop for review.** On approval: commit it, then build the next admin page. Per
-CLAUDE.md the design system already exists to reuse. Suggested next page:
-**Catalog (certificates) list** — a read-first page (`GET /admin/catalog`) that
-also establishes the reusable cursor-pagination + `{ data, meta }` list plumbing
-every other admin table will use. Confirm the order, and whether to keep the
-per-page review gate or proceed through several pages before the next review.
+**Admin Catalog list (page 2) is built and verified (typecheck / lint / build
+green) — stop for review.** It is **uncommitted** per the "don't commit till I
+agree" instruction. On approval: commit it, then continue one by one. Suggested
+next: **Catalog create / edit / deactivate** (`POST/PATCH/DELETE /admin/catalog`)
+to complete certificate management, reusing the data-access layer just built —
+or jump to another admin page if you prefer a different order.

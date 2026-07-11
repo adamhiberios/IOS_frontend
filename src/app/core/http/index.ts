@@ -20,6 +20,14 @@ import { retryInterceptor } from './retry.interceptor';
 
 export { RETRY_ATTEMPTS, SKIP_AUTH, SKIP_RETRY, SUPPRESS_ERROR_TOAST } from './http.tokens';
 export { problemDetailCode, problemDetailMessage, type ProblemDetails } from './problem-details';
+export {
+  toHttpParams,
+  toPage,
+  type CursorQuery,
+  type Page,
+  type PagedResponse,
+  type PaginationMeta,
+} from './pagination';
 
 /**
  * Wire the HttpClient with the canonical interceptor chain.

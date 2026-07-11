@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
-import { AuthStore } from '@core/auth';
+import { type AppRole, AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { Button } from '@ui';
 
@@ -11,10 +11,21 @@ interface AdminNavItem {
   readonly route: string;
   /** `true` for the index route so it isn't marked active on every child path. */
   readonly exact: boolean;
+  /**
+   * Roles that may see this item. Omit for "any admin". `super_admin` always
+   * sees everything (backend SUPER_ADMIN bypass), regardless of this list.
+   */
+  readonly roles?: readonly AppRole[];
 }
 
 const ADMIN_NAV: readonly AdminNavItem[] = [
   { labelKey: 'admin.shell.nav.home', route: '/admin', exact: true },
+  {
+    labelKey: 'admin.shell.nav.catalog',
+    route: '/admin/catalog',
+    exact: false,
+    roles: ['content_creator', 'learning_admin'],
+  },
 ];
 
 /**
@@ -43,7 +54,7 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
         </div>
         <nav class="flex-1 p-3">
           <ul class="flex flex-col gap-1">
-            @for (item of nav; track item.route) {
+            @for (item of nav(); track item.route) {
               <li>
                 <a
                   [routerLink]="item.route"
@@ -89,7 +100,12 @@ export class AdminLayout {
   private readonly auth = inject(AuthStore);
 
   protected readonly lang = inject(LanguageService);
-  protected readonly nav = ADMIN_NAV;
+
+  /** Nav filtered to what the signed-in admin may access (super_admin sees all). */
+  protected readonly nav = computed(() => {
+    const isSuper = this.auth.hasRole('super_admin');
+    return ADMIN_NAV.filter((item) => !item.roles || isSuper || this.auth.hasAnyRole(item.roles));
+  });
 
   protected readonly displayName = computed(() => {
     const u = this.auth.user();
