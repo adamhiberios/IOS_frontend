@@ -14,10 +14,11 @@ page against the deployed API.
 
 ## Current phase
 
-**Phase 3 — Admin application (page by page).** Phase 2 infrastructure (mock
-removal + real auth) complete and committed. Admin **Login** + full **Catalog**
-management + **student list/detail** committed. **Student attempts/access-codes/
-revoke** + admin-list active-first sort built, awaiting review (uncommitted).
+**Phase 3 — Admin application (page by page).** All work below is **committed**
+on `feat/real-backend-integration` (nothing pending review). Done so far: Admin
+Login, full Catalog CRUD, and complete student oversight (list, detail, attempts,
+access codes + revoke), plus admin-list active-first sort. **Next page to build:
+Audit logs** (`/admin/audit-logs`) — or another admin page the user picks.
 
 ## Phases at a glance
 
@@ -123,7 +124,7 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- (none — auth-routes mapping done; awaiting review before starting the Admin app)
+- (none — everything committed through student oversight; next page: **Audit logs**)
 
 ## Auth-route → backend endpoint map
 
