@@ -37,3 +37,29 @@ export interface UsersListQuery {
   readonly cursor?: string;
   readonly limit?: number;
 }
+
+/** One exam attempt in a student's history. */
+export interface StudentAttempt {
+  readonly id: string;
+  readonly examId: string;
+  readonly certId: string;
+  readonly score: number;
+  readonly passed: boolean;
+  readonly status: string;
+  readonly lateFlag: boolean;
+  readonly startedAt: string;
+  readonly submittedAt: string;
+  readonly durationSeconds: number | null;
+}
+
+export type AccessCodeStatus = 'used' | 'expired' | 'active';
+
+/** One issued exam access code for a student. */
+export interface AccessCode {
+  readonly id: string;
+  readonly examId: string;
+  readonly certId: string;
+  readonly expiresAt: string;
+  readonly usedAt: string | null;
+  readonly status: AccessCodeStatus;
+}

@@ -7,17 +7,17 @@
 
 ## Overall project status
 
-**Phase 2 (Frontend infrastructure) — in progress.** The backend has been fully
-analysed (Phase 1 complete, see [`backend-analysis.md`](./backend-analysis.md)).
-Current work: removing the legacy mock backend and wiring the real deployed API,
-starting with authentication.
+**Phase 3 (Admin application) — in progress.** Backend fully analysed (Phase 1,
+see [`backend-analysis.md`](./backend-analysis.md)); infrastructure done (Phase 2:
+mock backend removed, real `/auth/*` wired). Now building the Admin app page by
+page against the deployed API.
 
 ## Current phase
 
 **Phase 3 — Admin application (page by page).** Phase 2 infrastructure (mock
 removal + real auth) complete and committed. Admin **Login** + full **Catalog**
-management committed. **Users list + student detail** built, awaiting review
-(uncommitted).
+management + **student list/detail** committed. **Student attempts/access-codes/
+revoke** + admin-list active-first sort built, awaiting review (uncommitted).
 
 ## Phases at a glance
 
@@ -25,7 +25,67 @@ management committed. **Users list + student detail** built, awaiting review
 | ----- | ------------------------------------------------------------------------------------- | ---------------------------------- |
 | 1     | Study backend → `backend-analysis.md`                                                 | ✅ Complete                        |
 | 2     | Frontend infrastructure (remove mocks, real API services, auth, interceptors, models) | 🚧 Auth done; feature APIs pending |
-| 3     | Admin application, page by page (starting with Login)                                 | 🚧 In progress — Login built       |
+| 3     | Admin application, page by page (starting with Login)                                 | 🚧 In progress                     |
+
+---
+
+## For a new session — start here
+
+**Repo / branch.** Frontend project: `institute of scrum/` (Angular 21). Backend
+(READ-ONLY, never modify): `IOS_Backend/` (NestJS). All work is on git branch
+**`feat/real-backend-integration`** (in the `institute of scrum/` repo). The
+deployed API is the source of data — never run the backend locally. Dev API:
+`https://api-dev.instituteofscrum.org/api/v1` (already set in `environment*.ts`).
+
+**Read first (in order):** this file → [`backend-analysis.md`](./backend-analysis.md)
+(every endpoint/DTO/role, + the **Backend Issues Report**) → `CLAUDE.md`
+(frontend rules: standalone components, signals, OnPush, new control-flow, no
+`any`, no Observables in components, `ios-` selector prefix, logical CSS).
+
+**Working rules (from the mission brief):**
+
+- **Never modify `IOS_Backend/`.** Document backend problems in
+  `backend-analysis.md` → Backend Issues Report; don't fix them.
+- **Admin app, page by page.** Build one page, verify, **stop for review**.
+  **Never commit without the user's explicit approval** — they say "commit".
+- After each page: update THIS file, then `npm run typecheck && npm run lint &&
+npm run build` (all from `institute of scrum/`) must be clean.
+- i18n lives in `src/app/assets/i18n/{en,fr,ar}.json`. Add keys to all three;
+  Arabic strings added this project still need professional review (CLAUDE.md §9).
+
+**Verify commands** (cwd = `institute of scrum/`):
+`npm run typecheck` · `npm run lint` · `npm run build`. Known-benign: 3
+pre-existing `prefer-ngsrc` warnings and a raw-size bundle-budget warning
+(gzip initial is fine). Live browser testing needs real admin credentials
+against the deployed API (not available in-session).
+
+**Established patterns (reuse these — see the committed admin catalog/users):**
+
+- Feature data-access layering: `data-access/<feat>.dto.ts` (wire shapes,
+  mirror backend names) → `.model.ts` (frontend types) → `.mappers.ts` →
+  `.api.ts` (`@Injectable`, `HttpClient`, `environment.apiBaseUrl`) →
+  `.store.ts` (signal store: private writable signals, `.asReadonly()` views,
+  action methods; no Observables leak to components).
+- Lists use `@core/http` `pagination.ts`: `toPage()`, `toHttpParams()`,
+  `Page<T>`, `PagedResponse<T,M>`, `CursorQuery` (backend is cursor/keyset, no
+  totals). Pattern: `items/loading/loadingMore/error/nextCursor/hasMore` + a
+  `search`/filters; `load()` / `loadMore()`.
+- Errors: surface `problemDetailMessage(err)` (`@core/http`) inline; fall back
+  to an i18n string. Backend errors are RFC-7807 (`{ detail, title, code }`).
+- **Route params:** read from `route.snapshot.paramMap`, NOT a signal
+  `input('')` — with `withComponentInputBinding()` an absent optional param is
+  `undefined`, not the default (this crashed once). Child-component `[input]`
+  bindings from a parent are fine as `input.required<T>()`.
+- **RBAC:** hide actions with `auth.hasRole('super_admin') || auth.hasAnyRole([…])`
+  (super_admin sees everything); the backend still enforces. Admin nav
+  (`components/admin-layout.ts`) is role-filtered — register each new page's
+  nav item there.
+- **Admin routing** (`features/admin/admin.routes.ts`): `/admin/login` is public
+  (`adminLoginGuard`); everything else is under the shell, gated by
+  `adminAuthGuard` (unauth → `/admin/login?returnUrl=<absolute>`; non-admin →
+  `/forbidden`). Add new pages as children of the `''` (shell) route.
+- **Admin lists show active first** (client-side stable sort; backend only sorts
+  by `created_at`) — apply to any future list with a status flag.
 
 ---
 
@@ -118,8 +178,8 @@ not modified.
 | 1   | **Admin Login** (`/admin/login`)                   | ✅ Built & committed      | `POST /auth/admin/login`                                      |
 | 2   | **Catalog — certificates list** (`/admin/catalog`) | ✅ Built & committed      | `GET /admin/catalog`                                          |
 | 2b  | **Catalog — create / edit / deactivate**           | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/catalog`                        |
-| 3   | **Users — list + student detail** (`/admin/users`) | ✅ Built (review pending) | `GET /admin/users`, `GET /admin/users/:id`                    |
-| 3b  | Users — attempts / access codes / revoke           | ⬜ Next (follow-up to #3) | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke` |
+| 3   | **Users — list + student detail** (`/admin/users`) | ✅ Built & committed      | `GET /admin/users`, `GET /admin/users/:id`                    |
+| 3b  | **Users — attempts / access codes / revoke**       | ✅ Built (review pending) | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke` |
 | 4   | Curriculum (modules/lessons)                       | ⬜                        | `/admin/modules`, `/admin/lessons`                            |
 | 5   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`                                     |
 | 6   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam`                           |
@@ -141,6 +201,23 @@ not modified.
   `admin.users.*` + `admin.userDetail.*` i18n (en/fr/ar).
 - **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓. Live check needs a
   real admin session against the deployed API.
+
+**Page 3b + list sort (uncommitted, awaiting review):**
+
+- **Active-first sort:** admin list convention — active rows shown before
+  inactive. Applied to the catalog list (client-side stable sort in the store,
+  since `GET /admin/catalog` only sorts by `created_at`). The students list has
+  no active flag, so it's unaffected; future lists with a status follow this.
+- `AdminUsersApi` extended: `getAttempts`, `getAccessCodes`, `revokeAccessCode`;
+  matching DTOs/models/mappers.
+- `components/student-attempts.ts` — paginated exam-attempt history (score,
+  pass/fail, late flag, submitted); `[userId]` input, load-more.
+- `components/student-access-codes.ts` — paginated access codes (status badge,
+  expiry) with a **role-gated Revoke** (`learning_admin`) behind a confirm dialog;
+  Revoke shown only for non-used codes (backend 409s on used ones).
+- Both composed into the student detail page.
+- Added `admin.userDetail.*` attempts/codes/revoke i18n (en/fr/ar).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓.
 
 **Page 2 — Catalog list (uncommitted, awaiting review):**
 
@@ -274,9 +351,9 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Users list + student detail built and verified** (typecheck / lint / build
-green) — **uncommitted** per "don't commit till I agree". Browse → drill into a
-student → see profile + activity counts. On approval: commit, then continue.
-Suggested next: **Users 3b — attempt history + access codes + revoke** on the
-detail page (`/admin/users/:id/attempts`, `/access-codes`, `/access-codes/:codeId/revoke`)
-to complete oversight — or jump to another page (Audit logs, Curriculum, Exam).
+**Student oversight is complete** (list + detail committed; attempts + access
+codes + revoke built & verified, **uncommitted** per "don't commit till I
+agree"), and admin lists now show **active first**. On approval: commit, then
+continue. Suggested next page: **Audit logs** (`/admin/audit-logs`, super_admin)
+— a clean read-only list reusing the pagination plumbing — or **Curriculum** /
+**Exam authoring** if you'd rather build content-management next.

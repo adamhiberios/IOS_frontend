@@ -6,6 +6,8 @@ import { firstValueFrom } from 'rxjs';
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 
+import { StudentAccessCodes } from '../components/student-access-codes';
+import { StudentAttempts } from '../components/student-attempts';
 import { AdminUsersApi } from '../data-access/users.api';
 import { type StudentDetail } from '../data-access/users.model';
 
@@ -13,13 +15,14 @@ import { type StudentDetail } from '../data-access/users.model';
  * Admin users — student detail (`GET /admin/users/:id`).
  *
  * Shows the safe profile projection + activity counts (purchases, attempts,
- * certificates earned). The `userId` is read from the route snapshot (see the
- * catalog-form note on why not a signal input). Attempt history and access
- * codes (with revoke) are the next increment on this page.
+ * certificates earned), plus the student's attempt history and issued access
+ * codes (with role-gated revoke) via the two child components. The `userId` is
+ * read from the route snapshot (see the catalog-form note on why not a signal
+ * input).
  */
 @Component({
   selector: 'ios-admin-user-detail-page',
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, StudentAttempts, StudentAccessCodes],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="max-w-3xl">
@@ -97,6 +100,16 @@ import { type StudentDetail } from '../data-access/users.model';
             </dd>
           </div>
         </dl>
+
+        <!-- Attempt history -->
+        <div class="mt-8">
+          <ios-student-attempts [userId]="s.id" />
+        </div>
+
+        <!-- Access codes -->
+        <div class="mt-8">
+          <ios-student-access-codes [userId]="s.id" />
+        </div>
       }
     </section>
   `,

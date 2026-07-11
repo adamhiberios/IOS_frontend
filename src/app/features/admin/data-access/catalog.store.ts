@@ -33,7 +33,16 @@ export class AdminCatalogStore {
   private readonly _actionPendingId = signal<string | null>(null);
   private readonly _actionError = signal<string | null>(null);
 
-  readonly items = this._items.asReadonly();
+  /**
+   * Active certificates first, then inactive — a display sort applied on top of
+   * the backend's newest-first order (the `GET /admin/catalog` endpoint only
+   * sorts by `created_at`, so "active first" is a client-side concern).
+   * `Array.prototype.sort` is stable in the supported engines, so newest-first
+   * is preserved within each group. Applies to the loaded set (cursor pages).
+   */
+  readonly items = computed(() =>
+    [...this._items()].sort((a, b) => Number(b.active) - Number(a.active)),
+  );
   readonly loading = this._loading.asReadonly();
   readonly loadingMore = this._loadingMore.asReadonly();
   readonly error = this._error.asReadonly();

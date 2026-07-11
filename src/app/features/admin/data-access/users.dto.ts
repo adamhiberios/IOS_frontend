@@ -44,3 +44,38 @@ export interface StudentDetailDto {
 export interface StudentDetailResponseDto {
   readonly data: StudentDetailDto;
 }
+
+/** One exam attempt (`AttemptItemDto`). No answer snapshot is returned. */
+export interface AttemptItemDto {
+  readonly id: string;
+  readonly examId: string;
+  readonly certId: string;
+  readonly score: number;
+  readonly passed: boolean;
+  readonly status: string;
+  readonly lateFlag: boolean;
+  readonly startedAt: string;
+  readonly submittedAt: string;
+  readonly durationSeconds: number | null;
+}
+
+/** `GET /admin/users/:userId/attempts` response. */
+export type AttemptsListResponseDto = PagedResponse<AttemptItemDto>;
+
+/** One issued access code (`AccessCodeItemDto`). `tokenHash` is never returned. */
+export interface AccessCodeItemDto {
+  readonly id: string;
+  readonly examId: string;
+  readonly certId: string;
+  readonly expiresAt: string;
+  readonly usedAt: string | null;
+  readonly status: 'used' | 'expired' | 'active';
+}
+
+/** `GET /admin/users/:userId/access-codes` response. */
+export type AccessCodesListResponseDto = PagedResponse<AccessCodeItemDto>;
+
+/** `POST /admin/users/:userId/access-codes/:codeId/revoke` response. */
+export interface RevokeCodeResponseDto {
+  readonly data: { readonly revoked: true };
+}
