@@ -7,32 +7,109 @@
 
 ## Overall project status
 
-**Phase 3 (Admin application) — in progress.** Backend fully analysed (Phase 1,
-see [`backend-analysis.md`](./backend-analysis.md)); infrastructure done (Phase 2:
-mock backend removed, real `/auth/*` wired). Now building the Admin app page by
-page against the deployed API.
+**Phase 3 (Admin application) — COMPLETE** for every buildable backend surface.
+**Phase 4 (user-facing app ↔ real backend) — next.** Backend fully analysed
+(Phase 1, see [`backend-analysis.md`](./backend-analysis.md)); auth wired
+(Phase 2). The admin app is done; the remaining admin pages (Curriculum, Cert
+revocation) are **backend-blocked** — see
+[`backend-blockers-report.md`](./backend-blockers-report.md).
 
 ## Current phase
 
-**Phase 3 — Admin application (page by page).** All work below is **committed**
-on `feat/real-backend-integration`. Done & committed: Admin Login, full Catalog
-CRUD, complete student oversight (list, detail, attempts, access codes + revoke),
-admin-list active-first sort, **Audit logs** (`a9e002d`), **Mock questions**
-(`de8aff8`), **Exam assignment** + navbar language switcher (`8877dcd`), and
-**Exam authoring — list + lifecycle** (`bf1a620`), and the **exam question
-editor** + stale-list fix (`5e11e34`), and **exam title translations** (`6fa0bd6`)
-— so exam authoring is functionally complete. **Just built (uncommitted, awaiting
-review): catalog (certificate) translations** (Arabic/French title + description)
-on the catalog edit form. Curriculum is blocked by BE-I-13; Certificate
-revocation lacks an issued-cert list endpoint.
+**Phase 4 — Wire the user-facing app to the real backend.** All Phase-3 (admin)
+work is **committed** on `feat/real-backend-integration` (see "Admin pages
+status" below for the per-page commit map). The user-facing screens (landing,
+dashboard, courses, assessments, catalog, profile, certificates, notifications,
+insights, settings) still target the removed mock endpoints or placeholder data
+— they build/lint but 404 at runtime. Phase 4 wires them page-by-page using the
+established data-access layering, in the order below. **See the
+[Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration) — start
+there.**
 
 ## Phases at a glance
 
-| Phase | Description                                                                           | Status                             |
-| ----- | ------------------------------------------------------------------------------------- | ---------------------------------- |
-| 1     | Study backend → `backend-analysis.md`                                                 | ✅ Complete                        |
-| 2     | Frontend infrastructure (remove mocks, real API services, auth, interceptors, models) | 🚧 Auth done; feature APIs pending |
-| 3     | Admin application, page by page (starting with Login)                                 | 🚧 In progress                     |
+| Phase | Description                                                             | Status                               |
+| ----- | ----------------------------------------------------------------------- | ------------------------------------ |
+| 1     | Study backend → `backend-analysis.md`                                   | ✅ Complete                          |
+| 2     | Frontend infrastructure (remove mocks, real auth, interceptors, models) | ✅ Complete (auth + HTTP core)       |
+| 3     | Admin application, page by page                                         | ✅ Complete (all unblocked surfaces) |
+| 4     | **User-facing app ↔ real backend, page by page**                        | ⏭️ Next — see plan below             |
+
+---
+
+## Phase 4 plan — user-facing app backend integration
+
+**Goal:** wire every user-facing screen to the real backend, page-by-page, using
+the **same data-access layering** proven in the admin app
+(`data-access/<feat>.{dto,model,mappers,api,store}.ts`, signals, cursor
+pagination helpers, RFC-7807 error surfacing). Same workflow: **build one page →
+`typecheck`+`lint`+`build` clean → update this file → stop for review; commit
+only on "commit".**
+
+**Current state of these features:** they were scaffolded against the removed
+mock backend and now target non-existent endpoints (`/landing`, `/insights`) or
+placeholder/simulated data — they compile but 404 at runtime. Wiring = replace
+the placeholder with a real `data-access` layer against the endpoints below.
+
+### Feature → backend map (what to wire, in build order)
+
+| Order | Feature (route)                              | Screens / purpose                              | Backend endpoints (all under `/api/v1`)                                                                                                         | Status                      |
+| ----- | -------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| **1** | **Profile** (`/profile`)                     | View + edit profile; change password           | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                    | ✅ ready                    |
+| **1** | **Settings** (`/settings`)                   | Password, language; (delete account)           | `PATCH /me/password` ✅; **delete account = none (BE-I-19)** → hide/park                                                                        | ⚠️ partial                  |
+| **2** | **Catalog** (`/catalog`) + Landing           | Browse certs, cert detail, curriculum outline  | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /catalog`                                    | ✅ ready                    |
+| **3** | **Payments / enroll**                        | Checkout (enroll), retake, transaction history | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                | ✅ ready                    |
+| **4** | **Dashboard** (`/dashboard`)                 | Enrolled courses + progress, recent activity   | `GET /learning/progress` (enrolled certs + %), `GET /payments/transactions`, `GET /me`; **no aggregate analytics (BE-I-07)**                    | ⚠️ compose                  |
+| **5** | **Courses / Learning** (`/courses`)          | Curriculum tree, lesson viewer, quiz, complete | `GET /learning/certs/:id/curriculum`, `GET /learning/lessons/:id`, `GET /learning/lessons/:id/quiz`, `POST …/quiz/check`, `POST …/complete`     | ✅ ready (enrollment-gated) |
+| **6** | **Assessments — real exam** (`/assessments`) | Access-code entry → exam session → submit      | `POST /exam/{pre-exam-confirmation,validate-access,start}`, `GET/POST /exam/sessions/:id/*`, **`/exam` WebSocket** (heartbeat/timer)            | ✅ ready — high complexity  |
+| **6** | **Mock exam**                                | Practice attempts, history, review             | `POST /mock/start`, `GET /mock/history`, `GET /mock/attempts/:id`, `GET /mock/:id`, `POST /mock/:id/{autosave,extend,submit,…}`, **`/mock` WS** | ✅ ready                    |
+| **—** | **Certificates** (`/certificates`)           | List earned certs; verify                      | verify only: public `GET /verify/:certId`. **No "my certificates" list (BE-I-16)**                                                              | ⛔ blocked (list)           |
+| **—** | **Notifications** (`/notifications`)         | In-app notifications                           | **none — email-only (BE-I-18)**                                                                                                                 | ⛔ blocked                  |
+| **—** | **Insights** (`/insights`)                   | Analytics                                      | **none (BE-I-20 / BE-I-07)**                                                                                                                    | ⛔ blocked                  |
+
+### Build order & rationale
+
+1. **Profile + Settings (password)** — smallest, foundational; `/me` endpoints,
+   no dependencies. (Avatar image upload is **not** possible — BE-I-08 — treat
+   `avatarUrl` as a plain URL field.)
+2. **Catalog browse/detail + Landing featured** — public, simple; the funnel
+   entry. Reuse the admin `catalog.dto`/mappers where shapes overlap (public
+   response adds `locale`/`direction`/`fallbackUsed`).
+3. **Payments / enroll** — depends on catalog. **Do not collect card data in-app**
+   (prohibited): `POST /payments/checkout` returns a Stripe URL to redirect to
+   (or enrols immediately when the price is $0). Show `GET /payments/transactions`
+   for history.
+4. **Dashboard** — no analytics endpoint; **compose** the view from
+   `GET /learning/progress` (per-cert % complete) + `GET /payments/transactions`
+   - `GET /me`. Set expectations: no revenue/pass-rate widgets.
+5. **Courses / Learning** — curriculum tree + lesson viewer + inline quiz
+   (`quiz/check` persists nothing) + `POST …/complete` (idempotent). Lesson video
+   URL is signed with a short TTL (`meta.videoUrlExpiresInSeconds`).
+6. **Assessments (real exam) + Mock exam** — **largest, highest-stakes**; do
+   last. Follow the exam-engine discipline in `CLAUDE.md §10` / `docs/08`
+   (30 s heartbeat, `serverTick()` timer, IndexedDB answer drafts, idempotent
+   `clientSeq`, submit-blocked-until-synced). Two WebSocket namespaces: `/exam`
+   and `/mock`.
+
+### Blocked / scope-out (need backend work first — see the blockers report)
+
+- **Certificates list** (BE-I-16), **Notifications** (BE-I-18), **Insights**
+  (BE-I-20): no backend. Leave the routes as informative stubs (or remove from
+  nav) until endpoints exist. The **Certificates** screen can still offer
+  "verify a certificate by id" against public `GET /verify/:certId`.
+- **Delete account** (BE-I-19), **real-exam attempt history** (BE-I-17),
+  **avatar upload** (BE-I-08): degraders — hide the control or wire the partial.
+
+### Cross-cutting reminders for Phase 4
+
+- Keep the four-interceptor HTTP core; send `X-Lang` (locale) and
+  `Authorization: Bearer` (already wired). Student endpoints are RLS-scoped
+  server-side.
+- Lists are cursor/keyset (`@core/http` `pagination.ts`) — reuse `toPage`/
+  `toHttpParams`/`Page<T>`.
+- Response envelopes are **inconsistent** (BE-I-01): auth/profile/most student
+  reads are bare DTOs; lists are `{ data, meta }`. Map per endpoint.
+- Every user-visible string → i18n (en/fr/ar); Arabic needs pro review.
 
 ---
 
@@ -44,17 +121,23 @@ revocation lacks an issued-cert list endpoint.
 deployed API is the source of data — never run the backend locally. Dev API:
 `https://api-dev.instituteofscrum.org/api/v1` (already set in `environment*.ts`).
 
-**Read first (in order):** this file → [`backend-analysis.md`](./backend-analysis.md)
-(every endpoint/DTO/role, + the **Backend Issues Report**) → `CLAUDE.md`
-(frontend rules: standalone components, signals, OnPush, new control-flow, no
-`any`, no Observables in components, `ios-` selector prefix, logical CSS).
+**Read first (in order):** this file (esp. the
+[Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration)) →
+[`backend-blockers-report.md`](./backend-blockers-report.md) (what's blocked and
+why) → [`backend-analysis.md`](./backend-analysis.md) (every endpoint/DTO/role +
+Backend Issues Report) → `CLAUDE.md` (frontend rules: standalone components,
+signals, OnPush, new control-flow, no `any`, no Observables in components,
+`ios-` selector prefix, logical CSS).
 
 **Working rules (from the mission brief):**
 
 - **Never modify `IOS_Backend/`.** Document backend problems in
-  `backend-analysis.md` → Backend Issues Report; don't fix them.
-- **Admin app, page by page.** Build one page, verify, **stop for review**.
-  **Never commit without the user's explicit approval** — they say "commit".
+  `backend-analysis.md` → Backend Issues Report (and surface stoppers in
+  `backend-blockers-report.md`); don't fix them.
+- **App, page by page (Phase 4 — admin is done).** Build one page, verify,
+  **stop for review**. **Never commit without the user's explicit approval** —
+  they say "commit". Follow the [Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration)
+  order; skip the ⛔ blocked features.
 - After each page: update THIS file, then `npm run typecheck && npm run lint &&
 npm run build` (all from `institute of scrum/`) must be clean.
 - i18n lives in `src/app/assets/i18n/{en,fr,ar}.json`. Add keys to all three;
@@ -130,9 +213,10 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- **Catalog (certificate) translations** (ar/fr title + description) on the
-  catalog edit form — built & verified, **uncommitted**, awaiting review. See
-  "Page 2c" below. (Exam title translations committed as `6fa0bd6`.)
+- **(none — Phase 3 admin fully committed.)** Catalog translations committed as
+  `50fc688`. Next up: **Phase 4** — wire the user-facing app, starting with
+  **Profile** (`GET/PATCH /me`). See the
+  [Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration).
 
 ## Auth-route → backend endpoint map
 
@@ -180,24 +264,27 @@ not modified.
 
 ## Admin pages status
 
-🚧 **In progress — all buildable admin pages + exam translations committed; catalog translations awaiting review. Only backend-blocked pages remain (Curriculum, Cert revocation).**
+✅ **COMPLETE — every buildable admin page is built & committed.** The only two
+unbuilt pages are **backend-blocked** (Curriculum — BE-I-13; Certificate
+revocation — BE-I-15); see [`backend-blockers-report.md`](./backend-blockers-report.md).
+Next work is **Phase 4** (user-facing app) — see the plan above.
 
 | #   | Admin page                                                | Status                    | Backend                                                                              |
 | --- | --------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------ |
 | 1   | **Admin Login** (`/admin/login`)                          | ✅ Built & committed      | `POST /auth/admin/login`                                                             |
 | 2   | **Catalog — certificates list** (`/admin/catalog`)        | ✅ Built & committed      | `GET /admin/catalog`                                                                 |
 | 2b  | **Catalog — create / edit / deactivate**                  | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/catalog`                                               |
-| 2c  | **Catalog — title/description translations** (ar/fr)      | ✅ Built (review pending) | `PATCH /admin/catalog/:id/translations`                                              |
+| 2c  | **Catalog — title/description translations** (ar/fr)      | ✅ Built & committed      | `PATCH /admin/catalog/:id/translations`                                              |
 | 3   | **Users — list + student detail** (`/admin/users`)        | ✅ Built & committed      | `GET /admin/users`, `GET /admin/users/:id`                                           |
 | 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending) | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                        |
-| 4   | Curriculum (modules/lessons)                              | ⬜                        | `/admin/modules`, `/admin/lessons`                                                   |
+| 4   | Curriculum (modules/lessons)                              | ⛔ Blocked (BE-I-13)      | `/admin/modules`, `/admin/lessons` (no admin GET)                                    |
 | 5   | **Exam authoring — list + lifecycle** (`/admin/exams`)    | ✅ Built & committed      | `GET/POST /admin/certs/:id/exams`, `PATCH/DELETE/publish/unpublish /admin/exams/:id` |
 | 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built & committed      | `GET /admin/exams/:id`, `POST/PATCH/DELETE /admin/exams/:id/questions*`              |
-| 5c  | **Exam title translations** (ar/fr)                       | ✅ Built (review pending) | `PATCH /admin/exams/:id/translations`                                                |
+| 5c  | **Exam title translations** (ar/fr)                       | ✅ Built & committed      | `PATCH /admin/exams/:id/translations`                                                |
 | 6   | **Exam assignment** (`/admin/exam`)                       | ✅ Built & committed      | `GET /admin/exam`, `POST /admin/exam/assign`                                         |
 | 7   | **Mock questions** (`/admin/mock`)                        | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/mock*`                                                 |
 | 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed      | `GET /admin/audit-logs`                                                              |
-| 9   | Certificate revocation                                    | ⬜                        | `/admin/certs/issued/:id/revoke`                                                     |
+| 9   | Certificate revocation                                    | ⛔ Blocked (BE-I-15)      | `/admin/certs/issued/:id/revoke` (no issued-cert list)                               |
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -548,13 +635,14 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Catalog translations is built & verified** (ar/fr title + description on the
-catalog edit form) — **uncommitted** per "don't commit till I agree". With this,
-**every unblocked admin/content-authoring backend surface is covered** (catalog,
-users/oversight, mock, exam authoring + assignment, audit, and translations for
-both catalog and exams). On approval: commit, then pick the next direction. The
-two remaining admin pages are **backend-blocked**: **Curriculum** (BE-I-13 — no
-admin read) and **Certificate revocation** (no issued-cert list). So the next
-substantial work is **Phase 2 — wiring the user-facing app** (landing/dashboard/
-catalog/profile currently target removed mock endpoints), which is a larger,
-strategic pivot — **confirm scope/priority with the reviewer** before starting.
+**Admin app is complete and committed** (catalog translations — the last piece —
+committed as `50fc688`). **Begin Phase 4: wire the user-facing app**, following
+the [Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration).
+
+**Start with Profile** (`/profile`) — the smallest, dependency-free page:
+build `features/profile/data-access/profile.{dto,model,mappers,api,store}.ts`
+against `GET /me` (load) + `PATCH /me` (save) + `PATCH /me/password`, then wire
+the profile view/edit + change-password screens. Skip the ⛔ blocked features
+(Certificates list, Notifications, Insights) — see
+[`backend-blockers-report.md`](./backend-blockers-report.md). Then proceed down
+the plan: Catalog/Landing → Payments → Dashboard → Courses → Assessments/Mock.
