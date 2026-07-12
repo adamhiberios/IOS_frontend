@@ -16,10 +16,12 @@ page against the deployed API.
 
 **Phase 3 — Admin application (page by page).** All work below is **committed**
 on `feat/real-backend-integration`. Done & committed: Admin Login, full Catalog
-CRUD, and complete student oversight (list, detail, attempts, access codes +
-revoke), plus admin-list active-first sort. **Just built (uncommitted, awaiting
-review): Audit logs** (`/admin/audit-logs`). **Next page to build:** Curriculum,
-Exam authoring, Mock questions, or Certificate revocation — user picks.
+CRUD, complete student oversight (list, detail, attempts, access codes + revoke),
+admin-list active-first sort, and **Audit logs** (`/admin/audit-logs`, committed
+`a9e002d`). **Just built (uncommitted, awaiting review): Mock questions**
+(`/admin/mock`). **Next page to build:** Exam authoring or Exam assignment (both
+have full read surfaces); Curriculum is blocked by BE-I-13, Certificate
+revocation lacks an issued-cert list endpoint.
 
 ## Phases at a glance
 
@@ -125,8 +127,8 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- **Audit logs** (`/admin/audit-logs`) — built & verified, **uncommitted**,
-  awaiting review. See "Page 8" below.
+- **Mock questions** (`/admin/mock`) — built & verified, **uncommitted**,
+  awaiting review. See "Page 7" below. (Audit logs committed as `a9e002d`.)
 
 ## Auth-route → backend endpoint map
 
@@ -174,7 +176,7 @@ not modified.
 
 ## Admin pages status
 
-🚧 **In progress — Login + Catalog + student oversight committed; Audit logs awaiting review.**
+🚧 **In progress — Login + Catalog + student oversight + Audit logs committed; Mock questions awaiting review.**
 
 | #   | Admin page                                         | Status                    | Backend                                                       |
 | --- | -------------------------------------------------- | ------------------------- | ------------------------------------------------------------- |
@@ -186,11 +188,43 @@ not modified.
 | 4   | Curriculum (modules/lessons)                       | ⬜                        | `/admin/modules`, `/admin/lessons`                            |
 | 5   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`                                     |
 | 6   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam`                           |
-| 7   | Mock questions                                     | ⬜                        | `/admin/mock*`                                                |
-| 8   | **Audit logs** (`/admin/audit-logs`)               | ✅ Built (review pending) | `GET /admin/audit-logs`                                       |
+| 7   | **Mock questions** (`/admin/mock`)                 | ✅ Built (review pending) | `GET/POST/PATCH/DELETE /admin/mock*`                          |
+| 8   | **Audit logs** (`/admin/audit-logs`)               | ✅ Built & committed      | `GET /admin/audit-logs`                                       |
 | 9   | Certificate revocation                             | ⬜                        | `/admin/certs/issued/:id/revoke`                              |
 
-**Page 8 — Audit logs (uncommitted, awaiting review):**
+**Page 7 — Mock questions (uncommitted, awaiting review):**
+
+- `features/admin/data-access/` mock layer: `mock.dto.ts` (wire; the authoring
+  view **exposes** `isCorrect`), `mock.model.ts` (`MockQuestion`,
+  `MockQuestionDraft`, `MockQuestionType`/`isMockQuestionType`), `mock.mappers.ts`,
+  `mock.api.ts` (`AdminMockQuestionsApi`: `list(certId)` → `GET
+/admin/mock/certs/:certId/questions` — **not paginated**, returns the whole
+  bank incl. inactive; `create`/`update`/`softDelete`), `mock.store.ts`
+  (`AdminMockQuestionsStore` — owns the cert-picker options (loaded via the
+  sibling `AdminCatalogApi`), the selected cert, that cert's question bank, and
+  the save/deactivate/reactivate actions; active-first sort).
+- `pages/admin-mock-questions.page.ts` — pick a certificate (`ios-select`), then
+  manage its bank: cards per question (position, type, active badge, options with
+  the correct answer marked), an inline **create/edit dialog** with a dynamic
+  option set (native radio picks the single correct answer; add/remove options,
+  min 2 enforced client-side, exactly-one-correct enforced by the radio + backend),
+  role-gated **Deactivate** (confirm dialog) / **Reactivate**. Loading / empty /
+  error+retry states. Business logic in the store; component owns only forms +
+  dialog state.
+- **Note (lint):** a module-level `required` validator wraps `Validators.required`
+  as a call — the `FormArray` in this component degrades form-builder overload
+  inference enough that the type-aware `unbound-method` rule loses the bare
+  `Validators.required` reference (see the comment in the page).
+- Nav item **Mock questions** gated to `content_creator` / `learning_admin`
+  (super_admin sees all). Route `/admin/mock` added under the shell. Added
+  `admin.mock.*` (40 keys) + `admin.shell.nav.mock` i18n (en/fr/ar; Arabic
+  pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings in untouched files) · build ✓ (only the known raw-size budget warning;
+  `admin-mock-questions-page` chunk 4.93 kB gzip). Live check needs a real
+  content_creator/learning_admin session against the deployed API — deferred.
+
+**Page 8 — Audit logs (committed `a9e002d`):**
 
 - `features/admin/data-access/` audit layer: `audit.dto.ts` (wire; mirrors the
   backend `AuditLogItemDto` — `id` is a serial int, `oldData`/`newData` arrive
@@ -381,10 +415,13 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Audit logs is built & verified** (`/admin/audit-logs`, super_admin) —
-**uncommitted** per "don't commit till I agree". It reuses the established
-data-access layering + pagination plumbing and adds a super_admin-gated nav item
-and a read-only filtered table with an old/new-data detail dialog. On approval:
-commit, then continue. Suggested next page: **Curriculum** (modules/lessons) or
-**Exam authoring** for content-management, or **Certificate revocation** for a
-smaller super_admin/​learning_admin action page.
+**Mock questions is built & verified** (`/admin/mock`) — **uncommitted** per
+"don't commit till I agree". First cert-scoped admin page: a certificate picker
+
+- full per-cert question-bank CRUD (inline dialog, dynamic option set, active-
+  first, deactivate/reactivate), reusing the established layering. On approval:
+  commit, then continue. Suggested next page: **Exam authoring** (`/admin/certs/:id/
+exams*` — richest surface: list all statuses + question CRUD + publish) or **Exam
+  assignment** (`/admin/exam` — list published exams + issue a one-time code).
+  Avoid **Curriculum** (BE-I-13: no admin read) and **Certificate revocation** (no
+  issued-cert list endpoint) until the backend gaps are addressed.

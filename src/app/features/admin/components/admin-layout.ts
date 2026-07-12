@@ -33,6 +33,12 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     roles: ['learning_admin', 'support_admin'],
   },
   {
+    labelKey: 'admin.shell.nav.mock',
+    route: '/admin/mock',
+    exact: false,
+    roles: ['content_creator', 'learning_admin'],
+  },
+  {
     labelKey: 'admin.shell.nav.audit',
     route: '/admin/audit-logs',
     exact: false,
