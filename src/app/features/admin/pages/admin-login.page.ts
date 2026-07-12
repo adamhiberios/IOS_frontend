@@ -36,7 +36,7 @@ import { AccentBars, Button, Input as IosInput, SectionBadge } from '@ui';
       <ios-auth-header />
 
       <main class="flex-1 flex items-start md:items-center justify-center px-4 pt-24 pb-10">
-        <ios-accent-bars top="10.4rem" />
+        <ios-accent-bars top="14rem" />
         <section class="w-full z-2 max-w-xl bg-white border border-gray-200 rounded-xl p-6 md:p-8">
           <header class="mb-6">
             <ios-section-badge
