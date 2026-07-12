@@ -2354,7 +2354,8 @@
       "nav": {
         "home": "الرئيسية",
         "catalog": "الشهادات",
-        "users": "الطلاب"
+        "users": "الطلاب",
+        "audit": "سجلات التدقيق"
       }
     },
     "home": {
@@ -2485,6 +2486,40 @@
       "revokeBody": "سيتيح ذلك إعادة تعيين الطالب. لا يمكن إلغاء الرموز المستخدَمة.",
       "revokeError": "تعذّر إلغاء الرمز. حاول مرة أخرى.",
       "cancel": "إلغاء"
+    },
+    "audit": {
+      "title": "سجلات التدقيق",
+      "subtitle": "راجع الإجراءات الإدارية عبر المنصة.",
+      "tableLabel": "الجدول",
+      "tablePlaceholder": "مثال: exams، admin_users",
+      "actorLabel": "معرّف المنفّذ",
+      "actorPlaceholder": "UUID الخاص بالمشرف",
+      "recordLabel": "معرّف السجل",
+      "recordPlaceholder": "معرّف السجل المتأثر",
+      "actionLabel": "الإجراء",
+      "actionAll": "جميع الإجراءات",
+      "actionInsert": "إضافة",
+      "actionUpdate": "تحديث",
+      "actionDelete": "حذف",
+      "apply": "تطبيق عوامل التصفية",
+      "clear": "مسح",
+      "colWhen": "التاريخ",
+      "colAction": "الإجراء",
+      "colTable": "الجدول",
+      "colRecord": "السجل",
+      "colActor": "المنفّذ",
+      "colIp": "عنوان IP",
+      "colDetails": "التفاصيل",
+      "view": "عرض",
+      "oldData": "قبل",
+      "newData": "بعد",
+      "noData": "لا توجد بيانات",
+      "close": "إغلاق",
+      "loading": "جارٍ تحميل سجلات التدقيق…",
+      "empty": "لا توجد إدخالات تدقيق.",
+      "error": "تعذّر تحميل سجلات التدقيق. يُرجى المحاولة مرة أخرى.",
+      "retry": "إعادة المحاولة",
+      "loadMore": "تحميل المزيد"
     }
   }
 }

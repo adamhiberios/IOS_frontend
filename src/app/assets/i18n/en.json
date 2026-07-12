@@ -2354,7 +2354,8 @@
       "nav": {
         "home": "Home",
         "catalog": "Certificates",
-        "users": "Students"
+        "users": "Students",
+        "audit": "Audit logs"
       }
     },
     "home": {
@@ -2485,6 +2486,40 @@
       "revokeBody": "This frees the student to be re-assigned. Used codes can’t be revoked.",
       "revokeError": "Couldn’t revoke the code. Please try again.",
       "cancel": "Cancel"
+    },
+    "audit": {
+      "title": "Audit logs",
+      "subtitle": "Review administrative actions across the platform.",
+      "tableLabel": "Table",
+      "tablePlaceholder": "e.g. exams, admin_users",
+      "actorLabel": "Actor ID",
+      "actorPlaceholder": "Admin UUID",
+      "recordLabel": "Record ID",
+      "recordPlaceholder": "Affected record ID",
+      "actionLabel": "Action",
+      "actionAll": "All actions",
+      "actionInsert": "Insert",
+      "actionUpdate": "Update",
+      "actionDelete": "Delete",
+      "apply": "Apply filters",
+      "clear": "Clear",
+      "colWhen": "When",
+      "colAction": "Action",
+      "colTable": "Table",
+      "colRecord": "Record",
+      "colActor": "Actor",
+      "colIp": "IP address",
+      "colDetails": "Details",
+      "view": "View",
+      "oldData": "Before",
+      "newData": "After",
+      "noData": "No data",
+      "close": "Close",
+      "loading": "Loading audit logs…",
+      "empty": "No audit entries found.",
+      "error": "Couldn’t load audit logs. Please try again.",
+      "retry": "Retry",
+      "loadMore": "Load more"
     }
   }
 }

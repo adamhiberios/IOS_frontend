@@ -1,7 +1,7 @@
 # Implementation Progress — IOS LMS Frontend ↔ Real Backend
 
 > **Single source of truth for implementation progress.** Updated continuously.
-> Last updated: 2026-07-11.
+> Last updated: 2026-07-12.
 
 ---
 
@@ -15,10 +15,11 @@ page against the deployed API.
 ## Current phase
 
 **Phase 3 — Admin application (page by page).** All work below is **committed**
-on `feat/real-backend-integration` (nothing pending review). Done so far: Admin
-Login, full Catalog CRUD, and complete student oversight (list, detail, attempts,
-access codes + revoke), plus admin-list active-first sort. **Next page to build:
-Audit logs** (`/admin/audit-logs`) — or another admin page the user picks.
+on `feat/real-backend-integration`. Done & committed: Admin Login, full Catalog
+CRUD, and complete student oversight (list, detail, attempts, access codes +
+revoke), plus admin-list active-first sort. **Just built (uncommitted, awaiting
+review): Audit logs** (`/admin/audit-logs`). **Next page to build:** Curriculum,
+Exam authoring, Mock questions, or Certificate revocation — user picks.
 
 ## Phases at a glance
 
@@ -124,7 +125,8 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- (none — everything committed through student oversight; next page: **Audit logs**)
+- **Audit logs** (`/admin/audit-logs`) — built & verified, **uncommitted**,
+  awaiting review. See "Page 8" below.
 
 ## Auth-route → backend endpoint map
 
@@ -172,7 +174,7 @@ not modified.
 
 ## Admin pages status
 
-🚧 **In progress — Login + Catalog committed; Users list+detail awaiting review.**
+🚧 **In progress — Login + Catalog + student oversight committed; Audit logs awaiting review.**
 
 | #   | Admin page                                         | Status                    | Backend                                                       |
 | --- | -------------------------------------------------- | ------------------------- | ------------------------------------------------------------- |
@@ -185,8 +187,35 @@ not modified.
 | 5   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`                                     |
 | 6   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam`                           |
 | 7   | Mock questions                                     | ⬜                        | `/admin/mock*`                                                |
-| 8   | Audit logs                                         | ⬜                        | `/admin/audit-logs`                                           |
+| 8   | **Audit logs** (`/admin/audit-logs`)               | ✅ Built (review pending) | `GET /admin/audit-logs`                                       |
 | 9   | Certificate revocation                             | ⬜                        | `/admin/certs/issued/:id/revoke`                              |
+
+**Page 8 — Audit logs (uncommitted, awaiting review):**
+
+- `features/admin/data-access/` audit layer: `audit.dto.ts` (wire; mirrors the
+  backend `AuditLogItemDto` — `id` is a serial int, `oldData`/`newData` arrive
+  redacted server-side), `audit.model.ts` (`AuditLogEntry`, `AuditLogFilters`,
+  `AuditLogQuery`; `AUDIT_ACTIONS`/`isAuditAction` for `INSERT|UPDATE|DELETE`;
+  `action` kept as `string` because the backend types it loosely), `audit.mappers.ts`,
+  `audit.api.ts` (`AdminAuditLogsApi.list` → `GET /admin/audit-logs`, reuses
+  `toHttpParams`/`toPage`), `audit.store.ts` (`AdminAuditLogsStore` — signal store:
+  items, loading/loadingMore, error, cursor, a `filters` object + `setFilters`;
+  no mutations — audit logs are append-only).
+- `pages/admin-audit-logs.page.ts` — read-only, cursor-paginated table (When /
+  Action badge / Table / Record / Actor / IP) with the four backend filters
+  (`tableName`, `actorId`, `recordId` free-text; `action` via `ios-select`,
+  Apply/Clear), loading / empty / error+retry / inline load-more-error states,
+  and a per-row **details dialog** showing the redacted `oldData`/`newData`
+  JSON (`before`/`after`) plus actor / record / IP / timestamp. Business logic
+  lives in the store; the component only binds signals + drives filters.
+- Nav item **Audit logs** gated to `super_admin` (the only role the backend
+  allows; `admin-layout` nav filter already grants super_admin everything).
+  Route added as a child of the admin shell. Added `admin.audit.*` (32 keys) +
+  `admin.shell.nav.audit` i18n (en/fr/ar; Arabic still needs pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings in untouched files) · build ✓ (only the known raw-size budget warning;
+  gzip initial 96.13 kB). Live check needs a real `super_admin` session against
+  the deployed API (no test creds in-session) — deferred.
 
 **Page 3 — Users list + student detail (uncommitted, awaiting review):**
 
@@ -352,9 +381,10 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Student oversight is complete** (list + detail committed; attempts + access
-codes + revoke built & verified, **uncommitted** per "don't commit till I
-agree"), and admin lists now show **active first**. On approval: commit, then
-continue. Suggested next page: **Audit logs** (`/admin/audit-logs`, super_admin)
-— a clean read-only list reusing the pagination plumbing — or **Curriculum** /
-**Exam authoring** if you'd rather build content-management next.
+**Audit logs is built & verified** (`/admin/audit-logs`, super_admin) —
+**uncommitted** per "don't commit till I agree". It reuses the established
+data-access layering + pagination plumbing and adds a super_admin-gated nav item
+and a read-only filtered table with an old/new-data detail dialog. On approval:
+commit, then continue. Suggested next page: **Curriculum** (modules/lessons) or
+**Exam authoring** for content-management, or **Certificate revocation** for a
+smaller super_admin/​learning_admin action page.
