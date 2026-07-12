@@ -86,6 +86,36 @@ export class AdminExamQuestionsStore {
     }
   }
 
+  /**
+   * Save per-locale exam **title** translations, then refresh. Only non-empty
+   * titles are sent (the backend merges per supplied locale; a blank field is
+   * omitted, preserving the existing value — it can't clear one). Works on both
+   * draft and published exams. Returns `true` on success.
+   */
+  async saveTranslations(titles: Record<string, string>): Promise<boolean> {
+    const examId = this._examId();
+    if (examId === null || this._actionPendingId() !== null) return false;
+    this._actionPendingId.set('translations');
+    this._actionError.set(null);
+    const translations: Record<string, { title: string }> = {};
+    for (const [locale, title] of Object.entries(titles)) {
+      const trimmed = title.trim();
+      if (trimmed) translations[locale] = { title: trimmed };
+    }
+    try {
+      await firstValueFrom(this.api.updateTranslations(examId, { translations }));
+      await this.reload();
+      return true;
+    } catch (err) {
+      this._actionError.set(
+        problemDetailMessage(err) ?? this.lang.t('admin.examQuestions.translationsError'),
+      );
+      return false;
+    } finally {
+      this._actionPendingId.set(null);
+    }
+  }
+
   /** Delete a question, then refresh (DRAFT only). */
   async deleteQuestion(questionId: string): Promise<boolean> {
     const examId = this._examId();

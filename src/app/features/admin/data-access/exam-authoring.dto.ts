@@ -58,6 +58,11 @@ export interface ExamQuestionDto {
   readonly options: readonly ExamQuestionOptionDto[];
 }
 
+/** One per-locale translation block on the exam (`Translations<'title'>`). */
+export interface ExamTranslationEntryDto {
+  readonly title?: string;
+}
+
 /** `GET /admin/exams/:examId` — the full authoring view (exam meta + questions). */
 export interface ExamDetailDto {
   readonly id: string;
@@ -67,6 +72,7 @@ export interface ExamDetailDto {
   readonly status: string;
   readonly passingScore: number;
   readonly durationMinutes: number;
+  readonly translations?: Readonly<Record<string, ExamTranslationEntryDto>>;
   readonly questions: readonly ExamQuestionDto[];
 }
 
@@ -88,6 +94,14 @@ export interface CreateQuestionBody {
   readonly position?: number;
   readonly marks?: number;
   readonly options: readonly QuestionOptionInput[];
+}
+
+/**
+ * Body for `PATCH /admin/exams/:examId/translations` (`UpdateExamTranslationsDto`).
+ * Each supplied locale REPLACES that locale's block; omitted locales are kept.
+ */
+export interface UpdateExamTranslationsBody {
+  readonly translations: Record<string, { readonly title: string }>;
 }
 
 /**

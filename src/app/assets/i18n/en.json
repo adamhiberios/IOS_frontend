@@ -2683,7 +2683,12 @@
       "cancel": "Cancel",
       "save": "Save",
       "confirmTitle": "Delete question?",
-      "confirmBody": "This permanently removes the question from the exam."
+      "confirmBody": "This permanently removes the question from the exam.",
+      "translations": "Translations",
+      "translationsTitle": "Exam title translations",
+      "translationsHint": "Translate the exam title shown to students. Leave a field blank to keep the current value; English uses the exam’s main title.",
+      "canonicalLabel": "English (canonical)",
+      "translationsError": "Couldn’t save translations. Please try again."
     }
   }
 }

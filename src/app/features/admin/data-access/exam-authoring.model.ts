@@ -66,6 +66,8 @@ export interface ExamDetail {
   readonly status: ExamStatus;
   readonly passingScore: number;
   readonly durationMinutes: number;
+  /** Per-locale title overrides (locale → title), only where a title is set. */
+  readonly translations: Readonly<Record<string, string>>;
   readonly questions: readonly ExamQuestion[];
 }
 

@@ -42,7 +42,17 @@ function toQuestion(dto: ExamQuestionDto): ExamQuestion {
   };
 }
 
-/** Map a wire `ExamDetailDto` to an `ExamDetail` (meta + questions). */
+/** Flatten the wire `translations` map to `locale → title`, dropping empties. */
+function flattenTranslations(translations: ExamDetailDto['translations']): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [locale, entry] of Object.entries(translations ?? {})) {
+    const title = entry?.title?.trim();
+    if (title) out[locale] = title;
+  }
+  return out;
+}
+
+/** Map a wire `ExamDetailDto` to an `ExamDetail` (meta + translations + questions). */
 export function toExamDetail(dto: ExamDetailDto): ExamDetail {
   return {
     id: dto.id,
@@ -52,6 +62,7 @@ export function toExamDetail(dto: ExamDetailDto): ExamDetail {
     status: isExamStatus(dto.status) ? dto.status : 'draft',
     passingScore: dto.passingScore,
     durationMinutes: dto.durationMinutes,
+    translations: flattenTranslations(dto.translations),
     questions: dto.questions.map(toQuestion),
   };
 }

@@ -10,6 +10,7 @@ import {
   type ExamDetailResponseDto,
   type ExamListResponseDto,
   type UpdateExamBody,
+  type UpdateExamTranslationsBody,
   type UpdateQuestionBody,
 } from './exam-authoring.dto';
 import { toAdminExam, toExamDetail } from './exam-authoring.mappers';
@@ -76,6 +77,13 @@ export class AdminExamAuthoringApi {
     return this.http
       .get<ExamDetailResponseDto>(`${this.base}/exams/${examId}`)
       .pipe(map((res) => toExamDetail(res.data)));
+  }
+
+  /** `PATCH /admin/exams/:examId/translations` — merge per-locale title translations. */
+  updateTranslations(examId: string, body: UpdateExamTranslationsBody): Observable<void> {
+    return this.http
+      .patch<void>(`${this.base}/exams/${examId}/translations`, body)
+      .pipe(map(() => undefined));
   }
 
   /** `POST /admin/exams/:examId/questions` — add a question (DRAFT exams only). */

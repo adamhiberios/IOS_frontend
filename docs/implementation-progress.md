@@ -19,11 +19,12 @@ on `feat/real-backend-integration`. Done & committed: Admin Login, full Catalog
 CRUD, complete student oversight (list, detail, attempts, access codes + revoke),
 admin-list active-first sort, **Audit logs** (`a9e002d`), **Mock questions**
 (`de8aff8`), **Exam assignment** + navbar language switcher (`8877dcd`), and
-**Exam authoring — list + lifecycle** (`bf1a620`). **Just built (uncommitted,
-awaiting review): Exam authoring — question editor** (`/admin/exams/:id`). With
-that, **exam authoring is functionally complete** (author a draft → add
-questions → publish). Curriculum is blocked by BE-I-13; Certificate revocation
-lacks an issued-cert list endpoint.
+**Exam authoring — list + lifecycle** (`bf1a620`), and the **exam question
+editor** + stale-list fix (`5e11e34`) — so **exam authoring is functionally
+complete** (author a draft → add questions → publish). **Just built (uncommitted,
+awaiting review): exam title translations** (Arabic/French) on the exam editor.
+Curriculum is blocked by BE-I-13; Certificate revocation lacks an issued-cert
+list endpoint.
 
 ## Phases at a glance
 
@@ -129,9 +130,9 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- **Exam authoring — question editor** (`/admin/exams/:id`) — built & verified,
-  **uncommitted**, awaiting review. See "Page 5b" below. (Exam authoring list +
-  lifecycle committed as `bf1a620`.)
+- **Exam title translations** (ar/fr) on the exam editor — built & verified,
+  **uncommitted**, awaiting review. See "Page 5c" below. (Question editor + stale
+  fix committed as `5e11e34`; list + lifecycle as `bf1a620`.)
 
 ## Auth-route → backend endpoint map
 
@@ -179,7 +180,7 @@ not modified.
 
 ## Admin pages status
 
-🚧 **In progress — Login + Catalog + oversight + Audit + Mock + Exam assignment + Exam authoring list committed; exam question editor awaiting review.**
+🚧 **In progress — all buildable admin pages committed through the exam question editor; exam title translations awaiting review. Only backend-blocked pages remain (Curriculum, Cert revocation).**
 
 | #   | Admin page                                                | Status                    | Backend                                                                              |
 | --- | --------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------ |
@@ -190,13 +191,34 @@ not modified.
 | 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending) | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                        |
 | 4   | Curriculum (modules/lessons)                              | ⬜                        | `/admin/modules`, `/admin/lessons`                                                   |
 | 5   | **Exam authoring — list + lifecycle** (`/admin/exams`)    | ✅ Built & committed      | `GET/POST /admin/certs/:id/exams`, `PATCH/DELETE/publish/unpublish /admin/exams/:id` |
-| 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built (review pending) | `GET /admin/exams/:id`, `POST/PATCH/DELETE /admin/exams/:id/questions*`              |
+| 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built & committed      | `GET /admin/exams/:id`, `POST/PATCH/DELETE /admin/exams/:id/questions*`              |
+| 5c  | **Exam title translations** (ar/fr)                       | ✅ Built (review pending) | `PATCH /admin/exams/:id/translations`                                                |
 | 6   | **Exam assignment** (`/admin/exam`)                       | ✅ Built & committed      | `GET /admin/exam`, `POST /admin/exam/assign`                                         |
 | 7   | **Mock questions** (`/admin/mock`)                        | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/mock*`                                                 |
 | 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed      | `GET /admin/audit-logs`                                                              |
 | 9   | Certificate revocation                                    | ⬜                        | `/admin/certs/issued/:id/revoke`                                                     |
 
-**Page 5b — Exam authoring, question editor (uncommitted, awaiting review):**
+**Page 5c — Exam title translations (uncommitted, awaiting review):**
+
+- Small extension to the exam question editor. Adds per-locale exam **title**
+  authoring via `PATCH /admin/exams/:examId/translations`. The app supports
+  en/ar/fr, so the editor offers **Arabic + French** title fields (English is the
+  canonical `title` field); students see the localized title with English fallback.
+- `exam-authoring.{dto,model,mappers}` now carry the exam's `translations`
+  (flattened to `locale → title`); `AdminExamAuthoringApi.updateTranslations`;
+  `AdminExamQuestionsStore.saveTranslations` (sends only non-empty locales — the
+  backend merges per supplied locale, so a **blank field preserves** the existing
+  value and can't clear it; documented limitation).
+- UI: a **Translations** button in the exam header opens a dialog (canonical
+  English shown read-only + ar/fr inputs pre-filled from existing translations).
+  Available on both draft and published exams (the backend has no status lock on
+  translations). Added `admin.examQuestions.translations*` i18n (en/fr/ar; Arabic
+  pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓ (`admin-exam-
+questions-page` chunk 5.11 kB gzip). Live check needs a real
+  content_creator/learning_admin session — deferred.
+
+**Page 5b — Exam authoring, question editor (committed `5e11e34`):**
 
 - Second increment — makes a draft publishable. Extends the exam-authoring
   data-access with detail/question shapes (`ExamDetail`, `ExamQuestion`,
@@ -506,13 +528,13 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Exam authoring — question editor is built & verified** (`/admin/exams/:id`) —
-**uncommitted** per "don't commit till I agree". With it, **exam authoring is
-functionally complete**: author a draft → add/edit questions (dynamic options,
-single correct) → publish. On approval: commit, then continue. Remaining admin
-surfaces: **Curriculum** (blocked by BE-I-13 — no admin read) and **Certificate
-revocation** (blocked — no issued-cert list endpoint, only `PATCH
-/admin/certs/issued/:id/revoke`). With both blocked by backend gaps, the next
-useful work is likely **wiring the user-facing app** (catalog/profile, per the
-Phase-2 remaining tasks) or exam **translations** authoring (`PATCH
-/admin/exams/:id/translations`) — confirm direction with the reviewer.
+**Exam title translations is built & verified** (ar/fr on the exam editor) —
+**uncommitted** per "don't commit till I agree". With exam authoring +
+translations done, **the admin app covers every unblocked backend surface**. On
+approval: commit, then pick the next direction. The remaining admin pages are
+both **backend-blocked**: **Curriculum** (BE-I-13 — no admin read) and
+**Certificate revocation** (no issued-cert list endpoint). So the next useful
+work is likely one of: (a) **catalog translations** (same shape, `PATCH
+/admin/catalog/:id/translations`), (b) **wiring the user-facing app**
+(catalog/profile, Phase-2 remaining), or (c) revisit the blocked pages if the
+backend adds the missing read endpoints. Confirm direction with the reviewer.

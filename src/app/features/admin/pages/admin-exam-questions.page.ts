@@ -95,6 +95,11 @@ const required: ValidatorFn = (control) => Validators.required(control);
             </p>
           </div>
           <div class="flex shrink-0 items-center gap-2">
+            @if (canManage() && !preview()) {
+              <ios-button variant="secondary" (clicked)="openTranslations()">
+                {{ lang.t('admin.examQuestions.translations') }}
+              </ios-button>
+            }
             @if (store.questions().length > 0) {
               <ios-button variant="secondary" (clicked)="togglePreview()">
                 {{
@@ -193,7 +198,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           </ol>
         }
 
-        @if (store.actionError() && !dialogOpen() && !pendingDelete()) {
+        @if (store.actionError() && !dialogOpen() && !pendingDelete() && !translationsOpen()) {
           <p class="text-sm text-red-600 mt-3 text-center" role="alert">
             {{ store.actionError() }}
           </p>
@@ -358,6 +363,75 @@ const required: ValidatorFn = (control) => Validators.required(control);
         </div>
       }
 
+      <!-- Title translations -->
+      @if (translationsOpen()) {
+        <div
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="q-tr-title"
+        >
+          <div
+            class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
+            <h2 id="q-tr-title" class="text-lg font-semibold text-ios-brand-dark mb-1">
+              {{ lang.t('admin.examQuestions.translationsTitle') }}
+            </h2>
+            <p class="text-xs text-gray-500 mb-4">
+              {{ lang.t('admin.examQuestions.translationsHint') }}
+            </p>
+
+            <form
+              [formGroup]="translationsForm"
+              (ngSubmit)="submitTranslations()"
+              class="flex flex-col gap-4"
+            >
+              <div class="rounded-lg bg-gray-50 border border-gray-200 px-4 py-2">
+                <p class="text-xs text-gray-500">
+                  {{ lang.t('admin.examQuestions.canonicalLabel') }}
+                </p>
+                <p class="text-sm text-ios-brand-dark">{{ store.exam()?.title }}</p>
+              </div>
+              <ios-input
+                id="q-tr-ar"
+                [label]="localeLabel('ar')"
+                type="text"
+                [control]="translationsForm.controls.ar"
+                [placeholder]="store.exam()?.title ?? ''"
+              />
+              <ios-input
+                id="q-tr-fr"
+                [label]="localeLabel('fr')"
+                type="text"
+                [control]="translationsForm.controls.fr"
+                [placeholder]="store.exam()?.title ?? ''"
+              />
+
+              @if (store.actionError()) {
+                <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
+              }
+
+              <div class="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  (click)="closeTranslations()"
+                  class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                >
+                  {{ lang.t('admin.examQuestions.cancel') }}
+                </button>
+                <ios-button
+                  type="submit"
+                  variant="primary"
+                  [loading]="store.actionPendingId() === 'translations'"
+                >
+                  {{ lang.t('admin.examQuestions.save') }}
+                </ios-button>
+              </div>
+            </form>
+          </div>
+        </div>
+      }
+
       <!-- Delete confirmation -->
       @if (pendingDelete(); as pending) {
         <div
@@ -419,6 +493,17 @@ export class AdminExamQuestionsPage implements OnInit {
   protected readonly correctIndex = signal(0);
   protected readonly optionsError = signal<string | null>(null);
   protected readonly pendingDelete = signal<ExamQuestion | null>(null);
+  protected readonly translationsOpen = signal(false);
+
+  /** Non-English app locales get a translatable exam title (`en` is canonical). */
+  private readonly localeLabels = new Map<string, string>(
+    this.lang.supportedLocales.map((l) => [l.code, l.label]),
+  );
+
+  protected readonly translationsForm = this.fb.group({
+    ar: this.fb.control(''),
+    fr: this.fb.control(''),
+  });
 
   protected readonly form = this.fb.group({
     questionText: this.fb.control('', { validators: [required] }),
@@ -448,6 +533,29 @@ export class AdminExamQuestionsPage implements OnInit {
 
   protected togglePreview(): void {
     this.preview.update((v) => !v);
+  }
+
+  protected localeLabel(code: string): string {
+    return this.localeLabels.get(code) ?? code;
+  }
+
+  // ── Title translations ─────────────────────────────────────────────────
+
+  protected openTranslations(): void {
+    this.store.clearActionError();
+    const t = this.store.exam()?.translations ?? {};
+    this.translationsForm.reset({ ar: t['ar'] ?? '', fr: t['fr'] ?? '' });
+    this.translationsOpen.set(true);
+  }
+
+  protected closeTranslations(): void {
+    this.store.clearActionError();
+    this.translationsOpen.set(false);
+  }
+
+  protected async submitTranslations(): Promise<void> {
+    const ok = await this.store.saveTranslations(this.translationsForm.getRawValue());
+    if (ok) this.translationsOpen.set(false);
   }
 
   protected typeLabel(type: ExamQuestionType): string {

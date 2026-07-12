@@ -2683,7 +2683,12 @@
       "cancel": "Annuler",
       "save": "Enregistrer",
       "confirmTitle": "Supprimer la question ?",
-      "confirmBody": "Cela retire définitivement la question de l’examen."
+      "confirmBody": "Cela retire définitivement la question de l’examen.",
+      "translations": "Traductions",
+      "translationsTitle": "Traductions du titre de l’examen",
+      "translationsHint": "Traduisez le titre de l’examen affiché aux étudiants. Laissez un champ vide pour conserver la valeur actuelle ; l’anglais utilise le titre principal de l’examen.",
+      "canonicalLabel": "Anglais (canonique)",
+      "translationsError": "Impossible d’enregistrer les traductions. Veuillez réessayer."
     }
   }
 }
