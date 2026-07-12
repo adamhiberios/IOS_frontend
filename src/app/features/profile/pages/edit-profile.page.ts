@@ -1,15 +1,18 @@
-/* eslint-disable @typescript-eslint/unbound-method */
 import {
   ChangeDetectionStrategy,
   Component,
   type OnInit,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
-import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgOptimizedImage } from '@angular/common';
+import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
-import { LucideArrowLeft, LucidePencil } from '@lucide/angular';
+import { startWith } from 'rxjs/operators';
+import { LucideArrowLeft } from '@lucide/angular';
 
 import { CanadaFlag, Input, IosIcon, Select, provideIcons, type SelectOption } from '@ui';
 import { DashboardNavbar } from '@layouts';
@@ -19,7 +22,8 @@ import { ProfileCancelEditDialog } from '../components/cancel-edit-dialog';
 import { ProfileInfoUpdatedDialog } from '../components/info-updated-dialog';
 import { ProfileStore } from '../data-access/profile.store';
 
-/** Countries available in the dropdown — extend as needed. */
+/** Countries offered in the dropdown — the backend field is a free string, so
+ *  the current stored value is always merged in (see `countryOptions`). */
 const COUNTRY_OPTIONS: SelectOption[] = [
   { value: 'Canada', label: 'Canada' },
   { value: 'United States', label: 'United States' },
@@ -64,20 +68,30 @@ const POSITION_OPTIONS: SelectOption[] = [
   { value: 'Manager', label: 'Manager' },
 ];
 
+/** Ensure a stored value that isn't in the preset list is still selectable, so
+ *  editing an unrelated field never silently drops it (backend fields are free
+ *  strings). */
+function withValue(options: SelectOption[], value: string): SelectOption[] {
+  const v = value.trim();
+  if (!v || options.some((o) => o.value === v)) return options;
+  return [{ value: v, label: v }, ...options];
+}
+
 /**
- * `ios-edit-profile-page` — form for updating personal, location, and
- * professional information.
+ * `ios-edit-profile-page` — form for updating location + professional
+ * information and phone via `PATCH /me`.
  *
  * Figma: node 13068-5382 (Dashborad-General / Update information).
  *
- * Three sections rendered as labelled cards:
- *   1. Personal informations  — avatar, first/last name (read-only), email (read-only)
- *   2. Location informations  — country, city (selects), street, address, postal code
- *   3. Professional Information — occupation, position (selects), company name
+ * `firstName`, `lastName`, and `email` are shown read-only — they are LOCKED
+ * server-side (they appear on issued certificates) and `PATCH /me` rejects
+ * them. Country/city are optional here (the backend does not require them; a
+ * null profile field must not block saving other edits). Avatar image upload is
+ * not possible (BE-I-08) — the avatar is display-only.
  *
- * Bottom action bar: Cancel | Save information.
- * "Cancel" opens `ProfileCancelEditDialog`; "Save information" calls `ProfileStore.updateProfile()`.
- * On success, `ProfileInfoUpdatedDialog` is shown; "Ok" navigates back to `/dashboard/profile`.
+ * Bottom action bar: Cancel | Save information. "Cancel" opens
+ * `ProfileCancelEditDialog`; "Save information" calls `ProfileStore.updateProfile()`.
+ * On success, `ProfileInfoUpdatedDialog` is shown; "Ok" returns to the profile.
  */
 @Component({
   selector: 'ios-edit-profile-page',
@@ -89,10 +103,11 @@ const POSITION_OPTIONS: SelectOption[] = [
     CanadaFlag,
     Input,
     Select,
+    NgOptimizedImage,
     ProfileCancelEditDialog,
     ProfileInfoUpdatedDialog,
   ],
-  providers: [provideIcons(LucideArrowLeft, LucidePencil)],
+  providers: [provideIcons(LucideArrowLeft)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -163,32 +178,34 @@ const POSITION_OPTIONS: SelectOption[] = [
               <div
                 class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col md:flex-row gap-6 md:gap-8 items-start"
               >
-                <!-- Avatar + change image -->
+                <!-- Avatar (display-only — no upload endpoint, BE-I-08) -->
                 <div class="flex flex-col gap-4 items-center shrink-0">
                   <div
-                    class="size-[82px] rounded-full border border-ios-line bg-[#fdfdfd] flex items-center justify-center"
+                    class="size-[82px] rounded-full border border-ios-line bg-[#fdfdfd] overflow-hidden flex items-center justify-center"
                     aria-hidden="true"
                   >
-                    <span class="text-[24px] font-bold leading-[1.2] text-ios-fg">
-                      {{ store.initials() }}
-                    </span>
+                    @if (store.profile()?.avatarUrl; as avatar) {
+                      <img
+                        [ngSrc]="avatar"
+                        alt=""
+                        class="w-full h-full object-cover"
+                        width="82"
+                        height="82"
+                      />
+                    } @else {
+                      <span class="text-[24px] font-bold leading-[1.2] text-ios-fg">
+                        {{ store.initials() }}
+                      </span>
+                    }
                   </div>
-                  <button
-                    type="button"
-                    class="flex items-center gap-2 text-[16px] font-semibold leading-[1.4] text-ios-fg hover:text-ios-fg-mid transition-colors focus-visible:outline-none rounded"
-                    [attr.aria-label]="lang.t('profile.edit.changeImage')"
-                  >
-                    <ios-icon name="pencil" class="w-5 h-5 shrink-0" aria-hidden="true" />
-                    <span class="whitespace-nowrap">{{ lang.t('profile.edit.changeImage') }}</span>
-                  </button>
                 </div>
 
                 <!-- Vertical divider -->
                 <div class="self-stretch w-px bg-ios-line shrink-0" aria-hidden="true"></div>
 
-                <!-- Fields — first/last name + email are display-only (opacity-40) -->
+                <!-- Fields — first/last name + email are display-only (locked) -->
                 <div class="flex-1 flex flex-col gap-6">
-                  <!-- First Name + Last Name (read-only per Figma; opacity-40) -->
+                  <!-- First Name + Last Name (locked; opacity-40) -->
                   <div
                     class="flex flex-col sm:flex-row gap-4 items-start opacity-40 pointer-events-none"
                   >
@@ -230,9 +247,9 @@ const POSITION_OPTIONS: SelectOption[] = [
                     </div>
                   </div>
 
-                  <!-- Email (read-only per Figma) -->
-                  <div class="flex items-start opacity-40 pointer-events-none">
-                    <div class="flex-1 flex flex-col gap-1">
+                  <!-- Email (locked) + Phone (editable) -->
+                  <div class="flex flex-col sm:flex-row gap-4 items-start">
+                    <div class="flex-1 flex flex-col gap-1 opacity-40 pointer-events-none">
                       <label
                         for="email"
                         class="px-2 text-[16px] font-semibold leading-[1.4] text-ios-fg"
@@ -250,6 +267,15 @@ const POSITION_OPTIONS: SelectOption[] = [
                         />
                       </div>
                     </div>
+                    <ios-input
+                      class="flex-1"
+                      id="phone"
+                      type="tel"
+                      autocomplete="tel"
+                      [label]="lang.t('profile.edit.phoneLabel')"
+                      [placeholder]="lang.t('profile.edit.phonePlaceholder')"
+                      [control]="form.controls.phone"
+                    />
                   </div>
                 </div>
               </div>
@@ -276,10 +302,8 @@ const POSITION_OPTIONS: SelectOption[] = [
                       id="country"
                       [label]="lang.t('profile.edit.countryLabel')"
                       [placeholder]="lang.t('profile.edit.countryPlaceholder')"
-                      [options]="countryOptions"
+                      [options]="countryOptions()"
                       [control]="form.controls.country"
-                      [required]="true"
-                      [errorText]="lang.t('profile.edit.countryError')"
                     />
                   </div>
                   <div class="flex-1">
@@ -289,8 +313,6 @@ const POSITION_OPTIONS: SelectOption[] = [
                       [placeholder]="lang.t('profile.edit.cityPlaceholder')"
                       [options]="cityOptions()"
                       [control]="form.controls.city"
-                      [required]="true"
-                      [errorText]="lang.t('profile.edit.cityError')"
                     />
                   </div>
                 </div>
@@ -340,7 +362,7 @@ const POSITION_OPTIONS: SelectOption[] = [
                       id="occupation"
                       [label]="lang.t('profile.edit.occupationLabel')"
                       [placeholder]="lang.t('profile.edit.occupationPlaceholder')"
-                      [options]="occupationOptions"
+                      [options]="occupationOptions()"
                       [control]="form.controls.occupation"
                     />
                   </div>
@@ -349,7 +371,7 @@ const POSITION_OPTIONS: SelectOption[] = [
                       id="position"
                       [label]="lang.t('profile.edit.positionLabel')"
                       [placeholder]="lang.t('profile.edit.positionPlaceholder')"
-                      [options]="positionOptions"
+                      [options]="positionOptions()"
                       [control]="form.controls.position"
                     />
                   </div>
@@ -358,12 +380,19 @@ const POSITION_OPTIONS: SelectOption[] = [
                     id="companyName"
                     [label]="lang.t('profile.edit.companyLabel')"
                     [placeholder]="lang.t('profile.edit.companyPlaceholder')"
-                    [control]="form.controls.companyName"
+                    [control]="form.controls.company"
                   />
                 </div>
               </div>
             </div>
           </section>
+
+          <!-- ── Submit error ────────────────────────────────────────────── -->
+          @if (store.submitError(); as err) {
+            <p role="alert" class="text-end text-sm font-medium text-ios-brand-primary">
+              {{ err }}
+            </p>
+          }
 
           <!-- ── Action buttons ──────────────────────────────────────────── -->
           <div class="flex items-center justify-end gap-4 mt-2 pb-2">
@@ -427,77 +456,87 @@ export class EditProfilePage implements OnInit {
   protected readonly showCancelDialog = signal(false);
   protected readonly year = new Date().getFullYear();
 
-  protected readonly countryOptions = COUNTRY_OPTIONS;
-  protected readonly occupationOptions = OCCUPATION_OPTIONS;
-  protected readonly positionOptions = POSITION_OPTIONS;
-
-  /** Dynamic city options based on selected country. */
-  protected readonly cityOptions = computed<SelectOption[]>(() => {
-    const country = this.form?.controls.country.value ?? '';
-    return CITY_OPTIONS[country] ?? CITY_OPTIONS['default'];
-  });
+  /** Guards the one-time form hydration from the loaded profile. */
+  private patched = false;
 
   protected readonly form = this.fb.group({
     firstName: this.fb.control(''),
     lastName: this.fb.control(''),
     email: this.fb.control(''),
-    country: this.fb.control('', [Validators.required]),
-    city: this.fb.control('', [Validators.required]),
+    phone: this.fb.control(''),
+    country: this.fb.control(''),
+    city: this.fb.control(''),
     street: this.fb.control(''),
     address: this.fb.control(''),
     postalCode: this.fb.control(''),
     occupation: this.fb.control(''),
     position: this.fb.control(''),
-    companyName: this.fb.control(''),
+    company: this.fb.control(''),
   });
 
-  ngOnInit(): void {
-    this.store.load();
-    this.store.resetSubmitStatus();
-    const profile = this.store.profile();
-    if (profile) {
-      this.patchForm(
-        profile.personal.firstName,
-        profile.personal.lastName,
-        profile.personal.email,
-        profile.personal.country,
-        profile.personal.city,
-        profile.personal.street,
-        profile.personal.address,
-        profile.personal.postalCode,
-        profile.professional.occupation,
-        profile.professional.position,
-        profile.professional.companyName,
-      );
-    }
+  /** Country options with the current stored value merged in. */
+  protected readonly countryOptions = computed(() =>
+    withValue(COUNTRY_OPTIONS, this.countryValue()),
+  );
+
+  /** City options for the selected country, with the stored value merged in. */
+  protected readonly cityOptions = computed(() => {
+    const base = CITY_OPTIONS[this.countryValue()] ?? CITY_OPTIONS['default'];
+    return withValue(base, this.cityValue());
+  });
+
+  protected readonly occupationOptions = computed(() =>
+    withValue(OCCUPATION_OPTIONS, this.occupationValue()),
+  );
+  protected readonly positionOptions = computed(() =>
+    withValue(POSITION_OPTIONS, this.positionValue()),
+  );
+
+  /* Track the select-bound control values as signals so the option lists react
+   * (no `.subscribe()` in the component — banned pattern; use `toSignal`). */
+  private readonly countryValue = toSignal(
+    this.form.controls.country.valueChanges.pipe(startWith(this.form.controls.country.value)),
+    { initialValue: '' },
+  );
+  private readonly cityValue = toSignal(
+    this.form.controls.city.valueChanges.pipe(startWith(this.form.controls.city.value)),
+    { initialValue: '' },
+  );
+  private readonly occupationValue = toSignal(
+    this.form.controls.occupation.valueChanges.pipe(startWith(this.form.controls.occupation.value)),
+    { initialValue: '' },
+  );
+  private readonly positionValue = toSignal(
+    this.form.controls.position.valueChanges.pipe(startWith(this.form.controls.position.value)),
+    { initialValue: '' },
+  );
+
+  constructor() {
+    // Hydrate the form once the profile has loaded (load is async).
+    effect(() => {
+      const p = this.store.profile();
+      if (!p || this.patched) return;
+      this.patched = true;
+      this.form.patchValue({
+        firstName: p.firstName,
+        lastName: p.lastName,
+        email: p.email,
+        phone: p.phone ?? '',
+        country: p.country ?? '',
+        city: p.city ?? '',
+        street: p.street ?? '',
+        address: p.address ?? '',
+        postalCode: p.postalCode ?? '',
+        occupation: p.occupation ?? '',
+        position: p.position ?? '',
+        company: p.company ?? '',
+      });
+    });
   }
 
-  private patchForm(
-    firstName: string,
-    lastName: string,
-    email: string,
-    country: string,
-    city: string,
-    street: string,
-    address: string,
-    postalCode: string,
-    occupation: string,
-    position: string,
-    companyName: string,
-  ): void {
-    this.form.patchValue({
-      firstName,
-      lastName,
-      email,
-      country,
-      city,
-      street,
-      address,
-      postalCode,
-      occupation,
-      position,
-      companyName,
-    });
+  ngOnInit(): void {
+    this.store.resetSubmitStatus();
+    void this.store.load();
   }
 
   protected onSubmit(): void {
@@ -507,9 +546,7 @@ export class EditProfilePage implements OnInit {
     }
     const v = this.form.getRawValue();
     void this.store.updateProfile({
-      firstName: v.firstName,
-      lastName: v.lastName,
-      email: v.email,
+      phone: v.phone,
       country: v.country,
       city: v.city,
       street: v.street,
@@ -517,7 +554,7 @@ export class EditProfilePage implements OnInit {
       postalCode: v.postalCode,
       occupation: v.occupation,
       position: v.position,
-      companyName: v.companyName,
+      company: v.company,
     });
   }
 

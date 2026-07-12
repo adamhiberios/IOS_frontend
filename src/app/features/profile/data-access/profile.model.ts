@@ -1,41 +1,44 @@
 /**
  * Profile domain types.
  *
- * Separates the richer profile data from the lean `User` record in `core/auth`
- * which only carries session-scoped fields. Profile data is fetched on demand
- * when the user navigates to the Profile feature.
+ * Mirrors the backend `/me` profile (see `profile.dto.ts`) as a flat frontend
+ * model. Nullable fields stay nullable so the UI can render an explicit
+ * "not set" placeholder rather than an empty string. `firstName`, `lastName`,
+ * and `email` are read-only here — they are locked server-side because they
+ * appear on issued certificates; corrections go through support/admin tooling.
  */
-
-export interface ProfilePersonal {
-  readonly firstName: string;
-  readonly lastName: string;
-  readonly username: string;
-  /** IOS-assigned learner identifier, e.g. "241242". */
-  readonly iosId: string;
-  readonly email: string;
-  readonly city: string;
-  readonly street: string;
-  readonly address: string;
-  readonly postalCode: string;
-  readonly country: string;
-}
-
-export interface ProfileProfessional {
-  readonly occupation: string;
-  readonly companyName: string;
-  readonly position: string;
-}
-
 export interface Profile {
-  readonly personal: ProfilePersonal;
-  readonly professional: ProfileProfessional;
-}
-
-/** Mutable form payload for the "Update information" flow. */
-export interface UpdateProfilePayload {
+  readonly id: string;
+  readonly email: string;
   readonly firstName: string;
   readonly lastName: string;
-  readonly email: string;
+  readonly fullName: string;
+  readonly phone: string | null;
+  /** Plain URL string — there is no avatar upload endpoint (BE-I-08). */
+  readonly avatarUrl: string | null;
+  readonly country: string | null;
+  readonly city: string | null;
+  readonly street: string | null;
+  readonly address: string | null;
+  readonly postalCode: string | null;
+  readonly occupation: string | null;
+  readonly position: string | null;
+  readonly company: string | null;
+  readonly locale: string;
+  readonly direction: 'ltr' | 'rtl';
+  readonly emailVerified: boolean;
+  readonly createdAt: string;
+  readonly updatedAt: string;
+}
+
+/**
+ * Mutable form payload for the "Update information" flow. Only the fields that
+ * `PATCH /me` accepts (name/email are locked). Values are collected as strings;
+ * the mapper converts blank strings to `null` so an emptied optional field is
+ * cleared server-side.
+ */
+export interface UpdateProfilePayload {
+  readonly phone: string;
   readonly country: string;
   readonly city: string;
   readonly street: string;
@@ -43,12 +46,14 @@ export interface UpdateProfilePayload {
   readonly postalCode: string;
   readonly occupation: string;
   readonly position: string;
-  readonly companyName: string;
+  readonly company: string;
 }
 
-/** Mutable form payload for the "Change password" flow. */
+/**
+ * Mutable form payload for the "Change password" flow. `confirmPassword` is a
+ * client-side check only and is not sent — the API takes current + new.
+ */
 export interface ChangePasswordPayload {
-  readonly oldPassword: string;
+  readonly currentPassword: string;
   readonly newPassword: string;
-  readonly confirmPassword: string;
 }

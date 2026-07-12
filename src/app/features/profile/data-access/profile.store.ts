@@ -1,130 +1,180 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { HttpErrorResponse } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
-import { AuthStore } from '@core/auth';
+import { problemDetailCode, problemDetailMessage } from '@core/http';
+import { LanguageService } from '@core/i18n';
+import { AppEventBus } from '@core/event-bus';
 
-import type {
-  ChangePasswordPayload,
-  Profile,
-  ProfilePersonal,
-  UpdateProfilePayload,
-} from './profile.model';
+import { ProfileApi } from './profile.api';
+import type { ChangePasswordPayload, Profile, UpdateProfilePayload } from './profile.model';
 
 export type ProfileSubmitStatus = 'idle' | 'pending' | 'success' | 'error';
 
 /**
  * `ProfileStore` — injectable singleton for the Profile feature.
  *
- * Holds the user's extended profile data (personal + professional + location).
- * The current implementation uses mock data seeded from `AuthStore.user()`.
- * When the real profile API lands, only the `load()` method needs updating.
- *
- * All state mutations happen through explicit action methods only — signals
- * are exposed as readonly views per /docs/03 §3 (store conventions).
+ * Owns the student's `/me` profile and the update / change-password actions,
+ * talking to the real backend through {@link ProfileApi}. Business logic lives
+ * here; the pages only bind signals and dispatch actions. All state mutates
+ * through action methods; signals are exposed as `.asReadonly()` views per
+ * /docs/03 §3 (store conventions). No Observables leak to components —
+ * `firstValueFrom` bridges inside the store.
  */
 @Injectable({ providedIn: 'root' })
 export class ProfileStore {
-  private readonly auth = inject(AuthStore);
+  private readonly api = inject(ProfileApi);
+  private readonly lang = inject(LanguageService);
+  private readonly bus = inject(AppEventBus);
+
+  constructor() {
+    // Drop the cached profile when the session ends so the next signed-in user
+    // never sees the previous user's data (this store is a root singleton).
+    this.bus
+      .on('user.logged-out')
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.clear());
+  }
 
   /* ─── private writable state ─── */
   private readonly _profile = signal<Profile | null>(null);
+  private readonly _loading = signal(false);
+  private readonly _error = signal<string | null>(null);
+
   private readonly _submitStatus = signal<ProfileSubmitStatus>('idle');
+  private readonly _submitError = signal<string | null>(null);
+
   private readonly _passwordSubmitStatus = signal<ProfileSubmitStatus>('idle');
+  private readonly _passwordError = signal<string | null>(null);
+  /** True when the failure was specifically a wrong current password (401). */
+  private readonly _passwordCurrentWrong = signal(false);
 
   /* ─── public readonly views ─── */
   readonly profile = this._profile.asReadonly();
+  readonly loading = this._loading.asReadonly();
+  readonly error = this._error.asReadonly();
   readonly submitStatus = this._submitStatus.asReadonly();
+  readonly submitError = this._submitError.asReadonly();
   readonly passwordSubmitStatus = this._passwordSubmitStatus.asReadonly();
+  readonly passwordError = this._passwordError.asReadonly();
+  readonly passwordCurrentWrong = this._passwordCurrentWrong.asReadonly();
 
-  /** Derived full name, e.g. "Adam Adam". */
+  /** Derived full name, preferring the backend-computed value. */
   readonly fullName = computed(() => {
-    const p = this._profile()?.personal;
-    return p ? `${p.firstName} ${p.lastName}` : '';
+    const p = this._profile();
+    if (!p) return '';
+    return p.fullName || `${p.firstName} ${p.lastName}`.trim();
   });
 
   /** Derived initials for the avatar circle, e.g. "AA". */
   readonly initials = computed(() => {
-    const p = this._profile()?.personal;
+    const p = this._profile();
     if (!p) return '';
-    return `${p.firstName.charAt(0)}${p.lastName.charAt(0)}`.toUpperCase();
+    const first = p.firstName.charAt(0);
+    const last = p.lastName.charAt(0);
+    return `${first}${last}`.toUpperCase();
   });
 
   /* ─── actions ─── */
 
   /**
-   * Populate the store with a mock profile.
-   * Called by the profile page's `ngOnInit` equivalent (`effect` or direct call).
+   * Load the profile from `GET /me`. Skips the fetch when already loaded unless
+   * `force` is passed (e.g. a manual retry). Safe to call from every page's
+   * init; the first caller fetches and the rest reuse the cached value.
    */
-  load(): void {
-    if (this._profile() !== null) return; // already loaded
-    const user = this.auth.user();
-    this._profile.set({
-      personal: {
-        firstName: user?.firstName ?? 'Adam',
-        lastName: user?.lastName ?? 'Adam',
-        username: 'adam_adam',
-        iosId: '241242',
-        email: user?.email ?? 'adam.asdf@ios.com',
-        city: 'Victoria',
-        street: 'Nshard',
-        address: 'Blanshard',
-        postalCode: '4323',
-        country: 'Canada',
-      },
-      professional: {
-        occupation: 'Graphic designer',
-        companyName: 'IOS',
-        position: 'Team leader',
-      },
-    });
+  async load(force = false): Promise<void> {
+    if (!force && this._profile() !== null) return;
+    if (this._loading()) return;
+    this._loading.set(true);
+    this._error.set(null);
+    try {
+      this._profile.set(await firstValueFrom(this.api.getMe()));
+    } catch (err) {
+      this._profile.set(null);
+      this._error.set(problemDetailMessage(err) ?? this.lang.t('profile.view.loadError'));
+    } finally {
+      this._loading.set(false);
+    }
+  }
+
+  /** Force a re-fetch of the profile. */
+  async reload(): Promise<void> {
+    await this.load(true);
   }
 
   /**
-   * Persist personal + professional + location changes.
-   * Currently mocked — simulates a 400 ms network round-trip.
+   * Persist personal + location + professional changes via `PATCH /me`. On
+   * success the store adopts the returned profile and flips to `success` so the
+   * page can show its confirmation dialog. Returns `true` on success.
    */
-  async updateProfile(payload: UpdateProfilePayload): Promise<void> {
+  async updateProfile(payload: UpdateProfilePayload): Promise<boolean> {
+    if (this._submitStatus() === 'pending') return false;
     this._submitStatus.set('pending');
-    await new Promise<void>((resolve) => setTimeout(resolve, 400));
-    this._profile.update((prev) => {
-      if (!prev) return prev;
-      return {
-        personal: {
-          ...prev.personal,
-          firstName: payload.firstName,
-          lastName: payload.lastName,
-          email: payload.email,
-          country: payload.country,
-          city: payload.city,
-          street: payload.street,
-          address: payload.address,
-          postalCode: payload.postalCode,
-        } satisfies ProfilePersonal,
-        professional: {
-          occupation: payload.occupation,
-          position: payload.position,
-          companyName: payload.companyName,
-        },
-      };
-    });
-    this._submitStatus.set('success');
+    this._submitError.set(null);
+    try {
+      this._profile.set(await firstValueFrom(this.api.updateMe(payload)));
+      this._submitStatus.set('success');
+      return true;
+    } catch (err) {
+      this._submitError.set(problemDetailMessage(err) ?? this.lang.t('profile.edit.saveError'));
+      this._submitStatus.set('error');
+      return false;
+    }
   }
 
   /**
-   * Change the user's password.
-   * Currently mocked — simulates a 400 ms network round-trip.
+   * Change the password via `PATCH /me/password`. A 200 means every session was
+   * revoked server-side — the caller must treat success as a forced logout. A
+   * wrong current password surfaces as 401; {@link passwordCurrentWrong} lets
+   * the page attach the error to the "old password" field. Returns `true` on
+   * success.
    */
-  async changePassword(_payload: ChangePasswordPayload): Promise<void> {
+  async changePassword(payload: ChangePasswordPayload): Promise<boolean> {
+    if (this._passwordSubmitStatus() === 'pending') return false;
     this._passwordSubmitStatus.set('pending');
-    await new Promise<void>((resolve) => setTimeout(resolve, 400));
-    this._passwordSubmitStatus.set('success');
+    this._passwordError.set(null);
+    this._passwordCurrentWrong.set(false);
+    try {
+      await firstValueFrom(this.api.changePassword(payload));
+      this._passwordSubmitStatus.set('success');
+      return true;
+    } catch (err) {
+      const isWrongCurrent =
+        err instanceof HttpErrorResponse &&
+        (err.status === 401 || problemDetailCode(err) === 'INVALID_CREDENTIALS');
+      this._passwordCurrentWrong.set(isWrongCurrent);
+      this._passwordError.set(
+        problemDetailMessage(err) ??
+          this.lang.t(
+            isWrongCurrent
+              ? 'profile.changePassword.currentPasswordWrong'
+              : 'profile.changePassword.saveError',
+          ),
+      );
+      this._passwordSubmitStatus.set('error');
+      return false;
+    }
   }
 
-  /** Reset submit status back to idle (e.g. after dismissing a success dialog). */
+  /** Reset the update-information submit state (e.g. after dismissing a dialog). */
   resetSubmitStatus(): void {
     this._submitStatus.set('idle');
+    this._submitError.set(null);
   }
 
+  /** Reset the change-password submit state. */
   resetPasswordSubmitStatus(): void {
     this._passwordSubmitStatus.set('idle');
+    this._passwordError.set(null);
+    this._passwordCurrentWrong.set(false);
+  }
+
+  /** Wipe all profile state — invoked on logout so no data survives the session. */
+  private clear(): void {
+    this._profile.set(null);
+    this._error.set(null);
+    this.resetSubmitStatus();
+    this.resetPasswordSubmitStatus();
   }
 }

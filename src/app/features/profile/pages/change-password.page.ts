@@ -16,6 +16,7 @@ import { LucideArrowLeft, LucideEye, LucideEyeOff } from '@lucide/angular';
 import { CanadaFlag, IosIcon, provideIcons } from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { LanguageService } from '@core/i18n';
+import { AuthStore } from '@core/auth';
 import {
   STRONG_PASSWORD_MIN_LENGTH,
   matchFieldsValidator,
@@ -183,6 +184,14 @@ import { ProfileStore } from '../data-access/profile.store';
                       >
                         {{ lang.t('profile.changePassword.oldPasswordRequired') }}
                       </p>
+                    } @else if (hasError('oldPassword', 'wrongPassword')) {
+                      <p
+                        id="oldPassword-error"
+                        role="alert"
+                        class="mt-1 text-xs text-ios-brand-primary"
+                      >
+                        {{ lang.t('profile.changePassword.currentPasswordWrong') }}
+                      </p>
                     }
                   </div>
                 </div>
@@ -314,6 +323,16 @@ import { ProfileStore } from '../data-access/profile.store';
               </div>
             </div>
           </section>
+
+          <!-- ── Submit error ────────────────────────────────────────────── -->
+          @if (store.passwordError(); as err) {
+            @if (!store.passwordCurrentWrong()) {
+              <p role="alert" class="text-end text-sm font-medium text-ios-brand-primary">
+                {{ err }}
+              </p>
+            }
+          }
+
           <!-- ── Action buttons ──────────────────────────────────────────── -->
           <div class="flex items-center justify-end gap-4 mt-2 pb-2">
             <!-- Cancel -->
@@ -370,6 +389,7 @@ import { ProfileStore } from '../data-access/profile.store';
 export class ChangePasswordPage implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthStore);
   protected readonly store = inject(ProfileStore);
   protected readonly lang = inject(LanguageService);
 
@@ -443,17 +463,22 @@ export class ChangePasswordPage implements OnInit {
     return !!(control?.touched && control.hasError(errorKey));
   }
 
-  protected onSubmit(): void {
+  protected async onSubmit(): Promise<void> {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
     const v = this.form.getRawValue();
-    void this.store.changePassword({
-      oldPassword: v.oldPassword,
+    const ok = await this.store.changePassword({
+      currentPassword: v.oldPassword,
       newPassword: v.newPassword,
-      confirmPassword: v.confirmPassword,
     });
+    if (!ok && this.store.passwordCurrentWrong()) {
+      // Mark the "old password" field so the inline error renders on it.
+      const control = this.form.controls.oldPassword;
+      control.setErrors({ wrongPassword: true });
+      control.markAsTouched();
+    }
   }
 
   protected onCancelConfirmed(): void {
@@ -461,9 +486,14 @@ export class ChangePasswordPage implements OnInit {
     void this.router.navigate(['/dashboard/profile']);
   }
 
+  /**
+   * A successful password change revokes every session server-side (the backend
+   * clears the refresh cookie) — so we treat it as a forced logout and route to
+   * the login page rather than back into the app with a stale session.
+   */
   protected onPasswordSaved(): void {
     this.store.resetPasswordSubmitStatus();
-    void this.router.navigate(['/dashboard/profile']);
+    void this.auth.logout();
   }
 }
 

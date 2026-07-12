@@ -55,7 +55,7 @@ the placeholder with a real `data-access` layer against the endpoints below.
 
 | Order | Feature (route)                              | Screens / purpose                              | Backend endpoints (all under `/api/v1`)                                                                                                         | Status                      |
 | ----- | -------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| **1** | **Profile** (`/profile`)                     | View + edit profile; change password           | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                    | ✅ ready                    |
+| **1** | **Profile** (`/profile`)                     | View + edit profile; change password           | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                    | ✅ built (review pending)   |
 | **1** | **Settings** (`/settings`)                   | Password, language; (delete account)           | `PATCH /me/password` ✅; **delete account = none (BE-I-19)** → hide/park                                                                        | ⚠️ partial                  |
 | **2** | **Catalog** (`/catalog`) + Landing           | Browse certs, cert detail, curriculum outline  | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /catalog`                                    | ✅ ready                    |
 | **3** | **Payments / enroll**                        | Checkout (enroll), retake, transaction history | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                | ✅ ready                    |
@@ -213,10 +213,71 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- **(none — Phase 3 admin fully committed.)** Catalog translations committed as
-  `50fc688`. Next up: **Phase 4** — wire the user-facing app, starting with
-  **Profile** (`GET/PATCH /me`). See the
-  [Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration).
+- **Phase 4 · Profile — built, awaiting review (uncommitted).** The first
+  user-facing page is wired to the real `/me` endpoints; details below. Next up
+  per the plan: **Catalog browse/detail + Landing featured**.
+
+### Phase 4 · Profile (`/dashboard/profile`) — built, awaiting review (uncommitted)
+
+First user-facing page wired to the real backend. Replaced the mock-seeded
+placeholder store with a real data-access layer against the student `/me`
+endpoints (bare DTOs, not `{ data }`), reusing the established admin layering.
+
+- **`features/profile/data-access/`** (new layer):
+  - `profile.dto.ts` — wire shapes mirroring backend `ProfileResponseDto` /
+    `UpdateProfileDto` / `UpdatePasswordDto` / `MessageResponseDto`. `firstName`/
+    `lastName`/`email` are absent from the update DTO (LOCKED server-side —
+    they appear on issued certificates; `forbidNonWhitelisted` 400s them).
+  - `profile.model.ts` — flat `Profile` model (nullable fields stay nullable so
+    the UI can render an explicit "Not set"); `UpdateProfilePayload` (editable
+    fields only); `ChangePasswordPayload` (`currentPassword` + `newPassword`).
+    Replaces the old nested `ProfilePersonal`/`ProfileProfessional` + the
+    non-existent `username`/`iosId` mock fields.
+  - `profile.mappers.ts` — `toProfile` (1:1) and `toUpdateProfileDto` (blank
+    input → explicit `null` so an emptied optional field is cleared server-side).
+  - `profile.api.ts` — `ProfileApi`: `getMe` (`GET /me`), `updateMe`
+    (`PATCH /me`, returns the updated profile), `changePassword`
+    (`PATCH /me/password`).
+  - `profile.store.ts` — rewritten to the real API (`firstValueFrom`,
+    `problemDetailMessage` errors): `load(force)` / `reload`, `updateProfile`,
+    `changePassword`; loading/error + per-action submit-state signals. Clears its
+    cache on the `user.logged-out` bus event so the next signed-in user can't
+    see the previous user's data (root singleton).
+- **Pages wired** (`pages/`):
+  - `profile.page.ts` (view) — loading / error+retry / loaded states; renders the
+    real fields. The Figma **Username** / **IOS ID** slots have no backend
+    equivalent, so they were replaced with real data (**Phone**, **Member since**
+    from `createdAt`). Avatar shows the `avatarUrl` image when present, else
+    initials. `firstName`/`lastName`/`email` are read-only.
+  - `edit-profile.page.ts` — form hydrated from the loaded profile via an
+    `effect` (load is async now). Sends only editable fields to `PATCH /me`
+    (added an editable **phone**; name/email stay locked/read-only). The dead
+    "Change image profile" button was removed (no upload endpoint — BE-I-08);
+    the avatar is display-only. Country/city relaxed to **optional** (the
+    backend does not require them — forcing them blocked saving when a loaded
+    field was null); the selects merge the stored value in so an unrelated edit
+    never silently drops a free-text value the preset list doesn't contain.
+    Inline RFC-7807 submit error.
+  - `change-password.page.ts` — wired to `PATCH /me/password`. A wrong current
+    password (401) surfaces inline on the old-password field; other failures
+    show an inline alert. **A success is treated as a forced logout** — the
+    backend revokes all sessions and clears the refresh cookie, so the success
+    dialog's "Ok" calls `AuthStore.logout()` and routes to login (dialog copy
+    updated to explain the sign-out).
+- **i18n:** added `profile.view.{phone,memberSince,notSet,avatarAlt,loadError}`,
+  `profile.edit.{phoneLabel,phonePlaceholder,saveError}`,
+  `profile.changePassword.{currentPasswordWrong,saveError}`; relabelled
+  country/city to "(Optional)"; updated `passwordUpdatedDialog.description`. All
+  three locales (en/fr/ar); Arabic still needs pro review (CLAUDE.md §9). Orphaned
+  keys (`view.username`, `view.iosId`, `edit.changeImage`, `edit.{country,city}Error`)
+  left in place — harmless.
+- **Avatars use `NgOptimizedImage`** (`[ngSrc]`, width/height 82) — no new
+  `prefer-ngsrc` warnings; the 3 known-benign ones are unchanged (pre-existing
+  files).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.24 kB;
+  `edit-profile-page` chunk 4.24 kB gzip). Live check needs a real student
+  session against the deployed API (no test creds in-session) — deferred.
 
 ## Auth-route → backend endpoint map
 
@@ -635,14 +696,14 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Admin app is complete and committed** (catalog translations — the last piece —
-committed as `50fc688`). **Begin Phase 4: wire the user-facing app**, following
-the [Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration).
+**Phase 4 · Profile is built and awaiting review** (uncommitted — see the
+Profile section above). Once approved/committed, continue down the
+[Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration):
 
-**Start with Profile** (`/profile`) — the smallest, dependency-free page:
-build `features/profile/data-access/profile.{dto,model,mappers,api,store}.ts`
-against `GET /me` (load) + `PATCH /me` (save) + `PATCH /me/password`, then wire
-the profile view/edit + change-password screens. Skip the ⛔ blocked features
-(Certificates list, Notifications, Insights) — see
-[`backend-blockers-report.md`](./backend-blockers-report.md). Then proceed down
-the plan: Catalog/Landing → Payments → Dashboard → Courses → Assessments/Mock.
+**Next: Catalog browse/detail + Landing featured** — public endpoints
+(`GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline`); reuse the
+admin `catalog.dto`/mappers where shapes overlap (the public response adds
+`locale`/`direction`/`fallbackUsed`). Then: Payments/enroll → Dashboard →
+Courses → Assessments/Mock. Skip the ⛔ blocked features (Certificates list
+BE-I-16, Notifications BE-I-18, Insights BE-I-20) — see
+[`backend-blockers-report.md`](./backend-blockers-report.md).
