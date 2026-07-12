@@ -39,6 +39,12 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     roles: ['content_creator', 'learning_admin'],
   },
   {
+    labelKey: 'admin.shell.nav.examAuthoring',
+    route: '/admin/exams',
+    exact: false,
+    roles: ['content_creator', 'learning_admin'],
+  },
+  {
     labelKey: 'admin.shell.nav.exam',
     route: '/admin/exam',
     exact: false,

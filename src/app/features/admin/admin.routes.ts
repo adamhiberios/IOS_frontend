@@ -78,6 +78,12 @@ export const ADMIN_ROUTES: Routes = [
         title: () => inject(LanguageService).t('admin.exam.title'),
       },
       {
+        path: 'exams',
+        loadComponent: () =>
+          import('./pages/admin-exam-authoring.page').then((m) => m.AdminExamAuthoringPage),
+        title: () => inject(LanguageService).t('admin.examAuthoring.title'),
+      },
+      {
         path: 'audit-logs',
         loadComponent: () =>
           import('./pages/admin-audit-logs.page').then((m) => m.AdminAuditLogsPage),
