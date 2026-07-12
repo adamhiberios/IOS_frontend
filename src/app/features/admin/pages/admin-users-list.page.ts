@@ -21,7 +21,7 @@ import { AdminUsersStore } from '../data-access/users.store';
   imports: [ReactiveFormsModule, RouterLink, DatePipe, IosInput, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="max-w-5xl">
+    <section>
       <header class="mb-6">
         <h1 class="text-2xl font-bold text-ios-brand-dark">
           {{ lang.t('admin.users.title') }}

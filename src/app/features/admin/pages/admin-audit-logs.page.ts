@@ -29,7 +29,7 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
   imports: [ReactiveFormsModule, DatePipe, IosInput, Select, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="max-w-6xl">
+    <section>
       <header class="mb-6">
         <h1 class="text-2xl font-bold text-ios-brand-dark">
           {{ lang.t('admin.audit.title') }}
