@@ -6,11 +6,14 @@ import { environment } from '@env/environment';
 
 import {
   type CreateExamBody,
+  type CreateQuestionBody,
+  type ExamDetailResponseDto,
   type ExamListResponseDto,
   type UpdateExamBody,
+  type UpdateQuestionBody,
 } from './exam-authoring.dto';
-import { toAdminExam } from './exam-authoring.mappers';
-import { type AdminExam } from './exam-authoring.model';
+import { toAdminExam, toExamDetail } from './exam-authoring.mappers';
+import { type AdminExam, type ExamDetail } from './exam-authoring.model';
 
 /**
  * Admin exam-authoring transport (`docs/backend-analysis.md` §6.5).
@@ -66,5 +69,33 @@ export class AdminExamAuthoringApi {
   /** `DELETE /admin/exams/:examId` — hard-delete an unused draft. */
   remove(examId: string): Observable<void> {
     return this.http.delete<void>(`${this.base}/exams/${examId}`).pipe(map(() => undefined));
+  }
+
+  /** `GET /admin/exams/:examId` — full authoring view (exam + questions, incl. isCorrect). */
+  getExam(examId: string): Observable<ExamDetail> {
+    return this.http
+      .get<ExamDetailResponseDto>(`${this.base}/exams/${examId}`)
+      .pipe(map((res) => toExamDetail(res.data)));
+  }
+
+  /** `POST /admin/exams/:examId/questions` — add a question (DRAFT exams only). */
+  addQuestion(examId: string, body: CreateQuestionBody): Observable<void> {
+    return this.http
+      .post<void>(`${this.base}/exams/${examId}/questions`, body)
+      .pipe(map(() => undefined));
+  }
+
+  /** `PATCH /admin/exams/:examId/questions/:questionId` — update (options replace whole set). */
+  updateQuestion(examId: string, questionId: string, body: UpdateQuestionBody): Observable<void> {
+    return this.http
+      .patch<void>(`${this.base}/exams/${examId}/questions/${questionId}`, body)
+      .pipe(map(() => undefined));
+  }
+
+  /** `DELETE /admin/exams/:examId/questions/:questionId` — delete (DRAFT exams only). */
+  deleteQuestion(examId: string, questionId: string): Observable<void> {
+    return this.http
+      .delete<void>(`${this.base}/exams/${examId}/questions/${questionId}`)
+      .pipe(map(() => undefined));
   }
 }

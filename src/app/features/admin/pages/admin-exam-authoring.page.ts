@@ -12,6 +12,7 @@ import {
   type ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
@@ -38,7 +39,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-exam-authoring-page',
-  imports: [ReactiveFormsModule, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -161,6 +162,12 @@ const required: ValidatorFn = (control) => Validators.required(control);
                   @if (canManage()) {
                     <td class="px-4 py-3">
                       <div class="flex items-center justify-end gap-3">
+                        <a
+                          [routerLink]="['/admin/exams', e.id]"
+                          class="text-sm text-ios-brand-primary underline"
+                        >
+                          {{ lang.t('admin.examAuthoring.questions') }}
+                        </a>
                         @if (e.status === 'draft') {
                           <button
                             type="button"
@@ -405,6 +412,14 @@ export class AdminExamAuthoringPage implements OnInit {
 
   ngOnInit(): void {
     void this.store.loadCerts();
+    // Returning from the question editor (or any navigation back) re-mounts this
+    // page while the root-provided store keeps the previously selected cert and
+    // its exams. Restore the picker and re-fetch so counts/statuses are fresh.
+    const certId = this.store.certId();
+    if (certId) {
+      this.certControl.setValue(certId);
+      void this.store.load();
+    }
   }
 
   protected onCertChange(certId: string): void {

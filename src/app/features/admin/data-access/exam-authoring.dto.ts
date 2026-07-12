@@ -37,3 +37,67 @@ export interface UpdateExamBody {
   readonly durationMinutes?: number;
   readonly passingScore?: number;
 }
+
+// ── Authoring detail (exam + questions) ──────────────────────────────────────
+
+/** One answer option in the authoring view (`isCorrect` IS exposed here). */
+export interface ExamQuestionOptionDto {
+  readonly id: string;
+  readonly optionText: string;
+  readonly isCorrect: boolean;
+}
+
+/** One question with its options (`ExamQuestion`). */
+export interface ExamQuestionDto {
+  readonly id: string;
+  readonly questionText: string;
+  /** `mcq | true_false`. */
+  readonly questionType: string;
+  readonly position: number;
+  readonly marks: number;
+  readonly options: readonly ExamQuestionOptionDto[];
+}
+
+/** `GET /admin/exams/:examId` — the full authoring view (exam meta + questions). */
+export interface ExamDetailDto {
+  readonly id: string;
+  readonly certId: string;
+  readonly title: string;
+  readonly examOrder: number;
+  readonly status: string;
+  readonly passingScore: number;
+  readonly durationMinutes: number;
+  readonly questions: readonly ExamQuestionDto[];
+}
+
+/** `GET /admin/exams/:examId` response envelope. */
+export interface ExamDetailResponseDto {
+  readonly data: ExamDetailDto;
+}
+
+/** One option in a question write payload (`CreateOptionDto`). */
+export interface QuestionOptionInput {
+  readonly optionText: string;
+  readonly isCorrect: boolean;
+}
+
+/** Body for `POST /admin/exams/:examId/questions` (`CreateQuestionDto`). */
+export interface CreateQuestionBody {
+  readonly questionText: string;
+  readonly questionType: string;
+  readonly position?: number;
+  readonly marks?: number;
+  readonly options: readonly QuestionOptionInput[];
+}
+
+/**
+ * Body for `PATCH /admin/exams/:examId/questions/:questionId`
+ * (`UpdateQuestionDto`). When `options` is supplied it **replaces** the set.
+ */
+export interface UpdateQuestionBody {
+  readonly questionText?: string;
+  readonly questionType?: string;
+  readonly position?: number;
+  readonly marks?: number;
+  readonly options?: readonly QuestionOptionInput[];
+}
