@@ -2427,6 +2427,16 @@
         "loadError": "Couldn’t load this certificate.",
         "backToList": "Back to certificates",
         "genericError": "Couldn’t save the certificate. Please check the fields and try again."
+      },
+      "translations": {
+        "button": "Translations",
+        "title": "Certificate translations",
+        "hint": "Translate the title and description per language. Leave a field blank to clear it for that language; English uses the main form.",
+        "titleLabel": "Title",
+        "descriptionLabel": "Description",
+        "cancel": "Cancel",
+        "save": "Save",
+        "error": "Couldn’t save translations. Please try again."
       }
     },
     "users": {

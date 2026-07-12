@@ -18,6 +18,26 @@ export interface AdminCertificate {
   readonly updatedAt: string;
 }
 
+/** Per-locale translatable fields (`CertificateLocaleDto`). */
+export interface CertificateLocaleFields {
+  readonly title?: string;
+  readonly description?: string;
+}
+
+/** Detail view — adds the raw per-locale translations (admin `GET /admin/catalog/:id`). */
+export interface AdminCertificateDetail extends AdminCertificate {
+  readonly translations: Readonly<Record<string, CertificateLocaleFields>>;
+}
+
+/**
+ * Body for `PATCH /admin/catalog/:id/translations` (`UpdateTranslationsDto`).
+ * Each supplied locale REPLACES that locale's block; pass `{}` for a locale to
+ * clear it. Locales absent from the map are preserved.
+ */
+export interface CertificateTranslationsPayload {
+  readonly translations: Record<string, CertificateLocaleFields>;
+}
+
 /** Active-state filter for the list. `undefined` = all. */
 export type ActiveFilter = boolean | undefined;
 

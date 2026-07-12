@@ -1,5 +1,9 @@
-import { type CatalogItemDto } from './catalog.dto';
-import { type AdminCertificate } from './catalog.model';
+import { type CatalogDetailDto, type CatalogItemDto } from './catalog.dto';
+import {
+  type AdminCertificate,
+  type AdminCertificateDetail,
+  type CertificateLocaleFields,
+} from './catalog.model';
 
 /** Map a wire `CatalogItemDto` to the frontend `AdminCertificate` model. */
 export function toAdminCertificate(dto: CatalogItemDto): AdminCertificate {
@@ -15,4 +19,17 @@ export function toAdminCertificate(dto: CatalogItemDto): AdminCertificate {
     createdAt: dto.createdAt,
     updatedAt: dto.updatedAt,
   };
+}
+
+function toLocaleFields(raw: Record<string, string>): CertificateLocaleFields {
+  return { title: raw['title'], description: raw['description'] };
+}
+
+/** Map a wire `CatalogDetailDto` to `AdminCertificateDetail` (adds translations). */
+export function toAdminCertificateDetail(dto: CatalogDetailDto): AdminCertificateDetail {
+  const translations: Record<string, CertificateLocaleFields> = {};
+  for (const [locale, fields] of Object.entries(dto.translations ?? {})) {
+    translations[locale] = toLocaleFields(fields);
+  }
+  return { ...toAdminCertificate(dto), translations };
 }

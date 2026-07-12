@@ -9,7 +9,11 @@ import { LanguageService } from '@core/i18n';
 import { Button, Checkbox, Input as IosInput } from '@ui';
 
 import { AdminCatalogApi } from '../data-access/catalog.api';
-import { type CertificateWritePayload } from '../data-access/catalog.model';
+import {
+  type CertificateLocaleFields,
+  type CertificateTranslationsPayload,
+  type CertificateWritePayload,
+} from '../data-access/catalog.model';
 
 /** Decimal money string with up to 2 fraction digits (mirrors backend price). */
 const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
@@ -31,7 +35,7 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
   imports: [ReactiveFormsModule, RouterLink, IosInput, Button, Checkbox],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="max-w-2xl">
+    <section>
       <header class="mb-6">
         <h1 class="text-2xl font-bold text-ios-brand-dark">
           {{
@@ -143,11 +147,116 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
             <ios-button type="submit" variant="primary" [loading]="submitting()">
               {{ isEdit ? lang.t('admin.catalog.form.save') : lang.t('admin.catalog.form.create') }}
             </ios-button>
+            @if (isEdit) {
+              <button
+                type="button"
+                (click)="openTranslations()"
+                class="text-sm text-ios-brand-primary underline"
+              >
+                {{ lang.t('admin.catalog.translations.button') }}
+              </button>
+            }
             <a routerLink="/admin/catalog" class="text-sm text-gray-600 hover:text-gray-900">
               {{ lang.t('admin.catalog.form.cancel') }}
             </a>
           </div>
         </form>
+      }
+
+      <!-- Translations dialog -->
+      @if (translationsOpen()) {
+        <div
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="cat-tr-title"
+        >
+          <div
+            class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
+            <h2 id="cat-tr-title" class="text-lg font-semibold text-ios-brand-dark mb-1">
+              {{ lang.t('admin.catalog.translations.title') }}
+            </h2>
+            <p class="text-xs text-gray-500 mb-4">
+              {{ lang.t('admin.catalog.translations.hint') }}
+            </p>
+
+            <form
+              [formGroup]="translationsForm"
+              (ngSubmit)="onSaveTranslations()"
+              novalidate
+              class="flex flex-col gap-5"
+            >
+              <fieldset class="flex flex-col gap-3">
+                <legend class="text-sm font-heading font-medium text-ios-brand-dark">
+                  {{ localeLabel('ar') }}
+                </legend>
+                <ios-input
+                  id="cat-tr-ar-title"
+                  [label]="lang.t('admin.catalog.translations.titleLabel')"
+                  [control]="translationsForm.controls.arTitle"
+                  [placeholder]="form.controls.title.value"
+                />
+                <div class="flex flex-col gap-1.5">
+                  <label for="cat-tr-ar-desc" class="text-sm font-medium text-ios-brand-dark">
+                    {{ lang.t('admin.catalog.translations.descriptionLabel') }}
+                  </label>
+                  <textarea
+                    id="cat-tr-ar-desc"
+                    rows="3"
+                    [formControl]="translationsForm.controls.arDescription"
+                    class="rounded-lg border border-gray-300 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary"
+                  ></textarea>
+                </div>
+              </fieldset>
+
+              <fieldset class="flex flex-col gap-3">
+                <legend class="text-sm font-heading font-medium text-ios-brand-dark">
+                  {{ localeLabel('fr') }}
+                </legend>
+                <ios-input
+                  id="cat-tr-fr-title"
+                  [label]="lang.t('admin.catalog.translations.titleLabel')"
+                  [control]="translationsForm.controls.frTitle"
+                  [placeholder]="form.controls.title.value"
+                />
+                <div class="flex flex-col gap-1.5">
+                  <label for="cat-tr-fr-desc" class="text-sm font-medium text-ios-brand-dark">
+                    {{ lang.t('admin.catalog.translations.descriptionLabel') }}
+                  </label>
+                  <textarea
+                    id="cat-tr-fr-desc"
+                    rows="3"
+                    [formControl]="translationsForm.controls.frDescription"
+                    class="rounded-lg border border-gray-300 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary"
+                  ></textarea>
+                </div>
+              </fieldset>
+
+              @if (translationsError()) {
+                <p
+                  role="alert"
+                  class="text-sm p-2 rounded bg-red-50 text-red-700 border border-red-200"
+                >
+                  {{ translationsError() }}
+                </p>
+              }
+
+              <div class="flex justify-end gap-3">
+                <button
+                  type="button"
+                  (click)="closeTranslations()"
+                  class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                >
+                  {{ lang.t('admin.catalog.translations.cancel') }}
+                </button>
+                <ios-button type="submit" variant="primary" [loading]="translationsSaving()">
+                  {{ lang.t('admin.catalog.translations.save') }}
+                </ios-button>
+              </div>
+            </form>
+          </div>
+        </div>
       }
     </section>
   `,
@@ -175,6 +284,15 @@ export class AdminCatalogFormPage implements OnInit {
   protected readonly submitting = signal(false);
   protected readonly errorMessage = signal('');
 
+  // Per-locale translations (edited via a dialog; English is the canonical form).
+  protected readonly translationsOpen = signal(false);
+  protected readonly translationsSaving = signal(false);
+  protected readonly translationsError = signal('');
+  private readonly certTranslations = signal<Record<string, CertificateLocaleFields>>({});
+  private readonly localeLabels = new Map<string, string>(
+    this.lang.supportedLocales.map((l) => [l.code, l.label]),
+  );
+
   protected readonly form = this.fb.group({
     title: this.fb.control('', {
       validators: [Validators.required, Validators.maxLength(255)],
@@ -196,6 +314,17 @@ export class AdminCatalogFormPage implements OnInit {
     }),
     active: this.fb.control(true),
   });
+
+  protected readonly translationsForm = this.fb.group({
+    arTitle: this.fb.control('', { validators: [Validators.maxLength(255)] }),
+    arDescription: this.fb.control('', { validators: [Validators.maxLength(5000)] }),
+    frTitle: this.fb.control('', { validators: [Validators.maxLength(255)] }),
+    frDescription: this.fb.control('', { validators: [Validators.maxLength(5000)] }),
+  });
+
+  protected localeLabel(code: string): string {
+    return this.localeLabels.get(code) ?? code;
+  }
 
   ngOnInit(): void {
     if (this.isEdit) {
@@ -222,6 +351,7 @@ export class AdminCatalogFormPage implements OnInit {
         thumbnailUrl: cert.thumbnailUrl ?? '',
         active: cert.active,
       });
+      this.certTranslations.set(cert.translations);
     } catch (err) {
       this.loadError.set(problemDetailMessage(err) ?? this.lang.t('admin.catalog.form.loadError'));
     } finally {
@@ -253,6 +383,77 @@ export class AdminCatalogFormPage implements OnInit {
     } finally {
       this.submitting.set(false);
     }
+  }
+
+  protected openTranslations(): void {
+    this.translationsError.set('');
+    const t = this.certTranslations();
+    this.translationsForm.reset({
+      arTitle: t['ar']?.title ?? '',
+      arDescription: t['ar']?.description ?? '',
+      frTitle: t['fr']?.title ?? '',
+      frDescription: t['fr']?.description ?? '',
+    });
+    this.translationsOpen.set(true);
+  }
+
+  protected closeTranslations(): void {
+    this.translationsError.set('');
+    this.translationsOpen.set(false);
+  }
+
+  protected onSaveTranslations(): void {
+    if (this.translationsForm.invalid) {
+      this.translationsForm.markAllAsTouched();
+      return;
+    }
+    void this.saveTranslations();
+  }
+
+  private async saveTranslations(): Promise<void> {
+    this.translationsSaving.set(true);
+    this.translationsError.set('');
+    const payload = this.buildTranslationsPayload();
+    try {
+      await firstValueFrom(this.api.updateTranslations(this.certId, payload));
+      // Reflect the per-locale replace-merge locally (no reload needed).
+      const next = { ...this.certTranslations() };
+      for (const [locale, entry] of Object.entries(payload.translations)) {
+        next[locale] = entry;
+      }
+      this.certTranslations.set(next);
+      this.translationsOpen.set(false);
+    } catch (err) {
+      this.translationsError.set(
+        problemDetailMessage(err) ?? this.lang.t('admin.catalog.translations.error'),
+      );
+    } finally {
+      this.translationsSaving.set(false);
+    }
+  }
+
+  /**
+   * Build the translations body: for each locale send its non-empty fields
+   * (a REPLACE), or `{}` to clear a locale that previously had content. Locales
+   * that are and were empty are omitted (no-op).
+   */
+  private buildTranslationsPayload(): CertificateTranslationsPayload {
+    const v = this.translationsForm.getRawValue();
+    const translations: Record<string, CertificateLocaleFields> = {};
+    const add = (locale: string, title: string, description: string): void => {
+      const entry: { title?: string; description?: string } = {};
+      const t = title.trim();
+      const d = description.trim();
+      if (t) entry.title = t;
+      if (d) entry.description = d;
+      const prev = this.certTranslations()[locale];
+      const hadContent = Boolean(prev?.title ?? prev?.description);
+      if (Object.keys(entry).length > 0) translations[locale] = entry;
+      else if (hadContent) translations[locale] = {};
+    };
+    add('ar', v.arTitle, v.arDescription);
+    add('fr', v.frTitle, v.frDescription);
+    return { translations };
   }
 
   private buildPayload(): CertificateWritePayload {

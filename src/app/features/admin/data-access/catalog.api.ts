@@ -6,10 +6,12 @@ import { type Page, toHttpParams, toPage } from '@core/http';
 import { environment } from '@env/environment';
 
 import { type CatalogDetailResponseDto, type CatalogListResponseDto } from './catalog.dto';
-import { toAdminCertificate } from './catalog.mappers';
+import { toAdminCertificate, toAdminCertificateDetail } from './catalog.mappers';
 import {
   type AdminCertificate,
+  type AdminCertificateDetail,
   type CatalogListQuery,
+  type CertificateTranslationsPayload,
   type CertificateWritePayload,
 } from './catalog.model';
 
@@ -40,11 +42,11 @@ export class AdminCatalogApi {
       .pipe(map((res) => toPage(res, toAdminCertificate)));
   }
 
-  /** `GET /admin/catalog/:id` — one certificate (incl. inactive). */
-  getById(id: string): Observable<AdminCertificate> {
+  /** `GET /admin/catalog/:id` — one certificate (incl. inactive + raw translations). */
+  getById(id: string): Observable<AdminCertificateDetail> {
     return this.http
       .get<CatalogDetailResponseDto>(`${this.base}/${id}`)
-      .pipe(map((res) => toAdminCertificate(res.data)));
+      .pipe(map((res) => toAdminCertificateDetail(res.data)));
   }
 
   /** `POST /admin/catalog` — create a certificate (content_creator / learning_admin). */
@@ -55,6 +57,18 @@ export class AdminCatalogApi {
   /** `PATCH /admin/catalog/:id` — partial update (content_creator / learning_admin). */
   update(id: string, payload: Partial<CertificateWritePayload>): Observable<void> {
     return this.http.patch<void>(`${this.base}/${id}`, payload);
+  }
+
+  /**
+   * `PATCH /admin/catalog/:id/translations` — replace per-locale translations
+   * (content_creator / learning_admin). Each supplied locale is replaced; pass
+   * `{}` for a locale to clear it. English is the canonical title/description
+   * (edited via the main form) and is not sent here.
+   */
+  updateTranslations(id: string, payload: CertificateTranslationsPayload): Observable<void> {
+    return this.http
+      .patch<void>(`${this.base}/${id}/translations`, payload)
+      .pipe(map(() => undefined));
   }
 
   /** `DELETE /admin/catalog/:id` — soft-delete / deactivate (learning_admin only). */

@@ -2427,6 +2427,16 @@
         "loadError": "Impossible de charger cette certification.",
         "backToList": "Retour aux certifications",
         "genericError": "Impossible d’enregistrer la certification. Vérifiez les champs et réessayez."
+      },
+      "translations": {
+        "button": "Traductions",
+        "title": "Traductions de la certification",
+        "hint": "Traduisez le titre et la description par langue. Laissez un champ vide pour l’effacer dans cette langue ; l’anglais utilise le formulaire principal.",
+        "titleLabel": "Titre",
+        "descriptionLabel": "Description",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "error": "Impossible d’enregistrer les traductions. Veuillez réessayer."
       }
     },
     "users": {

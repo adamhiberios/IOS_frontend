@@ -20,11 +20,11 @@ CRUD, complete student oversight (list, detail, attempts, access codes + revoke)
 admin-list active-first sort, **Audit logs** (`a9e002d`), **Mock questions**
 (`de8aff8`), **Exam assignment** + navbar language switcher (`8877dcd`), and
 **Exam authoring — list + lifecycle** (`bf1a620`), and the **exam question
-editor** + stale-list fix (`5e11e34`) — so **exam authoring is functionally
-complete** (author a draft → add questions → publish). **Just built (uncommitted,
-awaiting review): exam title translations** (Arabic/French) on the exam editor.
-Curriculum is blocked by BE-I-13; Certificate revocation lacks an issued-cert
-list endpoint.
+editor** + stale-list fix (`5e11e34`), and **exam title translations** (`6fa0bd6`)
+— so exam authoring is functionally complete. **Just built (uncommitted, awaiting
+review): catalog (certificate) translations** (Arabic/French title + description)
+on the catalog edit form. Curriculum is blocked by BE-I-13; Certificate
+revocation lacks an issued-cert list endpoint.
 
 ## Phases at a glance
 
@@ -130,9 +130,9 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- **Exam title translations** (ar/fr) on the exam editor — built & verified,
-  **uncommitted**, awaiting review. See "Page 5c" below. (Question editor + stale
-  fix committed as `5e11e34`; list + lifecycle as `bf1a620`.)
+- **Catalog (certificate) translations** (ar/fr title + description) on the
+  catalog edit form — built & verified, **uncommitted**, awaiting review. See
+  "Page 2c" below. (Exam title translations committed as `6fa0bd6`.)
 
 ## Auth-route → backend endpoint map
 
@@ -180,13 +180,14 @@ not modified.
 
 ## Admin pages status
 
-🚧 **In progress — all buildable admin pages committed through the exam question editor; exam title translations awaiting review. Only backend-blocked pages remain (Curriculum, Cert revocation).**
+🚧 **In progress — all buildable admin pages + exam translations committed; catalog translations awaiting review. Only backend-blocked pages remain (Curriculum, Cert revocation).**
 
 | #   | Admin page                                                | Status                    | Backend                                                                              |
 | --- | --------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------ |
 | 1   | **Admin Login** (`/admin/login`)                          | ✅ Built & committed      | `POST /auth/admin/login`                                                             |
 | 2   | **Catalog — certificates list** (`/admin/catalog`)        | ✅ Built & committed      | `GET /admin/catalog`                                                                 |
 | 2b  | **Catalog — create / edit / deactivate**                  | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/catalog`                                               |
+| 2c  | **Catalog — title/description translations** (ar/fr)      | ✅ Built (review pending) | `PATCH /admin/catalog/:id/translations`                                              |
 | 3   | **Users — list + student detail** (`/admin/users`)        | ✅ Built & committed      | `GET /admin/users`, `GET /admin/users/:id`                                           |
 | 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending) | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                        |
 | 4   | Curriculum (modules/lessons)                              | ⬜                        | `/admin/modules`, `/admin/lessons`                                                   |
@@ -198,7 +199,26 @@ not modified.
 | 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed      | `GET /admin/audit-logs`                                                              |
 | 9   | Certificate revocation                                    | ⬜                        | `/admin/certs/issued/:id/revoke`                                                     |
 
-**Page 5c — Exam title translations (uncommitted, awaiting review):**
+**Page 2c — Catalog translations (uncommitted, awaiting review):**
+
+- Completes the catalog form's deferred translations piece (`catalog.model.ts`
+  had noted them as out of scope). Adds per-locale **title + description**
+  authoring via `PATCH /admin/catalog/:id/translations`. App locales beyond
+  English: ar + fr (English is the canonical title/description on the main form).
+- `catalog.{dto,model,mappers}`: the admin detail now carries raw `translations`
+  (`AdminCertificateDetail`, `CertificateLocaleFields`); `AdminCatalogApi.getById`
+  returns the detail model and `updateTranslations` is added.
+- `pages/admin-catalog-form.page.ts` (edit mode): a **Translations** button opens
+  a dialog with Arabic + French title/description, pre-filled from existing
+  translations. Full **clear** support (unlike the exam variant): a locale with
+  all-blank fields is sent as `{}` (the backend's clear signal) when it had
+  content, so translations can be removed; the local state updates in place
+  without a reload. Added `admin.catalog.translations.*` i18n (en/fr/ar; Arabic
+  pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓. Live check needs a
+  real content_creator/learning_admin session — deferred.
+
+**Page 5c — Exam title translations (committed `6fa0bd6`):**
 
 - Small extension to the exam question editor. Adds per-locale exam **title**
   authoring via `PATCH /admin/exams/:examId/translations`. The app supports
@@ -528,13 +548,13 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Exam title translations is built & verified** (ar/fr on the exam editor) —
-**uncommitted** per "don't commit till I agree". With exam authoring +
-translations done, **the admin app covers every unblocked backend surface**. On
-approval: commit, then pick the next direction. The remaining admin pages are
-both **backend-blocked**: **Curriculum** (BE-I-13 — no admin read) and
-**Certificate revocation** (no issued-cert list endpoint). So the next useful
-work is likely one of: (a) **catalog translations** (same shape, `PATCH
-/admin/catalog/:id/translations`), (b) **wiring the user-facing app**
-(catalog/profile, Phase-2 remaining), or (c) revisit the blocked pages if the
-backend adds the missing read endpoints. Confirm direction with the reviewer.
+**Catalog translations is built & verified** (ar/fr title + description on the
+catalog edit form) — **uncommitted** per "don't commit till I agree". With this,
+**every unblocked admin/content-authoring backend surface is covered** (catalog,
+users/oversight, mock, exam authoring + assignment, audit, and translations for
+both catalog and exams). On approval: commit, then pick the next direction. The
+two remaining admin pages are **backend-blocked**: **Curriculum** (BE-I-13 — no
+admin read) and **Certificate revocation** (no issued-cert list). So the next
+substantial work is **Phase 2 — wiring the user-facing app** (landing/dashboard/
+catalog/profile currently target removed mock endpoints), which is a larger,
+strategic pivot — **confirm scope/priority with the reviewer** before starting.
