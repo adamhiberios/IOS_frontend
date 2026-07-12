@@ -17,11 +17,12 @@ page against the deployed API.
 **Phase 3 — Admin application (page by page).** All work below is **committed**
 on `feat/real-backend-integration`. Done & committed: Admin Login, full Catalog
 CRUD, complete student oversight (list, detail, attempts, access codes + revoke),
-admin-list active-first sort, and **Audit logs** (`/admin/audit-logs`, committed
-`a9e002d`). **Just built (uncommitted, awaiting review): Mock questions**
-(`/admin/mock`). **Next page to build:** Exam authoring or Exam assignment (both
-have full read surfaces); Curriculum is blocked by BE-I-13, Certificate
-revocation lacks an issued-cert list endpoint.
+admin-list active-first sort, **Audit logs** (`a9e002d`), and **Mock questions**
+(`/admin/mock`, committed `de8aff8`). **Just built (uncommitted, awaiting review):
+Exam assignment** (`/admin/exam`). **Next page to build:** Exam authoring
+(`/admin/certs/:id/exams*` — the larger multi-view content surface: list all
+statuses + question CRUD + publish). Curriculum is blocked by BE-I-13;
+Certificate revocation lacks an issued-cert list endpoint.
 
 ## Phases at a glance
 
@@ -127,8 +128,8 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- **Mock questions** (`/admin/mock`) — built & verified, **uncommitted**,
-  awaiting review. See "Page 7" below. (Audit logs committed as `a9e002d`.)
+- **Exam assignment** (`/admin/exam`) — built & verified, **uncommitted**,
+  awaiting review. See "Page 6" below. (Mock questions committed as `de8aff8`.)
 
 ## Auth-route → backend endpoint map
 
@@ -176,7 +177,7 @@ not modified.
 
 ## Admin pages status
 
-🚧 **In progress — Login + Catalog + student oversight + Audit logs committed; Mock questions awaiting review.**
+🚧 **In progress — Login + Catalog + student oversight + Audit logs + Mock questions committed; Exam assignment awaiting review.**
 
 | #   | Admin page                                         | Status                    | Backend                                                       |
 | --- | -------------------------------------------------- | ------------------------- | ------------------------------------------------------------- |
@@ -187,12 +188,40 @@ not modified.
 | 3b  | **Users — attempts / access codes / revoke**       | ✅ Built (review pending) | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke` |
 | 4   | Curriculum (modules/lessons)                       | ⬜                        | `/admin/modules`, `/admin/lessons`                            |
 | 5   | Exam authoring                                     | ⬜                        | `/admin/certs/:id/exams*`                                     |
-| 6   | Exam assignment                                    | ⬜                        | `/admin/exam/assign`, `/admin/exam`                           |
-| 7   | **Mock questions** (`/admin/mock`)                 | ✅ Built (review pending) | `GET/POST/PATCH/DELETE /admin/mock*`                          |
+| 6   | **Exam assignment** (`/admin/exam`)                | ✅ Built (review pending) | `GET /admin/exam`, `POST /admin/exam/assign`                  |
+| 7   | **Mock questions** (`/admin/mock`)                 | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/mock*`                          |
 | 8   | **Audit logs** (`/admin/audit-logs`)               | ✅ Built & committed      | `GET /admin/audit-logs`                                       |
 | 9   | Certificate revocation                             | ⬜                        | `/admin/certs/issued/:id/revoke`                              |
 
-**Page 7 — Mock questions (uncommitted, awaiting review):**
+**Page 6 — Exam assignment (uncommitted, awaiting review):**
+
+- `features/admin/data-access/` exam-assign layer: `exam-assign.dto.ts` (wire),
+  `exam-assign.model.ts` (`PublishedExam`, `IssuedAccessCode`),
+  `exam-assign.mappers.ts`, `exam-assign.api.ts` (`AdminExamAssignApi`:
+  `listPublishedExams(certId)` → `GET /admin/exam?certId=` — published only,
+  ordered by `examOrder`; `assign(body)` → `POST /admin/exam/assign`, omitting
+  `examId` for auto-assign), `exam-assign.store.ts` (`AdminExamAssignStore` —
+  orchestrates cert options (via `AdminCatalogApi`), published exams, **student
+  search** (via `AdminUsersApi`), the exam target, and the assign action; holds
+  the one-time code until dismissed).
+- `pages/admin-exam-assign.page.ts` — three-step flow: pick a certificate →
+  search + select a student → choose a specific published exam or **auto-assign**
+  the next unattempted one → **issue a one-time access code** shown once in a
+  dialog (copy button, expiry, warning). Loading/empty/error states per step.
+- **Cohesion:** this is the _issue_ side of the exam-access story whose _view +
+  revoke_ already live on the student-detail page (`/admin/users/:id`).
+- Nav item **Exam assignment** gated to `learning_admin` (super_admin bypass).
+  Route `/admin/exam` added under the shell. Added `admin.exam.*` (28 keys) +
+  `admin.shell.nav.exam` i18n (en/fr/ar; Arabic pending pro review).
+- **Backend notes reused:** `GET /admin/exam?certId=` is published-only (BE-I-09
+  documents the overlap with `/admin/certs/:certId/exams`); auto-assign 404s when
+  a cert has no published exams, 403 when the student's pool is exhausted, 409
+  when they already hold an unused code — all surfaced inline via RFC-7807.
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only). Live check needs a
+  real `learning_admin` session against the deployed API — deferred.
+
+**Page 7 — Mock questions (committed `de8aff8`):**
 
 - `features/admin/data-access/` mock layer: `mock.dto.ts` (wire; the authoring
   view **exposes** `isCorrect`), `mock.model.ts` (`MockQuestion`,
@@ -415,13 +444,12 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Mock questions is built & verified** (`/admin/mock`) — **uncommitted** per
-"don't commit till I agree". First cert-scoped admin page: a certificate picker
-
-- full per-cert question-bank CRUD (inline dialog, dynamic option set, active-
-  first, deactivate/reactivate), reusing the established layering. On approval:
-  commit, then continue. Suggested next page: **Exam authoring** (`/admin/certs/:id/
-exams*` — richest surface: list all statuses + question CRUD + publish) or **Exam
-  assignment** (`/admin/exam` — list published exams + issue a one-time code).
-  Avoid **Curriculum** (BE-I-13: no admin read) and **Certificate revocation** (no
-  issued-cert list endpoint) until the backend gaps are addressed.
+**Exam assignment is built & verified** (`/admin/exam`) — **uncommitted** per
+"don't commit till I agree". Cert → student-search → exam-target → one-time-code
+flow, reusing the established layering and closing the exam-access loop with the
+student-detail access-codes view. On approval: commit, then continue. Suggested
+next page: **Exam authoring** (`/admin/certs/:id/exams*`) — the larger, richest
+content surface (list all statuses + create-draft + question CRUD +
+publish/unpublish), best built as its own multi-increment effort. Avoid
+**Curriculum** (BE-I-13: no admin read) and **Certificate revocation** (no
+issued-cert list endpoint) until the backend gaps are addressed.

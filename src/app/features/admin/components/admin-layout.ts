@@ -3,7 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { type AppRole, AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button } from '@ui';
+import { Button, LanguageSelector } from '@ui';
 
 /** Sidebar entry. New admin pages register their nav item here, one by one. */
 interface AdminNavItem {
@@ -39,6 +39,12 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     roles: ['content_creator', 'learning_admin'],
   },
   {
+    labelKey: 'admin.shell.nav.exam',
+    route: '/admin/exam',
+    exact: false,
+    roles: ['learning_admin'],
+  },
+  {
     labelKey: 'admin.shell.nav.audit',
     route: '/admin/audit-logs',
     exact: false,
@@ -56,7 +62,7 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
  */
 @Component({
   selector: 'ios-admin-layout',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, Button],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, Button, LanguageSelector],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex bg-gray-50 text-ios-brand-dark">
@@ -97,6 +103,7 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
             {{ lang.t('admin.shell.brand') }}
           </span>
           <div class="flex items-center gap-4 ms-auto">
+            <ios-language-selector />
             <div class="text-end leading-tight">
               <p class="text-sm font-semibold">{{ displayName() }}</p>
               <p class="text-xs text-gray-500">{{ roleLabel() }}</p>

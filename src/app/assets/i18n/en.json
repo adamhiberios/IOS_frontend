@@ -2356,6 +2356,7 @@
         "catalog": "Certificates",
         "users": "Students",
         "mock": "Mock questions",
+        "exam": "Exam assignment",
         "audit": "Audit logs"
       }
     },
@@ -2563,6 +2564,36 @@
       "cancel": "Cancel",
       "confirmTitle": "Deactivate question?",
       "confirmBody": "This removes it from future practice attempts. You can reactivate it later."
+    },
+    "exam": {
+      "title": "Assign an exam",
+      "subtitle": "Issue a one-time exam access code to a student.",
+      "certLabel": "Certificate",
+      "certPlaceholder": "Select a certificate",
+      "certsLoading": "Loading certificates…",
+      "certsError": "Couldn’t load certificates. Please try again.",
+      "retry": "Retry",
+      "studentStep": "Student",
+      "studentSearchLabel": "Find a student",
+      "studentSearchPlaceholder": "Name or email…",
+      "search": "Search",
+      "noStudents": "No students match that search.",
+      "changeStudent": "Change",
+      "studentsError": "Couldn’t search students. Please try again.",
+      "examStep": "Exam",
+      "examsLoading": "Loading exams…",
+      "examsError": "Couldn’t load exams. Please try again.",
+      "autoAssign": "Auto — next unattempted exam",
+      "noPublished": "This certificate has no published exams; auto-assign will fail until one is published.",
+      "assign": "Assign & issue code",
+      "assignError": "Couldn’t assign the exam. Please try again.",
+      "codeTitle": "Access code issued",
+      "codeWarning": "Copy this code now — it’s shown only once.",
+      "copy": "Copy",
+      "copied": "Copied",
+      "codeExam": "Exam",
+      "codeExpires": "Expires",
+      "done": "Done"
     }
   }
 }

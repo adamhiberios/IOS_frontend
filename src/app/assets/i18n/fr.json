@@ -2356,6 +2356,7 @@
         "catalog": "Certifications",
         "users": "Étudiants",
         "mock": "Questions d’entraînement",
+        "exam": "Attribution d’examen",
         "audit": "Journaux d’audit"
       }
     },
@@ -2563,6 +2564,36 @@
       "cancel": "Annuler",
       "confirmTitle": "Désactiver la question ?",
       "confirmBody": "Elle sera retirée des prochains entraînements. Vous pourrez la réactiver plus tard."
+    },
+    "exam": {
+      "title": "Attribuer un examen",
+      "subtitle": "Délivrez à un étudiant un code d’accès à usage unique.",
+      "certLabel": "Certification",
+      "certPlaceholder": "Sélectionnez une certification",
+      "certsLoading": "Chargement des certifications…",
+      "certsError": "Impossible de charger les certifications. Veuillez réessayer.",
+      "retry": "Réessayer",
+      "studentStep": "Étudiant",
+      "studentSearchLabel": "Rechercher un étudiant",
+      "studentSearchPlaceholder": "Nom ou e-mail…",
+      "search": "Rechercher",
+      "noStudents": "Aucun étudiant ne correspond à cette recherche.",
+      "changeStudent": "Changer",
+      "studentsError": "Impossible de rechercher des étudiants. Veuillez réessayer.",
+      "examStep": "Examen",
+      "examsLoading": "Chargement des examens…",
+      "examsError": "Impossible de charger les examens. Veuillez réessayer.",
+      "autoAssign": "Auto — prochain examen non tenté",
+      "noPublished": "Cette certification n’a aucun examen publié ; l’attribution automatique échouera tant qu’aucun n’est publié.",
+      "assign": "Attribuer et générer le code",
+      "assignError": "Impossible d’attribuer l’examen. Veuillez réessayer.",
+      "codeTitle": "Code d’accès généré",
+      "codeWarning": "Copiez ce code maintenant — il n’est affiché qu’une seule fois.",
+      "copy": "Copier",
+      "copied": "Copié",
+      "codeExam": "Examen",
+      "codeExpires": "Expire le",
+      "done": "Terminé"
     }
   }
 }
