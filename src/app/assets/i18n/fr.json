@@ -456,6 +456,7 @@
       "contact": "Contact",
       "login": "Connexion",
       "register": "Inscription",
+      "dashboard": "Tableau de bord",
       "mainNavAriaLabel": "Navigation principale",
       "homeAriaLabel": "Institute of Scrum — accueil",
       "logoAlt": "Institut Scrum",
@@ -1920,6 +1921,9 @@
       "description": "Votre mot de passe a été modifié. Pour votre sécurité, vous avez été déconnecté de tous les appareils — veuillez vous reconnecter avec votre nouveau mot de passe.",
       "ok": "OK"
     }
+  },
+  "catalog": {
+    "loadError": "Nous n'avons pas pu charger les certifications. Veuillez réessayer."
   },
   "notifications": {
     "pageTitle": "Notifications",

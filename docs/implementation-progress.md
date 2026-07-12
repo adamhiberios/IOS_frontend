@@ -57,7 +57,7 @@ the placeholder with a real `data-access` layer against the endpoints below.
 | ----- | -------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | **1** | **Profile** (`/profile`)                     | View + edit profile; change password           | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                    | ✅ built (review pending)   |
 | **1** | **Settings** (`/settings`)                   | Password, language; (delete account)           | `PATCH /me/password` ✅; **delete account = none (BE-I-19)** → hide/park                                                                        | ⚠️ partial                  |
-| **2** | **Catalog** (`/catalog`) + Landing           | Browse certs, cert detail, curriculum outline  | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /catalog`                                    | ✅ ready                    |
+| **2** | **Catalog** (`/certifications` + detail)     | Browse certs, cert detail, curriculum outline  | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /catalog`                                    | 🚧 in progress (retrofit)   |
 | **3** | **Payments / enroll**                        | Checkout (enroll), retake, transaction history | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                | ✅ ready                    |
 | **4** | **Dashboard** (`/dashboard`)                 | Enrolled courses + progress, recent activity   | `GET /learning/progress` (enrolled certs + %), `GET /payments/transactions`, `GET /me`; **no aggregate analytics (BE-I-07)**                    | ⚠️ compose                  |
 | **5** | **Courses / Learning** (`/courses`)          | Curriculum tree, lesson viewer, quiz, complete | `GET /learning/certs/:id/curriculum`, `GET /learning/lessons/:id`, `GET /learning/lessons/:id/quiz`, `POST …/quiz/check`, `POST …/complete`     | ✅ ready (enrollment-gated) |
@@ -213,9 +213,70 @@ against the deployed API (not available in-session).
 
 ## Tasks currently in progress
 
-- **Phase 4 · Profile — built, awaiting review (uncommitted).** The first
-  user-facing page is wired to the real `/me` endpoints; details below. Next up
-  per the plan: **Catalog browse/detail + Landing featured**.
+- **Phase 4 · Profile — built & committed** (`f23902e`). Details below.
+- **Phase 4 · Catalog — data-access layer built (logic only), awaiting review
+  (uncommitted).** Public catalog data-access layer is done; the reviewer asked
+  to **not** wire it into the marketing components yet (logic-only), so the ESM
+  cert-details retrofit was reverted. Details + rollout plan below.
+- **Landing navbar — auth-aware CTAs (uncommitted).** `ios-landing-navbar` now
+  hides **Login/Register** when the visitor is signed in and shows a
+  **Dashboard** link instead (desktop + mobile), via `AuthStore.isAuthenticated()`.
+  Added `landing.nav.dashboard` i18n (en/fr/ar).
+
+### Phase 4 · Catalog retrofit (`/certifications` + `cert-details-*`) — data-access only (uncommitted)
+
+**Scope decision (reviewer):** the user-facing catalog is **static marketing**
+(`/certifications` browse + hardcoded `cert-details-*` pages, IOS-branded
+slugs like `esm`/`epo`/`esf`). The backend `GET /catalog` is a thin,
+UUID-keyed list of _purchasable_ certs (title/description/price/currency/
+thumbnail) + an outline-titles endpoint — its demo seed uses Scrum.org codes
+(PSM/PSPO/…), and production certs will carry the IOS program codes. Chosen
+approach: **retrofit** — overlay the real backend fields the pages actually show
+(price, title) onto the existing marketing layout, matched by `programCode`,
+keeping the static copy the backend doesn't own and **flagging content gaps**.
+Per the reviewer, this increment lands the **data-access layer only**; the
+component overlay (the ESM reference retrofit) was reverted and is deferred.
+
+- **`features/landing/data-access/catalog.*`** (new; kept in-feature — no
+  cross-feature import of the admin catalog layer):
+  - `catalog.dto.ts` — public wire shapes (`CatalogItemDto` incl. `locale`/
+    `direction`/`fallbackUsed`; list/detail/outline responses).
+  - `catalog.model.ts` — `PublicCertificate`, `CatalogListQuery`, `CourseOutline`
+    (module/lesson outline, titles only).
+  - `catalog.mappers.ts` — `toPublicCertificate`, `toCourseOutline`, and
+    `formatPrice(price, currency, locale)` (Intl currency formatting with a safe
+    fallback for unknown codes).
+  - `catalog.api.ts` — `PublicCatalogApi`: `list` (`GET /catalog`, cursor-paged,
+    reuses `toPage`/`toHttpParams`), `getById`, `getOutline`.
+  - `catalog.store.ts` — `PublicCatalogStore`: loads the (small) active catalogue
+    once (walks cursor pages, cap 10), indexes by upper-cased `programCode`
+    (`byCode()`), exposes `items` for a future browse grid; never throws
+    (`error` signal + static fallback on the pages).
+- **Component overlay — deferred (reverted).** A reference retrofit of
+  `pages/cert-details-esm.page.ts` (overlay `price`/`title` from
+  `catalog.byCode('ESM')` with i18n fallback) was built and then **reverted** at
+  the reviewer's request (logic-only for now). The intended pattern is recorded
+  in the rollout plan below; no marketing component is wired to the catalog yet.
+- **i18n:** added top-level `catalog.loadError` (en/fr/ar; Arabic pending pro
+  review).
+- **Content gaps flagged (stay static — no backend source):** the browse page's
+  track grouping + comparison table + FAQ; per-cert audience / key-learning /
+  stats / hero imagery / marketing descriptions; `BE-I-04` card fields
+  (`track`/`level`/`durationHours`/`syllabusUrl`) aren't in the catalog DTO. The
+  `GET /catalog/:id/outline` endpoint is wired in the data-access layer but has
+  **no UI home yet** — the current detail design shows "Key Learning" bullets
+  (i18n), not a module/lesson curriculum list; surfacing the live outline needs a
+  new section (deferred, flag for design).
+- **Rollout plan (deferred — component work, needs the go-ahead):** overlay
+  `price`/`title` from `catalog.byCode('<CODE>')` (with `certDetails.<code>.*`
+  fallback) on each `cert-details-*` page (esm/esm-p/esm-a/epo/epo-p/epo-a/esf);
+  retrofit the `all-certifications` browse cards; add a Landing "featured
+  certifications" section from `PublicCatalogStore.items`. Pattern: read `byCode`,
+  `formatPrice(price, currency, locale)`, fall back to i18n so the page always
+  renders even when the backend has no matching cert.
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only). The data-access layer
+  has no live consumer yet; live check deferred until it's wired.
 
 ### Phase 4 · Profile (`/dashboard/profile`) — built, awaiting review (uncommitted)
 
@@ -696,14 +757,15 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Phase 4 · Profile is built and awaiting review** (uncommitted — see the
-Profile section above). Once approved/committed, continue down the
-[Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration):
+**Phase 4 · Profile is built & committed** (`f23902e`). **Catalog retrofit is in
+progress and awaiting review** (uncommitted — see the Catalog section above): the
+public catalog data-access layer + the ESM cert-details page are done as the
+reference pattern.
 
-**Next: Catalog browse/detail + Landing featured** — public endpoints
-(`GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline`); reuse the
-admin `catalog.dto`/mappers where shapes overlap (the public response adds
-`locale`/`direction`/`fallbackUsed`). Then: Payments/enroll → Dashboard →
-Courses → Assessments/Mock. Skip the ⛔ blocked features (Certificates list
-BE-I-16, Notifications BE-I-18, Insights BE-I-20) — see
-[`backend-blockers-report.md`](./backend-blockers-report.md).
+Per the reviewer, continuing **logic-only** (data-access layers; no component
+changes) down the [Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration):
+**Payments** (`/payments/checkout`, `/payments/retake`, `/payments/transactions`)
+→ Dashboard (`/learning/progress`) → Courses (`/learning/*`) → Assessments/Mock.
+The catalog + payments component overlays (and the `cert-details-*` / browse /
+Landing-featured retrofits) wait for the go-ahead. Skip the ⛔ blocked features
+(Certificates list BE-I-16, Notifications BE-I-18, Insights BE-I-20).

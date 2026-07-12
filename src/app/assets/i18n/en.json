@@ -456,6 +456,7 @@
       "contact": "Contact",
       "login": "Login",
       "register": "Register",
+      "dashboard": "Dashboard",
       "mainNavAriaLabel": "Main navigation",
       "homeAriaLabel": "Institute of Scrum — home",
       "languageToggle": "Switch language",
@@ -1920,6 +1921,9 @@
       "description": "Your password has been changed. For your security you've been signed out of all devices — please sign in again with your new password.",
       "ok": "Ok"
     }
+  },
+  "catalog": {
+    "loadError": "We couldn't load the certifications. Please try again."
   },
   "notifications": {
     "pageTitle": "Notifications",

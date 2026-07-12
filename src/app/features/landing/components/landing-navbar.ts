@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { LucideArrowUpRight, LucideMenu, LucideX } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
+import { AuthStore } from '@core/auth';
 import { IosIcon, LanguageSelector, provideIcons } from '@ui';
 
 /**
@@ -80,29 +81,44 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
 
         <!-- Auth CTAs + language + hamburger -->
         <div class="flex items-center gap-3">
-          <!-- Login — hidden on mobile, shown on lg+ -->
-          <a
-            routerLink="/auth/login"
-            class="hidden lg:inline-flex items-center justify-center bg-ios-brand-primary-soft text-ios-brand-primary
-                   font-heading font-semibold text-[15px]
-                   h-11 px-5 rounded-lg no-underline
-                   hover:opacity-90 transition-opacity
-                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-          >
-            {{ lang.t('landing.nav.login') }}
-          </a>
-          <!-- Register — hidden on mobile, shown on lg+ -->
-          <a
-            routerLink="/auth/register"
-            class="hidden lg:inline-flex items-center justify-center bg-ios-brand-primary text-white
-                   font-heading font-semibold text-[15px]
-                   h-11 px-5 rounded-lg
-                   hover:bg-ios-brand-primary-hover transition-colors
-                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-          >
-            {{ lang.t('landing.nav.register') }}
-            <ios-icon name="arrow-up-right" class="w-4 h-4" aria-hidden="true" />
-          </a>
+          @if (auth.isAuthenticated()) {
+            <!-- Signed in — go to the app instead of login/register -->
+            <a
+              routerLink="/dashboard"
+              class="hidden lg:inline-flex items-center justify-center bg-ios-brand-primary text-white
+                     font-heading font-semibold text-[15px]
+                     h-11 px-5 rounded-lg no-underline
+                     hover:bg-ios-brand-primary-hover transition-colors
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+            >
+              {{ lang.t('landing.nav.dashboard') }}
+              <ios-icon name="arrow-up-right" class="w-4 h-4" aria-hidden="true" />
+            </a>
+          } @else {
+            <!-- Login — hidden on mobile, shown on lg+ -->
+            <a
+              routerLink="/auth/login"
+              class="hidden lg:inline-flex items-center justify-center bg-ios-brand-primary-soft text-ios-brand-primary
+                     font-heading font-semibold text-[15px]
+                     h-11 px-5 rounded-lg no-underline
+                     hover:opacity-90 transition-opacity
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+            >
+              {{ lang.t('landing.nav.login') }}
+            </a>
+            <!-- Register — hidden on mobile, shown on lg+ -->
+            <a
+              routerLink="/auth/register"
+              class="hidden lg:inline-flex items-center justify-center bg-ios-brand-primary text-white
+                     font-heading font-semibold text-[15px]
+                     h-11 px-5 rounded-lg
+                     hover:bg-ios-brand-primary-hover transition-colors
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+            >
+              {{ lang.t('landing.nav.register') }}
+              <ios-icon name="arrow-up-right" class="w-4 h-4" aria-hidden="true" />
+            </a>
+          }
           <ios-language-selector />
 
           <!-- Hamburger — visible only on mobile (< lg) -->
@@ -159,25 +175,38 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
             {{ lang.t('landing.nav.contact') }}
           </a>
           <hr class="my-2 border-ios-border-light" />
-          <a
-            routerLink="/auth/login"
-            class="w-full text-center py-3 px-4 rounded-lg
-                   bg-ios-brand-primary-soft text-ios-brand-primary
-                   font-heading font-semibold text-[15px]
-                   no-underline hover:opacity-90 transition-opacity"
-          >
-            {{ lang.t('landing.nav.login') }}
-          </a>
-          <a
-            routerLink="/auth/register"
-            class="w-full text-center py-3 px-4 rounded-lg
-                   bg-ios-brand-primary text-white
-                   font-heading font-semibold text-[15px]
-                   no-underline hover:bg-ios-brand-primary-hover transition-colors"
-          >
-            {{ lang.t('landing.nav.register') }}
-            <ios-icon name="arrow-up-right" class="w-4 h-4" aria-hidden="true" />
-          </a>
+          @if (auth.isAuthenticated()) {
+            <a
+              routerLink="/dashboard"
+              class="w-full text-center py-3 px-4 rounded-lg
+                     bg-ios-brand-primary text-white
+                     font-heading font-semibold text-[15px]
+                     no-underline hover:bg-ios-brand-primary-hover transition-colors"
+            >
+              {{ lang.t('landing.nav.dashboard') }}
+              <ios-icon name="arrow-up-right" class="w-4 h-4" aria-hidden="true" />
+            </a>
+          } @else {
+            <a
+              routerLink="/auth/login"
+              class="w-full text-center py-3 px-4 rounded-lg
+                     bg-ios-brand-primary-soft text-ios-brand-primary
+                     font-heading font-semibold text-[15px]
+                     no-underline hover:opacity-90 transition-opacity"
+            >
+              {{ lang.t('landing.nav.login') }}
+            </a>
+            <a
+              routerLink="/auth/register"
+              class="w-full text-center py-3 px-4 rounded-lg
+                     bg-ios-brand-primary text-white
+                     font-heading font-semibold text-[15px]
+                     no-underline hover:bg-ios-brand-primary-hover transition-colors"
+            >
+              {{ lang.t('landing.nav.register') }}
+              <ios-icon name="arrow-up-right" class="w-4 h-4" aria-hidden="true" />
+            </a>
+          }
         </div>
       }
     </nav>
@@ -185,5 +214,6 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
 })
 export class LandingNavbar {
   protected readonly lang = inject(LanguageService);
+  protected readonly auth = inject(AuthStore);
   protected readonly mobileOpen = signal(false);
 }
