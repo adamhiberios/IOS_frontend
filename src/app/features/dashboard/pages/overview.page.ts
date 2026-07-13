@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
-import { LucideClock, LucideFileText, LucidePercent } from '@lucide/angular';
+import { RouterLink } from '@angular/router';
+import { LucideArrowLeft, LucideClock, LucideFileText, LucidePercent } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { CanadaFlag } from '@ui';
+import { CanadaFlag, IosIcon } from '@ui';
 import { provideIcons } from '@ui';
 
 import { BarChart, DonutChart } from '@ui';
@@ -11,7 +12,7 @@ import { CertProgressCard } from '../components/cert-progress-card';
 import { DashboardNavbar } from '@layouts';
 import { LearningCard } from '../components/learning-card';
 import { DashboardStatCard } from '../components/stat-card';
-import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
+import { DashboardStore } from '../data-access/dashboard.store';
 
 /**
  * `ios-dashboard-overview-page` — student dashboard entry point.
@@ -41,48 +42,52 @@ import { DashboardStore, type DemoMode } from '../data-access/dashboard.store';
     CertProgressCard,
     LearningCard,
     CanadaFlag,
+    RouterLink,
+    IosIcon,
   ],
-  providers: [provideIcons(LucideFileText, LucidePercent, LucideClock)],
+  providers: [provideIcons(LucideFileText, LucidePercent, LucideClock, LucideArrowLeft)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
 
-      <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
-          <!-- ── Breadcrumb + demo switcher ── -->
-          <div class="flex items-center justify-between mb-6">
+      <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
+      <div class="w-full bg-white border-b border-ios-surface-soft">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
+          <div class="flex items-center gap-4">
+            <a
+              routerLink="/dashboard"
+              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
+              [attr.aria-label]="lang.t('dashboard.breadcrumb.backToDashboard')"
+            >
+              <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
+            </a>
             <nav aria-label="Breadcrumb">
-              <ol class="flex items-center gap-1.5 text-sm text-gray-400" role="list">
+              <ol
+                class="flex items-center gap-3 text-base leading-[1.4] whitespace-nowrap"
+                role="list"
+              >
                 <li>
-                  <span>{{ lang.t('dashboard.breadcrumb.dashboard') }}</span>
+                  <a
+                    routerLink="/dashboard"
+                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+                    >{{ lang.t('dashboard.breadcrumb.dashboard') }}</a
+                  >
                 </li>
-                <li aria-hidden="true" class="text-gray-300">/</li>
+                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
-                  <span class="text-ios-brand-dark font-normal">{{ breadcrumbLeaf() }}</span>
+                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
+                    lang.t('dashboard.breadcrumb.overview')
+                  }}</span>
                 </li>
               </ol>
             </nav>
-
-            <!-- Dev helper — remove before production -->
-            <div class="flex items-center gap-2 select-none" aria-label="Demo mode switcher">
-              <span class="text-xs text-gray-400 font-medium">Demo:</span>
-              @for (mode of demoModes; track mode.value) {
-                <button
-                  type="button"
-                  class="px-3 py-1 rounded-full text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                  [class.bg-ios-brand-gold]="store.demoMode() === mode.value"
-                  [class.text-ios-fg-13]="store.demoMode() === mode.value"
-                  [class.bg-ios-surface-soft]="store.demoMode() !== mode.value"
-                  [class.text-ios-fg-8]="store.demoMode() !== mode.value"
-                  (click)="store.setDemoMode(mode.value)"
-                >
-                  {{ mode.label }}
-                </button>
-              }
-            </div>
           </div>
+        </div>
+      </div>
 
+      <main class="flex-1 bg-white" id="main-content">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
           <!-- ── Stat cards ── -->
           <section
             aria-label="Overview statistics"
@@ -190,21 +195,9 @@ export class DashboardOverviewPage {
   protected readonly currentYear = new Date().getFullYear();
   protected readonly yearStr = String(this.currentYear);
 
-  protected readonly demoModes: { value: DemoMode; label: string }[] = [
-    { value: 'empty', label: 'Empty' },
-    { value: 'one-cert', label: '1 Cert' },
-    { value: 'two-certs', label: '2 Certs' },
-  ];
-
   protected readonly learningCard = computed(() => this.store.learningCard());
   protected readonly certs = computed(() => this.store.validCertifications());
   protected readonly certCount = computed(() => this.certs().length);
-
-  protected readonly breadcrumbLeaf = computed(() =>
-    this.store.demoMode() !== 'empty'
-      ? this.lang.t('dashboard.breadcrumb.overview')
-      : this.lang.t('dashboard.breadcrumb.general'),
-  );
 }
 
 export default DashboardOverviewPage;

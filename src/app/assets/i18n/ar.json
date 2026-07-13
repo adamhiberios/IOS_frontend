@@ -530,6 +530,7 @@
     "nav": {
       "overview": "نظرة عامة",
       "myCertificates": "شهاداتي",
+      "myCredentials": "شهاداتي المعتمدة",
       "profile": "الملف الشخصي",
       "settings": "الإعدادات",
       "dashboardLabel": "معهد سكروم",
@@ -543,6 +544,7 @@
       "openUserMenu": "فتح قائمة المستخدم",
       "dashboard": "لوحة التحكم",
       "certificates": "الشهادات",
+      "credentials": "شهاداتي المعتمدة",
       "log": "السجل",
       "profile": "الملف الشخصي",
       "settings": "الإعدادات",
@@ -551,7 +553,8 @@
     "breadcrumb": {
       "dashboard": "لوحة التحكم",
       "overview": "نظرة عامة",
-      "general": "عام"
+      "general": "عام",
+      "backToDashboard": "العودة إلى لوحة التحكم"
     },
     "stats": {
       "programsEnrolled": "البرامج المسجلة",
@@ -2330,6 +2333,34 @@
     "google": "المتابعة عبر Google",
     "apple": "المتابعة عبر Apple",
     "linkedin": "المتابعة عبر LinkedIn"
+  },
+  "credentials": {
+    "title": "شهاداتي المعتمدة",
+    "subtitle": "الشهادات التي حصلت عليها في معهد سكرم.",
+    "backToDashboard": "العودة إلى لوحة التحكم",
+    "breadcrumb": {
+      "dashboard": "لوحة التحكم"
+    },
+    "loading": "جارٍ تحميل شهاداتك…",
+    "loadError": "تعذّر تحميل شهاداتك. يُرجى المحاولة مرة أخرى.",
+    "retry": "إعادة المحاولة",
+    "empty": {
+      "title": "لا توجد شهادات بعد",
+      "body": "اجتَز اختبار شهادة للحصول على أول اعتماد لك."
+    },
+    "issuedLabel": "تاريخ الإصدار",
+    "status": {
+      "valid": "سارية",
+      "revoked": "ملغاة"
+    },
+    "actions": {
+      "download": "تنزيل PDF",
+      "downloadAria": "تنزيل شهادة PDF لـ {program}",
+      "qr": "رمز QR",
+      "qrAria": "فتح رمز QR لـ {program}",
+      "verify": "التحقق",
+      "verifyAria": "التحقق من شهادة {program}"
+    }
   },
   "certificates": {
     "certDetail": {

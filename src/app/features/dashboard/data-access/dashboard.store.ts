@@ -142,7 +142,10 @@ export class DashboardStore {
   /* ── private state ───────────────────────────────────────────────────── */
 
   private readonly lang = inject(LanguageService);
-  private readonly _demoMode = signal<DemoMode>('empty');
+  // Demo switcher removed from the overview UI; the mode is now fixed to a
+  // populated state so the mock renders fully until the page is wired to the
+  // real backend (checklist A7). Kept as a signal for that upcoming rewire.
+  private readonly _demoMode = signal<DemoMode>('two-certs');
   private readonly _yearFilter = signal<ScoreFilterYear>('this_year');
 
   /* ── public read-only views ──────────────────────────────────────────── */

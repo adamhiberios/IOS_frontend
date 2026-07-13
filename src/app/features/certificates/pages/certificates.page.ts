@@ -1,60 +1,60 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { LucideArrowLeft } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { CanadaFlag } from '@ui';
+import { CanadaFlag, IosIcon, provideIcons } from '@ui';
 
 import { DashboardNavbar } from '@layouts';
 import { CertGridCard } from '../components/cert-grid-card';
 import { EnrolledCertRow } from '../components/enrolled-cert-row';
-import { type CertDemoMode, CertificatesStore } from '../data-access/certificates.store';
+import { CertificatesStore } from '../data-access/certificates.store';
 
 @Component({
   selector: 'ios-certificates-page',
-  imports: [DashboardNavbar, EnrolledCertRow, CertGridCard, CanadaFlag],
+  imports: [DashboardNavbar, EnrolledCertRow, CertGridCard, CanadaFlag, RouterLink, IosIcon],
+  providers: [provideIcons(LucideArrowLeft)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
 
-      <main class="flex-1 bg-white" id="main-content">
-        <!-- Breadcrumb -->
-        <div class="w-full border-b border-ios-border-light">
-          <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-4 flex items-center justify-between">
+      <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
+      <div class="w-full bg-white border-b border-ios-surface-soft">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
+          <div class="flex items-center gap-4">
+            <a
+              routerLink="/dashboard"
+              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
+              [attr.aria-label]="lang.t('dashboard.breadcrumb.backToDashboard')"
+            >
+              <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
+            </a>
             <nav aria-label="Breadcrumb">
-              <ol class="flex items-center gap-1.5 text-sm text-ios-fg-7" role="list">
+              <ol
+                class="flex items-center gap-3 text-base leading-[1.4] whitespace-nowrap"
+                role="list"
+              >
                 <li>
-                  <span>{{ lang.t('dashboard.breadcrumb.dashboard') }}</span>
+                  <a
+                    routerLink="/dashboard"
+                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+                    >{{ lang.t('dashboard.breadcrumb.dashboard') }}</a
+                  >
                 </li>
-                <li aria-hidden="true" class="text-ios-fg-7">/</li>
+                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
                 <li>
-                  <span class="text-ios-fg font-normal">{{
+                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
                     lang.t('dashboard.nav.myCertificates')
                   }}</span>
                 </li>
               </ol>
             </nav>
-
-            <!-- Dev helper — remove before production -->
-            <div class="flex items-center gap-2 select-none" aria-label="Demo mode switcher">
-              <span class="text-xs text-ios-fg-7 font-medium">Demo:</span>
-              @for (mode of demoModes; track mode.value) {
-                <button
-                  type="button"
-                  class="px-3 py-1 rounded-full text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                  [class.bg-ios-brand-gold]="store.demoMode() === mode.value"
-                  [class.text-ios-fg-13]="store.demoMode() === mode.value"
-                  [class.bg-ios-surface-soft]="store.demoMode() !== mode.value"
-                  [class.text-ios-fg-8]="store.demoMode() !== mode.value"
-                  (click)="store.setDemoMode(mode.value)"
-                >
-                  {{ mode.label }}
-                </button>
-              }
-            </div>
           </div>
         </div>
+      </div>
 
+      <main class="flex-1 bg-white" id="main-content">
         <!-- Hero sections — one per enrolled cert, full-width background -->
         @if (store.enrolledCerts().length > 0) {
           @for (cert of store.enrolledCerts(); track cert.code) {
@@ -93,13 +93,6 @@ export class CertificatesPage {
 
   protected readonly currentYear = new Date().getFullYear();
   protected readonly yearStr = String(this.currentYear);
-
-  protected readonly demoModes: { value: CertDemoMode; label: string }[] = [
-    { value: 'one-cert-low', label: '1 cert 12%' },
-    { value: 'one-cert-high', label: '1 cert 95%' },
-    { value: 'two-certs-low', label: '2 certs 12%' },
-    { value: 'two-certs-high', label: '2 certs 95%' },
-  ];
 
   protected onViewDetails(code: string): void {
     void this.router.navigate(['/dashboard/certificates', code]);

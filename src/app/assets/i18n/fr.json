@@ -530,6 +530,7 @@
     "nav": {
       "overview": "Aperçu",
       "myCertificates": "Mes certificats",
+      "myCredentials": "Mes accréditations",
       "profile": "Profil",
       "settings": "Paramètres",
       "dashboardLabel": "Institut de Scrum",
@@ -543,6 +544,7 @@
       "openUserMenu": "Ouvrir le menu utilisateur",
       "dashboard": "Tableau de bord",
       "certificates": "Certificats",
+      "credentials": "Mes accréditations",
       "log": "Journal",
       "profile": "Profil",
       "settings": "Paramètres",
@@ -551,7 +553,8 @@
     "breadcrumb": {
       "dashboard": "Tableau de bord",
       "overview": "Aperçu",
-      "general": "Général"
+      "general": "Général",
+      "backToDashboard": "Retour au tableau de bord"
     },
     "stats": {
       "programsEnrolled": "Programmes inscrits",
@@ -2330,6 +2333,34 @@
     "goBack": "Retour",
     "confirm": "Se déconnecter",
     "closeAriaLabel": "Fermer la boîte de dialogue"
+  },
+  "credentials": {
+    "title": "Mes accréditations",
+    "subtitle": "Les certificats que vous avez obtenus à l'Institute of Scrum.",
+    "backToDashboard": "Retour au tableau de bord",
+    "breadcrumb": {
+      "dashboard": "Tableau de bord"
+    },
+    "loading": "Chargement de vos certificats…",
+    "loadError": "Nous n'avons pas pu charger vos certificats. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "empty": {
+      "title": "Aucun certificat pour l'instant",
+      "body": "Réussissez un examen de certification pour obtenir votre première accréditation."
+    },
+    "issuedLabel": "Délivré",
+    "status": {
+      "valid": "Valide",
+      "revoked": "Révoqué"
+    },
+    "actions": {
+      "download": "Télécharger le PDF",
+      "downloadAria": "Télécharger le certificat PDF pour {program}",
+      "qr": "Code QR",
+      "qrAria": "Ouvrir le code QR pour {program}",
+      "verify": "Vérifier",
+      "verifyAria": "Vérifier le certificat {program}"
+    }
   },
   "certificates": {
     "certDetail": {

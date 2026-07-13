@@ -11,6 +11,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   LucideAward,
+  LucideBadgeCheck,
   LucideBell,
   LucideLayoutDashboard,
   LucideSettings,
@@ -26,13 +27,14 @@ import { LogoutDialog } from './logout-dialog';
 
 interface NavTab {
   readonly labelKey: string;
-  readonly icon: 'layout-dashboard' | 'award' | 'user' | 'settings';
+  readonly icon: 'layout-dashboard' | 'award' | 'badge-check' | 'user' | 'settings';
   readonly route: string;
 }
 
 const NAV_TABS: readonly NavTab[] = [
   { labelKey: 'dashboard.nav.overview', icon: 'layout-dashboard', route: '/dashboard' },
   { labelKey: 'dashboard.nav.myCertificates', icon: 'award', route: '/dashboard/certificates' },
+  { labelKey: 'dashboard.nav.myCredentials', icon: 'badge-check', route: '/dashboard/credentials' },
   { labelKey: 'dashboard.nav.profile', icon: 'user', route: '/dashboard/profile' },
   { labelKey: 'dashboard.nav.settings', icon: 'settings', route: '/dashboard/settings' },
 ];
@@ -67,7 +69,14 @@ const NAV_TABS: readonly NavTab[] = [
     LogoutDialog,
   ],
   providers: [
-    provideIcons(LucideLayoutDashboard, LucideBell, LucideUser, LucideSettings, LucideAward),
+    provideIcons(
+      LucideLayoutDashboard,
+      LucideBell,
+      LucideUser,
+      LucideSettings,
+      LucideAward,
+      LucideBadgeCheck,
+    ),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -125,8 +134,10 @@ const NAV_TABS: readonly NavTab[] = [
       </div>
 
       <!-- ── Tab nav — tabs span full container width ───────────────────── -->
+      <!-- Hidden on sm/md (cramped with 5 tabs); navigation there is via the
+           user-menu dropdown. Shown from lg up. -->
       <nav
-        class="w-full border-b border-ios-surface-soft"
+        class="hidden lg:block w-full border-b border-ios-surface-soft"
         [attr.aria-label]="lang.t('dashboard.menu.userMenuLabel')"
       >
         <div class="max-w-[1400px] mx-auto px-8">

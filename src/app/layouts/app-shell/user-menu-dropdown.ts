@@ -13,6 +13,7 @@ interface MenuItem {
 const MENU_ITEMS: readonly MenuItem[] = [
   { labelKey: 'dashboard.menu.dashboard', route: '/dashboard' },
   { labelKey: 'dashboard.menu.certificates', route: '/dashboard/certificates' },
+  { labelKey: 'dashboard.menu.credentials', route: '/dashboard/credentials' },
   { labelKey: 'dashboard.menu.log', route: '/dashboard/log' },
   { labelKey: 'dashboard.menu.profile', route: '/dashboard/profile' },
   { labelKey: 'dashboard.menu.settings', route: '/dashboard/settings' },

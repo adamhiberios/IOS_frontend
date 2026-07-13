@@ -530,6 +530,7 @@
     "nav": {
       "overview": "Overview",
       "myCertificates": "My certificates",
+      "myCredentials": "My credentials",
       "profile": "Profile",
       "settings": "Settings",
       "dashboardLabel": "Institute of Scrum",
@@ -543,6 +544,7 @@
       "openUserMenu": "Open user menu",
       "dashboard": "Dashboard",
       "certificates": "Certificates",
+      "credentials": "My credentials",
       "log": "Log",
       "profile": "Profile",
       "settings": "Settings",
@@ -551,7 +553,8 @@
     "breadcrumb": {
       "dashboard": "Dashboard",
       "overview": "Overview",
-      "general": "General"
+      "general": "General",
+      "backToDashboard": "Back to dashboard"
     },
     "stats": {
       "programsEnrolled": "Programs Enrolled",
@@ -2317,6 +2320,34 @@
       "description": "You will be logged out of this browser. You can log back in later to access your information.",
       "goBack": "Go back",
       "confirm": "Logout"
+    }
+  },
+  "credentials": {
+    "title": "My credentials",
+    "subtitle": "Certificates you've earned at the Institute of Scrum.",
+    "backToDashboard": "Back to dashboard",
+    "breadcrumb": {
+      "dashboard": "Dashboard"
+    },
+    "loading": "Loading your certificates…",
+    "loadError": "We couldn't load your certificates. Please try again.",
+    "retry": "Try again",
+    "empty": {
+      "title": "No certificates yet",
+      "body": "Pass a certification exam to earn your first credential."
+    },
+    "issuedLabel": "Issued",
+    "status": {
+      "valid": "Valid",
+      "revoked": "Revoked"
+    },
+    "actions": {
+      "download": "Download PDF",
+      "downloadAria": "Download the PDF certificate for {program}",
+      "qr": "QR code",
+      "qrAria": "Open the QR code for {program}",
+      "verify": "Verify",
+      "verifyAria": "Verify the {program} certificate"
     }
   },
   "certificates": {

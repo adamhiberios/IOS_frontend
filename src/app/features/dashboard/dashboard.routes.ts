@@ -21,6 +21,11 @@ const DASHBOARD_ROUTES: Routes = [
     loadChildren: () => import('@features/certificates/certificates.routes'),
   },
   {
+    path: 'credentials',
+    title: 'My Credentials',
+    loadChildren: () => import('@features/credentials/credentials.routes'),
+  },
+  {
     path: 'profile',
     title: 'Profile',
     loadChildren: () => import('@features/profile/profile.routes'),
