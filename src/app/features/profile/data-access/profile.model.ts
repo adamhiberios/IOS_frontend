@@ -14,7 +14,7 @@ export interface Profile {
   readonly lastName: string;
   readonly fullName: string;
   readonly phone: string | null;
-  /** Plain URL string — there is no avatar upload endpoint (BE-I-08). */
+  /** Readable URL resolved server-side; written via the presigned upload flow (A1). */
   readonly avatarUrl: string | null;
   readonly country: string | null;
   readonly city: string | null;
@@ -56,4 +56,32 @@ export interface UpdateProfilePayload {
 export interface ChangePasswordPayload {
   readonly currentPassword: string;
   readonly newPassword: string;
+}
+
+/* ─── Avatar upload (A1 / BE-I-08) ─── */
+
+/** Image MIME types the backend will sign a presigned PUT URL for. */
+export const AVATAR_CONTENT_TYPES = ['image/png', 'image/jpeg', 'image/webp'] as const;
+export type AvatarContentType = (typeof AVATAR_CONTENT_TYPES)[number];
+
+/** Narrow an arbitrary MIME string to a supported avatar content type. */
+export function isAvatarContentType(value: string): value is AvatarContentType {
+  return (AVATAR_CONTENT_TYPES as readonly string[]).includes(value);
+}
+
+/** Client-side avatar size guard — 5 MB (the backend enforces its own limit). */
+export const AVATAR_MAX_BYTES = 5 * 1024 * 1024;
+
+/** `accept` attribute value for the avatar file picker. */
+export const AVATAR_ACCEPT = AVATAR_CONTENT_TYPES.join(',');
+
+/**
+ * Presigned upload target from `POST /me/avatar-upload-url`. The browser PUTs
+ * the file bytes to `uploadUrl` (bypassing the API interceptors), then hands
+ * `key` to `PATCH /me { avatarUrl: key }`.
+ */
+export interface AvatarUploadTarget {
+  readonly uploadUrl: string;
+  readonly key: string;
+  readonly expiresInSeconds: number;
 }

@@ -1,7 +1,7 @@
 # Implementation Progress — IOS LMS Frontend ↔ Real Backend
 
 > **Single source of truth for implementation progress.** Updated continuously.
-> Last updated: 2026-07-12.
+> Last updated: 2026-07-13.
 
 ---
 
@@ -371,9 +371,10 @@ endpoints (bare DTOs, not `{ data }`), reusing the established admin layering.
     initials. `firstName`/`lastName`/`email` are read-only.
   - `edit-profile.page.ts` — form hydrated from the loaded profile via an
     `effect` (load is async now). Sends only editable fields to `PATCH /me`
-    (added an editable **phone**; name/email stay locked/read-only). The dead
-    "Change image profile" button was removed (no upload endpoint — BE-I-08);
-    the avatar is display-only. Country/city relaxed to **optional** (the
+    (added an editable **phone**; name/email stay locked/read-only). The
+    "Change image profile" button drives the real avatar-upload flow (**A1**,
+    see below); name/email stay locked/read-only. Country/city relaxed to
+    **optional** (the
     backend does not require them — forcing them blocked saving when a loaded
     field was null); the selects merge the stored value in so an unrelated edit
     never silently drops a free-text value the preset list doesn't contain.
@@ -398,6 +399,48 @@ endpoints (bare DTOs, not `{ data }`), reusing the established admin layering.
   warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.24 kB;
   `edit-profile-page` chunk 4.24 kB gzip). Live check needs a real student
   session against the deployed API (no test creds in-session) — deferred.
+
+### Phase 4 · A1 — Profile avatar upload (BE-I-08) — built, awaiting review (uncommitted)
+
+Full page build (data-access + UI) for the presigned avatar-upload flow;
+revisits the committed Profile work and clears the BE-I-08 "avatar is plain URL
+only" caveat. Endpoint: `POST /me/avatar-upload-url` (bare) → browser `PUT` to
+object storage → `PATCH /me { avatarUrl: key }`.
+
+- **`profile.dto.ts`** — `AvatarUploadUrlRequestDto` (`{ contentType }`, one of
+  `image/png|image/jpeg|image/webp`) + bare `AvatarUploadUrlResponseDto`
+  (`{ uploadUrl, key, expiresInSeconds }`). Updated the `UpdateProfileDto`
+  `avatarUrl` note (now set to the storage `key`; backend resolves to a URL on read).
+- **`profile.model.ts`** — `AVATAR_CONTENT_TYPES` / `AvatarContentType` /
+  `isAvatarContentType`, `AVATAR_MAX_BYTES` (5 MB client guard), `AVATAR_ACCEPT`,
+  `AvatarUploadTarget`. Dropped the "no upload endpoint" caveat on `avatarUrl`.
+- **`profile.mappers.ts`** — `toAvatarUploadTarget` (1:1).
+- **`profile.api.ts`** — three methods: `requestAvatarUploadUrl` (normal client,
+  needs bearer + `X-Locale`); `uploadAvatarBytes` — the raw storage `PUT`,
+  issued through a **bare `HttpClient` built on `HttpBackend`** so it **bypasses
+  the whole interceptor chain** (no `Authorization`/`X-Locale`, no refresh
+  cookie) and sends only the exact signed `Content-Type` (`responseType:'text'`
+  to avoid a JSON-parse error on the empty storage response); `setAvatar(key)` →
+  `PATCH /me { avatarUrl: key }` returning the updated profile.
+- **`profile.store.ts`** — `uploadAvatar(file)` action: client-side type/size
+  guard → request URL → PUT bytes → `PATCH /me` → adopt the returned profile
+  (avatar re-renders). `avatarStatus` (`idle|pending|error`) + `avatarError`
+  signals; `resetAvatarStatus()`; cleared on `user.logged-out`.
+- **`edit-profile.page.ts`** — restored the **"Change image profile"** button
+  (pencil icon) as a real file picker: a `sr-only` `<input type="file"
+[accept]="avatarAccept">` driven by the button, `onAvatarSelected` hands the
+  file to the store (and clears the input so re-picking the same file re-fires),
+  a pending spinner + "Uploading…" label, and an inline `role="alert"` error.
+- **i18n:** added `profile.edit.{changeImage,changingImage,avatarTypeError,
+avatarSizeError,avatarUploadError}` (en/fr/ar; Arabic pending pro review).
+- **Security note:** the object-storage `PUT` is deliberately isolated from the
+  API client (bare `HttpBackend`) so no credentials/cookies reach the storage
+  host — matches the checklist A1 constraint. This is a normal user-initiated
+  file upload, not a credential entry.
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.08 kB;
+  `edit-profile-page` chunk 4.56 kB gzip). Live check needs a real student
+  session + reachable object storage — deferred (no test creds in-session).
 
 ## Auth-route → backend endpoint map
 
@@ -823,17 +866,18 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 **Done so far (Phase 4):** Profile committed (`f23902e`); public **Catalog**
 data-access + auth-aware landing nav committed (`feat(catalog): …`); **Payments**
-data-access built (uncommitted, logic-only). No user-facing catalog/payments
-component is wired yet (logic-first, per the reviewer).
+data-access built (uncommitted, logic-only); **A1 — Profile avatar upload** built
+end-to-end (uncommitted, awaiting review — full page build, data-access + UI).
 
-**The plan is now driven by [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md)**
-— every backend blocker is fixed, so the ⛔ features are buildable. Suggested
-starting order (its §"Suggested order"):
+**Build mode is now full page builds** (data-access + wired screen, one checklist
+item at a time). The plan is driven by
+[`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md) — every backend
+blocker is fixed. Progress against its §"Suggested order":
 
-1. **Profile avatar upload** (checklist A1) — small; clears the BE-I-08 caveat on
-   already-committed Profile work (restore the "Change image" button + presigned PUT).
-2. **Certificates list** (A3), **Notifications** (A4), **Insights** (A5) — three
-   previously-⛔ user features, each a clean data-access + page.
+1. ✅ **Profile avatar upload** (checklist A1) — built (uncommitted); cleared the
+   BE-I-08 caveat, restored the "Change image" button + presigned PUT flow.
+2. ⏭️ **Next: Certificates list** (A3), then **Notifications** (A4), **Insights**
+   (A5) — three previously-⛔ user features, each a clean data-access + page.
 3. **Landing / Dashboard rewire** (A6, A7) — fold in `GET /landing`, `GET /insights`,
    `GET /exam/attempts`.
 4. **Settings** — delete account / export / cookie consent (A2, C2).

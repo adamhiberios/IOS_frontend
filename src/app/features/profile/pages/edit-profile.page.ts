@@ -12,7 +12,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, RouterLink } from '@angular/router';
 import { startWith } from 'rxjs/operators';
-import { LucideArrowLeft } from '@lucide/angular';
+import { LucideArrowLeft, LucidePencil } from '@lucide/angular';
 
 import { CanadaFlag, Input, IosIcon, Select, provideIcons, type SelectOption } from '@ui';
 import { DashboardNavbar } from '@layouts';
@@ -20,6 +20,7 @@ import { LanguageService } from '@core/i18n';
 
 import { ProfileCancelEditDialog } from '../components/cancel-edit-dialog';
 import { ProfileInfoUpdatedDialog } from '../components/info-updated-dialog';
+import { AVATAR_ACCEPT } from '../data-access/profile.model';
 import { ProfileStore } from '../data-access/profile.store';
 
 /** Countries offered in the dropdown — the backend field is a free string, so
@@ -86,8 +87,10 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
  * `firstName`, `lastName`, and `email` are shown read-only — they are LOCKED
  * server-side (they appear on issued certificates) and `PATCH /me` rejects
  * them. Country/city are optional here (the backend does not require them; a
- * null profile field must not block saving other edits). Avatar image upload is
- * not possible (BE-I-08) — the avatar is display-only.
+ * null profile field must not block saving other edits). The avatar can be
+ * changed via the presigned-upload flow (A1 / BE-I-08): pick a file →
+ * `ProfileStore.uploadAvatar()` requests a signed URL, PUTs the bytes to object
+ * storage, then `PATCH /me` points the profile at the new object.
  *
  * Bottom action bar: Cancel | Save information. "Cancel" opens
  * `ProfileCancelEditDialog`; "Save information" calls `ProfileStore.updateProfile()`.
@@ -107,7 +110,7 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
     ProfileCancelEditDialog,
     ProfileInfoUpdatedDialog,
   ],
-  providers: [provideIcons(LucideArrowLeft)],
+  providers: [provideIcons(LucideArrowLeft, LucidePencil)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -178,7 +181,7 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
               <div
                 class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col md:flex-row gap-6 md:gap-8 items-start"
               >
-                <!-- Avatar (display-only — no upload endpoint, BE-I-08) -->
+                <!-- Avatar + change image (presigned upload — A1 / BE-I-08) -->
                 <div class="flex flex-col gap-4 items-center shrink-0">
                   <div
                     class="size-[82px] rounded-full border border-ios-line bg-[#fdfdfd] overflow-hidden flex items-center justify-center"
@@ -198,6 +201,46 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
                       </span>
                     }
                   </div>
+
+                  <!-- Hidden native picker driven by the button below. -->
+                  <input
+                    #avatarInput
+                    type="file"
+                    class="sr-only"
+                    [accept]="avatarAccept"
+                    (change)="onAvatarSelected($event)"
+                  />
+                  <button
+                    type="button"
+                    class="flex items-center gap-2 text-[16px] font-semibold leading-[1.4] text-ios-fg hover:text-ios-fg-mid transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg-13 rounded disabled:opacity-50 disabled:pointer-events-none"
+                    [attr.aria-label]="lang.t('profile.edit.changeImage')"
+                    [disabled]="store.avatarStatus() === 'pending'"
+                    (click)="avatarInput.click()"
+                  >
+                    @if (store.avatarStatus() === 'pending') {
+                      <span
+                        class="inline-block h-5 w-5 shrink-0 animate-spin rounded-full border-2 border-ios-fg border-t-transparent"
+                        aria-hidden="true"
+                      ></span>
+                      <span class="whitespace-nowrap">{{
+                        lang.t('profile.edit.changingImage')
+                      }}</span>
+                    } @else {
+                      <ios-icon name="pencil" class="w-5 h-5 shrink-0" aria-hidden="true" />
+                      <span class="whitespace-nowrap">{{
+                        lang.t('profile.edit.changeImage')
+                      }}</span>
+                    }
+                  </button>
+
+                  @if (store.avatarError(); as avatarErr) {
+                    <p
+                      role="alert"
+                      class="max-w-[180px] text-center text-sm font-medium text-ios-brand-primary"
+                    >
+                      {{ avatarErr }}
+                    </p>
+                  }
                 </div>
 
                 <!-- Vertical divider -->
@@ -455,6 +498,8 @@ export class EditProfilePage implements OnInit {
 
   protected readonly showCancelDialog = signal(false);
   protected readonly year = new Date().getFullYear();
+  /** `accept` list for the avatar file picker (png/jpeg/webp). */
+  protected readonly avatarAccept = AVATAR_ACCEPT;
 
   /** Guards the one-time form hydration from the loaded profile. */
   private patched = false;
@@ -536,7 +581,20 @@ export class EditProfilePage implements OnInit {
 
   ngOnInit(): void {
     this.store.resetSubmitStatus();
+    this.store.resetAvatarStatus();
     void this.store.load();
+  }
+
+  /**
+   * File-picker handler for the avatar. Hands the chosen file to the store (which
+   * validates type/size, uploads via the presigned flow, and updates the profile)
+   * and clears the input so re-selecting the same file fires `change` again.
+   */
+  protected onAvatarSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (file) void this.store.uploadAvatar(file);
   }
 
   protected onSubmit(): void {

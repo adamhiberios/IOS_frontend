@@ -8,9 +8,16 @@ import { LanguageService } from '@core/i18n';
 import { AppEventBus } from '@core/event-bus';
 
 import { ProfileApi } from './profile.api';
-import type { ChangePasswordPayload, Profile, UpdateProfilePayload } from './profile.model';
+import {
+  AVATAR_MAX_BYTES,
+  type ChangePasswordPayload,
+  type Profile,
+  type UpdateProfilePayload,
+  isAvatarContentType,
+} from './profile.model';
 
 export type ProfileSubmitStatus = 'idle' | 'pending' | 'success' | 'error';
+export type AvatarUploadStatus = 'idle' | 'pending' | 'error';
 
 /**
  * `ProfileStore` — injectable singleton for the Profile feature.
@@ -50,6 +57,9 @@ export class ProfileStore {
   /** True when the failure was specifically a wrong current password (401). */
   private readonly _passwordCurrentWrong = signal(false);
 
+  private readonly _avatarStatus = signal<AvatarUploadStatus>('idle');
+  private readonly _avatarError = signal<string | null>(null);
+
   /* ─── public readonly views ─── */
   readonly profile = this._profile.asReadonly();
   readonly loading = this._loading.asReadonly();
@@ -59,6 +69,8 @@ export class ProfileStore {
   readonly passwordSubmitStatus = this._passwordSubmitStatus.asReadonly();
   readonly passwordError = this._passwordError.asReadonly();
   readonly passwordCurrentWrong = this._passwordCurrentWrong.asReadonly();
+  readonly avatarStatus = this._avatarStatus.asReadonly();
+  readonly avatarError = this._avatarError.asReadonly();
 
   /** Derived full name, preferring the backend-computed value. */
   readonly fullName = computed(() => {
@@ -157,6 +169,51 @@ export class ProfileStore {
     }
   }
 
+  /**
+   * Upload a new avatar (A1 / BE-I-08). Three steps: request a presigned PUT URL
+   * (`POST /me/avatar-upload-url`) → PUT the raw bytes to object storage (bypasses
+   * the API interceptors) → point the profile at the object (`PATCH /me`). The
+   * store validates type/size up front so a bad file never round-trips. On success
+   * it adopts the returned profile (the avatar re-renders); returns `true`.
+   */
+  async uploadAvatar(file: File): Promise<boolean> {
+    if (this._avatarStatus() === 'pending') return false;
+
+    const contentType = file.type;
+    if (!isAvatarContentType(contentType)) {
+      this._avatarError.set(this.lang.t('profile.edit.avatarTypeError'));
+      this._avatarStatus.set('error');
+      return false;
+    }
+    if (file.size > AVATAR_MAX_BYTES) {
+      this._avatarError.set(this.lang.t('profile.edit.avatarSizeError'));
+      this._avatarStatus.set('error');
+      return false;
+    }
+
+    this._avatarStatus.set('pending');
+    this._avatarError.set(null);
+    try {
+      const target = await firstValueFrom(this.api.requestAvatarUploadUrl(contentType));
+      await firstValueFrom(this.api.uploadAvatarBytes(target, file, contentType));
+      this._profile.set(await firstValueFrom(this.api.setAvatar(target.key)));
+      this._avatarStatus.set('idle');
+      return true;
+    } catch (err) {
+      this._avatarError.set(
+        problemDetailMessage(err) ?? this.lang.t('profile.edit.avatarUploadError'),
+      );
+      this._avatarStatus.set('error');
+      return false;
+    }
+  }
+
+  /** Reset the avatar-upload state (e.g. on entering the edit page). */
+  resetAvatarStatus(): void {
+    this._avatarStatus.set('idle');
+    this._avatarError.set(null);
+  }
+
   /** Reset the update-information submit state (e.g. after dismissing a dialog). */
   resetSubmitStatus(): void {
     this._submitStatus.set('idle');
@@ -176,5 +233,6 @@ export class ProfileStore {
     this._error.set(null);
     this.resetSubmitStatus();
     this.resetPasswordSubmitStatus();
+    this.resetAvatarStatus();
   }
 }

@@ -1,5 +1,9 @@
-import { type ProfileResponseDto, type UpdateProfileDto } from './profile.dto';
-import { type Profile, type UpdateProfilePayload } from './profile.model';
+import {
+  type AvatarUploadUrlResponseDto,
+  type ProfileResponseDto,
+  type UpdateProfileDto,
+} from './profile.dto';
+import { type AvatarUploadTarget, type Profile, type UpdateProfilePayload } from './profile.model';
 
 /** Map a wire `ProfileResponseDto` to the frontend `Profile` model (1:1). */
 export function toProfile(dto: ProfileResponseDto): Profile {
@@ -24,6 +28,15 @@ export function toProfile(dto: ProfileResponseDto): Profile {
     emailVerified: dto.emailVerified,
     createdAt: dto.createdAt,
     updatedAt: dto.updatedAt,
+  };
+}
+
+/** Map the presigned-upload response to the frontend `AvatarUploadTarget` (1:1). */
+export function toAvatarUploadTarget(dto: AvatarUploadUrlResponseDto): AvatarUploadTarget {
+  return {
+    uploadUrl: dto.uploadUrl,
+    key: dto.key,
+    expiresInSeconds: dto.expiresInSeconds,
   };
 }
 
