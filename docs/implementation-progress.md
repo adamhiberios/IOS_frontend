@@ -7,12 +7,18 @@
 
 ## Overall project status
 
-**Phase 3 (Admin application) — COMPLETE** for every buildable backend surface.
-**Phase 4 (user-facing app ↔ real backend) — next.** Backend fully analysed
-(Phase 1, see [`backend-analysis.md`](./backend-analysis.md)); auth wired
-(Phase 2). The admin app is done; the remaining admin pages (Curriculum, Cert
-revocation) are **backend-blocked** — see
-[`backend-blockers-report.md`](./backend-blockers-report.md).
+**Phase 3 (Admin application) — COMPLETE** for every backend surface that existed
+at the time. **Phase 4 (user-facing app ↔ real backend) — in progress.** Backend
+fully analysed (Phase 1, see [`backend-analysis.md`](./backend-analysis.md)); auth
+wired (Phase 2).
+
+> **2026-07-13 — the backend team resolved every blocker** from
+> [`backend-blockers-report.md`](./backend-blockers-report.md). All previously-⛔
+> user features (Certificates, Notifications, Insights) and the two blocked admin
+> pages (Curriculum, Cert revocation) are now buildable, plus new admin pages and
+> a two-step admin OTP login. The concrete, endpoint-level task list is in
+> **[`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md)** — the
+> primary "what to build next" reference; this file tracks progress.
 
 ## Current phase
 
@@ -33,7 +39,7 @@ there.**
 | 1     | Study backend → `backend-analysis.md`                                   | ✅ Complete                          |
 | 2     | Frontend infrastructure (remove mocks, real auth, interceptors, models) | ✅ Complete (auth + HTTP core)       |
 | 3     | Admin application, page by page                                         | ✅ Complete (all unblocked surfaces) |
-| 4     | **User-facing app ↔ real backend, page by page**                        | ⏭️ Next — see plan below             |
+| 4     | **User-facing app ↔ real backend, page by page**                        | 🚧 In progress (blockers cleared)    |
 
 ---
 
@@ -53,35 +59,37 @@ the placeholder with a real `data-access` layer against the endpoints below.
 
 ### Feature → backend map (what to wire, in build order)
 
-| Order | Feature (route)                              | Screens / purpose                              | Backend endpoints (all under `/api/v1`)                                                                                                         | Status                      |
-| ----- | -------------------------------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| **1** | **Profile** (`/profile`)                     | View + edit profile; change password           | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                    | ✅ built (review pending)   |
-| **1** | **Settings** (`/settings`)                   | Password, language; (delete account)           | `PATCH /me/password` ✅; **delete account = none (BE-I-19)** → hide/park                                                                        | ⚠️ partial                  |
-| **2** | **Catalog** (`/certifications` + detail)     | Browse certs, cert detail, curriculum outline  | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /catalog`                                    | 🚧 in progress (retrofit)   |
-| **3** | **Payments / enroll**                        | Checkout (enroll), retake, transaction history | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                | ✅ ready                    |
-| **4** | **Dashboard** (`/dashboard`)                 | Enrolled courses + progress, recent activity   | `GET /learning/progress` (enrolled certs + %), `GET /payments/transactions`, `GET /me`; **no aggregate analytics (BE-I-07)**                    | ⚠️ compose                  |
-| **5** | **Courses / Learning** (`/courses`)          | Curriculum tree, lesson viewer, quiz, complete | `GET /learning/certs/:id/curriculum`, `GET /learning/lessons/:id`, `GET /learning/lessons/:id/quiz`, `POST …/quiz/check`, `POST …/complete`     | ✅ ready (enrollment-gated) |
-| **6** | **Assessments — real exam** (`/assessments`) | Access-code entry → exam session → submit      | `POST /exam/{pre-exam-confirmation,validate-access,start}`, `GET/POST /exam/sessions/:id/*`, **`/exam` WebSocket** (heartbeat/timer)            | ✅ ready — high complexity  |
-| **6** | **Mock exam**                                | Practice attempts, history, review             | `POST /mock/start`, `GET /mock/history`, `GET /mock/attempts/:id`, `GET /mock/:id`, `POST /mock/:id/{autosave,extend,submit,…}`, **`/mock` WS** | ✅ ready                    |
-| **—** | **Certificates** (`/certificates`)           | List earned certs; verify                      | verify only: public `GET /verify/:certId`. **No "my certificates" list (BE-I-16)**                                                              | ⛔ blocked (list)           |
-| **—** | **Notifications** (`/notifications`)         | In-app notifications                           | **none — email-only (BE-I-18)**                                                                                                                 | ⛔ blocked                  |
-| **—** | **Insights** (`/insights`)                   | Analytics                                      | **none (BE-I-20 / BE-I-07)**                                                                                                                    | ⛔ blocked                  |
+| Order | Feature (route)                              | Screens / purpose                               | Backend endpoints (all under `/api/v1`)                                                                                                               | Status                        |
+| ----- | -------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| **1** | **Profile** (`/profile`)                     | View + edit profile; change password            | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                          | ✅ built (review pending)     |
+| **1** | **Settings** (`/settings`)                   | Password, language, delete account, data export | `PATCH /me/password` ✅; `POST /me/delete` `{password}` + `GET /me/export` (BE-I-19 ✅)                                                               | ⚠️ partial → now unblocked    |
+| **2** | **Catalog** (`/certifications` + detail)     | Browse certs, cert detail, curriculum outline   | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /landing`                                          | 🚧 data-access built (logic)  |
+| **3** | **Payments / enroll**                        | Checkout (enroll), retake, transaction history  | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                      | 🚧 data-access built (logic)  |
+| **4** | **Dashboard** (`/dashboard`)                 | Enrolled courses + progress, recent activity    | `GET /learning/progress`, `GET /payments/transactions`, `GET /me`, **`GET /insights`** (student aggregates), **`GET /exam/attempts`** (BE-I-07/17 ✅) | ⚠️ compose (+ real analytics) |
+| **5** | **Courses / Learning** (`/courses`)          | Curriculum tree, lesson viewer, quiz, complete  | `GET /learning/certs/:id/curriculum`, `GET /learning/lessons/:id`, `GET /learning/lessons/:id/quiz`, `POST …/quiz/check`, `POST …/complete`           | ✅ ready (enrollment-gated)   |
+| **6** | **Assessments — real exam** (`/assessments`) | Access-code entry → exam session → submit       | `POST /exam/{pre-exam-confirmation,validate-access,start}`, `GET/POST /exam/sessions/:id/*`, **`/exam` WebSocket** (heartbeat/timer)                  | ✅ ready — high complexity    |
+| **6** | **Mock exam**                                | Practice attempts, history, review              | `POST /mock/start`, `GET /mock/history`, `GET /mock/attempts/:id`, `GET /mock/:id`, `POST /mock/:id/{autosave,extend,submit,…}`, **`/mock` WS**       | ✅ ready                      |
+| **7** | **Certificates** (`/certificates`)           | List earned certs; verify                       | `GET /me/certificates` (BE-I-16 ✅) + public `GET /verify/:certId`                                                                                    | ✅ ready (was ⛔)             |
+| **7** | **Notifications** (`/notifications`)         | In-app notifications + unread badge             | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all` (BE-I-18 ✅)                                                                     | ✅ ready (was ⛔)             |
+| **7** | **Insights** (`/insights`)                   | Student learning/exam analytics                 | `GET /insights` (BE-I-20a ✅)                                                                                                                         | ✅ ready (was ⛔)             |
 
 ### Build order & rationale
 
-1. **Profile + Settings (password)** — smallest, foundational; `/me` endpoints,
-   no dependencies. (Avatar image upload is **not** possible — BE-I-08 — treat
-   `avatarUrl` as a plain URL field.)
-2. **Catalog browse/detail + Landing featured** — public, simple; the funnel
-   entry. Reuse the admin `catalog.dto`/mappers where shapes overlap (public
-   response adds `locale`/`direction`/`fallbackUsed`).
+1. **Profile + Settings** — smallest, foundational; `/me` endpoints. Avatar
+   upload **is now possible** (BE-I-08 fixed): `POST /me/avatar-upload-url` →
+   presigned PUT → `PATCH /me` (checklist A1). Settings gains delete-account +
+   data export (A2).
+2. **Catalog browse/detail + Landing** — public, simple; the funnel entry. Reuse
+   the admin `catalog.dto`/mappers where shapes overlap (public response adds
+   `locale`/`direction`/`fallbackUsed`). Landing dynamic uses **`GET /landing`**
+   (`featuredPrograms + stats`), not the old `/catalog` improvisation (A6).
 3. **Payments / enroll** — depends on catalog. **Do not collect card data in-app**
    (prohibited): `POST /payments/checkout` returns a Stripe URL to redirect to
    (or enrols immediately when the price is $0). Show `GET /payments/transactions`
    for history.
-4. **Dashboard** — no analytics endpoint; **compose** the view from
-   `GET /learning/progress` (per-cert % complete) + `GET /payments/transactions`
-   - `GET /me`. Set expectations: no revenue/pass-rate widgets.
+4. **Dashboard** — **real analytics now exists**: fold in `GET /insights`
+   (student aggregates) and `GET /exam/attempts` (real-exam history) alongside
+   `GET /learning/progress` + `GET /payments/transactions` + `GET /me` (A7).
 5. **Courses / Learning** — curriculum tree + lesson viewer + inline quiz
    (`quiz/check` persists nothing) + `POST …/complete` (idempotent). Lesson video
    URL is signed with a short TTL (`meta.videoUrlExpiresInSeconds`).
@@ -91,14 +99,24 @@ the placeholder with a real `data-access` layer against the endpoints below.
    `clientSeq`, submit-blocked-until-synced). Two WebSocket namespaces: `/exam`
    and `/mock`.
 
-### Blocked / scope-out (need backend work first — see the blockers report)
+### Previously blocked — now UNBLOCKED (backend fixes 2026-07-13)
+
+> The backend team resolved every stopper. Details + the endpoint-level task list:
+> [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md); status per
+> issue: [`backend-blockers-report.md`](./backend-blockers-report.md).
 
 - **Certificates list** (BE-I-16), **Notifications** (BE-I-18), **Insights**
-  (BE-I-20): no backend. Leave the routes as informative stubs (or remove from
-  nav) until endpoints exist. The **Certificates** screen can still offer
-  "verify a certificate by id" against public `GET /verify/:certId`.
+  (BE-I-20) — all now have endpoints; **build them** (checklist A3/A4/A5). No
+  longer stubs.
 - **Delete account** (BE-I-19), **real-exam attempt history** (BE-I-17),
-  **avatar upload** (BE-I-08): degraders — hide the control or wire the partial.
+  **avatar upload** (BE-I-08) — all wireable now (checklist A2/A7/A1).
+- **Landing dynamic** — now `GET /landing` (`featuredPrograms + stats`);
+  supersedes the "featured via `GET /catalog`" plan (checklist A6).
+- **Admin**: Curriculum (BE-I-13) and Certificate revocation (BE-I-15) unblocked;
+  new admin pages possible — staff (BE-I-03), promo codes (BE-I-05), lesson-quiz
+  authoring (BE-I-06), dashboard metrics (BE-I-07) (checklist B1–B6).
+- **Admin login** is now two-step **OTP** (`e97de75`) — a `core/auth` change
+  needing security review (checklist C1).
 
 ### Cross-cutting reminders for Phase 4
 
@@ -136,8 +154,8 @@ signals, OnPush, new control-flow, no `any`, no Observables in components,
   `backend-blockers-report.md`); don't fix them.
 - **App, page by page (Phase 4 — admin is done).** Build one page, verify,
   **stop for review**. **Never commit without the user's explicit approval** —
-  they say "commit". Follow the [Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration)
-  order; skip the ⛔ blocked features.
+  they say "commit". Follow [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md)
+  (all backend blockers are now cleared — nothing to skip).
 - After each page: update THIS file, then `npm run typecheck && npm run lint &&
 npm run build` (all from `institute of scrum/`) must be clean.
 - i18n lives in `src/app/assets/i18n/{en,fr,ar}.json`. Add keys to all three;
@@ -214,14 +232,55 @@ against the deployed API (not available in-session).
 ## Tasks currently in progress
 
 - **Phase 4 · Profile — built & committed** (`f23902e`). Details below.
-- **Phase 4 · Catalog — data-access layer built (logic only), awaiting review
-  (uncommitted).** Public catalog data-access layer is done; the reviewer asked
-  to **not** wire it into the marketing components yet (logic-only), so the ESM
-  cert-details retrofit was reverted. Details + rollout plan below.
-- **Landing navbar — auth-aware CTAs (uncommitted).** `ios-landing-navbar` now
-  hides **Login/Register** when the visitor is signed in and shows a
-  **Dashboard** link instead (desktop + mobile), via `AuthStore.isAuthenticated()`.
-  Added `landing.nav.dashboard` i18n (en/fr/ar).
+- **Phase 4 · Catalog — data-access layer built & committed (logic only).**
+  Public catalog data-access layer is done; the reviewer asked to **not** wire it
+  into the marketing components yet (logic-only), so the ESM cert-details retrofit
+  was reverted. Details + rollout plan below.
+- **Landing navbar — auth-aware CTAs** (committed with the catalog data-access).
+  `ios-landing-navbar` hides **Login/Register** when the visitor is signed in and
+  shows a **Dashboard** link instead (desktop + mobile), via
+  `AuthStore.isAuthenticated()`. Added `landing.nav.dashboard` i18n (en/fr/ar).
+- **Phase 4 · Payments — data-access layer built (logic only), awaiting review
+  (uncommitted).** Public payment flows wired in the data layer; no component
+  consumes it yet. Details below.
+
+### Phase 4 · Payments data-access (`features/payments/data-access`) — logic only (uncommitted)
+
+Student payment flows against `@Controller('payments')` (student token; RLS-
+scoped). Built as a standalone data-access layer per the "logic only, no
+component changes" directive — no page/enroll button is wired yet.
+
+- `payments.dto.ts` — wire shapes: `CreateCheckoutDto`/`CreateRetakeDto`; the
+  **discriminated** checkout/retake responses (`free: true` immediate
+  enrollment/unlock vs. `free: false` Stripe redirect with `checkoutUrl`/
+  `sessionId`); `TransactionItemDto` + `TransactionsResponseDto` (`{ data,
+meta.pagination }`).
+- `payments.model.ts` — `CheckoutRequest`/`RetakeRequest`; a unified
+  `CheckoutResult` (`redirect` | `enrolled` | `unlocked`) the UI acts on;
+  `Transaction` + `TRANSACTION_STATUSES`/`isTransactionStatus` (status kept as
+  `string` — the backend types it loosely).
+- `payments.mappers.ts` — `toCheckoutResult` / `toRetakeResult` (collapse the
+  discriminated DTO into `CheckoutResult`), `toTransaction`.
+- `payments.api.ts` — `PaymentsApi`: `checkout` (`POST /payments/checkout`),
+  `retake` (`POST /payments/retake`), `listTransactions` (`GET
+/payments/transactions`, cursor-paged via `toPage`/`toHttpParams`). The client
+  never sends an amount — the charge is recomputed server-side.
+- `payments.store.ts` — `PaymentsStore`: the **pay action** (`checkout`/`retake`)
+  returns the `CheckoutResult` for the caller to act on (the store never
+  navigates — redirect is the component's job) with `actionPending`/`actionError`;
+  and the **transaction history** list (`load`/`loadMore`, cursor, newest-first,
+  same shape as the admin list stores). Clears on `user.logged-out`.
+- **i18n:** added `payments.checkoutError` / `payments.transactionsError`
+  (en/fr/ar; Arabic pending pro review).
+- **Boundary note (for wiring time):** enroll is triggered from the catalog /
+  cert-detail pages (landing feature) and transaction history renders on the
+  Dashboard — both would import `PaymentsStore`. Per CLAUDE.md §5 features talk
+  only through `core/`; whether to route those through a payments page, inject
+  the root-provided store directly, or promote it to `core/` is a wiring
+  decision to settle when the components are built (deferred).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only). No live consumer yet;
+  live check deferred until wired.
 
 ### Phase 4 · Catalog retrofit (`/certifications` + `cert-details-*`) — data-access only (uncommitted)
 
@@ -386,27 +445,32 @@ not modified.
 
 ## Admin pages status
 
-✅ **COMPLETE — every buildable admin page is built & committed.** The only two
-unbuilt pages are **backend-blocked** (Curriculum — BE-I-13; Certificate
-revocation — BE-I-15); see [`backend-blockers-report.md`](./backend-blockers-report.md).
-Next work is **Phase 4** (user-facing app) — see the plan above.
+✅ **All previously-built admin pages remain built & committed.** The two pages
+that were backend-blocked are **now unblocked** (Curriculum — BE-I-13;
+Certificate revocation — BE-I-15), and **four new admin pages** are now possible
+(staff, promo codes, lesson-quiz authoring, dashboard metrics). See
+[`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md) §B.
 
-| #   | Admin page                                                | Status                    | Backend                                                                              |
-| --- | --------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------ |
-| 1   | **Admin Login** (`/admin/login`)                          | ✅ Built & committed      | `POST /auth/admin/login`                                                             |
-| 2   | **Catalog — certificates list** (`/admin/catalog`)        | ✅ Built & committed      | `GET /admin/catalog`                                                                 |
-| 2b  | **Catalog — create / edit / deactivate**                  | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/catalog`                                               |
-| 2c  | **Catalog — title/description translations** (ar/fr)      | ✅ Built & committed      | `PATCH /admin/catalog/:id/translations`                                              |
-| 3   | **Users — list + student detail** (`/admin/users`)        | ✅ Built & committed      | `GET /admin/users`, `GET /admin/users/:id`                                           |
-| 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending) | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                        |
-| 4   | Curriculum (modules/lessons)                              | ⛔ Blocked (BE-I-13)      | `/admin/modules`, `/admin/lessons` (no admin GET)                                    |
-| 5   | **Exam authoring — list + lifecycle** (`/admin/exams`)    | ✅ Built & committed      | `GET/POST /admin/certs/:id/exams`, `PATCH/DELETE/publish/unpublish /admin/exams/:id` |
-| 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built & committed      | `GET /admin/exams/:id`, `POST/PATCH/DELETE /admin/exams/:id/questions*`              |
-| 5c  | **Exam title translations** (ar/fr)                       | ✅ Built & committed      | `PATCH /admin/exams/:id/translations`                                                |
-| 6   | **Exam assignment** (`/admin/exam`)                       | ✅ Built & committed      | `GET /admin/exam`, `POST /admin/exam/assign`                                         |
-| 7   | **Mock questions** (`/admin/mock`)                        | ✅ Built & committed      | `GET/POST/PATCH/DELETE /admin/mock*`                                                 |
-| 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed      | `GET /admin/audit-logs`                                                              |
-| 9   | Certificate revocation                                    | ⛔ Blocked (BE-I-15)      | `/admin/certs/issued/:id/revoke` (no issued-cert list)                               |
+| #   | Admin page                                                | Status                        | Backend                                                                               |
+| --- | --------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------- |
+| 1   | **Admin Login** (`/admin/login`)                          | ✅ Built — ⚠️ needs OTP step  | `POST /auth/admin/login` (+ `login/otp`) — now two-step OTP (`e97de75`, checklist C1) |
+| 2   | **Catalog — certificates list** (`/admin/catalog`)        | ✅ Built & committed          | `GET /admin/catalog`                                                                  |
+| 2b  | **Catalog — create / edit / deactivate**                  | ✅ Built — ⚠️ add card fields | `GET/POST/PATCH/DELETE /admin/catalog` (BE-I-04 fields now writable, checklist B8)    |
+| 2c  | **Catalog — title/description translations** (ar/fr)      | ✅ Built & committed          | `PATCH /admin/catalog/:id/translations`                                               |
+| 3   | **Users — list + student detail** (`/admin/users`)        | ✅ Built & committed          | `GET /admin/users`, `GET /admin/users/:id`                                            |
+| 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending)     | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                         |
+| 4   | **Curriculum (modules/lessons)**                          | 🔓 Unblocked — build          | `GET /admin/certs/:id/curriculum` (all statuses) + existing module/lesson CRUD (B1)   |
+| 4b  | **Lesson-quiz authoring**                                 | 🆕 Now possible — build       | `/admin/lessons/:id/quizzes`, `/admin/quizzes/*` (BE-I-06, checklist B5)              |
+| 5   | **Exam authoring — list + lifecycle** (`/admin/exams`)    | ✅ Built & committed          | `GET/POST /admin/certs/:id/exams`, `PATCH/DELETE/publish/unpublish /admin/exams/:id`  |
+| 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built — ⚠️ show reasons[]  | `GET /admin/exams/:id`, `…/questions*`; publish `reasons[]` now available (B7)        |
+| 5c  | **Exam title translations** (ar/fr)                       | ✅ Built & committed          | `PATCH /admin/exams/:id/translations`                                                 |
+| 6   | **Exam assignment** (`/admin/exam`)                       | ✅ Built & committed          | `GET /admin/exam`, `POST /admin/exam/assign`                                          |
+| 7   | **Mock questions** (`/admin/mock`)                        | ✅ Built & committed          | `GET/POST/PATCH/DELETE /admin/mock*`                                                  |
+| 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed          | `GET /admin/audit-logs`                                                               |
+| 9   | **Certificate revocation**                                | 🔓 Unblocked — build          | `GET /admin/certs/issued` + `PATCH /admin/certs/issued/:id/revoke` (B2)               |
+| 10  | **Admin staff management**                                | 🆕 Now possible — build       | `/admin/staff` (super_admin, BE-I-03, checklist B3)                                   |
+| 11  | **Promo codes**                                           | 🆕 Now possible — build       | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
+| 12  | **Dashboard metrics** (`/admin` home)                     | 🆕 Now possible — build       | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -693,14 +757,14 @@ questions-page` chunk 5.11 kB gzip). Live check needs a real
 
 ## Discovered backend issues
 
-Full list in [`backend-analysis.md` → Backend Issues Report](./backend-analysis.md#backend-issues-report).
-Highlights that constrain the frontend:
+Full list + resolution status in [`backend-analysis.md` → Backend Issues Report](./backend-analysis.md#backend-issues-report).
 
-- **BE-I-02** Refresh cookie is `SameSite=Lax` (not `Strict` as frontend docs assume); `Secure` only in prod/staging.
-- **BE-I-03** No admin-user management API.
-- **BE-I-04** Certificate card fields (`badgeImageUrl`, `track`, `level`, `durationHours`, `syllabusUrl`) not writable via DTOs.
-- **BE-I-05** No promo-code admin CRUD. **BE-I-06** No lesson-quiz authoring. **BE-I-07** No dashboard/analytics endpoints. **BE-I-08** No upload-URL endpoint for avatars/images.
-- **BE-I-01 / BE-I-12** No global response envelope; validation + domain errors both return HTTP 400 with `code`.
+**Most issues were RESOLVED by the backend on 2026-07-13** (BE-I-03/04/05/06/07/08/
+13/14/15/16/17/18/19/20). Only behavioural notes still apply to the frontend:
+
+- **BE-I-01 / BE-I-12** No global response envelope; validation + domain errors both return HTTP 400 with `code` → map per endpoint, branch on `code`.
+- **BE-I-02** Refresh cookie is `SameSite=Lax` (not `Strict`); `Secure` only in prod/staging.
+- **BE-I-09 / BE-I-10 / BE-I-11** Info-only (duplicate exam-list endpoints; `/health` routing; dead `BlogArticle`).
 
 ## Open questions for reviewer
 
@@ -757,15 +821,30 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Phase 4 · Profile is built & committed** (`f23902e`). **Catalog retrofit is in
-progress and awaiting review** (uncommitted — see the Catalog section above): the
-public catalog data-access layer + the ESM cert-details page are done as the
-reference pattern.
+**Done so far (Phase 4):** Profile committed (`f23902e`); public **Catalog**
+data-access + auth-aware landing nav committed (`feat(catalog): …`); **Payments**
+data-access built (uncommitted, logic-only). No user-facing catalog/payments
+component is wired yet (logic-first, per the reviewer).
 
-Per the reviewer, continuing **logic-only** (data-access layers; no component
-changes) down the [Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration):
-**Payments** (`/payments/checkout`, `/payments/retake`, `/payments/transactions`)
-→ Dashboard (`/learning/progress`) → Courses (`/learning/*`) → Assessments/Mock.
-The catalog + payments component overlays (and the `cert-details-*` / browse /
-Landing-featured retrofits) wait for the go-ahead. Skip the ⛔ blocked features
-(Certificates list BE-I-16, Notifications BE-I-18, Insights BE-I-20).
+**The plan is now driven by [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md)**
+— every backend blocker is fixed, so the ⛔ features are buildable. Suggested
+starting order (its §"Suggested order"):
+
+1. **Profile avatar upload** (checklist A1) — small; clears the BE-I-08 caveat on
+   already-committed Profile work (restore the "Change image" button + presigned PUT).
+2. **Certificates list** (A3), **Notifications** (A4), **Insights** (A5) — three
+   previously-⛔ user features, each a clean data-access + page.
+3. **Landing / Dashboard rewire** (A6, A7) — fold in `GET /landing`, `GET /insights`,
+   `GET /exam/attempts`.
+4. **Settings** — delete account / export / cookie consent (A2, C2).
+5. **Admin** — Curriculum (B1), Cert revocation (B2), then staff / promo / quiz /
+   metrics (B3–B6).
+6. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
+
+Still to wire regardless of blockers: **Courses/Learning** (`/learning/*`) and
+**Assessments/Mock** (exam + mock, incl. `/exam` and `/mock` WebSockets — highest
+complexity), plus the deferred component overlays for catalog/payments.
+
+**Decision needed:** keep going **logic-only** (data-access layers) down this
+list, or switch to **full page builds** (data-access + UI) now that the plan is
+clear? The checklist is ordered to work either way.

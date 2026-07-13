@@ -635,8 +635,88 @@ issuance flows (e.g. the verification and reset **links** point at the
 
 ## Backend Issues Report
 
-> Per the mission rules, these are **documented, not fixed**. To be shared with
-> the backend team. Nothing in `IOS_Backend/` was modified.
+> Per the mission rules, these are **documented, not fixed**. Shared with the
+> backend team; nothing in `IOS_Backend/` was modified.
+>
+> **UPDATE 2026-07-13 — most issues RESOLVED by the backend team.** See the
+> resolution status below and the new endpoints in
+> [Endpoints added 2026-07-13](#endpoints-added-2026-07-13-blocker-fixes). The
+> table that follows is the **original finding text** (kept for history); read it
+> together with the status block. Frontend follow-ups:
+> [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md).
+
+### Resolution status (2026-07-13)
+
+| ID      | Status              | Fixed by (BE commit) | Frontend action                           |
+| ------- | ------------------- | -------------------- | ----------------------------------------- |
+| BE-I-01 | Open (behavioural)  | —                    | Map per endpoint; key off `code`.         |
+| BE-I-02 | Open (behavioural)  | —                    | Already handled (`SameSite=Lax`).         |
+| BE-I-03 | ✅ Resolved         | `10965cb`            | Build admin staff page (checklist B3).    |
+| BE-I-04 | ✅ Resolved         | `e4b347c`            | Add card fields to catalog form (B8).     |
+| BE-I-05 | ✅ Resolved         | `1b603f1`            | Build promo-codes page (B4).              |
+| BE-I-06 | ✅ Resolved         | `cb10205`            | Build lesson-quiz authoring (B5).         |
+| BE-I-07 | ✅ Resolved         | `1515dff`            | Wire admin dashboard metrics (B6).        |
+| BE-I-08 | ✅ Resolved         | `e4b347c`            | Wire avatar upload (A1).                  |
+| BE-I-09 | Open (info)         | —                    | Pick per screen.                          |
+| BE-I-10 | Open (info)         | —                    | Use bare origin for `/health`.            |
+| BE-I-11 | Open (dead surface) | —                    | Ignore; no controller.                    |
+| BE-I-12 | Open (behavioural)  | —                    | Branch on `code`, not status.             |
+| BE-I-13 | ✅ Resolved         | `a36ddfd`            | Build admin Curriculum page (B1).         |
+| BE-I-14 | ✅ Resolved         | `a36ddfd`            | Surface publish `reasons[]` (B7).         |
+| BE-I-15 | ✅ Resolved         | `a36ddfd`            | Build cert-revocation page (B2).          |
+| BE-I-16 | ✅ Resolved         | `a36ddfd`            | Build Certificates list (A3).             |
+| BE-I-17 | ✅ Resolved         | `a36ddfd`            | Add real-exam history (A7).               |
+| BE-I-18 | ✅ Resolved         | `181cd9f`            | Build Notifications (A4).                 |
+| BE-I-19 | ✅ Resolved         | `65bf4e8`            | Wire delete-account + export (A2).        |
+| BE-I-20 | ✅ Resolved         | `1515dff`            | Build Insights + rewire Landing (A5, A6). |
+
+**Also new (not original issues):** two-step admin **OTP login** (`e97de75`,
+checklist C1) and **GDPR cookie consent** (`65bf4e8`, checklist C2); catalog
+`?active=false` parse fix (`5133b4e`, B8).
+
+### Endpoints added 2026-07-13 (blocker fixes)
+
+> Response envelopes still vary per endpoint (BE-I-01) — noted inline.
+
+**User-facing (student token unless noted):**
+
+| Method | Path                          | Response                    | Notes                                                                                                           |
+| ------ | ----------------------------- | --------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| GET    | `/me/certificates`            | `{ data }`                  | Earned certs: `{ certId, program, programCode, issuedAt, status, certificateUrl, qrUrl, verifyUrl }` (BE-I-16). |
+| POST   | `/me/avatar-upload-url`       | bare                        | `{ contentType }` → `{ uploadUrl, key, expiresInSeconds }`; PUT bytes then `PATCH /me` (BE-I-08).               |
+| GET    | `/me/export`                  | bare                        | GDPR data export.                                                                                               |
+| POST   | `/me/delete`                  | message                     | `{ password }` step-up; anonymise-in-place (BE-I-19).                                                           |
+| GET    | `/insights`                   | bare                        | Student aggregates (BE-I-20a).                                                                                  |
+| GET    | `/landing`                    | bare (Public)               | `{ featuredPrograms: CatalogItem[], stats }` (BE-I-20).                                                         |
+| GET    | `/exam/attempts`              | `{ data, meta.pagination }` | Real-exam history (BE-I-17).                                                                                    |
+| GET    | `/notifications`              | `{ data, meta.pagination }` | `?cursor&limit&unreadOnly` (BE-I-18).                                                                           |
+| GET    | `/notifications/unread-count` | bare `{ count }`            | Badge source.                                                                                                   |
+| POST   | `/notifications/:id/read`     | `{ data }`                  | Idempotent.                                                                                                     |
+| POST   | `/notifications/read-all`     | `{ updated }`               |                                                                                                                 |
+| POST   | `/consent`                    | (Public)                    | `{ categories, policyVersion }` cookie consent (BE-042).                                                        |
+
+**Admin:**
+
+| Method | Path                                                           | Roles                           | Notes                                                                                              |
+| ------ | -------------------------------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------- |
+| GET    | `/admin/certs/:id/curriculum`                                  | content_creator, learning_admin | All statuses + full fields (BE-I-13).                                                              |
+| GET    | `/admin/certs/issued`                                          | super_admin, learning_admin     | `{ data, meta.pagination }`; revoke via existing `PATCH /admin/certs/issued/:id/revoke` (BE-I-15). |
+| GET    | `/admin/dashboard/overview`                                    | super_admin, finance_admin      | Revenue/enrollments/exams/students/topPrograms (BE-I-07).                                          |
+| \*     | `/admin/staff`                                                 | super_admin                     | Create/list/get/patch/deactivate (BE-I-03).                                                        |
+| \*     | `/admin/promo-codes`                                           | super_admin, finance_admin      | Full CRUD (BE-I-05).                                                                               |
+| \*     | `/admin/lessons/:id/quizzes`, `/admin/quizzes/:id[/questions]` | content_creator, learning_admin | Lesson-quiz authoring (BE-I-06).                                                                   |
+
+**Auth:**
+
+| Method | Path                                        | Notes                                                                                           |
+| ------ | ------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| POST   | `/auth/admin/login`                         | Returns `LoginResponseDto` **or** `{ otpRequired, challengeId, expiresInSeconds }` when OTP on. |
+| POST   | `/auth/admin/login/otp`                     | `{ challengeId, code }` → tokens; single-use, 5-min, ≤5 attempts.                               |
+| POST   | `/auth/admin/refresh`, `/auth/admin/logout` | Dedicated admin session routes — confirm whether admin must use these vs. shared `/auth/*`.     |
+
+---
+
+### Original findings (historical — see status block above for current state)
 
 | ID          | Severity | Area            | Finding                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Frontend impact                                                                                                                                                                                                                                                                                                                      |
 | ----------- | -------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
