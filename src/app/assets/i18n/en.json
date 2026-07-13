@@ -1925,6 +1925,10 @@
   "catalog": {
     "loadError": "We couldn't load the certifications. Please try again."
   },
+  "payments": {
+    "checkoutError": "We couldn't start the checkout. Please try again.",
+    "transactionsError": "We couldn't load your transactions. Please try again."
+  },
   "notifications": {
     "pageTitle": "Notifications",
     "sectionTitle": "All notifications",

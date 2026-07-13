@@ -1925,6 +1925,10 @@
   "catalog": {
     "loadError": "Nous n'avons pas pu charger les certifications. Veuillez réessayer."
   },
+  "payments": {
+    "checkoutError": "Nous n'avons pas pu démarrer le paiement. Veuillez réessayer.",
+    "transactionsError": "Nous n'avons pas pu charger vos transactions. Veuillez réessayer."
+  },
   "notifications": {
     "pageTitle": "Notifications",
     "sectionTitle": "Toutes les notifications",
