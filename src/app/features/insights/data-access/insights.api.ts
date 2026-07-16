@@ -1,42 +1,27 @@
 /**
- * InsightsApi — HTTP client for the insights content.
+ * InsightsApi — HTTP client for the public "insights" blog content.
  *
  * ── Current state ─────────────────────────────────────────────────────────
- * The backend endpoint does not exist yet. `getPosts()` returns `null`, which
- * causes `InsightsStore` to fall back to static data.
+ * There is **no backend for blog posts**. The `GET /insights` path is now the
+ * **student learning-analytics** endpoint (BE-I-20a / A5 — see
+ * `features/dashboard/data-access/insights.*`), a different domain and student-only.
+ * So `getPosts()` always returns `null`, which makes `InsightsStore` fall back
+ * to the static marketing content. Do NOT point this at `/insights` — that would
+ * fire a doomed (and, for signed-out visitors, unauthorized) request.
  *
- * ── When the backend is ready ────────────────────────────────────────────
- * 1. Remove the `return null` guard.
- * 2. Uncomment the `firstValueFrom(this.http.get(...))` call.
- * 3. The store requires no changes.
+ * ── When a real blog API exists ───────────────────────────────────────────
+ * Wire it to that dedicated endpoint (NOT `/insights`) and map via
+ * `mapInsightsPageData`.
  */
 
-import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { Injectable } from '@angular/core';
 
-import { environment } from '@env/environment';
-
-import { mapInsightsPageData } from './insights.mappers';
 import type { InsightsPageData } from './insights.model';
-import type { InsightsPageDto } from './insights.dto';
 
 @Injectable({ providedIn: 'root' })
 export class InsightsApi {
-  private readonly http = inject(HttpClient);
-
-  async getPosts(): Promise<InsightsPageData | null> {
-    if (!environment.production) {
-      return null;
-    }
-
-    try {
-      const dto = await firstValueFrom(
-        this.http.get<InsightsPageDto>(`${environment.apiBaseUrl}/insights`),
-      );
-      return mapInsightsPageData(dto);
-    } catch {
-      return null;
-    }
+  getPosts(): Promise<InsightsPageData | null> {
+    // No blog backend — the store uses its static fallback. See the class note.
+    return Promise.resolve(null);
   }
 }

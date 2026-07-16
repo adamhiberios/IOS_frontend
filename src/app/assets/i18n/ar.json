@@ -545,6 +545,7 @@
       "dashboard": "لوحة التحكم",
       "certificates": "الشهادات",
       "credentials": "شهاداتي المعتمدة",
+      "insights": "الإحصاءات",
       "log": "السجل",
       "profile": "الملف الشخصي",
       "settings": "الإعدادات",
@@ -768,6 +769,35 @@
       }
     },
     "scrollToTop": "العودة إلى الأعلى"
+  },
+  "studentInsights": {
+    "title": "الإحصاءات",
+    "subtitle": "نظرة سريعة على تقدّمك في التعلّم ونتائج اختباراتك.",
+    "backToDashboard": "العودة إلى لوحة التحكم",
+    "breadcrumb": {
+      "dashboard": "لوحة التحكم"
+    },
+    "overviewLabel": "نظرة عامة على التعلّم",
+    "loading": "جارٍ تحميل إحصاءاتك…",
+    "loadError": "تعذّر تحميل إحصاءاتك. يُرجى المحاولة مرة أخرى.",
+    "retry": "إعادة المحاولة",
+    "enrolledPrograms": "البرامج المسجَّلة",
+    "inProgressPrograms": "البرامج قيد التقدّم",
+    "completedLessons": "الدروس المكتملة",
+    "certificatesEarned": "الشهادات المكتسبة",
+    "realExam": {
+      "title": "الاختبار الرسمي"
+    },
+    "mockExam": {
+      "title": "الاختبار التجريبي"
+    },
+    "stats": {
+      "attempts": "المحاولات",
+      "passed": "الناجحة",
+      "passRate": "نسبة النجاح",
+      "avgScore": "متوسط الدرجة",
+      "bestScore": "أفضل درجة"
+    }
   },
   "insights": {
     "hero": {

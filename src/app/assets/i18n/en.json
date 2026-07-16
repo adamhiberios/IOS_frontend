@@ -545,6 +545,7 @@
       "dashboard": "Dashboard",
       "certificates": "Certificates",
       "credentials": "My credentials",
+      "insights": "Insights",
       "log": "Log",
       "profile": "Profile",
       "settings": "Settings",
@@ -768,6 +769,35 @@
       }
     },
     "scrollToTop": "Scroll to top"
+  },
+  "studentInsights": {
+    "title": "Insights",
+    "subtitle": "Your learning and exam performance at a glance.",
+    "backToDashboard": "Back to dashboard",
+    "breadcrumb": {
+      "dashboard": "Dashboard"
+    },
+    "overviewLabel": "Learning overview",
+    "loading": "Loading your insights…",
+    "loadError": "We couldn't load your insights. Please try again.",
+    "retry": "Try again",
+    "enrolledPrograms": "Enrolled programs",
+    "inProgressPrograms": "In-progress programs",
+    "completedLessons": "Completed lessons",
+    "certificatesEarned": "Certificates earned",
+    "realExam": {
+      "title": "Real exam"
+    },
+    "mockExam": {
+      "title": "Mock exam"
+    },
+    "stats": {
+      "attempts": "Attempts",
+      "passed": "Passed",
+      "passRate": "Pass rate",
+      "avgScore": "Average score",
+      "bestScore": "Best score"
+    }
   },
   "insights": {
     "hero": {

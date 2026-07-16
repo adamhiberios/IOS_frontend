@@ -1,6 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, type OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideArrowLeft, LucideClock, LucideFileText, LucidePercent } from '@lucide/angular';
+import {
+  LucideArrowLeft,
+  LucideAward,
+  LucideCircleCheck,
+  LucideClock,
+  LucideGraduationCap,
+} from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { CanadaFlag, IosIcon } from '@ui';
@@ -13,6 +19,8 @@ import { DashboardNavbar } from '@layouts';
 import { LearningCard } from '../components/learning-card';
 import { DashboardStatCard } from '../components/stat-card';
 import { DashboardStore } from '../data-access/dashboard.store';
+import { StudentInsightsStore } from '../data-access/insights.store';
+import { formatPassRate } from '../data-access/insights.model';
 
 /**
  * `ios-dashboard-overview-page` — student dashboard entry point.
@@ -45,7 +53,9 @@ import { DashboardStore } from '../data-access/dashboard.store';
     RouterLink,
     IosIcon,
   ],
-  providers: [provideIcons(LucideFileText, LucidePercent, LucideClock, LucideArrowLeft)],
+  providers: [
+    provideIcons(LucideArrowLeft, LucideAward, LucideCircleCheck, LucideClock, LucideGraduationCap),
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -88,26 +98,125 @@ import { DashboardStore } from '../data-access/dashboard.store';
 
       <main class="flex-1 bg-white" id="main-content">
         <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
-          <!-- ── Stat cards ── -->
+          <!-- ── Your insights (real GET /insights aggregates) ── -->
           <section
-            aria-label="Overview statistics"
-            class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8"
+            [attr.aria-label]="lang.t('studentInsights.overviewLabel')"
+            class="flex flex-col gap-4 mb-8"
           >
-            <ios-dashboard-stat-card
-              icon="file-text"
-              [value]="store.programsEnrolled().toString()"
-              [label]="lang.t('dashboard.stats.programsEnrolled')"
-            />
-            <ios-dashboard-stat-card
-              icon="percent"
-              [value]="store.averageScoreFormatted()"
-              [label]="lang.t('dashboard.stats.averageScore')"
-            />
-            <ios-dashboard-stat-card
-              icon="clock"
-              [value]="store.totalTimeFormatted()"
-              [label]="lang.t('dashboard.stats.totalTimeSpent')"
-            />
+            @if (insights.loading() && !insights.insights()) {
+              <div class="flex items-center gap-3 py-6 text-ios-fg-8" role="status">
+                <span
+                  class="inline-block h-5 w-5 animate-spin rounded-full border-2 border-ios-fg-8 border-t-transparent"
+                  aria-hidden="true"
+                ></span>
+                <span>{{ lang.t('studentInsights.loading') }}</span>
+              </div>
+            } @else if (insights.error(); as err) {
+              <div
+                class="flex flex-wrap items-center justify-between gap-3 bg-ios-surface-muted rounded-2xl px-6 py-4"
+                role="alert"
+              >
+                <p class="text-sm font-medium text-ios-brand-primary">{{ err }}</p>
+                <button
+                  type="button"
+                  class="h-9 px-4 rounded-lg bg-ios-fg-13 text-white text-sm font-semibold hover:bg-ios-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+                  (click)="onRetryInsights()"
+                >
+                  {{ lang.t('studentInsights.retry') }}
+                </button>
+              </div>
+            } @else if (insights.insights(); as data) {
+              <!-- KPI tiles -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <ios-dashboard-stat-card
+                  icon="graduation-cap"
+                  [value]="data.enrolledPrograms.toString()"
+                  [label]="lang.t('studentInsights.enrolledPrograms')"
+                />
+                <ios-dashboard-stat-card
+                  icon="clock"
+                  [value]="data.inProgressPrograms.toString()"
+                  [label]="lang.t('studentInsights.inProgressPrograms')"
+                />
+                <ios-dashboard-stat-card
+                  icon="circle-check"
+                  [value]="data.completedLessons.toString()"
+                  [label]="lang.t('studentInsights.completedLessons')"
+                />
+                <ios-dashboard-stat-card
+                  icon="award"
+                  [value]="data.certificatesEarned.toString()"
+                  [label]="lang.t('studentInsights.certificatesEarned')"
+                />
+              </div>
+
+              <!-- Exam stat cards -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-ios-surface-muted rounded-2xl px-6 py-4 flex flex-col gap-3">
+                  <h3 class="text-base font-semibold text-ios-fg-13">
+                    {{ lang.t('studentInsights.realExam.title') }}
+                  </h3>
+                  <dl class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="flex flex-col">
+                      <dt class="text-xs font-medium text-ios-fg-8">
+                        {{ lang.t('studentInsights.stats.attempts') }}
+                      </dt>
+                      <dd class="text-lg font-bold text-ios-fg-13 tabular-nums">
+                        {{ data.realExam.attempts }}
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-xs font-medium text-ios-fg-8">
+                        {{ lang.t('studentInsights.stats.passRate') }}
+                      </dt>
+                      <dd class="text-lg font-bold text-ios-fg-13 tabular-nums">
+                        {{ formatPassRate(data.realExam.passRate) }}
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-xs font-medium text-ios-fg-8">
+                        {{ lang.t('studentInsights.stats.avgScore') }}
+                      </dt>
+                      <dd class="text-lg font-bold text-ios-fg-13 tabular-nums">
+                        {{ data.realExam.avgScore }}
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-xs font-medium text-ios-fg-8">
+                        {{ lang.t('studentInsights.stats.bestScore') }}
+                      </dt>
+                      <dd class="text-lg font-bold text-ios-fg-13 tabular-nums">
+                        {{ data.realExam.bestScore }}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+
+                <div class="bg-ios-surface-muted rounded-2xl px-6 py-4 flex flex-col gap-3">
+                  <h3 class="text-base font-semibold text-ios-fg-13">
+                    {{ lang.t('studentInsights.mockExam.title') }}
+                  </h3>
+                  <dl class="grid grid-cols-2 gap-3">
+                    <div class="flex flex-col">
+                      <dt class="text-xs font-medium text-ios-fg-8">
+                        {{ lang.t('studentInsights.stats.attempts') }}
+                      </dt>
+                      <dd class="text-lg font-bold text-ios-fg-13 tabular-nums">
+                        {{ data.mockExam.attempts }}
+                      </dd>
+                    </div>
+                    <div class="flex flex-col">
+                      <dt class="text-xs font-medium text-ios-fg-8">
+                        {{ lang.t('studentInsights.stats.avgScore') }}
+                      </dt>
+                      <dd class="text-lg font-bold text-ios-fg-13 tabular-nums">
+                        {{ data.mockExam.avgScore }}
+                      </dd>
+                    </div>
+                  </dl>
+                </div>
+              </div>
+            }
           </section>
 
           <!-- ── Main content area ── -->
@@ -188,9 +297,13 @@ import { DashboardStore } from '../data-access/dashboard.store';
     </div>
   `,
 })
-export class DashboardOverviewPage {
+export class DashboardOverviewPage implements OnInit {
   protected readonly lang = inject(LanguageService);
   protected readonly store = inject(DashboardStore);
+  protected readonly insights = inject(StudentInsightsStore);
+
+  /** Exposed for the template to format the 0–1 pass-rate as a percentage. */
+  protected readonly formatPassRate = formatPassRate;
 
   protected readonly currentYear = new Date().getFullYear();
   protected readonly yearStr = String(this.currentYear);
@@ -198,6 +311,14 @@ export class DashboardOverviewPage {
   protected readonly learningCard = computed(() => this.store.learningCard());
   protected readonly certs = computed(() => this.store.validCertifications());
   protected readonly certCount = computed(() => this.certs().length);
+
+  ngOnInit(): void {
+    void this.insights.load();
+  }
+
+  protected onRetryInsights(): void {
+    void this.insights.reload();
+  }
 }
 
 export default DashboardOverviewPage;

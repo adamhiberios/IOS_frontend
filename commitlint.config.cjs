@@ -25,7 +25,8 @@ module.exports = {
         'revert',
       ],
     ],
-    'subject-case': [2, 'always', ['lower-case', 'sentence-case']],
+    // Subjects may use any mix of small and capital letters (case rule disabled).
+    'subject-case': [0, 'never'],
     'subject-empty': [2, 'never'],
     'subject-full-stop': [2, 'never', '.'],
     'header-max-length': [2, 'always', 100],

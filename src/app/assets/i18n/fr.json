@@ -545,6 +545,7 @@
       "dashboard": "Tableau de bord",
       "certificates": "Certificats",
       "credentials": "Mes accréditations",
+      "insights": "Analyses",
       "log": "Journal",
       "profile": "Profil",
       "settings": "Paramètres",
@@ -768,6 +769,35 @@
       }
     },
     "scrollToTop": "Retour en haut"
+  },
+  "studentInsights": {
+    "title": "Analyses",
+    "subtitle": "Votre progression d'apprentissage et vos résultats d'examen en un coup d'œil.",
+    "backToDashboard": "Retour au tableau de bord",
+    "breadcrumb": {
+      "dashboard": "Tableau de bord"
+    },
+    "overviewLabel": "Aperçu de l'apprentissage",
+    "loading": "Chargement de vos analyses…",
+    "loadError": "Nous n'avons pas pu charger vos analyses. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "enrolledPrograms": "Programmes inscrits",
+    "inProgressPrograms": "Programmes en cours",
+    "completedLessons": "Leçons terminées",
+    "certificatesEarned": "Certificats obtenus",
+    "realExam": {
+      "title": "Examen réel"
+    },
+    "mockExam": {
+      "title": "Examen blanc"
+    },
+    "stats": {
+      "attempts": "Tentatives",
+      "passed": "Réussis",
+      "passRate": "Taux de réussite",
+      "avgScore": "Score moyen",
+      "bestScore": "Meilleur score"
+    }
   },
   "insights": {
     "hero": {
