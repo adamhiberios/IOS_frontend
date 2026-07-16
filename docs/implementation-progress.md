@@ -986,13 +986,14 @@ true`; `/auth/refresh` works for both student and admin tokens (the backend
 
 ## Next recommended step
 
-**Done so far (Phase 4):** Profile committed (`f23902e`); public **Catalog**
-data-access + auth-aware landing nav committed (`feat(catalog): …`); **Payments**
-data-access built (uncommitted, logic-only); **A1 — Profile avatar upload** built
-end-to-end (uncommitted, awaiting review — full page build, data-access + UI).
+**Done so far (Phase 4):** Profile (`f23902e`), public Catalog data-access +
+auth-aware landing nav, and Payments data-access (logic-only) — all earlier. Then
+the checklist A-items: **A1** avatar upload (`242a11d`), **A3** credentials
+(`3bed4c1`), **A4** notifications (`99917c8`) — committed; **A5** insights — built,
+**staged not committed**.
 
-**Build mode is now full page builds** (data-access + wired screen, one checklist
-item at a time). The plan is driven by
+**Build mode is full page builds** (data-access + wired screen, one item at a time,
+stop for review, **commit only on explicit approval**). The plan is driven by
 [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md) — every backend
 blocker is fixed. Progress against its §"Suggested order":
 
@@ -1004,17 +1005,24 @@ blocker is fixed. Progress against its §"Suggested order":
    - navbar unread badge (core `NotificationBadgeStore`).
 4. ✅ **Insights** (A5) — `features/dashboard/data-access/insights.*` store;
    aggregates surfaced on the **Overview page only** (no standalone page, per
-   reviewer). Public blog left untouched.
-5. ⏭️ **Next: Landing / Dashboard rewire** (A6, A7) — fold in `GET /landing`,
-   `GET /insights`, `GET /exam/attempts`.
-6. **Settings** — delete account / export / cookie consent (A2, C2).
-7. **Admin** — Curriculum (B1), Cert revocation (B2), then staff / promo / quiz /
-   metrics (B3–B6).
+   reviewer). Public blog left untouched. **Staged, not yet committed.**
+
+**▶ PIVOT (2026-07-16): admin pages next, not A6/A7.** Per the user, switch to the
+**admin pages that exist in the backend but aren't in the UI** — analytics first.
+Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md)):
+
+5. ⏭️ **Next: B6 — Admin dashboard analytics** (`GET /admin/dashboard/overview`,
+   super/finance admin) — KPI tiles + revenue chart on the admin home (currently
+   "no metrics, BE-I-07"). Full DTO in [`backend-analysis.md`](./backend-analysis.md).
+6. **B1 Curriculum** → **B2 Cert revocation** → **B3 Staff** → **B4 Promo codes**
+   → **B5 lesson-quiz** → small **B7/B8** (see "Admin pages status" table below).
+7. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
+   A2 Settings delete/export, C2 cookie consent.
 8. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
 
-Still to wire regardless of blockers: **Courses/Learning** (`/learning/*`) and
-**Assessments/Mock** (exam + mock, incl. `/exam` and `/mock` WebSockets — highest
-complexity), plus the deferred component overlays for catalog/payments.
+Still to wire regardless: **Courses/Learning** (`/learning/*`) and **Assessments/
+Mock** (exam + mock, incl. `/exam` and `/mock` WebSockets — highest complexity;
+note exam domain conflicts are now **409**), plus the deferred catalog/payments overlays.
 
 **Decision needed:** keep going **logic-only** (data-access layers) down this
 list, or switch to **full page builds** (data-access + UI) now that the plan is

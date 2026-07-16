@@ -714,6 +714,44 @@ checklist C1) and **GDPR cookie consent** (`65bf4e8`, checklist C2); catalog
 | POST   | `/auth/admin/login/otp`                     | `{ challengeId, code }` → tokens; single-use, 5-min, ≤5 attempts.                               |
 | POST   | `/auth/admin/refresh`, `/auth/admin/logout` | Dedicated admin session routes — confirm whether admin must use these vs. shared `/auth/*`.     |
 
+### Admin dashboard overview — response shape (B6, `GET /admin/dashboard/overview`)
+
+Roles **super_admin / finance_admin** (revenue is finance-sensitive). **Bare**
+object (no envelope). Query `?months=N` (1–24, default 6) sizes the revenue
+series. Aggregates run on a dedicated analytics DB runner (not the per-request
+RLS runner), so admins see platform-wide totals.
+
+```jsonc
+{
+  "revenue": {
+    "total": 18234.75, // all-time completed-tx revenue (2dp)
+    "currency": "USD", // "MIXED" if completed tx span >1 currency (no FX)
+    "last30Days": 2450.0,
+    "monthly": [{ "month": "2026-03", "revenue": 1499.5, "transactions": 12 }],
+  },
+  "transactions": { "completed": 320, "pending": 14, "failed": 6, "refunded": 3 },
+  "enrollments": { "total": 512, "last30Days": 48 },
+  "students": { "total": 486, "newLast30Days": 37 },
+  "exams": { "attempts": 640, "passed": 520, "passRate": 0.8125, "avgScore": 84.32 },
+  "certificates": { "issued": 498 }, // active issued certs
+  "topPrograms": [
+    { "certId": "…", "program": "…", "programCode": "PSM", "enrollments": 210, "revenue": 10290.0 },
+  ], // top 5 by enrollments
+}
+```
+
+Note `exams.passRate` is a **0–1 fraction** (format as %); `revenue.currency` may
+be `"MIXED"`. `revenue.monthly` drives a chart (apexcharts is already bundled).
+
+### Later backend changes (2026-07-14 → ) — post-checklist
+
+| BE commit | Change                                                                                                                                                                                                                                                        | Frontend impact                                                                                                                                                       |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `5c11460` | `refactor(exam)`: exam **domain-state conflicts 422 → 409** (assign "not published", start "identity confirmation required", autosave "session expired", owned-session status guard). Locked convention: 400 = input validation, 409 = domain-state conflict. | When wiring exam/assessment flows, treat **409** as a domain conflict and branch on the RFC-7807 `code` (not the status). Mock-exam still uses 422 (separate module). |
+| `f78e76b` | `feat(audit)`: harden admin-write audit capture.                                                                                                                                                                                                              | None (server-side audit only).                                                                                                                                        |
+| `a0d2409` | `feat(health)`: gate debug-sentry route to development.                                                                                                                                                                                                       | None.                                                                                                                                                                 |
+| `f639a85` | `fix(deps)`: npm audit advisory bumps.                                                                                                                                                                                                                        | None.                                                                                                                                                                 |
+
 ---
 
 ### Original findings (historical — see status block above for current state)

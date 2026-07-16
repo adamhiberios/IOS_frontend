@@ -1,5 +1,11 @@
 # Backend Stoppers Report — status after the 2026-07-13 backend fixes
 
+> **📕 CLOSED / historical (as of 2026-07-16).** Every stopper below is resolved;
+> nothing here blocks frontend work. Kept as the audit trail of what was blocked
+> and which backend commit fixed it. For the **active** work list see
+> [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md) (now
+> admin-first) and [`implementation-progress.md`](./implementation-progress.md).
+
 > **Purpose:** track the backend gaps that **stop or degrade** frontend work.
 > Originally a to-do list for the backend team; they shipped the fixes on
 > **2026-07-12 → 2026-07-13**, so this is now a **resolution log**. The
@@ -70,8 +76,10 @@
 
 ## 4. Behavioural notes (still true — not blockers, FE already adapts)
 
-- **BE-I-01 / BE-I-12** — No global response envelope; validation + domain errors
-  both return **HTTP 400** with `code`. Map per endpoint; key off `code`/`errors[]`.
+- **BE-I-01 / BE-I-12** — No global response envelope; validation errors return
+  **HTTP 400** with `code`. **Update (`5c11460`, 2026-07-14):** exam **domain-state
+  conflicts now return 409** (not 422/400); convention is 400 = input validation,
+  409 = domain-state conflict. Map per endpoint; key off `code`/`errors[]`, not status.
 - **BE-I-02** — Refresh cookie is `SameSite=Lax`, `Secure` only in prod/staging.
 - **BE-I-09** — Two overlapping "list exams for a cert" endpoints (assign vs
   authoring) — pick per screen.

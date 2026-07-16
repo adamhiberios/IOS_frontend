@@ -9,6 +9,28 @@
 > `problemDetailMessage`.
 > Created 2026-07-13.
 
+## Status (updated 2026-07-16) — pivot to admin pages
+
+**Done (user-facing):** **A1** avatar upload (committed), **A3** earned-certificates
+list → new `features/credentials` at `/dashboard/credentials` (committed), **A4**
+notifications feed + navbar unread badge (committed), **A5** student insights →
+surfaced on the **Dashboard overview only** via `features/dashboard/data-access/
+insights.*` (no standalone page; **A5 staged, not yet committed**).
+
+**Now prioritized — Admin pages (section B), backend-ready but not in the UI:**
+build in this order — **B6 analytics dashboard** → **B1 Curriculum** → **B2 Cert
+revocation** → **B3 Staff** → **B4 Promo codes** → **B5 lesson-quiz** → small
+fixes **B7/B8**. See the reworked "Suggested order" at the bottom.
+
+**Still pending (user-facing, after admin):** **A6** Landing rewire (`GET /landing`),
+**A7** Dashboard fold-in (`GET /exam/attempts` + richer `/insights` composition),
+**A2** Settings delete/export, **C2** cookie consent, **C1** admin OTP login (last).
+
+**Later BE changes to honour (post-2026-07-13):** exam domain-state conflicts now
+return **409** (not 422/400) — `5c11460`; still key off `code`, not status. Audit
+capture hardened (`f78e76b`, no FE impact); `/health` debug-sentry gated to dev
+(`a0d2409`, no FE impact).
+
 ## Backend commits mapped to blockers
 
 | Commit    | What shipped                                                    | Blockers cleared        |
@@ -216,12 +238,27 @@ graduatesCount / insightPosts` shape (those have no backend — keep static or d
 
 ---
 
-## Suggested order (fits the current Phase-4 track, logic-first)
+## Suggested order (updated 2026-07-16 — admin-first)
 
-1. **Profile avatar upload** (A1) — small, revisits committed work, clears a caveat.
-2. **Certificates list** (A3) + **Notifications** (A4) + **Insights** (A5) — three
-   previously-⛔ user features now unblocked; each is a clean data-access + page.
-3. **Landing/dashboard** rewire (A6, A7) — fold in `/landing` + `/insights` + `/exam/attempts`.
-4. **Settings** delete/export/consent (A2, C2).
-5. **Admin** Curriculum (B1), Cert-revocation (B2), then staff/promo/quiz/metrics (B3–B6).
-6. **Admin OTP login** (C1) — schedule with security review; it's a `core/auth` change.
+**✅ Done:** A1, A3, A4, A5 (A5 staged, not committed). See the Status section at top.
+
+**▶ Now — Admin app (section B), all backend-ready:**
+
+1. **B6 — Admin dashboard analytics** (`GET /admin/dashboard/overview`) — wire the
+   admin home KPIs + revenue chart; gate to super_admin / finance_admin. Full DTO
+   shape in [`backend-analysis.md` → "Endpoints added"](./backend-analysis.md). A
+   chart lib is already in the bundle (apexcharts) — reuse the admin patterns.
+2. **B1 — Curriculum** (`GET /admin/certs/:id/curriculum`) — list/edit modules +
+   lessons (all statuses, full fields); existing module/lesson CRUD already wired.
+3. **B2 — Certificate revocation** (`GET /admin/certs/issued` + existing revoke).
+4. **B3 — Admin staff** (`/admin/staff`, super_admin only).
+5. **B4 — Promo codes** (`/admin/promo-codes`, super/finance admin).
+6. **B5 — Lesson-quiz authoring** (under the B1 curriculum page).
+7. **B7 / B8 — small fixes** — surface exam publish `reasons[]`; add catalog card
+   fields (`badgeImageUrl`/`track`/`level`/`durationHours`/`syllabusUrl`) + re-test
+   the `?active=false` filter.
+
+**Then — remaining user-facing:** A6 Landing rewire, A7 Dashboard fold-in
+(`GET /exam/attempts` + `/insights`), A2 Settings delete/export, C2 cookie consent.
+
+**Last — C1 Admin OTP login** (`core/auth` change; architect + security review).
