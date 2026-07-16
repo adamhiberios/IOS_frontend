@@ -1,7 +1,7 @@
 # Implementation Progress — IOS LMS Frontend ↔ Real Backend
 
 > **Single source of truth for implementation progress.** Updated continuously.
-> Last updated: 2026-07-13.
+> Last updated: 2026-07-16.
 
 ---
 
@@ -635,7 +635,55 @@ Certificate revocation — BE-I-15), and **four new admin pages** are now possib
 | 9   | **Certificate revocation**                                | 🔓 Unblocked — build          | `GET /admin/certs/issued` + `PATCH /admin/certs/issued/:id/revoke` (B2)               |
 | 10  | **Admin staff management**                                | 🆕 Now possible — build       | `/admin/staff` (super_admin, BE-I-03, checklist B3)                                   |
 | 11  | **Promo codes**                                           | 🆕 Now possible — build       | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
-| 12  | **Dashboard metrics** (`/admin` home)                     | 🆕 Now possible — build       | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
+| 12  | **Dashboard metrics** (`/admin` home)                     | ✅ Built (review pending)     | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
+
+**Page 12 — Admin dashboard analytics / B6 (uncommitted, awaiting review):**
+
+First item of the admin-first pivot (2026-07-16). Enriches the admin home
+(`pages/admin-home.page.ts`, previously "no metrics — BE-I-07") with the
+platform-wide overview. Endpoint: `GET /admin/dashboard/overview?months=N` —
+**bare** DTO (no envelope), super_admin / finance_admin only (finance-sensitive;
+every other role 403s).
+
+- **`features/admin/data-access/dashboard.*`** — standard layering:
+  - `dashboard.dto.ts` — wire shapes mirroring backend `DashboardOverviewDto`
+    (`revenue{total,currency,last30Days,monthly[]}`, `transactions`,
+    `enrollments`, `students`, `exams`, `certificates`, `topPrograms[]`).
+  - `dashboard.model.ts` — frontend types + helpers: `formatPassRate` (0–1
+    fraction → whole-% ), `formatMoney(amount,currency,locale)` (Intl currency,
+    falls back to a plain 2dp number + code for the `"MIXED"` sentinel or unknown
+    ISO codes — never a misleading symbol), `MIXED_CURRENCY`,
+    `DASHBOARD_MONTH_OPTIONS = [6,12,24]` / `DashboardMonths`.
+  - `dashboard.mappers.ts` — `toDashboardOverview` (1:1).
+  - `dashboard.api.ts` — `AdminDashboardApi.getOverview(months?)` → bare GET,
+    `months` via `toHttpParams` (omitted when undefined).
+  - `dashboard.store.ts` — `AdminDashboardStore` (root singleton): `overview/
+loading/error/months/loaded` signals; `load(force)`/`reload`; `setMonths()`
+    re-fetches on window change; cleared on `user.logged-out` (finance data).
+- **Chart** — `features/admin/components/admin-revenue-chart.ts`
+  (`ios-admin-revenue-chart`): a **feature-local** apex column chart for the
+  monthly-revenue series with a currency-aware Y axis + tooltip. **Not** the
+  shared `@ui` `ios-bar-chart`/`ios-donut-chart` — those are hard-wired to the
+  student dashboard's fixed 0–100 % score axis + mock-test labels, so they'd
+  distort currency amounts. It wraps the already-bundled `apx-chart` directly (no
+  new chart library — honours the "reuse apexcharts" intent).
+- **Page** (`admin-home.page.ts`) — keeps the signed-in-as / role cards for
+  **all** admins; the metrics block is gated to super_admin / finance_admin
+  (`canViewMetrics`) and only fetches when authorized (no doomed 403). Renders:
+  6 KPI tiles (revenue total + last-30d, transactions w/ pending/failed/refunded
+  breakdown, enrollments, students, exam attempts + pass-rate %, certificates
+  issued), a **6M/12M/24M** revenue-window segmented control (drives `?months`),
+  the revenue chart, and a top-programs list (program + code chip + revenue +
+  enrollments). Loading / error+retry / loaded states.
+- **No new nav item / route** — this enriches the existing `/admin` index page,
+  so the "Home" nav entry is unchanged (still visible to any admin; only the
+  metrics section is role-gated).
+- **i18n:** new `admin.home.metrics.*` namespace (en/fr/ar; Arabic pending pro
+  review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; gzip initial
+  96.20 kB). Live check needs a real super_admin/finance_admin session against
+  the deployed API — deferred (no admin creds in-session).
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -1011,11 +1059,14 @@ blocker is fixed. Progress against its §"Suggested order":
 **admin pages that exist in the backend but aren't in the UI** — analytics first.
 Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md)):
 
-5. ⏭️ **Next: B6 — Admin dashboard analytics** (`GET /admin/dashboard/overview`,
-   super/finance admin) — KPI tiles + revenue chart on the admin home (currently
-   "no metrics, BE-I-07"). Full DTO in [`backend-analysis.md`](./backend-analysis.md).
-6. **B1 Curriculum** → **B2 Cert revocation** → **B3 Staff** → **B4 Promo codes**
-   → **B5 lesson-quiz** → small **B7/B8** (see "Admin pages status" table below).
+5. ✅ **B6 — Admin dashboard analytics** (`GET /admin/dashboard/overview`,
+   super/finance admin) — **built (uncommitted, awaiting review)**: KPI tiles +
+   monthly-revenue chart + top-programs list on the admin home, 6M/12M/24M
+   window, role-gated. Full page build (data-access + wired screen). See "Page 12
+   — Admin dashboard analytics / B6" under "Admin pages status" below.
+6. ⏭️ **Next: B1 Curriculum** (`GET /admin/certs/:id/curriculum`) → **B2 Cert
+   revocation** → **B3 Staff** → **B4 Promo codes** → **B5 lesson-quiz** → small
+   **B7/B8** (see "Admin pages status" table below).
 7. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
    A2 Settings delete/export, C2 cookie consent.
 8. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
@@ -1024,6 +1075,6 @@ Still to wire regardless: **Courses/Learning** (`/learning/*`) and **Assessments
 Mock** (exam + mock, incl. `/exam` and `/mock` WebSockets — highest complexity;
 note exam domain conflicts are now **409**), plus the deferred catalog/payments overlays.
 
-**Decision needed:** keep going **logic-only** (data-access layers) down this
-list, or switch to **full page builds** (data-access + UI) now that the plan is
-clear? The checklist is ordered to work either way.
+**Decision (resolved 2026-07-16):** **full page builds** — each admin item builds
+the data-access layer AND wires the screen end to end, one item at a time, then
+stops for review. B6 was built this way.
