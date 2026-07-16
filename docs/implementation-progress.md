@@ -59,19 +59,19 @@ the placeholder with a real `data-access` layer against the endpoints below.
 
 ### Feature → backend map (what to wire, in build order)
 
-| Order | Feature (route)                              | Screens / purpose                               | Backend endpoints (all under `/api/v1`)                                                                                                               | Status                                 |
-| ----- | -------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
-| **1** | **Profile** (`/profile`)                     | View + edit profile; change password            | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                          | ✅ built (review pending)              |
-| **1** | **Settings** (`/settings`)                   | Password, language, delete account, data export | `PATCH /me/password` ✅; `POST /me/delete` `{password}` + `GET /me/export` (BE-I-19 ✅)                                                               | ⚠️ partial → now unblocked             |
-| **2** | **Catalog** (`/certifications` + detail)     | Browse certs, cert detail, curriculum outline   | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /landing`                                          | 🚧 data-access built (logic)           |
-| **3** | **Payments / enroll**                        | Checkout (enroll), retake, transaction history  | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                      | 🚧 data-access built (logic)           |
-| **4** | **Dashboard** (`/dashboard`)                 | Enrolled courses + progress, recent activity    | `GET /learning/progress`, `GET /payments/transactions`, `GET /me`, **`GET /insights`** (student aggregates), **`GET /exam/attempts`** (BE-I-07/17 ✅) | ⚠️ compose (+ real analytics)          |
-| **5** | **Courses / Learning** (`/courses`)          | Curriculum tree, lesson viewer, quiz, complete  | `GET /learning/certs/:id/curriculum`, `GET /learning/lessons/:id`, `GET /learning/lessons/:id/quiz`, `POST …/quiz/check`, `POST …/complete`           | ✅ ready (enrollment-gated)            |
-| **6** | **Assessments — real exam** (`/assessments`) | Access-code entry → exam session → submit       | `POST /exam/{pre-exam-confirmation,validate-access,start}`, `GET/POST /exam/sessions/:id/*`, **`/exam` WebSocket** (heartbeat/timer)                  | ✅ ready — high complexity             |
-| **6** | **Mock exam**                                | Practice attempts, history, review              | `POST /mock/start`, `GET /mock/history`, `GET /mock/attempts/:id`, `GET /mock/:id`, `POST /mock/:id/{autosave,extend,submit,…}`, **`/mock` WS**       | ✅ ready                               |
-| **7** | **Certificates** (`/dashboard/credentials`)  | List earned certs; verify                       | `GET /me/certificates` (BE-I-16 ✅) + public `GET /verify/:certId`                                                                                    | ✅ built — A3 (`features/credentials`) |
-| **7** | **Notifications** (`/notifications`)         | In-app notifications + unread badge             | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all` (BE-I-18 ✅)                                                                     | ✅ ready (was ⛔)                      |
-| **7** | **Insights** (`/insights`)                   | Student learning/exam analytics                 | `GET /insights` (BE-I-20a ✅)                                                                                                                         | ✅ ready (was ⛔)                      |
+| Order | Feature (route)                                | Screens / purpose                               | Backend endpoints (all under `/api/v1`)                                                                                                               | Status                                 |
+| ----- | ---------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| **1** | **Profile** (`/profile`)                       | View + edit profile; change password            | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                          | ✅ built (review pending)              |
+| **1** | **Settings** (`/settings`)                     | Password, language, delete account, data export | `PATCH /me/password` ✅; `POST /me/delete` `{password}` + `GET /me/export` (BE-I-19 ✅)                                                               | ⚠️ partial → now unblocked             |
+| **2** | **Catalog** (`/certifications` + detail)       | Browse certs, cert detail, curriculum outline   | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /landing`                                          | 🚧 data-access built (logic)           |
+| **3** | **Payments / enroll**                          | Checkout (enroll), retake, transaction history  | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                      | 🚧 data-access built (logic)           |
+| **4** | **Dashboard** (`/dashboard`)                   | Enrolled courses + progress, recent activity    | `GET /learning/progress`, `GET /payments/transactions`, `GET /me`, **`GET /insights`** (student aggregates), **`GET /exam/attempts`** (BE-I-07/17 ✅) | ⚠️ compose (+ real analytics)          |
+| **5** | **Courses / Learning** (`/courses`)            | Curriculum tree, lesson viewer, quiz, complete  | `GET /learning/certs/:id/curriculum`, `GET /learning/lessons/:id`, `GET /learning/lessons/:id/quiz`, `POST …/quiz/check`, `POST …/complete`           | ✅ ready (enrollment-gated)            |
+| **6** | **Assessments — real exam** (`/assessments`)   | Access-code entry → exam session → submit       | `POST /exam/{pre-exam-confirmation,validate-access,start}`, `GET/POST /exam/sessions/:id/*`, **`/exam` WebSocket** (heartbeat/timer)                  | ✅ ready — high complexity             |
+| **6** | **Mock exam**                                  | Practice attempts, history, review              | `POST /mock/start`, `GET /mock/history`, `GET /mock/attempts/:id`, `GET /mock/:id`, `POST /mock/:id/{autosave,extend,submit,…}`, **`/mock` WS**       | ✅ ready                               |
+| **7** | **Certificates** (`/dashboard/credentials`)    | List earned certs; verify                       | `GET /me/certificates` (BE-I-16 ✅) + public `GET /verify/:certId`                                                                                    | ✅ built — A3 (`features/credentials`) |
+| **7** | **Notifications** (`/dashboard/notifications`) | In-app notifications + unread badge             | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all` (BE-I-18 ✅)                                                                     | ✅ built — A4 (+ core badge)           |
+| **7** | **Insights** (`/insights`)                     | Student learning/exam analytics                 | `GET /insights` (BE-I-20a ✅)                                                                                                                         | ✅ ready (was ⛔)                      |
 
 ### Build order & rationale
 
@@ -485,6 +485,46 @@ rel=noopener noreferrer`). Reuses the dashboard navbar + footer shell.
   warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.x kB;
   `credentials-page` chunk 2.82 kB gzip). Live check needs a real student session
   with earned certs — deferred (no test creds in-session).
+
+### Phase 4 · A4 — Notifications (BE-I-18) — built, awaiting review (uncommitted)
+
+Full rewrite of `features/notifications` (was mock-driven) against the real
+in-app notification API, plus a shell **unread badge**. Endpoints:
+`GET /notifications?cursor&limit&unreadOnly` (`{ data, meta.pagination }`),
+`GET /notifications/unread-count` (bare `{ count }`), `POST /notifications/:id/read`
+(`{ data }`, idempotent), `POST /notifications/read-all` (`{ updated }`).
+
+- **`core/notifications` (new)** — `NotificationBadgeStore` (root singleton):
+  holds the unread `count` + `hasUnread`, `refresh()` (fetches
+  `/unread-count`), `setCount`/`decrement`, cleared on `user.logged-out`. Lives
+  in `core` because the **navbar (a layout) can't import a feature** (eslint
+  boundary rule); exported via `@core/notifications`.
+- **`features/notifications/data-access`** — rewrote `notification.model.ts`
+  (`Notification` now carries backend-**localized** `title`/`body`, `type`,
+  `data` params, `read`, `createdAt`; `notificationIcon(type)` cosmetic-icon
+  map w/ bell fallback; `notificationLink(data)` deep-link extractor); new
+  `notifications.dto.ts`, `notifications.mappers.ts`, `notifications.api.ts`
+  (`list` cursor-paged via `toPage`/`toHttpParams`, `markRead`, `markAllRead`),
+  and rewrote `notifications.store.ts` (cursor list + `unreadOnly` filter +
+  `markRead`/`markAllRead`; syncs the core badge; feature-scoped).
+- **`components/notification-card.ts`** — rewritten: renders localized
+  title/body as-is, unread dot + bolder title, per-row **Mark as read**, and a
+  **View** deep-link when `data` has one; emits `markRead(id)`.
+- **`pages/notifications.page.ts`** — rewritten: **All / Unread** filter,
+  **Mark all read**, cursor **Load more**, loading skeleton / error+retry /
+  empty (filter-aware) states. Replaced the old client-side sort (backend
+  orders the feed).
+- **Navbar badge** — `dashboard-navbar.ts` injects the core badge store, shows a
+  count pill (caps at "9+") on the bell, and `refresh()`es on init. A fresh
+  navbar is created per dashboard page, so the count refreshes on every
+  dashboard navigation (no WS, per A4).
+- **i18n:** new `notifications.*` keys (filter/markRead/markAllRead/view/loadMore/
+  retry/errors/emptyUnread) + `dashboard.notifications.labelWithCount` (en/fr/ar;
+  Arabic pending pro review). Old `notifications.items.*` + `sort*` keys left as
+  harmless orphans.
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; `notifications-page`
+  chunk 3.73 kB gzip). Live check needs a real student session — deferred.
 
 ## Auth-route → backend endpoint map
 
@@ -920,16 +960,18 @@ blocker is fixed. Progress against its §"Suggested order":
 
 1. ✅ **Profile avatar upload** (checklist A1) — committed (`242a11d`); cleared the
    BE-I-08 caveat, restored the "Change image" button + presigned PUT flow.
-2. ✅ **Earned certificates list** (A3) — built (uncommitted) as the new
+2. ✅ **Earned certificates list** (A3) — committed (`3bed4c1`) as the new
    `features/credentials` page at `/dashboard/credentials` (`GET /me/certificates`).
-3. ⏭️ **Next: Notifications** (A4) — list + mark-read/read-all + navbar unread
-   badge; then **Insights** (A5).
-4. **Landing / Dashboard rewire** (A6, A7) — fold in `GET /landing`, `GET /insights`,
+3. ✅ **Notifications** (A4) — real feed + mark-read/read-all + All/Unread filter
+   - navbar unread badge (core `NotificationBadgeStore`).
+4. ⏭️ **Next: Insights** (A5) — rewire `features/insights` to `GET /insights`
+   (student aggregates; `passRate` is a 0–1 fraction → format as %).
+5. **Landing / Dashboard rewire** (A6, A7) — fold in `GET /landing`, `GET /insights`,
    `GET /exam/attempts`.
-5. **Settings** — delete account / export / cookie consent (A2, C2).
-6. **Admin** — Curriculum (B1), Cert revocation (B2), then staff / promo / quiz /
+6. **Settings** — delete account / export / cookie consent (A2, C2).
+7. **Admin** — Curriculum (B1), Cert revocation (B2), then staff / promo / quiz /
    metrics (B3–B6).
-7. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
+8. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
 
 Still to wire regardless of blockers: **Courses/Learning** (`/learning/*`) and
 **Assessments/Mock** (exam + mock, incl. `/exam` and `/mock` WebSockets — highest

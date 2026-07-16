@@ -629,7 +629,8 @@
       "failedExams": "Fail Exams"
     },
     "notifications": {
-      "label": "Notifications"
+      "label": "Notifications",
+      "labelWithCount": "Notifications, {count} unread"
     },
     "examRunner": {
       "question": "Question {number}",
@@ -1944,6 +1945,18 @@
     "sortLatest": "Sort: Last date",
     "sortEarliest": "Sort: Earliest",
     "empty": "You have no notifications yet.",
+    "emptyUnread": "You have no unread notifications.",
+    "filterAriaLabel": "Filter notifications",
+    "filterAll": "All",
+    "filterUnread": "Unread",
+    "markAllRead": "Mark all read",
+    "markRead": "Mark as read",
+    "view": "View",
+    "loadMore": "Load more",
+    "retry": "Try again",
+    "loadError": "We couldn't load your notifications. Please try again.",
+    "markReadError": "We couldn't update the notification. Please try again.",
+    "markAllReadError": "We couldn't mark all as read. Please try again.",
     "items": {
       "welcome": {
         "title": "Welcome to THE IOS",

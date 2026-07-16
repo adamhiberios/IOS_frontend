@@ -3,6 +3,7 @@ import {
   Component,
   ElementRef,
   HostListener,
+  type OnInit,
   computed,
   inject,
   signal,
@@ -20,6 +21,7 @@ import {
 
 import { LanguageService } from '@core/i18n';
 import { AuthStore } from '@core/auth';
+import { NotificationBadgeStore } from '@core/notifications';
 import { IosIcon, provideIcons } from '@ui';
 
 import { UserMenuDropdown } from './user-menu-dropdown';
@@ -98,13 +100,20 @@ const NAV_TABS: readonly NavTab[] = [
 
         <!-- Bell + User -->
         <div class="flex items-center gap-4">
-          <!-- Notification bell -->
+          <!-- Notification bell + unread badge -->
           <a
             routerLink="/dashboard/notifications"
-            class="flex items-center justify-center w-11 h-11 rounded-full bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-            [attr.aria-label]="lang.t('dashboard.notifications.label')"
+            class="relative flex items-center justify-center w-11 h-11 rounded-full bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+            [attr.aria-label]="bellAriaLabel()"
           >
             <ios-icon name="bell" class="w-5 h-5" aria-hidden="true" />
+            @if (badge.hasUnread()) {
+              <span
+                class="absolute -top-0.5 -end-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-ios-brand-primary text-white text-[10px] font-bold leading-none"
+                aria-hidden="true"
+                >{{ badgeLabel() }}</span
+              >
+            }
           </a>
 
           <!-- User menu trigger -->
@@ -173,14 +182,36 @@ const NAV_TABS: readonly NavTab[] = [
     }
   `,
 })
-export class DashboardNavbar {
+export class DashboardNavbar implements OnInit {
   private readonly auth = inject(AuthStore);
   private readonly elRef = inject(ElementRef);
   protected readonly lang = inject(LanguageService);
+  protected readonly badge = inject(NotificationBadgeStore);
 
   protected readonly tabs = NAV_TABS;
   protected readonly menuOpen = signal(false);
   protected readonly logoutDialogOpen = signal(false);
+
+  /** Compact unread badge label — caps at "9+". */
+  protected readonly badgeLabel = computed(() => {
+    const count = this.badge.count();
+    return count > 9 ? '9+' : String(count);
+  });
+
+  /** Bell aria-label, including the unread count when there is one. */
+  protected readonly bellAriaLabel = computed(() =>
+    this.badge.hasUnread()
+      ? this.lang.t('dashboard.notifications.labelWithCount', {
+          count: this.badge.count().toString(),
+        })
+      : this.lang.t('dashboard.notifications.label'),
+  );
+
+  ngOnInit(): void {
+    // Refresh the unread count on each dashboard navigation (a fresh navbar is
+    // created per page). No WebSocket for notifications (checklist A4).
+    void this.badge.refresh();
+  }
 
   protected readonly displayName = computed(() => {
     const u = this.auth.user();

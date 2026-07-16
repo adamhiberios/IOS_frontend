@@ -1,54 +1,57 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import {
   LucideAward,
+  LucideBadgeCheck,
+  LucideBell,
+  LucideCheck,
   LucideCircleCheck,
   LucideDollarSign,
+  LucideExternalLink,
   LucideFilePlus,
+  LucideGraduationCap,
   LucideKey,
-  LucideNewspaper,
   LucidePercent,
-  LucideScanFace,
   LucideShieldAlert,
+  LucideTicket,
   LucideUserRoundCheck,
 } from '@lucide/angular';
 
 import { IosIcon, provideIcons } from '@ui';
 import { LanguageService } from '@core/i18n';
 
-import type { Notification } from '../data-access/notification.model';
+import {
+  type Notification,
+  notificationIcon,
+  notificationLink,
+} from '../data-access/notification.model';
 
 /**
- * `ios-notification-card` — single notification row.
+ * `ios-notification-card` — single notification row (BE-I-18 / A4).
  *
- * Figma: node 13468:11265 (notification-card)
- *
- * Layout:
- *  ┌─────────────────────────────────────────────────────────────┐
- *  │  [icon-bg] [icon 32px]  │  title (18px SemiBold)  │  time  │
- *  │                         │  description (16px Med) │        │
- *  └─────────────────────────────────────────────────────────────┘
- *
- * Background:   #f6f6f6  rounded-3xl
- * Icon pill:    8px padding, rounded-2xl, bg controlled by `notification.iconBg`
- * Title:        18px / 600 / #272827
- * Description:  16px / 500 / #666766
- * Time:         14px / 500 / #959695
+ * `title`/`body` are rendered as-is (already localized by the backend). Unread
+ * items are emphasised with a dot + bolder title and expose a "Mark as read"
+ * action; a deep link (from `data`, e.g. `verifyUrl`) surfaces as a "View" link.
+ * Both actions emit `markRead(id)` so the parent store can persist + sync.
  */
 @Component({
   selector: 'ios-notification-card',
-  imports: [NgOptimizedImage, IosIcon],
+  imports: [DatePipe, IosIcon],
   providers: [
     provideIcons(
       LucideAward,
+      LucideBadgeCheck,
+      LucideBell,
+      LucideCheck,
       LucideCircleCheck,
       LucideDollarSign,
+      LucideExternalLink,
       LucideFilePlus,
+      LucideGraduationCap,
       LucideKey,
-      LucideNewspaper,
       LucidePercent,
-      LucideScanFace,
       LucideShieldAlert,
+      LucideTicket,
       LucideUserRoundCheck,
     ),
   ],
@@ -56,55 +59,72 @@ import type { Notification } from '../data-access/notification.model';
   host: { class: 'block w-full' },
   template: `
     <article
-      class="flex items-center gap-3 px-4 py-2 bg-ios-surface-mid rounded-3xl w-full"
-      [attr.aria-label]="lang.t(notification().titleKey)"
+      class="flex items-center gap-3 px-4 py-2 rounded-3xl w-full"
+      [class.bg-ios-surface-mid]="notification().read"
+      [class.bg-ios-brand-primary-soft]="!notification().read"
     >
-      <!-- ── Icon container ──────────────────────────────────────────────── -->
+      <!-- ── Icon ────────────────────────────────────────────────────────── -->
       <div
-        class="flex items-center justify-center p-2 rounded-2xl shrink-0"
-        [class.bg-ios-brand-primary-soft]="notification().iconBg === 'bg-ios-brand-primary-soft'"
-        [class.bg-white]="notification().iconBg === 'bg-white'"
+        class="flex items-center justify-center p-2 rounded-2xl shrink-0 bg-white"
         aria-hidden="true"
       >
-        @if (notification().iconName === 'ios-logo') {
-          <!-- IOS brand logo (welcome notification) -->
-          <img
-            ngSrc="assets/icons/logo_institute_of_scrum.png"
-            alt=""
-            class="w-8 h-8 object-contain"
-            width="32"
-            height="32"
-            loading="lazy"
-            decoding="async"
-          />
-        } @else {
-          <ios-icon
-            [name]="$any(notification().iconName)"
-            class="w-8 h-8 text-ios-fg"
-            aria-hidden="true"
-          />
-        }
+        <ios-icon [name]="icon()" class="w-8 h-8 text-ios-fg" />
       </div>
 
       <!-- ── Text content ────────────────────────────────────────────────── -->
       <div class="flex flex-col gap-1 flex-1 min-w-0 py-2" dir="auto">
-        <p
-          class="text-[18px] font-semibold leading-[1.4] text-ios-fg w-full"
-          [class.font-bold]="!notification().isRead"
-        >
-          {{ lang.t(notification().titleKey) }}
-        </p>
+        <div class="flex items-center gap-2">
+          @if (!notification().read) {
+            <span
+              class="inline-block w-2 h-2 rounded-full bg-ios-brand-primary shrink-0"
+              aria-hidden="true"
+            ></span>
+          }
+          <p
+            class="text-[18px] leading-[1.4] text-ios-fg w-full"
+            [class.font-bold]="!notification().read"
+            [class.font-semibold]="notification().read"
+          >
+            {{ notification().title }}
+          </p>
+        </div>
         <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-8 w-full">
-          {{ lang.t(notification().descriptionKey) }}
+          {{ notification().body }}
         </p>
+
+        <!-- Actions -->
+        <div class="flex items-center gap-4 mt-1">
+          @if (link(); as href) {
+            <a
+              [href]="href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-1.5 text-sm font-semibold text-ios-brand-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 rounded"
+              (click)="markRead.emit(notification().id)"
+            >
+              <ios-icon name="external-link" class="w-4 h-4" aria-hidden="true" />
+              {{ lang.t('notifications.view') }}
+            </a>
+          }
+          @if (!notification().read) {
+            <button
+              type="button"
+              class="inline-flex items-center gap-1.5 text-sm font-semibold text-ios-fg-8 hover:text-ios-fg-13 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 rounded"
+              (click)="markRead.emit(notification().id)"
+            >
+              <ios-icon name="check" class="w-4 h-4" aria-hidden="true" />
+              {{ lang.t('notifications.markRead') }}
+            </button>
+          }
+        </div>
       </div>
 
       <!-- ── Timestamp ───────────────────────────────────────────────────── -->
       <p
-        class="text-[14px] font-medium leading-[1.4] text-ios-fg-7 whitespace-nowrap shrink-0"
+        class="text-[14px] font-medium leading-[1.4] text-ios-fg-7 whitespace-nowrap shrink-0 self-start pt-2"
         dir="auto"
       >
-        {{ notification().time }}
+        {{ notification().createdAt | date: 'MMM d, h:mm a' }}
       </p>
     </article>
   `,
@@ -113,4 +133,8 @@ export class NotificationCard {
   protected readonly lang = inject(LanguageService);
 
   readonly notification = input.required<Notification>();
+  readonly markRead = output<string>();
+
+  protected readonly icon = computed(() => notificationIcon(this.notification().type));
+  protected readonly link = computed(() => notificationLink(this.notification().data));
 }

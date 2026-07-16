@@ -629,7 +629,8 @@
       "failedExams": "اختبارات راسبة"
     },
     "notifications": {
-      "label": "الإشعارات"
+      "label": "الإشعارات",
+      "labelWithCount": "الإشعارات، {count} غير مقروءة"
     },
     "examRunner": {
       "question": "سؤال {number}",
@@ -1944,6 +1945,18 @@
     "sortLatest": "ترتيب: الأحدث",
     "sortEarliest": "ترتيب: الأقدم",
     "empty": "لا توجد إشعارات حتى الآن.",
+    "emptyUnread": "لا توجد إشعارات غير مقروءة.",
+    "filterAriaLabel": "تصفية الإشعارات",
+    "filterAll": "الكل",
+    "filterUnread": "غير المقروءة",
+    "markAllRead": "تعليم الكل كمقروء",
+    "markRead": "تعليم كمقروء",
+    "view": "عرض",
+    "loadMore": "تحميل المزيد",
+    "retry": "إعادة المحاولة",
+    "loadError": "تعذّر تحميل إشعاراتك. يُرجى المحاولة مرة أخرى.",
+    "markReadError": "تعذّر تحديث الإشعار. يُرجى المحاولة مرة أخرى.",
+    "markAllReadError": "تعذّر تعليم الكل كمقروء. يُرجى المحاولة مرة أخرى.",
     "items": {
       "welcome": {
         "title": "مرحباً بك في IOS",

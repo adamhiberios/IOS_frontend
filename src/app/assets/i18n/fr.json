@@ -629,7 +629,8 @@
       "failedExams": "Tests échoués"
     },
     "notifications": {
-      "label": "Notifications"
+      "label": "Notifications",
+      "labelWithCount": "Notifications, {count} non lues"
     },
     "examRunner": {
       "question": "Question {number}",
@@ -1944,6 +1945,18 @@
     "sortLatest": "Tri : Plus récent",
     "sortEarliest": "Tri : Plus ancien",
     "empty": "Vous n'avez pas encore de notifications.",
+    "emptyUnread": "Vous n'avez aucune notification non lue.",
+    "filterAriaLabel": "Filtrer les notifications",
+    "filterAll": "Toutes",
+    "filterUnread": "Non lues",
+    "markAllRead": "Tout marquer comme lu",
+    "markRead": "Marquer comme lu",
+    "view": "Voir",
+    "loadMore": "Charger plus",
+    "retry": "Réessayer",
+    "loadError": "Nous n'avons pas pu charger vos notifications. Veuillez réessayer.",
+    "markReadError": "Nous n'avons pas pu mettre à jour la notification. Veuillez réessayer.",
+    "markAllReadError": "Nous n'avons pas pu tout marquer comme lu. Veuillez réessayer.",
     "items": {
       "welcome": {
         "title": "Bienvenue sur IOS",

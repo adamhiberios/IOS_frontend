@@ -1,223 +1,141 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 
-import type { Notification, NotificationSortOrder } from './notification.model';
+import { problemDetailMessage } from '@core/http';
+import { LanguageService } from '@core/i18n';
+import { NotificationBadgeStore } from '@core/notifications';
 
-/** ── Mock data (replaces API until the backend endpoint is wired) ────────── */
-const MOCK_NOTIFICATIONS: readonly Notification[] = [
-  {
-    id: '1',
-    type: 'welcome',
-    titleKey: 'notifications.items.welcome.title',
-    descriptionKey: 'notifications.items.welcome.description',
-    time: '4:00 pm',
-    isRead: false,
-    iconName: 'ios-logo',
-    iconBg: 'bg-ios-brand-primary-soft',
-    createdAt: new Date('2026-05-18T16:00:00'),
-  },
-  {
-    id: '2',
-    type: 'course-recommendation',
-    titleKey: 'notifications.items.courseRecommendation.title',
-    descriptionKey: 'notifications.items.courseRecommendation.description',
-    time: '1:00 pm',
-    isRead: true,
-    iconName: 'award',
-    iconBg: 'bg-white',
-    createdAt: new Date('2026-05-18T13:00:00'),
-  },
-  {
-    id: '3',
-    type: 'security',
-    titleKey: 'notifications.items.security.title',
-    descriptionKey: 'notifications.items.security.description',
-    time: '2:00 pm',
-    isRead: true,
-    iconName: 'shield-alert',
-    iconBg: 'bg-white',
-    createdAt: new Date('2026-05-18T14:00:00'),
-  },
-  {
-    id: '4',
-    type: 'password-update',
-    titleKey: 'notifications.items.passwordUpdate.title',
-    descriptionKey: 'notifications.items.passwordUpdate.description',
-    time: '5:00 pm',
-    isRead: true,
-    iconName: 'key',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T17:00:00'),
-  },
-  {
-    id: '5',
-    type: 'course-progress',
-    titleKey: 'notifications.items.courseProgress.title',
-    descriptionKey: 'notifications.items.courseProgress.description',
-    time: '7:00 pm',
-    isRead: true,
-    iconName: 'circle-check',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T19:00:00'),
-  },
-  {
-    id: '6',
-    type: 'discount',
-    titleKey: 'notifications.items.discount.title',
-    descriptionKey: 'notifications.items.discount.description',
-    time: '3:00 pm',
-    isRead: true,
-    iconName: 'percent',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T15:00:00'),
-  },
-  {
-    id: '7',
-    type: 'new-material',
-    titleKey: 'notifications.items.newMaterial.title',
-    descriptionKey: 'notifications.items.newMaterial.description',
-    time: '6:00 pm',
-    isRead: true,
-    iconName: 'file-plus',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T18:00:00'),
-  },
-  {
-    id: '8',
-    type: 'profile-update',
-    titleKey: 'notifications.items.profileUpdate.title',
-    descriptionKey: 'notifications.items.profileUpdate.description',
-    time: '8:00 pm',
-    isRead: true,
-    iconName: 'user-round-check',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T20:00:00'),
-  },
-  {
-    id: '9',
-    type: 'payment',
-    titleKey: 'notifications.items.payment.title',
-    descriptionKey: 'notifications.items.payment.description',
-    time: '8:00 pm',
-    isRead: true,
-    iconName: 'dollar-sign',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T20:01:00'),
-  },
-  {
-    id: '10',
-    type: 'exam-access',
-    titleKey: 'notifications.items.examAccess.title',
-    descriptionKey: 'notifications.items.examAccess.description',
-    time: '8:00 pm',
-    isRead: true,
-    iconName: 'newspaper',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T20:02:00'),
-  },
-  {
-    id: '11',
-    type: 'verify-account',
-    titleKey: 'notifications.items.verifyAccount.title',
-    descriptionKey: 'notifications.items.verifyAccount.description',
-    time: '8:00 pm',
-    isRead: true,
-    iconName: 'scan-face',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T20:03:00'),
-  },
-  {
-    id: '12',
-    type: 'enrollment',
-    titleKey: 'notifications.items.enrollment.title',
-    descriptionKey: 'notifications.items.enrollment.description',
-    time: '8:00 pm',
-    isRead: true,
-    iconName: 'circle-check',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T20:04:00'),
-  },
-  {
-    id: '13',
-    type: 'exam-code',
-    titleKey: 'notifications.items.examCode.title',
-    descriptionKey: 'notifications.items.examCode.description',
-    time: '8:00 pm',
-    isRead: true,
-    iconName: 'circle-check',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T20:05:00'),
-  },
-  {
-    id: '14',
-    type: 'payment-receipt',
-    titleKey: 'notifications.items.paymentReceipt.title',
-    descriptionKey: 'notifications.items.paymentReceipt.description',
-    time: '8:00 pm',
-    isRead: true,
-    iconName: 'dollar-sign',
-    iconBg: 'bg-[#f6f6f6]',
-    createdAt: new Date('2026-05-18T20:06:00'),
-  },
-];
+import { NotificationsApi } from './notifications.api';
+import { type Notification } from './notification.model';
+
+/** Page size for the notifications feed (backend caps its own limit). */
+const PAGE_LIMIT = 20;
 
 /**
- * `NotificationsStore` — lightweight signal store for the notifications feature.
+ * `NotificationsStore` — signal store for the notifications feature (BE-I-18).
  *
- * State is private and mutated only through action methods.
- * Consumers receive read-only signals and `computed` derivations.
- *
- * NOTE: `load()` currently resolves mock data. When the backend notification
- * endpoint is available, replace the mock with an `HttpClient` call following
- * the pattern in `core/http/`.
+ * Owns the cursor-paginated feed plus the mark-read / mark-all-read actions and
+ * the unread-only filter. Feature-scoped (provided by the page). Business logic
+ * lives here; the page binds signals and dispatches actions. Keeps the shell's
+ * unread badge (`core` {@link NotificationBadgeStore}) in sync after mutations.
  */
 @Injectable()
 export class NotificationsStore {
-  // ── Private writable signals ───────────────────────────────────────────────
-  private readonly _notifications = signal<readonly Notification[]>([]);
-  private readonly _sortOrder = signal<NotificationSortOrder>('latest');
-  private readonly _loading = signal(false);
+  private readonly api = inject(NotificationsApi);
+  private readonly lang = inject(LanguageService);
+  private readonly badge = inject(NotificationBadgeStore);
 
-  // ── Public read-only views ─────────────────────────────────────────────────
+  private readonly _items = signal<readonly Notification[]>([]);
+  private readonly _loading = signal(false);
+  private readonly _loadingMore = signal(false);
+  private readonly _error = signal<string | null>(null);
+  private readonly _nextCursor = signal<string | null>(null);
+  private readonly _hasMore = signal(false);
+  private readonly _unreadOnly = signal(false);
+  private readonly _markingAll = signal(false);
+
+  readonly items = this._items.asReadonly();
   readonly loading = this._loading.asReadonly();
-  readonly sortOrder = this._sortOrder.asReadonly();
+  readonly loadingMore = this._loadingMore.asReadonly();
+  readonly error = this._error.asReadonly();
+  readonly hasMore = this._hasMore.asReadonly();
+  readonly unreadOnly = this._unreadOnly.asReadonly();
+  readonly markingAll = this._markingAll.asReadonly();
+
+  /** True when a completed load returned no notifications. */
+  readonly isEmpty = computed(
+    () => !this._loading() && this._error() === null && this._items().length === 0,
+  );
+
+  /** True when at least one loaded item is still unread. */
+  readonly hasUnread = computed(() => this._items().some((n) => !n.read));
+
+  /** Load the first page with the current filter (replaces the list). */
+  async load(): Promise<void> {
+    await this.fetch(false);
+  }
+
+  /** Append the next keyset page, if any. */
+  async loadMore(): Promise<void> {
+    if (this._loadingMore() || !this._hasMore() || this._nextCursor() === null) return;
+    await this.fetch(true);
+  }
+
+  /** Toggle the unread-only filter and reload from the first page. */
+  async setUnreadOnly(value: boolean): Promise<void> {
+    if (value === this._unreadOnly()) return;
+    this._unreadOnly.set(value);
+    await this.fetch(false);
+  }
 
   /**
-   * Notifications sorted according to `sortOrder`.
-   * Latest (default) = descending by `createdAt`.
-   * Earliest = ascending by `createdAt`.
+   * Mark a single notification read (`POST /:id/read`, idempotent). Optimistic
+   * badge decrement; if the unread-only filter is active the row drops out of
+   * the list. No-op when the item is already read.
    */
-  readonly notifications = computed<readonly Notification[]>(() => {
-    const list = [...this._notifications()];
-    const order = this._sortOrder();
-    return list.sort((a, b) =>
-      order === 'latest'
-        ? b.createdAt.getTime() - a.createdAt.getTime()
-        : a.createdAt.getTime() - b.createdAt.getTime(),
-    );
-  });
+  async markRead(id: string): Promise<void> {
+    const target = this._items().find((n) => n.id === id);
+    if (!target || target.read) return;
+    try {
+      await firstValueFrom(this.api.markRead(id));
+      if (this._unreadOnly()) {
+        this._items.update((list) => list.filter((n) => n.id !== id));
+      } else {
+        this._items.update((list) => list.map((n) => (n.id === id ? { ...n, read: true } : n)));
+      }
+      this.badge.decrement();
+    } catch (err) {
+      this._error.set(problemDetailMessage(err) ?? this.lang.t('notifications.markReadError'));
+    }
+  }
 
-  /** Count of unread notifications. */
-  readonly unreadCount = computed(() => this._notifications().filter((n) => !n.isRead).length);
+  /**
+   * Mark every notification read (`POST /read-all`). Flips all loaded rows to
+   * read (or clears the list under the unread-only filter) and zeroes the badge.
+   */
+  async markAllRead(): Promise<void> {
+    if (this._markingAll() || !this.hasUnread()) return;
+    this._markingAll.set(true);
+    this._error.set(null);
+    try {
+      await firstValueFrom(this.api.markAllRead());
+      if (this._unreadOnly()) {
+        this._items.set([]);
+      } else {
+        this._items.update((list) => list.map((n) => ({ ...n, read: true })));
+      }
+      this.badge.setCount(0);
+    } catch (err) {
+      this._error.set(problemDetailMessage(err) ?? this.lang.t('notifications.markAllReadError'));
+    } finally {
+      this._markingAll.set(false);
+    }
+  }
 
-  // ── Action methods ─────────────────────────────────────────────────────────
-
-  /** Loads notifications. Swap mock data for a real API call when ready. */
-  load(): void {
-    this._loading.set(true);
-    // Simulate async — remove in production and replace with toSignal(http.get(...))
-    setTimeout(() => {
-      this._notifications.set(MOCK_NOTIFICATIONS);
+  private async fetch(append: boolean): Promise<void> {
+    if (append) {
+      this._loadingMore.set(true);
+    } else {
+      this._loading.set(true);
+    }
+    this._error.set(null);
+    try {
+      const page = await firstValueFrom(
+        this.api.list({
+          cursor: append ? (this._nextCursor() ?? undefined) : undefined,
+          limit: PAGE_LIMIT,
+          unreadOnly: this._unreadOnly() ? true : undefined,
+        }),
+      );
+      this._items.update((current) => (append ? [...current, ...page.items] : [...page.items]));
+      this._nextCursor.set(page.nextCursor);
+      this._hasMore.set(page.hasMore);
+      if (!append) void this.badge.refresh();
+    } catch (err) {
+      this._error.set(problemDetailMessage(err) ?? this.lang.t('notifications.loadError'));
+    } finally {
       this._loading.set(false);
-    }, 0);
-  }
-
-  /** Toggles between 'latest' and 'earliest' sort orders. */
-  toggleSort(): void {
-    this._sortOrder.update((o) => (o === 'latest' ? 'earliest' : 'latest'));
-  }
-
-  /** Marks all notifications as read. */
-  markAllRead(): void {
-    this._notifications.update((list) => list.map((n) => ({ ...n, isRead: true })));
+      this._loadingMore.set(false);
+    }
   }
 }
