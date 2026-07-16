@@ -57,6 +57,12 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     roles: ['learning_admin'],
   },
   {
+    labelKey: 'admin.shell.nav.issuedCerts',
+    route: '/admin/issued-certs',
+    exact: false,
+    roles: ['learning_admin'],
+  },
+  {
     labelKey: 'admin.shell.nav.audit',
     route: '/admin/audit-logs',
     exact: false,

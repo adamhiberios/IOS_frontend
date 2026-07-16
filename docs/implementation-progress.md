@@ -632,7 +632,7 @@ Certificate revocation — BE-I-15), and **four new admin pages** are now possib
 | 6   | **Exam assignment** (`/admin/exam`)                       | ✅ Built & committed          | `GET /admin/exam`, `POST /admin/exam/assign`                                          |
 | 7   | **Mock questions** (`/admin/mock`)                        | ✅ Built & committed          | `GET/POST/PATCH/DELETE /admin/mock*`                                                  |
 | 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed          | `GET /admin/audit-logs`                                                               |
-| 9   | **Certificate revocation**                                | 🔓 Unblocked — build          | `GET /admin/certs/issued` + `PATCH /admin/certs/issued/:id/revoke` (B2)               |
+| 9   | **Certificate revocation**                                | ✅ Built (review pending)     | `GET /admin/certs/issued` + `PATCH /admin/certs/issued/:id/revoke` (B2)               |
 | 10  | **Admin staff management**                                | 🆕 Now possible — build       | `/admin/staff` (super_admin, BE-I-03, checklist B3)                                   |
 | 11  | **Promo codes**                                           | 🆕 Now possible — build       | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
 | 12  | **Dashboard metrics** (`/admin` home)                     | ✅ Built (review pending)     | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
@@ -737,6 +737,75 @@ modules[] }`), `AdminModuleDto` (w/ nested `lessons[]`), `AdminLessonDto`;
   warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.23 kB;
   `admin-curriculum-page` chunk 5.23 kB gzip). Live check needs a real
   content_creator/learning_admin session — deferred (no admin creds in-session).
+  **Committed** (`7268d26`).
+
+**Page 9 — Certificate revocation / B2 (uncommitted, awaiting review):**
+
+Third admin-pivot item. New page `/admin/issued-certs` listing issued
+certificates and revoking them. Read: `GET /admin/certs/issued?userId&certId&
+cursor&limit` → **`{ data, meta.pagination }`** (cursor, newest-first). Revoke:
+`PATCH /admin/certs/issued/:id/revoke` (idempotent, bare `RevokeResult`). Both
+super_admin / learning_admin.
+
+- **`features/admin/data-access/issued-certs.*`** — standard layering:
+  - `issued-certs.dto.ts` — `IssuedCertificateItemDto` (`id` internal uuid +
+    `certId` public serial nullable + student/program/`issuedAt`/`status`),
+    `IssuedCertificatesResponseDto = PagedResponse<…>`, bare `RevokeResultDto`
+    (`{ certId, isActive, revoked }`).
+  - `issued-certs.model.ts` — `IssuedCertificate`, `ISSUED_CERT_STATUSES` /
+    `isIssuedCertStatus`, `IssuedCertFilters` (`userId`/`certId`, both UUIDs),
+    `RevokeResult`.
+  - `issued-certs.mappers.ts` — `toIssuedCertificate` (status guarded: unknown →
+    `revoked`, fail-closed), `toRevokeResult`.
+  - `issued-certs.api.ts` — `AdminIssuedCertsApi`: `list` (cursor-paged via
+    `toPage`/`toHttpParams`), `revoke`.
+  - `issued-certs.store.ts` — `AdminIssuedCertsStore`: cursor list
+    (`items/loading/loadingMore/error/hasMore/filters`, `load`/`loadMore`) + a
+    `revoke(id)` action that flips the row's status to `revoked` **in place** (no
+    reload — keyset order is stable) with `revokePendingId`/`revokeError`.
+    **Filters are driven by pickers, not raw UUIDs:** a certificate select
+    (`loadCerts` via `AdminCatalogApi`, active certs) → `selectCert`, and a
+    student search-and-pick (`searchStudents`/`selectStudent`/`clearStudent` via
+    `AdminUsersApi`) → both map to the backend `certId`/`userId` params. Cleared
+    on `user.logged-out` (rows carry student PII).
+- **Page** (`admin-issued-certs.page.ts`) — table (student, program + code,
+  serial, issued date, valid/revoked badge) with a **certificate `ios-select`**
+  ("All certificates" default) and a **student typeahead** (search → results
+  list → selected chip with clear), cursor **Load more**, and a per-row
+  **Revoke** guarded by a confirm dialog. Revoke gated to super_admin /
+  learning_admin (`canRevoke`); revoked rows show no action. Loading /
+  error+retry / empty states.
+- **Note:** kept the backend's newest-first order (no client active-first
+  re-sort — that would only reorder loaded pages of an infinite list and mislead;
+  the active-first convention is for fully-loaded lists like the curriculum tree).
+  Step-up re-auth for revoke (CLAUDE.md §8) is a backend/auth concern (C1), not
+  wired here.
+- **Two bugs surfaced during review:**
+  1. **Search reloaded the page / lost the filter (fixed).** The student-search
+     `<form (ngSubmit)>` had **no `[formGroup]`**, so Angular didn't intercept the
+     submit and the browser did a native form submission → full page reload. Fixed
+     by wrapping the search control in a `studentForm` FormGroup and binding
+     `[formGroup]` + `formControlName` (mirrors the working exam-assign search).
+  2. **Logout ~15 min into a local-dev session (documented, NOT fixed).** `ng serve`
+     runs on **`localhost:4200`** but the API is **`api-dev.instituteofscrum.org`**
+     — cross-site. The httpOnly refresh cookie is **`SameSite=Lax`**, so it's not
+     sent on the cross-site `POST /auth/refresh` XHR; the in-memory access token
+     lasts **15 min** (`accessTtlSec = 900`), and once it expires the next request
+     401s → cookie-less refresh 401s → `handleRefreshFailure()` → logout. Not a B2
+     bug (any admin action after token expiry does it); real deployments are fine
+     (frontend + API same-site). A dev-proxy fix was prototyped then **reverted at
+     the user's request** — for now, re-login when the 15-min token lapses, or
+     serve the frontend same-site as the API. In-scope B2 fix retained: the student
+     search sets its **own** `studentsError` (shown under the search box) instead of
+     clobbering the main-list `error`, so a failed search no longer blanks the table.
+- **Routing/nav:** child route `/admin/issued-certs`; nav item gated to
+  learning_admin (super_admin sees all).
+- **i18n:** new `admin.issuedCerts.*` namespace + `admin.shell.nav.issuedCerts`
+  (en/fr/ar; Arabic pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; gzip initial
+  96.22 kB). Live check needs a real super_admin/learning_admin session —
+  deferred (no admin creds in-session).
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -1122,9 +1191,12 @@ Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md))
    page — cert picker → module/lesson tree with create/edit/reactivate/deactivate,
    active-first. Translation editor + lesson-quiz authoring (B5) deferred. See
    "Page 4 — Curriculum management / B1" below.
-7. ⏭️ **Next: B2 Cert revocation** (`GET /admin/certs/issued` + existing revoke) →
-   **B3 Staff** → **B4 Promo codes** → **B5 lesson-quiz** → small **B7/B8** (see
-   "Admin pages status" table below).
+7. ✅ **B2 — Certificate revocation** (`GET /admin/certs/issued` + existing revoke)
+   — **built (uncommitted, awaiting review)**: new `/admin/issued-certs` page —
+   cursor list + confirm-guarded revoke, super/learning admin. See "Page 9 —
+   Certificate revocation / B2" below.
+   7b. ⏭️ **Next: B3 Staff** (`/admin/staff`, super_admin) → **B4 Promo codes** →
+   **B5 lesson-quiz** → small **B7/B8** (see "Admin pages status" table below).
 8. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
    A2 Settings delete/export, C2 cookie consent.
 9. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
