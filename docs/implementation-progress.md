@@ -624,7 +624,7 @@ Certificate revocation — BE-I-15), and **four new admin pages** are now possib
 | 2c  | **Catalog — title/description translations** (ar/fr)      | ✅ Built & committed          | `PATCH /admin/catalog/:id/translations`                                               |
 | 3   | **Users — list + student detail** (`/admin/users`)        | ✅ Built & committed          | `GET /admin/users`, `GET /admin/users/:id`                                            |
 | 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending)     | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                         |
-| 4   | **Curriculum (modules/lessons)**                          | 🔓 Unblocked — build          | `GET /admin/certs/:id/curriculum` (all statuses) + existing module/lesson CRUD (B1)   |
+| 4   | **Curriculum (modules/lessons)**                          | ✅ Built (review pending)     | `GET /admin/certs/:id/curriculum` (all statuses) + existing module/lesson CRUD (B1)   |
 | 4b  | **Lesson-quiz authoring**                                 | 🆕 Now possible — build       | `/admin/lessons/:id/quizzes`, `/admin/quizzes/*` (BE-I-06, checklist B5)              |
 | 5   | **Exam authoring — list + lifecycle** (`/admin/exams`)    | ✅ Built & committed          | `GET/POST /admin/certs/:id/exams`, `PATCH/DELETE/publish/unpublish /admin/exams/:id`  |
 | 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built — ⚠️ show reasons[]  | `GET /admin/exams/:id`, `…/questions*`; publish `reasons[]` now available (B7)        |
@@ -683,7 +683,60 @@ loading/error/months/loaded` signals; `load(force)`/`reload`; `setMonths()`
 - **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
   warnings) · build ✓ (known raw-size budget warning only; gzip initial
   96.20 kB). Live check needs a real super_admin/finance_admin session against
-  the deployed API — deferred (no admin creds in-session).
+  the deployed API — deferred (no admin creds in-session). **Committed by the
+  user.**
+
+**Page 4 — Curriculum management / B1 (uncommitted, awaiting review):**
+
+Second admin-pivot item. New page `/admin/curriculum` for managing a
+certificate's modules + lessons. Read: `GET /admin/certs/:id/curriculum` →
+**`{ data }`** envelope (all statuses, full admin fields incl. `active`,
+timestamps, `translations`). Writes reuse the existing `POST/PATCH/DELETE
+/admin/modules|lessons` CRUD (`learning-admin.controller.ts`).
+
+- **`features/admin/data-access/curriculum.*`** — standard layering:
+  - `curriculum.dto.ts` — `AdminCurriculumDto` (`{ certId, programCode, title,
+modules[] }`), `AdminModuleDto` (w/ nested `lessons[]`), `AdminLessonDto`;
+    write bodies `Create/Update{Module,Lesson}Body`. Note the lesson per-locale
+    body key is **`content_html`** (snake_case) while the canonical field is
+    `contentText`.
+  - `curriculum.model.ts` — frontend types + `ModuleDraft`/`LessonDraft` (no
+    `active` — activation is a separate toggle), `translatedLocales()` (non-`en`
+    locales with content, for the indicator chips), `activeFirstByPosition()`
+    (stable sort: active first, then position).
+  - `curriculum.mappers.ts` — `toAdminCurriculum/Module/Lesson`; draft→body
+    builders (omit blank optionals on create; send them on update so a cleared
+    field persists; never send `translations` — the backend re-mirrors only `en`
+    from the canonical title, preserving ar/fr).
+  - `curriculum.api.ts` — `AdminCurriculumApi`: `getCurriculum` + module/lesson
+    create/update/deactivate (`DELETE` = soft-delete `active=false`). Writes
+    resolve to `void` (store refetches the whole tree).
+  - `curriculum.store.ts` — `AdminCurriculumStore` (root singleton): cert picker
+    (via `AdminCatalogApi`, active certs), selected cert + its curriculum,
+    `modules` computed (active-first, each with lessons active-first), and
+    module/lesson save / reactivate / deactivate actions with a shared
+    `actionPendingId` (`module:<id>` / `lesson:<id>`) + `actionError`.
+- **Page** (`admin-curriculum.page.ts`) — mirrors the exam-authoring idioms: cert
+  picker → module cards (position, title, inactive badge, translated-locale chips,
+  description) each containing its lessons (position, title, duration/video meta,
+  inactive badge). Create/edit dialogs for modules and lessons; per-row
+  **Reactivate**/**Deactivate**; "Add lesson" per module. Position fields
+  pre-fill the next slot. Role gates: create/edit/reactivate =
+  content_creator/learning_admin; **deactivate** (soft-delete `DELETE`) =
+  learning_admin (mirrors exam-authoring's `canManage`/`canPublish` split;
+  backend still enforces). Loading / error+retry / empty states.
+- **Deferred (flagged):** the **translation editor** (per-locale module/lesson
+  title + body — read-through only for now, shown as indicator chips; matches how
+  catalog/exam translations were separate increments) and **lesson-quiz
+  authoring** (B5, mounts under this page).
+- **Routing/nav:** child route `/admin/curriculum` under the admin shell; nav item
+  gated to content_creator/learning_admin.
+- **i18n:** new `admin.curriculum.*` namespace + `admin.shell.nav.curriculum`
+  (en/fr/ar; Arabic pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.23 kB;
+  `admin-curriculum-page` chunk 5.23 kB gzip). Live check needs a real
+  content_creator/learning_admin session — deferred (no admin creds in-session).
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -1064,12 +1117,17 @@ Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md))
    monthly-revenue chart + top-programs list on the admin home, 6M/12M/24M
    window, role-gated. Full page build (data-access + wired screen). See "Page 12
    — Admin dashboard analytics / B6" under "Admin pages status" below.
-6. ⏭️ **Next: B1 Curriculum** (`GET /admin/certs/:id/curriculum`) → **B2 Cert
-   revocation** → **B3 Staff** → **B4 Promo codes** → **B5 lesson-quiz** → small
-   **B7/B8** (see "Admin pages status" table below).
-7. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
+6. ✅ **B1 — Curriculum management** (`GET /admin/certs/:id/curriculum` + module/
+   lesson CRUD) — **built (uncommitted, awaiting review)**: new `/admin/curriculum`
+   page — cert picker → module/lesson tree with create/edit/reactivate/deactivate,
+   active-first. Translation editor + lesson-quiz authoring (B5) deferred. See
+   "Page 4 — Curriculum management / B1" below.
+7. ⏭️ **Next: B2 Cert revocation** (`GET /admin/certs/issued` + existing revoke) →
+   **B3 Staff** → **B4 Promo codes** → **B5 lesson-quiz** → small **B7/B8** (see
+   "Admin pages status" table below).
+8. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
    A2 Settings delete/export, C2 cookie consent.
-8. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
+9. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
 
 Still to wire regardless: **Courses/Learning** (`/learning/*`) and **Assessments/
 Mock** (exam + mock, incl. `/exam` and `/mock` WebSockets — highest complexity;

@@ -54,6 +54,12 @@ export const ADMIN_ROUTES: Routes = [
         title: () => inject(LanguageService).t('admin.catalog.form.editTitle'),
       },
       {
+        path: 'curriculum',
+        loadComponent: () =>
+          import('./pages/admin-curriculum.page').then((m) => m.AdminCurriculumPage),
+        title: () => inject(LanguageService).t('admin.curriculum.title'),
+      },
+      {
         path: 'users',
         loadComponent: () =>
           import('./pages/admin-users-list.page').then((m) => m.AdminUsersListPage),
