@@ -633,7 +633,7 @@ Certificate revocation — BE-I-15), and **four new admin pages** are now possib
 | 7   | **Mock questions** (`/admin/mock`)                        | ✅ Built & committed          | `GET/POST/PATCH/DELETE /admin/mock*`                                                  |
 | 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed          | `GET /admin/audit-logs`                                                               |
 | 9   | **Certificate revocation**                                | ✅ Built (review pending)     | `GET /admin/certs/issued` + `PATCH /admin/certs/issued/:id/revoke` (B2)               |
-| 10  | **Admin staff management**                                | 🆕 Now possible — build       | `/admin/staff` (super_admin, BE-I-03, checklist B3)                                   |
+| 10  | **Admin staff management**                                | ✅ Built (review pending)     | `/admin/staff` (super_admin, BE-I-03, checklist B3)                                   |
 | 11  | **Promo codes**                                           | 🆕 Now possible — build       | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
 | 12  | **Dashboard metrics** (`/admin` home)                     | ✅ Built (review pending)     | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
 
@@ -806,6 +806,50 @@ super_admin / learning_admin.
   warnings) · build ✓ (known raw-size budget warning only; gzip initial
   96.22 kB). Live check needs a real super_admin/learning_admin session —
   deferred (no admin creds in-session).
+
+**Page 10 — Admin staff management / B3 (uncommitted, awaiting review):**
+
+Fourth admin-pivot item. New page `/admin/staff` — **super_admin only** — to
+list / create / edit / deactivate admin staff (BE-I-03). Envelopes: list is
+`{ data, meta.pagination }` (cursor); create/detail/update/deactivate are
+`{ data }`.
+
+- **`features/admin/data-access/staff.*`** — standard layering:
+  - `staff.dto.ts` / `staff.model.ts` — `StaffMember` (`id/email/firstName/
+lastName/role/locale/active/createdAt`), `STAFF_ROLES` (5) +
+    `ASSIGNABLE_STAFF_ROLES` (4 — **`super_admin` excluded**, it's bootstrap-only),
+    `STAFF_LOCALES`, `STAFF_PASSWORD_MIN = 12`, `isEditableStaff` (false for a
+    super_admin target), `Create/UpdateStaffPayload`.
+  - `staff.mappers.ts` — `toStaffMember`, draft→body builders (email lower-cased,
+    fields trimmed).
+  - `staff.api.ts` — `AdminStaffApi`: `list` (cursor via `toPage`/`toHttpParams`,
+    filters `search`/`role`/`active`), `create`, `update`, `deactivate` (dedicated
+    `POST :id/deactivate`).
+  - `staff.store.ts` — `AdminStaffStore`: cursor list + `search`/`role`/`active`
+    filters, create/update/deactivate + reactivate (`PATCH { active: true }`),
+    shared `actionPendingId`/`actionError`; each write refetches. Cleared on
+    `user.logged-out`.
+- **Page** (`admin-staff.page.ts`) — table (name, email, role, locale,
+  active badge) with search + role + status filters and cursor **Load more**;
+  a create/edit dialog (create adds email + password ≥12; edit is name/role/
+  locale, email/password not editable — validators dropped in edit mode);
+  per-row deactivate (confirm) / reactivate. Pickers use **`ios-select`**; the
+  create/edit dialog uses the **backdrop-scroll pattern** (the `fixed` overlay
+  scrolls via `overflow-y-auto` + a `min-h-full` flex wrapper; the card itself has
+  no `max-h`/`overflow`) so the select's absolute popover isn't clipped inside the
+  dialog (an earlier native-`<select>` swap was reverted — design preference). **`super_admin` protection is
+  honoured in the UI:** that role is absent from the assignable options, and
+  super_admin rows show "Protected" instead of edit/deactivate (backend 400s/403s
+  anyway). Whole page gated to super_admin (route + nav + backend).
+- **Errors:** surfaces `problemDetailMessage` (e.g. 409 duplicate email, 400
+  invalid, 403 super_admin target) inline in the dialog.
+- **Routing/nav:** child route `/admin/staff`; nav item gated to super_admin.
+- **i18n:** new `admin.staff.*` namespace (incl. `roleNames.*`) +
+  `admin.shell.nav.staff` (en/fr/ar; Arabic pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.20 kB;
+  `admin-staff-page` chunk 4.63 kB gzip). Live check needs a real super_admin
+  session — deferred (no admin creds in-session).
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -1195,7 +1239,10 @@ Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md))
    — **built (uncommitted, awaiting review)**: new `/admin/issued-certs` page —
    cursor list + confirm-guarded revoke, super/learning admin. See "Page 9 —
    Certificate revocation / B2" below.
-   7b. ⏭️ **Next: B3 Staff** (`/admin/staff`, super_admin) → **B4 Promo codes** →
+   7b. ✅ **B3 — Admin staff management** (`/admin/staff`, super_admin) — **built
+   (uncommitted, awaiting review)**: list/create/edit/deactivate staff, super_admin
+   rows protected. See "Page 10 — Admin staff management / B3" below.
+   7c. ⏭️ **Next: B4 Promo codes** (`/admin/promo-codes`, super/finance admin) →
    **B5 lesson-quiz** → small **B7/B8** (see "Admin pages status" table below).
 8. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
    A2 Settings delete/export, C2 cookie consent.
