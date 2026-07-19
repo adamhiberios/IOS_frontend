@@ -625,7 +625,7 @@ Certificate revocation — BE-I-15), and **four new admin pages** are now possib
 | 3   | **Users — list + student detail** (`/admin/users`)        | ✅ Built & committed          | `GET /admin/users`, `GET /admin/users/:id`                                            |
 | 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending)     | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                         |
 | 4   | **Curriculum (modules/lessons)**                          | ✅ Built (review pending)     | `GET /admin/certs/:id/curriculum` (all statuses) + existing module/lesson CRUD (B1)   |
-| 4b  | **Lesson-quiz authoring**                                 | 🆕 Now possible — build       | `/admin/lessons/:id/quizzes`, `/admin/quizzes/*` (BE-I-06, checklist B5)              |
+| 4b  | **Lesson-quiz authoring**                                 | ✅ Built (review pending)     | `/admin/lessons/:id/quizzes`, `/admin/quizzes/*` (BE-I-06, checklist B5)              |
 | 5   | **Exam authoring — list + lifecycle** (`/admin/exams`)    | ✅ Built & committed          | `GET/POST /admin/certs/:id/exams`, `PATCH/DELETE/publish/unpublish /admin/exams/:id`  |
 | 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built — ⚠️ show reasons[]  | `GET /admin/exams/:id`, `…/questions*`; publish `reasons[]` now available (B7)        |
 | 5c  | **Exam title translations** (ar/fr)                       | ✅ Built & committed          | `PATCH /admin/exams/:id/translations`                                                 |
@@ -891,6 +891,51 @@ delete are `{ data }`.
   warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.25 kB;
   `admin-promo-codes-page` chunk 5.59 kB gzip). Live check needs a real
   super_admin/finance_admin session — deferred (no admin creds in-session).
+
+**Page 4b — Lesson-quiz authoring / B5 (uncommitted, awaiting review):**
+
+Sixth admin-pivot item, extends B1. New page `/admin/lessons/:lessonId/quizzes`
+(BE-I-06), reached from a **"Quizzes"** link on each lesson row in the curriculum
+page. Manage a lesson's quizzes and their questions (MCQ or free-text) — the
+authoring view exposes `correctAnswer` (student endpoints strip it). All
+responses are `{ data }` (no pagination). Create/edit quiz + add/edit question =
+content_creator / learning_admin; deactivate quiz + delete question =
+learning_admin only (backend-enforced; mirrored in the UI via `canAuthor` /
+`canDelete`).
+
+- **`features/admin/data-access/quiz.*`** — standard layering:
+  - `quiz.dto.ts` / `quiz.model.ts` — `Quiz` (`id/lessonId/title/active/
+createdAt/updatedAt/questions[]`), `QuizQuestion` (`questionText`,
+    `correctAnswer`, `options[]|null`, `position`), `isMcq`, `QuestionDraft`,
+    `QUIZ_MIN_OPTIONS`.
+  - `quiz.mappers.ts` — `toQuiz`/`toQuizQuestion`; question body builders (create
+    omits `options` for free-text; update always sends `options` — empty array
+    converts to free-text, per the backend "supplying options replaces the set").
+  - `quiz.api.ts` — `AdminQuizApi`: `listByLesson`, `createQuiz`, `updateQuiz`
+    (title/active), `deleteQuiz` (soft-delete), `addQuestion`, `updateQuestion`,
+    `deleteQuestion`.
+  - `quiz.store.ts` — `AdminQuizStore`: one lesson's quiz tree; quiz CRUD +
+    deactivate/reactivate and question CRUD; every mutation refetches the tree;
+    `actionPendingId` keys spinners by quiz/question id (or `new`/`q-new-<quizId>`).
+    Cleared on `user.logged-out`.
+- **Page** (`admin-lesson-quizzes.page.ts`) — back-link + lesson title (from a
+  `?title=` query param passed by the curriculum link); quiz cards (title, active
+  badge, question list with the correct option/answer marked) with rename /
+  deactivate / reactivate; per-question edit + delete. Question dialog: text +
+  a **MCQ / free-text toggle** — MCQ uses a `FormArray` of options (≥2) with a
+  radio for the correct one (mirrors the exam-question editor); free-text uses a
+  single answer field. Client-side checks (≥2 non-empty options, correct ∈
+  options) back up the server rules. Backdrop-scroll dialogs.
+- **Curriculum link:** the B1 curriculum page's lesson rows gained a "Quizzes"
+  link (`RouterLink`, gated to `canManage`) → the quiz page with the lesson title.
+- **Routing:** child route `/admin/lessons/:lessonId/quizzes` (no nav item — it's
+  reached from the curriculum page, not the sidebar).
+- **i18n:** new `admin.quiz.*` namespace + `admin.curriculum.quizzes` (en/fr/ar;
+  Arabic pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.21 kB;
+  `admin-lesson-quizzes-page` chunk 5.70 kB gzip). Live check needs a real
+  content_creator/learning_admin session — deferred (no admin creds in-session).
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -1286,8 +1331,13 @@ Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md))
    7c. ✅ **B4 — Promo codes** (`/admin/promo-codes`, super/finance admin) — **built
    (uncommitted, awaiting review)**: CRUD + retire/reactivate, cert-scoping
    checklist, support_admin read-only. See "Page 11 — Promo-code management / B4".
-   7d. ⏭️ **Next: B5 lesson-quiz authoring** (under the B1 curriculum page) → small
-   **B7/B8** (see "Admin pages status" table below).
+   7d. ✅ **B5 — Lesson-quiz authoring** (under the B1 curriculum page) — **built
+   (uncommitted, awaiting review)**: `/admin/lessons/:id/quizzes`, quiz + question
+   (MCQ/free-text) CRUD. See "Page 4b — Lesson-quiz authoring / B5".
+   7e. ⏭️ **Next: small B7/B8** — B7 surface exam publish `reasons[]` in
+   admin-exam-questions; B8 add catalog card fields
+   (`badgeImageUrl`/`track`/`level`/`durationHours`/`syllabusUrl`) to
+   admin-catalog-form + re-test the `?active=false` filter.
 8. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
    A2 Settings delete/export, C2 cookie consent.
 9. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.

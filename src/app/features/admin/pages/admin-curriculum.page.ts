@@ -13,6 +13,8 @@ import {
   Validators,
 } from '@angular/forms';
 
+import { RouterLink } from '@angular/router';
+
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
@@ -45,7 +47,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-curriculum-page',
-  imports: [ReactiveFormsModule, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -218,6 +220,13 @@ const required: ValidatorFn = (control) => Validators.required(control);
                     </div>
                     @if (canManage()) {
                       <div class="flex items-center gap-3 shrink-0">
+                        <a
+                          [routerLink]="['/admin/lessons', l.id, 'quizzes']"
+                          [queryParams]="{ title: l.title }"
+                          class="text-sm text-ios-brand-primary underline"
+                        >
+                          {{ lang.t('admin.curriculum.quizzes') }}
+                        </a>
                         <button
                           type="button"
                           (click)="openEditLesson(m, l)"
