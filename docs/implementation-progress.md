@@ -634,7 +634,7 @@ Certificate revocation — BE-I-15), and **four new admin pages** are now possib
 | 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed          | `GET /admin/audit-logs`                                                               |
 | 9   | **Certificate revocation**                                | ✅ Built (review pending)     | `GET /admin/certs/issued` + `PATCH /admin/certs/issued/:id/revoke` (B2)               |
 | 10  | **Admin staff management**                                | ✅ Built (review pending)     | `/admin/staff` (super_admin, BE-I-03, checklist B3)                                   |
-| 11  | **Promo codes**                                           | 🆕 Now possible — build       | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
+| 11  | **Promo codes**                                           | ✅ Built (review pending)     | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
 | 12  | **Dashboard metrics** (`/admin` home)                     | ✅ Built (review pending)     | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
 
 **Page 12 — Admin dashboard analytics / B6 (uncommitted, awaiting review):**
@@ -850,6 +850,47 @@ lastName/role/locale/active/createdAt`), `STAFF_ROLES` (5) +
   warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.20 kB;
   `admin-staff-page` chunk 4.63 kB gzip). Live check needs a real super_admin
   session — deferred (no admin creds in-session).
+
+**Page 11 — Promo-code management / B4 (uncommitted, awaiting review):**
+
+Fifth admin-pivot item. New page `/admin/promo-codes` (BE-I-05). View allowed for
+super_admin / finance_admin / support_admin; **mutations (create/edit/retire/
+reactivate) are super_admin / finance_admin only** (support_admin read-only, in
+the UI and backend). List is `{ data, meta.pagination }` (cursor); create/update/
+delete are `{ data }`.
+
+- **`features/admin/data-access/promo.*`** — standard layering:
+  - `promo.dto.ts` / `promo.model.ts` — `PromoCode` (`code`, `discountType`,
+    `discountValue|null`, `applicableCertIds|null`, `maxUses|null`, `usageCount`
+    read-only, `expiresAt|null`, `active`, `createdAt`), `DISCOUNT_TYPES`
+    (`percentage`/`full_waiver`), `PROMO_PERCENT_MIN/MAX`, `isExpired`,
+    `Create/UpdatePromoPayload`.
+  - `promo.mappers.ts` — create body omits blank optionals + `discountValue`
+    for full_waiver; update body sends `null` to clear (and nulls `discountValue`
+    for full_waiver); `code` never sent on update (immutable).
+  - `promo.api.ts` — `AdminPromoApi`: `list` (cursor, `active`/`expired` filters),
+    `create`, `update`, `retire` (DELETE → soft-delete active=false).
+  - `promo.store.ts` — `AdminPromoStore`: cursor list + filters, create/update/
+    retire + reactivate (`PATCH { active: true }`), `actionPending`/`actionError`,
+    plus active-cert options (`loadCerts`) for the "applies to" picker; cleared on
+    `user.logged-out`.
+- **Page** (`admin-promo-codes.page.ts`) — table (code, discount, applies-to,
+  uses `usageCount/max`, expires, active/retired badge + an "expired" hint) with
+  status + expiry filters and cursor **Load more**. Create/edit dialog: code
+  (create-only, read-only in edit), discount type (`ios-select`), **percent value
+  shown only for `percentage`** (validated 0.01–100), max-uses (optional int),
+  expiry (`datetime-local` → ISO), and an **"applies to" certificate checklist**
+  (none checked = all certs). Retire behind a confirm dialog; reactivate inline.
+  Manage actions gated to super_admin/finance_admin (`canManage`). Uses the
+  backdrop-scroll dialog pattern so the `ios-select` popover isn't clipped.
+- **Routing/nav:** child route `/admin/promo-codes`; nav item gated to
+  finance_admin + support_admin (super sees all).
+- **i18n:** new `admin.promo.*` namespace + `admin.shell.nav.promo` (en/fr/ar;
+  Arabic pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only; gzip initial 96.25 kB;
+  `admin-promo-codes-page` chunk 5.59 kB gzip). Live check needs a real
+  super_admin/finance_admin session — deferred (no admin creds in-session).
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -1242,8 +1283,11 @@ Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md))
    7b. ✅ **B3 — Admin staff management** (`/admin/staff`, super_admin) — **built
    (uncommitted, awaiting review)**: list/create/edit/deactivate staff, super_admin
    rows protected. See "Page 10 — Admin staff management / B3" below.
-   7c. ⏭️ **Next: B4 Promo codes** (`/admin/promo-codes`, super/finance admin) →
-   **B5 lesson-quiz** → small **B7/B8** (see "Admin pages status" table below).
+   7c. ✅ **B4 — Promo codes** (`/admin/promo-codes`, super/finance admin) — **built
+   (uncommitted, awaiting review)**: CRUD + retire/reactivate, cert-scoping
+   checklist, support_admin read-only. See "Page 11 — Promo-code management / B4".
+   7d. ⏭️ **Next: B5 lesson-quiz authoring** (under the B1 curriculum page) → small
+   **B7/B8** (see "Admin pages status" table below).
 8. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
    A2 Settings delete/export, C2 cookie consent.
 9. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.

@@ -69,6 +69,12 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     roles: ['super_admin'],
   },
   {
+    labelKey: 'admin.shell.nav.promo',
+    route: '/admin/promo-codes',
+    exact: false,
+    roles: ['finance_admin', 'support_admin'],
+  },
+  {
     labelKey: 'admin.shell.nav.audit',
     route: '/admin/audit-logs',
     exact: false,
