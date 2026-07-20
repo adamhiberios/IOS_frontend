@@ -3,6 +3,7 @@ import {
   type AdminCertificate,
   type AdminCertificateDetail,
   type CertificateLocaleFields,
+  isCertLevel,
 } from './catalog.model';
 
 /** Map a wire `CatalogItemDto` to the frontend `AdminCertificate` model. */
@@ -16,6 +17,11 @@ export function toAdminCertificate(dto: CatalogItemDto): AdminCertificate {
     currency: dto.currency,
     thumbnailUrl: dto.thumbnailUrl,
     active: dto.active,
+    badgeImageUrl: dto.badgeImageUrl,
+    track: dto.track,
+    level: isCertLevel(dto.level) ? dto.level : null,
+    durationHours: dto.durationHours,
+    syllabusUrl: dto.syllabusUrl,
     createdAt: dto.createdAt,
     updatedAt: dto.updatedAt,
   };

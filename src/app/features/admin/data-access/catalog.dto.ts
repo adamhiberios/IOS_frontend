@@ -16,6 +16,12 @@ export interface CatalogItemDto {
   readonly currency: string;
   readonly thumbnailUrl: string | null;
   readonly active: boolean;
+  // Catalog-card metadata (BE-I-04) — all nullable.
+  readonly badgeImageUrl: string | null;
+  readonly track: string | null;
+  readonly level: string | null;
+  readonly durationHours: number | null;
+  readonly syllabusUrl: string | null;
   readonly locale: string;
   readonly direction: 'ltr' | 'rtl';
   readonly fallbackUsed: boolean;

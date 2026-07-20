@@ -616,26 +616,26 @@ Certificate revocation — BE-I-15), and **four new admin pages** are now possib
 (staff, promo codes, lesson-quiz authoring, dashboard metrics). See
 [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md) §B.
 
-| #   | Admin page                                                | Status                        | Backend                                                                               |
-| --- | --------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------- |
-| 1   | **Admin Login** (`/admin/login`)                          | ✅ Built — ⚠️ needs OTP step  | `POST /auth/admin/login` (+ `login/otp`) — now two-step OTP (`e97de75`, checklist C1) |
-| 2   | **Catalog — certificates list** (`/admin/catalog`)        | ✅ Built & committed          | `GET /admin/catalog`                                                                  |
-| 2b  | **Catalog — create / edit / deactivate**                  | ✅ Built — ⚠️ add card fields | `GET/POST/PATCH/DELETE /admin/catalog` (BE-I-04 fields now writable, checklist B8)    |
-| 2c  | **Catalog — title/description translations** (ar/fr)      | ✅ Built & committed          | `PATCH /admin/catalog/:id/translations`                                               |
-| 3   | **Users — list + student detail** (`/admin/users`)        | ✅ Built & committed          | `GET /admin/users`, `GET /admin/users/:id`                                            |
-| 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending)     | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                         |
-| 4   | **Curriculum (modules/lessons)**                          | ✅ Built (review pending)     | `GET /admin/certs/:id/curriculum` (all statuses) + existing module/lesson CRUD (B1)   |
-| 4b  | **Lesson-quiz authoring**                                 | ✅ Built (review pending)     | `/admin/lessons/:id/quizzes`, `/admin/quizzes/*` (BE-I-06, checklist B5)              |
-| 5   | **Exam authoring — list + lifecycle** (`/admin/exams`)    | ✅ Built & committed          | `GET/POST /admin/certs/:id/exams`, `PATCH/DELETE/publish/unpublish /admin/exams/:id`  |
-| 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built — ⚠️ show reasons[]  | `GET /admin/exams/:id`, `…/questions*`; publish `reasons[]` now available (B7)        |
-| 5c  | **Exam title translations** (ar/fr)                       | ✅ Built & committed          | `PATCH /admin/exams/:id/translations`                                                 |
-| 6   | **Exam assignment** (`/admin/exam`)                       | ✅ Built & committed          | `GET /admin/exam`, `POST /admin/exam/assign`                                          |
-| 7   | **Mock questions** (`/admin/mock`)                        | ✅ Built & committed          | `GET/POST/PATCH/DELETE /admin/mock*`                                                  |
-| 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed          | `GET /admin/audit-logs`                                                               |
-| 9   | **Certificate revocation**                                | ✅ Built (review pending)     | `GET /admin/certs/issued` + `PATCH /admin/certs/issued/:id/revoke` (B2)               |
-| 10  | **Admin staff management**                                | ✅ Built (review pending)     | `/admin/staff` (super_admin, BE-I-03, checklist B3)                                   |
-| 11  | **Promo codes**                                           | ✅ Built (review pending)     | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
-| 12  | **Dashboard metrics** (`/admin` home)                     | ✅ Built (review pending)     | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
+| #   | Admin page                                                | Status                          | Backend                                                                               |
+| --- | --------------------------------------------------------- | ------------------------------- | ------------------------------------------------------------------------------------- |
+| 1   | **Admin Login** (`/admin/login`)                          | ✅ Built — ⚠️ needs OTP step    | `POST /auth/admin/login` (+ `login/otp`) — now two-step OTP (`e97de75`, checklist C1) |
+| 2   | **Catalog — certificates list** (`/admin/catalog`)        | ✅ Built & committed            | `GET /admin/catalog`                                                                  |
+| 2b  | **Catalog — create / edit / deactivate**                  | ✅ Built (B8 card fields added) | `GET/POST/PATCH/DELETE /admin/catalog` (BE-I-04 card fields now editable, B8)         |
+| 2c  | **Catalog — title/description translations** (ar/fr)      | ✅ Built & committed            | `PATCH /admin/catalog/:id/translations`                                               |
+| 3   | **Users — list + student detail** (`/admin/users`)        | ✅ Built & committed            | `GET /admin/users`, `GET /admin/users/:id`                                            |
+| 3b  | **Users — attempts / access codes / revoke**              | ✅ Built (review pending)       | `/admin/users/:id/attempts`, `.../access-codes`, `.../revoke`                         |
+| 4   | **Curriculum (modules/lessons)**                          | ✅ Built (review pending)       | `GET /admin/certs/:id/curriculum` (all statuses) + existing module/lesson CRUD (B1)   |
+| 4b  | **Lesson-quiz authoring**                                 | ✅ Built (review pending)       | `/admin/lessons/:id/quizzes`, `/admin/quizzes/*` (BE-I-06, checklist B5)              |
+| 5   | **Exam authoring — list + lifecycle** (`/admin/exams`)    | ✅ Built & committed            | `GET/POST /admin/certs/:id/exams`, `PATCH/DELETE/publish/unpublish /admin/exams/:id`  |
+| 5b  | **Exam authoring — question editor** (`/admin/exams/:id`) | ✅ Built — ⚠️ show reasons[]    | `GET /admin/exams/:id`, `…/questions*`; publish `reasons[]` now available (B7)        |
+| 5c  | **Exam title translations** (ar/fr)                       | ✅ Built & committed            | `PATCH /admin/exams/:id/translations`                                                 |
+| 6   | **Exam assignment** (`/admin/exam`)                       | ✅ Built & committed            | `GET /admin/exam`, `POST /admin/exam/assign`                                          |
+| 7   | **Mock questions** (`/admin/mock`)                        | ✅ Built & committed            | `GET/POST/PATCH/DELETE /admin/mock*`                                                  |
+| 8   | **Audit logs** (`/admin/audit-logs`)                      | ✅ Built & committed            | `GET /admin/audit-logs`                                                               |
+| 9   | **Certificate revocation**                                | ✅ Built (review pending)       | `GET /admin/certs/issued` + `PATCH /admin/certs/issued/:id/revoke` (B2)               |
+| 10  | **Admin staff management**                                | ✅ Built (review pending)       | `/admin/staff` (super_admin, BE-I-03, checklist B3)                                   |
+| 11  | **Promo codes**                                           | ✅ Built (review pending)       | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
+| 12  | **Dashboard metrics** (`/admin` home)                     | ✅ Built (review pending)       | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
 
 **Page 12 — Admin dashboard analytics / B6 (uncommitted, awaiting review):**
 
@@ -964,6 +964,34 @@ doesn't (they're in `errors[]`), so the note was stale.
 > bundle or budgets. Use `npx ng build --configuration production` (or `build:uat`/
 > `build:test`) to check prod. Flagged for the team to confirm whether that change
 > was intentional.
+
+**Page 2b update — B8: catalog card fields (uncommitted, awaiting review):**
+
+Final admin-pivot item (BE-I-04). The `Create/UpdateCertificateDto` now accept
+five catalog-card fields — added to the admin-catalog form + data-access.
+
+- **`catalog.dto.ts`** — `CatalogItemDto` gains `badgeImageUrl`/`track`/`level`/
+  `durationHours`/`syllabusUrl` (all nullable, mirroring the backend response).
+- **`catalog.model.ts`** — `CERT_LEVELS` (`foundation`/`practitioner`/`authority`)
+  - `CertLevel`/`isCertLevel`; the fields added to `AdminCertificate` and to
+    `CertificateWritePayload` (dropped the stale "BE-I-04 fields not accepted" note).
+- **`catalog.mappers.ts`** — maps the five fields (`level` guarded → known enum or
+  null).
+- **`admin-catalog-form.page.ts`** — badge-URL + syllabus-URL (url inputs), track
+  (text), duration-hours (integer-validated text), and a **level `ios-select`**
+  (— None — / Foundation / Practitioner / Authority). Prefilled on edit; sent in
+  the write payload. Nullable strings + `level` send `null` to clear;
+  `durationHours` is **omitted when blank** (the backend coerces `null → 0`, so a
+  blank field preserves the value rather than clearing — documented limitation).
+- **`?active=false` filter:** re-checked — `AdminCatalogApi.list` passes it via
+  `toHttpParams` (stringifies the boolean) and the backend now parses it correctly
+  (`5133b4e`); **no client-side workaround existed**, so no code change needed.
+- **i18n:** new `admin.catalog.form.{badge,syllabus,track,duration,level}*` keys
+  (en/fr/ar; Arabic pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 known `prefer-ngsrc`
+  warnings) · production build ✓ (`npx ng build --configuration production`; gzip
+  initial 96.25 kB; known budget warning only). Live check needs a
+  content_creator/learning_admin session — deferred.
 
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
@@ -1365,12 +1393,16 @@ Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md))
    7e. ✅ **B7 — Exam publish `reasons[]`** — **built (uncommitted, awaiting review)**:
    the exam-authoring publish action now surfaces the failing publish-gate checks.
    See "Page 5 update — B7" below.
-   7f. ⏭️ **Next: B8** — add catalog card fields
-   (`badgeImageUrl`/`track`/`level`/`durationHours`/`syllabusUrl`) to
-   admin-catalog-form + re-test the `?active=false` filter.
-8. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
-   A2 Settings delete/export, C2 cookie consent.
-9. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
+   7f. ✅ **B8 — Catalog card fields** — **built (uncommitted, awaiting review)**:
+   added `badgeImageUrl`/`track`/`level`/`durationHours`/`syllabusUrl` to the
+   admin-catalog form + `catalog.dto/model/mappers`; `?active=false` needs no FE
+   change (no client-side workaround existed). See "Page 2b update — B8" below.
+
+**🎉 Section-B admin pivot is COMPLETE** (B1–B8 all built). Remaining backlog is
+user-facing: A6 Landing rewire, A7 Dashboard fold-in (`GET /exam/attempts`),
+A2 Settings delete/export, C2 cookie consent; and **C1 admin OTP login LAST**
+(core/auth change → architect + security review). 8. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),
+A2 Settings delete/export, C2 cookie consent. 9. **Admin OTP login** (C1) — last; it's a `core/auth` change needing security review.
 
 Still to wire regardless: **Courses/Learning** (`/learning/*`) and **Assessments/
 Mock** (exam + mock, incl. `/exam` and `/mock` WebSockets — highest complexity;

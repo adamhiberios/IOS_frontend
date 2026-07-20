@@ -1,19 +1,30 @@
 /* eslint-disable @typescript-eslint/unbound-method */
-import { ChangeDetectionStrategy, Component, type OnInit, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  type OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
-import { Button, Checkbox, Input as IosInput } from '@ui';
+import { Button, Checkbox, Input as IosInput, Select, type SelectOption } from '@ui';
 
 import { AdminCatalogApi } from '../data-access/catalog.api';
 import {
+  type CertLevel,
   type CertificateLocaleFields,
   type CertificateTranslationsPayload,
   type CertificateWritePayload,
 } from '../data-access/catalog.model';
+
+/** Integer string (estimated study hours). */
+const INT_PATTERN = /^\d+$/;
 
 /** Decimal money string with up to 2 fraction digits (mirrors backend price). */
 const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
@@ -26,13 +37,13 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
  * `AdminCatalogApi` directly (a one-shot form, no shared list state); on success
  * it returns to the list, which reloads on entry.
  *
- * Fields mirror the backend `CreateCertificateDto` exactly — the catalog-card
- * extras (`badgeImageUrl`, `track`, `level`, `durationHours`, `syllabusUrl`) and
- * translations are intentionally absent (backend BE-I-04).
+ * Fields mirror the backend `CreateCertificateDto` — including the catalog-card
+ * metadata (`badgeImageUrl`, `track`, `level`, `durationHours`, `syllabusUrl`,
+ * BE-I-04). Per-locale translations are edited via a separate dialog.
  */
 @Component({
   selector: 'ios-admin-catalog-form-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Button, Checkbox],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, Button, Checkbox, Select],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -126,6 +137,49 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
             type="url"
             [control]="form.controls.thumbnailUrl"
             [placeholder]="lang.t('admin.catalog.form.thumbnailPlaceholder')"
+          />
+
+          <!-- Catalog-card metadata (BE-I-04) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <ios-input
+              id="cert-badge"
+              [label]="lang.t('admin.catalog.form.badgeLabel')"
+              type="url"
+              [control]="form.controls.badgeImageUrl"
+              [placeholder]="lang.t('admin.catalog.form.badgePlaceholder')"
+            />
+            <ios-input
+              id="cert-syllabus"
+              [label]="lang.t('admin.catalog.form.syllabusLabel')"
+              type="url"
+              [control]="form.controls.syllabusUrl"
+              [placeholder]="lang.t('admin.catalog.form.syllabusPlaceholder')"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <ios-input
+              id="cert-track"
+              [label]="lang.t('admin.catalog.form.trackLabel')"
+              [control]="form.controls.track"
+              [placeholder]="lang.t('admin.catalog.form.trackPlaceholder')"
+            />
+            <ios-input
+              id="cert-duration"
+              [label]="lang.t('admin.catalog.form.durationLabel')"
+              [control]="form.controls.durationHours"
+              [placeholder]="lang.t('admin.catalog.form.durationPlaceholder')"
+              [errorText]="
+                hasError('durationHours') ? lang.t('admin.catalog.form.durationError') : ''
+              "
+            />
+          </div>
+
+          <ios-select
+            id="cert-level"
+            [label]="lang.t('admin.catalog.form.levelLabel')"
+            [options]="levelOptions()"
+            [control]="form.controls.level"
           />
 
           <ios-checkbox
@@ -313,7 +367,20 @@ export class AdminCatalogFormPage implements OnInit {
       validators: [Validators.maxLength(500)],
     }),
     active: this.fb.control(true),
+    // Catalog-card metadata (BE-I-04).
+    badgeImageUrl: this.fb.control('', { validators: [Validators.maxLength(500)] }),
+    track: this.fb.control('', { validators: [Validators.maxLength(100)] }),
+    level: this.fb.control(''),
+    durationHours: this.fb.control('', { validators: [Validators.pattern(INT_PATTERN)] }),
+    syllabusUrl: this.fb.control('', { validators: [Validators.maxLength(500)] }),
   });
+
+  protected readonly levelOptions = computed<SelectOption[]>(() => [
+    { value: '', label: this.lang.t('admin.catalog.form.levelNone') },
+    { value: 'foundation', label: this.lang.t('admin.catalog.form.levelFoundation') },
+    { value: 'practitioner', label: this.lang.t('admin.catalog.form.levelPractitioner') },
+    { value: 'authority', label: this.lang.t('admin.catalog.form.levelAuthority') },
+  ]);
 
   protected readonly translationsForm = this.fb.group({
     arTitle: this.fb.control('', { validators: [Validators.maxLength(255)] }),
@@ -332,7 +399,9 @@ export class AdminCatalogFormPage implements OnInit {
     }
   }
 
-  protected hasError = (controlName: 'title' | 'programCode' | 'price' | 'currency'): boolean => {
+  protected hasError = (
+    controlName: 'title' | 'programCode' | 'price' | 'currency' | 'durationHours',
+  ): boolean => {
     const control = this.form.controls[controlName];
     return control.invalid && control.touched;
   };
@@ -350,6 +419,11 @@ export class AdminCatalogFormPage implements OnInit {
         description: cert.description ?? '',
         thumbnailUrl: cert.thumbnailUrl ?? '',
         active: cert.active,
+        badgeImageUrl: cert.badgeImageUrl ?? '',
+        track: cert.track ?? '',
+        level: cert.level ?? '',
+        durationHours: cert.durationHours != null ? String(cert.durationHours) : '',
+        syllabusUrl: cert.syllabusUrl ?? '',
       });
       this.certTranslations.set(cert.translations);
     } catch (err) {
@@ -461,6 +535,11 @@ export class AdminCatalogFormPage implements OnInit {
     const description = v.description.trim();
     const thumbnailUrl = v.thumbnailUrl.trim();
     const currency = v.currency.trim();
+    const badgeImageUrl = v.badgeImageUrl.trim();
+    const track = v.track.trim();
+    const syllabusUrl = v.syllabusUrl.trim();
+    const durationHours = v.durationHours.trim();
+    const level = v.level;
     return {
       title: v.title.trim(),
       programCode: v.programCode.trim(),
@@ -469,6 +548,13 @@ export class AdminCatalogFormPage implements OnInit {
       description: description ? description : null,
       thumbnailUrl: thumbnailUrl ? thumbnailUrl : null,
       active: v.active,
+      badgeImageUrl: badgeImageUrl ? badgeImageUrl : null,
+      track: track ? track : null,
+      syllabusUrl: syllabusUrl ? syllabusUrl : null,
+      level: level ? (level as CertLevel) : null,
+      // Omit when blank — the backend coerces null → 0, so a blank field
+      // preserves the existing value rather than clearing it.
+      ...(durationHours ? { durationHours: Number(durationHours) } : {}),
     };
   }
 }

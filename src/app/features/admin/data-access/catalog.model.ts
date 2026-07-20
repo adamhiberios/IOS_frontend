@@ -1,3 +1,12 @@
+/** Certification mastery tier (`CertLevel`). */
+export const CERT_LEVELS = ['foundation', 'practitioner', 'authority'] as const;
+export type CertLevel = (typeof CERT_LEVELS)[number];
+
+/** True when `value` is a known cert level. */
+export function isCertLevel(value: string | null): value is CertLevel {
+  return value !== null && (CERT_LEVELS as readonly string[]).includes(value);
+}
+
 /**
  * Frontend domain model for admin catalog (certificates). Trimmed from the DTO
  * to the fields the admin UI actually renders; i18n-resolution hints
@@ -14,6 +23,12 @@ export interface AdminCertificate {
   readonly currency: string;
   readonly thumbnailUrl: string | null;
   readonly active: boolean;
+  // Catalog-card metadata (BE-I-04).
+  readonly badgeImageUrl: string | null;
+  readonly track: string | null;
+  readonly level: CertLevel | null;
+  readonly durationHours: number | null;
+  readonly syllabusUrl: string | null;
   readonly createdAt: string;
   readonly updatedAt: string;
 }
@@ -43,13 +58,11 @@ export type ActiveFilter = boolean | undefined;
 
 /**
  * Body for create (`POST /admin/catalog`) and update (`PATCH /admin/catalog/:id`).
- * Mirrors the backend `CreateCertificateDto` / `UpdateCertificateDto`.
- *
- * NOTE (backend BE-I-04): the backend DTOs do **not** accept `badgeImageUrl`,
- * `track`, `level`, `durationHours` or `syllabusUrl` — with `forbidNonWhitelisted`
- * the server 400s on any extra key — so those catalog-card fields are not
- * editable here and are intentionally absent. Translations are managed via a
- * separate endpoint and are out of scope for this form.
+ * Mirrors the backend `CreateCertificateDto` / `UpdateCertificateDto`, including
+ * the catalog-card metadata (BE-I-04). Nullable fields send `null` to clear;
+ * `durationHours` is omitted when blank (the backend coerces `null → 0`, so it
+ * can't be cleared to null via the form — a blank field preserves the value).
+ * Translations are managed via a separate endpoint (out of scope for this form).
  */
 export interface CertificateWritePayload {
   readonly title: string;
@@ -59,6 +72,11 @@ export interface CertificateWritePayload {
   readonly description?: string | null;
   readonly thumbnailUrl?: string | null;
   readonly active?: boolean;
+  readonly badgeImageUrl?: string | null;
+  readonly track?: string | null;
+  readonly level?: CertLevel | null;
+  readonly durationHours?: number;
+  readonly syllabusUrl?: string | null;
 }
 
 /** Query for `GET /admin/catalog`. Mirrors the backend `CatalogQueryDto`. */
