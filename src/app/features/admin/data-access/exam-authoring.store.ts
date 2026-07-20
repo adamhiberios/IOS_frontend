@@ -1,12 +1,28 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-import { problemDetailMessage } from '@core/http';
+import { type ProblemDetails, problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 
 import { AdminCatalogApi } from './catalog.api';
 import { AdminExamAuthoringApi } from './exam-authoring.api';
 import { type AdminExam, type ExamDraft } from './exam-authoring.model';
+
+/**
+ * Extract the publish-gate `reasons[]` from a `409 EXAM_NOT_PUBLISHABLE` body
+ * (BE-I-14): each check lands in the RFC-7807 `errors[]` array as
+ * `{ code: 'NOT_PUBLISHABLE', message }`. Returns the non-empty messages, or `[]`.
+ */
+function publishReasonsFrom(err: unknown): readonly string[] {
+  if (!(err instanceof HttpErrorResponse)) return [];
+  const body = err.error as ProblemDetails | null;
+  const errors = body?.errors;
+  if (!errors) return [];
+  return errors
+    .map((e) => e.message)
+    .filter((m): m is string => typeof m === 'string' && m.trim().length > 0);
+}
 
 /** Certs offered in the picker (backend max page size). */
 const CERT_PICKER_LIMIT = 100;
@@ -41,6 +57,8 @@ export class AdminExamAuthoringStore {
   private readonly _error = signal<string | null>(null);
   private readonly _actionPendingId = signal<string | null>(null);
   private readonly _actionError = signal<string | null>(null);
+  /** Publish-gate failure reasons (BE-I-14), shown alongside the generic error. */
+  private readonly _publishReasons = signal<readonly string[]>([]);
 
   readonly certs = this._certs.asReadonly();
   readonly certsLoading = this._certsLoading.asReadonly();
@@ -53,6 +71,7 @@ export class AdminExamAuthoringStore {
   readonly error = this._error.asReadonly();
   readonly actionPendingId = this._actionPendingId.asReadonly();
   readonly actionError = this._actionError.asReadonly();
+  readonly publishReasons = this._publishReasons.asReadonly();
   readonly isEmpty = computed(
     () =>
       this._certId() !== null &&
@@ -90,6 +109,7 @@ export class AdminExamAuthoringStore {
     this._exams.set([]);
     this._error.set(null);
     this._actionError.set(null);
+    this._publishReasons.set([]);
     if (next !== null) await this.load();
   }
 
@@ -118,6 +138,7 @@ export class AdminExamAuthoringStore {
     if (this._actionPendingId() !== null) return false;
     this._actionPendingId.set(id ?? 'new');
     this._actionError.set(null);
+    this._publishReasons.set([]);
     try {
       if (id) {
         await firstValueFrom(this.api.update(id, draft));
@@ -137,12 +158,30 @@ export class AdminExamAuthoringStore {
   }
 
   /**
-   * Publish a draft exam, then refresh. On the publish-gate failure the backend
-   * returns a generic message (the structured `reasons[]` are dropped by its
-   * exception filter — see BE-I-14), surfaced here as {@link actionError}.
+   * Publish a draft exam, then refresh. On a publish-gate failure the backend
+   * returns `409 EXAM_NOT_PUBLISHABLE` with the failing checks in the RFC-7807
+   * `errors[]` (BE-I-14) — captured into {@link publishReasons} so the page can
+   * list exactly which checks failed (the generic message stays in
+   * {@link actionError}).
    */
   async publish(id: string): Promise<boolean> {
-    return this.runRowAction(id, () => firstValueFrom(this.api.publish(id)));
+    if (this._actionPendingId() !== null) return false;
+    this._actionPendingId.set(id);
+    this._actionError.set(null);
+    this._publishReasons.set([]);
+    try {
+      await firstValueFrom(this.api.publish(id));
+      await this.load();
+      return true;
+    } catch (err) {
+      this._publishReasons.set(publishReasonsFrom(err));
+      this._actionError.set(
+        problemDetailMessage(err) ?? this.lang.t('admin.examAuthoring.actionError'),
+      );
+      return false;
+    } finally {
+      this._actionPendingId.set(null);
+    }
   }
 
   /** Revert a published exam to draft, then refresh (learning_admin). */
@@ -158,12 +197,14 @@ export class AdminExamAuthoringStore {
   /** Clear a lingering row/form-action error (e.g. when a dialog closes). */
   clearActionError(): void {
     this._actionError.set(null);
+    this._publishReasons.set([]);
   }
 
   private async runRowAction(id: string, action: () => Promise<unknown>): Promise<boolean> {
     if (this._actionPendingId() !== null) return false;
     this._actionPendingId.set(id);
     this._actionError.set(null);
+    this._publishReasons.set([]);
     try {
       await action();
       await this.load();

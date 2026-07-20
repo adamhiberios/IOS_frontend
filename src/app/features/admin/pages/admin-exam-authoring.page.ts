@@ -213,9 +213,21 @@ const required: ValidatorFn = (control) => Validators.required(control);
         </div>
 
         @if (store.actionError() && !dialogOpen() && !pendingDelete()) {
-          <p class="text-sm text-red-600 mt-3 text-center" role="alert">
-            {{ store.actionError() }}
-          </p>
+          <div class="mt-3" role="alert">
+            <p class="text-sm text-red-600 text-center">{{ store.actionError() }}</p>
+            @if (store.publishReasons().length) {
+              <div class="mt-2 mx-auto max-w-xl rounded-lg border border-red-200 bg-red-50 p-3">
+                <p class="text-xs font-semibold text-red-700">
+                  {{ lang.t('admin.examAuthoring.notPublishable') }}
+                </p>
+                <ul class="mt-1 ps-4 list-disc text-xs text-red-700 flex flex-col gap-0.5">
+                  @for (reason of store.publishReasons(); track reason) {
+                    <li>{{ reason }}</li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
         }
       }
 

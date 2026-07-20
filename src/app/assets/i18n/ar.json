@@ -2984,6 +2984,7 @@
       "statusDraft": "مسودة",
       "statusPublished": "منشور",
       "needsQuestions": "أضِف أسئلة للنشر",
+      "notPublishable": "لا يمكن نشر هذا الاختبار بعد:",
       "minutes": "دقيقة",
       "questions": "الأسئلة",
       "edit": "تعديل",

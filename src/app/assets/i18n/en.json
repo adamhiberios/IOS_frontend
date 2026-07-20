@@ -2984,6 +2984,7 @@
       "statusDraft": "Draft",
       "statusPublished": "Published",
       "needsQuestions": "add questions to publish",
+      "notPublishable": "This exam can't be published yet:",
       "minutes": "min",
       "questions": "Questions",
       "edit": "Edit",

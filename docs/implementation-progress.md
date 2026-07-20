@@ -937,6 +937,34 @@ createdAt/updatedAt/questions[]`), `QuizQuestion` (`questionText`,
   `admin-lesson-quizzes-page` chunk 5.70 kB gzip). Live check needs a real
   content_creator/learning_admin session — deferred (no admin creds in-session).
 
+**Page 5 update — B7: exam publish `reasons[]` (uncommitted, awaiting review):**
+
+Small fix (BE-I-14). The publish gate returns `409 EXAM_NOT_PUBLISHABLE` with the
+failing checks in the RFC-7807 `errors[]` (each `{ code:'NOT_PUBLISHABLE',
+message }`) — these are now surfaced instead of only the generic "not publishable"
+message. The earlier note claimed the exception filter dropped `reasons[]`; it
+doesn't (they're in `errors[]`), so the note was stale.
+
+- **`exam-authoring.store.ts`** — a local `publishReasonsFrom(err)` reads the
+  `errors[].message` list from the 409 body (kept **in-feature**, not added to
+  `@core/http`, to avoid a protected-file change per CLAUDE.md §13). `publish()`
+  captures them into a new `publishReasons` signal (cleared by every other action
+  - `clearActionError`/`setCert`/`save`).
+- **`admin-exam-authoring.page.ts`** — when a publish fails, the generic error is
+  followed by a bulleted list of the exact failing checks.
+- **i18n:** `admin.examAuthoring.notPublishable` (en/fr/ar; Arabic pending review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 known `prefer-ngsrc`
+  warnings) · production build ✓ (`npx ng build --configuration production`; gzip
+  initial 96.25 kB; known raw-size budget warning only). Live check needs a
+  content_creator/learning_admin session — deferred.
+
+> **Build-script note (not a B5/B7 change):** `package.json`'s `build` script is
+> currently `ng build --configuration development` (committed outside this
+> session), so plain `npm run build` no longer produces/verifies the **production**
+> bundle or budgets. Use `npx ng build --configuration production` (or `build:uat`/
+> `build:test`) to check prod. Flagged for the team to confirm whether that change
+> was intentional.
+
 **Page 2c — Catalog translations (uncommitted, awaiting review):**
 
 - Completes the catalog form's deferred translations piece (`catalog.model.ts`
@@ -1334,8 +1362,10 @@ Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md))
    7d. ✅ **B5 — Lesson-quiz authoring** (under the B1 curriculum page) — **built
    (uncommitted, awaiting review)**: `/admin/lessons/:id/quizzes`, quiz + question
    (MCQ/free-text) CRUD. See "Page 4b — Lesson-quiz authoring / B5".
-   7e. ⏭️ **Next: small B7/B8** — B7 surface exam publish `reasons[]` in
-   admin-exam-questions; B8 add catalog card fields
+   7e. ✅ **B7 — Exam publish `reasons[]`** — **built (uncommitted, awaiting review)**:
+   the exam-authoring publish action now surfaces the failing publish-gate checks.
+   See "Page 5 update — B7" below.
+   7f. ⏭️ **Next: B8** — add catalog card fields
    (`badgeImageUrl`/`track`/`level`/`durationHours`/`syllabusUrl`) to
    admin-catalog-form + re-test the `?active=false` filter.
 8. **Then user-facing:** A6 Landing, A7 Dashboard fold-in (`GET /exam/attempts`),

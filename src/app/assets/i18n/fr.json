@@ -2984,6 +2984,7 @@
       "statusDraft": "Brouillon",
       "statusPublished": "Publié",
       "needsQuestions": "ajoutez des questions pour publier",
+      "notPublishable": "Cet examen ne peut pas encore être publié :",
       "minutes": "min",
       "questions": "Questions",
       "edit": "Modifier",
