@@ -84,7 +84,16 @@
 - **BE-I-09** — Two overlapping "list exams for a cert" endpoints (assign vs
   authoring) — pick per screen.
 - **BE-I-10** — `GET /health` is at the bare origin; `/health/full` is under `/api/v1`.
-- **BE-I-11** — `BlogArticle` still has no controller (dead/planned surface).
+- **BE-I-11** — ✅ **RESOLVED (`334d0c6`, 2026-07-14→).** `BlogArticle` now has a
+  full `BlogModule`: public `GET /blog` + `GET /blog/:slug` (SEO) and admin
+  `admin/blog` CRUD + publish/unpublish/translations (content_creator/
+  learning_admin; publish/delete = learning_admin). Was the last dead surface —
+  now buildable (public blog rewire + admin Blog authoring page). See
+  `backend-analysis.md` → "Blog endpoints (BE-I-11)".
+- **Week-9 i18n (`be902fe`/`d67d7ff`, 2026-07-14→)** — backend `SUPPORTED_LOCALES`
+  expanded to `en/tr/fr/es/ar/de`; validation errors + emails are now localized by
+  `X-Lang`. No FE break (app UI stays en/fr/ar; the extra locales are authoring
+  targets in the translation editors).
 
 ---
 

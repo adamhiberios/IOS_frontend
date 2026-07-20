@@ -1,14 +1,25 @@
 # Implementation Progress — IOS LMS Frontend ↔ Real Backend
 
 > **Single source of truth for implementation progress.** Updated continuously.
-> Last updated: 2026-07-16.
+> Last updated: 2026-07-20.
 
 ---
 
+> **2026-07-20 — Admin pivot COMPLETE.** The whole admin app (**B1–B8**) is built
+> and committed on `feat/real-backend-integration` (B6 `9559ec1`, B1 `7268d26`,
+> B2 `451af2a`, B3 `6f09077`, B4 `3ea7e28`, B5 `0d95e6e` + restyle `d1ce3e8`,
+> B7 `0db202e`, B8 `9b18571`). **New backend surface to build next:** the
+> **Blog module (BE-I-11, `334d0c6`)** — a public-blog rewire + a new admin Blog
+> page (see [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md) →
+> Status). Also note **Week-9 i18n** (`be902fe`/`d67d7ff`): backend locales now
+> `en/tr/fr/es/ar/de` and validation/emails localized by `X-Lang` — the app UI
+> stays en/fr/ar. Build script was switched to dev config (`f5e8caa`) — use
+> `npx ng build --configuration production` to verify prod bundles/budgets.
+
 ## Overall project status
 
-**Phase 3 (Admin application) — COMPLETE** for every backend surface that existed
-at the time. **Phase 4 (user-facing app ↔ real backend) — in progress.** Backend
+**Phase 3 (Admin application) — COMPLETE**, including the full section-B admin
+pivot (B1–B8). **Phase 4 (user-facing app ↔ real backend) — in progress.** Backend
 fully analysed (Phase 1, see [`backend-analysis.md`](./backend-analysis.md)); auth
 wired (Phase 2).
 

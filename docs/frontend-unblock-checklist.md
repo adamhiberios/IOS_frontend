@@ -9,27 +9,42 @@
 > `problemDetailMessage`.
 > Created 2026-07-13.
 
-## Status (updated 2026-07-16) — pivot to admin pages
+## Status (updated 2026-07-20) — admin pivot COMPLETE
 
-**Done (user-facing):** **A1** avatar upload (committed), **A3** earned-certificates
-list → new `features/credentials` at `/dashboard/credentials` (committed), **A4**
-notifications feed + navbar unread badge (committed), **A5** student insights →
-surfaced on the **Dashboard overview only** via `features/dashboard/data-access/
-insights.*` (no standalone page; **A5 staged, not yet committed**).
+**Done (user-facing):** **A1** avatar upload, **A3** earned-certificates list
+(`features/credentials`), **A4** notifications + navbar badge, **A5** student
+insights (Dashboard overview) — all committed.
 
-**Now prioritized — Admin pages (section B), backend-ready but not in the UI:**
-build in this order — **B6 analytics dashboard** → **B1 Curriculum** → **B2 Cert
-revocation** → **B3 Staff** → **B4 Promo codes** → **B5 lesson-quiz** → small
-fixes **B7/B8**. See the reworked "Suggested order" at the bottom.
+**✅ Admin pages (section B) — ALL BUILT & COMMITTED** on
+`feat/real-backend-integration`: **B6** dashboard analytics (`9559ec1`), **B1**
+curriculum (`7268d26`), **B2** cert revocation (`451af2a`), **B3** staff
+(`6f09077`), **B4** promo codes (`3ea7e28`), **B5** lesson-quiz (`0d95e6e`, restyle
+`d1ce3e8`), **B7** publish `reasons[]` (`0db202e`), **B8** catalog card fields
+(`9b18571`).
 
-**Still pending (user-facing, after admin):** **A6** Landing rewire (`GET /landing`),
-**A7** Dashboard fold-in (`GET /exam/attempts` + richer `/insights` composition),
-**A2** Settings delete/export, **C2** cookie consent, **C1** admin OTP login (last).
+**🆕 New backend surface (post-2026-07-14) — NOT yet in the UI:** **BE-I-11 Blog
+module** shipped (`334d0c6`). Two new FE items:
 
-**Later BE changes to honour (post-2026-07-13):** exam domain-state conflicts now
-return **409** (not 422/400) — `5c11460`; still key off `code`, not status. Audit
-capture hardened (`f78e76b`, no FE impact); `/health` debug-sentry gated to dev
-(`a0d2409`, no FE impact).
+- **Blog-public rewire** — `features/insights` public blog (its `getPosts()`
+  currently returns `null`) → `GET /blog` (`{data,meta.pagination}`, cursor) +
+  `GET /blog/:slug` (detail + `seo`). Public, localized by `X-Lang`.
+- **Blog-admin** (new page) — `admin/blog` CRUD + publish/unpublish/translations
+  (content_creator/learning_admin; publish/delete = learning_admin). Same
+  data-access + authoring-dialog patterns as the B-pages. See
+  [`backend-analysis.md` → "Blog endpoints (BE-I-11)"](./backend-analysis.md).
+
+**Still pending (user-facing):** **A6** Landing rewire (`GET /landing`), **A7**
+Dashboard fold-in (`GET /exam/attempts` + richer `/insights`), **A2** Settings
+delete/export, **C2** cookie consent, **C1** admin OTP login (LAST — `core/auth`,
+security review).
+
+**Later BE changes to honour:** exam domain-state conflicts return **409** (not
+422/400) — `5c11460`; key off `code`, not status. **Week-9 i18n** (`be902fe`/
+`d67d7ff`): backend `SUPPORTED_LOCALES = en/tr/fr/es/ar/de`, and validation errors
+
+- emails now localized by `X-Lang` — app UI stays **en/fr/ar**; the extra backend
+  locales are authoring targets only. Audit hardening (`f78e76b`) / health-sentry
+  gating (`a0d2409`) / dep bumps (`f639a85`) — no FE impact.
 
 ## Backend commits mapped to blockers
 
@@ -238,27 +253,27 @@ graduatesCount / insightPosts` shape (those have no backend — keep static or d
 
 ---
 
-## Suggested order (updated 2026-07-16 — admin-first)
+## Suggested order (updated 2026-07-20)
 
-**✅ Done:** A1, A3, A4, A5 (A5 staged, not committed). See the Status section at top.
+**✅ Done & committed:** A1, A3, A4, A5 (user-facing) and **B1–B8** (entire admin
+app). See the Status section at top for the commit map.
 
-**▶ Now — Admin app (section B), all backend-ready:**
+**▶ Next — new backend surface (BE-I-11 Blog, `334d0c6`):**
 
-1. **B6 — Admin dashboard analytics** (`GET /admin/dashboard/overview`) — wire the
-   admin home KPIs + revenue chart; gate to super_admin / finance_admin. Full DTO
-   shape in [`backend-analysis.md` → "Endpoints added"](./backend-analysis.md). A
-   chart lib is already in the bundle (apexcharts) — reuse the admin patterns.
-2. **B1 — Curriculum** (`GET /admin/certs/:id/curriculum`) — list/edit modules +
-   lessons (all statuses, full fields); existing module/lesson CRUD already wired.
-3. **B2 — Certificate revocation** (`GET /admin/certs/issued` + existing revoke).
-4. **B3 — Admin staff** (`/admin/staff`, super_admin only).
-5. **B4 — Promo codes** (`/admin/promo-codes`, super/finance admin).
-6. **B5 — Lesson-quiz authoring** (under the B1 curriculum page).
-7. **B7 / B8 — small fixes** — surface exam publish `reasons[]`; add catalog card
-   fields (`badgeImageUrl`/`track`/`level`/`durationHours`/`syllabusUrl`) + re-test
-   the `?active=false` filter.
+1. **Blog-public rewire** — `features/insights` public blog → `GET /blog` (cursor)
+   - `GET /blog/:slug` (detail + `seo`). Replace the `getPosts()`→null fallback
+     with a real `landing`/`insights` data-access layer. Public, `X-Lang`-localized.
+2. **Blog-admin** (new page) — `admin/blog` CRUD + publish/unpublish + per-locale
+   translations. Reuse the admin data-access + authoring-dialog patterns (dto →
+   model → mappers → api → store; content_creator/learning_admin, publish/delete =
+   learning_admin). Endpoints: [`backend-analysis.md` → "Blog endpoints (BE-I-11)"](./backend-analysis.md).
 
-**Then — remaining user-facing:** A6 Landing rewire, A7 Dashboard fold-in
-(`GET /exam/attempts` + `/insights`), A2 Settings delete/export, C2 cookie consent.
+**Then — remaining user-facing:** A6 Landing rewire (`GET /landing`), A7 Dashboard
+fold-in (`GET /exam/attempts` + `/insights`), A2 Settings delete/export, C2 cookie
+consent.
 
 **Last — C1 Admin OTP login** (`core/auth` change; architect + security review).
+
+> **i18n note:** the backend now supports `en/tr/fr/es/ar/de`, but the app UI ships
+> **en/fr/ar**. Translation editors (catalog/exam/blog) author against backend
+> locales; keep the UI locale set at en/fr/ar unless the SOW changes.
