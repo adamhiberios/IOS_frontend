@@ -26,3 +26,4 @@ export { BulletStepList } from './bullet-step-list/bullet-step-list';
 export { BarChart } from './bar-chart/bar-chart';
 export { LineChart } from './line-chart/line-chart';
 export { DonutChart } from './donut-chart/donut-chart';
+export { RichText } from './rich-text/rich-text';

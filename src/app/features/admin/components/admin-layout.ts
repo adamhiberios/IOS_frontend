@@ -75,6 +75,12 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
     roles: ['finance_admin', 'support_admin'],
   },
   {
+    labelKey: 'admin.shell.nav.blog',
+    route: '/admin/blog',
+    exact: false,
+    roles: ['content_creator', 'learning_admin'],
+  },
+  {
     labelKey: 'admin.shell.nav.audit',
     route: '/admin/audit-logs',
     exact: false,

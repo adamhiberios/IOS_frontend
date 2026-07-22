@@ -810,7 +810,11 @@
     "search": {
       "placeholder": "Search articles..."
     },
-    "loadMore": "Load more"
+    "loadMore": "Load more",
+    "empty": "No articles found.",
+    "loadError": "We couldn't load the articles. Please try again.",
+    "retry": "Try again",
+    "minRead": "{count} min read"
   },
   "insight": {
     "detail": {
@@ -2454,7 +2458,8 @@
         "issuedCerts": "Certificate revocation",
         "staff": "Staff",
         "promo": "Promo codes",
-        "audit": "Audit logs"
+        "audit": "Audit logs",
+        "blog": "Blog"
       }
     },
     "home": {
@@ -3069,6 +3074,60 @@
       "translationsHint": "Translate the exam title shown to students. Leave a field blank to keep the current value; English uses the exam’s main title.",
       "canonicalLabel": "English (canonical)",
       "translationsError": "Couldn’t save translations. Please try again."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Author, translate, and publish blog articles.",
+      "new": "New article",
+      "filterStatus": "Status",
+      "allStatuses": "All statuses",
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search by English title…",
+      "error": "We couldn't load the articles. Please try again.",
+      "saveError": "We couldn't save your changes. Please try again.",
+      "detailError": "We couldn't load this article. Please try again.",
+      "retry": "Try again",
+      "loading": "Loading articles…",
+      "empty": "No articles yet.",
+      "loadMore": "Load more",
+      "colTitle": "Title",
+      "colStatus": "Status",
+      "colAuthor": "Author",
+      "colUpdated": "Updated",
+      "colActions": "Actions",
+      "status": {
+        "draft": "Draft",
+        "published": "Published",
+        "archived": "Archived"
+      },
+      "edit": "Edit",
+      "translations": "Translations",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "archive": "Archive",
+      "createTitle": "New article",
+      "editTitle": "Edit article",
+      "titleLabel": "Title (English)",
+      "titlePlaceholder": "e.g. What is Scrum?",
+      "slugLabel": "Slug",
+      "slugPlaceholder": "Auto-generated from the title if left blank",
+      "slugLocked": "The slug is locked once an article is published (SEO URLs must not move).",
+      "metaLabel": "Meta description (English)",
+      "metaPlaceholder": "Short excerpt used on cards and for SEO",
+      "contentLabel": "Content (English)",
+      "contentPlaceholder": "<h2>Heading</h2><p>Paragraph…</p>",
+      "contentHint": "HTML is sanitized before it is shown to readers.",
+      "formError": "Please fill in the required fields.",
+      "cancel": "Cancel",
+      "save": "Save",
+      "translationsHint": "Per-locale content. Empty locales are left unchanged. Article:",
+      "archiveTitle": "Archive article?",
+      "archiveBody": "This hides the article from the public blog. You can republish it later. Article:",
+      "slugError": "Use lowercase letters, numbers and hyphens only (e.g. what-is-scrum).",
+      "contentError": "Content is required.",
+      "trTitleLabel": "Title",
+      "trMetaLabel": "Meta description",
+      "trContentLabel": "Content"
     }
   }
 }

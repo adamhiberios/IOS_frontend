@@ -669,10 +669,56 @@ issuance flows (e.g. the verification and reset **links** point at the
 | BE-I-18 | ✅ Resolved        | `181cd9f`            | Build Notifications (A4).                                            |
 | BE-I-19 | ✅ Resolved        | `65bf4e8`            | Wire delete-account + export (A2).                                   |
 | BE-I-20 | ✅ Resolved        | `1515dff`            | Build Insights + rewire Landing (A5, A6).                            |
+| BE-I-21 | ⛔ **Open (bug)**  | —                    | **Blog `POST /admin/blog` always 404s + rolls back** — see below.    |
 
 **Also new (not original issues):** two-step admin **OTP login** (`e97de75`,
 checklist C1) and **GDPR cookie consent** (`65bf4e8`, checklist C2); catalog
 `?active=false` parse fix (`5133b4e`, B8).
+
+#### BE-I-21 — ⛔ Blog `POST /admin/blog` always fails with 404 "Article not found" (read-after-write across two connections)
+
+**Severity: High — blog article creation is impossible; every attempt 404s and persists nothing.**
+
+Discovered 2026-07-20 while testing the new admin Blog page (BLOG-ADMIN). Creating
+an article returns `404 { code: RESOURCE_NOT_FOUND?, detail: "Article not found" }`
+and the row is never saved (the public/admin lists stay empty).
+
+**Root cause** — a read-after-write that straddles two DB connections inside one
+uncommitted transaction:
+
+1. `RlsInterceptor` (`src/common/interceptors/rls.interceptor.ts`) opens a
+   transaction on a dedicated **RLS query-runner** (`startTransaction`, ~L68),
+   runs the route handler, and **commits only _after_ the handler returns** (~L90).
+2. `BlogService.create()` (`src/modules/blog/blog.service.ts`) INSERTs through that
+   runner (`requireRunner(rlsRunner).manager.getRepository(...)`), then ends with
+   `return this.getAdminById(saved.id)`.
+3. `getAdminById()` reads via `this.blogs` — the **default connection pool**, a
+   _different_ connection. Under READ COMMITTED, that connection cannot see the
+   runner's still-uncommitted INSERT, so `findOne` returns `null` →
+   `throw new NotFoundException('Article not found')`.
+4. That thrown error propagates to the interceptor's `catch`, which
+   `rollbackTransaction()`s (~L94) — undoing the INSERT. Hence the 404 **and** the
+   empty list.
+
+`update()` / `updateTranslations()` / `publish()` / `unpublish()` share the same
+final `return this.getAdminById(id)` read-back on the default pool. They don't 404
+(the row already exists on the default pool from a prior committed request) but
+their **response body is stale** — it reflects the pre-write state, since the
+in-flight change is still uncommitted on the runner. Only `create` is fatal.
+
+**Suggested backend fix (one of):**
+
+- Build the response DTO from the entity already in hand instead of re-querying —
+  `create` already has `saved` from `repo.save(...)`; return
+  `this.toAdminDetail(saved)` (load the `author` relation via the runner if needed).
+- Or route the read-back through the **same `rlsRunner`** (pass the runner into a
+  runner-aware `getAdminById`) so it sees the pending write.
+
+**Frontend status:** no workaround possible — the write genuinely rolls back, so
+the article cannot be created until the backend is fixed. The FE request is
+correct (verified payload, id handling, and the Quill editor output). BLOG-ADMIN
+create/edit and, transitively, any end-to-end test of the public blog rewire
+(BLOG-PUBLIC) are **blocked** on this.
 
 ### Endpoints added 2026-07-13 (blocker fixes)
 

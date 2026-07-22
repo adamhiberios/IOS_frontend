@@ -810,7 +810,11 @@
     "search": {
       "placeholder": "Rechercher des articles..."
     },
-    "loadMore": "Charger plus"
+    "loadMore": "Charger plus",
+    "empty": "Aucun article trouvé.",
+    "loadError": "Impossible de charger les articles. Veuillez réessayer.",
+    "retry": "Réessayer",
+    "minRead": "{count} min de lecture"
   },
   "insight": {
     "detail": {
@@ -2454,7 +2458,8 @@
         "issuedCerts": "Révocation de certificat",
         "staff": "Personnel",
         "promo": "Codes promo",
-        "audit": "Journaux d’audit"
+        "audit": "Journaux d’audit",
+        "blog": "Blog"
       }
     },
     "home": {
@@ -3069,6 +3074,60 @@
       "translationsHint": "Traduisez le titre de l’examen affiché aux étudiants. Laissez un champ vide pour conserver la valeur actuelle ; l’anglais utilise le titre principal de l’examen.",
       "canonicalLabel": "Anglais (canonique)",
       "translationsError": "Impossible d’enregistrer les traductions. Veuillez réessayer."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Rédigez, traduisez et publiez des articles de blog.",
+      "new": "Nouvel article",
+      "filterStatus": "Statut",
+      "allStatuses": "Tous les statuts",
+      "searchLabel": "Rechercher",
+      "searchPlaceholder": "Rechercher par titre anglais…",
+      "error": "Impossible de charger les articles. Veuillez réessayer.",
+      "saveError": "Impossible d'enregistrer vos modifications. Veuillez réessayer.",
+      "detailError": "Impossible de charger cet article. Veuillez réessayer.",
+      "retry": "Réessayer",
+      "loading": "Chargement des articles…",
+      "empty": "Aucun article pour le moment.",
+      "loadMore": "Charger plus",
+      "colTitle": "Titre",
+      "colStatus": "Statut",
+      "colAuthor": "Auteur",
+      "colUpdated": "Mis à jour",
+      "colActions": "Actions",
+      "status": {
+        "draft": "Brouillon",
+        "published": "Publié",
+        "archived": "Archivé"
+      },
+      "edit": "Modifier",
+      "translations": "Traductions",
+      "publish": "Publier",
+      "unpublish": "Dépublier",
+      "archive": "Archiver",
+      "createTitle": "Nouvel article",
+      "editTitle": "Modifier l'article",
+      "titleLabel": "Titre (anglais)",
+      "titlePlaceholder": "ex. Qu'est-ce que Scrum ?",
+      "slugLabel": "Slug",
+      "slugPlaceholder": "Généré à partir du titre si laissé vide",
+      "slugLocked": "Le slug est verrouillé une fois l'article publié (les URL SEO ne doivent pas changer).",
+      "metaLabel": "Méta-description (anglais)",
+      "metaPlaceholder": "Court extrait utilisé sur les cartes et pour le SEO",
+      "contentLabel": "Contenu (anglais)",
+      "contentPlaceholder": "<h2>Titre</h2><p>Paragraphe…</p>",
+      "contentHint": "Le HTML est nettoyé avant d'être montré aux lecteurs.",
+      "formError": "Veuillez remplir les champs obligatoires.",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "translationsHint": "Contenu par langue. Les langues vides restent inchangées. Article :",
+      "archiveTitle": "Archiver l'article ?",
+      "archiveBody": "Cela masque l'article du blog public. Vous pourrez le republier plus tard. Article :",
+      "slugError": "Utilisez uniquement des minuscules, des chiffres et des traits d’union (ex. what-is-scrum).",
+      "contentError": "Le contenu est obligatoire.",
+      "trTitleLabel": "Titre",
+      "trMetaLabel": "Méta-description",
+      "trContentLabel": "Contenu"
     }
   }
 }

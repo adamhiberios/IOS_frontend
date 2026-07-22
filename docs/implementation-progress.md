@@ -575,6 +575,121 @@ certificatesEarned }`.
   warnings) · build ✓ (known raw-size budget warning only). Live check needs a
   real student session — deferred.
 
+### Phase 4 · BLOG-PUBLIC rewire (BE-I-11, `features/insights`) — built, awaiting review (uncommitted)
+
+Rewired the public blog (`features/insights`) from static fallback to the live
+**Blog module** (`334d0c6`): `GET /blog` (cursor list) + `GET /blog/:slug`
+(detail). Both `@Public()`, localized by `X-Lang` (via `localeInterceptor`).
+
+- **Data-access layer** (`features/insights/data-access/insights.*`): `dto` (wire
+  shapes) → `model` (`InsightPost` / `InsightDetailPost` + `InsightSeo`) →
+  `mappers` → `api` (HttpClient + `toPage`) → `store` (signal store, cursor feed,
+  server-side search). Followed the committed layering (`firstValueFrom`; no
+  Observables in components).
+- **List** = cursor/keyset infinite feed (`toPage`, `PAGE_LIMIT=9`), keeps backend
+  `published_at DESC` order (no client resort). **Search** is now **server-side**
+  (`?search=`, English title), debounced 300 ms in the page. Added loading
+  skeletons, empty, and error+retry states.
+- **Detail** renders admin-authored `contentHtml` via Angular's built-in
+  `[innerHTML]` sanitizer (`SecurityContext.HTML` — the allow-list required by
+  CLAUDE.md §4; **no** `bypassSecurityTrust*`), styled by a scoped `.ios-blog-prose`
+  block (`::ng-deep`, design tokens). Replaced the old static content-block model.
+  404 (draft/archived/unknown slug) → not-found state. Read-time is **computed**
+  from the body word count; the byline shows author · date · read-time.
+- **Backend contract corrections** (verified against `IOS_Backend/src/modules/blog`,
+  read-only) — the earlier task note was slightly off: `GET /blog/:slug` is
+  **enveloped `{ data, meta:{locale} }`**, not bare; and `authorName` /
+  `metaDescription` / `seo.*` are **nullable** (mapped `?? ''`). List/detail also
+  carry a `direction` field (typed in the DTO; UI direction stays owned by
+  `DirectionService`). Dates are formatted with the **response** locale.
+- **Shared `ios-insights-card`:** `readTime` made optional + added optional
+  `authorName` byline (blog list rows have an author but no read-time); landing
+  still passes `readTime` and is unchanged. Backend supplies no featured image, so
+  the mapper derives a **deterministic placeholder** (`blog_1..3.png`) from the slug.
+- **i18n:** added `insights.{empty,loadError,retry,minRead}` (en/fr/ar; Arabic
+  pending pro review). Removed the old static `FALLBACK_DATA` / content-block copy.
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (known raw-size budget warning only). Browser smoke test at
+  `/insights`: request correctly hits `GET /api/v1/blog?limit=9`; error state +
+  retry render cleanly. **Happy path not yet verifiable — the Blog module is not
+  deployed to `api-dev` (endpoint 404s there as of 2026-07-20);** ready to light up
+  once deployed.
+
+### Phase 4 · BLOG-ADMIN (`admin/blog`, new page) — built, awaiting review (uncommitted)
+
+New admin authoring page for the Blog module (`334d0c6`): full CRUD + lifecycle +
+per-locale translations, built like the B-pages (dto→model→mappers→api→store +
+page with dialogs). Route `/admin/blog` under the admin shell; role-filtered nav
+item registered.
+
+- **Data-access** (`features/admin/data-access/blog.*`): `BlogAdminItem` /
+  `BlogAdminDetail` (+ per-locale `BlogLocaleContent`), `BlogStatus`
+  (draft|published|archived), payloads. `AdminBlogApi`: `list` (cursor, all
+  statuses, `?status=`/`?search=`), `getById` (**bare** detail + `contentHtml` +
+  raw `translations`), `create`/`update`/`updateTranslations`/`publish`/
+  `unpublish`/`remove` (all `{ data }`). `AdminBlogStore`: cursor list, filters,
+  lazy detail load for dialogs, action runner, publish-gate `reasons[]` capture
+  (`409 BLOG_NOT_PUBLISHABLE` → `errors[]`, same idiom as B7), cleared on
+  `user.logged-out`.
+- **Page** (`admin-blog.page.ts`): list table (title/slug, status badge, author,
+  updated) with loading/empty/error+retry; create/edit dialog (title, slug,
+  metaDescription, `contentHtml` textarea); a **translations dialog** with a
+  per-locale matrix (`tr/fr/es/ar/de` — the non-English backend locales; nested
+  `formGroupName` groups); publish/unpublish inline; archive confirm dialog.
+  Publish-gate reasons shown under the table.
+- **RBAC (UI hide; backend enforces):** create/edit/translations →
+  `content_creator`/`learning_admin`; publish/unpublish/archive → `learning_admin`;
+  `super_admin` bypass. Nav item visible to `content_creator`/`learning_admin`.
+- **Contract notes (verified against `IOS_Backend`, read-only):** `GET
+/admin/blog/:id` is **bare** (not `{ data }`); the translations JSONB uses
+  **snake_case** inner keys (`content_html`/`meta_description`) — mappers convert
+  to camelCase; `DELETE` is a **soft-delete → archived** (labelled "Archive", not
+  "Delete"); slug is **locked once published** (form shows it read-only then).
+- **Translation editor scope:** authors `tr/fr/es/ar/de` (English is the canonical
+  form, auto-mirrored to `translations.en` server-side). The app UI itself stays
+  en/fr/ar. Empty locales are omitted from the replace-merge (left unchanged).
+- **i18n:** added the `admin.blog.*` namespace + `admin.shell.nav.blog` (en/fr/ar;
+  Arabic pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · build ✓ (`admin-blog-page` chunk 5.94 kB gzip; known raw-size budget
+  warning only). Browser: `/admin/blog` correctly redirects to `/admin/login`
+  (route + `adminAuthGuard` wired, lazy-load OK). **Authenticated happy path not
+  yet verifiable — needs admin credentials + the Blog module deployed to
+  `api-dev` (still 404s there).**
+
+#### Follow-up refinements (per review)
+
+- **Slug validation:** the slug field now validates kebab-case
+  (`^[a-z0-9]+(?:-[a-z0-9]+)*$`, empty allowed → backend derives) with an inline
+  `ios-input` error (`admin.blog.slugError`).
+- **Rich-text editor:** replaced the raw HTML `<textarea>` (English content **and**
+  the per-locale translation content fields) with a new **`ios-rich-text`**
+  primitive (`ui/rich-text/`, exported from `@ui`). Applies to the English content
+  field and the per-locale content fields; translation-dialog labels are now
+  locale-neutral (`admin.blog.tr{Title,Meta,Content}Label`).
+  - **Implementation:** wraps **Quill 2** (`quill@^2.0.3`, MIT — the most widely
+    used free rich-text editor). A first hand-rolled `document.execCommand` version
+    was scrapped (its `formatBlock` heading buttons were unreliable) in favour of
+    the library, per the user's request to "use the best free rich-text library".
+    Quill is framework-agnostic vanilla JS → no Angular-21 peer-dep churn; it
+    renders its own toolbar (H2/H3, bold, italic, ordered/bulleted lists,
+    blockquote, link, clean) whose formats map 1:1 onto the public
+    `.ios-blog-prose` renderer.
+  - Binds to a `FormControl<string>` like `ios-input` (no CVA): the control's HTML
+    is pasted in once via Quill's own parser (`dangerouslyPasteHTML` — not a raw
+    `[innerHTML]`, §4-clean), and `text-change` writes `getSemanticHTML()` back.
+    `ViewEncapsulation.None` + `.ios-rte`-scoped rules for sizing/brand borders.
+  - **Bundle/deps:** `quill.snow.css` is registered in `angular.json` `styles`
+    (global — adds ~2.5 kB gzip to the initial CSS on all pages; a lazy
+    component-`@import` was tried but tripped the 8 kB `anyComponentStyle` budget).
+    Quill's **JS stays in the lazy `admin-blog-page` chunk** (not the initial
+    bundle). Added `allowedCommonJsDependencies: ['quill-delta']` to silence the
+    CJS-interop build warning.
+  - **Verification:** typecheck ✓ · lint ✓ · prod build ✓ (initial gzip 101 kB;
+    known raw-size budget warning only). Editor visuals not yet browser-verified
+    (admin-login gated); the `angular.json` styles change needs a dev-server
+    restart to take effect locally.
+
 ## Auth-route → backend endpoint map
 
 | Frontend route           | Page                    | Backend call                                                                    |
