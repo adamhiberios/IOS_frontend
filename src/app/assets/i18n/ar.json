@@ -2364,7 +2364,11 @@
     },
     "account": {
       "heading": "تفضيلات الحساب",
-      "delete": "حذف الحساب"
+      "delete": "حذف الحساب",
+      "export": "تنزيل بياناتي",
+      "exporting": "جارٍ التحضير…",
+      "exportHint": "احصل على نسخة من بياناتك الشخصية بصيغة JSON (اللائحة العامة لحماية البيانات).",
+      "exportError": "تعذّر تحضير تصدير بياناتك. يرجى المحاولة مرة أخرى."
     },
     "cancelSubscription": {
       "backAriaLabel": "العودة إلى الإعدادات",
@@ -2387,10 +2391,12 @@
       "closeAriaLabel": "إغلاق مربع الحوار",
       "heading": "هل أنت متأكد من حذف حسابك؟",
       "description": "ستفقد جميع معلوماتك، وخاصة شهاداتك.",
-      "typeLabel": "اكتب \"Delete\" للمتابعة",
-      "typePlaceholder": "اكتب \"Delete\"",
       "goBack": "رجوع",
-      "confirm": "حذف الحساب"
+      "confirm": "حذف الحساب",
+      "passwordLabel": "أدخل كلمة المرور للتأكيد",
+      "passwordPlaceholder": "كلمة المرور",
+      "deleting": "جارٍ الحذف…",
+      "error": "تعذّر حذف حسابك. يرجى المحاولة مرة أخرى."
     },
     "logoutDialog": {
       "closeAriaLabel": "إغلاق مربع الحوار",

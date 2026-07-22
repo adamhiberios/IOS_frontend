@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { LanguageService } from '@core/i18n';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
@@ -16,15 +16,18 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
  *  │    You will lose all information especially your         │
  *  │    certificates                                          │
  *  │                                                          │
- *  │    Type "Delete" to continue process                     │
+ *  │    Enter your password to confirm                        │
  *  │    ┌─────────────────────────────────────────────┐       │
- *  │    │  Type "Delete"                              │       │
+ *  │    │  ••••••••••                                 │       │
  *  │    └─────────────────────────────────────────────┘       │
  *  │                                [Go back]  [Delete acc]  │
  *  └──────────────────────────────────────────────────────────┘
  *
- * The "Delete account" button is disabled (40% opacity) until the user types
- * exactly "Delete" in the input.
+ * Account deletion requires step-up re-auth (`POST /me/delete { password }`), so
+ * the confirm field is the caller's password. The "Delete account" button is
+ * disabled (40% opacity) until a password is entered, and shows a spinner while
+ * the delete request is in flight (`pending`). A wrong password (401) surfaces
+ * as `errorMessage` under the field.
  *
  * Accessibility:
  *  · The backdrop is a transparent `<button>` so it is keyboard-reachable and
@@ -94,24 +97,37 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
               </p>
             </div>
 
-            <!-- Confirmation input -->
+            <!-- Password re-auth input (step-up) -->
             <div class="flex flex-col gap-1 items-start w-full">
               <div class="flex items-center px-2 w-full">
                 <label
-                  for="delete-confirm-input"
+                  for="delete-password-input"
                   class="font-semibold leading-[1.4] text-ios-fg text-[16px]"
                 >
-                  {{ lang.t('settings.deleteDialog.typeLabel') }}
+                  {{ lang.t('settings.deleteDialog.passwordLabel') }}
                 </label>
               </div>
               <input
-                id="delete-confirm-input"
-                type="text"
-                [attr.placeholder]="lang.t('settings.deleteDialog.typePlaceholder')"
-                [formControl]="confirmControl"
-                autocomplete="off"
+                id="delete-password-input"
+                type="password"
+                [attr.placeholder]="lang.t('settings.deleteDialog.passwordPlaceholder')"
+                [formControl]="passwordControl"
+                autocomplete="current-password"
+                [attr.aria-invalid]="errorMessage() !== null"
+                [attr.aria-describedby]="errorMessage() ? 'delete-password-error' : null"
+                (keydown.enter)="onDeleteClick()"
                 class="w-full px-3 py-3 rounded-lg bg-ios-surface-mid border border-ios-line text-[16px] text-ios-fg-10 font-medium leading-[1.4] placeholder:text-ios-fg-7 focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary transition-colors"
               />
+              @if (errorMessage(); as err) {
+                <p
+                  id="delete-password-error"
+                  class="px-2 pt-1 text-sm font-medium text-ios-danger-strong"
+                  role="alert"
+                  aria-live="polite"
+                >
+                  {{ err }}
+                </p>
+              }
             </div>
 
             <!-- Buttons -->
@@ -125,17 +141,25 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
                 {{ lang.t('settings.deleteDialog.goBack') }}
               </button>
 
-              <!-- Delete account — disabled until "Delete" typed -->
+              <!-- Delete account — disabled until a password is entered -->
               <button
                 type="button"
-                class="flex items-center justify-center h-14 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[18px] font-semibold leading-[1.4] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50"
+                class="flex items-center justify-center gap-2 h-14 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[18px] font-semibold leading-[1.4] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50"
                 [class.opacity-40]="!canDelete()"
                 [class.cursor-not-allowed]="!canDelete()"
                 [disabled]="!canDelete()"
                 [attr.aria-disabled]="!canDelete()"
                 (click)="onDeleteClick()"
               >
-                {{ lang.t('settings.deleteDialog.confirm') }}
+                @if (pending()) {
+                  <span
+                    class="inline-block h-5 w-5 animate-spin rounded-full border-2 border-white/60 border-t-transparent"
+                    aria-hidden="true"
+                  ></span>
+                  <span>{{ lang.t('settings.deleteDialog.deleting') }}</span>
+                } @else {
+                  {{ lang.t('settings.deleteDialog.confirm') }}
+                }
               </button>
             </div>
           </div>
@@ -146,26 +170,35 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 })
 export class DeleteAccountDialog {
   protected readonly lang = inject(LanguageService);
+
+  /** `true` while the parent's `POST /me/delete` call is in flight. */
+  readonly pending = input(false);
+  /** Server/validation error to surface under the field (e.g. wrong password). */
+  readonly errorMessage = input<string | null>(null);
+
   /** Emitted when the user cancels or clicks the backdrop. */
   readonly cancelled = output<void>();
-  /** Emitted when the user confirms deletion (typed "Delete" and clicked). */
-  readonly confirmed = output<void>();
+  /** Emitted with the entered password when the user confirms deletion. */
+  readonly confirmed = output<string>();
 
-  protected readonly confirmControl = new FormControl('');
+  protected readonly passwordControl = new FormControl('', { nonNullable: true });
 
   /**
-   * Reactive signal derived from the FormControl's value stream via `toSignal`.
-   * This ensures the `canDelete` computed updates whenever the input changes.
+   * Reactive signal derived from the FormControl's value stream via `toSignal`,
+   * so `canDelete` recomputes as the user types.
    */
-  private readonly confirmValue = toSignal(this.confirmControl.valueChanges, {
+  private readonly passwordValue = toSignal(this.passwordControl.valueChanges, {
     initialValue: '',
   });
 
-  protected readonly canDelete = computed(() => (this.confirmValue() ?? '').trim() === 'Delete');
+  /** Enabled once a non-empty password is entered and no delete is in flight. */
+  protected readonly canDelete = computed(
+    () => this.passwordValue().trim().length > 0 && !this.pending(),
+  );
 
   protected onDeleteClick(): void {
     if (this.canDelete()) {
-      this.confirmed.emit();
+      this.confirmed.emit(this.passwordControl.value.trim());
     }
   }
 }

@@ -2364,7 +2364,11 @@
     },
     "account": {
       "heading": "Account Preferences",
-      "delete": "Delete account"
+      "delete": "Delete account",
+      "export": "Download my data",
+      "exporting": "Preparing…",
+      "exportHint": "Get a copy of your personal data as a JSON file (GDPR).",
+      "exportError": "We couldn't prepare your data export. Please try again."
     },
     "cancelSubscription": {
       "backAriaLabel": "Back to Settings",
@@ -2387,10 +2391,12 @@
       "closeAriaLabel": "Close dialog",
       "heading": "Are you sure you want to delete your account?",
       "description": "You will lose all information, especially your certificates.",
-      "typeLabel": "Type \"Delete\" to continue",
-      "typePlaceholder": "Type \"Delete\"",
       "goBack": "Go back",
-      "confirm": "Delete account"
+      "confirm": "Delete account",
+      "passwordLabel": "Enter your password to confirm",
+      "passwordPlaceholder": "Your password",
+      "deleting": "Deleting…",
+      "error": "We couldn't delete your account. Please try again."
     },
     "logoutDialog": {
       "closeAriaLabel": "Close dialog",

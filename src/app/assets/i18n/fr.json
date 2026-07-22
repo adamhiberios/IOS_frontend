@@ -2364,7 +2364,11 @@
     },
     "account": {
       "heading": "Préférences du compte",
-      "delete": "Supprimer le compte"
+      "delete": "Supprimer le compte",
+      "export": "Télécharger mes données",
+      "exporting": "Préparation…",
+      "exportHint": "Obtenez une copie de vos données personnelles au format JSON (RGPD).",
+      "exportError": "Impossible de préparer l'export de vos données. Veuillez réessayer."
     },
     "cancelSubscription": {
       "backAriaLabel": "Retour aux paramètres",
@@ -2387,10 +2391,12 @@
       "closeAriaLabel": "Fermer la boîte de dialogue",
       "heading": "Êtes-vous sûr de vouloir supprimer votre compte ?",
       "description": "Vous perdrez toutes vos informations, en particulier vos certificats.",
-      "typeLabel": "Tapez « Delete » pour continuer",
-      "typePlaceholder": "Tapez « Delete »",
       "goBack": "Retour",
-      "confirm": "Supprimer le compte"
+      "confirm": "Supprimer le compte",
+      "passwordLabel": "Saisissez votre mot de passe pour confirmer",
+      "passwordPlaceholder": "Votre mot de passe",
+      "deleting": "Suppression…",
+      "error": "Impossible de supprimer votre compte. Veuillez réessayer."
     },
     "logoutDialog": {
       "closeAriaLabel": "Fermer la boîte de dialogue",

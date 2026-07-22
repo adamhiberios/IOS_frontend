@@ -9,6 +9,7 @@ import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 
 import { DeleteAccountDialog } from '../components/delete-account-dialog';
+import { AccountStore } from '../data-access/account.store';
 
 /**
  * `ios-settings-page` — Student dashboard Settings tab.
@@ -41,7 +42,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
     ReactiveFormsModule,
     DeleteAccountDialog,
   ],
-  providers: [provideIcons(LucideArrowLeft, LucideArrowRight)],
+  providers: [provideIcons(LucideArrowLeft, LucideArrowRight), AccountStore],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
@@ -192,23 +193,59 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
                 {{ lang.t('settings.account.heading') }}
               </h2>
 
-              <!-- Delete account pill -->
-              <button
-                type="button"
-                class="flex items-center gap-4 bg-ios-danger-soft ps-8 pe-6 py-4 rounded-2xl hover:bg-[#f8ddd5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-strong/40"
-                (click)="showDeleteDialog.set(true)"
-              >
-                <span
-                  class="font-semibold text-[16px] text-ios-danger-strong leading-[1.4] whitespace-nowrap"
+              <div class="flex-1 flex flex-col gap-4 items-start">
+                <!-- Export my data (GDPR access) -->
+                <div class="flex flex-col gap-1 items-start">
+                  <button
+                    type="button"
+                    class="flex items-center gap-3 bg-ios-surface-mid ps-8 pe-6 py-4 rounded-2xl hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                    [disabled]="account.exporting()"
+                    (click)="onExport()"
+                  >
+                    @if (account.exporting()) {
+                      <span
+                        class="inline-block h-5 w-5 animate-spin rounded-full border-2 border-ios-fg-8 border-t-transparent"
+                        aria-hidden="true"
+                      ></span>
+                    }
+                    <span
+                      class="font-semibold text-[16px] text-ios-fg-13 leading-[1.4] whitespace-nowrap"
+                    >
+                      {{
+                        account.exporting()
+                          ? lang.t('settings.account.exporting')
+                          : lang.t('settings.account.export')
+                      }}
+                    </span>
+                  </button>
+                  <p class="px-2 text-sm text-ios-fg-8">
+                    {{ lang.t('settings.account.exportHint') }}
+                  </p>
+                  @if (account.exportError(); as err) {
+                    <p class="px-2 text-sm font-medium text-ios-danger-strong" role="alert">
+                      {{ err }}
+                    </p>
+                  }
+                </div>
+
+                <!-- Delete account pill -->
+                <button
+                  type="button"
+                  class="flex items-center gap-4 bg-ios-danger-soft ps-8 pe-6 py-4 rounded-2xl hover:bg-[#f8ddd5] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-strong/40"
+                  (click)="onOpenDeleteDialog()"
                 >
-                  {{ lang.t('settings.account.delete') }}
-                </span>
-                <ios-icon
-                  name="arrow-right"
-                  class="w-6 h-6 text-ios-danger-strong"
-                  aria-hidden="true"
-                />
-              </button>
+                  <span
+                    class="font-semibold text-[16px] text-ios-danger-strong leading-[1.4] whitespace-nowrap"
+                  >
+                    {{ lang.t('settings.account.delete') }}
+                  </span>
+                  <ios-icon
+                    name="arrow-right"
+                    class="w-6 h-6 text-ios-danger-strong"
+                    aria-hidden="true"
+                  />
+                </button>
+              </div>
             </div>
           </section>
         </div>
@@ -228,8 +265,10 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
     <!-- ── Delete account dialog ─────────────────────────────────────────── -->
     @if (showDeleteDialog()) {
       <ios-delete-account-dialog
-        (cancelled)="showDeleteDialog.set(false)"
-        (confirmed)="onDeleteConfirmed()"
+        [pending]="account.deleting()"
+        [errorMessage]="account.deleteError()"
+        (cancelled)="onCancelDelete()"
+        (confirmed)="onDeleteConfirmed($event)"
       />
     }
   `,
@@ -237,6 +276,7 @@ import { DeleteAccountDialog } from '../components/delete-account-dialog';
 export class SettingsPage {
   private readonly auth = inject(AuthStore);
   protected readonly lang = inject(LanguageService);
+  protected readonly account = inject(AccountStore);
 
   protected readonly year = new Date().getFullYear().toString();
 
@@ -252,10 +292,34 @@ export class SettingsPage {
   /** Email address — sourced from SettingsStore once the backend endpoint is live. */
   protected readonly newsletterEmail = signal('adam.ama.@gml.co');
 
-  protected onDeleteConfirmed(): void {
+  /** Trigger the GDPR personal-data export download. */
+  protected onExport(): void {
+    void this.account.exportData();
+  }
+
+  /** Open the delete dialog with a clean error slate. */
+  protected onOpenDeleteDialog(): void {
+    this.account.clearDeleteError();
+    this.showDeleteDialog.set(true);
+  }
+
+  /** Close the dialog and clear any lingering delete error. */
+  protected onCancelDelete(): void {
     this.showDeleteDialog.set(false);
-    // TODO(epic-X): dispatch delete-account action via a SettingsStore before signing out.
-    void this.auth.logout({ reason: 'user-initiated' });
+    this.account.clearDeleteError();
+  }
+
+  /**
+   * Confirm account deletion with the entered password (step-up re-auth). On
+   * success the account is anonymized server-side and its sessions revoked, so
+   * we force a logout → `/auth/login`. On failure the dialog stays open and
+   * surfaces `account.deleteError()` (e.g. a wrong password).
+   */
+  protected async onDeleteConfirmed(password: string): Promise<void> {
+    const result = await this.account.deleteAccount(password);
+    if (!result) return;
+    this.showDeleteDialog.set(false);
+    await this.auth.logout({ reason: 'user-initiated' });
   }
 }
 

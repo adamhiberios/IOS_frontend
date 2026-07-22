@@ -756,6 +756,41 @@ submittedAt, durationSeconds (nullable), status, lateFlag }`.
   build ✓ (`overview-page` chunk 6.31 kB gzip; known raw-size budget warning only).
   Per request, **not browser-verified**.
 
+### Phase 4 · A2 — Settings delete account + data export (BE-042) — built, awaiting review (uncommitted)
+
+Wired the two self-service GDPR actions on the Settings page (`@Controller('me')`,
+student token). The delete dialog previously only had a cosmetic "type Delete"
+gate and the page stubbed the action with a bare `auth.logout()`; both are now
+real, backed by the live endpoints.
+
+- **New data-access** (`features/settings/data-access/account.*` + a
+  route-scoped store): `dto` (`DeleteAccountRequestDto`, `DeleteAccountResultDto
+{ deleted, retained[], note }`), `model`, `mappers`, `api` (`AccountApi` —
+  `export()` reads `GET /me/export` as a **Blob** to preserve the exact payload;
+  `deleteAccount(password)` `POST /me/delete` with `withCredentials` so the
+  server's refresh-cookie clear is honoured), `store` (`AccountStore` — provided
+  on the settings route, tracks `exporting`/`exportError` + `deleting`/
+  `deleteError`; export triggers a client download, delete returns the result or
+  null). Feature-local `utils/download-blob.ts` for the anchor-download.
+- **Delete = step-up re-auth:** the confirm input is now a **password** field
+  (`autocomplete="current-password"`); the dialog became a controlled component
+  (`pending`/`errorMessage` inputs, `confirmed` emits the password), shows a
+  spinner while deleting, and surfaces a wrong-password **401** inline via
+  `aria-describedby`. On success the page forces `auth.logout({ reason:
+'user-initiated' })` → `/auth/login` (the account is anonymized-in-place and
+  its sessions revoked server-side).
+- **Export:** un-parked with a "Download my data" button (+ GDPR hint and error
+  slot) in Account Preferences; downloads `ios-lms-export-<YYYY-MM-DD>.json`.
+  `?includeAnswers` left default-off (omits the raw exam-answers blob).
+- **i18n:** `settings.account.{export,exporting,exportHint,exportError}` and
+  `settings.deleteDialog.{passwordLabel,passwordPlaceholder,deleting,error}`
+  (en/fr/ar; Arabic pending pro review). Dropped the unused `typeLabel`/
+  `typePlaceholder` keys.
+- **Verification:** typecheck ✓ · lint ✓ (3 known `prefer-ngsrc` warnings) · prod
+  build ✓ (known raw-size budget warning only). **Not browser-verified.** Note:
+  `POST /me/delete` is genuinely destructive — verify against a throwaway seeded
+  student, not a real account.
+
 ## Auth-route → backend endpoint map
 
 | Frontend route           | Page                    | Backend call                                                                    |
