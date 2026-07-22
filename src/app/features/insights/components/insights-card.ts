@@ -10,26 +10,31 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { LucideArrowRight, LucideClock } from '@lucide/angular';
+import { LucideArrowRight, LucideClock, LucideUser } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, provideIcons } from '@ui';
 
-/** Common shape shared by `InsightPost` (landing) and `InsightPost` (insights). */
+/**
+ * Common shape shared by the landing `InsightPost` and the blog `InsightPost`.
+ * The card footer shows a read-time (landing static content) when present, else
+ * an author byline (public blog list rows carry an author but no read-time).
+ */
 export interface InsightCardPost {
   id: string;
   date: string;
   title: string;
   excerpt: string;
-  readTime: string;
   imageUrl: string;
   link: string;
+  readTime?: string;
+  authorName?: string;
 }
 
 @Component({
   selector: 'ios-insights-card',
   imports: [NgOptimizedImage, RouterLink, IosIcon],
-  providers: [provideIcons(LucideArrowRight, LucideClock)],
+  providers: [provideIcons(LucideArrowRight, LucideClock, LucideUser)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <article
@@ -70,18 +75,31 @@ export interface InsightCardPost {
 
         <div class="border-t border-ios-border-light"></div>
 
-        <!-- Read time -->
+        <!-- Read time (static content) or author byline (blog list rows) -->
         <div class="flex items-center justify-end gap-3">
-          <div class="flex items-center gap-2">
-            <div
-              class="w-5 h-5 rounded-full bg-ios-brand-gold-soft flex items-center justify-center"
-            >
-              <ios-icon name="clock" class="w-3.5 h-3.5 text-ios-brand-gold" aria-hidden="true" />
+          @if (post().readTime) {
+            <div class="flex items-center gap-2">
+              <div
+                class="w-5 h-5 rounded-full bg-ios-brand-gold-soft flex items-center justify-center"
+              >
+                <ios-icon name="clock" class="w-3.5 h-3.5 text-ios-brand-gold" aria-hidden="true" />
+              </div>
+              <span class="font-body font-medium text-[14px] text-ios-fg-10">
+                {{ post().readTime }}
+              </span>
             </div>
-            <span class="font-body font-medium text-[14px] text-ios-fg-10">
-              {{ post().readTime }}
-            </span>
-          </div>
+          } @else if (post().authorName) {
+            <div class="flex items-center gap-2">
+              <div
+                class="w-5 h-5 rounded-full bg-ios-brand-gold-soft flex items-center justify-center"
+              >
+                <ios-icon name="user" class="w-3.5 h-3.5 text-ios-brand-gold" aria-hidden="true" />
+              </div>
+              <span class="font-body font-medium text-[14px] text-ios-fg-10 truncate max-w-[160px]">
+                {{ post().authorName }}
+              </span>
+            </div>
+          }
         </div>
       </div>
     </article>

@@ -1,13 +1,18 @@
 /**
- * `ios-insight-detail-page` — full article view for a single Insights post.
+ * `ios-insight-detail-page` — full article view for a single blog post.
  *
- * Route: /insights/:slug
+ * Route: /insights/:slug  →  `GET /blog/:slug`.
+ *
+ * The body arrives as `contentHtml` (admin-authored) and is rendered through
+ * Angular's built-in `[innerHTML]` sanitizer (`SecurityContext.HTML`) — the
+ * allow-list required by CLAUDE.md §4. We never call `bypassSecurityTrust*`.
+ * A 404 (draft / archived / unknown slug) shows the not-found state.
  *
  * Structure (top → bottom):
  *   1. Navbar
- *   2. Hero banner  — dark #272827 bg, breadcrumb (Home / Insights), title, read time
- *   3. Article body — featured image (overlaps hero by ~half), content blocks
- *   4. You Might Also Enjoy — related posts on #FFFCEE bg
+ *   2. Hero banner  — dark bg, breadcrumb (Home / Insights), title, byline
+ *   3. Article body — featured image (overlaps hero), sanitized HTML content
+ *   4. You Might Also Enjoy — related posts
  *   5. Footer
  *   6. Scroll-to-top floating button
  */
@@ -15,7 +20,7 @@
 import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
-import { LucideArrowLeft, LucideClock } from '@lucide/angular';
+import { LucideArrowLeft, LucideClock, LucideUser } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { IosIcon, ScrollToTop, provideIcons } from '@ui';
@@ -36,8 +41,88 @@ import { InsightsStore } from '../data-access/insights.store';
     IosIcon,
     ScrollToTop,
   ],
-  providers: [provideIcons(LucideArrowLeft, LucideClock)],
+  providers: [provideIcons(LucideArrowLeft, LucideClock, LucideUser)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [
+    `
+      /* Prose styling for admin-authored article HTML injected via [innerHTML].
+         ::ng-deep pierces view encapsulation to reach the sanitized children;
+         scoped under .ios-blog-prose so it never leaks to the rest of the app. */
+      .ios-blog-prose {
+        font-family: var(--font-body, sans-serif);
+        font-size: 16px;
+        line-height: 1.75;
+        color: var(--color-ios-fg-mid, #535453);
+      }
+      .ios-blog-prose ::ng-deep h1,
+      .ios-blog-prose ::ng-deep h2,
+      .ios-blog-prose ::ng-deep h3,
+      .ios-blog-prose ::ng-deep h4 {
+        font-family: var(--font-heading, sans-serif);
+        font-weight: 800;
+        line-height: 1.3;
+        color: var(--color-ios-brand-dark, #272827);
+        margin-block: 1.5rem 0.75rem;
+      }
+      .ios-blog-prose ::ng-deep h1 {
+        font-size: 28px;
+      }
+      .ios-blog-prose ::ng-deep h2 {
+        font-size: 24px;
+      }
+      .ios-blog-prose ::ng-deep h3 {
+        font-size: 20px;
+      }
+      .ios-blog-prose ::ng-deep p {
+        margin-block: 0 1.25rem;
+      }
+      .ios-blog-prose ::ng-deep a {
+        color: var(--color-ios-brand-primary, #8b0000);
+        text-decoration: underline;
+      }
+      .ios-blog-prose ::ng-deep ul,
+      .ios-blog-prose ::ng-deep ol {
+        margin-block: 0 1.25rem;
+        padding-inline-start: 1.5rem;
+      }
+      .ios-blog-prose ::ng-deep ul {
+        list-style: disc;
+      }
+      .ios-blog-prose ::ng-deep ol {
+        list-style: decimal;
+      }
+      .ios-blog-prose ::ng-deep li {
+        margin-block: 0.35rem;
+      }
+      .ios-blog-prose ::ng-deep blockquote {
+        margin-block: 1.25rem;
+        padding: 1rem 1.5rem;
+        border-inline-start: 4px solid var(--color-ios-brand-gold, #d9bd4c);
+        border-radius: 0.75rem;
+        background: var(--color-ios-brand-gold-soft, #fff9f0);
+        font-family: var(--font-heading, sans-serif);
+        font-style: italic;
+        color: #736428;
+      }
+      .ios-blog-prose ::ng-deep img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 0.75rem;
+        margin-block: 1.25rem;
+      }
+      .ios-blog-prose ::ng-deep strong {
+        font-weight: 700;
+        color: var(--color-ios-brand-dark, #272827);
+      }
+      .ios-blog-prose ::ng-deep code {
+        font-family: ui-monospace, monospace;
+        font-size: 0.9em;
+        background: #f3f4f6;
+        padding: 0.1rem 0.35rem;
+        border-radius: 0.25rem;
+      }
+    `,
+  ],
   template: `
     <!-- 1. Navbar -->
     <ios-landing-navbar />
@@ -89,10 +174,23 @@ import { InsightsStore } from '../data-access/insights.store';
               >
                 {{ post.title }}
               </h1>
-              <!-- Read time under title -->
-              <div class="flex items-center gap-1.5 mt-3">
-                <ios-icon name="clock" class="w-4 h-4 text-ios-brand-gold" aria-hidden="true" />
-                <span class="text-[13px] font-body text-white/70">{{ post.readTime }}</span>
+              <!-- Byline: author · date · read time -->
+              <div class="flex items-center gap-4 mt-3 flex-wrap">
+                @if (post.authorName) {
+                  <div class="flex items-center gap-1.5">
+                    <ios-icon name="user" class="w-4 h-4 text-ios-brand-gold" aria-hidden="true" />
+                    <span class="text-[13px] font-body text-white/70">{{ post.authorName }}</span>
+                  </div>
+                }
+                @if (post.date) {
+                  <span class="text-[13px] font-body text-white/40">{{ post.date }}</span>
+                }
+                <div class="flex items-center gap-1.5">
+                  <ios-icon name="clock" class="w-4 h-4 text-ios-brand-gold" aria-hidden="true" />
+                  <span class="text-[13px] font-body text-white/70">{{
+                    lang.t('insights.minRead', { count: post.readMinutes })
+                  }}</span>
+                </div>
               </div>
             }
           </div>
@@ -144,62 +242,14 @@ import { InsightsStore } from '../data-access/insights.store';
           </div>
         </div>
 
-        <!-- Body content blocks -->
+        <!-- Sanitized article body -->
         <div class="px-6 md:px-16 lg:px-[120px] pt-12">
-          <div class="max-w-4xl mx-auto flex flex-col gap-6">
-            @for (block of post.body; track $index) {
-              @switch (block.type) {
-                @case ('heading') {
-                  <h2
-                    class="font-heading font-extrabold text-[22px] md:text-[26px] leading-snug text-ios-brand-dark mt-4"
-                  >
-                    {{ block.text }}
-                  </h2>
-                }
-                @case ('paragraph') {
-                  <p class="font-body font-normal text-[16px] leading-[1.75] text-ios-fg-mid">
-                    {{ block.text }}
-                  </p>
-                }
-                @case ('quote') {
-                  <blockquote
-                    class="relative border-s-4 border-ios-brand-gold rounded-xl bg-[#FFFCEE] ps-6 pe-6 py-5 my-2"
-                  >
-                    <p
-                      class="font-heading font-semibold italic text-[17px] leading-relaxed text-[#736428]"
-                    >
-                      "{{ block.text }}"
-                    </p>
-                    @if (block.attribution) {
-                      <footer class="mt-3 text-[13px] font-body text-[#736428]/80">
-                        — {{ block.attribution }}
-                      </footer>
-                    }
-                  </blockquote>
-                }
-                @case ('list') {
-                  <ul class="flex flex-col gap-3 ps-2">
-                    @for (item of block.items; track $index) {
-                      <li class="flex items-start gap-3">
-                        <span
-                          class="mt-1.5 shrink-0 w-2 h-2 rounded-full bg-ios-brand-primary"
-                          aria-hidden="true"
-                        ></span>
-                        <span class="font-body text-[16px] leading-[1.7] text-ios-fg-mid">{{
-                          item
-                        }}</span>
-                      </li>
-                    }
-                  </ul>
-                }
-              }
-            }
-          </div>
+          <div class="ios-blog-prose max-w-4xl mx-auto" [innerHTML]="post.contentHtml"></div>
         </div>
       </article>
     }
 
-    <!-- 5. You Might Also Enjoy -->
+    <!-- 4. You Might Also Enjoy -->
     @if (store.relatedPosts().length > 0) {
       <section class="bg-[#FFFCEE] py-16 px-6 md:px-16 lg:px-[120px]">
         <div class="max-w-4xl mx-auto">
@@ -215,18 +265,18 @@ import { InsightsStore } from '../data-access/insights.store';
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            @for (post of store.relatedPosts(); track post.id) {
-              <ios-insights-card [post]="post" />
+            @for (related of store.relatedPosts(); track related.id) {
+              <ios-insights-card [post]="related" />
             }
           </div>
         </div>
       </section>
     }
 
-    <!-- 6. Footer -->
+    <!-- 5. Footer -->
     <ios-landing-footer />
 
-    <!-- 7. Scroll-to-top (shared primitive) -->
+    <!-- 6. Scroll-to-top (shared primitive) -->
     <ios-scroll-to-top />
   `,
 })
