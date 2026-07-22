@@ -24,12 +24,10 @@ import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angula
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
 import { HeroSection } from '../components/sections/hero-section';
-import { LandingStatsSection } from '../components/sections/landing-stats-section';
 import { TrustedBySection } from '../components/sections/trusted-by-section';
 import { CredibilitySection } from '../components/sections/credibility-section';
 import { ValuePropSection } from '../components/sections/value-prop-section';
 import { CertLevelsSection } from '../components/sections/cert-levels-section';
-import { FeaturedCertsSection } from '../components/sections/featured-certs-section';
 import { WhyChooseUsSection } from '../components/sections/why-choose-us-section';
 import { MarketStatsSection } from '../components/sections/market-stats-section';
 import { HowItWorksSection } from '../components/sections/how-it-works-section';
@@ -43,12 +41,10 @@ import { LandingStore } from '../data-access/landing.store';
     LandingNavbar,
     LandingFooter,
     HeroSection,
-    LandingStatsSection,
     TrustedBySection,
     CredibilitySection,
     ValuePropSection,
     CertLevelsSection,
-    FeaturedCertsSection,
     WhyChooseUsSection,
     MarketStatsSection,
     HowItWorksSection,
@@ -64,7 +60,7 @@ import { LandingStore } from '../data-access/landing.store';
       <ios-hero-section />
 
       <!-- 1b. Live platform stats strip (GET /landing.stats) -->
-      <ios-landing-stats-section [stats]="store.stats()" />
+      <!-- <ios-landing-stats-section [stats]="store.stats()" /> -->
 
       <!-- 3. Why Scrum Certification Matters — fully static -->
       <ios-credibility-section />
@@ -79,7 +75,7 @@ import { LandingStore } from '../data-access/landing.store';
       <ios-cert-levels-section />
 
       <!-- 5b. Featured certifications — dynamic (GET /landing.featuredPrograms) -->
-      <ios-featured-certs-section [programs]="store.featuredPrograms()" />
+      <!-- <ios-featured-certs-section [programs]="store.featuredPrograms()" /> -->
 
       <!-- 6. Why Choose Us — fully static -->
       <ios-why-choose-us-section />
