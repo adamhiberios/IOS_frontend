@@ -1,40 +1,24 @@
 /**
- * Landing page API response DTOs.
+ * Landing page API response DTO — `GET /landing` (public, BE-I-20).
  *
- * These types mirror the JSON shape the backend will return.
- * They are intentionally kept separate from domain models so that
- * backend naming conventions do not leak into the component layer.
- *
- * ── Backend contract (future) ─────────────────────────────────────────────
- * GET /api/landing
- *   Headers: Accept-Language: en | ar | fr
- *   Response: LandingDynamicDto
- *
- * Only server-driven fields are represented here. Static copy (headings,
- * cert names, descriptions, etc.) is owned by section components and i18n.
- * ─────────────────────────────────────────────────────────────────────────
+ * Bare payload (no envelope): `{ featuredPrograms, stats }`. `featuredPrograms`
+ * are full `CatalogItemDto`s (localized by `X-Lang`, same shape the public
+ * catalog returns), and `stats` are live platform counters. Static landing copy
+ * (headings, cert-level structure, insight posts) is owned by the section
+ * components / i18n and is never fetched.
  */
 
-export interface HeroDynamicDto {
-  /** E.g. "June 2, 2026" — changes every cohort. */
-  cohort_date: string;
-  /** E.g. "12,000+" — live graduate count. */
-  graduates_count: string;
+import { type CatalogItemDto } from './catalog.dto';
+
+/** Live platform counters shown in the landing stats strip. */
+export interface LandingStatsDto {
+  readonly programs: number;
+  readonly students: number;
+  readonly certificatesIssued: number;
 }
 
-export interface InsightPostDto {
-  id: string;
-  date: string;
-  title: string;
-  excerpt: string;
-  read_time: string;
-  image_url: string;
-  link: string;
-}
-
-export interface LandingDynamicDto {
-  hero: HeroDynamicDto;
-  /** Admin-controlled section badge, e.g. "Insights". */
-  insight_section_badge: string;
-  insight_posts: InsightPostDto[];
+/** `GET /landing` — bare `{ featuredPrograms, stats }`. */
+export interface LandingResponseDto {
+  readonly featuredPrograms: readonly CatalogItemDto[];
+  readonly stats: LandingStatsDto;
 }

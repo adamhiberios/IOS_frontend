@@ -496,6 +496,21 @@
       "youtubeAriaLabel": "يوتيوب",
       "logoAlt": "معهد سكرم",
       "socialLinksTitle": "روابط التواصل الاجتماعي"
+    },
+    "stats": {
+      "sectionAriaLabel": "معهد سكرم بالأرقام",
+      "programs": "البرامج",
+      "students": "المتعلمون",
+      "certificatesIssued": "الشهادات الصادرة"
+    },
+    "featured": {
+      "sectionAriaLabel": "شهادات مميزة",
+      "badge": "مميّز",
+      "title": "استكشف",
+      "titleHighlight": "شهاداتنا",
+      "subtitle": "مجموعة من أكثر شهاداتنا المعتمدة رواجًا — ابدأ مسارك اليوم.",
+      "explore": "استكشاف",
+      "viewAll": "عرض جميع الشهادات"
     }
   },
   "contact": {

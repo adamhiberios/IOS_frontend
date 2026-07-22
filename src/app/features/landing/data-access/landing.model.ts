@@ -2,34 +2,36 @@
  * Landing page domain models.
  *
  * ## Design principle
- * Only data that the **server will provide** lives here.
- * Static copy (headings, descriptions, cert names, icons, prices, links) lives
- * directly in each section component — either as `lang.t()` calls for
- * translatable text, or as hardcoded constants for structural/visual values.
+ * Only data the **server provides** lives here. `GET /landing` (BE-I-20) returns
+ * `featuredPrograms` (live catalog cards) + `stats` (platform counters). Static
+ * copy (headings, cert-level structure, prices in the marketing carousel) stays
+ * in the section components via `lang.t()` / constants.
  *
- * ## Server-driven fields
- * | Field              | Example value       | Why server-driven                        |
- * |--------------------|---------------------|------------------------------------------|
- * | cohortDate         | "June 2, 2026"      | Changes every cohort cycle               |
- * | graduatesCount     | "12,000+"           | Live stat, updated by backend            |
- * | insightSectionBadge | "Insights"          | Admins may relabel the section           |
- * | insightPosts        | [{…}, …]            | Real CMS content                         |
+ * The Scrum-Journal / insight posts on the landing page have **no `/landing`
+ * backing** — they render from a static list the store owns (see `landing.store`).
  */
 
-/**
- * The only hero values that change at runtime.
- * All other hero text (headline, subtext, CTA labels, etc.) is static copy
- * translated via `lang.t()` inside `HeroSection`.
- */
-export interface HeroDynamicData {
-  /** Human-readable cohort start date, e.g. "June 2, 2026". */
-  cohortDate: string;
-  /** Display string for graduate count, e.g. "12,000+". */
-  graduatesCount: string;
+import { type PublicCertificate } from './catalog.model';
+
+/** Live platform counters shown in the stats strip under the hero. */
+export interface LandingStats {
+  readonly programs: number;
+  readonly students: number;
+  readonly certificatesIssued: number;
 }
 
+/** Everything the landing page fetches from `GET /landing`. */
+export interface LandingData {
+  readonly featuredPrograms: readonly PublicCertificate[];
+  readonly stats: LandingStats;
+}
+
+/**
+ * A single Scrum-Journal card on the landing page. Static content (no backend);
+ * the public blog itself lives in the `insights` feature.
+ */
 export interface InsightPost {
-  /** Stable slug / backend ID. */
+  /** Stable slug / id. */
   id: string;
   /** Human-readable date, e.g. "Apr 15, 2026". */
   date: string;
@@ -39,19 +41,4 @@ export interface InsightPost {
   readTime: string;
   imageUrl: string;
   link: string;
-}
-
-/**
- * Everything the landing page fetches from the backend.
- * `LandingApi.getPageData()` will return this once the endpoint is live.
- * `LandingStore` falls back to static defaults when the API is unavailable.
- */
-export interface LandingDynamicData {
-  hero: HeroDynamicData;
-  /**
-   * Label for the insights section badge, e.g. "Insights".
-   * Kept server-driven so admins can rename the section without a deploy.
-   */
-  insightSectionBadge: string;
-  insightPosts: InsightPost[];
 }

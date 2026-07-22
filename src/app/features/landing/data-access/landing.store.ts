@@ -1,35 +1,34 @@
 /**
- * LandingStore — signal store for the landing page.
+ * LandingStore — signal store for the public landing page.
  *
- * Holds **only the server-driven dynamic data** the landing page needs:
- *   • `hero`              — cohort date + graduate count (change each cycle)
- *   • `insightSectionBadge`  — admin-configurable section label ("Insights")
- *   • `insightPosts`         — real CMS content
+ * Fetches the server-driven blocks from `GET /landing` (BE-I-20):
+ *   • `featuredPrograms` — live catalog cards (title, price, link)
+ *   • `stats`            — platform counters (programs / students / certs issued)
  *
- * All static copy (headings, cert names, level descriptions, step text, etc.)
- * lives directly in the section components and is never routed through this
- * store. Translatable static text uses `lang.t()` inside each component;
- * structural constants (icon names, colors, prices, links) are hardcoded
- * inline in each section component.
+ * The Scrum-Journal insight cards have **no `/landing` backing** — they render
+ * from the static list this store owns. All other landing copy (headings, cert
+ * levels, step text) lives directly in the section components via `lang.t()`.
  *
  * ## Fallback behaviour
- * When the API endpoint is not yet live (null return) or returns an error,
- * `_data` falls back to `FALLBACK_DATA` — a minimal set of static defaults
- * that let the page render correctly while the backend is being built.
- *
- * Usage (in landing.page.ts):
- *   protected readonly store = inject(LandingStore);
- *   // template: [heroDynamic]="store.hero()"
+ * On error the store keeps static `FALLBACK_STATS` and an empty featured list
+ * (the featured section hides itself), so the page always renders.
  */
 
 import { Injectable, computed, inject, signal } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
+
+import { problemDetailMessage } from '@core/http';
 
 import { LandingApi } from './landing.api';
-import type { InsightPost, HeroDynamicData, LandingDynamicData } from './landing.model';
+import { type PublicCertificate } from './catalog.model';
+import { type InsightPost, type LandingData, type LandingStats } from './landing.model';
 
 type LoadStatus = 'idle' | 'loading' | 'success' | 'error';
 
-/** Static fallback content rendered when the backend endpoint is unavailable. */
+/** Stats shown until the API responds (kept modest / non-misleading). */
+const FALLBACK_STATS: LandingStats = { programs: 0, students: 0, certificatesIssued: 0 };
+
+/** Static Scrum-Journal cards (no backend — the real blog lives in `insights`). */
 const FALLBACK_INSIGHT_POSTS: InsightPost[] = [
   {
     id: 'post-1',
@@ -63,58 +62,44 @@ const FALLBACK_INSIGHT_POSTS: InsightPost[] = [
   },
 ];
 
-const FALLBACK_DATA: LandingDynamicData = {
-  hero: {
-    cohortDate: 'June 2, 2026',
-    graduatesCount: '12,000+',
-  },
-  insightSectionBadge: 'Insights',
-  insightPosts: FALLBACK_INSIGHT_POSTS,
-};
-
 @Injectable({ providedIn: 'root' })
 export class LandingStore {
   private readonly api = inject(LandingApi);
 
-  /** Live API payload — null until the backend endpoint is available. */
-  private readonly _apiData = signal<LandingDynamicData | null>(null);
+  /** Live `/landing` payload — null until loaded (or on error). */
+  private readonly _data = signal<LandingData | null>(null);
   private readonly _status = signal<LoadStatus>('idle');
   private readonly _error = signal<string | null>(null);
-
-  /** Resolved data: API payload when available, static fallback otherwise. */
-  private readonly _data = computed<LandingDynamicData>(() => this._apiData() ?? FALLBACK_DATA);
 
   readonly status = this._status.asReadonly();
   readonly error = this._error.asReadonly();
   readonly isLoading = computed(() => this._status() === 'loading');
 
-  readonly hero = computed<HeroDynamicData>(() => this._data().hero);
-  readonly insightSectionBadge = computed<string>(() => this._data().insightSectionBadge);
-  readonly insightPosts = computed<InsightPost[]>(() => this._data().insightPosts);
+  readonly featuredPrograms = computed<readonly PublicCertificate[]>(
+    () => this._data()?.featuredPrograms ?? [],
+  );
+  readonly stats = computed<LandingStats>(() => this._data()?.stats ?? FALLBACK_STATS);
+
+  /** Static Scrum-Journal cards (not server-driven). */
+  readonly insightPosts = signal<readonly InsightPost[]>(FALLBACK_INSIGHT_POSTS).asReadonly();
+  /** Static section-badge label for the Scrum-Journal block. */
+  readonly insightSectionBadge = signal('Insights').asReadonly();
 
   /**
-   * Attempts to load live dynamic data from the backend API.
-   * Falls back to `FALLBACK_DATA` on failure or when the endpoint is not yet
-   * available (null return).
-   *
-   * Called once from `LandingPage.ngOnInit()`.
+   * Load the server-driven landing blocks. Never throws — failures surface via
+   * {@link error} and the page keeps its fallbacks.
    */
   async load(): Promise<void> {
     if (this._status() === 'loading') return;
-
     this._status.set('loading');
     this._error.set(null);
-
     try {
-      // A null return signals "endpoint not yet live"; FALLBACK_DATA stays active in that case.
-      const data = await this.api.getPageData();
-      if (data) {
-        this._apiData.set(data);
-      }
+      const data = await firstValueFrom(this.api.getPageData());
+      this._data.set(data);
       this._status.set('success');
     } catch (err) {
       this._status.set('error');
-      this._error.set(err instanceof Error ? err.message : 'Failed to load landing content');
+      this._error.set(problemDetailMessage(err) ?? 'Failed to load landing content');
     }
   }
 }

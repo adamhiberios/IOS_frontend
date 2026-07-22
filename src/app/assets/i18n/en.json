@@ -496,6 +496,21 @@
       "youtubeAriaLabel": "YouTube",
       "socialLinksTitle": "Social links",
       "logoAlt": "Institute of Scrum"
+    },
+    "stats": {
+      "sectionAriaLabel": "Institute of Scrum by the numbers",
+      "programs": "Programs",
+      "students": "Learners",
+      "certificatesIssued": "Certificates issued"
+    },
+    "featured": {
+      "sectionAriaLabel": "Featured certifications",
+      "badge": "Featured",
+      "title": "Explore our",
+      "titleHighlight": "certifications",
+      "subtitle": "A selection of our most popular endorsed credentials — start your path today.",
+      "explore": "Explore",
+      "viewAll": "View all certifications"
     }
   },
   "contact": {

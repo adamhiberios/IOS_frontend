@@ -1,39 +1,23 @@
 /**
- * Landing page DTO → Domain model mappers.
+ * Landing page DTO → domain mappers for `GET /landing` (BE-I-20).
  *
- * Each function transforms the snake_case backend shape into the camelCase
- * domain model consumed by `LandingStore`.
- *
- * Only server-driven fields are mapped here. Static content lives in the
- * section components.
+ * `featuredPrograms` reuse the public-catalog mapper (same `CatalogItemDto`
+ * shape); `stats` are copied through. Static content (insight posts) is not
+ * mapped here — it lives in the store / section components.
  */
 
-import type { InsightPost, HeroDynamicData, LandingDynamicData } from './landing.model';
-import type { InsightPostDto, HeroDynamicDto, LandingDynamicDto } from './landing.dto';
+import { toPublicCertificate } from './catalog.mappers';
+import { type LandingResponseDto } from './landing.dto';
+import { type LandingData } from './landing.model';
 
-export function mapHeroDynamic(dto: HeroDynamicDto): HeroDynamicData {
+/** Map the bare `GET /landing` response into the `LandingData` domain model. */
+export function toLandingData(dto: LandingResponseDto): LandingData {
   return {
-    cohortDate: dto.cohort_date,
-    graduatesCount: dto.graduates_count,
-  };
-}
-
-export function mapInsightPost(dto: InsightPostDto): InsightPost {
-  return {
-    id: dto.id,
-    date: dto.date,
-    title: dto.title,
-    excerpt: dto.excerpt,
-    readTime: dto.read_time,
-    imageUrl: dto.image_url,
-    link: dto.link,
-  };
-}
-
-export function mapLandingDynamicData(dto: LandingDynamicDto): LandingDynamicData {
-  return {
-    hero: mapHeroDynamic(dto.hero),
-    insightSectionBadge: dto.insight_section_badge,
-    insightPosts: dto.insight_posts.map(mapInsightPost),
+    featuredPrograms: dto.featuredPrograms.map(toPublicCertificate),
+    stats: {
+      programs: dto.stats.programs,
+      students: dto.stats.students,
+      certificatesIssued: dto.stats.certificatesIssued,
+    },
   };
 }

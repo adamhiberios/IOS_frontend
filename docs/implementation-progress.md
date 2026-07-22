@@ -690,6 +690,34 @@ item registered.
     (admin-login gated); the `angular.json` styles change needs a dev-server
     restart to take effect locally.
 
+### Phase 4 · A6 — Landing rewire (`GET /landing`, BE-I-20) — built, awaiting review (uncommitted)
+
+Replaced the dead `LandingApi.getPageData()`→null stub with a real fetch of the
+now-deployed **`GET /landing`** (bare `{ featuredPrograms, stats }`, public,
+`X-Lang`-localized). Verified live: 6 featured programs + `{ programs, students,
+certificatesIssued }`.
+
+- **Data-access reworked** (`features/landing/data-access/landing.*`): `dto`
+  (`LandingResponseDto` = `featuredPrograms: CatalogItemDto[]` + `stats`), `model`
+  (`LandingData`, `LandingStats`; `InsightPost` kept), `mappers` (`toLandingData`
+  — reuses `toPublicCertificate`), `api` (Observable `getPageData()`), `store`
+  (signal store: `featuredPrograms()` / `stats()` with graceful fallbacks; keeps
+  `insightPosts` + `insightSectionBadge` as **static** since they have no
+  `/landing` backing). Dropped the old `cohortDate` / `graduatesCount` /
+  snake_case DTOs (never rendered).
+- **Two new additive sections** (per reviewer choice — leaves the static sections
+  untouched): **`ios-landing-stats-section`** — live counters band under the hero
+  (hides on the zero/fallback state); **`ios-featured-certs-section`** — grid of
+  featured-program cards (programCode, title, description, formatted price, link
+  to `/certifications/:id`, "View all" CTA; hides when empty). Wired into
+  `landing.page` (stats after hero; featured after the cert-levels carousel).
+- **i18n:** `landing.stats.*` + `landing.featured.*` (en/fr/ar; Arabic pending pro
+  review). `insights-section` `posts` input relaxed to `readonly`.
+- **Verification:** typecheck ✓ · lint ✓ (3 known `prefer-ngsrc` warnings) · prod
+  build ✓ (`landing-page` chunk 8.80 kB gzip; known raw-size budget warning only).
+  Per request, **not browser-verified** — the local dev server was serving a stale
+  bundle; restart `npm start` (dev config → api-dev) to see it render.
+
 ## Auth-route → backend endpoint map
 
 | Frontend route           | Page                    | Backend call                                                                    |

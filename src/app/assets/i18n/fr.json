@@ -496,6 +496,21 @@
       "youtubeAriaLabel": "YouTube",
       "logoAlt": "Institut Scrum",
       "socialLinksTitle": "Liens sociaux"
+    },
+    "stats": {
+      "sectionAriaLabel": "L'Institut de Scrum en chiffres",
+      "programs": "Programmes",
+      "students": "Apprenants",
+      "certificatesIssued": "Certificats délivrés"
+    },
+    "featured": {
+      "sectionAriaLabel": "Certifications en vedette",
+      "badge": "En vedette",
+      "title": "Découvrez nos",
+      "titleHighlight": "certifications",
+      "subtitle": "Une sélection de nos credentials les plus populaires — commencez votre parcours dès aujourd'hui.",
+      "explore": "Découvrir",
+      "viewAll": "Voir toutes les certifications"
     }
   },
   "contact": {

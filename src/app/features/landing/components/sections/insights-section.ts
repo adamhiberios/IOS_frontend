@@ -75,8 +75,8 @@ import type { InsightPost } from '../../data-access/landing.model';
   `,
 })
 export class InsightsSection {
-  /** CMS insight posts — fetched from server. */
-  readonly posts = input.required<InsightPost[]>();
+  /** Static Scrum-Journal cards passed from the landing store. */
+  readonly posts = input.required<readonly InsightPost[]>();
   /** Admin-configurable section badge label — fetched from server. */
   readonly badge = input.required<string>();
 
