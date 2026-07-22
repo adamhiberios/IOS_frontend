@@ -791,6 +791,43 @@ real, backed by the live endpoints.
   `POST /me/delete` is genuinely destructive — verify against a throwaway seeded
   student, not a real account.
 
+### Phase 4 · C2 — Cookie consent banner (BE-042) — built, awaiting review (uncommitted)
+
+Added the GDPR cookie-consent banner the docs anticipated in `core/consent/`
+(`06 §2.7.1`, note at `06:199`). Public + root-mounted so consent can be given
+before login; records the choice to `POST /consent` as an audit trail.
+
+- **New `core/consent/`** (root singletons + banner): `consent.model`
+  (`COOKIE_POLICY_VERSION = '2026-01-01'`, `ConsentSelection`/`ConsentCategories`
+  — `necessary` always true, `StoredConsent`, `toCategories()`), `consent.api`
+  (`ConsentApi.record()` `POST /consent` `{ categories, policyVersion }`; public,
+  fire-and-forget → `SKIP_RETRY` + `SUPPRESS_ERROR_TOAST`; bearer auto-attaches
+  when logged in so the backend links the record), `consent.store`
+  (`ConsentStore` — decides visibility from the persisted choice vs. the current
+  policy version, `acceptAll` / `rejectNonEssential` / `save(selection)` /
+  `reopen`), `cookie-consent-banner` (`ios-cookie-consent-banner`). Exported via
+  `core/consent/index.ts` → `core/index.ts`.
+- **Placement rationale:** banner lives in `core/` (not `ui/`) because it's global
+  app chrome inseparable from the consent singleton and root-mounted — matches the
+  doc's "to be added in `core/consent/`" note. Mounted in `app.ts`/`app.html`
+  alongside the `<router-outlet />`.
+- **Privacy-preserving:** all non-essential categories default **OFF**; nothing is
+  recorded until the user explicitly picks Accept all / Reject non-essential /
+  Save preferences. "Manage preferences" reveals per-category toggles (necessary
+  locked-on, analytics, marketing). Links to `/privacy-policy`.
+- **Persistence:** the choice + `policyVersion` + `decidedAt` are stored in
+  `localStorage` (key `ios.cookie-consent`) so the banner stays dismissed until
+  the policy version bumps. Uses the same **sanctioned §2.7.1 UI-pref exception**
+  as `LanguageService` (per-line `eslint-disable no-restricted-globals -- …not
+tokens/PII`); wrapped in try/catch for private-mode. No read endpoint exists,
+  so local persistence is what prevents re-prompting.
+- **A11y:** labelled `role="region"`; native checkboxes with visible labels;
+  `:focus-visible` rings; `z-40` (below the `z-50` dialogs).
+- **i18n:** `consent.*` (en/fr/ar; Arabic pending pro review).
+- **Verification:** typecheck ✓ · lint ✓ (3 known `prefer-ngsrc` warnings) · prod
+  build ✓ (banner is in the initial bundle: +~2 kB gzip → ~103 kB; known raw-size
+  budget warning only). **Not browser-verified.**
+
 ## Auth-route → backend endpoint map
 
 | Frontend route           | Page                    | Backend call                                                                    |

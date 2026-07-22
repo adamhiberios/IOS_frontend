@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
+import { CookieConsentBanner } from '@core/consent';
 import { LanguageService, type AppLocale } from '@core/i18n';
 
 @Component({
   selector: 'ios-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, CookieConsentBanner],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

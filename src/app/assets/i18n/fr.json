@@ -3166,5 +3166,30 @@
       "trMetaLabel": "Méta-description",
       "trContentLabel": "Contenu"
     }
+  },
+  "consent": {
+    "regionLabel": "Consentement aux cookies",
+    "heading": "Nous respectons votre vie privée",
+    "description": "Nous utilisons des cookies strictement nécessaires au fonctionnement du site et des cookies optionnels pour l'améliorer. Vous choisissez ce que vous autorisez. Consultez notre",
+    "policyLink": "politique de confidentialité.",
+    "manage": "Gérer les préférences",
+    "manageLegend": "Catégories de cookies",
+    "savePreferences": "Enregistrer les préférences",
+    "rejectNonEssential": "Refuser les non essentiels",
+    "acceptAll": "Tout accepter",
+    "categories": {
+      "necessary": {
+        "label": "Strictement nécessaires",
+        "hint": "Requis pour le fonctionnement du site. Toujours actifs."
+      },
+      "analytics": {
+        "label": "Analyse",
+        "hint": "Nous aident à comprendre l'utilisation du site."
+      },
+      "marketing": {
+        "label": "Marketing",
+        "hint": "Utilisés pour personnaliser le contenu et les offres."
+      }
+    }
   }
 }
