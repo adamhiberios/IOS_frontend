@@ -263,6 +263,15 @@ a 200 here as a forced logout.
 > `Student` = student token only (admin ⇒ 403); `@Roles(...)` = listed admin roles
 > (super_admin always allowed). All paths are under `/api/v1` unless noted.
 
+> **Frontend consumption status (rescan 2026-07-22):** a full sweep of the FE
+> `*.api.ts` consumers against these 27 controllers lives in
+> [`implementation-progress.md` → "Backend ↔ Frontend reconciliation"](./implementation-progress.md#backend--frontend-reconciliation-full-rescan-2026-07-22).
+> **BE-ready but FE-missing:** the student real-exam engine (`/exam/*` +
+> WS), learning/courses (`/learning/*`), the mock-exam runner (`/mock/*`),
+> admin OTP login (`/auth/admin/login/otp`, `/auth/admin/refresh|logout`),
+> `POST /auth/verify-email`, and `GET /admin/exams/:examId/preview`. Everything
+> else is wired.
+
 ### 6.1 Auth (`/auth`, `/auth/admin`) — see §5.2. All `Public`.
 
 ### 6.2 Profile — `@Controller('me')` — **Student**

@@ -9,7 +9,32 @@
 > `problemDetailMessage`.
 > Created 2026-07-13.
 
-## Status (updated 2026-07-20) — admin pivot COMPLETE
+## Status (updated 2026-07-22) — all backend-rewire items COMPLETE
+
+**Full backend rescan 2026-07-22:** every endpoint now has a known FE status —
+see [`implementation-progress.md` → "Backend ↔ Frontend reconciliation"](./implementation-progress.md#backend--frontend-reconciliation-full-rescan-2026-07-22).
+
+**Committed since 2026-07-20** on `feat/real-backend-integration`: **A6** Landing
+(`469f429`), **A7** Dashboard real-exam history / `GET /exam/attempts` (`554fbe6`),
+**A2** Settings delete + data export (`c659335`), **C2** cookie consent (`6fddf8e`),
+plus BLOG-PUBLIC (`1940501`) / BLOG-ADMIN (`5404e77`).
+
+**All A/B/C rewire items are DONE except C1** (admin OTP — deferred to last,
+`core/auth`, security review). The remaining product work is **not "unblock"
+work** — it's net-new FE features whose backends already exist:
+
+- **Real-exam engine (student)** — `/exam/*` + exam WebSocket; `features/assessments`
+  is still a UI stub. Highest-stakes (CLAUDE §10 / `08-exam-engine.md`).
+- **Learning / courses (student)** — `/learning/*`; `features/courses` is an empty shell.
+- **Mock-exam runner (student)** — `/mock/*`; no student mock UI yet.
+- **Email verify / complete-account** — `POST /auth/verify-email` (+ resend), deferred.
+
+**Still backend-blocked:** **BE-I-21** blog create read-after-write bug — FE
+`admin/blog` built, waiting on the backend fix for E2E authoring.
+
+---
+
+## Status (2026-07-20 snapshot) — admin pivot COMPLETE
 
 **Done (user-facing):** **A1** avatar upload, **A3** earned-certificates list
 (`features/credentials`), **A4** notifications + navbar badge, **A5** student
@@ -33,10 +58,9 @@ module** shipped (`334d0c6`). Two new FE items:
   data-access + authoring-dialog patterns as the B-pages. See
   [`backend-analysis.md` → "Blog endpoints (BE-I-11)"](./backend-analysis.md).
 
-**Still pending (user-facing):** **A6** Landing rewire (`GET /landing`), **A7**
-Dashboard fold-in (`GET /exam/attempts` + richer `/insights`), **A2** Settings
-delete/export, **C2** cookie consent, **C1** admin OTP login (LAST — `core/auth`,
-security review).
+**Still pending (user-facing):** ~~A6, A7, A2, C2~~ — **all committed 2026-07-22**
+(see the current-status block at the top). Only **C1** admin OTP login remains
+(LAST — `core/auth`, security review).
 
 **Later BE changes to honour:** exam domain-state conflicts return **409** (not
 422/400) — `5c11460`; key off `code`, not status. **Week-9 i18n** (`be902fe`/
@@ -253,24 +277,21 @@ graduatesCount / insightPosts` shape (those have no backend — keep static or d
 
 ---
 
-## Suggested order (updated 2026-07-20)
+## Suggested order (updated 2026-07-22)
 
-**✅ Done & committed:** A1, A3, A4, A5 (user-facing) and **B1–B8** (entire admin
-app). See the Status section at top for the commit map.
+**✅ Done & committed:** A1–A7, BLOG-PUBLIC, BLOG-ADMIN, C2 (user-facing) and
+**B1–B8** (entire admin app). Every backend-rewire/unblock item is complete.
 
-**▶ Next — new backend surface (BE-I-11 Blog, `334d0c6`):**
+**▶ Next — net-new FE features (backends already deployed).** These are no longer
+"unblock" items; full plan + endpoint list in
+[`implementation-progress.md` → reconciliation](./implementation-progress.md#backend--frontend-reconciliation-full-rescan-2026-07-22):
 
-1. **Blog-public rewire** — `features/insights` public blog → `GET /blog` (cursor)
-   - `GET /blog/:slug` (detail + `seo`). Replace the `getPosts()`→null fallback
-     with a real `landing`/`insights` data-access layer. Public, `X-Lang`-localized.
-2. **Blog-admin** (new page) — `admin/blog` CRUD + publish/unpublish + per-locale
-   translations. Reuse the admin data-access + authoring-dialog patterns (dto →
-   model → mappers → api → store; content_creator/learning_admin, publish/delete =
-   learning_admin). Endpoints: [`backend-analysis.md` → "Blog endpoints (BE-I-11)"](./backend-analysis.md).
-
-**Then — remaining user-facing:** A6 Landing rewire (`GET /landing`), A7 Dashboard
-fold-in (`GET /exam/attempts` + `/insights`), A2 Settings delete/export, C2 cookie
-consent.
+1. **Real-exam engine (student)** — `/exam/*` + exam WebSocket, IndexedDB drafts,
+   `clientSeq`, 60 s offline scenario (`08-exam-engine.md`; architect review).
+2. **Learning / courses (student)** — `/learning/*` (curriculum → lesson → quiz →
+   complete → progress); build `features/courses`.
+3. **Mock-exam runner (student)** — `/mock/*` (reuses the real-exam runner shape).
+4. **Email verify / complete-account** — `POST /auth/verify-email` (+ resend).
 
 **Last — C1 Admin OTP login** (`core/auth` change; architect + security review).
 
