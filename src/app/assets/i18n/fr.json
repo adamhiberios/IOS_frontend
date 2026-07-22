@@ -812,6 +812,22 @@
       "passRate": "Taux de réussite",
       "avgScore": "Score moyen",
       "bestScore": "Meilleur score"
+    },
+    "examHistory": {
+      "title": "Résultats des examens réels",
+      "loading": "Chargement de vos résultats d'examen…",
+      "error": "Impossible de charger vos résultats d'examen. Veuillez réessayer.",
+      "retry": "Réessayer",
+      "empty": "Vous n'avez encore passé aucun examen réel.",
+      "exam": "Examen",
+      "score": "Score",
+      "result": "Résultat",
+      "duration": "Durée",
+      "submitted": "Soumis",
+      "passed": "Réussi",
+      "failed": "Échoué",
+      "late": "En retard",
+      "loadMore": "Charger plus"
     }
   },
   "insights": {

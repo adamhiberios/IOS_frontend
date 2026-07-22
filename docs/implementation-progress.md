@@ -718,6 +718,44 @@ certificatesIssued }`.
   Per request, **not browser-verified** — the local dev server was serving a stale
   bundle; restart `npm start` (dev config → api-dev) to see it render.
 
+### Phase 4 · A7 — Dashboard real-exam history (`GET /exam/attempts`, BE-I-17) — built, awaiting review (uncommitted)
+
+Added the student's **real-exam attempt history** to the Dashboard overview, the
+one still-missing piece of the A7 fold-in. The student `GET /insights` aggregates
+were already folded in under A5 (`StudentInsightsStore`, KPI tiles + real/mock
+exam summary); this pass adds the per-attempt list that previously only existed
+for mock exams.
+
+- **New data-access** (`features/dashboard/data-access/exam-attempts.*`): `dto`
+  (`ExamAttemptItemDto`; `ExamAttemptsResponseDto = PagedResponse<…>`), `model`
+  (`ExamAttempt`, `ExamAttemptStatus = 'submitted' | 'auto_submitted'`, plus
+  `formatDuration()` → `Hh Mm`/`Mm`/`Ss` (null-safe) and `formatScore()` →
+  one-decimal), `mappers` (`toExamAttempt`, narrows the status string), `api`
+  (`ExamAttemptsApi.list()` → `Page<ExamAttempt>` via `toHttpParams`/`toPage`),
+  `store` (`ExamAttemptsStore` — root singleton, cursor `load`/`loadMore`/`reload`,
+  `isEmpty`, clears on `user.logged-out`; mirrors `PaymentsStore`'s history
+  contract). `PAGE_LIMIT = 20` (backend max 100).
+- **New component** `ios-exam-history` (`features/dashboard/components/exam-history.ts`):
+  self-contained, reads the store, fetches page 1 on init, cursor "load more".
+  States: loading · error+retry · empty · table (exam title + program, score %,
+  pass/fail badge + late flag, duration, submitted date via `DatePipe`). Styled
+  with the dashboard `ios-surface-muted` card language; logical props for RTL.
+  Wired into `overview.page` as a section between the insights strip and the
+  charts/certs area.
+- **Envelope:** `{ data, meta.pagination }` (cursor, newest-first). Endpoint never
+  returns the answer snapshot. Item: `{ id, examTitle, program, score, passed,
+submittedAt, durationSeconds (nullable), status, lateFlag }`.
+- **i18n:** `studentInsights.examHistory.*` (en/fr/ar; Arabic pending pro review).
+- **Scope note:** the overview's bar/donut charts, "Valid certification" cards and
+  "Complete your learning" card are still driven by the mock `DashboardStore` — the
+  checklist deprioritized composing those from `/learning/progress` +
+  `/payments/transactions` + `/me` now that `/insights` supersedes the aggregates.
+  Left as a follow-up (would also draw on the already-built `features/credentials`
+  for real certs). Flagged here, not silently dropped.
+- **Verification:** typecheck ✓ · lint ✓ (3 known `prefer-ngsrc` warnings) · prod
+  build ✓ (`overview-page` chunk 6.31 kB gzip; known raw-size budget warning only).
+  Per request, **not browser-verified**.
+
 ## Auth-route → backend endpoint map
 
 | Frontend route           | Page                    | Backend call                                                                    |

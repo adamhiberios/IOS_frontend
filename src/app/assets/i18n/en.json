@@ -812,6 +812,22 @@
       "passRate": "Pass rate",
       "avgScore": "Average score",
       "bestScore": "Best score"
+    },
+    "examHistory": {
+      "title": "Real exam results",
+      "loading": "Loading your exam results…",
+      "error": "We couldn't load your exam results. Please try again.",
+      "retry": "Try again",
+      "empty": "You haven't taken any real exams yet.",
+      "exam": "Exam",
+      "score": "Score",
+      "result": "Result",
+      "duration": "Duration",
+      "submitted": "Submitted",
+      "passed": "Passed",
+      "failed": "Failed",
+      "late": "Late",
+      "loadMore": "Load more"
     }
   },
   "insights": {

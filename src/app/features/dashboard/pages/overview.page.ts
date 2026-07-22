@@ -16,6 +16,7 @@ import { BarChart, DonutChart } from '@ui';
 
 import { CertProgressCard } from '../components/cert-progress-card';
 import { DashboardNavbar } from '@layouts';
+import { ExamHistory } from '../components/exam-history';
 import { LearningCard } from '../components/learning-card';
 import { DashboardStatCard } from '../components/stat-card';
 import { DashboardStore } from '../data-access/dashboard.store';
@@ -48,6 +49,7 @@ import { formatPassRate } from '../data-access/insights.model';
     BarChart,
     DonutChart,
     CertProgressCard,
+    ExamHistory,
     LearningCard,
     CanadaFlag,
     RouterLink,
@@ -218,6 +220,9 @@ import { formatPassRate } from '../data-access/insights.model';
               </div>
             }
           </section>
+
+          <!-- ── Real-exam results history (GET /exam/attempts, BE-I-17) ── -->
+          <ios-exam-history class="block mb-8" />
 
           <!-- ── Main content area ── -->
 
