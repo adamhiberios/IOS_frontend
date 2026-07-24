@@ -2103,7 +2103,34 @@
       "historyTitle": "سجل الاختبارات التجريبية",
       "historyCount": "({count} اختبارات)",
       "subtitleBefore": "أصبح لديك الآن ",
-      "subtitleAfter": "، يمكنك مشاركته على ملفك الشخصي"
+      "subtitleAfter": "، يمكنك مشاركته على ملفك الشخصي",
+      "submittedNeutralTitle": "تم إرسال اختبارك",
+      "submittedNeutralBody": "تم تسجيل محاولتك. يمكنك مراجعة درجتك في سجل لوحة التحكم الخاصة بك.",
+      "viewInDashboard": "الذهاب إلى لوحة التحكم"
+    },
+    "runner": {
+      "finalTest": "الاختبار النهائي",
+      "currentPageAriaLabel": "الصفحة الحالية: الاختبار النهائي",
+      "examQuestionsAriaLabel": "أسئلة الاختبار",
+      "questionLabel": "السؤال",
+      "answerOptionsAriaLabel": "خيارات الإجابة",
+      "examProgressAriaLabel": "تقدم الاختبار",
+      "timeRemainingAriaLabel": "الوقت المتبقي",
+      "progressAriaLabel": "تمت الإجابة على {answered} من {total} سؤال",
+      "submitExam": "إرسال الاختبار",
+      "submitting": "جارٍ الإرسال…",
+      "loading": "جارٍ تحميل اختبارك…",
+      "restoreErrorTitle": "تعذّر فتح هذا الاختبار",
+      "restoreErrorBody": "تعذّر استعادة جلسة الاختبار هذه على هذا الجهاز.",
+      "backToDashboard": "العودة إلى لوحة التحكم",
+      "connecting": "جارٍ الاتصال…",
+      "reconnecting": "إعادة الاتصال — تم حفظ إجاباتك محليًا",
+      "draftFailed": "فشل الحفظ المحلي — يرجى البقاء متصلاً بالإنترنت لبقية هذا الاختبار.",
+      "saving": "جارٍ الحفظ…",
+      "saved": "تم حفظ الإجابات",
+      "saveFailed": "تعذّر الحفظ — إعادة المحاولة",
+      "warn10": "بقيت 10 دقائق",
+      "warn5": "بقيت 5 دقائق"
     },
     "verify": {
       "pageNavAriaLabel": "التنقل في الصفحة",
@@ -2122,7 +2149,17 @@
       "instruction3Hours": "24 ساعة",
       "instruction3Post": " لاجتياز الاختبار.",
       "continue": "متابعة",
-      "resendLink": "فقدت الرابط، أعد إرساله"
+      "resendLink": "فقدت الرابط، أعد إرساله",
+      "codeIntro": "أدخل رمز الوصول لمرة واحدة من بريد الامتحان الإلكتروني وأكّد هويتك للبدء.",
+      "codeLabel": "رمز الوصول",
+      "codePlaceholder": "الصق الرمز من بريد الامتحان الإلكتروني",
+      "codeRequired": "أدخل رمز الوصول الخاص بك.",
+      "nameLabel": "الاسم الكامل (كما يجب أن يظهر على شهادتك)",
+      "nameRequired": "أدخل اسمك الكامل.",
+      "idLabel": "رقم الهوية / رقم الطالب (اختياري)",
+      "validating": "جارٍ التحقق…",
+      "invalidCode": "رمز الوصول هذا غير صالح أو منتهي الصلاحية.",
+      "genericError": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
     },
     "ready": {
       "heading": "مرحبًا آدم، هل أنت مستعد؟",
@@ -2133,7 +2170,16 @@
       "instruction2Repurchase": "إعادة شراء الوصول",
       "instruction2Post": " للحصول على رابط جديد.",
       "letsStart": "لنبدأ",
-      "certAriaLabelPrefix": "شهادة الامتحان:"
+      "certAriaLabelPrefix": "شهادة الامتحان:",
+      "durationLine": "{minutes} دقيقة",
+      "durationBullet": "لديك {minutes} دقيقة لإكمال هذا الامتحان بمجرد البدء.",
+      "noPauseBullet": "يعمل المؤقّت باستمرار — لا يمكنك الإيقاف المؤقت بمجرد أن تبدأ.",
+      "starting": "جارٍ البدء…",
+      "startConflict": "قد يكون هذا الامتحان قيد التقدم بالفعل، أو تم استخدام رمز الوصول. يرجى التحقق من لوحة التحكم.",
+      "startError": "تعذّر بدء الامتحان. يرجى المحاولة مرة أخرى.",
+      "noSessionTitle": "لا يوجد امتحان للبدء",
+      "noSessionBody": "ابدأ امتحانك من صفحة شهادتك أو الرابط الموجود في بريد الامتحان الإلكتروني.",
+      "goToDashboard": "الذهاب إلى لوحة التحكم"
     },
     "confirmDialog": {
       "title": "هل أنت متأكد من المتابعة في الامتحان؟",

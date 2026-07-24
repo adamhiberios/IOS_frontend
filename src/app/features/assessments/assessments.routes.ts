@@ -1,51 +1,67 @@
 import { type Routes } from '@angular/router';
 
+import { EXAM_DRAFT_STORE, IdbExamDraftStore } from './data-access/exam-draft.store';
+import { ExamSessionStore } from './data-access/exam-session.store';
+import { ExamSessionWs } from './data-access/exam-session.ws';
+import { examDraftSweepGuard } from './guards/exam-draft-sweep.guard';
+
 /**
- * Assessments — the highest-stakes feature in the app. The exam runner page
- * MUST be a separate lazy chunk so the bundle does not bleed into other
- * routes; see CLAUDE.md §10 and /docs/09 for the discipline that applies here.
+ * Assessments — the highest-stakes feature in the app. The exam runner is a
+ * separate lazy chunk so socket.io-client + the engine never bleed into other
+ * routes; see CLAUDE.md §10 and /docs/08-exam-engine.md.
  *
- * Exam verify flow (Figma nodes 13271-13551, 13269-13490, 13461-40691):
- *   /assessments/verify   → ExamVerifyPage  (instructions + confirm dialog + success dialog)
+ * Routes:
+ *   /assessments/verify            → ExamVerifyPage  (validate-access + identity — Slice 5b)
+ *   /assessments/ready             → ExamReadyPage   (start CTA — Slice 5b)
+ *   /assessments/run/:sessionId    → ExamRunnerPage  (in-exam; route-scoped store + WS)
+ *   /assessments/result/:sessionId → ExamResultPage  (score-only; review disabled, BE-I-22)
  *
- * Exam ready page (Figma node 13271-14042) — reached via the email link:
- *   /assessments/ready    → ExamReadyPage   (certification badge + "Let's start" CTA)
- *
- * Exam runner (Figma node 13271-13907):
- *   /assessments/run      → ExamRunnerPage  (question panel + timer + EPO-green sidebar)
- *
- * Exam result (Figma node 13172-56939):
- *   /assessments/result   → ExamResultPage  (reveals correct answers, score, share)
- *
- * Epic-9: replace DEMO_EXAM_QUESTIONS with a backend-resolved signal; wire
- * the WebSocket heartbeat and IndexedDB sync per CLAUDE.md §10.
+ * `ExamSessionStore` and `ExamSessionWs` are provided at the `run` route so a
+ * fresh instance is created per attempt and destroyed (with its socket, timers,
+ * and subscriptions) on route exit. `EXAM_DRAFT_STORE` is bound to the IDB
+ * implementation here for clarity, though its root factory default is identical.
  */
+const RUN_PROVIDERS = [
+  ExamSessionStore,
+  ExamSessionWs,
+  { provide: EXAM_DRAFT_STORE, useClass: IdbExamDraftStore },
+];
+
 export const ASSESSMENTS_ROUTES: Routes = [
   {
+    // Pathless wrapper — sweeps stale drafts on entry to the assessments area
+    // (in the lazy chunk, so the IDB code never lands in the app shell).
     path: '',
-    pathMatch: 'full',
-    title: 'Assessments',
-    children: [],
-  },
-  {
-    path: 'verify',
-    title: 'Verify Exam — Institute of Scrum',
-    loadComponent: () => import('./pages/exam-verify.page').then((m) => m.ExamVerifyPage),
-  },
-  {
-    path: 'ready',
-    title: 'Exam Ready — Institute of Scrum',
-    loadComponent: () => import('./pages/exam-ready.page').then((m) => m.ExamReadyPage),
-  },
-  {
-    path: 'run',
-    title: 'Final Exam — Institute of Scrum',
-    loadComponent: () => import('./pages/exam-runner.page').then((m) => m.ExamRunnerPage),
-  },
-  {
-    path: 'result',
-    title: 'Exam Results — Institute of Scrum',
-    loadComponent: () => import('./pages/exam-result.page').then((m) => m.ExamResultPage),
+    canActivate: [examDraftSweepGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        title: 'Assessments',
+        children: [],
+      },
+      {
+        path: 'verify',
+        title: 'Verify Exam — Institute of Scrum',
+        loadComponent: () => import('./pages/exam-verify.page').then((m) => m.ExamVerifyPage),
+      },
+      {
+        path: 'ready',
+        title: 'Exam Ready — Institute of Scrum',
+        loadComponent: () => import('./pages/exam-ready.page').then((m) => m.ExamReadyPage),
+      },
+      {
+        path: 'run/:sessionId',
+        title: 'Final Exam — Institute of Scrum',
+        providers: RUN_PROVIDERS,
+        loadComponent: () => import('./pages/exam-runner.page').then((m) => m.ExamRunnerPage),
+      },
+      {
+        path: 'result/:sessionId',
+        title: 'Exam Results — Institute of Scrum',
+        loadComponent: () => import('./pages/exam-result.page').then((m) => m.ExamResultPage),
+      },
+    ],
   },
 ];
 

@@ -656,29 +656,32 @@ issuance flows (e.g. the verification and reset **links** point at the
 
 ### Resolution status (2026-07-13)
 
-| ID      | Status             | Fixed by (BE commit) | Frontend action                                                      |
-| ------- | ------------------ | -------------------- | -------------------------------------------------------------------- |
-| BE-I-01 | Open (behavioural) | —                    | Map per endpoint; key off `code`.                                    |
-| BE-I-02 | Open (behavioural) | —                    | Already handled (`SameSite=Lax`).                                    |
-| BE-I-03 | ✅ Resolved        | `10965cb`            | Build admin staff page (checklist B3).                               |
-| BE-I-04 | ✅ Resolved        | `e4b347c`            | Add card fields to catalog form (B8).                                |
-| BE-I-05 | ✅ Resolved        | `1b603f1`            | Build promo-codes page (B4).                                         |
-| BE-I-06 | ✅ Resolved        | `cb10205`            | Build lesson-quiz authoring (B5).                                    |
-| BE-I-07 | ✅ Resolved        | `1515dff`            | Wire admin dashboard metrics (B6).                                   |
-| BE-I-08 | ✅ Resolved        | `e4b347c`            | Wire avatar upload (A1).                                             |
-| BE-I-09 | Open (info)        | —                    | Pick per screen.                                                     |
-| BE-I-10 | Open (info)        | —                    | Use bare origin for `/health`.                                       |
-| BE-I-11 | ✅ Resolved        | `334d0c6`            | BlogModule shipped — build the public blog rewire + admin Blog page. |
-| BE-I-12 | Open (behavioural) | —                    | Branch on `code`, not status.                                        |
-| BE-I-13 | ✅ Resolved        | `a36ddfd`            | Build admin Curriculum page (B1).                                    |
-| BE-I-14 | ✅ Resolved        | `a36ddfd`            | Surface publish `reasons[]` (B7).                                    |
-| BE-I-15 | ✅ Resolved        | `a36ddfd`            | Build cert-revocation page (B2).                                     |
-| BE-I-16 | ✅ Resolved        | `a36ddfd`            | Build Certificates list (A3).                                        |
-| BE-I-17 | ✅ Resolved        | `a36ddfd`            | Add real-exam history (A7).                                          |
-| BE-I-18 | ✅ Resolved        | `181cd9f`            | Build Notifications (A4).                                            |
-| BE-I-19 | ✅ Resolved        | `65bf4e8`            | Wire delete-account + export (A2).                                   |
-| BE-I-20 | ✅ Resolved        | `1515dff`            | Build Insights + rewire Landing (A5, A6).                            |
-| BE-I-21 | ⛔ **Open (bug)**  | —                    | **Blog `POST /admin/blog` always 404s + rolls back** — see below.    |
+| ID      | Status                   | Fixed by (BE commit) | Frontend action                                                                                                                                                                                   |
+| ------- | ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BE-I-01 | Open (behavioural)       | —                    | Map per endpoint; key off `code`.                                                                                                                                                                 |
+| BE-I-02 | Open (behavioural)       | —                    | Already handled (`SameSite=Lax`).                                                                                                                                                                 |
+| BE-I-03 | ✅ Resolved              | `10965cb`            | Build admin staff page (checklist B3).                                                                                                                                                            |
+| BE-I-04 | ✅ Resolved              | `e4b347c`            | Add card fields to catalog form (B8).                                                                                                                                                             |
+| BE-I-05 | ✅ Resolved              | `1b603f1`            | Build promo-codes page (B4).                                                                                                                                                                      |
+| BE-I-06 | ✅ Resolved              | `cb10205`            | Build lesson-quiz authoring (B5).                                                                                                                                                                 |
+| BE-I-07 | ✅ Resolved              | `1515dff`            | Wire admin dashboard metrics (B6).                                                                                                                                                                |
+| BE-I-08 | ✅ Resolved              | `e4b347c`            | Wire avatar upload (A1).                                                                                                                                                                          |
+| BE-I-09 | Open (info)              | —                    | Pick per screen.                                                                                                                                                                                  |
+| BE-I-10 | Open (info)              | —                    | Use bare origin for `/health`.                                                                                                                                                                    |
+| BE-I-11 | ✅ Resolved              | `334d0c6`            | BlogModule shipped — build the public blog rewire + admin Blog page.                                                                                                                              |
+| BE-I-12 | Open (behavioural)       | —                    | Branch on `code`, not status.                                                                                                                                                                     |
+| BE-I-13 | ✅ Resolved              | `a36ddfd`            | Build admin Curriculum page (B1).                                                                                                                                                                 |
+| BE-I-14 | ✅ Resolved              | `a36ddfd`            | Surface publish `reasons[]` (B7).                                                                                                                                                                 |
+| BE-I-15 | ✅ Resolved              | `a36ddfd`            | Build cert-revocation page (B2).                                                                                                                                                                  |
+| BE-I-16 | ✅ Resolved              | `a36ddfd`            | Build Certificates list (A3).                                                                                                                                                                     |
+| BE-I-17 | ✅ Resolved              | `a36ddfd`            | Add real-exam history (A7).                                                                                                                                                                       |
+| BE-I-18 | ✅ Resolved              | `181cd9f`            | Build Notifications (A4).                                                                                                                                                                         |
+| BE-I-19 | ✅ Resolved              | `65bf4e8`            | Wire delete-account + export (A2).                                                                                                                                                                |
+| BE-I-20 | ✅ Resolved              | `1515dff`            | Build Insights + rewire Landing (A5, A6).                                                                                                                                                         |
+| BE-I-21 | ⛔ **Open (bug)**        | —                    | **Blog `POST /admin/blog` always 404s + rolls back** — see below.                                                                                                                                 |
+| BE-I-22 | ⚠️ **Open (limitation)** | —                    | **Real-exam APIs never return the answer key / per-question correctness** — blocks the result-page "Review Correct Answers" section; see below.                                                   |
+| BE-I-23 | ⚠️ **Open (limitation)** | —                    | **`GET /exam/sessions/:id` returns no questions** — reload-resume can't redraw the exam from the server; FE persists a local question snapshot to work around it. See below.                      |
+| BE-I-24 | ⚠️ **Open (limitation)** | —                    | **No `certId` exposed at exam-entry** — `validate-access` returns only `exam.{id,title,…}`, so the FE can't call `pre-exam-confirmation` (needs `certId`); it relies on `start`'s 409. See below. |
 
 **Also new (not original issues):** two-step admin **OTP login** (`e97de75`,
 checklist C1) and **GDPR cookie consent** (`65bf4e8`, checklist C2); catalog
@@ -728,6 +731,144 @@ the article cannot be created until the backend is fixed. The FE request is
 correct (verified payload, id handling, and the Quill editor output). BLOG-ADMIN
 create/edit and, transitively, any end-to-end test of the public blog rewire
 (BLOG-PUBLIC) are **blocked** on this.
+
+#### BE-I-22 — ⚠️ Real-exam APIs never return the answer key or per-question correctness (blocks "Review Correct Answers")
+
+**Severity: Medium — the real-exam result page cannot show a per-question answer
+review; it can only show the aggregate score.** Not a bug — a deliberate anti-cheat
+posture at exam time that has no post-submission counterpart. Discovered 2026-07-23
+while wiring the real-exam engine (`features/assessments`).
+
+**Affected endpoints (`src/modules/exam/exam.controller.ts` + `exam.service.ts`):**
+
+| Endpoint                                     | What it returns today                                                                                               | The gap                                                                                                                                                      |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `POST /exam/start`                           | `questions[]` with each option as `{ id, optionText }` — `isCorrect` is **stripped** (correct for exam time)        | No later endpoint ever re-exposes `isCorrect`.                                                                                                               |
+| `POST /exam/sessions/:sessionId/submit`      | `{ score, passed, correctCount, totalCount }`                                                                       | Aggregate only — no per-question breakdown, no correct-option ids.                                                                                           |
+| `POST /exam/sessions/:sessionId/late-submit` | same `ScoreResult`                                                                                                  | same.                                                                                                                                                        |
+| `GET  /exam/sessions/:sessionId`             | `{ sessionId, remainingSeconds, answers, status }` where `answers` is the **student's own** `Record<qid, optionId>` | No correctness, no key.                                                                                                                                      |
+| `GET  /exam/attempts`                        | `{ data: [{ id, examTitle, program, score, passed, submittedAt, durationSeconds, status, lateFlag }], meta }`       | Comment in `listMyAttempts` is explicit: the `answers` snapshot is **deliberately never selected**; and even it holds only the student's picks, not the key. |
+
+**Current contract (post-submission):** after a real exam is submitted (manual,
+late, or server auto-submit), the frontend can obtain **only** the aggregate
+`{ score, passed, correctCount, totalCount }`. There is no endpoint that returns,
+for a terminal attempt, the per-question correct answer or whether the student got
+each question right.
+
+**Expected contract (requested):** a post-submission, owner-only review endpoint —
+e.g. `GET /exam/attempts/:attemptId/review` (or `GET /exam/sessions/:sessionId/review`)
+— that, **only once the attempt is terminal** (submitted / auto-submitted) and only
+for the owning student (FORCE-RLS on `app.current_user_id`, same as `/exam/attempts`),
+returns per question:
+
+```jsonc
+{
+  "questions": [
+    {
+      "questionId": "uuid",
+      "questionText": "…",
+      "questionType": "mcq | true_false",
+      "options": [{ "id": "uuid", "optionText": "…", "isCorrect": true }],
+      "selectedOptionId": "uuid | null",
+      "correctOptionId": "uuid",
+      "isCorrect": true,
+      "explanation": "… (optional)",
+    },
+  ],
+}
+```
+
+Precedent already exists on the mock side: `GET /mock/questions/:questionId/reveal`
+exposes the correct option for practice exams. The real-exam engine needs the
+equivalent, gated behind attempt-terminal + ownership so it can never leak the key
+mid-exam.
+
+**Frontend impact:** the real-exam result page's **"Review Correct Answers"**
+section (present in the Figma design and already built for mock/demo data) **cannot
+be implemented** for real exams. As a temporary measure the FE will **disable
+(comment out, not delete)** that section on the real-exam result page and show only
+`score / passed / correctCount / totalCount`, re-enabling it once this endpoint
+ships. No frontend workaround is possible — the data does not exist in any current
+response.
+
+#### BE-I-23 — ⚠️ `GET /exam/sessions/:sessionId` returns no questions, so reload-resume can't rebuild the exam from the server
+
+**Severity: Medium — a mid-exam tab reload cannot redraw the question list from
+the backend; the frontend works around it by persisting a local question
+snapshot.** Discovered 2026-07-23 while building the real-exam runner store (Slice 3).
+
+**Current contract.** The only endpoint that returns exam questions is
+`POST /exam/start` — and it consumes the one-time access code, so it cannot be
+replayed (a second call returns **409** "active session already exists / code
+already used"). The live-session read, `GET /exam/sessions/:sessionId`
+(`getSessionStatus`), returns only:
+
+```jsonc
+{
+  "sessionId": "…",
+  "remainingSeconds": 1234,
+  "answers": { "<qid>": "<optId>" },
+  "status": "active",
+}
+```
+
+There is no `questions` array anywhere in the session-read path. So after a full
+page reload (or the tab being closed and reopened) the SPA has lost the in-memory
+question list and **cannot fetch it again** — `start` 409s and `sessions/:id` omits
+it. Offline reload is worse: the server is unreachable, so even `answers`/
+`remainingSeconds` are unavailable.
+
+**Expected contract.** Either include the questions on the session read, or add a
+dedicated read:
+
+- `GET /exam/sessions/:sessionId` also returns `questions` (same shape as
+  `POST /start`: `{ id, questionText, questionType, position, options:[{ id, optionText }] }`,
+  `isCorrect` stripped), **or**
+- a new `GET /exam/sessions/:sessionId/questions` returning that array.
+
+Ownership + active-status gating identical to the existing session read.
+
+**Frontend impact / current workaround.** To satisfy the standing ~60-second
+offline-reload acceptance scenario (`08-exam-engine.md` §8, step 7), the frontend
+persists a **local question snapshot** in IndexedDB at start
+(`PersistedExamSession` in the `sessionMeta` store) and rehydrates the runner from
+it on resume, refreshing `answers`/`remainingSeconds` from the server when
+reachable. This is why the exam draft DB now stores questions in addition to
+answer drafts — a deliberate, architect-review-flagged stretch of the
+"answer-drafts-only" storage rule (the snapshot carries no correct-answer flag and
+no PII). If the backend adds questions to the session read, the local snapshot can
+be reduced to answers-only again.
+
+#### BE-I-24 — ⚠️ No `certId` exposed at exam entry, so the FE can't drive `pre-exam-confirmation`
+
+**Severity: Low/Medium — the pre-exam identity-confirmation step cannot be
+completed by the frontend; the flow relies on `start`'s 409 guard instead.**
+Discovered 2026-07-23 while wiring the exam entry pages (Slice 5b).
+
+**Current contract.** `POST /exam/pre-exam-confirmation` requires a `certId`
+(UUID). But nothing the frontend can reach at exam-entry time yields that UUID:
+
+- `POST /exam/validate-access` returns `exam: { id, title, durationMinutes, passingScore }`
+  — **no `certId`** (the service has `accessCode.certId` internally but doesn't
+  return it).
+- `POST /exam/start` likewise returns `sessionId, durationSeconds, expiresAt,
+questions` — no `certId`.
+- The user-facing certificate pages are static marketing pages keyed by **slug**
+  (`epo`, `esm`, …), not the backend certificate UUID, so they can't supply it
+  either.
+
+**Expected contract.** Return `certId` on `validate-access` (and ideally on
+`start` / the session read), so the frontend can call `pre-exam-confirmation`
+before starting when a purchase-enrolled student needs it.
+
+**Frontend impact / current workaround.** Slice 5b collects the identity
+attestation (full name / ID) on the verify page per journeys p.4, but **does not**
+POST `pre-exam-confirmation` (no `certId`). This is safe because the backend still
+enforces it: for purchase-enrolled students `start` returns **409** "Pre-exam
+identity confirmation is required", which the ready page surfaces. Admin-issued
+codes without a purchase row (the current real assignment path) skip the gate
+entirely, so the flow works end-to-end today. Add `certId` to the responses to let
+the FE complete the confirmation inline.
 
 ### Endpoints added 2026-07-13 (blocker fixes)
 

@@ -2103,7 +2103,34 @@
       "historyTitle": "Historique de l'examen blanc",
       "historyCount": "({count} tests)",
       "subtitleBefore": "Vous avez maintenant ",
-      "subtitleAfter": ", vous pouvez le partager sur votre profil"
+      "subtitleAfter": ", vous pouvez le partager sur votre profil",
+      "submittedNeutralTitle": "Votre examen a été soumis",
+      "submittedNeutralBody": "Votre tentative a été enregistrée. Vous pouvez consulter votre score dans l'historique de votre tableau de bord.",
+      "viewInDashboard": "Aller au tableau de bord"
+    },
+    "runner": {
+      "finalTest": "Examen final",
+      "currentPageAriaLabel": "Page actuelle : examen final",
+      "examQuestionsAriaLabel": "Questions de l'examen",
+      "questionLabel": "Question",
+      "answerOptionsAriaLabel": "Options de réponse",
+      "examProgressAriaLabel": "Progression de l'examen",
+      "timeRemainingAriaLabel": "Temps restant",
+      "progressAriaLabel": "{answered} sur {total} questions répondues",
+      "submitExam": "Soumettre l'examen",
+      "submitting": "Soumission…",
+      "loading": "Chargement de votre examen…",
+      "restoreErrorTitle": "Impossible d'ouvrir cet examen",
+      "restoreErrorBody": "Cette session d'examen n'a pas pu être restaurée sur cet appareil.",
+      "backToDashboard": "Retour au tableau de bord",
+      "connecting": "Connexion…",
+      "reconnecting": "Reconnexion — vos réponses sont enregistrées localement",
+      "draftFailed": "Échec de l'enregistrement local — veuillez rester en ligne pour le reste de cet examen.",
+      "saving": "Enregistrement…",
+      "saved": "Réponses enregistrées",
+      "saveFailed": "Échec de l'enregistrement — nouvelle tentative",
+      "warn10": "10 minutes restantes",
+      "warn5": "5 minutes restantes"
     },
     "verify": {
       "pageNavAriaLabel": "Navigation de la page",
@@ -2122,7 +2149,17 @@
       "instruction3Hours": "24 heures",
       "instruction3Post": " pour réussir le test.",
       "continue": "Continuer",
-      "resendLink": "J'ai perdu le lien, renvoyer"
+      "resendLink": "J'ai perdu le lien, renvoyer",
+      "codeIntro": "Saisissez le code d'accès unique reçu par e-mail et confirmez votre identité pour commencer.",
+      "codeLabel": "Code d'accès",
+      "codePlaceholder": "Collez le code reçu dans votre e-mail d'examen",
+      "codeRequired": "Saisissez votre code d'accès.",
+      "nameLabel": "Nom complet (tel qu'il doit apparaître sur votre certificat)",
+      "nameRequired": "Saisissez votre nom complet.",
+      "idLabel": "Pièce d'identité / numéro d'étudiant (facultatif)",
+      "validating": "Vérification…",
+      "invalidCode": "Ce code d'accès est invalide ou a expiré.",
+      "genericError": "Une erreur s'est produite. Veuillez réessayer."
     },
     "ready": {
       "heading": "Bonjour Adam, êtes-vous prêt ?",
@@ -2133,7 +2170,16 @@
       "instruction2Repurchase": "racheter l'accès",
       "instruction2Post": " pour en obtenir un nouveau.",
       "letsStart": "C'est parti",
-      "certAriaLabelPrefix": "Certification d'examen :"
+      "certAriaLabelPrefix": "Certification d'examen :",
+      "durationLine": "{minutes} minutes",
+      "durationBullet": "Vous disposez de {minutes} minutes pour terminer cet examen une fois commencé.",
+      "noPauseBullet": "Le minuteur s'exécute en continu — vous ne pouvez pas mettre en pause une fois commencé.",
+      "starting": "Démarrage…",
+      "startConflict": "Cet examen est peut-être déjà en cours, ou le code d'accès a été utilisé. Veuillez vérifier votre tableau de bord.",
+      "startError": "Impossible de démarrer l'examen. Veuillez réessayer.",
+      "noSessionTitle": "Aucun examen à démarrer",
+      "noSessionBody": "Démarrez votre examen depuis votre page de certificat ou le lien de votre e-mail d'examen.",
+      "goToDashboard": "Aller au tableau de bord"
     },
     "confirmDialog": {
       "title": "Êtes-vous sûr de vouloir procéder à l'examen ?",
