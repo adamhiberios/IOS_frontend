@@ -2081,6 +2081,36 @@
       }
     }
   },
+  "courses": {
+    "common": {
+      "loading": "Loading…",
+      "minutes": "{minutes} min"
+    },
+    "index": {
+      "title": "My courses",
+      "subtitle": "Continue where you left off.",
+      "emptyTitle": "You're not enrolled in any courses yet.",
+      "browse": "Browse certifications",
+      "lessonsDone": "{done} of {total} lessons"
+    },
+    "curriculum": {
+      "back": "All courses",
+      "completed": "Completed"
+    },
+    "lesson": {
+      "back": "Back to curriculum",
+      "completed": "Completed",
+      "markComplete": "Mark as complete"
+    },
+    "quiz": {
+      "check": "Check answers",
+      "checking": "Checking…",
+      "correct": "Correct",
+      "incorrectAnswer": "Correct answer: {answer}",
+      "scoreLine": "You got {correct} of {total} correct",
+      "tryAgain": "Try again"
+    }
+  },
   "assessments": {
     "result": {
       "breadcrumbParent": "Final test",

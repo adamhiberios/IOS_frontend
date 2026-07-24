@@ -262,6 +262,455 @@ against the deployed API (not available in-session).
   (uncommitted).** Public payment flows wired in the data layer; no component
   consumes it yet. Details below.
 
+### Phase 4 · ⭐ Real-exam engine — Slice 1: REST data-access (`features/assessments/data-access`) — logic only (uncommitted)
+
+First of five sub-slices for the student real-exam engine (the highest-stakes
+surface — CLAUDE §10 / `08-exam-engine.md`). **Architect review required before
+the runner ships (Slice 5).** Built as a standalone data-access layer per the
+"logic only, no component behaviour changes" directive — no page consumes it yet
+(it tree-shakes out of the bundle until Slice 3+ wires the store).
+
+**Key finding — docs 08/09 are aspirational; the live backend differs.** The
+spec (`08-exam-engine.md`, internally titled "09"; there is **no** separate 09
+file) describes a richer engine than `IOS_Backend/src/modules/exam` implements.
+The reconciliation that shaped this slice (full table in the session plan):
+
+- **Answers are a flat `Record<questionId, optionId>` map**, single-select only
+  (`mcq` | `true_false`) — no per-answer op, no discriminated `AnswerValue`
+  union, no essay type.
+- **`clientSeq` is NOT on the wire.** Autosave/submit post the whole current
+  answers map (last-write-wins). `clientSeq` becomes a frontend-internal
+  ordering/dedupe key for the IndexedDB draft rows (Slice 2) only.
+- **No post-submission answer key / per-question correctness** (BE-I-22, filed
+  this session + email drafted for the backend team). Real-exam result page will
+  show score/passed only; the "Review Correct Answers" section is disabled
+  (commented, not deleted) until the backend adds a review endpoint.
+- **No draft encryption** — `POST /start` issues no per-session key; spec §7 is
+  out. Drafts hold only `{ questionId, optionId }` (no PII) → plaintext IDB is
+  policy-compliant.
+- **WS is Socket.IO** (namespace `/exam`, `join_session` → `timer_tick`(30s) /
+  `warning`(600s,300s) / `session_expired`), not the spec's raw-WS/ping-pong —
+  handled in Slice 4 (adds `socket.io-client`, approved; installed when consumed).
+
+**Files (all new except the model split):**
+
+- `exam.dto.ts` — verbatim wire shapes: `ValidateAccess`/`StartExam`/`Answers`
+  requests; `ValidateAccessResponseDto`, `StartExamResponseDto` (options carry
+  only `{ id, optionText }` — `isCorrect` stripped server-side),
+  `SessionStatusResponseDto`, `AutosaveResponseDto`, `ScoreResultDto`,
+  `PreExamConfirmation*`. All bare DTOs (BE-I-01).
+- `exam.model.ts` — **replaced** the old demo types with the real domain model:
+  `ExamQuestion`/`ExamOption` (no correct answer), `AnswerValue`/`AnswerMap`,
+  `AnswerOp` (frontend-only `clientSeq`), `SessionStatus`/`SyncStatus`,
+  `TestSessionStatus`, `ExamAccessPreview`, `ExamSessionStart`,
+  `ExamSessionSnapshot`, `ExamScoreResult`, `PreExamConfirmation`. Carries the
+  reconciliation note as the file header.
+- `exam-demo.model.ts` — **temporary**: the old display-only demo types +
+  `DEMO_EXAM_QUESTIONS`, moved out verbatim so the placeholder runner/result
+  pages keep compiling. The two page imports were repointed here (mechanical, no
+  behaviour change). **Delete in Slice 5** when the pages are rewired.
+- `exam.mappers.ts` — dto ↔ domain; narrows `questionType`/`TestSessionStatus`
+  strings to the domain unions; sorts start questions by `position`.
+- `exam.api.ts` — `ExamApi` (`@Injectable`, `HttpClient`, `environment.apiBaseUrl`):
+  `confirmPreExam`, `validateAccess`, `start`, `getSession`, `autosave`, `submit`,
+  `lateSubmit`. Observables only; error contract (403/404/409 per endpoint)
+  documented in the class JSDoc for the store to branch on via `problemDetailCode`.
+- **i18n:** none this slice (no user-facing strings yet).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ (initial gzip 103.13 kB;
+  known raw-size budget warning only). No live consumer yet; live check deferred
+  until the store/UI slices wire it.
+- **Next:** Slice 2 — `ExamDraftStore` (native IndexedDB, no dep) + in-memory
+  fake; then Slice 3 store, Slice 4 Socket.IO WS, Slice 5 UI rewire + routing.
+
+### Phase 4 · ⭐ Real-exam engine — Slice 2: IndexedDB draft layer (`features/assessments/data-access`) — logic only (uncommitted)
+
+Second sub-slice. The offline answer buffer (spec §5, `08-exam-engine.md`). Pure
+logic + a test fake; nothing consumes it yet (tree-shaken out of the bundle —
+initial gzip still 103.13 kB). No dependency added — native IndexedDB, wrapped by
+hand.
+
+**Files (new):**
+
+- `exam-draft.store.ts` — the `ExamDraftStore` **interface**, the
+  `EXAM_DRAFT_STORE` **DI token** (root factory → `IdbExamDraftStore`), and the
+  native-IndexedDB implementation. DB `ios-exam-drafts` / store `pendingAnswers`,
+  composite key `[sessionId, questionId]`, index `bySession`. Methods: `put`
+  (upsert-if-newer), `markSynced` (ack only on exact `clientSeq` match),
+  `loadPending` (unsynced, ascending `clientSeq`), `deleteSession`,
+  `pruneOlderThan` (returns count). Dependency-free constructor so the boot sweep
+  can `new` it outside DI. Handles `onblocked`/missing-`indexedDB` by rejecting
+  (store degrades to a non-blocking banner per spec §9, wired in Slice 3).
+- `exam-draft.store.fake.ts` — `InMemoryExamDraftStore`, the spec §12 test fake;
+  identical semantics, injectable clock (`now`) for deterministic prune tests.
+
+**Design decisions (reconciliation with spec §5.2 — documented in the file header):**
+
+- **Key is `[sessionId, questionId]`, not the spec's `(sessionId, questionId,
+clientSeq)`.** The live backend has no per-answer endpoint (bulk last-write-wins
+  map), so only the latest answer per question matters locally. `clientSeq` is a
+  monotonic **guard field**: `put` applies only when strictly newer; `markSynced`
+  acks only when the stored `clientSeq` still matches (a fresh edit that lands
+  mid-flush stays pending). This is the mechanism that makes the debounced bulk
+  autosave (Slice 3) safe.
+- **No encryption** (spec §7): `POST /start` issues no per-session key, and rows
+  hold only `{ sessionId, questionId, optionId }` + bookkeeping (no tokens/PII),
+  so plaintext IDB is policy-compliant. No `payload`/`iv` columns.
+- **7-day boot sweep — capability now, wiring deferred to Slice 5.**
+  `pruneOlderThan` is implemented, but it is **not** yet wired into app boot: an
+  eager `app.config.ts` import would drag the exam draft code into the app shell
+  and break the zero-initial-cost guarantee (CLAUDE §7 / spec §11). Slice 5 will
+  run the sweep on exam-route activation (or via a lazy app-initializer that
+  dynamic-imports the store into its own chunk) — settled with the routing work.
+
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ (initial gzip 103.13 kB;
+  known raw-size budget warning only). No live consumer yet.
+- **Next:** Slice 3 — `ExamSessionStore` (signals; `setAnswer` optimistic → IDB →
+  debounced bulk autosave; `resume`; `flushQueue`; `submit`/`lateSubmit`;
+  `canSubmit`). Timer via `getSession` poll initially so the slice runs without WS.
+
+### Phase 4 · ⭐ Real-exam engine — Slice 3: `ExamSessionStore` (`features/assessments/data-access`) — logic only (uncommitted)
+
+Third sub-slice — the signal store that owns exam-session state and the answer
+sync queue (spec §4/§5). Pure logic; no page consumes it yet (tree-shaken —
+initial gzip still 103.13 kB). **Architect review required before the runner
+ships (Slice 5).**
+
+**Files:**
+
+- `exam-session.store.ts` (new) — `ExamSessionStore`, **route-scoped**
+  (`@Injectable()`, no `providedIn`; provided at `/run/:sessionId` in Slice 5 so
+  it's destroyed on route exit). Single writer of the session signals; injects
+  `ExamApi` + `EXAM_DRAFT_STORE`.
+  - **State/derived:** `sessionId`, `certId`, `questions`, `answers`,
+    `sessionStatus`, `syncStatus`, `remainingSeconds`, `expiresAt`, `score`,
+    `error`, `draftError`; computed `answeredCount`, `hasPending`, `progress`,
+    and `canSubmit` (`in-exam`|`reviewing` && !pending && synced).
+  - **`hydrateFromStart(start, ctx)`** — seed from a fresh `POST /start` (carried
+    via router nav state) and persist the session snapshot for reload survival.
+  - **`resume(sessionId)`** — rehydrate after reload: questions from the IDB
+    snapshot (BE-I-23), answers/time/status from `GET /exam/sessions/:id` when
+    online, overlaid with local pending drafts; monotonic `seq` continues above
+    the loaded drafts.
+  - **`setAnswer`** — optimistic signal update → durable IDB `put` → enqueue →
+    debounced (~1 s) **bulk autosave**. IDB failure sets a non-blocking
+    `draftError` but keeps syncing to the server (spec §9).
+  - **`flushQueue`** (private) — posts the whole answers map once, acks exactly
+    the in-flight ops (answers landing mid-flush stay queued), 409 → `markExpired`,
+    network/5xx → `syncStatus='error'`, retried on the next trigger / `online` event.
+  - **`submit` / `lateSubmit`** — send the full answers map; on success set
+    `score`, status `submitted`, delete drafts. Submit **409** (already submitted)
+    and late-submit **403** (grace closed → backend already auto-submitted) are
+    treated as terminal with `score=null` (the result page reads the score from
+    `GET /exam/attempts`).
+  - **`applyServerTick` / `markExpired` / `enterReview` / `backToQuestions`** —
+    hooks the Socket.IO WS (Slice 4) and the runner UI (Slice 5) drive.
+- `exam-draft.store.ts` / `.fake.ts` (extended) — added a second object store
+  `sessionMeta` (keyPath `sessionId`) with `putSessionMeta` / `loadSessionMeta`;
+  `deleteSession` and `pruneOlderThan` now cover it too.
+- `exam.model.ts` (extended) — `PersistedExamSession` (question snapshot + meta).
+
+**Decisions (flag for architect review):**
+
+- **Local question snapshot in IndexedDB (BE-I-23, filed this session).**
+  `GET /exam/sessions/:id` returns no questions and `POST /start` can't be
+  replayed, so reload-resume (incl. offline, spec §8 step 7) is impossible without
+  a local copy. The runner now persists `PersistedExamSession` at start. This
+  stretches CLAUDE §8's "IndexedDB for answer drafts only" — the snapshot carries
+  no correct-answer flag and no PII, and drafts are meaningless without the
+  questions they answer. Reducible to answers-only if the backend adds questions
+  to the session read.
+- **`clientSeq` collision resolver simplified.** Spec §9 uses `Date.now()` + a
+  counter; this store uses a pure per-session monotonic integer (no clock), so
+  intra-session collisions are impossible and there's no local-clock dependency.
+- **Bulk-map submit is self-complete.** `submit` sends the entire answers map, so
+  it's correct even if a pending op wasn't autosaved; the `canSubmit` "synced"
+  gate is a UX guarantee (server has the latest), not a correctness requirement.
+- **Offline remaining-time estimate** from the persisted `expiresAt` is a display
+  seed only (local clock), replaced by the first authoritative WS tick (spec §6.3).
+
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ (initial gzip 103.13 kB;
+  known raw-size budget warning only). No live consumer yet.
+- **Next:** Slice 4 — `ExamSessionWs` (Socket.IO client; adds `socket.io-client`):
+  `join_session` → `applyServerTick` from `timer_tick`, `warning` a11y hooks,
+  `session_expired` → `markExpired`/late-submit, 70 s staleness watchdog, reconnect.
+
+### Phase 4 · ⭐ Real-exam engine — Slice 4: `ExamSessionWs` (Socket.IO) (`features/assessments/data-access`) — logic only (uncommitted)
+
+Fourth sub-slice — the live exam channel (spec §6). Adds the **`socket.io-client`
+dependency** (approved this session; the backend gateway is Socket.IO, so a raw
+`WebSocket` can't speak to it). Still logic-only — nothing imports the WS service
+yet, so it (and socket.io-client) tree-shake out; initial gzip unchanged at
+103.13 kB. **Architect review required before the runner ships (Slice 5).**
+
+**Dependency:** `npm install socket.io-client` → **4.8.3** (added to
+`package.json` + `package-lock.json`). Client build ~11 kB gzip; it will land
+**only** in the lazy exam chunk once Slice 5 wires the runner — never the app
+shell (verified: initial bundle unchanged this slice).
+
+**File (new):** `exam-session.ws.ts` — `ExamSessionWs`, route-scoped
+(`@Injectable()`, provided at `/run/:sessionId` in Slice 5; torn down on route
+exit via `DestroyRef.onDestroy`). Injects `ExamSessionStore` + `AuthStore`.
+
+- **Transport:** `io(`${environment.wsBaseUrl}/exam`, …)` — Socket.IO namespace
+  `/exam`, `transports: ['websocket','polling']`, handshake `auth` as a
+  **function** so the current (possibly rotated) in-memory access token is sent on
+  every (re)connect (never logged, never in the URL).
+- **Server → store:** `timer_tick` / `warning` → `store.applyServerTick(...)`;
+  `session_expired` → `store.applyServerTick(0)` + `store.markExpired()`.
+- **Exposed signals:** `connection` (`idle|connecting|open|reconnecting|closed`),
+  `serverTick` (`{ remainingSeconds, receivedAt }` — the interpolation anchor the
+  Slice 5 timer counts down from), `lastWarning` (10-/5-minute a11y announcer),
+  `isConnected`.
+- **`join_session`** re-emitted on every `connect` (a reconnect is a new socket
+  that must re-join its room); the ack's `remainingSeconds` seeds the first tick.
+- **Staleness watchdog** (`interval(10 s)`, disposed via `takeUntilDestroyed`):
+  no server message for > 70 s while "open" → force `socket.disconnect().connect()`
+  (spec's "two missed pongs > 70 s → reconnect", mapped onto the 30 s tick cadence).
+- **Reconnect:** Socket.IO built-in, `reconnectionDelay` 1 s → max 30 s, infinite
+  attempts (route lifetime caps it) — replaces the spec's manual raw-WS retry.
+
+**Reconciliation with spec §6 (documented in the file header):** the spec assumes
+a raw WebSocket with app-level ping/pong and `tick`(1 s)/`auto-submit` events; the
+live backend is Socket.IO with engine.io's own heartbeat, `timer_tick`(30 s),
+`warning`, and `session_expired`. Handled accordingly.
+
+- **Coupling note:** `ExamSessionWs` injects `ExamSessionStore` and pushes ticks
+  into it (both route-scoped, resolved as the same instances). No cycle (the store
+  doesn't inject the WS). The runner (Slice 5) reads `store.remainingSeconds` +
+  `ws.connection`/`ws.serverTick`/`ws.lastWarning`.
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ (initial gzip 103.13 kB —
+  socket.io-client absent from the initial bundle; known raw-size warning only).
+  WS behaviour can't be exercised in-session (needs a live session + real token);
+  it'll be validated when Slice 5 wires the runner against api-dev.
+- **Next:** Slice 5 — UI rewire + routing: `exam-verify`/`exam-ready`
+  (validate-access + pre-exam-confirmation + start), `exam-runner`
+  (`ExamSessionStore` + `serverTick` timer + connection indicator + submit gating),
+  `exam-result` (score-only; "Review Correct Answers" disabled per BE-I-22), routes
+  `/run/:sessionId` + `/result/:sessionId` with route-scoped providers, the 7-day
+  boot sweep wiring, and the §8 offline acceptance walk-through.
+
+### Phase 4 · ⭐ Real-exam engine — Slice 5a: routing + runner/result rewire (`features/assessments`) — uncommitted
+
+Fifth-slice, part A — the first slice that **touches components and goes live**.
+Wires the runner + result pages to the Slice 1–4 data-access. **Architect review
+required before merge** (CLAUDE §10). Cannot be runtime-tested in-session (needs a
+live session + real token against api-dev); validated by typecheck + strict-template
+build + the §8 walk-through in 5b.
+
+**Routing (`assessments.routes.ts`):**
+
+- `run/:sessionId` — route-scoped `providers: [ExamSessionStore, ExamSessionWs,
+{ provide: EXAM_DRAFT_STORE, useClass: IdbExamDraftStore }]` so a fresh
+  store/socket is created per attempt and destroyed on exit. `result/:sessionId`.
+  `verify` / `ready` unchanged (rewired in 5b).
+
+**`exam-runner.page.ts` (full rewire):**
+
+- Injects the route-scoped `ExamSessionStore` + `ExamSessionWs`. On entry either
+  `hydrateFromStart` (fresh start payload from router nav state — supplied by the
+  ready page in 5b) or `resume(:sessionId)` (reload); then `ws.connect`.
+- **Timer reads `ws.serverTick()`** and interpolates DOWN locally each second
+  (`toSignal(interval(1000))`), never below the server value, HH:MM:SS / MM:SS
+  (CLAUDE §10 — no local-clock anchor).
+- **Submit gated by `store.canSubmit()`** (blocked while pending / not synced);
+  options show default/selected only (no correctness leak); `setAnswer` →
+  IDB → debounced bulk autosave.
+- Terminal handling via an `effect`: server `expired` → auto `lateSubmit`;
+  `submitted` → disconnect WS + navigate to `/result/:sessionId` (score in nav
+  state). Restore-error and loading gates via `@switch` on `sessionStatus`.
+- **a11y:** `role="radiogroup"`/`radio` with `aria-checked`; `aria-live` regions
+  for time warnings (10-/5-min from `ws.lastWarning()`) and sync status; connection
+  indicator; `dir="auto"` on question/option text (bidi).
+
+**`exam-result.page.ts` (rewire — score-only):**
+
+- Reads `ExamScoreResult` from nav state; pass/fail hero + summary card
+  (correct/incorrect counts, score %); certificate + share shown only when passed;
+  neutral "submitted — see history" state when `score` is `null` (terminal race).
+- **"Review Correct Answers" section DISABLED (BE-I-22)** — removed from the live
+  template and preserved as a prose reference comment (per the instruction to
+  comment out, not delete); restore from git once the backend review endpoint ships.
+
+**Model / cleanup:**
+
+- `exam.model.ts` — added `ExamResultNavState`; `exam-session.store.ts` — added
+  `examTitle` signal (runner sidebar / result title).
+- **Deleted `exam-demo.model.ts`** (the temporary demo types + `DEMO_EXAM_QUESTIONS`)
+  now that both pages use the real model — its Slice-1 purpose is done.
+- **i18n:** added `assessments.runner.*` (22 keys — the old demo referenced missing
+  `assessments.runner.*` keys) + `assessments.result.{submittedNeutralTitle,
+submittedNeutralBody,viewInDashboard}` to en/fr/ar. Arabic still needs pro review.
+
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ — strict templates compiled;
+  **initial gzip 103.39 kB** (socket.io-client stays in the lazy assessments chunk,
+  NOT the initial bundle); known raw-size budget warning only. No new build warnings.
+- **Next (Slice 5b — final):** rewire `exam-verify` (validate-access preview +
+  pre-exam identity confirmation) and `exam-ready` (start → nav to `/run/:sessionId`
+  with the start payload + `certId` via nav state); wire the 7-day boot sweep
+  (route-activation or lazy app-initializer); dashboard/cert entry points →
+  `/assessments/verify`; and document the §8 ~60 s offline acceptance walk-through.
+
+### Phase 4 · ⭐ Real-exam engine — Slice 5b: entry pages + boot sweep (`features/assessments`) — uncommitted
+
+Final sub-slice — the exam entry flow, completing the engine. **Architect review
+required before merge** (CLAUDE §10).
+
+**`exam-verify.page.ts` (rewired):** replaced the obsolete email-link mock with a
+functional form — access **code** input (from the exam email) + identity
+attestation (full name required, ID optional), typed reactive form
+(`NonNullableFormBuilder`). On submit → `POST /exam/validate-access` (does not
+consume the code) → navigate to ready with the code + resolved exam metadata
+(`ExamReadyNavState`). 403 → inline "invalid/expired code"; other errors via
+`problemDetailMessage`. Accessible (visible labels, `aria-invalid`/`aria-describedby`,
+`aria-live` errors, `dir="auto"`).
+
+**`exam-ready.page.ts` (rewired):** receives the validated code + exam metadata
+via nav state; shows title + duration. "Let's start" → `POST /exam/start` (consumes
+the code) → navigate to `/run/:sessionId` with `{ start, ctx }` for the runner to
+hydrate. 409 (active session / code used / confirmation required) surfaced inline.
+No-nav-state fallback → "start from your dashboard".
+
+**Boot sweep:** `guards/exam-draft-sweep.guard.ts` — `examDraftSweepGuard`
+(`CanActivateFn`) fires `pruneOlderThan(7 days)` fire-and-forget on entry to the
+assessments area (pathless wrapper route). Realized as **exam-area-entry** rather
+than app-boot to keep the IDB/exam code out of the app shell (CLAUDE §7) — runs in
+the lazy chunk exactly when stale drafts matter.
+
+**Cleanup:** deleted the obsolete `confirm-exam-dialog.ts` + `exam-sent-dialog.ts`
+(email-link flow). Added `ExamReadyNavState` to the model; `assessments.verify.*`
+(11 new keys) + `assessments.ready.*` (10 new keys) to en/fr/ar (Arabic pending
+pro review). Orphaned `assessments.{confirmDialog,sentDialog}` i18n keys left in
+place (harmless; minor future cleanup).
+
+**Backend gap filed:** **BE-I-24** — no `certId` at exam entry, so
+`pre-exam-confirmation` can't be driven by the FE; the flow relies on `start`'s 409
+(which is how the backend gates purchase-enrolled students anyway).
+
+**§8 acceptance walk-through (documented; can't run live in-session):**
+
+1. Mid-exam, answered Q1–Q3, on Q4, online → `connection open`, `syncStatus synced`.
+2. DevTools → Offline ~60 s → runner shows the reconnecting/offline connection
+   chip; `setAnswer` still writes to IndexedDB; timer freezes at the last
+   `serverTick` (no local decrement past it once ticks stop).
+3. Answer Q4, Q5 offline → visible immediately, written to IDB, `pendingOps=2`,
+   submit disabled (`canSubmit` false while pending/unsynced).
+4. Restore network → the `online` event + Socket.IO reconnect fire; `flushQueue`
+   posts the full answers map; `join_session` re-emitted; ticks resume.
+5. `pendingOps=0`, `syncStatus synced`.
+6. Submit enabled → `POST …/submit` → result page renders the score.
+7. Reload while offline → `resume` reads the IDB question snapshot (BE-I-23) +
+   pending drafts; on reconnect `flushQueue` drains as in step 4.
+
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings; `Validators.*` unbound-method disabled file-level per the auth-form
+  pattern) · `ng build --configuration production` ✓ (initial gzip 103.34 kB;
+  socket.io-client stays in the lazy chunk; known raw-size warning only).
+
+### ✅ Real-exam engine (student) — COMPLETE across Slices 1–5b (uncommitted, awaiting architect review)
+
+All five slices done: REST data-access (1) → IndexedDB drafts + session snapshot
+(2) → `ExamSessionStore` (3) → Socket.IO `ExamSessionWs` (4) → routing + UI rewire
+
+- entry pages + boot sweep (5a/5b). Reconciled the aspirational spec (docs 08/09)
+  to the live backend throughout; filed BE-I-22/23/24 for the three real backend
+  gaps (answer-key review, questions-on-resume, certId-at-entry). Not runtime-tested
+  in-session (needs a live session + real token against api-dev); validated by
+  typecheck + strict-template build + the §8 walk-through above.
+
+**Refactor pass (`/simplify`, 4-angle review) applied:** parallelised `resume()`'s
+IndexedDB + network reads (`Promise.all`); batched draft acks into one
+IndexedDB transaction (`markManySynced` replaces per-op `markSynced`); WS connect
+no longer waits on the snapshot-persist write; centralised the `expired →
+late-submit` reaction in the store's `markExpired` (dropped the runner's
+`lateSubmitTried` flag); replaced the `resume('')` sentinel with an explicit
+`failRestore()`; and simplified two redundant `computed` passthroughs + the result
+page's closure-wrapped snapshots. Reuse review found no violations; the `certId`
+forward-plumbing (BE-I-24) was kept intentionally. All green after
+(typecheck/lint/build, initial gzip 103.34 kB).
+
+**Next feature: Learning / courses (student)** — plan item 2.
+
+### Phase 4 · ⭐ Learning / courses — Slice 1: data-access (`features/courses/data-access`) — logic only (uncommitted)
+
+Plan item 2. First slice of the student learning experience, wired to the backend
+`@Controller('learning')`. Pure logic; `features/courses` is still an empty route
+shell, so nothing consumes it yet (tree-shaken — initial gzip unchanged 103.34 kB).
+
+**Backend contract (from `IOS_Backend/src/modules/learning`):** all endpoints
+return a `{ data, meta }` envelope (BE-I-01) and are purchase-gated (403 when not
+enrolled). `GET /learning/certs/:certId/curriculum` (module/lesson tree +
+per-lesson `completed`), `GET /learning/lessons/:id` (localised `contentHtml` +
+short-lived **signed** `videoUrl` + `meta.videoUrlExpiresInSeconds`),
+`GET /learning/lessons/:id/quiz` (correct answers stripped; free-text OR MCQ via
+`options`), `POST …/quiz/check` (instant per-question feedback incl. `correctAnswer`
+— **nothing persisted**, unlimited attempts), `POST …/complete` (idempotent,
+`alreadyCompleted`), `GET /learning/progress` (per-cert `totalLessons /
+completedLessons / percentComplete`).
+
+**Files (new):**
+
+- `courses.dto.ts` — wire shapes mirroring the backend, incl. the `{ data, meta }`
+  envelopes.
+- `courses.model.ts` — domain: `Curriculum`/`CourseModule`/`LessonSummary`,
+  `Lesson` (with `videoUrlExpiresInSeconds`; `contentHtml` flagged
+  MUST-sanitise), `LessonQuiz`/`QuizQuestion`, `QuizCheckResult`/`QuizAnswerResult`,
+  `LessonCompletion`, `CourseProgress`.
+- `courses.mappers.ts` — dto→domain, unwrapping each `{ data, meta }`.
+- `courses.api.ts` — `CoursesApi` (`@Injectable`, `HttpClient`,
+  `environment.apiBaseUrl + '/learning'`): `getCurriculum`, `getLesson`,
+  `getLessonQuiz`, `checkQuiz`, `markComplete`, `getProgress`. Observables only.
+- `courses.store.ts` — `CoursesStore` (root singleton): curriculum / current-lesson
+  / quiz+checkResult / progress slices, each with loading+error signals; actions
+  `loadCurriculum`, `loadLesson`, `loadQuiz`, `checkQuiz`, `markComplete` (reflects
+  completion into the lesson + curriculum immutably), `loadProgress`; clears on
+  `user.logged-out`. `problemDetailMessage` for inline errors; no Observables leak.
+
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ (initial gzip 103.34 kB,
+  tree-shaken; known raw-size warning only).
+
+### Phase 4 · ⭐ Learning / courses — Slice 2: pages (`features/courses/pages`) — uncommitted
+
+Wired the full student learning UI on top of Slice 1. Lazy chunks (not in the app
+shell); initial gzip 103.39 kB. i18n `courses.*` added to en/fr/ar (Arabic pending
+pro review).
+
+**Routing (`courses.routes.ts`):** `/courses` → index · `/courses/:certId` →
+curriculum · `/courses/:certId/lessons/:lessonId` → lesson.
+
+**Pages (new):**
+
+- `courses-index.page.ts` — enrolled certs from `GET /learning/progress` as cards
+  (programCode, title, progress bar, `done/total`), empty state → `/certifications`.
+- `curriculum.page.ts` — module/lesson tree from `GET …/curriculum`; each lesson
+  row shows a completion tick / play icon + duration and links to the lesson.
+- `lesson.page.ts` — signed-URL `<video>`, **sanitised** `contentHtml` via
+  Angular's built-in `[innerHTML]` sanitizer (`.ios-lesson-prose` styling; no
+  `bypassSecurityTrust*`), idempotent **mark-complete**, and an optional **self-check
+  quiz**: MCQ (radios) or free-text, `Check answers` → `POST …/quiz/check` →
+  per-question correct/incorrect + revealed correct answer + score, with `Try again`.
+  A missing quiz (404) simply hides the section (quizzes are optional).
+
+**Notes:**
+
+- Route params read via `route.snapshot.paramMap` (project convention; no
+  same-route lesson→lesson links, so no param-reuse reload issue). Quiz/lesson
+  state lives in the root `CoursesStore`; `answersMap` is per-page.
+- `markComplete` failures surface via the global error toast, deliberately NOT via
+  `lessonError` (which gates the whole lesson view).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ (initial gzip 103.39 kB,
+  courses pages lazy; known raw-size warning only). Not runtime-tested in-session
+  (needs an enrolled student + real token against api-dev).
+- **Follow-ups:** A7 dashboard can now drop the mock `DashboardStore` for
+  `GET /learning/progress`; a "Courses" nav entry / dashboard link into `/courses`
+  can be added where the student nav lives.
+
 ### Phase 4 · Payments data-access (`features/payments/data-access`) — logic only (uncommitted)
 
 Student payment flows against `@Controller('payments')` (student token; RLS-
@@ -855,48 +1304,49 @@ surface by design).
 
 ### By domain
 
-| Domain                              | Endpoints                                                                                                                                                    | Status                                                                                                 |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------ |
-| **Auth (student)**                  | `POST /auth/register`, `/login`, `/forgot-password`, `/reset-password`, `/resend-verification`, `/refresh`, `/logout`                                        | ✅ wired                                                                                               |
-| **Auth — email verify**             | `POST /auth/verify-email`                                                                                                                                    | ❌ deferred (part of the un-wired `complete-account` wizard)                                           |
-| **Auth — admin OTP (C1)**           | `POST /auth/admin/login` (basic call exists), `/auth/admin/login/otp`, `/auth/admin/refresh`, `/auth/admin/logout`                                           | ❌ OTP two-step + admin refresh/logout not wired — **C1, core/auth, needs security review**            |
-| **Profile** `/me`                   | `GET /me`, `GET /me/certificates`, `PATCH /me`, `PATCH /me/password`, `POST /me/avatar-upload-url`                                                           | ✅ wired (A1, A3)                                                                                      |
-| **GDPR**                            | `GET /me/export`, `POST /me/delete`, `POST /consent`                                                                                                         | ✅ wired (A2, C2)                                                                                      |
-| **Analytics**                       | `GET /admin/dashboard/overview`, `GET /insights`, `GET /landing`                                                                                             | ✅ wired (B6, A5/A7, A6)                                                                               |
-| **Blog**                            | public `GET /blog`, `/blog/:slug`; admin CRUD + publish/translations                                                                                         | ✅ wired (BLOG-PUBLIC, BLOG-ADMIN)                                                                     |
-| **Catalog**                         | public `GET /catalog`, `/catalog/:id`, `/catalog/:id/outline`; admin CRUD + translations                                                                     | ✅ wired (B8, catalog translations)                                                                    |
-| **Certificates**                    | public `GET /verify/:certId`; admin `GET /admin/certs/issued`, `PATCH …/revoke`                                                                              | ✅ wired (B2, exam-verify)                                                                             |
-| **Notifications**                   | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all`                                                                                         | ✅ wired (A4)                                                                                          |
-| **Payments (student)**              | `POST /payments/checkout`, `/retake`, `GET /payments/transactions`                                                                                           | ✅ wired                                                                                               |
-| **Promo (admin)**                   | `/admin/promo-codes` CRUD                                                                                                                                    | ✅ wired (B4)                                                                                          |
-| **Staff (admin)**                   | `/admin/staff` CRUD + deactivate                                                                                                                             | ✅ wired (B3)                                                                                          |
-| **Users (admin)**                   | `/admin/users`, `/:id`, `/:id/attempts`, `/:id/access-codes`, revoke                                                                                         | ✅ wired                                                                                               |
-| **Audit (admin)**                   | `GET /admin/audit-logs`                                                                                                                                      | ✅ wired                                                                                               |
-| **Learning-admin**                  | modules/lessons CRUD, `GET /admin/certs/:id/curriculum`, lesson-quiz CRUD                                                                                    | ✅ wired (B1, B5)                                                                                      |
-| **Exam-authoring (admin)**          | certs/exams CRUD, questions, publish/unpublish, translations                                                                                                 | ✅ wired (B7). `GET /admin/exams/:examId/preview` — ❌ not wired (minor)                               |
-| **Exam assign (admin)**             | `GET /admin/exam`, `POST /admin/exam/assign`                                                                                                                 | ✅ wired                                                                                               |
-| **Mock-authoring (admin)**          | `/admin/mock/certs/:certId/questions`, `/admin/mock/questions` CRUD                                                                                          | ✅ wired                                                                                               |
-| **Real-exam history**               | `GET /exam/attempts`                                                                                                                                         | ✅ wired (A7)                                                                                          |
-| **⭐ Real-exam engine (student)**   | `POST /exam/pre-exam-confirmation`, `/validate-access`, `/start`, `GET /exam/sessions/:id`, `POST …/autosave`, `…/submit`, `…/late-submit` (+ exam WS)       | ❌ **BE-ready, FE-missing** — `features/assessments` is a UI stub (display-only countdown, no HTTP/WS) |
-| **⭐ Mock-exam runner (student)**   | `POST /mock/start`, `GET /mock/history`, `/mock/attempts/:id`, `/mock/:id`, `POST …/autosave`, `…/extend`, `…/submit`, `…/questions/:qid/reveal`             | ❌ **BE-ready, FE-missing** — no student mock UI wired                                                 |
-| **⭐ Learning / courses (student)** | `GET /learning/certs/:certId/curriculum`, `/learning/lessons/:id`, `/learning/lessons/:id/quiz`, `POST …/quiz/check`, `…/complete`, `GET /learning/progress` | ❌ **BE-ready, FE-missing** — `features/courses` is an empty route shell                               |
-| **Payments webhook / health / web** | `POST /payments/webhook`, `/health*`, `web` redirect pages                                                                                                   | ⚙️ backend/infra — no FE                                                                               |
+| Domain                              | Endpoints                                                                                                                                                    | Status                                                                                                          |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| **Auth (student)**                  | `POST /auth/register`, `/login`, `/forgot-password`, `/reset-password`, `/resend-verification`, `/refresh`, `/logout`                                        | ✅ wired                                                                                                        |
+| **Auth — email verify**             | `POST /auth/verify-email`                                                                                                                                    | ❌ deferred (part of the un-wired `complete-account` wizard)                                                    |
+| **Auth — admin OTP (C1)**           | `POST /auth/admin/login` (basic call exists), `/auth/admin/login/otp`, `/auth/admin/refresh`, `/auth/admin/logout`                                           | ❌ OTP two-step + admin refresh/logout not wired — **C1, core/auth, needs security review**                     |
+| **Profile** `/me`                   | `GET /me`, `GET /me/certificates`, `PATCH /me`, `PATCH /me/password`, `POST /me/avatar-upload-url`                                                           | ✅ wired (A1, A3)                                                                                               |
+| **GDPR**                            | `GET /me/export`, `POST /me/delete`, `POST /consent`                                                                                                         | ✅ wired (A2, C2)                                                                                               |
+| **Analytics**                       | `GET /admin/dashboard/overview`, `GET /insights`, `GET /landing`                                                                                             | ✅ wired (B6, A5/A7, A6)                                                                                        |
+| **Blog**                            | public `GET /blog`, `/blog/:slug`; admin CRUD + publish/translations                                                                                         | ✅ wired (BLOG-PUBLIC, BLOG-ADMIN)                                                                              |
+| **Catalog**                         | public `GET /catalog`, `/catalog/:id`, `/catalog/:id/outline`; admin CRUD + translations                                                                     | ✅ wired (B8, catalog translations)                                                                             |
+| **Certificates**                    | public `GET /verify/:certId`; admin `GET /admin/certs/issued`, `PATCH …/revoke`                                                                              | ✅ wired (B2, exam-verify)                                                                                      |
+| **Notifications**                   | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all`                                                                                         | ✅ wired (A4)                                                                                                   |
+| **Payments (student)**              | `POST /payments/checkout`, `/retake`, `GET /payments/transactions`                                                                                           | ✅ wired                                                                                                        |
+| **Promo (admin)**                   | `/admin/promo-codes` CRUD                                                                                                                                    | ✅ wired (B4)                                                                                                   |
+| **Staff (admin)**                   | `/admin/staff` CRUD + deactivate                                                                                                                             | ✅ wired (B3)                                                                                                   |
+| **Users (admin)**                   | `/admin/users`, `/:id`, `/:id/attempts`, `/:id/access-codes`, revoke                                                                                         | ✅ wired                                                                                                        |
+| **Audit (admin)**                   | `GET /admin/audit-logs`                                                                                                                                      | ✅ wired                                                                                                        |
+| **Learning-admin**                  | modules/lessons CRUD, `GET /admin/certs/:id/curriculum`, lesson-quiz CRUD                                                                                    | ✅ wired (B1, B5)                                                                                               |
+| **Exam-authoring (admin)**          | certs/exams CRUD, questions, publish/unpublish, translations                                                                                                 | ✅ wired (B7). `GET /admin/exams/:examId/preview` — ❌ not wired (minor)                                        |
+| **Exam assign (admin)**             | `GET /admin/exam`, `POST /admin/exam/assign`                                                                                                                 | ✅ wired                                                                                                        |
+| **Mock-authoring (admin)**          | `/admin/mock/certs/:certId/questions`, `/admin/mock/questions` CRUD                                                                                          | ✅ wired                                                                                                        |
+| **Real-exam history**               | `GET /exam/attempts`                                                                                                                                         | ✅ wired (A7)                                                                                                   |
+| **⭐ Real-exam engine (student)**   | `POST /exam/pre-exam-confirmation`, `/validate-access`, `/start`, `GET /exam/sessions/:id`, `POST …/autosave`, `…/submit`, `…/late-submit` (+ exam WS)       | ✅ **wired (Slices 1–5b, uncommitted — architect review pending)**. `pre-exam-confirmation` deferred (BE-I-24). |
+| **⭐ Mock-exam runner (student)**   | `POST /mock/start`, `GET /mock/history`, `/mock/attempts/:id`, `/mock/:id`, `POST …/autosave`, `…/extend`, `…/submit`, `…/questions/:qid/reveal`             | ❌ **BE-ready, FE-missing** — no student mock UI wired                                                          |
+| **⭐ Learning / courses (student)** | `GET /learning/certs/:certId/curriculum`, `/learning/lessons/:id`, `/learning/lessons/:id/quiz`, `POST …/quiz/check`, `…/complete`, `GET /learning/progress` | ✅ **wired** — `features/courses` data-access + index/curriculum/lesson pages (uncommitted; awaiting review)    |
+| **Payments webhook / health / web** | `POST /payments/webhook`, `/health*`, `web` redirect pages                                                                                                   | ⚙️ backend/infra — no FE                                                                                        |
 
 ### Done from BE side, NOT done from ours (the new plan backlog)
 
 Ordered by size/impact. Everything below is deployed on the backend and blocked
 only on **frontend** work:
 
-1. **⭐ Real-exam engine (student)** — the highest-stakes surface (CLAUDE §10 /
-   `09-exam-engine.md`). Needs a real `features/assessments` data-access layer:
-   `exam.api` (pre-exam-confirmation → validate-access → start → session load →
-   autosave → submit / late-submit), the **exam WebSocket** (`*.ws.ts`, 30 s
-   heartbeat, `serverTick()`), **IndexedDB** answer drafts with `clientSeq`, and
-   the ~60 s offline acceptance scenario. Large, multi-session; architect review.
-2. **⭐ Learning / courses (student)** — the whole learn experience: cert
-   curriculum browser, lesson viewer, per-lesson quiz + check, mark-complete, and
-   `GET /learning/progress` (which also lets A7's dashboard charts/certs drop the
-   mock `DashboardStore`). Build `features/courses` data-access + pages.
+1. **⭐ Real-exam engine (student)** — ✅ **DONE (Slices 1–5b, uncommitted,
+   awaiting architect review).** Full `features/assessments` data-access
+   (`exam.api` + `exam-session.store` + `exam-session.ws` Socket.IO + IndexedDB
+   drafts/snapshot), runner/result/verify/ready UI, `/run/:sessionId` routing, and
+   the 7-day sweep. Reconciled to the live backend (BE-I-22/23/24 filed). See the
+   Slice 1–5b entries under "Tasks currently in progress".
+2. **⭐ Learning / courses (student)** — ✅ **DONE (uncommitted, awaiting review)**.
+   Built `features/courses` data-access + index/curriculum/lesson pages (curriculum
+   browser, lesson viewer with sanitised HTML + signed-URL video + mark-complete,
+   self-check quiz + check). Follow-up: A7's dashboard can now drop the mock
+   `DashboardStore` for `GET /learning/progress`.
 3. **⭐ Mock-exam runner (student)** — practice-exam flow with reveal/extend and
    `GET /mock/history` (shares much of the real-exam runner's shape; can reuse
    patterns once #1 exists).
@@ -914,8 +1364,9 @@ removed/mock endpoint anymore (the last such stubs — landing null-fallback, bl
 
 ## Remaining tasks (high level)
 
-**User-facing FE gaps (BE-ready — see reconciliation above):** real-exam engine,
-learning/courses, mock-exam runner, C1 admin OTP, email-verify/complete-account.
+**User-facing FE gaps (BE-ready — see reconciliation above):** ~~real-exam engine~~
+(done, uncommitted), ~~learning/courses~~ (done, uncommitted), mock-exam runner,
+C1 admin OTP, email-verify/complete-account.
 
 **Known backend blocker:** **BE-I-21** — blog article creation 404s + rolls back
 (read-after-write across two connections); blog authoring can't complete E2E until

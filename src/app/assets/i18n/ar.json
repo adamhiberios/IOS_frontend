@@ -2081,6 +2081,36 @@
       }
     }
   },
+  "courses": {
+    "common": {
+      "loading": "جارٍ التحميل…",
+      "minutes": "{minutes} دقيقة"
+    },
+    "index": {
+      "title": "دوراتي",
+      "subtitle": "تابع من حيث توقفت.",
+      "emptyTitle": "لست مسجّلاً في أي دورة بعد.",
+      "browse": "تصفّح الشهادات",
+      "lessonsDone": "{done} من {total} درس"
+    },
+    "curriculum": {
+      "back": "جميع الدورات",
+      "completed": "مكتمل"
+    },
+    "lesson": {
+      "back": "العودة إلى المنهج",
+      "completed": "مكتمل",
+      "markComplete": "وضع علامة كمكتمل"
+    },
+    "quiz": {
+      "check": "تحقق من الإجابات",
+      "checking": "جارٍ التحقق…",
+      "correct": "صحيح",
+      "incorrectAnswer": "الإجابة الصحيحة: {answer}",
+      "scoreLine": "حصلت على {correct} من {total} إجابة صحيحة",
+      "tryAgain": "حاول مرة أخرى"
+    }
+  },
   "assessments": {
     "result": {
       "breadcrumbParent": "الاختبار النهائي",

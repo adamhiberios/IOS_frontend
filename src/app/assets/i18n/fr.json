@@ -2081,6 +2081,36 @@
       }
     }
   },
+  "courses": {
+    "common": {
+      "loading": "Chargement…",
+      "minutes": "{minutes} min"
+    },
+    "index": {
+      "title": "Mes cours",
+      "subtitle": "Reprenez où vous vous êtes arrêté.",
+      "emptyTitle": "Vous n'êtes inscrit à aucun cours pour le moment.",
+      "browse": "Parcourir les certifications",
+      "lessonsDone": "{done} sur {total} leçons"
+    },
+    "curriculum": {
+      "back": "Tous les cours",
+      "completed": "Terminé"
+    },
+    "lesson": {
+      "back": "Retour au programme",
+      "completed": "Terminé",
+      "markComplete": "Marquer comme terminé"
+    },
+    "quiz": {
+      "check": "Vérifier les réponses",
+      "checking": "Vérification…",
+      "correct": "Correct",
+      "incorrectAnswer": "Bonne réponse : {answer}",
+      "scoreLine": "Vous avez {correct} sur {total} bonnes réponses",
+      "tryAgain": "Réessayer"
+    }
+  },
   "assessments": {
     "result": {
       "breadcrumbParent": "Examen final",
