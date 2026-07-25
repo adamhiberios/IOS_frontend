@@ -775,9 +775,12 @@ to en/fr/ar (Arabic pending pro review).
 - **Reveal-on-demand, not auto-reveal.** The demo auto-revealed the answer on every
   selection; the real runner reveals only on the explicit "Reveal answer" button
   (one `POST …/reveal` per use) — the endpoint's intended, non-spammy usage.
-- **Soft timer is a local countdown** seeded from the server's `remainingSeconds`
-  and re-seeded on extend — acceptable because the mock timer is non-terminal. A
-  `/mock` Socket.IO channel (soft, reuses the exam WS shape) is a follow-up.
+- **Soft timer is now server-authoritative** via `mock-session.ws.ts` (Socket.IO
+  namespace `/mock`, reuses the exam WS shape): `timer_tick`/`warning`/`time_up` →
+  `MockStore.applyRemaining`; the runner interpolates down locally between ticks
+  (anchored by an effect on `store.remainingSeconds`) and gracefully degrades to a
+  pure local countdown if the WS is unavailable. Non-terminal (`time_up` prompts
+  extend, never auto-submits). socket.io-client is shared with the exam chunk.
 - **History view** (`GET /mock/history`) — ✅ now surfaced: `mock-history.page.ts`
   at `certificates/mock-test/history` (cursor-paged "past attempts" list; submitted
   rows → review, in-progress rows → resume). Linked from the courses index header

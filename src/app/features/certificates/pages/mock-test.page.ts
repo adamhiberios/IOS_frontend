@@ -1,10 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  DestroyRef,
   computed,
   effect,
   inject,
   signal,
+  untracked,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -24,6 +26,7 @@ import { CanadaFlag, IosIcon, provideIcons } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { MockStore } from '../data-access/mock.store';
+import { MockSessionWs } from '../data-access/mock-session.ws';
 import { type MockQuestion } from '../data-access/mock.model';
 import { CertMockExitDialog } from '../components/cert-mock-exit-dialog';
 import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
@@ -321,8 +324,10 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
 export class MockTestPage {
   protected readonly lang = inject(LanguageService);
   protected readonly store = inject(MockStore);
+  protected readonly ws = inject(MockSessionWs);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly yearStr = String(new Date().getFullYear());
 
@@ -375,11 +380,11 @@ export class MockTestPage {
     const attemptId = this.route.snapshot.queryParamMap.get('attemptId');
     const certId = this.route.snapshot.queryParamMap.get('certId');
     if (attemptId) {
-      void this.store.resume(attemptId).then(() => this.seed());
+      void this.store.resume(attemptId).then(() => this.ws.connect(attemptId));
     } else if (certId) {
       void this.store.start(certId).then((id) => {
         if (!id) return;
-        this.seed();
+        this.ws.connect(id);
         // Rewrite the URL so a reload resumes the same attempt.
         void this.router.navigate([], {
           relativeTo: this.route,
@@ -390,6 +395,16 @@ export class MockTestPage {
     } else {
       this.store.clear();
     }
+    this.destroyRef.onDestroy(() => this.ws.disconnect());
+
+    // Re-anchor the interpolated countdown whenever the AUTHORITATIVE remaining
+    // time changes — start/resume/extend and every server `timer_tick` (the WS
+    // feeds `MockStore.applyRemaining`). Interpolate down locally between ticks.
+    effect(() => {
+      this.seededRemaining = this.store.remainingSeconds();
+      this.seededAtTick = untracked(() => this.uiTick());
+      this.timeUpShown = false;
+    });
 
     // Soft timer reached zero → prompt to extend (never auto-submits).
     effect(() => {
@@ -402,13 +417,6 @@ export class MockTestPage {
         this.showTimeupDialog.set(true);
       }
     });
-  }
-
-  /** Re-anchor the local countdown to the store's current remaining seconds. */
-  private seed(): void {
-    this.seededRemaining = this.store.remainingSeconds();
-    this.seededAtTick = this.uiTick();
-    this.timeUpShown = false;
   }
 
   protected letterFor(index: number): string {
@@ -462,10 +470,11 @@ export class MockTestPage {
     void this.submitAndGo();
   }
 
-  /** Extend the soft timer via the backend (capped), then re-anchor the countdown. */
+  /** Extend the soft timer via the backend (capped). `extend` updates the store's
+   *  remaining time, which the anchor effect picks up to re-seed the countdown. */
   protected onAddTime(): void {
     this.showTimeupDialog.set(false);
-    void this.store.extend().then(() => this.seed());
+    void this.store.extend();
   }
 
   protected optionClass(optionId: string): string {
