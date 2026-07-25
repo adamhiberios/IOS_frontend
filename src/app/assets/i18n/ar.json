@@ -2106,7 +2106,16 @@
     "goToCourses": "الذهاب إلى دوراتي",
     "extensionsLeft": "بقيت {count} تمديدات للوقت",
     "readyHeading": "أنت جاهز للامتحان النهائي!",
-    "keepPractisingHeading": "واصل التدرّب استعدادًا للامتحان النهائي"
+    "keepPractisingHeading": "واصل التدرّب استعدادًا للامتحان النهائي",
+    "history": {
+      "title": "سجل الاختبارات التجريبية",
+      "empty": "لم تُجرِ أي اختبار تجريبي بعد.",
+      "scoreLine": "{correct} من {total} صحيحة",
+      "inProgress": "قيد التقدم",
+      "resume": "استئناف",
+      "loadMore": "تحميل المزيد",
+      "viewAll": "عرض جميع المحاولات"
+    }
   },
   "courses": {
     "common": {

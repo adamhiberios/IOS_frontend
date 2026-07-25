@@ -2106,7 +2106,16 @@
     "goToCourses": "Go to my courses",
     "extensionsLeft": "{count} time extensions left",
     "readyHeading": "You're ready for the final exam!",
-    "keepPractisingHeading": "Keep practising for the final exam"
+    "keepPractisingHeading": "Keep practising for the final exam",
+    "history": {
+      "title": "Practice history",
+      "empty": "You haven't taken any practice tests yet.",
+      "scoreLine": "{correct} of {total} correct",
+      "inProgress": "In progress",
+      "resume": "Resume",
+      "loadMore": "Load more",
+      "viewAll": "View all practice attempts"
+    }
   },
   "courses": {
     "common": {

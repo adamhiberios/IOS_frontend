@@ -2106,7 +2106,16 @@
     "goToCourses": "Aller à mes cours",
     "extensionsLeft": "{count} prolongations de temps restantes",
     "readyHeading": "Vous êtes prêt pour l'examen final !",
-    "keepPractisingHeading": "Continuez à vous entraîner pour l'examen final"
+    "keepPractisingHeading": "Continuez à vous entraîner pour l'examen final",
+    "history": {
+      "title": "Historique des tests blancs",
+      "empty": "Vous n'avez pas encore passé de test blanc.",
+      "scoreLine": "{correct} sur {total} correctes",
+      "inProgress": "En cours",
+      "resume": "Reprendre",
+      "loadMore": "Charger plus",
+      "viewAll": "Voir toutes les tentatives"
+    }
   },
   "courses": {
     "common": {

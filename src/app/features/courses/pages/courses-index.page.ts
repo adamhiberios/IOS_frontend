@@ -23,13 +23,23 @@ import { CoursesStore } from '../data-access/courses.store';
 
       <main class="flex-1 w-full px-4 md:px-20 py-10" id="main-content">
         <div class="max-w-[1100px] mx-auto flex flex-col gap-8">
-          <header class="flex flex-col gap-2">
-            <h1 class="text-[28px] md:text-[32px] font-bold text-ios-fg-13 leading-tight">
-              {{ lang.t('courses.index.title') }}
-            </h1>
-            <p class="text-[15px] font-medium text-ios-fg-8">
-              {{ lang.t('courses.index.subtitle') }}
-            </p>
+          <header class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+            <div class="flex flex-col gap-2">
+              <h1 class="text-[28px] md:text-[32px] font-bold text-ios-fg-13 leading-tight">
+                {{ lang.t('courses.index.title') }}
+              </h1>
+              <p class="text-[15px] font-medium text-ios-fg-8">
+                {{ lang.t('courses.index.subtitle') }}
+              </p>
+            </div>
+            <a
+              routerLink="/dashboard/certificates/mock-test/history"
+              class="inline-flex h-11 shrink-0 items-center justify-center rounded-xl border border-ios-surface-hover
+                     bg-white px-5 font-semibold text-ios-fg-11 transition-colors hover:bg-[#f8f8f8] w-fit
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+                     focus-visible:ring-ios-brand-primary/40"
+              >{{ lang.t('mock.history.title') }}</a
+            >
           </header>
 
           @if (store.progressLoading()) {

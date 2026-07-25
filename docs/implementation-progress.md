@@ -778,8 +778,10 @@ to en/fr/ar (Arabic pending pro review).
 - **Soft timer is a local countdown** seeded from the server's `remainingSeconds`
   and re-seeded on extend — acceptable because the mock timer is non-terminal. A
   `/mock` Socket.IO channel (soft, reuses the exam WS shape) is a follow-up.
-- **History view** (`GET /mock/history`) is in the store but not yet surfaced as a
-  page — a follow-up (a "past attempts" list).
+- **History view** (`GET /mock/history`) — ✅ now surfaced: `mock-history.page.ts`
+  at `certificates/mock-test/history` (cursor-paged "past attempts" list; submitted
+  rows → review, in-progress rows → resume). Linked from the courses index header
+  and the mock result page.
 - **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
   warnings) · `ng build --configuration production` ✓ (initial gzip 103.28 kB,
   mock pages lazy; known raw-size warning only). Not runtime-tested in-session

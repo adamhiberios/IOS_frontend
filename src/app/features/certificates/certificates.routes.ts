@@ -19,6 +19,11 @@ const CERTIFICATES_ROUTES: Routes = [
   // captures `mock-test`. These are the real (backend-wired) mock runner/result,
   // query-param driven: `?certId=` starts an attempt, `?attemptId=` resumes/reviews.
   {
+    path: 'mock-test/history',
+    title: 'Practice History',
+    loadComponent: () => import('./pages/mock-history.page').then((m) => m.MockHistoryPage),
+  },
+  {
     path: 'mock-test/result',
     title: 'Mock Test Results',
     loadComponent: () => import('./pages/mock-exam-result.page').then((m) => m.MockExamResultPage),

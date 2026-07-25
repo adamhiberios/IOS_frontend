@@ -216,6 +216,11 @@ import { MockStore } from '../data-access/mock.store';
                     aria-hidden="true"
                   />
                 </a>
+                <a
+                  routerLink="/dashboard/certificates/mock-test/history"
+                  class="text-[15px] font-medium text-white/80 hover:text-white underline underline-offset-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                  >{{ lang.t('mock.history.viewAll') }}</a
+                >
               </div>
             </section>
           } @else {
