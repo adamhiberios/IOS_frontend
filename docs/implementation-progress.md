@@ -711,6 +711,47 @@ curriculum · `/courses/:certId/lessons/:lessonId` → lesson.
   `GET /learning/progress`; a "Courses" nav entry / dashboard link into `/courses`
   can be added where the student nav lives.
 
+### Phase 4 · ⭐ Mock-exam runner — Slice 1: data-access (`features/certificates/data-access`) — logic only (uncommitted)
+
+Plan item 3. First slice of the student practice-exam engine, wired to the
+backend `@Controller('mock')`. Pure logic; no page consumes it yet (tree-shaken —
+initial gzip unchanged 103.39 kB). Lives in `features/certificates` (where the
+existing demo `mock-test.page` / `mock-exam-result.page` already are).
+
+**Contract vs. the real exam:** the mock timer is **soft / non-terminal**
+(extendable via `POST /mock/:id/extend`, never auto-submits — `timeUp` is
+advisory), correct answers **are** revealed (`POST …/reveal` hint + the
+`GET /mock/attempts/:id` review), history is cursor-paginated, and nothing is
+graded on the client. `readyForFinal` is advisory only (never blocks the real exam).
+
+**Files (new, `features/certificates/data-access/`):**
+
+- `mock.dto.ts` — wire shapes: start / session / autosave / extend / submit /
+  reveal / history (`{ data, meta.pagination }`) / review (`{ data }`, reveals key).
+- `mock.model.ts` — domain: `MockStart`/`MockSession`/`MockQuestion`,
+  `MockResult`/`MockReadiness`, `MockExtension`, `MockReveal`, `MockHistoryItem`,
+  `MockReview`/`MockReviewQuestion`.
+- `mock.mappers.ts` — dto→domain, unwrapping envelopes, ordering questions by position.
+- `mock.api.ts` — `MockApi`: `start`, `getSession`, `autosave`, `extend`,
+  `submit`, `reveal`, `getHistory` (via `@core/http` `toPage`/`toHttpParams`),
+  `getReview`. Error contract (403/409/422/404) documented in the class JSDoc.
+- `mock.store.ts` — `MockStore` (root singleton): live-runner slice (start/resume,
+  optimistic `setAnswer` → debounced bulk autosave, `extend`, `submit`, `reveal`),
+  cursor-paginated `history` (`load`/`loadMore`), and `review`; clears on
+  `user.logged-out`.
+
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ (initial gzip 103.39 kB,
+  tree-shaken; known raw-size warning only). No live consumer yet.
+- **Next:** Slice 2 — student mock UI: replace the demo `mock-test.page` runner
+  (serverTick timer + extend + reveal-hint + submit), `mock-exam-result.page`
+  (real score/readiness + per-question review via `GET /mock/attempts/:id`), and a
+  history view. **Entry decision (like the exam):** `POST /mock/start` needs a
+  UUID `certId`, but the demo mock routes are slug-based (`:code`) — the start
+  should be triggered from a UUID-bearing context (courses/dashboard via
+  `GET /learning/progress`), to settle when the UI is wired. A `/mock` Socket.IO
+  timer channel (namespace `/mock`, soft/non-terminal) can reuse the exam WS shape.
+
 ### Phase 4 · Payments data-access (`features/payments/data-access`) — logic only (uncommitted)
 
 Student payment flows against `@Controller('payments')` (student token; RLS-
@@ -1304,32 +1345,32 @@ surface by design).
 
 ### By domain
 
-| Domain                              | Endpoints                                                                                                                                                    | Status                                                                                                          |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
-| **Auth (student)**                  | `POST /auth/register`, `/login`, `/forgot-password`, `/reset-password`, `/resend-verification`, `/refresh`, `/logout`                                        | ✅ wired                                                                                                        |
-| **Auth — email verify**             | `POST /auth/verify-email`                                                                                                                                    | ❌ deferred (part of the un-wired `complete-account` wizard)                                                    |
-| **Auth — admin OTP (C1)**           | `POST /auth/admin/login` (basic call exists), `/auth/admin/login/otp`, `/auth/admin/refresh`, `/auth/admin/logout`                                           | ❌ OTP two-step + admin refresh/logout not wired — **C1, core/auth, needs security review**                     |
-| **Profile** `/me`                   | `GET /me`, `GET /me/certificates`, `PATCH /me`, `PATCH /me/password`, `POST /me/avatar-upload-url`                                                           | ✅ wired (A1, A3)                                                                                               |
-| **GDPR**                            | `GET /me/export`, `POST /me/delete`, `POST /consent`                                                                                                         | ✅ wired (A2, C2)                                                                                               |
-| **Analytics**                       | `GET /admin/dashboard/overview`, `GET /insights`, `GET /landing`                                                                                             | ✅ wired (B6, A5/A7, A6)                                                                                        |
-| **Blog**                            | public `GET /blog`, `/blog/:slug`; admin CRUD + publish/translations                                                                                         | ✅ wired (BLOG-PUBLIC, BLOG-ADMIN)                                                                              |
-| **Catalog**                         | public `GET /catalog`, `/catalog/:id`, `/catalog/:id/outline`; admin CRUD + translations                                                                     | ✅ wired (B8, catalog translations)                                                                             |
-| **Certificates**                    | public `GET /verify/:certId`; admin `GET /admin/certs/issued`, `PATCH …/revoke`                                                                              | ✅ wired (B2, exam-verify)                                                                                      |
-| **Notifications**                   | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all`                                                                                         | ✅ wired (A4)                                                                                                   |
-| **Payments (student)**              | `POST /payments/checkout`, `/retake`, `GET /payments/transactions`                                                                                           | ✅ wired                                                                                                        |
-| **Promo (admin)**                   | `/admin/promo-codes` CRUD                                                                                                                                    | ✅ wired (B4)                                                                                                   |
-| **Staff (admin)**                   | `/admin/staff` CRUD + deactivate                                                                                                                             | ✅ wired (B3)                                                                                                   |
-| **Users (admin)**                   | `/admin/users`, `/:id`, `/:id/attempts`, `/:id/access-codes`, revoke                                                                                         | ✅ wired                                                                                                        |
-| **Audit (admin)**                   | `GET /admin/audit-logs`                                                                                                                                      | ✅ wired                                                                                                        |
-| **Learning-admin**                  | modules/lessons CRUD, `GET /admin/certs/:id/curriculum`, lesson-quiz CRUD                                                                                    | ✅ wired (B1, B5)                                                                                               |
-| **Exam-authoring (admin)**          | certs/exams CRUD, questions, publish/unpublish, translations                                                                                                 | ✅ wired (B7). `GET /admin/exams/:examId/preview` — ❌ not wired (minor)                                        |
-| **Exam assign (admin)**             | `GET /admin/exam`, `POST /admin/exam/assign`                                                                                                                 | ✅ wired                                                                                                        |
-| **Mock-authoring (admin)**          | `/admin/mock/certs/:certId/questions`, `/admin/mock/questions` CRUD                                                                                          | ✅ wired                                                                                                        |
-| **Real-exam history**               | `GET /exam/attempts`                                                                                                                                         | ✅ wired (A7)                                                                                                   |
-| **⭐ Real-exam engine (student)**   | `POST /exam/pre-exam-confirmation`, `/validate-access`, `/start`, `GET /exam/sessions/:id`, `POST …/autosave`, `…/submit`, `…/late-submit` (+ exam WS)       | ✅ **wired (Slices 1–5b, uncommitted — architect review pending)**. `pre-exam-confirmation` deferred (BE-I-24). |
-| **⭐ Mock-exam runner (student)**   | `POST /mock/start`, `GET /mock/history`, `/mock/attempts/:id`, `/mock/:id`, `POST …/autosave`, `…/extend`, `…/submit`, `…/questions/:qid/reveal`             | ❌ **BE-ready, FE-missing** — no student mock UI wired                                                          |
-| **⭐ Learning / courses (student)** | `GET /learning/certs/:certId/curriculum`, `/learning/lessons/:id`, `/learning/lessons/:id/quiz`, `POST …/quiz/check`, `…/complete`, `GET /learning/progress` | ✅ **wired** — `features/courses` data-access + index/curriculum/lesson pages (uncommitted; awaiting review)    |
-| **Payments webhook / health / web** | `POST /payments/webhook`, `/health*`, `web` redirect pages                                                                                                   | ⚙️ backend/infra — no FE                                                                                        |
+| Domain                              | Endpoints                                                                                                                                                    | Status                                                                                                                |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| **Auth (student)**                  | `POST /auth/register`, `/login`, `/forgot-password`, `/reset-password`, `/resend-verification`, `/refresh`, `/logout`                                        | ✅ wired                                                                                                              |
+| **Auth — email verify**             | `POST /auth/verify-email`                                                                                                                                    | ❌ deferred (part of the un-wired `complete-account` wizard)                                                          |
+| **Auth — admin OTP (C1)**           | `POST /auth/admin/login` (basic call exists), `/auth/admin/login/otp`, `/auth/admin/refresh`, `/auth/admin/logout`                                           | ❌ OTP two-step + admin refresh/logout not wired — **C1, core/auth, needs security review**                           |
+| **Profile** `/me`                   | `GET /me`, `GET /me/certificates`, `PATCH /me`, `PATCH /me/password`, `POST /me/avatar-upload-url`                                                           | ✅ wired (A1, A3)                                                                                                     |
+| **GDPR**                            | `GET /me/export`, `POST /me/delete`, `POST /consent`                                                                                                         | ✅ wired (A2, C2)                                                                                                     |
+| **Analytics**                       | `GET /admin/dashboard/overview`, `GET /insights`, `GET /landing`                                                                                             | ✅ wired (B6, A5/A7, A6)                                                                                              |
+| **Blog**                            | public `GET /blog`, `/blog/:slug`; admin CRUD + publish/translations                                                                                         | ✅ wired (BLOG-PUBLIC, BLOG-ADMIN)                                                                                    |
+| **Catalog**                         | public `GET /catalog`, `/catalog/:id`, `/catalog/:id/outline`; admin CRUD + translations                                                                     | ✅ wired (B8, catalog translations)                                                                                   |
+| **Certificates**                    | public `GET /verify/:certId`; admin `GET /admin/certs/issued`, `PATCH …/revoke`                                                                              | ✅ wired (B2, exam-verify)                                                                                            |
+| **Notifications**                   | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all`                                                                                         | ✅ wired (A4)                                                                                                         |
+| **Payments (student)**              | `POST /payments/checkout`, `/retake`, `GET /payments/transactions`                                                                                           | ✅ wired                                                                                                              |
+| **Promo (admin)**                   | `/admin/promo-codes` CRUD                                                                                                                                    | ✅ wired (B4)                                                                                                         |
+| **Staff (admin)**                   | `/admin/staff` CRUD + deactivate                                                                                                                             | ✅ wired (B3)                                                                                                         |
+| **Users (admin)**                   | `/admin/users`, `/:id`, `/:id/attempts`, `/:id/access-codes`, revoke                                                                                         | ✅ wired                                                                                                              |
+| **Audit (admin)**                   | `GET /admin/audit-logs`                                                                                                                                      | ✅ wired                                                                                                              |
+| **Learning-admin**                  | modules/lessons CRUD, `GET /admin/certs/:id/curriculum`, lesson-quiz CRUD                                                                                    | ✅ wired (B1, B5)                                                                                                     |
+| **Exam-authoring (admin)**          | certs/exams CRUD, questions, publish/unpublish, translations                                                                                                 | ✅ wired (B7). `GET /admin/exams/:examId/preview` — ❌ not wired (minor)                                              |
+| **Exam assign (admin)**             | `GET /admin/exam`, `POST /admin/exam/assign`                                                                                                                 | ✅ wired                                                                                                              |
+| **Mock-authoring (admin)**          | `/admin/mock/certs/:certId/questions`, `/admin/mock/questions` CRUD                                                                                          | ✅ wired                                                                                                              |
+| **Real-exam history**               | `GET /exam/attempts`                                                                                                                                         | ✅ wired (A7)                                                                                                         |
+| **⭐ Real-exam engine (student)**   | `POST /exam/pre-exam-confirmation`, `/validate-access`, `/start`, `GET /exam/sessions/:id`, `POST …/autosave`, `…/submit`, `…/late-submit` (+ exam WS)       | ✅ **wired (Slices 1–5b, uncommitted — architect review pending)**. `pre-exam-confirmation` deferred (BE-I-24).       |
+| **⭐ Mock-exam runner (student)**   | `POST /mock/start`, `GET /mock/history`, `/mock/attempts/:id`, `/mock/:id`, `POST …/autosave`, `…/extend`, `…/submit`, `…/questions/:qid/reveal`             | 🟡 **data-access wired** (`features/certificates/data-access/mock.*`, uncommitted); student mock **UI** still pending |
+| **⭐ Learning / courses (student)** | `GET /learning/certs/:certId/curriculum`, `/learning/lessons/:id`, `/learning/lessons/:id/quiz`, `POST …/quiz/check`, `…/complete`, `GET /learning/progress` | ✅ **wired** — `features/courses` data-access + index/curriculum/lesson pages (uncommitted; awaiting review)          |
+| **Payments webhook / health / web** | `POST /payments/webhook`, `/health*`, `web` redirect pages                                                                                                   | ⚙️ backend/infra — no FE                                                                                              |
 
 ### Done from BE side, NOT done from ours (the new plan backlog)
 
