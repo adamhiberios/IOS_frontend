@@ -8,6 +8,7 @@ import { AppEventBus } from '@core/event-bus';
 
 import { AuthApi } from './auth.api';
 import {
+  type AdminLoginChallenge,
   type AuthSession,
   type LoginCredentials,
   type LogoutReason,
@@ -42,13 +43,23 @@ export class AuthStore {
   private _refreshInFlight: Observable<string> | null = null;
   /** Pending submit so UI can render `pending` / `error` states. */
   private readonly _submitState = signal<SubmitState>({ status: 'idle' });
+  /** Active admin OTP challenge (step 2 of admin login), if any. */
+  private readonly _otpChallenge = signal<AdminLoginChallenge | null>(null);
+  /** Where to land after a successful admin OTP verify. */
+  private _pendingAdminReturnUrl: string | null = null;
 
   /* -------------------------- read-only views ------------------------ */
   readonly accessToken = this._accessToken.asReadonly();
   readonly user = this._user.asReadonly();
   readonly roles = this._roles.asReadonly();
   readonly submitState = this._submitState.asReadonly();
+  readonly otpChallenge = this._otpChallenge.asReadonly();
   readonly isAuthenticated = computed(() => this._accessToken() !== null);
+  /** True when the active session is a staff/admin session (not a student). */
+  readonly isAdminSession = computed(() => {
+    const r = this._roles();
+    return r.length > 0 && !r.includes('student');
+  });
 
   /** Returns true if the active session has any of the supplied roles. */
   hasAnyRole(allowed: readonly Role[]): boolean {
@@ -106,9 +117,19 @@ export class AuthStore {
    */
   async loginAdmin(creds: LoginCredentials, returnUrl?: string | null): Promise<void> {
     this._submitState.set({ status: 'pending' });
+    this._otpChallenge.set(null);
     try {
-      const session = await firstValueFrom(this.api.loginAdmin(creds));
-      this.adoptSession(session);
+      const result = await firstValueFrom(this.api.loginAdmin(creds));
+      if (result.kind === 'otp') {
+        // OTP enabled: the password was accepted but NO session/token exists yet
+        // — hold the challenge and let the page render the code step. Nothing is
+        // adopted until verifyAdminOtp succeeds.
+        this._otpChallenge.set(result.challenge);
+        this._pendingAdminReturnUrl = returnUrl ?? null;
+        this._submitState.set({ status: 'idle' });
+        return;
+      }
+      this.adoptSession(result.session);
       this._submitState.set({ status: 'success' });
       await this.router.navigateByUrl(returnUrl ?? '/admin');
     } catch (err) {
@@ -116,6 +137,38 @@ export class AuthStore {
       this._submitState.set({ status: 'error', message });
       throw new Error(message, { cause: err });
     }
+  }
+
+  /**
+   * Complete admin login with the 6-digit emailed code — `POST
+   * /auth/admin/login/otp`. Only valid while an {@link otpChallenge} is pending;
+   * a wrong/expired code surfaces an inline error and keeps the challenge so the
+   * user can retry (until the backend exhausts it, which returns 401).
+   */
+  async verifyAdminOtp(code: string): Promise<void> {
+    const challenge = this._otpChallenge();
+    if (!challenge) return;
+    this._submitState.set({ status: 'pending' });
+    try {
+      const session = await firstValueFrom(this.api.verifyAdminOtp(challenge.challengeId, code));
+      this.adoptSession(session);
+      this._otpChallenge.set(null);
+      const returnUrl = this._pendingAdminReturnUrl;
+      this._pendingAdminReturnUrl = null;
+      this._submitState.set({ status: 'success' });
+      await this.router.navigateByUrl(returnUrl ?? '/admin');
+    } catch (err) {
+      const message = this.humaniseError(err, this.lang.t('auth.errors.invalidCredentials'));
+      this._submitState.set({ status: 'error', message });
+      throw new Error(message, { cause: err });
+    }
+  }
+
+  /** Abandon the pending OTP step and return to the password form. */
+  cancelAdminOtp(): void {
+    this._otpChallenge.set(null);
+    this._pendingAdminReturnUrl = null;
+    this._submitState.set({ status: 'idle' });
   }
 
   /**
@@ -146,9 +199,12 @@ export class AuthStore {
    */
   async logout(opts: { reason?: LogoutReason; redirectTo?: string } = {}): Promise<void> {
     const reason = opts.reason ?? 'user-initiated';
+    // Capture the session kind BEFORE clearing so we hit the right revoke
+    // endpoint and land on the right login page.
+    const wasAdmin = this.isAdminSession();
     this.clearSession();
     try {
-      await firstValueFrom(this.api.logout());
+      await firstValueFrom(wasAdmin ? this.api.adminLogout() : this.api.logout());
     } catch {
       // Best-effort — the local session is already gone.
     }
@@ -156,7 +212,8 @@ export class AuthStore {
       type: 'user.logged-out',
       reason: reason === 'user-initiated' ? 'manual' : 'session-expired',
     });
-    await this.router.navigate([opts.redirectTo ?? '/auth/login'], {
+    const redirectTo = opts.redirectTo ?? (wasAdmin ? '/admin/login' : '/auth/login');
+    await this.router.navigate([redirectTo], {
       queryParams: reason === 'user-initiated' ? null : { reason },
     });
   }
@@ -210,6 +267,8 @@ export class AuthStore {
     this._user.set(null);
     this._roles.set([]);
     this._refreshInFlight = null;
+    this._otpChallenge.set(null);
+    this._pendingAdminReturnUrl = null;
   }
 
   /**

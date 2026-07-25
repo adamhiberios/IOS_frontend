@@ -2585,6 +2585,17 @@
       "passwordError": "Le mot de passe est requis.",
       "submit": "Se connecter"
     },
+    "otp": {
+      "title": "Saisissez votre code de vérification",
+      "subtitle": "Nous avons envoyé un code à 6 chiffres à votre adresse professionnelle. Saisissez-le pour terminer la connexion.",
+      "codeLabel": "Code de vérification",
+      "codePlaceholder": "123456",
+      "codeError": "Saisissez le code à 6 chiffres reçu par e-mail.",
+      "expiresIn": "Ce code expire dans {seconds} s.",
+      "expired": "Ce code a expiré — revenez en arrière et reconnectez-vous pour en obtenir un nouveau.",
+      "verify": "Vérifier et se connecter",
+      "back": "Retour à la connexion"
+    },
     "shell": {
       "brand": "IOS Admin",
       "signOut": "Se déconnecter",

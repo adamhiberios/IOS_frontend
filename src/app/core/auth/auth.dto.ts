@@ -42,6 +42,27 @@ export interface MessageResponse {
   readonly message: string;
 }
 
+/**
+ * `AdminLoginChallengeResponseDto` — returned by `POST /auth/admin/login` when
+ * `ADMIN_OTP_ENABLED` is on: the password was correct but NO tokens/cookie are
+ * issued; the session is minted only after `POST /auth/admin/login/otp`.
+ */
+export interface AdminLoginChallengeResponse {
+  readonly otpRequired: true;
+  readonly challengeId: string;
+  readonly expiresInSeconds: number;
+}
+
+/** `POST /auth/admin/login` response — tokens (OTP off) OR an OTP challenge (OTP on). */
+export type AdminLoginResponse = LoginResponse | AdminLoginChallengeResponse;
+
+/** Body for `POST /auth/admin/login/otp` (`AdminOtpVerifyDto`). */
+export interface AdminOtpVerifyRequest {
+  readonly challengeId: string;
+  /** 6-digit code from the email (`/^\d{6}$/`). */
+  readonly code: string;
+}
+
 /** `RegisterResponseDto` — registration acknowledgement (NO session issued). */
 export interface RegisterResponse extends MessageResponse {
   readonly userId: string;

@@ -2585,6 +2585,17 @@
       "passwordError": "Password is required.",
       "submit": "Sign in"
     },
+    "otp": {
+      "title": "Enter your verification code",
+      "subtitle": "We emailed a 6-digit code to your staff address. Enter it to finish signing in.",
+      "codeLabel": "Verification code",
+      "codePlaceholder": "123456",
+      "codeError": "Enter the 6-digit code from your email.",
+      "expiresIn": "This code expires in {seconds}s.",
+      "expired": "This code has expired — go back and sign in again to get a new one.",
+      "verify": "Verify and sign in",
+      "back": "Back to sign in"
+    },
     "shell": {
       "brand": "IOS Admin",
       "signOut": "Sign out",

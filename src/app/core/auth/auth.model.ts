@@ -74,6 +74,24 @@ export interface AuthSession {
 }
 
 /**
+ * A pending admin OTP step (from `POST /auth/admin/login` with OTP enabled): the
+ * password was accepted, but a 6-digit code was emailed and must be verified via
+ * `POST /auth/admin/login/otp` before any session/token exists.
+ */
+export interface AdminLoginChallenge {
+  readonly challengeId: string;
+  readonly expiresInSeconds: number;
+}
+
+/**
+ * Result of an admin login attempt: either a full session (OTP disabled) or an
+ * OTP challenge (OTP enabled) — no partial/token state exists in the `otp` case.
+ */
+export type AdminLoginResult =
+  | { readonly kind: 'session'; readonly session: AuthSession }
+  | { readonly kind: 'otp'; readonly challenge: AdminLoginChallenge };
+
+/**
  * Why the user got logged out. Drives the post-logout banner copy on the
  * login page (see /docs/07 §2.4 for the full table).
  */

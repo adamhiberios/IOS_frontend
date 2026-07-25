@@ -5,6 +5,8 @@ import { type Observable, map } from 'rxjs';
 import { environment } from '@env/environment';
 
 import {
+  type AdminLoginResponse,
+  type AdminOtpVerifyRequest,
   type AuthUserResponse,
   type LoginRequest,
   type LoginResponse,
@@ -13,6 +15,7 @@ import {
   type RegisterResponse,
 } from './auth.dto';
 import {
+  type AdminLoginResult,
   type AuthSession,
   type LoginCredentials,
   type RegisterPayload,
@@ -49,13 +52,53 @@ export class AuthApi {
       .pipe(map((res) => this.toSession(res)));
   }
 
-  /** Admin/staff login — `POST /auth/admin/login`. */
-  loginAdmin(creds: LoginCredentials): Observable<AuthSession> {
+  /**
+   * Admin/staff login — `POST /auth/admin/login`. With OTP enabled (default in
+   * prod/staging) a correct password returns an OTP **challenge** (no tokens, no
+   * cookie), completed via {@link verifyAdminOtp}; with OTP off it returns a
+   * session directly. The result is discriminated so callers never mistake a
+   * challenge for a session.
+   */
+  loginAdmin(creds: LoginCredentials): Observable<AdminLoginResult> {
     return this.http
-      .post<LoginResponse>(`${this.base}/admin/login`, this.toLoginRequest(creds), {
+      .post<AdminLoginResponse>(`${this.base}/admin/login`, this.toLoginRequest(creds), {
         withCredentials: true,
       })
+      .pipe(
+        map(
+          (res): AdminLoginResult =>
+            'otpRequired' in res
+              ? {
+                  kind: 'otp',
+                  challenge: {
+                    challengeId: res.challengeId,
+                    expiresInSeconds: res.expiresInSeconds,
+                  },
+                }
+              : { kind: 'session', session: this.toSession(res) },
+        ),
+      );
+  }
+
+  /**
+   * Complete admin login — `POST /auth/admin/login/otp`. Exchanges the challenge
+   * id + 6-digit emailed code for a session (and sets the refresh cookie).
+   * 401 on an invalid/expired/exhausted challenge or code.
+   */
+  verifyAdminOtp(challengeId: string, code: string): Observable<AuthSession> {
+    const body: AdminOtpVerifyRequest = { challengeId, code };
+    return this.http
+      .post<LoginResponse>(`${this.base}/admin/login/otp`, body, { withCredentials: true })
       .pipe(map((res) => this.toSession(res)));
+  }
+
+  /** Revoke the admin refresh token and clear the cookie — `POST /auth/admin/logout`. */
+  adminLogout(): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(
+      `${this.base}/admin/logout`,
+      {},
+      { withCredentials: true },
+    );
   }
 
   /**
