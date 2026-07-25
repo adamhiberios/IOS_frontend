@@ -43,6 +43,11 @@ export const AUTH_ROUTES: Routes = [
     loadComponent: () => import('./pages/new-password.page').then((m) => m.NewPasswordPage),
     title: () => inject(LanguageService).t('auth.newPassword.title'),
   },
+  {
+    path: 'verify-email',
+    loadComponent: () => import('./pages/verify-email.page').then((m) => m.VerifyEmailPage),
+    title: () => inject(LanguageService).t('auth.verifyEmail.title'),
+  },
 ];
 
 export default AUTH_ROUTES;

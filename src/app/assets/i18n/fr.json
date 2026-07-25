@@ -136,6 +136,23 @@
       "popupTitle": "Votre mot de passe a été mis à jour avec succès",
       "popupButton": "OK, aller à la connexion"
     },
+    "verifyEmail": {
+      "title": "Vérifiez votre e-mail",
+      "verifying": "Vérification de votre e-mail…",
+      "successTitle": "E-mail vérifié",
+      "successBody": "Votre adresse e-mail est confirmée. Vous pouvez maintenant vous connecter.",
+      "goToLogin": "Aller à la connexion",
+      "invalidTitle": "Nous n'avons pas pu vérifier votre e-mail",
+      "invalidBody": "Ce lien de vérification est invalide ou a expiré. Saisissez votre e-mail pour en recevoir un nouveau.",
+      "noTokenBody": "Saisissez votre adresse e-mail et nous vous enverrons un nouveau lien de vérification.",
+      "emailLabel": "Adresse e-mail",
+      "emailPlaceholder": "vous@exemple.com",
+      "emailError": "Saisissez une adresse e-mail valide.",
+      "resend": "Envoyer un nouveau lien",
+      "resendSent": "Si cette adresse doit être vérifiée, un nouveau lien est en route. Consultez votre boîte de réception.",
+      "backToLogin": "Retour à la connexion",
+      "genericError": "Une erreur s'est produite. Veuillez réessayer."
+    },
     "completeAccount": {
       "title": "Complétez votre compte",
       "stepSubtitle1": "Veuillez remplir toutes les informations pour poursuivre l'inscription.",

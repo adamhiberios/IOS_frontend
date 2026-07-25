@@ -786,6 +786,26 @@ to en/fr/ar (Arabic pending pro review).
   (needs an enrolled student + token). **Node ≥ 20.19 required for `ng build`**
   (nvm: `nvm use 20.19.0`; the shell defaulted to 20.11 which the CLI rejects).
 
+### Phase 4 · Email verification (`features/auth` + `core/auth`) — uncommitted
+
+Plan item 5 (partial). Wires the "BE-ready, FE-missing" `POST /auth/verify-email`.
+
+- `core/auth/auth.api.ts` — added `verifyEmail(token)` → `POST /auth/verify-email`
+  `{ token }`. **⚠️ core/auth change — architect + security review** (CLAUDE §8/§13);
+  it only wires an existing endpoint and touches no token/refresh storage.
+- `features/auth/pages/verify-email.page.ts` (new) + route `/auth/verify-email`:
+  reads `?token=` and verifies on load → success (→ `/auth/login?verified=1`) or
+  an invalid/expired/missing-token state that offers **resend**
+  (`AuthApi.resendVerification`, anti-enumeration messaging). Auth-shell layout,
+  reactive form, `firstValueFrom` (no component `subscribe`).
+- **i18n:** `auth.verifyEmail.*` (en/fr/ar; Arabic pending pro review).
+- **Not done (follow-up):** the `complete-account` 3-step profile wizard is still a
+  simulated stub (`onSubmit` TODO → navigates to `/dashboard`); wiring it to
+  `PATCH /me` needs a cross-feature path (ProfileApi lives in `features/profile`).
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 pre-existing `prefer-ngsrc`
+  warnings) · `ng build --configuration production` ✓ (initial gzip 103.36 kB,
+  verify-email lazy). Not runtime-tested in-session. Node ≥ 20.19 for `ng build`.
+
 ### Phase 4 · Payments data-access (`features/payments/data-access`) — logic only (uncommitted)
 
 Student payment flows against `@Controller('payments')` (student token; RLS-
@@ -1382,7 +1402,7 @@ surface by design).
 | Domain                              | Endpoints                                                                                                                                                    | Status                                                                                                             |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
 | **Auth (student)**                  | `POST /auth/register`, `/login`, `/forgot-password`, `/reset-password`, `/resend-verification`, `/refresh`, `/logout`                                        | ✅ wired                                                                                                           |
-| **Auth — email verify**             | `POST /auth/verify-email`                                                                                                                                    | ❌ deferred (part of the un-wired `complete-account` wizard)                                                       |
+| **Auth — email verify**             | `POST /auth/verify-email`, `/auth/resend-verification`                                                                                                       | ✅ wired — `/auth/verify-email` page (token verify + resend); `complete-account` profile wizard still deferred     |
 | **Auth — admin OTP (C1)**           | `POST /auth/admin/login` (basic call exists), `/auth/admin/login/otp`, `/auth/admin/refresh`, `/auth/admin/logout`                                           | ❌ OTP two-step + admin refresh/logout not wired — **C1, core/auth, needs security review**                        |
 | **Profile** `/me`                   | `GET /me`, `GET /me/certificates`, `PATCH /me`, `PATCH /me/password`, `POST /me/avatar-upload-url`                                                           | ✅ wired (A1, A3)                                                                                                  |
 | **GDPR**                            | `GET /me/export`, `POST /me/delete`, `POST /consent`                                                                                                         | ✅ wired (A2, C2)                                                                                                  |
@@ -1428,8 +1448,12 @@ only on **frontend** work:
    Follow-ups: a mock **history** page and an optional `/mock` Socket.IO channel.
 4. **C1 — Admin OTP login** — `core/auth` change (OTP challenge branch + admin
    refresh/logout). Explicitly **last**; needs architect + security review.
-5. **Email verification** — `POST /auth/verify-email` (+ resend) and the
-   `complete-account` wizard. Currently deferred.
+5. **Email verification** — ✅ **DONE (uncommitted)**: `/auth/verify-email` page
+   verifies the token (`POST /auth/verify-email`, new `AuthApi.verifyEmail`) and
+   offers resend (`/auth/resend-verification`). ⚠️ touches `core/auth` (new API
+   method) — flag for architect + security review. The **`complete-account`
+   profile wizard** (→ `PATCH /me`) is still a simulated stub (cross-feature
+   `ProfileApi` wiring) — remains a follow-up.
 6. **Minor** — exam-authoring **preview** (`GET /admin/exams/:examId/preview`).
 
 ### Everything else = reconciled

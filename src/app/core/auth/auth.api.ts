@@ -99,6 +99,15 @@ export class AuthApi {
   }
 
   /**
+   * Verify a registered email address — `POST /auth/verify-email`. Consumes the
+   * single-use token from the registration email (expires 24 h after signup).
+   * 4xx on an invalid/expired/already-used token.
+   */
+  verifyEmail(token: string): Observable<MessageResponse> {
+    return this.http.post<MessageResponse>(`${this.base}/verify-email`, { token });
+  }
+
+  /**
    * Re-send the email-verification link — `POST /auth/resend-verification`.
    * Anti-enumeration: the response is identical whether or not the email exists
    * or is already verified.
