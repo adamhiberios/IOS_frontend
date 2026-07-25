@@ -1519,8 +1519,11 @@ removed/mock endpoint anymore (the last such stubs — landing null-fallback, bl
 ## Remaining tasks (high level)
 
 **User-facing FE gaps (BE-ready — see reconciliation above):** ~~real-exam engine~~
-(committed), ~~learning/courses~~ (committed), ~~mock-exam runner~~ (data-access
-committed; UI uncommitted), **C1 admin OTP**, **email-verify/complete-account**.
+(committed), ~~learning/courses~~ (committed), ~~mock-exam runner~~ (committed),
+~~email verify~~ (committed), ~~C1 admin OTP~~ (committed — **security review
+pending**). **Remaining:** the `complete-account` profile wizard (→ `PATCH /me`,
+stub) and the minor admin exam-authoring **preview** endpoint. All primary Phase-4
+student + auth surfaces are now wired.
 
 **Known backend blocker:** **BE-I-21** — blog article creation 404s + rolls back
 (read-after-write across two connections); blog authoring can't complete E2E until

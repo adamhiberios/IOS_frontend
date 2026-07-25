@@ -422,6 +422,73 @@ the SPA generally doesn't call them, but be aware they exist at the root.
 
 ---
 
+## 6.9 Latest backend sync (2026-07-25) — student engines + auth, verified against source
+
+Endpoints the frontend now consumes, re-verified against `IOS_Backend` source
+while wiring Phase 4. Envelopes vary per endpoint (BE-I-01). All are bearer-auth
+unless noted; RFC-7807 errors (branch on `code`). Related backend gaps:
+**BE-I-22** (real-exam never returns the answer key), **BE-I-23** (`GET
+/exam/sessions/:id` returns no questions), **BE-I-24** (`certId` not exposed at
+exam/mock entry) — see the Backend Issues Report.
+
+### Student real-exam engine — `@Controller('exam')`
+
+| Method | Path                             | Body / notes                                                                                                                                                                                                                                       |
+| ------ | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/exam/pre-exam-confirmation`    | `{ certId, fullName, idNumber? }`; flips `pre_exam_confirmed` (attestation NOT persisted); 404 if no purchase.                                                                                                                                     |
+| POST   | `/exam/validate-access`          | `{ code, examId? }` → `{ valid, accessCodeId, expiresAt, exam:{ id, title, durationMinutes, passingScore } }`; **no certId**; 403 invalid/expired.                                                                                                 |
+| POST   | `/exam/start`                    | `{ code, examId? }` → `{ sessionId, durationSeconds, expiresAt, questions:[{ id, questionText, questionType, position, options:[{ id, optionText }] }] }` (`isCorrect` stripped); 409 active session / code used / pre-exam-confirmation required. |
+| GET    | `/exam/sessions/:id`             | → `{ sessionId, remainingSeconds, answers:Record<qid,optId>, status }` — **no questions** (BE-I-23).                                                                                                                                               |
+| POST   | `/exam/sessions/:id/autosave`    | `{ answers:Record<qid,optId> }` → `{ saved:true }`; 409 expired. Bulk map (no clientSeq on the wire).                                                                                                                                              |
+| POST   | `/exam/sessions/:id/submit`      | `{ answers }` → `{ score, passed, correctCount, totalCount }`; 409 already submitted.                                                                                                                                                              |
+| POST   | `/exam/sessions/:id/late-submit` | `{ answers }` → `ScoreResult`; 403 grace (120 s) closed.                                                                                                                                                                                           |
+| GET    | `/exam/attempts`                 | cursor page `{ data:[{ id, examTitle, program, score, passed, submittedAt, durationSeconds, status, lateFlag }], meta }` — never the answer snapshot.                                                                                              |
+
+WS: **Socket.IO** namespace `/exam`, handshake `auth:{ token }`, C→S `join_session
+{ sessionId }`, S→C `timer_tick { remainingSeconds }` (30 s) / `warning`
+(600 s, 300 s) / `session_expired`. Terminal grace + backend auto-submit from
+snapshot.
+
+### Student mock engine — `@Controller('mock')` (soft, non-terminal timer)
+
+| Method | Path                              | Body / notes                                                                                                                                                      |
+| ------ | --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/mock/start`                     | `{ certId }` → `{ attemptId, certId, durationSeconds, expiresAt, extensionsRemaining, questionCount, questions[] }`; 403 not enrolled, 409 active attempt.        |
+| GET    | `/mock/history`                   | cursor page `{ data:[{ attemptId, certId, status, score, correctCount, totalCount, falseCount, readyForFinal, extensionsUsed, startedAt, submittedAt }], meta }`. |
+| GET    | `/mock/attempts/:id`              | `{ data:{ …, questions:[{ questionId, questionText, options[], selectedOptionId, correctOptionId, isCorrect }] } }` — **reveals** the key; 422 if not submitted.  |
+| GET    | `/mock/:id`                       | `{ attemptId, certId, status, remainingSeconds, timeUp, extensionsUsed, extensionsRemaining, answers, questions[] }`.                                             |
+| POST   | `/mock/:id/autosave`              | `{ answers }` → `{ saved, answeredCount, timeUp }`; never rejects.                                                                                                |
+| POST   | `/mock/:id/extend`                | → `{ attemptId, extensionsUsed, extensionsRemaining, remainingSeconds }`; 422 when capped.                                                                        |
+| POST   | `/mock/:id/submit`                | `{ answers? }` → `{ …, score, correctCount, totalCount, falseCount, readyForFinal, readiness:{…}, durationSeconds }`; 409 already submitted.                      |
+| POST   | `/mock/:id/questions/:qid/reveal` | → `{ selectedCorrect, correctOptionId }` (mock-only hint).                                                                                                        |
+
+WS: Socket.IO namespace `/mock` (same shape as `/exam` but the timer is soft/non-terminal).
+
+### Learning / courses — `@Controller('learning')` (all `{ data, meta }`, enrolment-gated → 403)
+
+`GET /learning/certs/:certId/curriculum` (modules→lessons + per-lesson `completed`);
+`GET /learning/lessons/:id` (`contentHtml`, signed `videoUrl` +
+`meta.videoUrlExpiresInSeconds`); `GET /learning/lessons/:id/quiz` (correct answer
+stripped; `options` null ⇒ free-text); `POST /learning/lessons/:id/quiz/check`
+(`{ answers }` → per-question `{ correct, correctAnswer }` + score; nothing
+persisted); `POST /learning/lessons/:id/complete` (idempotent); `GET
+/learning/progress` (`[{ certId, programCode, title, totalLessons,
+completedLessons, percentComplete }]`).
+
+### Auth — email verify + admin OTP
+
+- `POST /auth/verify-email { token }` → `{ message }`; `POST
+/auth/resend-verification { email }` (anti-enumeration).
+- `POST /auth/admin/login { email, password }` → **union**: `LoginResponse`
+  (OTP off) **or** `{ otpRequired:true, challengeId, expiresInSeconds }` (OTP on —
+  no tokens/cookie). `POST /auth/admin/login/otp { challengeId, code(6-digit) }` →
+  `LoginResponse` + cookie (401 bad/expired/exhausted). `POST /auth/admin/refresh`,
+  `POST /auth/admin/logout`. **Open question for security review:** whether the
+  admin refresh cookie is accepted at the shared `POST /auth/refresh` (the FE
+  currently assumes yes) or requires `/auth/admin/refresh`.
+
+---
+
 ## 7. DTOs
 
 ### 7.1 Auth / profile
