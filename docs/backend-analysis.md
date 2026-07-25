@@ -723,32 +723,33 @@ issuance flows (e.g. the verification and reset **links** point at the
 
 ### Resolution status (2026-07-13)
 
-| ID      | Status                   | Fixed by (BE commit) | Frontend action                                                                                                                                                                                   |
-| ------- | ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| BE-I-01 | Open (behavioural)       | —                    | Map per endpoint; key off `code`.                                                                                                                                                                 |
-| BE-I-02 | Open (behavioural)       | —                    | Already handled (`SameSite=Lax`).                                                                                                                                                                 |
-| BE-I-03 | ✅ Resolved              | `10965cb`            | Build admin staff page (checklist B3).                                                                                                                                                            |
-| BE-I-04 | ✅ Resolved              | `e4b347c`            | Add card fields to catalog form (B8).                                                                                                                                                             |
-| BE-I-05 | ✅ Resolved              | `1b603f1`            | Build promo-codes page (B4).                                                                                                                                                                      |
-| BE-I-06 | ✅ Resolved              | `cb10205`            | Build lesson-quiz authoring (B5).                                                                                                                                                                 |
-| BE-I-07 | ✅ Resolved              | `1515dff`            | Wire admin dashboard metrics (B6).                                                                                                                                                                |
-| BE-I-08 | ✅ Resolved              | `e4b347c`            | Wire avatar upload (A1).                                                                                                                                                                          |
-| BE-I-09 | Open (info)              | —                    | Pick per screen.                                                                                                                                                                                  |
-| BE-I-10 | Open (info)              | —                    | Use bare origin for `/health`.                                                                                                                                                                    |
-| BE-I-11 | ✅ Resolved              | `334d0c6`            | BlogModule shipped — build the public blog rewire + admin Blog page.                                                                                                                              |
-| BE-I-12 | Open (behavioural)       | —                    | Branch on `code`, not status.                                                                                                                                                                     |
-| BE-I-13 | ✅ Resolved              | `a36ddfd`            | Build admin Curriculum page (B1).                                                                                                                                                                 |
-| BE-I-14 | ✅ Resolved              | `a36ddfd`            | Surface publish `reasons[]` (B7).                                                                                                                                                                 |
-| BE-I-15 | ✅ Resolved              | `a36ddfd`            | Build cert-revocation page (B2).                                                                                                                                                                  |
-| BE-I-16 | ✅ Resolved              | `a36ddfd`            | Build Certificates list (A3).                                                                                                                                                                     |
-| BE-I-17 | ✅ Resolved              | `a36ddfd`            | Add real-exam history (A7).                                                                                                                                                                       |
-| BE-I-18 | ✅ Resolved              | `181cd9f`            | Build Notifications (A4).                                                                                                                                                                         |
-| BE-I-19 | ✅ Resolved              | `65bf4e8`            | Wire delete-account + export (A2).                                                                                                                                                                |
-| BE-I-20 | ✅ Resolved              | `1515dff`            | Build Insights + rewire Landing (A5, A6).                                                                                                                                                         |
-| BE-I-21 | ⛔ **Open (bug)**        | —                    | **Blog `POST /admin/blog` always 404s + rolls back** — see below.                                                                                                                                 |
-| BE-I-22 | ⚠️ **Open (limitation)** | —                    | **Real-exam APIs never return the answer key / per-question correctness** — blocks the result-page "Review Correct Answers" section; see below.                                                   |
-| BE-I-23 | ⚠️ **Open (limitation)** | —                    | **`GET /exam/sessions/:id` returns no questions** — reload-resume can't redraw the exam from the server; FE persists a local question snapshot to work around it. See below.                      |
-| BE-I-24 | ⚠️ **Open (limitation)** | —                    | **No `certId` exposed at exam-entry** — `validate-access` returns only `exam.{id,title,…}`, so the FE can't call `pre-exam-confirmation` (needs `certId`); it relies on `start`'s 409. See below. |
+| ID      | Status                   | Fixed by (BE commit) | Frontend action                                                                                                                                                                                                                 |
+| ------- | ------------------------ | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| BE-I-01 | Open (behavioural)       | —                    | Map per endpoint; key off `code`.                                                                                                                                                                                               |
+| BE-I-02 | Open (behavioural)       | —                    | Already handled (`SameSite=Lax`).                                                                                                                                                                                               |
+| BE-I-03 | ✅ Resolved              | `10965cb`            | Build admin staff page (checklist B3).                                                                                                                                                                                          |
+| BE-I-04 | ✅ Resolved              | `e4b347c`            | Add card fields to catalog form (B8).                                                                                                                                                                                           |
+| BE-I-05 | ✅ Resolved              | `1b603f1`            | Build promo-codes page (B4).                                                                                                                                                                                                    |
+| BE-I-06 | ✅ Resolved              | `cb10205`            | Build lesson-quiz authoring (B5).                                                                                                                                                                                               |
+| BE-I-07 | ✅ Resolved              | `1515dff`            | Wire admin dashboard metrics (B6).                                                                                                                                                                                              |
+| BE-I-08 | ✅ Resolved              | `e4b347c`            | Wire avatar upload (A1).                                                                                                                                                                                                        |
+| BE-I-09 | Open (info)              | —                    | Pick per screen.                                                                                                                                                                                                                |
+| BE-I-10 | Open (info)              | —                    | Use bare origin for `/health`.                                                                                                                                                                                                  |
+| BE-I-11 | ✅ Resolved              | `334d0c6`            | BlogModule shipped — build the public blog rewire + admin Blog page.                                                                                                                                                            |
+| BE-I-12 | Open (behavioural)       | —                    | Branch on `code`, not status.                                                                                                                                                                                                   |
+| BE-I-13 | ✅ Resolved              | `a36ddfd`            | Build admin Curriculum page (B1).                                                                                                                                                                                               |
+| BE-I-14 | ✅ Resolved              | `a36ddfd`            | Surface publish `reasons[]` (B7).                                                                                                                                                                                               |
+| BE-I-15 | ✅ Resolved              | `a36ddfd`            | Build cert-revocation page (B2).                                                                                                                                                                                                |
+| BE-I-16 | ✅ Resolved              | `a36ddfd`            | Build Certificates list (A3).                                                                                                                                                                                                   |
+| BE-I-17 | ✅ Resolved              | `a36ddfd`            | Add real-exam history (A7).                                                                                                                                                                                                     |
+| BE-I-18 | ✅ Resolved              | `181cd9f`            | Build Notifications (A4).                                                                                                                                                                                                       |
+| BE-I-19 | ✅ Resolved              | `65bf4e8`            | Wire delete-account + export (A2).                                                                                                                                                                                              |
+| BE-I-20 | ✅ Resolved              | `1515dff`            | Build Insights + rewire Landing (A5, A6).                                                                                                                                                                                       |
+| BE-I-21 | ⛔ **Open (bug)**        | —                    | **Blog `POST /admin/blog` always 404s + rolls back** — see below.                                                                                                                                                               |
+| BE-I-22 | ⚠️ **Open (limitation)** | —                    | **Real-exam APIs never return the answer key / per-question correctness** — blocks the result-page "Review Correct Answers" section; see below.                                                                                 |
+| BE-I-23 | ⚠️ **Open (limitation)** | —                    | **`GET /exam/sessions/:id` returns no questions** — reload-resume can't redraw the exam from the server; FE persists a local question snapshot to work around it. See below.                                                    |
+| BE-I-24 | ⚠️ **Open (limitation)** | —                    | **No `certId` exposed at exam-entry** — `validate-access` returns only `exam.{id,title,…}`, so the FE can't call `pre-exam-confirmation` (needs `certId`); it relies on `start`'s 409. See below.                               |
+| BE-I-25 | ⚠️ **Open (gap)**        | —                    | **No date-of-birth storage** — the User entity + `PATCH /me` (`UpdateProfileDto`) accept no DOB, but the `complete-account` onboarding wizard's step 1 collects a birthday, so the wizard can't be faithfully wired. See below. |
 
 **Also new (not original issues):** two-step admin **OTP login** (`e97de75`,
 checklist C1) and **GDPR cookie consent** (`65bf4e8`, checklist C2); catalog
@@ -936,6 +937,33 @@ identity confirmation is required", which the ready page surfaces. Admin-issued
 codes without a purchase row (the current real assignment path) skip the gate
 entirely, so the flow works end-to-end today. Add `certId` to the responses to let
 the FE complete the confirmation inline.
+
+#### BE-I-25 — ⚠️ No date-of-birth storage, so the `complete-account` wizard can't be faithfully wired
+
+**Severity: Medium — the post-registration onboarding wizard (`/auth/complete-account`)
+cannot be wired to persist its primary field.** Discovered 2026-07-25 while
+assessing the `complete-account` follow-up.
+
+**Current contract.** `PATCH /me` (`UpdateProfileDto`) accepts only `phone`,
+`locale`, `country`, `city`, `street`, `address`, `postalCode`. The `User` entity
+has **no** date-of-birth column (confirmed: nothing in `user.entity.ts`, the
+migrations, or the DTO). But the `complete-account` wizard's **step 1** collects a
+**birthday** (month / day / year) as a required field, plus phone + address.
+
+**Expected contract (one of):**
+
+- Add a `dateOfBirth` (nullable date) column to `User` + a validated field on
+  `UpdateProfileDto`, so the wizard's birthday can be persisted; **or**
+- Confirm birthday is out of scope so the design can drop the step.
+
+**Frontend impact.** `complete-account.page` is still a **stub** (`onSubmit` →
+navigate to `/dashboard`, saving nothing). It can be partially wired now (PATCH the
+address/contact fields the backend accepts), but that would silently drop the
+birthday — a data-loss/UX issue — and also requires a boundary decision, since
+`ProfileApi` lives in `features/profile` and cross-feature imports are banned
+(CLAUDE §5): either promote a profile-update call to `core/`, or add an
+auth-feature-local `PATCH /me` transport. Deferred pending (a) the DOB decision
+above and (b) that boundary decision.
 
 ### Endpoints added 2026-07-13 (blocker fixes)
 

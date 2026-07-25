@@ -1430,14 +1430,14 @@ tokens/PII`); wrapped in try/catch for private-mode. No read endpoint exists,
 
 ## Auth-route → backend endpoint map
 
-| Frontend route           | Page                    | Backend call                                                                    |
-| ------------------------ | ----------------------- | ------------------------------------------------------------------------------- |
-| `/auth/login`            | `login.page`            | `POST /auth/login`                                                              |
-| `/auth/register`         | `register.page`         | `POST /auth/register`                                                           |
-| `/auth/forgot-password`  | `reset-password.page`   | `POST /auth/forgot-password`                                                    |
-| `/auth/new-password`     | `new-password.page`     | `POST /auth/reset-password`                                                     |
-| `/auth/complete-account` | `complete-account.page` | **Not yet wired** — profile wizard; maps to `PATCH /me` after login (deferred). |
-| (app boot / 401)         | `AuthStore`             | `POST /auth/refresh` · `POST /auth/logout`                                      |
+| Frontend route           | Page                    | Backend call                                                                                                                                                                                     |
+| ------------------------ | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `/auth/login`            | `login.page`            | `POST /auth/login`                                                                                                                                                                               |
+| `/auth/register`         | `register.page`         | `POST /auth/register`                                                                                                                                                                            |
+| `/auth/forgot-password`  | `reset-password.page`   | `POST /auth/forgot-password`                                                                                                                                                                     |
+| `/auth/new-password`     | `new-password.page`     | `POST /auth/reset-password`                                                                                                                                                                      |
+| `/auth/complete-account` | `complete-account.page` | **Not wired (stub)** — blocked: `PATCH /me` has no date-of-birth field but the wizard's step 1 collects a birthday (**BE-I-25**), plus a cross-feature `ProfileApi` boundary decision. Deferred. |
+| (app boot / 401)         | `AuthStore`             | `POST /auth/refresh` · `POST /auth/logout`                                                                                                                                                       |
 
 ## Backend ↔ Frontend reconciliation (full rescan 2026-07-22)
 
