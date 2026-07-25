@@ -1,27 +1,47 @@
 # Implementation Progress — IOS LMS Frontend ↔ Real Backend
 
 > **Single source of truth for implementation progress.** Updated continuously.
-> Last updated: 2026-07-20.
+> Last updated: 2026-07-25 (doc reconciliation against frontend HEAD `904a478`
+> and backend HEAD `72a711c`).
 
 ---
 
-> **2026-07-20 — Admin pivot COMPLETE.** The whole admin app (**B1–B8**) is built
-> and committed on `feat/real-backend-integration` (B6 `9559ec1`, B1 `7268d26`,
-> B2 `451af2a`, B3 `6f09077`, B4 `3ea7e28`, B5 `0d95e6e` + restyle `d1ce3e8`,
-> B7 `0db202e`, B8 `9b18571`). **New backend surface to build next:** the
-> **Blog module (BE-I-11, `334d0c6`)** — a public-blog rewire + a new admin Blog
-> page (see [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md) →
-> Status). Also note **Week-9 i18n** (`be902fe`/`d67d7ff`): backend locales now
-> `en/tr/fr/es/ar/de` and validation/emails localized by `X-Lang` — the app UI
-> stays en/fr/ar. Build script was switched to dev config (`f5e8caa`) — use
+> **2026-07-25 — every primary Phase-4 student + auth surface is committed.**
+> On `feat/real-backend-integration`: **real-exam engine** (`b951242`),
+> **learning/courses** (`172f35a`), **mock-exam** data-access (`37b5c57`) + runner/
+> result (`f4752ad`) + history page (`6d9e406`) + server-authoritative `/mock`
+> Socket.IO timer (`904a478`), **email verification** (`9e06730`), and **C1 admin
+> OTP login** (`ae6ae44` — ⚠️ security review still pending). Everything the
+> 2026-07-22 rescan listed as "BE-ready, FE-missing" is now built.
+>
+> **What changed on the backend while we were building** (HEAD `72a711c`,
+> 2026-07-22 — missed by the 2026-07-25 sync, now recorded in
+> [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync-2026-07-25b--cms-module-blog-fix-analytics-window)):
+>
+> - **BE-I-21 is fixed** (`30bfff5`) — blog authoring is unblocked E2E; only a
+>   re-test is owed.
+> - **A whole new CMS module** (`3e52625`) — public `GET /cms/pages/:slug` +
+>   `/cms/globals/:key`, admin `admin/cms/*`, 16 typed section types. **No FE
+>   consumer at all** — this is the next big frontend surface.
+> - **`contentText` is now required on lesson create** (`72a711c`) — the admin
+>   curriculum form breaks against it today (**BE-I-29**, FE fix owed).
+> - Admin dashboard gained `from`/`to`; admin student detail gained
+>   `certificates[]`/`attempts[]`/`purchases[]` (both additive).
+>
+> Build script is on dev config (`f5e8caa`) — use
 > `npx ng build --configuration production` to verify prod bundles/budgets.
 
 ## Overall project status
 
 **Phase 3 (Admin application) — COMPLETE**, including the full section-B admin
-pivot (B1–B8). **Phase 4 (user-facing app ↔ real backend) — in progress.** Backend
-fully analysed (Phase 1, see [`backend-analysis.md`](./backend-analysis.md)); auth
-wired (Phase 2).
+pivot (B1–B8). **Phase 4 (user-facing app ↔ real backend) — feature-complete for
+the planned scope**, pending reviews: the architect review of the real-exam engine
+and the **security review of C1** (`core/auth`). What remains is (a) the
+newly-arrived CMS surface, (b) the `complete-account` wizard (blocked by
+**BE-I-25**), (c) the **BE-I-29** lesson-`contentText` fix, and (d) two legacy
+mock-data pockets (student dashboard `DashboardStore`, the `/dashboard/certificates`
+demo pages). Backend fully analysed (Phase 1, see
+[`backend-analysis.md`](./backend-analysis.md)); auth wired (Phase 2).
 
 > **2026-07-13 — the backend team resolved every blocker** from
 > [`backend-blockers-report.md`](./backend-blockers-report.md). All previously-⛔
@@ -33,24 +53,27 @@ wired (Phase 2).
 
 ## Current phase
 
-**Phase 4 — Wire the user-facing app to the real backend.** All Phase-3 (admin)
-work is **committed** on `feat/real-backend-integration` (see "Admin pages
-status" below for the per-page commit map). The user-facing screens (landing,
-dashboard, courses, assessments, catalog, profile, certificates, notifications,
-insights, settings) still target the removed mock endpoints or placeholder data
-— they build/lint but 404 at runtime. Phase 4 wires them page-by-page using the
-established data-access layering, in the order below. **See the
-[Phase 4 plan](#phase-4-plan--user-facing-app-backend-integration) — start
-there.**
+**Phase 4 — Wire the user-facing app to the real backend — the planned scope is
+DONE.** All Phase-3 (admin) work and all Phase-4 A/B/C items are **committed** on
+`feat/real-backend-integration` (per-page commit maps below), as are the four
+net-new student/auth features from the 2026-07-22 rescan (real exam, courses,
+mock, email verify) and C1. The old statement that "the user-facing screens still
+target removed mock endpoints" is **no longer true** — the surviving mock data is
+narrow and enumerated in [Remaining tasks](#remaining-tasks-high-level).
+
+**Phase 5 candidate — the CMS surface** (`3e52625`): a public CMS-driven marketing
+renderer and an admin CMS editor, neither of which exists yet. See
+[New backend surface: CMS](#new-backend-surface-cms-3e52625--no-fe-consumer-yet).
 
 ## Phases at a glance
 
-| Phase | Description                                                             | Status                               |
-| ----- | ----------------------------------------------------------------------- | ------------------------------------ |
-| 1     | Study backend → `backend-analysis.md`                                   | ✅ Complete                          |
-| 2     | Frontend infrastructure (remove mocks, real auth, interceptors, models) | ✅ Complete (auth + HTTP core)       |
-| 3     | Admin application, page by page                                         | ✅ Complete (all unblocked surfaces) |
-| 4     | **User-facing app ↔ real backend, page by page**                        | 🚧 In progress (blockers cleared)    |
+| Phase | Description                                                             | Status                                                               |
+| ----- | ----------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| 1     | Study backend → `backend-analysis.md`                                   | ✅ Complete                                                          |
+| 2     | Frontend infrastructure (remove mocks, real auth, interceptors, models) | ✅ Complete (auth + HTTP core)                                       |
+| 3     | Admin application, page by page                                         | ✅ Complete (all unblocked surfaces)                                 |
+| 4     | **User-facing app ↔ real backend, page by page**                        | ✅ Planned scope complete (2026-07-25) — reviews + 4 follow-ups open |
+| 5     | **CMS surface** (public renderer + admin editor) — `3e52625`            | ⬜ Not started (new backend surface)                                 |
 
 ---
 
@@ -63,26 +86,29 @@ pagination helpers, RFC-7807 error surfacing). Same workflow: **build one page �
 `typecheck`+`lint`+`build` clean → update this file → stop for review; commit
 only on "commit".**
 
-**Current state of these features:** they were scaffolded against the removed
-mock backend and now target non-existent endpoints (`/landing`, `/insights`) or
-placeholder/simulated data — they compile but 404 at runtime. Wiring = replace
-the placeholder with a real `data-access` layer against the endpoints below.
+**Current state of these features (corrected 2026-07-25):** the original text here
+— "scaffolded against the removed mock backend, they compile but 404 at runtime" —
+is **no longer true**. Every row in the map below is wired to a live endpoint; the
+map is kept as the plan-of-record with each row's shipping commit. The only
+placeholder data left in the user-facing app is the student dashboard overview's
+`DashboardStore` and the legacy `/dashboard/certificates` demo pages (both in
+[Remaining tasks](#remaining-tasks-high-level)).
 
 ### Feature → backend map (what to wire, in build order)
 
-| Order | Feature (route)                                | Screens / purpose                               | Backend endpoints (all under `/api/v1`)                                                                                                               | Status                                                    |
-| ----- | ---------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| **1** | **Profile** (`/profile`)                       | View + edit profile; change password            | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                          | ✅ built (review pending)                                 |
-| **1** | **Settings** (`/settings`)                     | Password, language, delete account, data export | `PATCH /me/password` ✅; `POST /me/delete` `{password}` + `GET /me/export` (BE-I-19 ✅)                                                               | ⚠️ partial → now unblocked                                |
-| **2** | **Catalog** (`/certifications` + detail)       | Browse certs, cert detail, curriculum outline   | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /landing`                                          | 🚧 data-access built (logic)                              |
-| **3** | **Payments / enroll**                          | Checkout (enroll), retake, transaction history  | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                      | 🚧 data-access built (logic)                              |
-| **4** | **Dashboard** (`/dashboard`)                   | Enrolled courses + progress, recent activity    | `GET /learning/progress`, `GET /payments/transactions`, `GET /me`, **`GET /insights`** (student aggregates), **`GET /exam/attempts`** (BE-I-07/17 ✅) | ⚠️ compose (+ real analytics)                             |
-| **5** | **Courses / Learning** (`/courses`)            | Curriculum tree, lesson viewer, quiz, complete  | `GET /learning/certs/:id/curriculum`, `GET /learning/lessons/:id`, `GET /learning/lessons/:id/quiz`, `POST …/quiz/check`, `POST …/complete`           | ✅ ready (enrollment-gated)                               |
-| **6** | **Assessments — real exam** (`/assessments`)   | Access-code entry → exam session → submit       | `POST /exam/{pre-exam-confirmation,validate-access,start}`, `GET/POST /exam/sessions/:id/*`, **`/exam` WebSocket** (heartbeat/timer)                  | ✅ ready — high complexity                                |
-| **6** | **Mock exam**                                  | Practice attempts, history, review              | `POST /mock/start`, `GET /mock/history`, `GET /mock/attempts/:id`, `GET /mock/:id`, `POST /mock/:id/{autosave,extend,submit,…}`, **`/mock` WS**       | ✅ ready                                                  |
-| **7** | **Certificates** (`/dashboard/credentials`)    | List earned certs; verify                       | `GET /me/certificates` (BE-I-16 ✅) + public `GET /verify/:certId`                                                                                    | ✅ built — A3 (`features/credentials`)                    |
-| **7** | **Notifications** (`/dashboard/notifications`) | In-app notifications + unread badge             | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all` (BE-I-18 ✅)                                                                     | ✅ built — A4 (+ core badge)                              |
-| **7** | **Insights** (Overview only)                   | Student learning/exam analytics                 | `GET /insights` (BE-I-20a ✅)                                                                                                                         | ✅ built — A5 (dashboard data-access, no standalone page) |
+| Order | Feature (route)                                | Screens / purpose                               | Backend endpoints (all under `/api/v1`)                                                                                                               | Status                                                                                                                                                                                                         |
+| ----- | ---------------------------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | **Profile** (`/profile`)                       | View + edit profile; change password            | `GET /me`, `PATCH /me`, `PATCH /me/password`                                                                                                          | ✅ built (review pending)                                                                                                                                                                                      |
+| **1** | **Settings** (`/settings`)                     | Password, language, delete account, data export | `PATCH /me/password` ✅; `POST /me/delete` `{password}` + `GET /me/export` (BE-I-19 ✅)                                                               | ⚠️ partial → now unblocked                                                                                                                                                                                     |
+| **2** | **Catalog** (`/certifications` + detail)       | Browse certs, cert detail, curriculum outline   | `GET /catalog`, `GET /catalog/:id`, `GET /catalog/:id/outline` (public); Landing "featured" → `GET /landing`                                          | 🚧 data-access built (logic)                                                                                                                                                                                   |
+| **3** | **Payments / enroll**                          | Checkout (enroll), retake, transaction history  | `POST /payments/checkout`, `POST /payments/retake`, `GET /payments/transactions`                                                                      | 🚧 data-access built (logic)                                                                                                                                                                                   |
+| **4** | **Dashboard** (`/dashboard`)                   | Enrolled courses + progress, recent activity    | `GET /learning/progress`, `GET /payments/transactions`, `GET /me`, **`GET /insights`** (student aggregates), **`GET /exam/attempts`** (BE-I-07/17 ✅) | ⚠️ **partial** — insights (`0272e27`) + attempts (`554fbe6`) are real, but the overview's cards/charts still come from the hardcoded `features/dashboard/data-access/dashboard.store.ts` (see Remaining tasks) |
+| **5** | **Courses / Learning** (`/courses`)            | Curriculum tree, lesson viewer, quiz, complete  | `GET /learning/certs/:id/curriculum`, `GET /learning/lessons/:id`, `GET /learning/lessons/:id/quiz`, `POST …/quiz/check`, `POST …/complete`           | ✅ built & committed (`172f35a`)                                                                                                                                                                               |
+| **6** | **Assessments — real exam** (`/assessments`)   | Access-code entry → exam session → submit       | `POST /exam/{pre-exam-confirmation,validate-access,start}`, `GET/POST /exam/sessions/:id/*`, **`/exam` WebSocket** (heartbeat/timer)                  | ✅ built & committed (`b951242`) — architect review pending; degraded by BE-I-22/23/24                                                                                                                         |
+| **6** | **Mock exam**                                  | Practice attempts, history, review              | `POST /mock/start`, `GET /mock/history`, `GET /mock/attempts/:id`, `GET /mock/:id`, `POST /mock/:id/{autosave,extend,submit,…}`, **`/mock` WS**       | ✅ built & committed (`37b5c57`, `f4752ad`, `6d9e406`, WS `904a478`)                                                                                                                                           |
+| **7** | **Certificates** (`/dashboard/credentials`)    | List earned certs; verify                       | `GET /me/certificates` (BE-I-16 ✅) + public `GET /verify/:certId`                                                                                    | ✅ built — A3 (`features/credentials`)                                                                                                                                                                         |
+| **7** | **Notifications** (`/dashboard/notifications`) | In-app notifications + unread badge             | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all` (BE-I-18 ✅)                                                                     | ✅ built — A4 (+ core badge)                                                                                                                                                                                   |
+| **7** | **Insights** (Overview only)                   | Student learning/exam analytics                 | `GET /insights` (BE-I-20a ✅)                                                                                                                         | ✅ built — A5 (dashboard data-access, no standalone page)                                                                                                                                                      |
 
 ### Build order & rationale
 
@@ -159,11 +185,15 @@ Backend Issues Report) → `CLAUDE.md` (frontend rules: standalone components,
 signals, OnPush, new control-flow, no `any`, no Observables in components,
 `ios-` selector prefix, logical CSS).
 
-**State (2026-07-22):** whole admin app (B1–B8) + all user-facing rewire A-items
-(A1–A7, BLOG-PUBLIC/ADMIN, C2) committed on `feat/real-backend-integration`. The
-remaining work is **BE-ready, FE-missing**: the student **real-exam engine**,
-**learning/courses**, **mock-exam runner**, **C1 admin OTP**, and
-**email-verify/complete-account** — see the reconciliation section.
+**State (2026-07-25):** whole admin app (B1–B8), all user-facing rewire A-items
+(A1–A7, BLOG-PUBLIC/ADMIN, C2), **and** the four net-new student/auth features —
+real-exam engine (`b951242`), learning/courses (`172f35a`), mock-exam
+(`37b5c57`/`f4752ad`/`6d9e406`/`904a478`), email verification (`9e06730`) — plus
+**C1 admin OTP** (`ae6ae44`) are committed on `feat/real-backend-integration`.
+**Open:** the C1 security review, the architect review of the exam engine, the
+brand-new **CMS** surface, **BE-I-29** (lesson `contentText`), the
+`complete-account` wizard (blocked by **BE-I-25**), and the two mock-data pockets
+listed under [Remaining tasks](#remaining-tasks-high-level).
 
 **Working rules (from the mission brief):**
 
@@ -173,7 +203,9 @@ remaining work is **BE-ready, FE-missing**: the student **real-exam engine**,
 - **App, page by page (Phase 4 — admin is done).** Build one page, verify,
   **stop for review**. **Never commit without the user's explicit approval** —
   they say "commit". Follow [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md)
-  (all backend blockers are now cleared — nothing to skip).
+  — its §E lists the current open items. **Not** everything is unblocked: check
+  [`backend-blockers-report.md`](./backend-blockers-report.md) §1 before starting
+  anything that touches `complete-account` (BE-I-25) or the CMS (BE-I-26/27/28).
 - After each page: update THIS file, then `npm run typecheck && npm run lint &&
 npm run build` (all from `institute of scrum/`) must be clean.
 - i18n lives in `src/app/assets/i18n/{en,fr,ar}.json`. Add keys to all three;
@@ -247,22 +279,28 @@ against the deployed API (not available in-session).
   - Added `auth.login.session.registered` i18n key to en/fr/ar.
   - **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓.
 
-## Tasks currently in progress
+## Task log (all committed — see "Remaining tasks" for what is still open)
 
-- **Phase 4 · Profile — built & committed** (`f23902e`). Details below.
-- **Phase 4 · Catalog — data-access layer built & committed (logic only).**
-  Public catalog data-access layer is done; the reviewer asked to **not** wire it
-  into the marketing components yet (logic-only), so the ESM cert-details retrofit
-  was reverted. Details + rollout plan below.
-- **Landing navbar — auth-aware CTAs** (committed with the catalog data-access).
-  `ios-landing-navbar` hides **Login/Register** when the visitor is signed in and
-  shows a **Dashboard** link instead (desktop + mobile), via
+> **Heading corrected 2026-07-25.** Everything below this line is **committed** on
+> `feat/real-backend-integration`; the per-entry "(uncommitted / awaiting review)"
+> labels were stale and have been replaced with the commit sha that shipped each
+> slice. Two items still carry an open **review** (not an open build): C1
+> (`ae6ae44`, security) and the real-exam engine (`b951242`, architect).
+
+- **Phase 4 · Profile — committed** (`f23902e`). Details below.
+- **Phase 4 · Catalog — data-access layer committed (`f5954e0`), logic only.**
+  The reviewer asked to **not** wire it into the marketing components yet, so the
+  ESM cert-details retrofit was reverted. The marketing-page retrofit is still an
+  open item. Details + rollout plan below.
+- **Landing navbar — auth-aware CTAs** (committed with the catalog data-access,
+  `f5954e0`). `ios-landing-navbar` hides **Login/Register** when the visitor is
+  signed in and shows a **Dashboard** link instead (desktop + mobile), via
   `AuthStore.isAuthenticated()`. Added `landing.nav.dashboard` i18n (en/fr/ar).
-- **Phase 4 · Payments — data-access layer built (logic only), awaiting review
-  (uncommitted).** Public payment flows wired in the data layer; no component
-  consumes it yet. Details below.
+- **Phase 4 · Payments — data-access layer committed (`468b457`), logic only.**
+  Public payment flows wired in the data layer; no component consumes it yet.
+  Details below.
 
-### Phase 4 · ⭐ Real-exam engine — Slice 1: REST data-access (`features/assessments/data-access`) — logic only (uncommitted)
+### Phase 4 · ⭐ Real-exam engine — Slice 1: REST data-access (`features/assessments/data-access`) — ✅ committed (`b951242`)
 
 First of five sub-slices for the student real-exam engine (the highest-stakes
 surface — CLAUDE §10 / `08-exam-engine.md`). **Architect review required before
@@ -323,7 +361,7 @@ The reconciliation that shaped this slice (full table in the session plan):
 - **Next:** Slice 2 — `ExamDraftStore` (native IndexedDB, no dep) + in-memory
   fake; then Slice 3 store, Slice 4 Socket.IO WS, Slice 5 UI rewire + routing.
 
-### Phase 4 · ⭐ Real-exam engine — Slice 2: IndexedDB draft layer (`features/assessments/data-access`) — logic only (uncommitted)
+### Phase 4 · ⭐ Real-exam engine — Slice 2: IndexedDB draft layer (`features/assessments/data-access`) — ✅ committed (`b951242`)
 
 Second sub-slice. The offline answer buffer (spec §5, `08-exam-engine.md`). Pure
 logic + a test fake; nothing consumes it yet (tree-shaken out of the bundle —
@@ -370,7 +408,7 @@ clientSeq)`.** The live backend has no per-answer endpoint (bulk last-write-wins
   debounced bulk autosave; `resume`; `flushQueue`; `submit`/`lateSubmit`;
   `canSubmit`). Timer via `getSession` poll initially so the slice runs without WS.
 
-### Phase 4 · ⭐ Real-exam engine — Slice 3: `ExamSessionStore` (`features/assessments/data-access`) — logic only (uncommitted)
+### Phase 4 · ⭐ Real-exam engine — Slice 3: `ExamSessionStore` (`features/assessments/data-access`) — ✅ committed (`b951242`)
 
 Third sub-slice — the signal store that owns exam-session state and the answer
 sync queue (spec §4/§5). Pure logic; no page consumes it yet (tree-shaken —
@@ -437,7 +475,7 @@ ships (Slice 5).**
   `join_session` → `applyServerTick` from `timer_tick`, `warning` a11y hooks,
   `session_expired` → `markExpired`/late-submit, 70 s staleness watchdog, reconnect.
 
-### Phase 4 · ⭐ Real-exam engine — Slice 4: `ExamSessionWs` (Socket.IO) (`features/assessments/data-access`) — logic only (uncommitted)
+### Phase 4 · ⭐ Real-exam engine — Slice 4: `ExamSessionWs` (Socket.IO) (`features/assessments/data-access`) — ✅ committed (`b951242`)
 
 Fourth sub-slice — the live exam channel (spec §6). Adds the **`socket.io-client`
 dependency** (approved this session; the backend gateway is Socket.IO, so a raw
@@ -493,7 +531,7 @@ live backend is Socket.IO with engine.io's own heartbeat, `timer_tick`(30 s),
   `/run/:sessionId` + `/result/:sessionId` with route-scoped providers, the 7-day
   boot sweep wiring, and the §8 offline acceptance walk-through.
 
-### Phase 4 · ⭐ Real-exam engine — Slice 5a: routing + runner/result rewire (`features/assessments`) — uncommitted
+### Phase 4 · ⭐ Real-exam engine — Slice 5a: routing + runner/result rewire (`features/assessments`) — ✅ committed (`b951242`)
 
 Fifth-slice, part A — the first slice that **touches components and goes live**.
 Wires the runner + result pages to the Slice 1–4 data-access. **Architect review
@@ -555,7 +593,7 @@ submittedNeutralBody,viewInDashboard}` to en/fr/ar. Arabic still needs pro revie
   (route-activation or lazy app-initializer); dashboard/cert entry points →
   `/assessments/verify`; and document the §8 ~60 s offline acceptance walk-through.
 
-### Phase 4 · ⭐ Real-exam engine — Slice 5b: entry pages + boot sweep (`features/assessments`) — uncommitted
+### Phase 4 · ⭐ Real-exam engine — Slice 5b: entry pages + boot sweep (`features/assessments`) — ✅ committed (`b951242`)
 
 Final sub-slice — the exam entry flow, completing the engine. **Architect review
 required before merge** (CLAUDE §10).
@@ -611,7 +649,7 @@ place (harmless; minor future cleanup).
   pattern) · `ng build --configuration production` ✓ (initial gzip 103.34 kB;
   socket.io-client stays in the lazy chunk; known raw-size warning only).
 
-### ✅ Real-exam engine (student) — COMPLETE across Slices 1–5b (uncommitted, awaiting architect review)
+### ✅ Real-exam engine (student) — COMPLETE across Slices 1–5b — committed `b951242` (2026-07-24); architect review still pending
 
 All five slices done: REST data-access (1) → IndexedDB drafts + session snapshot
 (2) → `ExamSessionStore` (3) → Socket.IO `ExamSessionWs` (4) → routing + UI rewire
@@ -635,7 +673,7 @@ forward-plumbing (BE-I-24) was kept intentionally. All green after
 
 **Next feature: Learning / courses (student)** — plan item 2.
 
-### Phase 4 · ⭐ Learning / courses — Slice 1: data-access (`features/courses/data-access`) — logic only (uncommitted)
+### Phase 4 · ⭐ Learning / courses — Slice 1: data-access (`features/courses/data-access`) — ✅ committed (`172f35a`)
 
 Plan item 2. First slice of the student learning experience, wired to the backend
 `@Controller('learning')`. Pure logic; `features/courses` is still an empty route
@@ -674,7 +712,7 @@ completedLessons / percentComplete`).
   warnings) · `ng build --configuration production` ✓ (initial gzip 103.34 kB,
   tree-shaken; known raw-size warning only).
 
-### Phase 4 · ⭐ Learning / courses — Slice 2: pages (`features/courses/pages`) — uncommitted
+### Phase 4 · ⭐ Learning / courses — Slice 2: pages (`features/courses/pages`) — ✅ committed (`172f35a`)
 
 Wired the full student learning UI on top of Slice 1. Lazy chunks (not in the app
 shell); initial gzip 103.39 kB. i18n `courses.*` added to en/fr/ar (Arabic pending
@@ -711,7 +749,7 @@ curriculum · `/courses/:certId/lessons/:lessonId` → lesson.
   `GET /learning/progress`; a "Courses" nav entry / dashboard link into `/courses`
   can be added where the student nav lives.
 
-### Phase 4 · ⭐ Mock-exam runner — Slice 1: data-access (`features/certificates/data-access`) — logic only (uncommitted)
+### Phase 4 · ⭐ Mock-exam runner — Slice 1: data-access (`features/certificates/data-access`) — ✅ committed (`37b5c57`)
 
 Plan item 3. First slice of the student practice-exam engine, wired to the
 backend `@Controller('mock')`. Pure logic; no page consumes it yet (tree-shaken —
@@ -745,7 +783,7 @@ graded on the client. `readyForFinal` is advisory only (never blocks the real ex
   tree-shaken; known raw-size warning only). No live consumer yet.
 - **Slice 1 committed** (`37b5c57`).
 
-### Phase 4 · ⭐ Mock-exam runner — Slice 2: UI rewire (`features/certificates/pages`) — uncommitted
+### Phase 4 · ⭐ Mock-exam runner — Slice 2: UI rewire (`features/certificates/pages`) — ✅ committed (`f4752ad`)
 
 Rewired the **existing** demo mock pages to the real `MockStore`. Lazy chunks;
 initial gzip 103.28 kB. i18n `mock.*` + `courses.curriculum.practiceTest` added
@@ -791,7 +829,7 @@ to en/fr/ar (Arabic pending pro review).
   (needs an enrolled student + token). **Node ≥ 20.19 required for `ng build`**
   (nvm: `nvm use 20.19.0`; the shell defaulted to 20.11 which the CLI rejects).
 
-### Phase 4 · ⭐ C1 — Admin OTP login (`core/auth` + `features/admin`) — uncommitted — ⚠️ SECURITY REVIEW REQUIRED
+### Phase 4 · ⭐ C1 — Admin OTP login (`core/auth` + `features/admin`) — ✅ committed (`ae6ae44`) — ⚠️ SECURITY REVIEW STILL REQUIRED
 
 Plan item 4 (the explicitly-last, highest-risk item). Two-step admin OTP login +
 admin-aware logout. **Touches `core/auth` → must pass architect + security review
@@ -838,7 +876,7 @@ before it ships** (CLAUDE §8/§13). No new dependency; initial gzip 103.66 kB.
   known raw-size warning only). Not runtime-tested in-session (needs a staff account
   - OTP email). Node ≥ 20.19 for `ng build`.
 
-### Phase 4 · Email verification (`features/auth` + `core/auth`) — uncommitted
+### Phase 4 · Email verification (`features/auth` + `core/auth`) — ✅ committed (`9e06730`)
 
 Plan item 5 (partial). Wires the "BE-ready, FE-missing" `POST /auth/verify-email`.
 
@@ -858,7 +896,7 @@ Plan item 5 (partial). Wires the "BE-ready, FE-missing" `POST /auth/verify-email
   warnings) · `ng build --configuration production` ✓ (initial gzip 103.36 kB,
   verify-email lazy). Not runtime-tested in-session. Node ≥ 20.19 for `ng build`.
 
-### Phase 4 · Payments data-access (`features/payments/data-access`) — logic only (uncommitted)
+### Phase 4 · Payments data-access (`features/payments/data-access`) — ✅ committed (`468b457`), logic only
 
 Student payment flows against `@Controller('payments')` (student token; RLS-
 scoped). Built as a standalone data-access layer per the "logic only, no
@@ -896,7 +934,7 @@ meta.pagination }`).
   warnings) · build ✓ (known raw-size budget warning only). No live consumer yet;
   live check deferred until wired.
 
-### Phase 4 · Catalog retrofit (`/certifications` + `cert-details-*`) — data-access only (uncommitted)
+### Phase 4 · Catalog retrofit (`/certifications` + `cert-details-*`) — data-access committed (`f5954e0`); the marketing-page retrofit is still open
 
 **Scope decision (reviewer):** the user-facing catalog is **static marketing**
 (`/certifications` browse + hardcoded `cert-details-*` pages, IOS-branded
@@ -951,7 +989,7 @@ component overlay (the ESM reference retrofit) was reverted and is deferred.
   warnings) · build ✓ (known raw-size budget warning only). The data-access layer
   has no live consumer yet; live check deferred until it's wired.
 
-### Phase 4 · Profile (`/dashboard/profile`) — built, awaiting review (uncommitted)
+### Phase 4 · Profile (`/dashboard/profile`) — ✅ committed (`f23902e`)
 
 First user-facing page wired to the real backend. Replaced the mock-seeded
 placeholder store with a real data-access layer against the student `/me`
@@ -1014,7 +1052,7 @@ endpoints (bare DTOs, not `{ data }`), reusing the established admin layering.
   `edit-profile-page` chunk 4.24 kB gzip). Live check needs a real student
   session against the deployed API (no test creds in-session) — deferred.
 
-### Phase 4 · A1 — Profile avatar upload (BE-I-08) — built, awaiting review (uncommitted)
+### Phase 4 · A1 — Profile avatar upload (BE-I-08) — ✅ committed (`242a11d`)
 
 Full page build (data-access + UI) for the presigned avatar-upload flow;
 revisits the committed Profile work and clears the BE-I-08 "avatar is plain URL
@@ -1056,7 +1094,7 @@ avatarSizeError,avatarUploadError}` (en/fr/ar; Arabic pending pro review).
   `edit-profile-page` chunk 4.56 kB gzip). Live check needs a real student
   session + reachable object storage — deferred (no test creds in-session).
 
-### Phase 4 · A3 — Earned certificates list (BE-I-16) — built, awaiting review (uncommitted)
+### Phase 4 · A3 — Earned certificates list (BE-I-16) — ✅ committed (`3bed4c1`)
 
 Full page build for the student's earned credentials. Endpoint:
 `GET /me/certificates` → **`{ data }`** envelope (no pagination), item
@@ -1100,7 +1138,7 @@ rel=noopener noreferrer`). Reuses the dashboard navbar + footer shell.
   `credentials-page` chunk 2.82 kB gzip). Live check needs a real student session
   with earned certs — deferred (no test creds in-session).
 
-### Phase 4 · A4 — Notifications (BE-I-18) — built, awaiting review (uncommitted)
+### Phase 4 · A4 — Notifications (BE-I-18) — ✅ committed (`99917c8`)
 
 Full rewrite of `features/notifications` (was mock-driven) against the real
 in-app notification API, plus a shell **unread badge**. Endpoints:
@@ -1140,7 +1178,7 @@ in-app notification API, plus a shell **unread badge**. Endpoints:
   warnings) · build ✓ (known raw-size budget warning only; `notifications-page`
   chunk 3.73 kB gzip). Live check needs a real student session — deferred.
 
-### Phase 4 · A5 — Student learning insights (BE-I-20a) — built, awaiting review (uncommitted)
+### Phase 4 · A5 — Student learning insights (BE-I-20a) — ✅ committed (`0272e27`)
 
 Student learning + exam analytics from bare `GET /insights` (student only;
 admins 403): `{ enrolledPrograms, completedLessons, inProgressPrograms,
@@ -1178,7 +1216,7 @@ certificatesEarned }`.
   warnings) · build ✓ (known raw-size budget warning only). Live check needs a
   real student session — deferred.
 
-### Phase 4 · BLOG-PUBLIC rewire (BE-I-11, `features/insights`) — built, awaiting review (uncommitted)
+### Phase 4 · BLOG-PUBLIC rewire (BE-I-11, `features/insights`) — ✅ committed (`1940501`)
 
 Rewired the public blog (`features/insights`) from static fallback to the live
 **Blog module** (`334d0c6`): `GET /blog` (cursor list) + `GET /blog/:slug`
@@ -1218,7 +1256,7 @@ Rewired the public blog (`features/insights`) from static fallback to the live
   deployed to `api-dev` (endpoint 404s there as of 2026-07-20);** ready to light up
   once deployed.
 
-### Phase 4 · BLOG-ADMIN (`admin/blog`, new page) — built, awaiting review (uncommitted)
+### Phase 4 · BLOG-ADMIN (`admin/blog`, new page) — ✅ committed (`5404e77`)
 
 New admin authoring page for the Blog module (`334d0c6`): full CRUD + lifecycle +
 per-locale translations, built like the B-pages (dto→model→mappers→api→store +
@@ -1293,7 +1331,7 @@ item registered.
     (admin-login gated); the `angular.json` styles change needs a dev-server
     restart to take effect locally.
 
-### Phase 4 · A6 — Landing rewire (`GET /landing`, BE-I-20) — built, awaiting review (uncommitted)
+### Phase 4 · A6 — Landing rewire (`GET /landing`, BE-I-20) — ✅ committed (`469f429`)
 
 Replaced the dead `LandingApi.getPageData()`→null stub with a real fetch of the
 now-deployed **`GET /landing`** (bare `{ featuredPrograms, stats }`, public,
@@ -1321,7 +1359,7 @@ certificatesIssued }`.
   Per request, **not browser-verified** — the local dev server was serving a stale
   bundle; restart `npm start` (dev config → api-dev) to see it render.
 
-### Phase 4 · A7 — Dashboard real-exam history (`GET /exam/attempts`, BE-I-17) — built, awaiting review (uncommitted)
+### Phase 4 · A7 — Dashboard real-exam history (`GET /exam/attempts`, BE-I-17) — ✅ committed (`554fbe6`)
 
 Added the student's **real-exam attempt history** to the Dashboard overview, the
 one still-missing piece of the A7 fold-in. The student `GET /insights` aggregates
@@ -1359,7 +1397,7 @@ submittedAt, durationSeconds (nullable), status, lateFlag }`.
   build ✓ (`overview-page` chunk 6.31 kB gzip; known raw-size budget warning only).
   Per request, **not browser-verified**.
 
-### Phase 4 · A2 — Settings delete account + data export (BE-042) — built, awaiting review (uncommitted)
+### Phase 4 · A2 — Settings delete account + data export (BE-042) — ✅ committed (`c659335`)
 
 Wired the two self-service GDPR actions on the Settings page (`@Controller('me')`,
 student token). The delete dialog previously only had a cosmetic "type Delete"
@@ -1394,7 +1432,7 @@ real, backed by the live endpoints.
   `POST /me/delete` is genuinely destructive — verify against a throwaway seeded
   student, not a real account.
 
-### Phase 4 · C2 — Cookie consent banner (BE-042) — built, awaiting review (uncommitted)
+### Phase 4 · C2 — Cookie consent banner (BE-042) — ✅ committed (`6fddf8e`)
 
 Added the GDPR cookie-consent banner the docs anticipated in `core/consent/`
 (`06 §2.7.1`, note at `06:199`). Public + root-mounted so consent can be given
@@ -1451,55 +1489,64 @@ surface by design).
 
 ### By domain
 
-| Domain                              | Endpoints                                                                                                                                                    | Status                                                                                                                                      |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Auth (student)**                  | `POST /auth/register`, `/login`, `/forgot-password`, `/reset-password`, `/resend-verification`, `/refresh`, `/logout`                                        | ✅ wired                                                                                                                                    |
-| **Auth — email verify**             | `POST /auth/verify-email`, `/auth/resend-verification`                                                                                                       | ✅ wired — `/auth/verify-email` page (token verify + resend); `complete-account` profile wizard still deferred                              |
-| **Auth — admin OTP (C1)**           | `POST /auth/admin/login` (basic call exists), `/auth/admin/login/otp`, `/auth/admin/refresh`, `/auth/admin/logout`                                           | ✅ **wired — awaiting security review**: two-step OTP + admin-aware logout (`core/auth`). Refresh kept on shared `/auth/refresh` (see note) |
-| **Profile** `/me`                   | `GET /me`, `GET /me/certificates`, `PATCH /me`, `PATCH /me/password`, `POST /me/avatar-upload-url`                                                           | ✅ wired (A1, A3)                                                                                                                           |
-| **GDPR**                            | `GET /me/export`, `POST /me/delete`, `POST /consent`                                                                                                         | ✅ wired (A2, C2)                                                                                                                           |
-| **Analytics**                       | `GET /admin/dashboard/overview`, `GET /insights`, `GET /landing`                                                                                             | ✅ wired (B6, A5/A7, A6)                                                                                                                    |
-| **Blog**                            | public `GET /blog`, `/blog/:slug`; admin CRUD + publish/translations                                                                                         | ✅ wired (BLOG-PUBLIC, BLOG-ADMIN)                                                                                                          |
-| **Catalog**                         | public `GET /catalog`, `/catalog/:id`, `/catalog/:id/outline`; admin CRUD + translations                                                                     | ✅ wired (B8, catalog translations)                                                                                                         |
-| **Certificates**                    | public `GET /verify/:certId`; admin `GET /admin/certs/issued`, `PATCH …/revoke`                                                                              | ✅ wired (B2, exam-verify)                                                                                                                  |
-| **Notifications**                   | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all`                                                                                         | ✅ wired (A4)                                                                                                                               |
-| **Payments (student)**              | `POST /payments/checkout`, `/retake`, `GET /payments/transactions`                                                                                           | ✅ wired                                                                                                                                    |
-| **Promo (admin)**                   | `/admin/promo-codes` CRUD                                                                                                                                    | ✅ wired (B4)                                                                                                                               |
-| **Staff (admin)**                   | `/admin/staff` CRUD + deactivate                                                                                                                             | ✅ wired (B3)                                                                                                                               |
-| **Users (admin)**                   | `/admin/users`, `/:id`, `/:id/attempts`, `/:id/access-codes`, revoke                                                                                         | ✅ wired                                                                                                                                    |
-| **Audit (admin)**                   | `GET /admin/audit-logs`                                                                                                                                      | ✅ wired                                                                                                                                    |
-| **Learning-admin**                  | modules/lessons CRUD, `GET /admin/certs/:id/curriculum`, lesson-quiz CRUD                                                                                    | ✅ wired (B1, B5)                                                                                                                           |
-| **Exam-authoring (admin)**          | certs/exams CRUD, questions, publish/unpublish, translations                                                                                                 | ✅ wired (B7). `GET /admin/exams/:examId/preview` — ❌ not wired (minor)                                                                    |
-| **Exam assign (admin)**             | `GET /admin/exam`, `POST /admin/exam/assign`                                                                                                                 | ✅ wired                                                                                                                                    |
-| **Mock-authoring (admin)**          | `/admin/mock/certs/:certId/questions`, `/admin/mock/questions` CRUD                                                                                          | ✅ wired                                                                                                                                    |
-| **Real-exam history**               | `GET /exam/attempts`                                                                                                                                         | ✅ wired (A7)                                                                                                                               |
-| **⭐ Real-exam engine (student)**   | `POST /exam/pre-exam-confirmation`, `/validate-access`, `/start`, `GET /exam/sessions/:id`, `POST …/autosave`, `…/submit`, `…/late-submit` (+ exam WS)       | ✅ **wired (Slices 1–5b, uncommitted — architect review pending)**. `pre-exam-confirmation` deferred (BE-I-24).                             |
-| **⭐ Mock-exam runner (student)**   | `POST /mock/start`, `GET /mock/history`, `/mock/attempts/:id`, `/mock/:id`, `POST …/autosave`, `…/extend`, `…/submit`, `…/questions/:qid/reveal`             | ✅ **wired** — data-access (committed) + runner/result UI rewired to `MockStore` (UI uncommitted; awaiting review)                          |
-| **⭐ Learning / courses (student)** | `GET /learning/certs/:certId/curriculum`, `/learning/lessons/:id`, `/learning/lessons/:id/quiz`, `POST …/quiz/check`, `…/complete`, `GET /learning/progress` | ✅ **wired** — `features/courses` data-access + index/curriculum/lesson pages (uncommitted; awaiting review)                                |
-| **Payments webhook / health / web** | `POST /payments/webhook`, `/health*`, `web` redirect pages                                                                                                   | ⚙️ backend/infra — no FE                                                                                                                    |
+| Domain                              | Endpoints                                                                                                                                                       | Status                                                                                                                                                                                    |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Auth (student)**                  | `POST /auth/register`, `/login`, `/forgot-password`, `/reset-password`, `/resend-verification`, `/refresh`, `/logout`                                           | ✅ wired                                                                                                                                                                                  |
+| **Auth — email verify**             | `POST /auth/verify-email`, `/auth/resend-verification`                                                                                                          | ✅ wired — `/auth/verify-email` page (token verify + resend); `complete-account` profile wizard still deferred                                                                            |
+| **Auth — admin OTP (C1)**           | `POST /auth/admin/login` (basic call exists), `/auth/admin/login/otp`, `/auth/admin/refresh`, `/auth/admin/logout`                                              | ✅ **wired — awaiting security review**: two-step OTP + admin-aware logout (`core/auth`). Refresh kept on shared `/auth/refresh` (see note)                                               |
+| **Profile** `/me`                   | `GET /me`, `GET /me/certificates`, `PATCH /me`, `PATCH /me/password`, `POST /me/avatar-upload-url`                                                              | ✅ wired (A1, A3)                                                                                                                                                                         |
+| **GDPR**                            | `GET /me/export`, `POST /me/delete`, `POST /consent`                                                                                                            | ✅ wired (A2, C2)                                                                                                                                                                         |
+| **Analytics**                       | `GET /admin/dashboard/overview`, `GET /insights`, `GET /landing`                                                                                                | ✅ wired (B6, A5/A7, A6)                                                                                                                                                                  |
+| **Blog**                            | public `GET /blog`, `/blog/:slug`; admin CRUD + publish/translations                                                                                            | ✅ wired (BLOG-PUBLIC, BLOG-ADMIN)                                                                                                                                                        |
+| **Catalog**                         | public `GET /catalog`, `/catalog/:id`, `/catalog/:id/outline`; admin CRUD + translations                                                                        | ✅ wired (B8, catalog translations)                                                                                                                                                       |
+| **Certificates**                    | public `GET /verify/:certId`; admin `GET /admin/certs/issued`, `PATCH …/revoke`                                                                                 | ✅ wired (B2, exam-verify)                                                                                                                                                                |
+| **Notifications**                   | `GET /notifications`, `/unread-count`, `POST /:id/read`, `/read-all`                                                                                            | ✅ wired (A4)                                                                                                                                                                             |
+| **Payments (student)**              | `POST /payments/checkout`, `/retake`, `GET /payments/transactions`                                                                                              | ✅ wired                                                                                                                                                                                  |
+| **Promo (admin)**                   | `/admin/promo-codes` CRUD                                                                                                                                       | ✅ wired (B4)                                                                                                                                                                             |
+| **Staff (admin)**                   | `/admin/staff` CRUD + deactivate                                                                                                                                | ✅ wired (B3)                                                                                                                                                                             |
+| **Users (admin)**                   | `/admin/users`, `/:id`, `/:id/attempts`, `/:id/access-codes`, revoke                                                                                            | ✅ wired                                                                                                                                                                                  |
+| **Audit (admin)**                   | `GET /admin/audit-logs`                                                                                                                                         | ✅ wired                                                                                                                                                                                  |
+| **Learning-admin**                  | modules/lessons CRUD, `GET /admin/certs/:id/curriculum`, lesson-quiz CRUD                                                                                       | ✅ wired (B1, B5)                                                                                                                                                                         |
+| **Exam-authoring (admin)**          | certs/exams CRUD, questions, publish/unpublish, translations                                                                                                    | ✅ wired (B7). `GET /admin/exams/:examId/preview` — ❌ not wired (minor)                                                                                                                  |
+| **Exam assign (admin)**             | `GET /admin/exam`, `POST /admin/exam/assign`                                                                                                                    | ✅ wired                                                                                                                                                                                  |
+| **Mock-authoring (admin)**          | `/admin/mock/certs/:certId/questions`, `/admin/mock/questions` CRUD                                                                                             | ✅ wired                                                                                                                                                                                  |
+| **Real-exam history**               | `GET /exam/attempts`                                                                                                                                            | ✅ wired (A7)                                                                                                                                                                             |
+| **⭐ Real-exam engine (student)**   | `POST /exam/pre-exam-confirmation`, `/validate-access`, `/start`, `GET /exam/sessions/:id`, `POST …/autosave`, `…/submit`, `…/late-submit` (+ exam WS)          | ✅ **wired & committed `b951242`** — architect review pending. `pre-exam-confirmation` still unreachable (BE-I-24); review UI disabled (BE-I-22); resume uses a local snapshot (BE-I-23). |
+| **⭐ Mock-exam runner (student)**   | `POST /mock/start`, `GET /mock/history`, `/mock/attempts/:id`, `/mock/:id`, `POST …/autosave`, `…/extend`, `…/submit`, `…/questions/:qid/reveal` (+ `/mock` WS) | ✅ **wired & committed** — data-access `37b5c57`, runner/result `f4752ad`, history page `6d9e406`, `/mock` Socket.IO timer `904a478`.                                                     |
+| **⭐ Learning / courses (student)** | `GET /learning/certs/:certId/curriculum`, `/learning/lessons/:id`, `/learning/lessons/:id/quiz`, `POST …/quiz/check`, `…/complete`, `GET /learning/progress`    | ✅ **wired & committed `172f35a`** — `features/courses` data-access + index/curriculum/lesson pages.                                                                                      |
+| **🆕 CMS (public + admin)**         | public `GET /cms/pages/:slug`, `/cms/globals/:key`; admin `admin/cms/pages\|sections\|globals` (+ publish/reorder/translations)                                 | ❌ **BE-ready, FE-missing** — merged `3e52625` (2026-07-22); no `*.api.ts` references `/cms`. Gaps: BE-I-26/27/28.                                                                        |
+| **Payments webhook / health / web** | `POST /payments/webhook`, `/health*`, `web` redirect pages                                                                                                      | ⚙️ backend/infra — no FE                                                                                                                                                                  |
 
-### Done from BE side, NOT done from ours (the new plan backlog)
+> **Matrix refreshed 2026-07-25** against frontend HEAD `904a478` and backend HEAD
+> `72a711c`. Two rows above changed meaning since the 2026-07-22 rescan: the
+> **Analytics** row is now only _partly_ exercised (`from`/`to` unused by
+> `dashboard.api.ts:27`), and the **Users (admin)** row consumes `counts` only —
+> the backend now also returns `certificates[]`, `attempts[]` and
+> `exams.{assigned,purchases}` (`72a711c`).
+
+### Done from BE side, NOT done from ours (the plan backlog — refreshed 2026-07-25)
 
 Ordered by size/impact. Everything below is deployed on the backend and blocked
 only on **frontend** work:
 
-1. **⭐ Real-exam engine (student)** — ✅ **DONE (Slices 1–5b, uncommitted,
-   awaiting architect review).** Full `features/assessments` data-access
-   (`exam.api` + `exam-session.store` + `exam-session.ws` Socket.IO + IndexedDB
-   drafts/snapshot), runner/result/verify/ready UI, `/run/:sessionId` routing, and
-   the 7-day sweep. Reconciled to the live backend (BE-I-22/23/24 filed). See the
-   Slice 1–5b entries under "Tasks currently in progress".
-2. **⭐ Learning / courses (student)** — ✅ **DONE (uncommitted, awaiting review)**.
-   Built `features/courses` data-access + index/curriculum/lesson pages (curriculum
+1. **⭐ Real-exam engine (student)** — ✅ **DONE — committed `b951242`
+   (2026-07-24); architect review still pending.** Full `features/assessments`
+   data-access (`exam.api` + `exam-session.store` + `exam-session.ws` Socket.IO +
+   IndexedDB drafts/snapshot), runner/result/verify/ready UI, `/run/:sessionId`
+   routing, and the 7-day sweep. Reconciled to the live backend (BE-I-22/23/24
+   filed — all three still open). See the Slice 1–5b entries above.
+2. **⭐ Learning / courses (student)** — ✅ **DONE — committed `172f35a`.**
+   `features/courses` data-access + index/curriculum/lesson pages (curriculum
    browser, lesson viewer with sanitised HTML + signed-URL video + mark-complete,
-   self-check quiz + check). Follow-up: A7's dashboard can now drop the mock
-   `DashboardStore` for `GET /learning/progress`.
-3. **⭐ Mock-exam runner (student)** — ✅ **DONE** (data-access committed `37b5c57`;
-   runner/result UI rewired to `MockStore`, uncommitted). Reveal/extend/soft-timer
-   practice flow; entry via the courses curriculum "Practice test" action.
-   Follow-ups: a mock **history** page and an optional `/mock` Socket.IO channel.
-4. **C1 — Admin OTP login** — ✅ **DONE (uncommitted) — MUST pass architect +
-   security review before shipping** (`core/auth`, CLAUDE §8/§13). Two-step OTP
+   self-check quiz + check). **Follow-up still open:** the student dashboard
+   overview can now drop the hardcoded `DashboardStore` for `GET /learning/progress`.
+3. **⭐ Mock-exam runner (student)** — ✅ **DONE** — data-access `37b5c57`,
+   runner/result UI `f4752ad`, practice-**history** page `6d9e406`, and the
+   server-authoritative `/mock` Socket.IO timer `904a478` (both former follow-ups
+   are now shipped). Reveal/extend/soft-timer practice flow; entry via the courses
+   curriculum "Practice test" action.
+4. **C1 — Admin OTP login** — ✅ **DONE — committed `ae6ae44`; MUST still pass
+   architect + security review before shipping** (`core/auth`, CLAUDE §8/§13). Two-step OTP
    (challenge branch in `AuthStore.loginAdmin` + `verifyAdminOtp`/`cancelAdminOtp`),
    admin-aware `logout` (routes to `/auth/admin/logout` + `/admin/login`), and the
    admin-login OTP UI. **Refresh routing decision:** left on the shared
@@ -1507,35 +1554,110 @@ only on **frontend** work:
    and admins — branches on the token's `type` claim"); `/auth/admin/refresh` was
    NOT wired. Security review MUST confirm this (else switch the interceptor's
    refresh to `/auth/admin/refresh` for admin sessions using `isAdminSession`).
-5. **Email verification** — ✅ **DONE (uncommitted)**: `/auth/verify-email` page
-   verifies the token (`POST /auth/verify-email`, new `AuthApi.verifyEmail`) and
-   offers resend (`/auth/resend-verification`). ⚠️ touches `core/auth` (new API
-   method) — flag for architect + security review. The **`complete-account`
-   profile wizard** (→ `PATCH /me`) is still a simulated stub (cross-feature
-   `ProfileApi` wiring) — remains a follow-up.
-6. **Minor** — exam-authoring **preview** (`GET /admin/exams/:examId/preview`).
+5. **Email verification** — ✅ **DONE — committed `9e06730`**: `/auth/verify-email`
+   page verifies the token (`POST /auth/verify-email`, new `AuthApi.verifyEmail`,
+   `auth.api.ts:145-160`) and offers resend (`/auth/resend-verification`).
+   ⚠️ touches `core/auth` (new API method) — flag for architect + security review.
+   The **`complete-account` profile wizard** (→ `PATCH /me`) is still a simulated
+   stub (`complete-account.page.ts:947`) — blocked by **BE-I-25**, see below.
+6. **🆕 CMS surface (public + admin)** — ❌ **NOT STARTED.** Merged on the backend
+   `3e52625` (2026-07-22). See
+   [New backend surface: CMS](#new-backend-surface-cms-3e52625--no-fe-consumer-yet).
+7. **BE-I-29 — lesson `contentText` fix** — ❌ **NOT DONE, breaks admin lesson
+   creation today.** See the task entry below.
+8. **Minor** — exam-authoring **preview** (`GET /admin/exams/:examId/preview`);
+   admin dashboard `from`/`to` window; admin student-detail lists.
+
+### New backend surface: CMS (`3e52625`) — no FE consumer yet
+
+The backend merged a **typed-section CMS** on 2026-07-22 (public
+`GET /cms/pages/:slug` + `GET /cms/globals/:key`; admin `admin/cms/*` with pages,
+sections, globals, publish gate, reorder and translations; 16 section types; a
+seed of 8 pages including `home`, `about*`, `why-scrum`, `contact`, `privacy`,
+`terms`). Full inventory:
+[`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync-2026-07-25b--cms-module-blog-fix-analytics-window).
+
+Verified 2026-07-25: **nothing in `src/app` references `/cms`** — this is a
+greenfield frontend workstream, expected to be two builds:
+
+- **CMS-PUBLIC** — a section-renderer for the marketing site: fetch
+  `GET /cms/pages/:slug`, map the 16 `type`s to components, honour
+  `locale`/`direction`/`fallbackUsed`, and inject the `seo` block. `certifications`
+  and `journal` sections arrive pre-hydrated (`data.certifications[]` /
+  `data.articles[]`). **Decision required first:** the landing page currently uses
+  `GET /landing` (A6, `469f429`) while the CMS seeds a `home` page covering the
+  same ground — two sources of truth; pick one and record it here.
+  **Constraint:** `contact_form` sections have nowhere to submit (**BE-I-26**).
+- **CMS-ADMIN** — a page/section editor under `/admin`: list/create pages,
+  add/edit/reorder/delete sections against the per-type schemas, per-locale
+  translation editing, publish/unpublish with the 409 `CMS_PAGE_NOT_PUBLISHABLE`
+  `errors[]` surfaced (same idiom as B7), globals (nav/footer/announcement).
+  **Constraints:** image fields are pasted URLs (**BE-I-27**) and there is no true
+  draft preview (**BE-I-28**) — call both out in the UI rather than faking them.
+
+### BE-I-29 — admin lesson creation now 400s (FE fix owed)
+
+`72a711c` made `contentText` **required and non-empty** on `CreateLessonDto`
+(`IOS_Backend/src/modules/learning/dto/lesson.dtos.ts:41-49`). The FE deliberately
+omits the key when the field is blank
+(`features/admin/data-access/curriculum.mappers.ts:83-94`), so creating a lesson
+with an empty body — previously accepted — now fails validation.
+
+**Fix:** mark the lesson-content control required in `admin-curriculum.page.ts`
+(`lessonForm`, ~`:526`), add the i18n error string (en/fr/ar), and always send
+`contentText` from `toCreateLessonBody()`. Small, self-contained; no architecture
+impact.
+
+### Blog authoring (BE-I-21) — unblocked, re-test owed
+
+The backend fixed the create/rollback bug on 2026-07-21 (`30bfff5`:
+`blog.service.ts:196-198` returns the in-hand entity; `d7a78e6` fixed the list
+query). The FE (`5404e77` admin authoring, `1940501` public blog) was already
+built against the correct contract, so **no code change is expected** — what is
+owed is an **E2E re-test against api-dev**: create draft → edit → translations →
+publish → read on the public blog; confirm the create response's `authorName` is
+`null` until the next read (cosmetic, FE refetches).
 
 ### Everything else = reconciled
 
-All committed FE work maps 1:1 to a live backend endpoint; no FE code targets a
-removed/mock endpoint anymore (the last such stubs — landing null-fallback, blog
-`getPosts()`→null, dashboard mock aggregates — were rewired in A6/BLOG/A7).
+All committed FE work maps 1:1 to a live backend endpoint. Two mock-data pockets
+survive and are tracked in [Remaining tasks](#remaining-tasks-high-level): the
+student dashboard overview's `DashboardStore` and the legacy
+`/dashboard/certificates` demo pages.
 
 ## Remaining tasks (high level)
 
 **User-facing FE gaps (BE-ready — see reconciliation above):** ~~real-exam engine~~
-(committed), ~~learning/courses~~ (committed), ~~mock-exam runner~~ (committed),
-~~email verify~~ (committed), ~~C1 admin OTP~~ (committed — **security review
-pending**). **Remaining:** the `complete-account` profile wizard (→ `PATCH /me`,
-stub) and the minor admin exam-authoring **preview** endpoint. All primary Phase-4
-student + auth surfaces are now wired.
+(committed `b951242`), ~~learning/courses~~ (`172f35a`), ~~mock-exam runner~~
+(`37b5c57`/`f4752ad`/`6d9e406`/`904a478`), ~~email verify~~ (`9e06730`), ~~C1 admin
+OTP~~ (`ae6ae44` — **security review pending**). All primary Phase-4 student + auth
+surfaces are wired.
 
-**Known backend blocker:** **BE-I-21** — blog article creation 404s + rolls back
-(read-after-write across two connections); blog authoring can't complete E2E until
-the backend fixes it. FE `admin/blog` is built and correct.
+**Open FE backlog (2026-07-25), highest impact first:**
+
+| #   | Task                                                            | Why now                                                                                                                                                                                                                | Blocked by                                                                 |
+| --- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| 1   | **BE-I-29 — lesson `contentText` required**                     | Admin lesson creation 400s today (`curriculum.mappers.ts:83-94` vs `72a711c`)                                                                                                                                          | — (FE-only fix)                                                            |
+| 2   | **CMS-PUBLIC** — CMS section renderer for the marketing site    | Whole new backend surface (`3e52625`) with zero FE consumption                                                                                                                                                         | `contact_form` needs **BE-I-26**; `/landing` vs `/cms/pages/home` decision |
+| 3   | **CMS-ADMIN** — page/section/globals editor                     | Same                                                                                                                                                                                                                   | Degraded by **BE-I-27** (no media upload), **BE-I-28** (no draft preview)  |
+| 4   | **Student dashboard overview → real data**                      | `features/dashboard/data-access/dashboard.store.ts` is still hardcoded ("Mock datasets", `:38-120`) and drives `overview.page.ts:307`; `GET /learning/progress` now exists and is already mapped in `features/courses` | —                                                                          |
+| 5   | **Blog E2E re-test** (BE-I-21 fixed by `30bfff5`)               | Authoring was never verified against a working backend                                                                                                                                                                 | needs api-dev credentials                                                  |
+| 6   | **`complete-account` wizard**                                   | Still a stub (`complete-account.page.ts:947`)                                                                                                                                                                          | **BE-I-25** (no DOB field) + a `ProfileApi` boundary decision              |
+| 7   | **Legacy `/dashboard/certificates` demo pages**                 | `certificates.page` / `cert-detail.page` / `cert-session.page` still read hardcoded `ESM_P_*` data from `certificates.store.ts:356-644`, duplicating the real `/dashboard/credentials` (A3) and the real mock runner   | product decision: rewire or retire                                         |
+| 8   | **Admin dashboard date window** (`from`/`to`, `72a711c`)        | `dashboard.api.ts:27` sends `months` only                                                                                                                                                                              | —                                                                          |
+| 9   | **Admin student detail enrichment**                             | Backend now returns `certificates[]`/`attempts[]`/`exams.{assigned,purchases}`; FE maps `counts` only (`users.model.ts:20-31`)                                                                                         | —                                                                          |
+| 10  | **Exam-authoring preview** (`GET /admin/exams/:examId/preview`) | Minor, never wired                                                                                                                                                                                                     | —                                                                          |
+
+**Known backend blockers (see [`backend-blockers-report.md`](./backend-blockers-report.md)):**
+**BE-I-25** (no DOB → task 6 cannot ship), **BE-I-26/27/28** (CMS gaps → cap tasks
+2–3), and **BE-I-22/23/24** (real-exam limitations — already shipped around, but
+the exam review UI stays disabled until BE-I-22 lands). **BE-I-21 is no longer a
+blocker** — fixed by `30bfff5`.
 
 **Cross-cutting:** Arabic i18n still needs professional review across all shipped
-screens; testing remains deferred per SOW §6.2.14.
+screens; testing remains deferred per SOW §6.2.14. Two reviews are outstanding:
+**C1 security review** (`core/auth`, `ae6ae44`) and the **architect review of the
+real-exam engine** (`b951242`).
 
 ---
 
@@ -1547,15 +1669,22 @@ not modified.
 
 ## Frontend infrastructure status
 
-🚧 **In progress.**
+✅ **Complete** (corrected 2026-07-25 — the previous "feature API services not yet
+built" line was stale; 28 `*.api.ts` services exist on `feat/real-backend-integration`).
 
 - HTTP core (interceptors auth → locale → retry → error) real-backend-ready.
   **Mock interceptor removed.**
 - Auth core **fully wired to the real `/auth/*` API** (login, register, refresh,
-  logout, forgot-password, reset-password, resend-verification; cookie-based
-  refresh; RBAC in the real role space). All existing `features/auth` pages mapped.
-- Feature API services (catalog, learning, exam, mock, payments, certificates,
-  profile, admin): not yet built (Phase 2 continuation).
+  logout, forgot-password, reset-password, resend-verification, **verify-email**,
+  **admin OTP verify**, **admin logout**; cookie-based refresh; RBAC in the real
+  role space). All `features/auth` pages mapped.
+- Feature API services **built**: `core/auth`, `core/consent`, admin (audit, blog,
+  catalog, curriculum, dashboard, exam-assign, exam-authoring, issued-certs, mock,
+  promo, quiz, staff, users), assessments (`exam.api` + `exam-session.ws`),
+  certificates (`mock.api` + `mock-session.ws`), courses, credentials,
+  dashboard (insights, exam-attempts), insights, landing (catalog + landing),
+  notifications, payments, profile, settings.
+- **No API service exists for `/cms`** — the only unconsumed backend module.
 
 ## Admin pages status
 
@@ -1586,7 +1715,7 @@ Certificate revocation — BE-I-15), and **four new admin pages** are now possib
 | 11  | **Promo codes**                                           | ✅ Built (review pending)       | `/admin/promo-codes` (super/finance admin, BE-I-05, checklist B4)                     |
 | 12  | **Dashboard metrics** (`/admin` home)                     | ✅ Built (review pending)       | `GET /admin/dashboard/overview` (super/finance admin, BE-I-07, checklist B6)          |
 
-**Page 12 — Admin dashboard analytics / B6 (uncommitted, awaiting review):**
+**Page 12 — Admin dashboard analytics / B6 (committed `9559ec1`):**
 
 First item of the admin-first pivot (2026-07-16). Enriches the admin home
 (`pages/admin-home.page.ts`, previously "no metrics — BE-I-07") with the
@@ -1635,7 +1764,7 @@ loading/error/months/loaded` signals; `load(force)`/`reload`; `setMonths()`
   the deployed API — deferred (no admin creds in-session). **Committed by the
   user.**
 
-**Page 4 — Curriculum management / B1 (uncommitted, awaiting review):**
+**Page 4 — Curriculum management / B1 (committed `7268d26`):**
 
 Second admin-pivot item. New page `/admin/curriculum` for managing a
 certificate's modules + lessons. Read: `GET /admin/certs/:id/curriculum` →
@@ -1688,7 +1817,7 @@ modules[] }`), `AdminModuleDto` (w/ nested `lessons[]`), `AdminLessonDto`;
   content_creator/learning_admin session — deferred (no admin creds in-session).
   **Committed** (`7268d26`).
 
-**Page 9 — Certificate revocation / B2 (uncommitted, awaiting review):**
+**Page 9 — Certificate revocation / B2 (committed `451af2a`):**
 
 Third admin-pivot item. New page `/admin/issued-certs` listing issued
 certificates and revoking them. Read: `GET /admin/certs/issued?userId&certId&
@@ -1756,7 +1885,7 @@ super_admin / learning_admin.
   96.22 kB). Live check needs a real super_admin/learning_admin session —
   deferred (no admin creds in-session).
 
-**Page 10 — Admin staff management / B3 (uncommitted, awaiting review):**
+**Page 10 — Admin staff management / B3 (committed `6f09077`):**
 
 Fourth admin-pivot item. New page `/admin/staff` — **super_admin only** — to
 list / create / edit / deactivate admin staff (BE-I-03). Envelopes: list is
@@ -1800,7 +1929,7 @@ lastName/role/locale/active/createdAt`), `STAFF_ROLES` (5) +
   `admin-staff-page` chunk 4.63 kB gzip). Live check needs a real super_admin
   session — deferred (no admin creds in-session).
 
-**Page 11 — Promo-code management / B4 (uncommitted, awaiting review):**
+**Page 11 — Promo-code management / B4 (committed `3ea7e28`):**
 
 Fifth admin-pivot item. New page `/admin/promo-codes` (BE-I-05). View allowed for
 super_admin / finance_admin / support_admin; **mutations (create/edit/retire/
@@ -1841,7 +1970,7 @@ delete are `{ data }`.
   `admin-promo-codes-page` chunk 5.59 kB gzip). Live check needs a real
   super_admin/finance_admin session — deferred (no admin creds in-session).
 
-**Page 4b — Lesson-quiz authoring / B5 (uncommitted, awaiting review):**
+**Page 4b — Lesson-quiz authoring / B5 (committed `0d95e6e`, restyle `d1ce3e8`):**
 
 Sixth admin-pivot item, extends B1. New page `/admin/lessons/:lessonId/quizzes`
 (BE-I-06), reached from a **"Quizzes"** link on each lesson row in the curriculum
@@ -1886,7 +2015,7 @@ createdAt/updatedAt/questions[]`), `QuizQuestion` (`questionText`,
   `admin-lesson-quizzes-page` chunk 5.70 kB gzip). Live check needs a real
   content_creator/learning_admin session — deferred (no admin creds in-session).
 
-**Page 5 update — B7: exam publish `reasons[]` (uncommitted, awaiting review):**
+**Page 5 update — B7: exam publish `reasons[]` (committed `0db202e`):**
 
 Small fix (BE-I-14). The publish gate returns `409 EXAM_NOT_PUBLISHABLE` with the
 failing checks in the RFC-7807 `errors[]` (each `{ code:'NOT_PUBLISHABLE',
@@ -1914,7 +2043,7 @@ doesn't (they're in `errors[]`), so the note was stale.
 > `build:test`) to check prod. Flagged for the team to confirm whether that change
 > was intentional.
 
-**Page 2b update — B8: catalog card fields (uncommitted, awaiting review):**
+**Page 2b update — B8: catalog card fields (committed `9b18571`):**
 
 Final admin-pivot item (BE-I-04). The `Create/UpdateCertificateDto` now accept
 five catalog-card fields — added to the admin-catalog form + data-access.
@@ -1942,7 +2071,7 @@ five catalog-card fields — added to the admin-catalog form + data-access.
   initial 96.25 kB; known budget warning only). Live check needs a
   content_creator/learning_admin session — deferred.
 
-**Page 2c — Catalog translations (uncommitted, awaiting review):**
+**Page 2c — Catalog translations (committed `50fc688`):**
 
 - Completes the catalog form's deferred translations piece (`catalog.model.ts`
   had noted them as out of scope). Adds per-locale **title + description**
@@ -2127,7 +2256,7 @@ questions-page` chunk 5.11 kB gzip). Live check needs a real
   gzip initial 96.13 kB). Live check needs a real `super_admin` session against
   the deployed API (no test creds in-session) — deferred.
 
-**Page 3 — Users list + student detail (uncommitted, awaiting review):**
+**Page 3 — Users list + student detail (committed `f1f5013`):**
 
 - `features/admin/data-access/` users layer: `users.dto.ts`, `users.model.ts`,
   `users.mappers.ts`, `users.api.ts` (`AdminUsersApi.list` → `GET /admin/users`,
@@ -2142,7 +2271,7 @@ questions-page` chunk 5.11 kB gzip). Live check needs a real
 - **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓. Live check needs a
   real admin session against the deployed API.
 
-**Page 3b + list sort (uncommitted, awaiting review):**
+**Page 3b + list sort (committed `af4e917`):**
 
 - **Active-first sort:** admin list convention — active rows shown before
   inactive. Applied to the catalog list (client-side stable sort in the store,
@@ -2159,7 +2288,7 @@ questions-page` chunk 5.11 kB gzip). Live check needs a real
 - Added `admin.userDetail.*` attempts/codes/revoke i18n (en/fr/ar).
 - **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓.
 
-**Page 2 — Catalog list (uncommitted, awaiting review):**
+**Page 2 — Catalog list (committed `60a072c`):**
 
 - Reusable `core/http/pagination.ts` — `Page<T>`, `PagedResponse<T,M>`,
   `CursorQuery`, `toPage()`, `toHttpParams()` (the list plumbing every admin
@@ -2176,7 +2305,7 @@ questions-page` chunk 5.11 kB gzip). Live check needs a real
 - **Verification:** typecheck ✓ · lint ✓ (0 errors) · build ✓. Live check needs
   a real admin session (deployed API, no test creds) — deferred.
 
-**Page 2b — Catalog create / edit / deactivate (uncommitted, awaiting review):**
+**Page 2b — Catalog create / edit / deactivate (committed `9499fec`):**
 
 - Extended `AdminCatalogApi`: `getById`, `create` (`POST`), `update` (`PATCH`),
   `softDelete` (`DELETE`). Added `CertificateWritePayload` + detail DTO.
@@ -2229,12 +2358,29 @@ questions-page` chunk 5.11 kB gzip). Live check needs a real
 
 Full list + resolution status in [`backend-analysis.md` → Backend Issues Report](./backend-analysis.md#backend-issues-report).
 
-**Most issues were RESOLVED by the backend on 2026-07-13** (BE-I-03/04/05/06/07/08/
-13/14/15/16/17/18/19/20). Only behavioural notes still apply to the frontend:
+**Resolved by the backend:** BE-I-03/04/05/06/07/08/11/13/14/15/16/17/18/19/20
+(2026-07-13 wave) and **BE-I-21** (`30bfff5`, 2026-07-21 — blog create no longer
+404s/rolls back).
 
-- **BE-I-01 / BE-I-12** No global response envelope; validation + domain errors both return HTTP 400 with `code` → map per endpoint, branch on `code`.
+**Still open and affecting us (2026-07-25):**
+
+- **BE-I-22** no post-submission answer key → real-exam review UI stays disabled.
+- **BE-I-23** `GET /exam/sessions/:id` returns no questions → resume relies on a
+  local IndexedDB snapshot.
+- **BE-I-24** no `certId` at exam entry → `pre-exam-confirmation` unreachable.
+- **BE-I-25** no date-of-birth storage → `complete-account` wizard cannot ship.
+- **BE-I-26 / 27 / 28** _(filed 2026-07-25)_ CMS gaps: no contact-form submission
+  endpoint, no media upload, no draft preview.
+- **BE-I-29** _(filed 2026-07-25)_ `contentText` became required on lesson create —
+  **FE fix owed**, admin lesson creation 400s today.
+
+**Behavioural notes (unchanged):**
+
+- **BE-I-01 / BE-I-12** No global response envelope; validation errors return 400
+  with `code`, exam domain-state conflicts return 409 (`5c11460`) → map per
+  endpoint, branch on `code`.
 - **BE-I-02** Refresh cookie is `SameSite=Lax` (not `Strict`); `Secure` only in prod/staging.
-- **BE-I-09 / BE-I-10 / BE-I-11** Info-only (duplicate exam-list endpoints; `/health` routing; dead `BlogArticle`).
+- **BE-I-09 / BE-I-10** Info-only (duplicate exam-list endpoints; `/health` routing).
 
 ## Open questions for reviewer
 
@@ -2266,8 +2412,17 @@ Full list + resolution status in [`backend-analysis.md` → Backend Issues Repor
 
 ## Blockers
 
-- None blocking Phase 2. Phase 3 (admin panel) is intentionally gated on
-  finishing Phase 2 infrastructure + your review.
+_(refreshed 2026-07-25 — the old "none blocking Phase 2" note was three phases stale.)_
+
+- **BE-I-25** — `complete-account` wizard cannot be faithfully wired (no DOB field).
+- **BE-I-26** — the CMS `contact_form` section has nowhere to submit.
+- **BE-I-27 / BE-I-28** — CMS admin editor will ship without media upload or a true
+  draft preview.
+- **BE-I-22** — the real-exam result page's "review correct answers" stays disabled.
+- **Process, not backend:** C1 (`ae6ae44`) must not ship before the **security
+  review** of the `core/auth` changes; the real-exam engine (`b951242`) is awaiting
+  **architect review**; live verification of the exam/mock/courses flows needs a
+  real enrolled student + token against api-dev (not available in-session).
 
 ---
 
@@ -2317,32 +2472,32 @@ blocker is fixed. Progress against its §"Suggested order":
 Build order (see [checklist "Suggested order"](./frontend-unblock-checklist.md)):
 
 5. ✅ **B6 — Admin dashboard analytics** (`GET /admin/dashboard/overview`,
-   super/finance admin) — **built (uncommitted, awaiting review)**: KPI tiles +
+   super/finance admin) — **committed (`9559ec1`)**: KPI tiles +
    monthly-revenue chart + top-programs list on the admin home, 6M/12M/24M
    window, role-gated. Full page build (data-access + wired screen). See "Page 12
    — Admin dashboard analytics / B6" under "Admin pages status" below.
 6. ✅ **B1 — Curriculum management** (`GET /admin/certs/:id/curriculum` + module/
-   lesson CRUD) — **built (uncommitted, awaiting review)**: new `/admin/curriculum`
+   lesson CRUD) — **committed (`7268d26`)**: new `/admin/curriculum`
    page — cert picker → module/lesson tree with create/edit/reactivate/deactivate,
    active-first. Translation editor + lesson-quiz authoring (B5) deferred. See
    "Page 4 — Curriculum management / B1" below.
 7. ✅ **B2 — Certificate revocation** (`GET /admin/certs/issued` + existing revoke)
-   — **built (uncommitted, awaiting review)**: new `/admin/issued-certs` page —
+   — **committed (`451af2a`)**: new `/admin/issued-certs` page —
    cursor list + confirm-guarded revoke, super/learning admin. See "Page 9 —
    Certificate revocation / B2" below.
-   7b. ✅ **B3 — Admin staff management** (`/admin/staff`, super_admin) — **built
-   (uncommitted, awaiting review)**: list/create/edit/deactivate staff, super_admin
+   7b. ✅ **B3 — Admin staff management** (`/admin/staff`, super_admin) — **committed
+   (`6f09077`)**: list/create/edit/deactivate staff, super_admin
    rows protected. See "Page 10 — Admin staff management / B3" below.
-   7c. ✅ **B4 — Promo codes** (`/admin/promo-codes`, super/finance admin) — **built
-   (uncommitted, awaiting review)**: CRUD + retire/reactivate, cert-scoping
+   7c. ✅ **B4 — Promo codes** (`/admin/promo-codes`, super/finance admin) — **committed
+   (`3ea7e28`)**: CRUD + retire/reactivate, cert-scoping
    checklist, support_admin read-only. See "Page 11 — Promo-code management / B4".
-   7d. ✅ **B5 — Lesson-quiz authoring** (under the B1 curriculum page) — **built
-   (uncommitted, awaiting review)**: `/admin/lessons/:id/quizzes`, quiz + question
+   7d. ✅ **B5 — Lesson-quiz authoring** (under the B1 curriculum page) — **committed
+   (`0d95e6e`)**: `/admin/lessons/:id/quizzes`, quiz + question
    (MCQ/free-text) CRUD. See "Page 4b — Lesson-quiz authoring / B5".
-   7e. ✅ **B7 — Exam publish `reasons[]`** — **built (uncommitted, awaiting review)**:
+   7e. ✅ **B7 — Exam publish `reasons[]`** — **committed (`0db202e`)**:
    the exam-authoring publish action now surfaces the failing publish-gate checks.
    See "Page 5 update — B7" below.
-   7f. ✅ **B8 — Catalog card fields** — **built (uncommitted, awaiting review)**:
+   7f. ✅ **B8 — Catalog card fields** — **committed (`9b18571`)**:
    added `badgeImageUrl`/`track`/`level`/`durationHours`/`syllabusUrl` to the
    admin-catalog form + `catalog.dto/model/mappers`; `?active=false` needs no FE
    change (no client-side workaround existed). See "Page 2b update — B8" below.
@@ -2352,21 +2507,36 @@ committed** on `feat/real-backend-integration`: **A6** Landing (`469f429`), **A7
 Dashboard real-exam history (`554fbe6`), **A2** Settings delete/export (`c659335`),
 **C2** cookie consent (`6fddf8e`).
 
-**▶ Next (2026-07-22 rescan — see "Backend ↔ Frontend reconciliation" above).**
-Every remaining item is BE-ready and blocked only on FE. Recommended order:
+**✅ The 2026-07-22 backlog is closed** — all five items shipped between
+2026-07-24 and 2026-07-25:
 
-8. **⭐ Real-exam engine (student)** — wire `features/assessments` to the live
-   exam flow (`/exam/*` + exam WebSocket, IndexedDB drafts, `clientSeq`, 60 s
-   offline scenario). Highest-stakes (CLAUDE §10); architect review. Multi-session.
-9. **⭐ Learning / courses (student)** — build `features/courses` against
-   `/learning/*` (curriculum → lesson → quiz/check → complete → progress). Lets
-   A7's dashboard charts/certs drop the mock `DashboardStore`.
-10. **⭐ Mock-exam runner (student)** — `/mock/*` practice flow (reuses #8's shape).
-11. **C1 — Admin OTP login** — `core/auth`; **last**, architect + security review.
-12. **Email verify / complete-account** — `POST /auth/verify-email` (+ resend).
+8. ✅ **Real-exam engine (student)** — `b951242` (architect review pending).
+9. ✅ **Learning / courses (student)** — `172f35a`.
+10. ✅ **Mock-exam runner (student)** — `37b5c57` + `f4752ad`, plus history
+    `6d9e406` and the `/mock` Socket.IO timer `904a478`.
+11. ✅ **C1 — Admin OTP login** — `ae6ae44` (**security review pending**).
+12. ✅ **Email verification** — `9e06730`. (`complete-account` remains a stub —
+    blocked by **BE-I-25**.)
 
-**Blocked (backend):** blog authoring E2E — **BE-I-21** read-after-write bug still
-open; FE `admin/blog` is built and waiting on the backend fix.
+**▶ Next (2026-07-25 rescan).** Recommended order — rationale in
+[Remaining tasks](#remaining-tasks-high-level):
+
+13. **BE-I-29 fix** — make `contentText` required in the admin lesson form; admin
+    lesson creation is broken against the current backend. Smallest, highest
+    urgency.
+14. **Student dashboard overview → `GET /learning/progress`** — retires the last
+    hardcoded store on a live user-facing screen; the mapper already exists in
+    `features/courses`.
+15. **CMS-PUBLIC** — the section renderer (decide `/landing` vs `/cms/pages/home`
+    first). Then **CMS-ADMIN** — the page/section/globals editor.
+16. **Blog E2E re-test** (BE-I-21 fixed) and the `/dashboard/certificates` legacy
+    demo pages (rewire or retire — product decision).
+17. **Minor:** admin dashboard `from`/`to` window, admin student-detail lists,
+    exam-authoring preview.
+
+**Blocked (backend):** **BE-I-25** (`complete-account`), **BE-I-26/27/28** (CMS
+contact form / media upload / draft preview), **BE-I-22** (exam answer review).
+**BE-I-21 is no longer blocking** — the backend fixed it in `30bfff5`.
 
 **Decision (resolved 2026-07-16):** **full page builds** — each item builds the
 data-access layer AND wires the screen end to end, one at a time, then stops for

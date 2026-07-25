@@ -424,6 +424,10 @@ the SPA generally doesn't call them, but be aware they exist at the root.
 
 ## 6.9 Latest backend sync (2026-07-25) — student engines + auth, verified against source
 
+> Superseded in scope by [§6.9b](#69b-latest-backend-sync-2026-07-25b--cms-module-blog-fix-analytics-window):
+> this section is accurate for the student engines but was taken without the
+> 2026-07-20 → 2026-07-22 backend merges (CMS, blog fix, analytics window).
+
 Endpoints the frontend now consumes, re-verified against `IOS_Backend` source
 while wiring Phase 4. Envelopes vary per endpoint (BE-I-01). All are bearer-auth
 unless noted; RFC-7807 errors (branch on `code`). Related backend gaps:
@@ -486,6 +490,62 @@ completedLessons, percentComplete }]`).
   `POST /auth/admin/logout`. **Open question for security review:** whether the
   admin refresh cookie is accepted at the shared `POST /auth/refresh` (the FE
   currently assumes yes) or requires `/auth/admin/refresh`.
+
+## 6.9b Latest backend sync (2026-07-25b) — CMS module, blog fix, analytics window
+
+**Correction to §6.9.** The 2026-07-25 sync covered the _student engine_ surfaces
+but was taken against a stale view of `IOS_Backend`: it missed everything merged
+between **2026-07-20 and 2026-07-22**. Backend HEAD is now **`72a711c`
+(2026-07-22)** on `main`; `3e52625` merged PR #21 (`feat/cms`). Re-verified
+against source on 2026-07-25.
+
+| BE commit                                        | Change                                                                                                                                                                                                                                                                                                                                   | Frontend impact                                                                                                                                                                                                                                                                                                                                                                   |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `30bfff5` (2026-07-21)                           | `fix(blog)`: admin writes build the response from the entity in hand instead of re-reading on the default pool — **resolves BE-I-21** (`blog.service.ts:196-198`, and `:325-329`, `:408-411` for update/publish).                                                                                                                        | **Unblocks blog authoring E2E.** FE `admin/blog` (`5404e77`) needs no change; re-test create/publish against api-dev.                                                                                                                                                                                                                                                             |
+| `d7a78e6` (2026-07-20)                           | `fix(blog)`: list queries order by entity property path (TypeORM distinct-pagination crash).                                                                                                                                                                                                                                             | None — `GET /admin/blog` / `GET /blog` list pagination is now safe.                                                                                                                                                                                                                                                                                                               |
+| `4ec6423`/`e0f74d8` (→ `3e52625`, 2026-07-21/22) | `feat(cms)`: **new typed-section CMS** — `cms_pages` → ordered `cms_sections` + `cms_globals`, 16 section types, public read + SEO, admin CRUD/publish/translations/reorder, seed of 8 pages.                                                                                                                                            | **New, entirely unconsumed FE surface** (no `*.api.ts` references `/cms`). Two workstreams: a public CMS-driven marketing renderer and an admin CMS editor. See the inventory below + **BE-I-26/27/28**.                                                                                                                                                                          |
+| `72a711c` (2026-07-22)                           | `feat(analytics)`: `GET /admin/dashboard/overview` accepts `from`/`to` (ISO) which override `months`; `feat(users)`: student detail now also returns `certificates[]`, `attempts[]`, `exams.{assigned,purchases}`; `feat(learning)`: **`contentText` is now required and non-empty on `CreateLessonDto`** (and non-blankable on update). | **(a)** B6 dashboard can offer a real date-range picker (`dashboard.api.ts:27` sends only `months`). **(b)** Admin student detail can show real lists (FE maps only `counts` — `users.model.ts:20-31`); additive, nothing breaks. **(c)** ⚠️ **breaking** — FE omits `contentText` when the field is blank (`curriculum.mappers.ts:83-94`), which now 400s. Filed as **BE-I-29**. |
+
+### CMS endpoints (`3e52625`) — public `@Controller('cms')` + admin `@Controller('admin/cms')`
+
+Public (`@Public()`, GET only; `cms.controller.ts:15-39`). Both return
+`{ data, meta:{ locale } }` — block-level locale resolution with `en` fallback and
+a `fallbackUsed` flag, same idiom as catalog/blog translations.
+
+| Method | Path                | Notes                                                                                                                                                                                                                                                                                                                                   |
+| ------ | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/cms/pages/:slug`  | PUBLISHED only (else 404). `data:{ slug, title, locale, direction, sections:[{ type, config, content, locale, direction, fallbackUsed, data\|null }], seo:{ metaTitle, metaDescription, canonicalUrl, ogType, ogImageUrl } }`. Seeded slugs: `home`, `about`, `about-agile`, `about-scrum`, `why-scrum`, `contact`, `privacy`, `terms`. |
+| GET    | `/cms/globals/:key` | `nav` \| `footer` \| `announcement`; `data:{ key, config, content, locale, direction, fallbackUsed }`; 404 when missing/invisible (`cms.service.ts:137-163`).                                                                                                                                                                           |
+
+Admin `admin/cms` (`cms-admin.controller.ts:70-295`; RolesGuard, RLS-audited writes):
+
+| Method    | Path                                        | Roles                                   | Notes                                                          |
+| --------- | ------------------------------------------- | --------------------------------------- | -------------------------------------------------------------- |
+| POST      | `/admin/cms/pages`                          | content_creator, learning_admin         | Creates a DRAFT.                                               |
+| GET       | `/admin/cms/pages`                          | any admin role                          | `?status=&search=&cursor=&limit=` (cursor page).               |
+| GET       | `/admin/cms/pages/:id`                      | any admin role                          | Page + ordered sections.                                       |
+| PATCH     | `/admin/cms/pages/:id`                      | content_creator, learning_admin         | Slug immutable once PUBLISHED (409 `SLUG_LOCKED`).             |
+| PATCH     | `/admin/cms/pages/:id/translations`         | content_creator, learning_admin         | Replace-merge per locale.                                      |
+| POST      | `/admin/cms/pages/:id/{publish,unpublish}`  | learning_admin                          | Publish gate → 409 `CMS_PAGE_NOT_PUBLISHABLE` with `errors[]`. |
+| DELETE    | `/admin/cms/pages/:id`                      | learning_admin                          | Archive; `isSystem` page → 409 `SYSTEM_PAGE_PROTECTED`.        |
+| POST      | `/admin/cms/pages/:id/sections`             | content_creator, learning_admin         | Validates `config`+`content` against the section type schema.  |
+| PATCH     | `/admin/cms/sections/:sid`(`/translations`) | content_creator, learning_admin         | Per-section edit / localized content.                          |
+| DELETE    | `/admin/cms/sections/:sid`                  | content_creator, learning_admin         |                                                                |
+| PUT       | `/admin/cms/pages/:id/sections/order`       | learning_admin                          | `{ order: uuid[] }`; 400 `SECTION_NOT_IN_PAGE`.                |
+| GET/PATCH | `/admin/cms/globals/:key`(`/translations`)  | read: any admin · write: learning_admin | Upsert (creates when missing).                                 |
+
+**16 section types** (`cms.entity.ts:26-43`): `hero`, `indicator_band`,
+`feature_cards`, `logo_cloud`, `rich_band`, `level_matrix`, `steps_timeline`,
+`cta_band`, `faq`, `content_columns`, `certifications`\*, `journal`\*,
+`testimonials`, `stats`, `media_embed`, `contact_form`. \* dynamic — hydrated at
+read time from catalog / blog (`data.certifications[]` / `data.articles[]`).
+
+> **Overlap to decide (FE):** `GET /landing` (`analytics/landing.controller.ts:15`)
+> still exists and is what the FE landing page consumes (A6, `469f429`), while the
+> CMS seeds a `home` page whose `certifications`/`journal` sections cover the same
+> ground. The backend now has **two sources of truth for the marketing homepage**.
+> Neither is deprecated — pick one per screen and record the decision before
+> building the CMS renderer.
 
 ---
 
@@ -720,6 +780,14 @@ issuance flows (e.g. the verification and reset **links** point at the
 > table that follows is the **original finding text** (kept for history); read it
 > together with the status block. Frontend follow-ups:
 > [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md).
+>
+> **UPDATE 2026-07-25 (backend HEAD `72a711c`).** **BE-I-21 is resolved**
+> (`30bfff5`). Still open: **BE-I-22/23/24** (real-exam limitations, FE has
+> workarounds), **BE-I-25** (no DOB → `complete-account` wizard blocked), and the
+> newly filed **BE-I-26/27/28** (CMS contact-form submission, media upload, draft
+> preview) plus **BE-I-29** (lesson `contentText` breaking change — FE fix owed).
+> The ones that still stop or degrade frontend work are tracked in
+> [`backend-blockers-report.md`](./backend-blockers-report.md).
 
 ### Resolution status (2026-07-13)
 
@@ -745,19 +813,44 @@ issuance flows (e.g. the verification and reset **links** point at the
 | BE-I-18 | ✅ Resolved              | `181cd9f`            | Build Notifications (A4).                                                                                                                                                                                                       |
 | BE-I-19 | ✅ Resolved              | `65bf4e8`            | Wire delete-account + export (A2).                                                                                                                                                                                              |
 | BE-I-20 | ✅ Resolved              | `1515dff`            | Build Insights + rewire Landing (A5, A6).                                                                                                                                                                                       |
-| BE-I-21 | ⛔ **Open (bug)**        | —                    | **Blog `POST /admin/blog` always 404s + rolls back** — see below.                                                                                                                                                               |
+| BE-I-21 | ✅ Resolved              | `30bfff5`            | **Blog create/update now return the in-hand entity** — authoring works E2E; FE `admin/blog` (`5404e77`) needs no change, only a re-test. See below.                                                                             |
 | BE-I-22 | ⚠️ **Open (limitation)** | —                    | **Real-exam APIs never return the answer key / per-question correctness** — blocks the result-page "Review Correct Answers" section; see below.                                                                                 |
 | BE-I-23 | ⚠️ **Open (limitation)** | —                    | **`GET /exam/sessions/:id` returns no questions** — reload-resume can't redraw the exam from the server; FE persists a local question snapshot to work around it. See below.                                                    |
 | BE-I-24 | ⚠️ **Open (limitation)** | —                    | **No `certId` exposed at exam-entry** — `validate-access` returns only `exam.{id,title,…}`, so the FE can't call `pre-exam-confirmation` (needs `certId`); it relies on `start`'s 409. See below.                               |
 | BE-I-25 | ⚠️ **Open (gap)**        | —                    | **No date-of-birth storage** — the User entity + `PATCH /me` (`UpdateProfileDto`) accept no DOB, but the `complete-account` onboarding wizard's step 1 collects a birthday, so the wizard can't be faithfully wired. See below. |
+| BE-I-26 | ⚠️ **Open (gap)**        | —                    | **CMS `contact_form` section has no submission endpoint** — the section type renders but nothing receives/stores/emails a submission. See below.                                                                                |
+| BE-I-27 | ⚠️ **Open (gap)**        | —                    | **No media upload for CMS/admin content** — image fields hold pasted URLs; the presigned-upload flow exists for user avatars only (`POST /me/avatar-upload-url`). See below.                                                    |
+| BE-I-28 | ⚠️ **Open (gap)**        | —                    | **No CMS draft preview** — public reads are PUBLISHED-only, so an editor cannot preview an unpublished page. See below.                                                                                                         |
+| BE-I-29 | ⚠️ **Open (breaking)**   | —                    | **`contentText` became required on `POST /admin/lessons`** (`72a711c`) with no version/deprecation note; the FE omits it when blank and now gets a 400. FE fix required. See below.                                             |
 
 **Also new (not original issues):** two-step admin **OTP login** (`e97de75`,
 checklist C1) and **GDPR cookie consent** (`65bf4e8`, checklist C2); catalog
-`?active=false` parse fix (`5133b4e`, B8).
+`?active=false` parse fix (`5133b4e`, B8); the **CMS module** (`3e52625`) — new
+public + admin surface, no FE consumer yet (see §6.9b and BE-I-26/27/28).
 
-#### BE-I-21 — ⛔ Blog `POST /admin/blog` always fails with 404 "Article not found" (read-after-write across two connections)
+**Last verified against backend source:** 2026-07-25, backend HEAD `72a711c`
+(2026-07-22). Verification method: read `IOS_Backend/src/modules/**` controllers,
+services, DTOs and entities directly; `git log` for provenance.
 
-**Severity: High — blog article creation is impossible; every attempt 404s and persists nothing.**
+#### BE-I-21 — ✅ RESOLVED (`30bfff5`, 2026-07-21) — Blog `POST /admin/blog` 404 "Article not found" (read-after-write across two connections)
+
+> **Resolution (verified 2026-07-25 against `IOS_Backend/src/modules/blog/blog.service.ts`).**
+> The backend took the first suggested fix below: `create()` now ends with
+> `return this.toAdminDetail(saved)` on the entity returned by `repo.save(...)`
+> (`blog.service.ts:181-198`), with an inline comment naming the RLS-transaction
+> race. The stale-response variants are gone too — `update()` (`:325-329`),
+> `publish()` (`:408-411`) and the translation/unpublish paths build their
+> response from the mutated in-hand entity rather than re-reading on the default
+> pool. `d7a78e6` additionally fixed a TypeORM distinct-pagination crash in the
+> list queries. **Nothing blocks blog authoring anymore.**
+> **Frontend:** `admin/blog` (`5404e77`) and the public blog (`1940501`) were
+> already built against the correct contract — no FE code change; an E2E
+> create → publish → public-read re-test against api-dev is the only follow-up
+> (tracked in `implementation-progress.md`). Author name is `null` in the create
+> response until the next read (the `author` relation isn't loaded) — the FE list
+> refetches, so this is cosmetic.
+
+**Original finding — Severity: High — blog article creation is impossible; every attempt 404s and persists nothing.**
 
 Discovered 2026-07-20 while testing the new admin Blog page (BLOG-ADMIN). Creating
 an article returns `404 { code: RESOURCE_NOT_FOUND?, detail: "Article not found" }`
@@ -965,6 +1058,82 @@ birthday — a data-loss/UX issue — and also requires a boundary decision, sin
 auth-feature-local `PATCH /me` transport. Deferred pending (a) the DOB decision
 above and (b) that boundary decision.
 
+#### BE-I-26 — ⚠️ CMS `contact_form` section has no submission endpoint
+
+**Severity: Medium — the Contact page can be composed in the CMS but cannot
+function.** Discovered 2026-07-25 while inventorying the new CMS module.
+
+`CmsSectionType.CONTACT_FORM` exists (`cms.entity.ts:42`) and the seed ships a
+`contact` page, but a repo-wide search of `IOS_Backend/src/modules/**/*.controller.ts`
+finds **no contact/enquiry endpoint** — nothing receives, stores, rate-limits or
+emails a submission. The backend's own `CMS-HANDOFF.md` lists it under
+"Deferred (not built)".
+
+**Expected contract:** a `@Public()` `POST /contact` (or `/cms/contact`) taking
+`{ name, email, subject?, message, pageSlug? }` with spam + rate-limit guards,
+persisting and/or emailing via the existing mail renderer.
+
+**Frontend impact:** the FE can render the section, but the submit action has
+nowhere to go. Either skip `contact_form` in the first CMS renderer slice or
+render it read-only (mailto fallback) until this lands.
+
+#### BE-I-27 — ⚠️ No media/image upload for CMS or admin content
+
+**Severity: Medium — every image in CMS/blog/catalog content must be a
+hand-pasted URL.** Discovered 2026-07-25 (CMS inventory; confirmed in
+`CMS-HANDOFF.md` → Deferred).
+
+A presigned-upload flow already exists for **user avatars**
+(`POST /me/avatar-upload-url` → `{ uploadUrl, key, expiresInSeconds }`, BE-I-08)
+and `StorageService` backs it, but there is no admin/content equivalent. CMS
+section image fields, blog `contentHtml` images and catalog `badgeImageUrl` all
+accept URLs only.
+
+**Expected contract:** an admin-scoped presigned-upload endpoint (e.g.
+`POST /admin/media/upload-url` `{ contentType }` → `{ uploadUrl, publicUrl, key }`)
+reusing the avatar mechanics with admin roles + a content-type allowlist.
+
+**Frontend impact:** the admin CMS/blog editors must ship a "paste an image URL"
+field rather than a picker; a media picker is a follow-up once this exists.
+
+#### BE-I-28 — ⚠️ No CMS draft preview (public reads are PUBLISHED-only)
+
+**Severity: Low/Medium — editors cannot see a page before publishing it.**
+Discovered 2026-07-25.
+
+`CmsService.getPublicPage()` throws 404 unless `page.status === PUBLISHED`
+(`cms.service.ts:89-92`); the admin read (`GET /admin/cms/pages/:id`) returns the
+raw page + sections but **not** the hydrated, locale-resolved, SEO-decorated
+shape the public renderer consumes. There is no tokenised preview route.
+
+**Expected contract:** either a tokenised `GET /cms/preview/:token` or an
+admin-authenticated `GET /admin/cms/pages/:id/preview` returning the _public_
+projection for any status.
+
+**Frontend impact:** the admin CMS editor can only offer a structural preview
+built from the admin payload; a true WYSIWYG preview needs one of the above. The
+gap should be called out in the editor UI rather than faked.
+
+#### BE-I-29 — ⚠️ `contentText` became required on lesson create (breaking, unannounced)
+
+**Severity: Medium — admin lesson creation without body text now 400s.**
+Discovered 2026-07-25 by diffing `72a711c` against the FE mappers.
+
+`CreateLessonDto.contentText` is now `@IsString() @IsNotEmpty()` and no longer
+optional (`learning/dto/lesson.dtos.ts:41-49`); on update it stays optional but
+cannot be blanked (`:99-107`). The change shipped inside a mixed
+`feat(analytics)/feat(users)/feat(learning)` commit with no contract note.
+
+**Frontend impact (real bug today):** `toCreateLessonBody()` deliberately omits
+`contentText` when the field is blank
+(`features/admin/data-access/curriculum.mappers.ts:83-94`), so creating a lesson
+with an empty body — previously valid — now fails validation. **FE fix required:**
+make the lesson form's content field required (client-side validator + i18n error)
+and always send it. Tracked as an FE task in `implementation-progress.md`.
+
+**Backend ask:** flag required-field tightenings separately from feature work so
+the contract change is reviewable.
+
 ### Endpoints added 2026-07-13 (blocker fixes)
 
 > Response envelopes still vary per endpoint (BE-I-01) — noted inline.
@@ -1036,14 +1205,15 @@ be `"MIXED"`. `revenue.monthly` drives a chart (apexcharts is already bundled).
 
 ### Later backend changes (2026-07-14 → ) — post-checklist
 
-| BE commit             | Change                                                                                                                                                                                                                                                        | Frontend impact                                                                                                                                                                                                                                                                               |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `5c11460`             | `refactor(exam)`: exam **domain-state conflicts 422 → 409** (assign "not published", start "identity confirmation required", autosave "session expired", owned-session status guard). Locked convention: 400 = input validation, 409 = domain-state conflict. | When wiring exam/assessment flows, treat **409** as a domain conflict and branch on the RFC-7807 `code` (not the status). Mock-exam still uses 422 (separate module).                                                                                                                         |
-| `f78e76b`             | `feat(audit)`: harden admin-write audit capture.                                                                                                                                                                                                              | None (server-side audit only).                                                                                                                                                                                                                                                                |
-| `a0d2409`             | `feat(health)`: gate debug-sentry route to development.                                                                                                                                                                                                       | None.                                                                                                                                                                                                                                                                                         |
-| `f639a85`             | `fix(deps)`: npm audit advisory bumps.                                                                                                                                                                                                                        | None.                                                                                                                                                                                                                                                                                         |
-| `334d0c6`             | `feat(blog)`: **BlogModule (BE-I-11)** — admin CRUD + publish/unpublish + translations, and a public SEO read API. `BlogArticle` is no longer a dead surface. Endpoints below.                                                                                | **Two new FE surfaces:** (1) rewire the public blog (`features/insights`, currently `getPosts()`→null) to `GET /blog` + `GET /blog/:slug`; (2) a new **admin Blog authoring** page. See "Blog endpoints (BE-I-11)" below.                                                                     |
-| `be902fe` + `d67d7ff` | `feat(i18n)` Week 9 — locale-aware mail renderer, **validation error i18n**, locale parity guard, and content bundles for **tr/fr/es/ar/de** (+ 60 email templates). `SUPPORTED_LOCALES = ['en','tr','fr','es','ar','de']` (was fewer).                       | RFC-7807 `detail`/validation messages are now localized by `X-Lang`. The **catalog/blog/exam translation editors** may offer more target locales than the app's UI locales (en/fr/ar) — the FE still ships en/fr/ar UI; extra backend locales are authoring targets only. No breaking change. |
+| BE commit                                     | Change                                                                                                                                                                                                                                                        | Frontend impact                                                                                                                                                                                                                                                                               |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `5c11460`                                     | `refactor(exam)`: exam **domain-state conflicts 422 → 409** (assign "not published", start "identity confirmation required", autosave "session expired", owned-session status guard). Locked convention: 400 = input validation, 409 = domain-state conflict. | When wiring exam/assessment flows, treat **409** as a domain conflict and branch on the RFC-7807 `code` (not the status). Mock-exam still uses 422 (separate module).                                                                                                                         |
+| `f78e76b`                                     | `feat(audit)`: harden admin-write audit capture.                                                                                                                                                                                                              | None (server-side audit only).                                                                                                                                                                                                                                                                |
+| `a0d2409`                                     | `feat(health)`: gate debug-sentry route to development.                                                                                                                                                                                                       | None.                                                                                                                                                                                                                                                                                         |
+| `f639a85`                                     | `fix(deps)`: npm audit advisory bumps.                                                                                                                                                                                                                        | None.                                                                                                                                                                                                                                                                                         |
+| `334d0c6`                                     | `feat(blog)`: **BlogModule (BE-I-11)** — admin CRUD + publish/unpublish + translations, and a public SEO read API. `BlogArticle` is no longer a dead surface. Endpoints below.                                                                                | **Two new FE surfaces:** (1) rewire the public blog (`features/insights`, currently `getPosts()`→null) to `GET /blog` + `GET /blog/:slug`; (2) a new **admin Blog authoring** page. See "Blog endpoints (BE-I-11)" below.                                                                     |
+| `d7a78e6` · `30bfff5` · `3e52625` · `72a711c` | 2026-07-20 → 2026-07-22: blog list-query fix, **BE-I-21 fix**, the **CMS module**, and the analytics date-window / student-detail / lesson-`contentText` changes.                                                                                             | Detailed in [§6.9b Latest backend sync (2026-07-25b)](#69b-latest-backend-sync-2026-07-25b--cms-module-blog-fix-analytics-window).                                                                                                                                                            |
+| `be902fe` + `d67d7ff`                         | `feat(i18n)` Week 9 — locale-aware mail renderer, **validation error i18n**, locale parity guard, and content bundles for **tr/fr/es/ar/de** (+ 60 email templates). `SUPPORTED_LOCALES = ['en','tr','fr','es','ar','de']` (was fewer).                       | RFC-7807 `detail`/validation messages are now localized by `X-Lang`. The **catalog/blog/exam translation editors** may offer more target locales than the app's UI locales (en/fr/ar) — the FE still ships en/fr/ar UI; extra backend locales are authoring targets only. No breaking change. |
 
 ### Blog endpoints (BE-I-11, `334d0c6`)
 

@@ -9,32 +9,46 @@
 > `problemDetailMessage`.
 > Created 2026-07-13.
 
-## Status (updated 2026-07-22) — all backend-rewire items COMPLETE
+## Status (updated 2026-07-25) — **every A/B/C item is DONE, including C1**
 
-**Full backend rescan 2026-07-22:** every endpoint now has a known FE status —
-see [`implementation-progress.md` → "Backend ↔ Frontend reconciliation"](./implementation-progress.md#backend--frontend-reconciliation-full-rescan-2026-07-22).
+Verified against frontend HEAD `904a478` (`feat/real-backend-integration`) and
+backend HEAD `72a711c`. Sections A, B, C and D below are ticked with the commit
+that shipped each item; the live backlog is in
+[`implementation-progress.md` → Remaining tasks](./implementation-progress.md#remaining-tasks-high-level).
 
-**Committed since 2026-07-20** on `feat/real-backend-integration`: **A6** Landing
-(`469f429`), **A7** Dashboard real-exam history / `GET /exam/attempts` (`554fbe6`),
-**A2** Settings delete + data export (`c659335`), **C2** cookie consent (`6fddf8e`),
-plus BLOG-PUBLIC (`1940501`) / BLOG-ADMIN (`5404e77`).
+**Committed since the 2026-07-22 rescan** — the entire "net-new features" backlog
+that the block below still describes as pending:
 
-**All A/B/C rewire items are DONE except C1** (admin OTP — deferred to last,
-`core/auth`, security review). The remaining product work is **not "unblock"
-work** — it's net-new FE features whose backends already exist:
+| Item                             | Commit(s)                                  | Note                                                                 |
+| -------------------------------- | ------------------------------------------ | -------------------------------------------------------------------- |
+| **Real-exam engine (student)**   | `b951242`                                  | ⚠️ architect review pending; degraded by BE-I-22/23/24               |
+| **Learning / courses (student)** | `172f35a`                                  | curriculum → lesson → quiz → complete → progress                     |
+| **Mock-exam runner (student)**   | `37b5c57`, `f4752ad`, `6d9e406`, `904a478` | data-access, runner/result UI, history page, `/mock` Socket.IO timer |
+| **Email verification**           | `9e06730`                                  | `complete-account` wizard still a stub — **BE-I-25**                 |
+| **C1 — Admin OTP login**         | `ae6ae44`                                  | ⚠️ **security review pending** (`core/auth`)                         |
 
-- **Real-exam engine (student)** — `/exam/*` + exam WebSocket; `features/assessments`
-  is still a UI stub. Highest-stakes (CLAUDE §10 / `08-exam-engine.md`).
-- **Learning / courses (student)** — `/learning/*`; `features/courses` is an empty shell.
-- **Mock-exam runner (student)** — `/mock/*`; no student mock UI yet.
-- **Email verify / complete-account** — `POST /auth/verify-email` (+ resend), deferred.
+**No longer backend-blocked:** **BE-I-21** (blog create read-after-write) was
+fixed by the backend on 2026-07-21 (`30bfff5`, plus the list-query fix `d7a78e6`).
+The FE `admin/blog` (`5404e77`) and public blog (`1940501`) need **no code change** —
+only an E2E re-test against api-dev.
 
-**Still backend-blocked:** **BE-I-21** blog create read-after-write bug — FE
-`admin/blog` built, waiting on the backend fix for E2E authoring.
+**🆕 New work discovered on 2026-07-25 — see [§E](#e-new-since-the-checklist-was-written-2026-07-25):**
+the backend merged a whole **CMS module** (`3e52625`) with no FE consumer, made
+lesson `contentText` **required** (breaks admin lesson creation today — **BE-I-29**),
+and added an analytics date window + richer admin student detail (`72a711c`).
+
+**Still backend-blocked:** **BE-I-25** (no DOB → `complete-account`),
+**BE-I-26/27/28** (CMS contact-form submission / media upload / draft preview),
+**BE-I-22** (no exam answer key → review UI stays disabled). Full triage:
+[`backend-blockers-report.md`](./backend-blockers-report.md).
 
 ---
 
 ## Status (2026-07-20 snapshot) — admin pivot COMPLETE
+
+> 📕 **Historical — superseded by the 2026-07-25 status block above.** Kept for the
+> commit map. Its two "not yet in the UI" blog items shipped as `1940501`
+> (public) and `5404e77` (admin); C1 shipped as `ae6ae44`.
 
 **Done (user-facing):** **A1** avatar upload, **A3** earned-certificates list
 (`features/credentials`), **A4** notifications + navbar badge, **A5** student
@@ -89,78 +103,78 @@ module** shipped (`334d0c6`). Two new FE items:
 
 ## A. User-facing (Phase 4) — highest priority (aligns with current work)
 
-### A1. Profile — wire real avatar upload (BE-I-08) — revisits committed work
+### A1. Profile — wire real avatar upload (BE-I-08) — ✅ DONE (`242a11d`)
 
-- [ ] New endpoint: `POST /me/avatar-upload-url` `{ contentType }` (one of
+- [x] New endpoint: `POST /me/avatar-upload-url` `{ contentType }` (one of
       `image/png|image/jpeg|image/webp`) → **bare** `{ uploadUrl, key, expiresInSeconds }`.
-- [ ] Flow: request presigned URL → browser `PUT`s the file bytes to `uploadUrl`
+- [x] Flow: request presigned URL → browser `PUT`s the file bytes to `uploadUrl`
       **with the exact same `Content-Type`** → then `PATCH /me { avatarUrl: <key or resolved URL> }`.
-- [ ] Restore the **"Change image profile"** button removed in `edit-profile.page`
+- [x] Restore the **"Change image profile"** button removed in `edit-profile.page`
       (it was cut for BE-I-08); add a file picker + client-side type/size guard.
-- [ ] The `PUT` goes to object storage, not the API — **bypass `authInterceptor`
+- [x] The `PUT` goes to object storage, not the API — **bypass `authInterceptor`
       / `X-Lang`** for that request (use a bare `HttpClient` call or `SKIP_AUTH`), and
       do not send credentials to the storage host.
-- [ ] Note: image upload is a "Prohibited/permission" area only for _credentials_ —
+- [x] Note: image upload is a "Prohibited/permission" area only for _credentials_ —
       a normal file upload is fine, but keep it user-initiated.
-- [ ] Update `docs/implementation-progress.md` Profile section (drop the BE-I-08
+- [x] Update `docs/implementation-progress.md` Profile section (drop the BE-I-08
       "avatar is plain URL only" caveat).
 
-### A2. Settings — delete account + data export (BE-I-19 / BE-042)
+### A2. Settings — delete account + data export (BE-I-19 / BE-042) — ✅ DONE (`c659335`)
 
-- [ ] `POST /me/delete` `{ password }` (step-up re-auth) — **not** `DELETE /me`.
+- [x] `POST /me/delete` `{ password }` (step-up re-auth) — **not** `DELETE /me`.
       On success the account is anonymised-in-place → treat as a forced logout
       (clear session, route to a farewell/login page). Confirm dialog + password field.
-- [ ] `GET /me/export` — GDPR data export (bare payload). Add a "Download my data"
+- [x] `GET /me/export` — GDPR data export (bare payload). Add a "Download my data"
       action in Settings; trigger a client download of the returned JSON.
-- [ ] Un-park the Settings "delete account" control (was hidden per BE-I-19).
+- [x] Un-park the Settings "delete account" control (was hidden per BE-I-19).
 
-### A3. Certificates list (BE-I-16) — build the page (was ⛔ blocked)
+### A3. Certificates list (BE-I-16) — ✅ DONE (`3bed4c1`, shipped as `features/credentials` at `/dashboard/credentials`)
 
-- [ ] `GET /me/certificates` → **`{ data: [...] }`** (no pagination). Item:
+- [x] `GET /me/certificates` → **`{ data: [...] }`** (no pagination). Item:
       `{ certId (public id, nullable), program, programCode, issuedAt, status:'valid'|'revoked', certificateUrl, qrUrl, verifyUrl }`.
-- [ ] Build `features/certificates` data-access + the list page (earned certs,
+- [x] Build `features/certificates` data-access + the list page (earned certs,
       download PDF / QR / verify links). Keep the existing public
       `GET /verify/:certId` "verify a certificate" tool.
-- [ ] Remove the ⛔ stub; add the nav item back.
+- [x] Remove the ⛔ stub; add the nav item back.
 
-### A4. Notifications (BE-I-18) — build the feature (was ⛔ blocked)
+### A4. Notifications (BE-I-18) — ✅ DONE (`99917c8`)
 
-- [ ] `GET /notifications?cursor&limit&unreadOnly` → `{ data, meta.pagination }`
+- [x] `GET /notifications?cursor&limit&unreadOnly` → `{ data, meta.pagination }`
       (cursor). Item: `{ id, type, title (localized), body (localized), data (params object), read, createdAt }`.
-- [ ] `GET /notifications/unread-count` → bare `{ count }`.
-- [ ] `POST /notifications/:id/read` → `{ data: NotificationItem }` (idempotent).
-- [ ] `POST /notifications/read-all` → `{ updated: number }`.
-- [ ] Build `features/notifications` data-access + list page (mark-read,
+- [x] `GET /notifications/unread-count` → bare `{ count }`.
+- [x] `POST /notifications/:id/read` → `{ data: NotificationItem }` (idempotent).
+- [x] `POST /notifications/read-all` → `{ updated: number }`.
+- [x] Build `features/notifications` data-access + list page (mark-read,
       mark-all-read, unreadOnly filter) and a **navbar unread badge** (poll
       `unread-count`, or refresh on route change — no WS for notifications).
-- [ ] `title`/`body` arrive already localized (server renders i18n) — send `X-Lang`
+- [x] `title`/`body` arrive already localized (server renders i18n) — send `X-Lang`
       (already wired); don't re-translate. `data` carries params (e.g. `verifyUrl`)
       for deep-linking.
 
-### A5. Insights (student) (BE-I-20a / BE-I-07) — build the page (was ⛔ blocked)
+### A5. Insights (student) (BE-I-20a / BE-I-07) — ✅ DONE (`0272e27`, surfaced on the Dashboard overview; no standalone page per reviewer)
 
-- [ ] `GET /insights` (student only; admins 403) → **bare**
+- [x] `GET /insights` (student only; admins 403) → **bare**
       `{ enrolledPrograms, completedLessons, inProgressPrograms, realExam:{attempts,passed,passRate,avgScore,bestScore}, mockExam:{attempts,avgScore}, certificatesEarned }`.
-- [ ] Rewire `features/insights` (currently targets a removed mock) to this shape.
-- [ ] Note `passRate` is a fraction (0–1) — format as %.
+- [x] Rewire `features/insights` (currently targets a removed mock) to this shape.
+- [x] Note `passRate` is a fraction (0–1) — format as %.
 
-### A6. Landing dynamic blocks (BE-I-20) — rewire (currently returns null)
+### A6. Landing dynamic blocks (BE-I-20) — ✅ DONE (`469f429`)
 
-- [ ] `GET /landing` (public) → **bare** `{ featuredPrograms: CatalogItem[], stats:{programs, students, certificatesIssued} }`.
-- [ ] `LandingApi.getPageData()` currently hard-returns `null` (fallback to static).
+- [x] `GET /landing` (public) → **bare** `{ featuredPrograms: CatalogItem[], stats:{programs, students, certificatesIssued} }`.
+- [x] `LandingApi.getPageData()` currently hard-returns `null` (fallback to static).
       Replace with a real fetch; **rework `landing.model`/`landing.dto`**: the new
       payload is `featuredPrograms + stats`, **not** the old `cohortDate /
 graduatesCount / insightPosts` shape (those have no backend — keep static or drop).
-- [ ] This supersedes my planned "Landing featured via `GET /catalog`" — use
+- [x] This supersedes my planned "Landing featured via `GET /catalog`" — use
       `GET /landing.featuredPrograms` instead (`featuredPrograms` are `CatalogItemDto`,
       same shape my `PublicCatalogStore` already maps).
 
-### A7. Dashboard (student) — reconsider composition (BE-I-07 now partially exists)
+### A7. Dashboard (student) — ⚠️ PARTLY DONE (`554fbe6` + `0272e27`) — the overview's cards/charts still read the hardcoded `DashboardStore`; see IP task 4
 
-- [ ] The plan said "compose, no analytics." Now `GET /insights` gives real
+- [x] The plan said "compose, no analytics." Now `GET /insights` gives real
       student aggregates — fold it into the dashboard overview instead of composing
       everything from `/learning/progress` + `/payments/transactions`.
-- [ ] Real-exam history now exists: `GET /exam/attempts?cursor&limit` →
+- [x] Real-exam history now exists: `GET /exam/attempts?cursor&limit` →
       `{ data, meta.pagination }`, item `{ id, examTitle, program, score, passed, submittedAt, durationSeconds, status, lateFlag }` (BE-I-17). Add a real-exam
       results widget/list (previously only mock history existed).
 
@@ -168,60 +182,60 @@ graduatesCount / insightPosts` shape (those have no backend — keep static or d
 
 ## B. Admin app — new pages now buildable
 
-### B1. Curriculum (BE-I-13) — the remaining blocked admin page
+### B1. Curriculum (BE-I-13) — ✅ DONE (`7268d26`)
 
-- [ ] `GET /admin/certs/:id/curriculum` → `{ data: <modules+lessons, all statuses, full fields incl. translations> }` (content_creator / learning_admin).
-- [ ] Full module/lesson CRUD already existed (`POST/PATCH/DELETE /admin/modules`,
+- [x] `GET /admin/certs/:id/curriculum` → `{ data: <modules+lessons, all statuses, full fields incl. translations> }` (content_creator / learning_admin).
+- [x] Full module/lesson CRUD already existed (`POST/PATCH/DELETE /admin/modules`,
       `/admin/lessons`); this read unblocks list/pre-fill/reactivate. Build the page.
 
-### B2. Certificate revocation (BE-I-15) — the other remaining blocked admin page
+### B2. Certificate revocation (BE-I-15) — ✅ DONE (`451af2a`)
 
-- [ ] `GET /admin/certs/issued?…` → `{ data, meta.pagination }`, item
+- [x] `GET /admin/certs/issued?…` → `{ data, meta.pagination }`, item
       `{ id (internal uuid), certId (public id, nullable), userId, studentName, program, programCode, issuedAt, status }` (super_admin / learning_admin).
-- [ ] `PATCH /admin/certs/issued/:id/revoke` already existed — now the revoke `id`
+- [x] `PATCH /admin/certs/issued/:id/revoke` already existed — now the revoke `id`
       is discoverable. Build the list + revoke page.
 
-### B3. Admin staff management (BE-I-03) — new page
+### B3. Admin staff management (BE-I-03) — ✅ DONE (`6f09077`)
 
-- [ ] `/admin/staff` (super_admin only): `POST` create, `GET` list (`ListStaffQuery`),
+- [x] `/admin/staff` (super_admin only): `POST` create, `GET` list (`ListStaffQuery`),
       `GET /:id`, `PATCH /:id`, `POST /:id/deactivate`. See
       `admin-staff/dto/*` for `CreateStaffDto` / `UpdateStaffDto` / `StaffResponseDto`.
-- [ ] New feature/page + nav item (super_admin only).
+- [x] New feature/page + nav item (super_admin only).
 
-### B4. Promo-code CRUD (BE-I-05) — new page
+### B4. Promo-code CRUD (BE-I-05) — ✅ DONE (`3ea7e28`)
 
-- [ ] `/admin/promo-codes` (super_admin / finance_admin): `POST`, `GET` (list),
+- [x] `/admin/promo-codes` (super_admin / finance_admin): `POST`, `GET` (list),
       `GET /:id`, `PATCH /:id`, `DELETE /:id`. See `payment/dto/promo-admin.dtos.ts`.
-- [ ] New feature/page + nav item; gate to super_admin / finance_admin.
+- [x] New feature/page + nav item; gate to super_admin / finance_admin.
 
-### B5. Lesson-quiz authoring (BE-I-06) — extends curriculum
+### B5. Lesson-quiz authoring (BE-I-06) — ✅ DONE (`0d95e6e`, restyle `d1ce3e8`)
 
-- [ ] `/admin/lessons/:lessonId/quizzes` (POST/GET), `/admin/quizzes/:quizId`
+- [x] `/admin/lessons/:lessonId/quizzes` (POST/GET), `/admin/quizzes/:quizId`
       (PATCH/DELETE), `/admin/quizzes/:quizId/questions` (POST),
       `/admin/quizzes/:quizId/questions/:questionId` (PATCH/DELETE). Authoring view
       exposes `correctAnswer`. See `learning/dto/quiz.dtos.ts`.
-- [ ] Build under the curriculum page (per-lesson quiz editor).
+- [x] Build under the curriculum page (per-lesson quiz editor).
 
-### B6. Admin dashboard metrics (BE-I-07) — enrich the admin home
+### B6. Admin dashboard metrics (BE-I-07) — ✅ DONE (`9559ec1`) — see §E4 for the new `from`/`to` window
 
-- [ ] `GET /admin/dashboard/overview?…` (super_admin / finance_admin) → **bare**
+- [x] `GET /admin/dashboard/overview?…` (super_admin / finance_admin) → **bare**
       `{ revenue:{total,currency,last30Days,monthly[]}, transactions:{completed,pending,failed,refunded}, enrollments:{total,last30Days}, students:{total,newLast30Days}, exams:{attempts,passed,passRate,avgScore}, certificates:{issued}, topPrograms[] }`.
-- [ ] The admin home currently shows "no metrics (BE-I-07)". Wire real widgets
+- [x] The admin home currently shows "no metrics (BE-I-07)". Wire real widgets
       (revenue chart, KPI tiles) gated to super_admin / finance_admin.
 
-### B7. Exam publish `reasons[]` (BE-I-14) — small fix
+### B7. Exam publish `reasons[]` (BE-I-14) — ✅ DONE (`0db202e`)
 
-- [ ] The publish gate now returns structured `reasons[]` in the RFC-7807 body.
+- [x] The publish gate now returns structured `reasons[]` in the RFC-7807 body.
       Update `AdminExamQuestionsStore` / exam-authoring to surface **which** checks
       failed instead of the generic "not publishable" message (the `docs` note said
       this was dropped by the exception filter — now available).
 
-### B8. Catalog admin form — card fields (BE-I-04) + `?active` fix
+### B8. Catalog admin form — card fields (BE-I-04) + `?active` fix — ✅ DONE (`9b18571`)
 
-- [ ] `Create/UpdateCertificateDto` now accept `badgeImageUrl`, `track`,
+- [x] `Create/UpdateCertificateDto` now accept `badgeImageUrl`, `track`,
       `level` (enum `CertLevel`), `durationHours`, `syllabusUrl`. Add these fields to
       `admin-catalog-form.page` (were intentionally omitted). Update `catalog.dto/model/mappers`.
-- [ ] `?active=false` now parses correctly (was flipped to `true`). The admin
+- [x] `?active=false` now parses correctly (was flipped to `true`). The admin
       catalog **Inactive** filter now works server-side — re-test; likely no FE code
       change, but remove any client-side workaround if one exists.
 
@@ -229,28 +243,28 @@ graduatesCount / insightPosts` shape (those have no backend — keep static or d
 
 ## C. Auth / infrastructure
 
-### C1. Admin login — two-step OTP (new) — **touches `core/auth`** (needs security review)
+### C1. Admin login — two-step OTP — ✅ BUILT (`ae6ae44`) — ⚠️ **SECURITY REVIEW STILL PENDING** (`core/auth`)
 
-- [ ] `POST /auth/admin/login` `{ email, password }` now returns **either**
+- [x] `POST /auth/admin/login` `{ email, password }` now returns **either**
       `LoginResponseDto` (OTP off) **or** `AdminLoginChallengeResponseDto`
       `{ otpRequired: true, challengeId, expiresInSeconds }` (OTP on — default in
       prod/staging). No cookie/tokens on the challenge.
-- [ ] `POST /auth/admin/login/otp` `{ challengeId, code (6 digits) }` → `LoginResponseDto`
+- [x] `POST /auth/admin/login/otp` `{ challengeId, code (6 digits) }` → `LoginResponseDto`
   - sets refresh cookie. Single-use, 5-min expiry, ≤5 attempts.
-- [ ] Admin login page: after step 1, if `otpRequired`, show a 6-digit OTP entry
+- [x] Admin login page: after step 1, if `otpRequired`, show a 6-digit OTP entry
       (countdown to `expiresInSeconds`, resend = re-run step 1). `AuthStore.loginAdmin`
       must branch on the response type.
-- [ ] Handle new statuses: **503** "OTP email could not be sent — retry"; **401**
+- [x] Handle new statuses: **503** "OTP email could not be sent — retry"; **401**
       invalid/expired/exhausted challenge.
-- [ ] Verify admin **refresh/logout**: dedicated `POST /auth/admin/refresh` and
+- [x] Verify admin **refresh/logout**: dedicated `POST /auth/admin/refresh` and
       `POST /auth/admin/logout` now exist. Confirm whether admin sessions must use
       these (vs. the shared `/auth/refresh` that branched on token `type`); update
       `AuthApi` if so. Any change here is a `core/auth`/`core/http` change → architect
   - security review (CLAUDE.md §8, §13).
 
-### C2. Cookie consent (BE-042) — new banner
+### C2. Cookie consent (BE-042) — ✅ DONE (`6fddf8e`)
 
-- [ ] `POST /consent` (public) `{ categories: Record<string,boolean>, policyVersion }`
+- [x] `POST /consent` (public) `{ categories: Record<string,boolean>, policyVersion }`
       — audit trail only (the one backend cookie is strictly-necessary). Add a
       consent banner; record the choice. This is an **"accept terms/consent"** action
       → keep it explicit/user-driven; choose privacy-preserving defaults.
@@ -259,42 +273,130 @@ graduatesCount / insightPosts` shape (those have no backend — keep static or d
 
 ## D. Cross-cutting / cleanup
 
-- [ ] Update [`backend-blockers-report.md`](./backend-blockers-report.md): move
-      BE-I-03/05/06/07/08/13/14/15/16/17/18/19/20 out of "blocked" (now resolved);
-      keep only anything still open (e.g. `BE-I-11` BlogArticle, if still dead).
-- [ ] Update [`backend-analysis.md`](./backend-analysis.md) endpoint inventory +
-      Backend Issues Report statuses, and `implementation-progress.md` Phase-4 map
-      (Certificates / Notifications / Insights flip from ⛔ to buildable; Curriculum /
-      Cert-revocation admin pages unblocked).
-- [ ] Response-envelope reminder (BE-I-01) — map per endpoint: bare
-      (`/insights`, `/landing`, `/me/*`, avatar-url, unread-count), `{ data }`
-      (`/me/certificates`, admin curriculum, notification read), `{ data, meta.pagination }`
-      (notifications list, `/exam/attempts`, issued-certs).
-- [ ] i18n: every new screen needs en/fr/ar keys; Arabic still needs pro review
-      (CLAUDE.md §9).
-- [ ] `avatarUrl` handling: keep it a plain URL on read; the upload flow (A1) is
-      the only new write path.
+- [x] Update [`backend-blockers-report.md`](./backend-blockers-report.md) — done
+      2026-07-25: the end-to-end-resolved items were removed, the file was reopened
+      with the seven genuinely-active stoppers (BE-I-22…28) and a triage legend.
+- [x] Update [`backend-analysis.md`](./backend-analysis.md) endpoint inventory +
+      Backend Issues Report statuses and the `implementation-progress.md` Phase-4
+      map — done 2026-07-25 (BE-I-21 → ✅ Resolved; BE-I-26/27/28/29 filed; CMS
+      inventory added as §6.9b).
+- [x] Response-envelope reminder (BE-I-01) — mapped per endpoint across every
+      shipped feature. **New:** the CMS reads are `{ data, meta:{ locale } }`.
+- [ ] i18n: every new screen needs en/fr/ar keys; **Arabic across all shipped
+      screens still needs professional review** (CLAUDE.md §9) — the largest open
+      cross-cutting debt.
+- [x] `avatarUrl` handling: plain URL on read; the A1 upload flow is the only write
+      path.
+- [ ] **Testing** remains deferred per SOW §6.2.14 — nothing built since 2026-07-13
+      has been runtime-tested against api-dev (exam/mock/courses need a real
+      enrolled student + token).
 
 ---
 
-## Suggested order (updated 2026-07-22)
+## E. New since the checklist was written (2026-07-25)
 
-**✅ Done & committed:** A1–A7, BLOG-PUBLIC, BLOG-ADMIN, C2 (user-facing) and
-**B1–B8** (entire admin app). Every backend-rewire/unblock item is complete.
+Discovered by reconciling against backend HEAD `72a711c`. These are **not**
+"unblock" items — three are net-new surfaces and one is a regression the backend
+introduced. Detail:
+[`implementation-progress.md` → Remaining tasks](./implementation-progress.md#remaining-tasks-high-level)
+and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync-2026-07-25b--cms-module-blog-fix-analytics-window).
 
-**▶ Next — net-new FE features (backends already deployed).** These are no longer
-"unblock" items; full plan + endpoint list in
-[`implementation-progress.md` → reconciliation](./implementation-progress.md#backend--frontend-reconciliation-full-rescan-2026-07-22):
+### E1. BE-I-29 — lesson `contentText` is now required (⛔ breaks admin lesson creation today)
 
-1. **Real-exam engine (student)** — `/exam/*` + exam WebSocket, IndexedDB drafts,
-   `clientSeq`, 60 s offline scenario (`08-exam-engine.md`; architect review).
-2. **Learning / courses (student)** — `/learning/*` (curriculum → lesson → quiz →
-   complete → progress); build `features/courses`.
-3. **Mock-exam runner (student)** — `/mock/*` (reuses the real-exam runner shape).
-4. **Email verify / complete-account** — `POST /auth/verify-email` (+ resend).
+- [ ] `72a711c` made `contentText` required + non-empty on `CreateLessonDto`
+      (`IOS_Backend/src/modules/learning/dto/lesson.dtos.ts:41-49`). The FE omits
+      the key when the field is blank
+      (`features/admin/data-access/curriculum.mappers.ts:83-94`) → **400 today**.
+- [ ] Mark the lesson-content control required in `admin-curriculum.page.ts`
+      (`lessonForm`, ~`:526`), add the en/fr/ar validation string, and always send
+      `contentText` from `toCreateLessonBody()`. Update on `UpdateLessonDto` is
+      optional-but-non-blankable — the current update body already always sends it.
 
-**Last — C1 Admin OTP login** (`core/auth` change; architect + security review).
+### E2. CMS-PUBLIC — render CMS pages on the marketing site (new surface, `3e52625`)
 
-> **i18n note:** the backend now supports `en/tr/fr/es/ar/de`, but the app UI ships
-> **en/fr/ar**. Translation editors (catalog/exam/blog) author against backend
-> locales; keep the UI locale set at en/fr/ar unless the SOW changes.
+- [ ] `GET /cms/pages/:slug` (public) → `{ data:{ slug, title, locale, direction,
+  sections[], seo{…} }, meta:{ locale } }`; PUBLISHED-only (404 otherwise).
+- [ ] `GET /cms/globals/:key` (`nav` | `footer` | `announcement`) → `{ data:{ key,
+  config, content, locale, direction, fallbackUsed } }`.
+- [ ] Build a section renderer for the **16 typed sections** (`hero`,
+      `indicator_band`, `feature_cards`, `logo_cloud`, `rich_band`, `level_matrix`,
+      `steps_timeline`, `cta_band`, `faq`, `content_columns`, `certifications`\*,
+      `journal`\*, `testimonials`, `stats`, `media_embed`, `contact_form`). \* the
+      two dynamic ones arrive pre-hydrated (`data.certifications[]` / `data.articles[]`)
+      — do **not** refetch catalog/blog for them.
+- [ ] Honour `locale`/`direction`/`fallbackUsed` per block and inject the `seo`
+      block into `<head>`.
+- [ ] **Decide first:** the landing page uses `GET /landing` (A6, `469f429`) while
+      the CMS seeds a `home` page covering the same ground — two sources of truth.
+      Record the decision in `implementation-progress.md`.
+- [ ] **BE-I-26:** `contact_form` has no submission endpoint — skip or render
+      read-only (mailto fallback); do not fake a submit.
+
+### E3. CMS-ADMIN — page / section / globals editor (new surface, `3e52625`)
+
+- [ ] Pages: `POST/GET/PATCH /admin/cms/pages[/:id]`, `PATCH …/translations`,
+      `POST …/publish|unpublish` (learning_admin), `DELETE …/:id` (archive;
+      `isSystem` → 409 `SYSTEM_PAGE_PROTECTED`). Slug is immutable once PUBLISHED
+      (409 `SLUG_LOCKED`) — mirror the blog authoring UX.
+- [ ] Sections: `POST /admin/cms/pages/:id/sections`, `PATCH/DELETE
+  /admin/cms/sections/:sid`, `PATCH …/translations`, `PUT
+  /admin/cms/pages/:id/sections/order` `{ order: uuid[] }` (400
+      `SECTION_NOT_IN_PAGE`). `config`/`content` are validated per section type.
+- [ ] Globals: `GET /admin/cms/globals/:key` (any admin) · `PATCH` (learning_admin,
+      upsert) · `PATCH …/translations`.
+- [ ] Publish gate returns 409 `CMS_PAGE_NOT_PUBLISHABLE` with
+      `errors[]=[{field:"_root",code:"NOT_PUBLISHABLE",…}]` — surface the reasons
+      like B7 does, not a generic message.
+- [ ] **BE-I-27:** no media upload — image fields take pasted URLs; say so in the UI.
+- [ ] **BE-I-28:** no draft preview — structural preview only; do not imply WYSIWYG.
+
+### E4. Backend additions worth adopting (`72a711c`) — small, optional
+
+- [ ] **Admin dashboard date window:** `GET /admin/dashboard/overview` now accepts
+      `from`/`to` (ISO), which override `months`. `dashboard.api.ts:27` sends
+      `months` only — add a range picker to B6.
+- [ ] **Admin student detail:** the response now also carries `certificates[]`,
+      `attempts[]` and `exams.{assigned,purchases}`; the FE maps `counts` only
+      (`users.model.ts:20-31`). Additive — nothing breaks; optional enrichment.
+
+### E5. Carried-over FE debt (not backend-driven)
+
+- [ ] **Student dashboard overview** still renders from the hardcoded
+      `features/dashboard/data-access/dashboard.store.ts` ("Mock datasets", `:38-120`,
+      consumed at `overview.page.ts:307`). `GET /learning/progress` is live and
+      already mapped in `features/courses` — swap it in.
+- [ ] **Legacy `/dashboard/certificates` demo pages** — `certificates.page`,
+      `cert-detail.page`, `cert-session.page` read hardcoded `ESM_P_*` fixtures
+      (`certificates.store.ts:356-644`), duplicating the real `/dashboard/credentials`
+      (A3) and the real mock runner. Rewire or retire — product decision.
+- [ ] **Blog E2E re-test** — BE-I-21 is fixed (`30bfff5`); verify create → edit →
+      translations → publish → public read against api-dev. No FE change expected.
+- [ ] **`complete-account` wizard** — still a stub (`complete-account.page.ts:947`);
+      **blocked by BE-I-25** (no DOB field) plus a `ProfileApi` boundary decision.
+- [ ] **Exam-authoring preview** — `GET /admin/exams/:examId/preview` never wired.
+
+---
+
+## Suggested order (updated 2026-07-25)
+
+**✅ Done & committed:** A1–A7 (A7 partially — see E5), B1–B8, C1, C2,
+BLOG-PUBLIC, BLOG-ADMIN, **and** the four net-new student/auth features
+(real exam `b951242`, courses `172f35a`, mock `37b5c57`/`f4752ad`/`6d9e406`/`904a478`,
+email verify `9e06730`). Every backend-rewire/unblock item is complete.
+
+**▶ Next:**
+
+1. **E1 — BE-I-29 fix** (admin lesson creation is broken right now).
+2. **E5 — student dashboard overview → `GET /learning/progress`** (last hardcoded
+   store on a live user-facing screen).
+3. **E2 — CMS-PUBLIC** (decide `/landing` vs `/cms/pages/home` first), then
+   **E3 — CMS-ADMIN**.
+4. **E5 — blog E2E re-test**; `/dashboard/certificates` legacy pages (rewire or retire).
+5. **E4 + exam-authoring preview** — minor.
+
+**Gating reviews, not build work:** C1 (`ae6ae44`) needs the **security review**
+before shipping; the real-exam engine (`b951242`) needs the **architect review**.
+
+> **i18n note:** the backend supports `en/tr/fr/es/ar/de`, but the app UI ships
+> **en/fr/ar**. Translation editors (catalog/exam/blog, and now CMS) author against
+> backend locales; keep the UI locale set at en/fr/ar unless the SOW changes.
