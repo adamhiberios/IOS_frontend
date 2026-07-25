@@ -2081,6 +2081,16 @@
       }
     }
   },
+  "mock": {
+    "reveal": "Reveal answer",
+    "submitting": "Submitting…",
+    "startError": "The mock test couldn't be started. Please try again.",
+    "noAttempt": "No mock test in progress. Start one from your courses.",
+    "goToCourses": "Go to my courses",
+    "extensionsLeft": "{count} time extensions left",
+    "readyHeading": "You're ready for the final exam!",
+    "keepPractisingHeading": "Keep practising for the final exam"
+  },
   "courses": {
     "common": {
       "loading": "Loading…",
@@ -2095,7 +2105,8 @@
     },
     "curriculum": {
       "back": "All courses",
-      "completed": "Completed"
+      "completed": "Completed",
+      "practiceTest": "Practice test"
     },
     "lesson": {
       "back": "Back to curriculum",

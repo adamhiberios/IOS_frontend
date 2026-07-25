@@ -42,16 +42,28 @@ import { CoursesStore } from '../data-access/courses.store';
               {{ store.curriculumError() }}
             </p>
           } @else if (store.curriculum(); as cur) {
-            <header class="flex flex-col gap-1">
-              <span class="text-[13px] font-bold text-ios-brand-primary-mid">{{
-                cur.certificate.programCode
-              }}</span>
-              <h1
-                class="text-[28px] md:text-[32px] font-bold text-ios-fg-13 leading-tight"
-                dir="auto"
+            <header class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+              <div class="flex flex-col gap-1">
+                <span class="text-[13px] font-bold text-ios-brand-primary-mid">{{
+                  cur.certificate.programCode
+                }}</span>
+                <h1
+                  class="text-[28px] md:text-[32px] font-bold text-ios-fg-13 leading-tight"
+                  dir="auto"
+                >
+                  {{ cur.certificate.title }}
+                </h1>
+              </div>
+              <!-- Practice-test entry — carries the UUID certId the mock runner needs. -->
+              <a
+                [routerLink]="['/dashboard/certificates/mock-test']"
+                [queryParams]="{ certId: cur.certificate.id }"
+                class="inline-flex h-11 shrink-0 items-center justify-center rounded-xl bg-ios-fg-13
+                       px-5 font-semibold text-white transition-colors hover:bg-[#2a2b2a] w-fit
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+                       focus-visible:ring-ios-fg-13/50"
+                >{{ lang.t('courses.curriculum.practiceTest') }}</a
               >
-                {{ cur.certificate.title }}
-              </h1>
             </header>
 
             <div class="flex flex-col gap-8">

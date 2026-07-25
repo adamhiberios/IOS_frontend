@@ -2081,6 +2081,16 @@
       }
     }
   },
+  "mock": {
+    "reveal": "Révéler la réponse",
+    "submitting": "Envoi…",
+    "startError": "Impossible de démarrer le test blanc. Veuillez réessayer.",
+    "noAttempt": "Aucun test blanc en cours. Démarrez-en un depuis vos cours.",
+    "goToCourses": "Aller à mes cours",
+    "extensionsLeft": "{count} prolongations de temps restantes",
+    "readyHeading": "Vous êtes prêt pour l'examen final !",
+    "keepPractisingHeading": "Continuez à vous entraîner pour l'examen final"
+  },
   "courses": {
     "common": {
       "loading": "Chargement…",
@@ -2095,7 +2105,8 @@
     },
     "curriculum": {
       "back": "Tous les cours",
-      "completed": "Terminé"
+      "completed": "Terminé",
+      "practiceTest": "Test blanc"
     },
     "lesson": {
       "back": "Retour au programme",

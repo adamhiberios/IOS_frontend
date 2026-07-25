@@ -15,6 +15,19 @@ const CERTIFICATES_ROUTES: Routes = [
     title: 'My Certificates',
     loadComponent: () => import('./pages/certificates.page').then((m) => m.CertificatesPage),
   },
+  // Literal `mock-test*` routes MUST precede the bare `:code` route, or `:code`
+  // captures `mock-test`. These are the real (backend-wired) mock runner/result,
+  // query-param driven: `?certId=` starts an attempt, `?attemptId=` resumes/reviews.
+  {
+    path: 'mock-test/result',
+    title: 'Mock Test Results',
+    loadComponent: () => import('./pages/mock-exam-result.page').then((m) => m.MockExamResultPage),
+  },
+  {
+    path: 'mock-test',
+    title: 'Mock Test',
+    loadComponent: () => import('./pages/mock-test.page').then((m) => m.MockTestPage),
+  },
   // The three multi-segment `:code/...` routes below MUST stay above the bare `:code` route.
   // Otherwise the router matches `:code` first and the inner segments never resolve.
   {
