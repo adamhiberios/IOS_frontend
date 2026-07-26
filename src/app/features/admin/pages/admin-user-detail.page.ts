@@ -25,7 +25,7 @@ import { type StudentDetail } from '../data-access/users.model';
   imports: [RouterLink, DatePipe, StudentAttempts, StudentAccessCodes],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="max-w-3xl">
+    <section>
       <a routerLink="/admin/users" class="text-sm text-ios-brand-primary underline">
         {{ lang.t('admin.userDetail.back') }}
       </a>
@@ -101,9 +101,158 @@ import { type StudentDetail } from '../data-access/users.model';
           </div>
         </dl>
 
+        <!-- Certificates earned -->
+        <div class="mt-8">
+          <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+            {{ lang.t('admin.userDetail.certificatesTitle') }}
+          </h2>
+          @if (s.certificates.length === 0) {
+            <div class="rounded-xl border border-gray-200 bg-white p-6 text-center">
+              <p class="text-sm text-gray-500">{{ lang.t('admin.userDetail.noCertificates') }}</p>
+            </div>
+          } @else {
+            <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                  <tr>
+                    <th scope="col" class="text-start font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.certSerial') }}
+                    </th>
+                    <th scope="col" class="text-start font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.certIssued') }}
+                    </th>
+                    <th scope="col" class="text-start font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.certStatus') }}
+                    </th>
+                    <th scope="col" class="text-end font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.actions') }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  @for (c of s.certificates; track c.id) {
+                    <tr class="hover:bg-gray-50">
+                      <td class="px-4 py-3 font-mono text-xs text-gray-500">
+                        {{ c.certId ?? shortId(c.certificateId) }}
+                      </td>
+                      <td class="px-4 py-3 text-gray-500">{{ c.issuedAt | date: 'mediumDate' }}</td>
+                      <td class="px-4 py-3">
+                        <span
+                          class="inline-block px-2 py-0.5 rounded-full text-xs font-medium"
+                          [class.bg-green-50]="c.isActive"
+                          [class.text-green-700]="c.isActive"
+                          [class.bg-red-50]="!c.isActive"
+                          [class.text-red-700]="!c.isActive"
+                        >
+                          {{
+                            c.isActive
+                              ? lang.t('admin.userDetail.certActive')
+                              : lang.t('admin.userDetail.certRevoked')
+                          }}
+                        </span>
+                      </td>
+                      <td class="px-4 py-3 text-end">
+                        <div class="flex items-center justify-end gap-3">
+                          @if (c.certificateUrl) {
+                            <a
+                              [href]="c.certificateUrl"
+                              target="_blank"
+                              rel="noopener"
+                              class="text-sm text-ios-brand-primary underline"
+                            >
+                              {{ lang.t('admin.userDetail.certView') }}
+                            </a>
+                          }
+                          @if (c.qrUrl) {
+                            <a
+                              [href]="c.qrUrl"
+                              target="_blank"
+                              rel="noopener"
+                              class="text-sm text-ios-brand-primary underline"
+                            >
+                              {{ lang.t('admin.userDetail.certQr') }}
+                            </a>
+                          }
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+
         <!-- Attempt history -->
         <div class="mt-8">
           <ios-student-attempts [userId]="s.id" />
+        </div>
+
+        <!-- Purchases / enrollments -->
+        <div class="mt-8">
+          <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+            {{ lang.t('admin.userDetail.purchasesTitle') }}
+          </h2>
+          @if (s.exams.purchases.length === 0) {
+            <div class="rounded-xl border border-gray-200 bg-white p-6 text-center">
+              <p class="text-sm text-gray-500">{{ lang.t('admin.userDetail.noPurchases') }}</p>
+            </div>
+          } @else {
+            <div class="overflow-x-auto rounded-xl border border-gray-200 bg-white">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                  <tr>
+                    <th scope="col" class="text-start font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.purchaseCert') }}
+                    </th>
+                    <th scope="col" class="text-start font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.purchaseType') }}
+                    </th>
+                    <th scope="col" class="text-start font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.purchasePreExam') }}
+                    </th>
+                    <th scope="col" class="text-start font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.purchaseExamCompleted') }}
+                    </th>
+                    <th scope="col" class="text-start font-medium px-4 py-3">
+                      {{ lang.t('admin.userDetail.purchaseDate') }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                  @for (p of s.exams.purchases; track p.id) {
+                    <tr class="hover:bg-gray-50">
+                      <td class="px-4 py-3 font-mono text-xs text-gray-500">
+                        {{ shortId(p.certId) }}
+                      </td>
+                      <td class="px-4 py-3 text-gray-700">
+                        {{
+                          p.paymentType === 'retake'
+                            ? lang.t('admin.userDetail.purchaseTypeRetake')
+                            : lang.t('admin.userDetail.purchaseTypeEnrollment')
+                        }}
+                      </td>
+                      <td class="px-4 py-3 text-gray-500">
+                        {{
+                          p.preExamConfirmed
+                            ? lang.t('admin.userDetail.yes')
+                            : lang.t('admin.userDetail.no')
+                        }}
+                      </td>
+                      <td class="px-4 py-3 text-gray-500">
+                        {{
+                          p.examCompleted
+                            ? lang.t('admin.userDetail.yes')
+                            : lang.t('admin.userDetail.no')
+                        }}
+                      </td>
+                      <td class="px-4 py-3 text-gray-500">{{ p.createdAt | date: 'mediumDate' }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
         </div>
 
         <!-- Access codes -->
@@ -128,6 +277,10 @@ export class AdminUserDetailPage implements OnInit {
 
   ngOnInit(): void {
     void this.load();
+  }
+
+  protected shortId(id: string): string {
+    return id.slice(0, 8);
   }
 
   private async load(): Promise<void> {

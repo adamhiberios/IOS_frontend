@@ -1,6 +1,0 @@
-#\!/usr/bin/env sh
-# IOS LMS — pre-commit hook
-# Runs lint-staged so only files in the index are linted/formatted.
-# Full-tree lint runs in CI, not in the hook, to keep commits snappy.
-
-npx lint-staged

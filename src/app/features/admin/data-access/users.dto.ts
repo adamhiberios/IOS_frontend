@@ -27,6 +27,37 @@ export interface StudentCountsDto {
   readonly certificatesEarned: number;
 }
 
+/** One earned certificate (`CertificateItemDto`). */
+export interface CertificateItemDto {
+  readonly id: string;
+  /** Public serial (`IOS-…`), null if not yet assigned. */
+  readonly certId: string | null;
+  readonly certificateId: string;
+  readonly examAttemptId: string;
+  readonly s3Url: string | null;
+  readonly qrUrl: string | null;
+  readonly isActive: boolean;
+  readonly issuedAt: string;
+}
+
+/** One purchase / enrollment record (`PurchaseItemDto`). */
+export interface PurchaseItemDto {
+  readonly id: string;
+  readonly certId: string;
+  readonly paymentType: string;
+  readonly preExamConfirmed: boolean;
+  readonly examCompleted: boolean;
+  readonly createdAt: string;
+}
+
+/** Exams block on the detail response (`StudentExamsBlockDto`). */
+export interface StudentExamsBlockDto {
+  /** Exams assigned to the student (issued access codes). */
+  readonly assigned: readonly AccessCodeItemDto[];
+  /** Programs the student has purchased (enrollments + retakes). */
+  readonly purchases: readonly PurchaseItemDto[];
+}
+
 /** Student detail projection (`StudentDetailDto`). */
 export interface StudentDetailDto {
   readonly id: string;
@@ -38,6 +69,11 @@ export interface StudentDetailDto {
   readonly country: string | null;
   readonly createdAt: string;
   readonly counts: StudentCountsDto;
+  /** Earned certificates (most recent first, capped at 100). */
+  readonly certificates: readonly CertificateItemDto[];
+  /** Exam attempts (most recent first, capped at 100). */
+  readonly attempts: readonly AttemptItemDto[];
+  readonly exams: StudentExamsBlockDto;
 }
 
 /** `GET /admin/users/:userId` response. */

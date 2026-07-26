@@ -30,4 +30,15 @@ export class AdminDashboardApi {
       .get<DashboardOverviewDto>(this.endpoint, { params })
       .pipe(map(toDashboardOverview));
   }
+
+  /**
+   * `GET /admin/dashboard/overview?from=DATE&to=DATE` — platform-wide aggregates
+   * scoped to a date range. Both `from` and `to` are optional ISO 8601 dates.
+   */
+  getOverviewByDateRange(from?: string, to?: string): Observable<DashboardOverview> {
+    const params = toHttpParams({ from, to });
+    return this.http
+      .get<DashboardOverviewDto>(this.endpoint, { params })
+      .pipe(map(toDashboardOverview));
+  }
 }

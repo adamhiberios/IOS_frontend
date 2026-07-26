@@ -41,6 +41,13 @@ export class AdminStaffApi {
       .pipe(map((res) => toPage(res, toStaffMember)));
   }
 
+  /** `GET /admin/staff/:id` — one staff account (safe projection). */
+  getOne(id: string): Observable<StaffMember> {
+    return this.http
+      .get<StaffDetailResponseDto>(`${this.base}/${id}`)
+      .pipe(map((res) => toStaffMember(res.data)));
+  }
+
   /** `POST /admin/staff` — create a staff account. */
   create(body: CreateStaffBody): Observable<StaffMember> {
     return this.http

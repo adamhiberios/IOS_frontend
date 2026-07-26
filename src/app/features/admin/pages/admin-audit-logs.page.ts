@@ -4,6 +4,7 @@ import {
   Component,
   type OnInit,
   computed,
+  effect,
   inject,
   signal,
 } from '@angular/core';
@@ -52,12 +53,16 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
           [control]="form.controls.tableName"
           [placeholder]="lang.t('admin.audit.tablePlaceholder')"
         />
-        <ios-input
+        <ios-select
           id="audit-actor"
           [label]="lang.t('admin.audit.actorLabel')"
-          type="text"
+          [options]="actorOptions()"
+          [placeholder]="
+            store.actorsLoading()
+              ? lang.t('admin.audit.actorsLoading')
+              : lang.t('admin.audit.actorAllLabel')
+          "
           [control]="form.controls.actorId"
-          [placeholder]="lang.t('admin.audit.actorPlaceholder')"
         />
         <ios-input
           id="audit-record"
@@ -73,6 +78,9 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
           [control]="form.controls.action"
         />
       </form>
+      @if (store.actorsError()) {
+        <p class="text-xs text-red-600 mb-2" role="alert">{{ store.actorsError() }}</p>
+      }
       <div class="flex gap-2 mb-6">
         <ios-button type="button" variant="primary" (clicked)="onApply()">
           {{ lang.t('admin.audit.apply') }}
@@ -150,7 +158,7 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
                   <td class="px-4 py-3 font-mono text-xs text-gray-500">
                     {{ e.recordId ?? '—' }}
                   </td>
-                  <td class="px-4 py-3 font-mono text-xs text-gray-500">{{ e.actorId }}</td>
+                  <td class="px-4 py-3 text-gray-700">{{ actorLabel(e.actorId) }}</td>
                   <td class="px-4 py-3 text-gray-500">{{ e.ipAddress ?? '—' }}</td>
                   <td class="px-4 py-3 text-end">
                     <button
@@ -189,7 +197,7 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
           aria-labelledby="audit-detail-title"
         >
           <div
-            class="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl max-h-[85vh] overflow-y-auto"
+            class="w-full max-w-5xl rounded-xl bg-white p-6 shadow-xl max-h-[85vh] overflow-y-auto"
           >
             <div class="flex items-start justify-between gap-4">
               <h2 id="audit-detail-title" class="text-lg font-semibold text-ios-brand-dark">
@@ -212,7 +220,18 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
               </div>
               <div>
                 <dt class="text-gray-500">{{ lang.t('admin.audit.colActor') }}</dt>
-                <dd class="font-mono text-xs text-ios-brand-dark break-all">{{ entry.actorId }}</dd>
+                <dd class="text-ios-brand-dark">
+                  @if (actorLoading()) {
+                    <span class="text-gray-400">{{ lang.t('admin.audit.actorLoading') }}</span>
+                  } @else if (actorName(); as name) {
+                    {{ name }}
+                    <span class="block font-mono text-[10px] text-gray-400 break-all">{{
+                      entry.actorId
+                    }}</span>
+                  } @else {
+                    <span class="font-mono text-xs break-all">{{ entry.actorId }}</span>
+                  }
+                </dd>
               </div>
               <div>
                 <dt class="text-gray-500">{{ lang.t('admin.audit.colRecord') }}</dt>
@@ -226,33 +245,64 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
               </div>
             </dl>
 
-            <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
-                  {{ lang.t('admin.audit.oldData') }}
-                </h3>
-                @if (entry.oldData) {
-                  <pre
-                    class="rounded-lg bg-gray-50 border border-gray-200 p-3 text-xs text-gray-700 overflow-x-auto whitespace-pre-wrap break-words"
-                    >{{ formatJson(entry.oldData) }}</pre
-                  >
-                } @else {
-                  <p class="text-sm text-gray-400">{{ lang.t('admin.audit.noData') }}</p>
-                }
-              </div>
-              <div>
-                <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-1">
-                  {{ lang.t('admin.audit.newData') }}
-                </h3>
-                @if (entry.newData) {
-                  <pre
-                    class="rounded-lg bg-gray-50 border border-gray-200 p-3 text-xs text-gray-700 overflow-x-auto whitespace-pre-wrap break-words"
-                    >{{ formatJson(entry.newData) }}</pre
-                  >
-                } @else {
-                  <p class="text-sm text-gray-400">{{ lang.t('admin.audit.noData') }}</p>
-                }
-              </div>
+            <div class="mt-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wide text-gray-500 mb-2">
+                {{ lang.t('admin.audit.changes') }}
+              </h3>
+              @if (!entry.oldData && !entry.newData) {
+                <p class="text-sm text-gray-400">{{ lang.t('admin.audit.noData') }}</p>
+              } @else {
+                <div class="overflow-x-auto rounded-lg border border-gray-200">
+                  <table class="w-full table-fixed text-sm">
+                    <thead class="bg-gray-50 text-gray-500 text-xs uppercase tracking-wide">
+                      <tr>
+                        <th scope="col" class="w-1/5 text-start font-medium px-3 py-2">
+                          {{ lang.t('admin.audit.field') }}
+                        </th>
+                        <th scope="col" class="w-2/5 text-start font-medium px-3 py-2">
+                          {{ lang.t('admin.audit.before') }}
+                        </th>
+                        <th scope="col" class="w-2/5 text-start font-medium px-3 py-2">
+                          {{ lang.t('admin.audit.after') }}
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-100">
+                      @for (row of diffRows(entry); track row.key) {
+                        <tr
+                          [class.bg-green-50]="row.kind === 'added'"
+                          [class.bg-red-50]="row.kind === 'removed'"
+                          [class.bg-amber-50]="row.kind === 'changed'"
+                        >
+                          <td
+                            class="px-3 py-2 font-medium text-ios-brand-dark align-top break-words"
+                          >
+                            {{ formatKey(row.key) }}
+                          </td>
+                          <td
+                            class="px-3 py-2 align-top break-words"
+                            [class.text-gray-300]="row.kind === 'added'"
+                            [class.text-red-700]="row.kind === 'removed' || row.kind === 'changed'"
+                            [class.line-through]="row.kind === 'changed' || row.kind === 'removed'"
+                            [class.text-gray-500]="row.kind === 'unchanged'"
+                          >
+                            {{ row.kind === 'added' ? '—' : formatValue(row.oldValue) }}
+                          </td>
+                          <td
+                            class="px-3 py-2 align-top break-words"
+                            [class.text-gray-300]="row.kind === 'removed'"
+                            [class.text-green-700]="row.kind === 'added' || row.kind === 'changed'"
+                            [class.font-semibold]="row.kind === 'added' || row.kind === 'changed'"
+                            [class.text-gray-500]="row.kind === 'unchanged'"
+                          >
+                            {{ row.kind === 'removed' ? '—' : formatValue(row.newValue) }}
+                          </td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              }
             </div>
 
             <div class="mt-5 flex justify-end">
@@ -274,6 +324,9 @@ export class AdminAuditLogsPage implements OnInit {
 
   /** The entry whose old/new data is shown in the detail dialog, or `null`. */
   protected readonly selected = signal<AuditLogEntry | null>(null);
+  /** Resolved display name for `selected()`'s actor, or `null` while unresolved. */
+  protected readonly actorName = signal<string | null>(null);
+  protected readonly actorLoading = signal(false);
 
   protected readonly form = this.fb.group({
     tableName: this.fb.control(''),
@@ -290,8 +343,42 @@ export class AdminAuditLogsPage implements OnInit {
     { value: 'DELETE', label: this.lang.t('admin.audit.actionDelete') },
   ]);
 
+  /** Actor filter options ("All actors" + one per loaded staff account). */
+  protected readonly actorOptions = computed<SelectOption[]>(() => [
+    { value: '', label: this.lang.t('admin.audit.actorAllLabel') },
+    ...this.store
+      .actors()
+      .map((a) => ({ value: a.id, label: `${a.firstName} ${a.lastName} (${a.email})` })),
+  ]);
+
+  constructor() {
+    // Resolve actor names for whatever page of rows is currently loaded.
+    // `actorDisplayName` reads the store's cache, so this reruns whenever the
+    // cache or the item list changes, and converges once every visible actor
+    // is resolved (already-cached ids are skipped, so this doesn't re-fetch).
+    effect(() => {
+      const unresolved = new Set<string>();
+      for (const item of this.store.items()) {
+        if (!this.store.actorDisplayName(item.actorId)) unresolved.add(item.actorId);
+      }
+      for (const actorId of unresolved) {
+        void this.store.resolveActor(actorId);
+      }
+    });
+  }
+
   ngOnInit(): void {
     void this.store.load();
+    void this.store.loadActors();
+  }
+
+  /** Cached display name for the table row, falling back to a short id while unresolved. */
+  protected actorLabel(actorId: string): string {
+    return this.store.actorDisplayName(actorId) ?? this.shortId(actorId);
+  }
+
+  protected shortId(id: string): string {
+    return id.slice(0, 8);
   }
 
   protected onApply(): void {
@@ -320,10 +407,21 @@ export class AdminAuditLogsPage implements OnInit {
 
   protected openDetails(entry: AuditLogEntry): void {
     this.selected.set(entry);
+    this.actorName.set(null);
+    this.actorLoading.set(true);
+    void this.store.resolveActor(entry.actorId).then((staff) => {
+      // Ignore a stale resolution if the dialog moved on to another entry
+      // (or was closed) while the lookup was in flight.
+      if (this.selected()?.actorId !== entry.actorId) return;
+      this.actorName.set(staff ? `${staff.firstName} ${staff.lastName}` : null);
+      this.actorLoading.set(false);
+    });
   }
 
   protected closeDetails(): void {
     this.selected.set(null);
+    this.actorName.set(null);
+    this.actorLoading.set(false);
   }
 
   protected isKnownAction(action: string): boolean {
@@ -344,8 +442,58 @@ export class AdminAuditLogsPage implements OnInit {
     }
   }
 
-  protected formatJson(data: Record<string, unknown>): string {
-    return JSON.stringify(data, null, 2);
+  /**
+   * Field-by-field diff between `oldData`/`newData`, sorted by key. A field
+   * missing from `oldData` is `added`, missing from `newData` is `removed`,
+   * present in both with an unequal value is `changed`, otherwise `unchanged`.
+   * For a pure INSERT (no oldData) every field is `added`; for a pure DELETE
+   * (no newData) every field is `removed`.
+   */
+  protected diffRows(entry: AuditLogEntry): Array<{
+    key: string;
+    oldValue: unknown;
+    newValue: unknown;
+    kind: 'added' | 'removed' | 'changed' | 'unchanged';
+  }> {
+    const oldData = entry.oldData;
+    const newData = entry.newData;
+    const keys = new Set([...Object.keys(oldData ?? {}), ...Object.keys(newData ?? {})]);
+
+    return Array.from(keys)
+      .sort()
+      .map((key) => {
+        const hasOld = oldData !== null && Object.hasOwn(oldData, key);
+        const hasNew = newData !== null && Object.hasOwn(newData, key);
+        const oldValue = hasOld ? oldData![key] : undefined;
+        const newValue = hasNew ? newData![key] : undefined;
+
+        let kind: 'added' | 'removed' | 'changed' | 'unchanged';
+        if (!hasOld && hasNew) kind = 'added';
+        else if (hasOld && !hasNew) kind = 'removed';
+        else if (JSON.stringify(oldValue) !== JSON.stringify(newValue)) kind = 'changed';
+        else kind = 'unchanged';
+
+        return { key, oldValue, newValue, kind };
+      });
+  }
+
+  /** `firstSeenAt` → `First seen at`; `payment_type` → `Payment type`. */
+  protected formatKey(key: string): string {
+    const spaced = key
+      .replace(/_/g, ' ')
+      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .toLowerCase();
+    return spaced.charAt(0).toUpperCase() + spaced.slice(1);
+  }
+
+  /** Render a raw field value in a human-friendly way instead of raw JSON. */
+  protected formatValue(value: unknown): string {
+    if (value === null || value === undefined) return '—';
+    if (typeof value === 'boolean') {
+      return value ? this.lang.t('common.yes') : this.lang.t('common.no');
+    }
+    if (typeof value === 'object') return JSON.stringify(value);
+    return String(value);
   }
 }
 

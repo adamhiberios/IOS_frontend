@@ -6,6 +6,11 @@ import { LanguageService } from '@core/i18n';
 
 import { AdminAuditLogsApi } from './audit.api';
 import { type AuditLogEntry, type AuditLogFilters } from './audit.model';
+import { AdminStaffApi } from './staff.api';
+import { type StaffMember } from './staff.model';
+
+/** Max staff accounts loaded for the actor filter (backend caps `limit` at 100). */
+const ACTORS_LIMIT = 100;
 
 /** Page size for the admin audit-log list (backend max is 100). */
 const PAGE_LIMIT = 50;
@@ -21,6 +26,7 @@ const PAGE_LIMIT = 50;
 @Injectable({ providedIn: 'root' })
 export class AdminAuditLogsStore {
   private readonly api = inject(AdminAuditLogsApi);
+  private readonly staffApi = inject(AdminStaffApi);
   private readonly lang = inject(LanguageService);
 
   private readonly _items = signal<readonly AuditLogEntry[]>([]);
@@ -31,6 +37,13 @@ export class AdminAuditLogsStore {
   private readonly _hasMore = signal(false);
   private readonly _filters = signal<AuditLogFilters>({});
 
+  /** Staff accounts for the actor filter dropdown (also seeds the actor-name cache). */
+  private readonly _actors = signal<readonly StaffMember[]>([]);
+  private readonly _actorsLoading = signal(false);
+  private readonly _actorsError = signal<string | null>(null);
+  /** actorId -> resolved StaffMember, populated by `loadActors` and `resolveActor`. */
+  private readonly _actorCache = signal<ReadonlyMap<string, StaffMember>>(new Map());
+
   readonly items = this._items.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly loadingMore = this._loadingMore.asReadonly();
@@ -40,6 +53,10 @@ export class AdminAuditLogsStore {
   readonly isEmpty = computed(
     () => !this._loading() && this._error() === null && this._items().length === 0,
   );
+
+  readonly actors = this._actors.asReadonly();
+  readonly actorsLoading = this._actorsLoading.asReadonly();
+  readonly actorsError = this._actorsError.asReadonly();
 
   /** Load the first page with the current filters (replaces the list). */
   async load(): Promise<void> {
@@ -62,6 +79,56 @@ export class AdminAuditLogsStore {
     if (filtersEqual(normalized, this._filters())) return;
     this._filters.set(normalized);
     await this.fetch(false);
+  }
+
+  /**
+   * Load staff accounts once for the actor filter dropdown. Also seeds the
+   * actor-name cache used by {@link resolveActor}, so names for actors in this
+   * page never trigger a follow-up request. No-ops once loaded.
+   */
+  async loadActors(): Promise<void> {
+    if (this._actors().length > 0 || this._actorsLoading()) return;
+    this._actorsLoading.set(true);
+    this._actorsError.set(null);
+    try {
+      const page = await firstValueFrom(this.staffApi.list({ limit: ACTORS_LIMIT }));
+      this._actors.set(page.items);
+      this._actorCache.update((cache) => {
+        const next = new Map(cache);
+        for (const s of page.items) next.set(s.id, s);
+        return next;
+      });
+    } catch (err) {
+      this._actorsError.set(problemDetailMessage(err) ?? this.lang.t('admin.audit.actorsError'));
+    } finally {
+      this._actorsLoading.set(false);
+    }
+  }
+
+  /** Cached display name for `actorId` (`First Last`), or `null` if not yet resolved. */
+  actorDisplayName(actorId: string): string | null {
+    const staff = this._actorCache().get(actorId);
+    return staff ? `${staff.firstName} ${staff.lastName}` : null;
+  }
+
+  /**
+   * Resolve an actor's staff record for display — cache-first (populated by
+   * {@link loadActors} or a prior call here), falling back to a single
+   * `GET /admin/staff/:id` fetch on a cache miss ("load when needed" rather
+   * than bulk-fetching names for every log row). Returns `null` on failure
+   * (e.g. the actor account no longer exists) so the caller can fall back to
+   * the raw id.
+   */
+  async resolveActor(actorId: string): Promise<StaffMember | null> {
+    const cached = this._actorCache().get(actorId);
+    if (cached) return cached;
+    try {
+      const staff = await firstValueFrom(this.staffApi.getOne(actorId));
+      this._actorCache.update((cache) => new Map(cache).set(actorId, staff));
+      return staff;
+    } catch {
+      return null;
+    }
   }
 
   private async fetch(append: boolean): Promise<void> {

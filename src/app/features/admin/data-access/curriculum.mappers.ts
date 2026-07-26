@@ -81,12 +81,12 @@ export function toUpdateModuleBody(draft: ModuleDraft): UpdateModuleBody {
 }
 
 export function toCreateLessonBody(draft: LessonDraft, moduleId: string): CreateLessonBody {
-  const contentText = draft.contentText.trim();
   const videoUrl = draft.videoUrl.trim();
   return {
     moduleId,
     title: draft.title.trim(),
-    ...(contentText ? { contentText } : {}),
+    // Required and non-empty on the backend — never omitted, unlike videoUrl.
+    contentText: draft.contentText.trim(),
     ...(videoUrl ? { videoUrl } : {}),
     position: draft.position,
     durationSeconds: draft.durationSeconds,

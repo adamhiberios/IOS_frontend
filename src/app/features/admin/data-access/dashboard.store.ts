@@ -34,11 +34,15 @@ export class AdminDashboardStore {
   private readonly _loading = signal(false);
   private readonly _error = signal<string | null>(null);
   private readonly _months = signal<DashboardMonths>(6);
+  private readonly _from = signal<string | undefined>(undefined);
+  private readonly _to = signal<string | undefined>(undefined);
 
   readonly overview = this._overview.asReadonly();
   readonly loading = this._loading.asReadonly();
   readonly error = this._error.asReadonly();
   readonly months = this._months.asReadonly();
+  readonly from = this._from.asReadonly();
+  readonly to = this._to.asReadonly();
 
   /** True once a first successful fetch has populated the overview. */
   readonly loaded = computed(() => this._overview() !== null);
@@ -53,7 +57,13 @@ export class AdminDashboardStore {
     this._loading.set(true);
     this._error.set(null);
     try {
-      this._overview.set(await firstValueFrom(this.api.getOverview(this._months())));
+      const from = this._from();
+      const to = this._to();
+      if (from || to) {
+        this._overview.set(await firstValueFrom(this.api.getOverviewByDateRange(from, to)));
+      } else {
+        this._overview.set(await firstValueFrom(this.api.getOverview(this._months())));
+      }
     } catch (err) {
       this._error.set(problemDetailMessage(err) ?? this.lang.t('admin.home.metrics.loadError'));
     } finally {
@@ -70,6 +80,22 @@ export class AdminDashboardStore {
   async setMonths(months: DashboardMonths): Promise<void> {
     if (months === this._months()) return;
     this._months.set(months);
+    this._from.set(undefined);
+    this._to.set(undefined);
+    await this.load(true);
+  }
+
+  /** Set date range filter and re-fetch. */
+  async setDateRange(from?: string, to?: string): Promise<void> {
+    this._from.set(from);
+    this._to.set(to);
+    await this.load(true);
+  }
+
+  /** Clear date range filter and reset to months-based view. */
+  async clearDateRange(): Promise<void> {
+    this._from.set(undefined);
+    this._to.set(undefined);
     await this.load(true);
   }
 
@@ -77,5 +103,7 @@ export class AdminDashboardStore {
     this._overview.set(null);
     this._error.set(null);
     this._months.set(6);
+    this._from.set(undefined);
+    this._to.set(undefined);
   }
 }

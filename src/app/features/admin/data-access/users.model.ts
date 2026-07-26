@@ -17,7 +17,38 @@ export interface StudentListItem {
   readonly createdAt: string;
 }
 
-/** A student's detail view (profile slice + activity counts). */
+/** One earned certificate shown on the student detail view. */
+export interface StudentCertificate {
+  readonly id: string;
+  /** Public serial (`IOS-…`), null if not yet assigned. */
+  readonly certId: string | null;
+  readonly certificateId: string;
+  readonly examAttemptId: string;
+  readonly certificateUrl: string | null;
+  readonly qrUrl: string | null;
+  readonly isActive: boolean;
+  readonly issuedAt: string;
+}
+
+export type PurchasePaymentType = 'enrollment' | 'retake';
+
+/** One purchase / enrollment record shown on the student detail view. */
+export interface StudentPurchase {
+  readonly id: string;
+  readonly certId: string;
+  readonly paymentType: string;
+  readonly preExamConfirmed: boolean;
+  readonly examCompleted: boolean;
+  readonly createdAt: string;
+}
+
+/** Exams the student has been assigned + programs they've purchased. */
+export interface StudentExams {
+  readonly assigned: readonly AccessCode[];
+  readonly purchases: readonly StudentPurchase[];
+}
+
+/** A student's detail view (profile slice + activity counts + activity lists). */
 export interface StudentDetail {
   readonly id: string;
   readonly firstName: string;
@@ -29,6 +60,11 @@ export interface StudentDetail {
   readonly country: string | null;
   readonly createdAt: string;
   readonly counts: StudentCounts;
+  /** Earned certificates (most recent first, capped at 100). */
+  readonly certificates: readonly StudentCertificate[];
+  /** Exam attempts (most recent first, capped at 100). */
+  readonly attempts: readonly StudentAttempt[];
+  readonly exams: StudentExams;
 }
 
 /** Query for `GET /admin/users`. Mirrors the backend `ListUsersQueryDto`. */

@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, RichText, Select, type SelectOption } from '@ui';
 
 import {
   type AdminLesson,
@@ -47,7 +47,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-curriculum-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, RichText, Select, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -381,7 +381,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           aria-labelledby="lesson-dialog-title"
         >
           <div
-            class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            class="w-full max-w-3xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
             <h2 id="lesson-dialog-title" class="text-lg font-semibold text-ios-brand-dark mb-1">
               {{
@@ -400,20 +400,13 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 [control]="lessonForm.controls.title"
                 [placeholder]="lang.t('admin.curriculum.lessonTitlePlaceholder')"
               />
-              <div>
-                <label
-                  for="lesson-content"
-                  class="block text-sm font-heading font-medium text-ios-brand-dark mb-1"
-                >
-                  {{ lang.t('admin.curriculum.contentLabel') }}
-                </label>
-                <textarea
-                  id="lesson-content"
-                  rows="4"
-                  [formControl]="lessonForm.controls.contentText"
-                  class="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 text-sm text-ios-brand-dark focus:outline-none focus:border-ios-fg"
-                ></textarea>
-              </div>
+              <ios-rich-text
+                id="lesson-content"
+                [label]="lang.t('admin.curriculum.contentLabel')"
+                [control]="lessonForm.controls.contentText"
+                [placeholder]="lang.t('admin.curriculum.contentPlaceholder')"
+                [errorText]="lang.t('admin.curriculum.contentError')"
+              />
               <ios-input
                 id="lesson-video"
                 [label]="lang.t('admin.curriculum.videoLabel')"
@@ -517,13 +510,13 @@ export class AdminCurriculumPage implements OnInit {
 
   protected readonly moduleForm = this.fb.group({
     title: this.fb.control('', { validators: [required] }),
-    description: this.fb.control(''),
+    description: this.fb.control('', { validators: [required] }),
     position: this.fb.control(0, { validators: [required, Validators.min(0)] }),
   });
 
   protected readonly lessonForm = this.fb.group({
     title: this.fb.control('', { validators: [required] }),
-    contentText: this.fb.control(''),
+    contentText: this.fb.control('', { validators: [required] }),
     videoUrl: this.fb.control(''),
     position: this.fb.control(0, { validators: [required, Validators.min(0)] }),
     durationSeconds: this.fb.control(0, { validators: [required, Validators.min(0)] }),

@@ -31,7 +31,7 @@ import { AdminUsersStore } from '../data-access/users.store';
         </p>
       </header>
 
-      <form [formGroup]="form" (ngSubmit)="onSearch()" class="flex items-end gap-2 mb-4 max-w-xl">
+      <form [formGroup]="form" (ngSubmit)="onSearch()" class="flex items-end gap-2 mb-4 ">
         <div class="grow">
           <ios-input
             id="users-search"

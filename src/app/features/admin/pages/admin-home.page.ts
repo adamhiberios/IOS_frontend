@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, type OnInit, computed, inject } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
@@ -24,7 +25,7 @@ import {
  */
 @Component({
   selector: 'ios-admin-home-page',
-  imports: [Button, AdminRevenueChart],
+  imports: [Button, AdminRevenueChart, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -53,33 +54,83 @@ import {
 
       @if (canViewMetrics()) {
         <div class="mt-10">
-          <div class="flex items-center justify-between gap-4 flex-wrap">
+          <div class="flex items-center justify-between gap-4 flex-wrap mb-4">
             <h2 class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.home.metrics.title') }}
             </h2>
+          </div>
 
-            <!-- Revenue-window control -->
-            <div
-              class="inline-flex rounded-lg border border-gray-200 bg-white p-0.5"
-              role="group"
-              [attr.aria-label]="lang.t('admin.home.metrics.months')"
-            >
-              @for (m of monthOptions; track m) {
-                <button
-                  type="button"
-                  class="px-3 py-1 text-sm font-semibold rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                  [class.bg-ios-brand-amber-soft]="store.months() === m"
-                  [class.text-ios-brand-primary]="store.months() === m"
-                  [class.text-gray-500]="store.months() !== m"
-                  [attr.aria-pressed]="store.months() === m"
+          <!-- Date range filter -->
+          <div
+            class="rounded-lg border border-gray-200 bg-white p-4 mb-4"
+            [formGroup]="dateRangeForm"
+          >
+            <div class="flex items-end gap-4 flex-wrap">
+              <div class="flex-1 min-w-[200px]">
+                <label for="filter-from" class="block text-sm font-medium text-ios-brand-dark mb-1">
+                  {{ lang.t('admin.home.metrics.dateFromLabel') }}
+                </label>
+                <input
+                  id="filter-from"
+                  type="date"
+                  formControlName="from"
+                  (blur)="onDateRangeChange()"
+                  class="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm text-ios-brand-dark focus:outline-none focus:border-ios-fg"
+                />
+              </div>
+              <div class="flex-1 min-w-[200px]">
+                <label for="filter-to" class="block text-sm font-medium text-ios-brand-dark mb-1">
+                  {{ lang.t('admin.home.metrics.dateToLabel') }}
+                </label>
+                <input
+                  id="filter-to"
+                  type="date"
+                  formControlName="to"
+                  (blur)="onDateRangeChange()"
+                  class="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm text-ios-brand-dark focus:outline-none focus:border-ios-fg"
+                />
+              </div>
+              <div class="flex gap-2">
+                <ios-button
+                  variant="secondary"
+                  size="sm"
                   [disabled]="store.loading()"
-                  (click)="onMonths(m)"
+                  (clicked)="clearDateRange()"
                 >
-                  {{ lang.t('admin.home.metrics.monthsOption', { count: m }) }}
-                </button>
-              }
+                  {{ lang.t('admin.home.metrics.clearDateRange') }}
+                </ios-button>
+              </div>
             </div>
           </div>
+
+          <!-- Revenue-window control (shown when no date range is set) -->
+          <!-- @if (!hasDateRange()) {
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-600 mb-2">
+                {{ lang.t('admin.home.metrics.months') }}
+              </label>
+              <div
+                class="inline-flex rounded-lg border border-gray-200 bg-white p-0.5"
+                role="group"
+                [attr.aria-label]="lang.t('admin.home.metrics.months')"
+              >
+                @for (m of monthOptions; track m) {
+                  <button
+                    type="button"
+                    class="px-3 py-1 text-sm font-semibold rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+                    [class.bg-ios-brand-amber-soft]="store.months() === m"
+                    [class.text-ios-brand-primary]="store.months() === m"
+                    [class.text-gray-500]="store.months() !== m"
+                    [attr.aria-pressed]="store.months() === m"
+                    [disabled]="store.loading()"
+                    (click)="onMonths(m)"
+                  >
+                    {{ lang.t('admin.home.metrics.monthsOption', { count: m }) }}
+                  </button>
+                }
+              </div>
+            </div>
+          } -->
 
           @if (store.loading() && !store.loaded()) {
             <p class="mt-6 text-sm text-gray-500" role="status">
@@ -246,8 +297,19 @@ export class AdminHomePage implements OnInit {
   private readonly auth = inject(AuthStore);
   protected readonly lang = inject(LanguageService);
   protected readonly store = inject(AdminDashboardStore);
+  private readonly fb = inject(FormBuilder);
 
   protected readonly monthOptions = DASHBOARD_MONTH_OPTIONS;
+  protected readonly dateRangeForm = this.fb.group({
+    from: [''],
+    to: [''],
+  });
+
+  protected readonly hasDateRange = computed(() => {
+    const from = this.dateRangeForm.get('from')?.value;
+    const to = this.dateRangeForm.get('to')?.value;
+    return !!(from || to);
+  });
 
   protected readonly displayName = computed(() => this.auth.user()?.fullName ?? '');
   protected readonly email = computed(() => this.auth.user()?.email ?? '');
@@ -278,6 +340,20 @@ export class AdminHomePage implements OnInit {
 
   protected onMonths(months: DashboardMonths): void {
     void this.store.setMonths(months);
+  }
+
+  protected onDateRangeChange(): void {
+    const from = this.dateRangeForm.get('from')?.value;
+    const to = this.dateRangeForm.get('to')?.value;
+
+    if (!from && !to) return;
+
+    void this.store.setDateRange(from || undefined, to || undefined);
+  }
+
+  protected clearDateRange(): void {
+    this.dateRangeForm.reset();
+    void this.store.clearDateRange();
   }
 
   protected retry(): void {

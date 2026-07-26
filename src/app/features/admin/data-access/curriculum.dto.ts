@@ -79,11 +79,11 @@ export interface UpdateModuleBody {
   readonly active?: boolean;
 }
 
-/** `POST /admin/lessons`. */
+/** `POST /admin/lessons`. `contentText` is required and non-empty (backend). */
 export interface CreateLessonBody {
   readonly moduleId: string;
   readonly title: string;
-  readonly contentText?: string;
+  readonly contentText: string;
   readonly videoUrl?: string;
   readonly position?: number;
   readonly durationSeconds?: number;
