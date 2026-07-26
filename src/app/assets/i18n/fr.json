@@ -293,6 +293,20 @@
         "hours": "+20 h",
         "online": "100 % en ligne",
         "exam": "Examen de 45 questions"
+      },
+      "dataToggle": {
+        "label": "Source des données",
+        "real": "En direct",
+        "fake": "Démo",
+        "loading": "Chargement…",
+        "error": "Échec du chargement des données en direct — affichage des données de démonstration"
+      },
+      "live": {
+        "description": "Certifications actuellement publiées dans notre catalogue.",
+        "audienceDesc": "Provient directement de notre catalogue de cours — la disponibilité et les prix peuvent changer.",
+        "explorePath": "Voir les certifications",
+        "noLevel": "Général",
+        "empty": "Aucune certification en direct n'est publiée pour le moment."
       }
     },
     "certs": {

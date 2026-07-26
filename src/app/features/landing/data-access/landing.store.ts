@@ -5,31 +5,40 @@
  *   • `featuredPrograms` — live catalog cards (title, price, link)
  *   • `stats`            — platform counters (programs / students / certs issued)
  *
- * The Scrum-Journal insight cards have **no `/landing` backing** — they render
- * from the static list this store owns. All other landing copy (headings, cert
- * levels, step text) lives directly in the section components via `lang.t()`.
+ * The Scrum-Journal insight cards are **not** part of the `/landing` payload —
+ * this store fetches the 3 most recent published articles straight from the
+ * public blog (`GET /blog`) via the `insights` feature's `InsightsApi`/mapper,
+ * so the section always shows real content. All other landing copy (headings,
+ * cert levels, step text) lives directly in the section components via `lang.t()`.
  *
  * ## Fallback behaviour
  * On error the store keeps static `FALLBACK_STATS` and an empty featured list
- * (the featured section hides itself), so the page always renders.
+ * (the featured section hides itself). Insight posts fall back to a small
+ * static set — independently of the `/landing` call — when the blog has
+ * nothing published yet or the request fails, so the page always renders.
  */
 
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
 import { problemDetailMessage } from '@core/http';
+import { InsightsApi } from '@features/insights/data-access/insights.api';
 
 import { LandingApi } from './landing.api';
 import { type PublicCertificate } from './catalog.model';
-import { type InsightPost, type LandingData, type LandingStats } from './landing.model';
+import { type LandingData, type LandingStats } from './landing.model';
+import type { InsightCardPost } from '../../insights/components/insights-card';
 
 type LoadStatus = 'idle' | 'loading' | 'success' | 'error';
 
 /** Stats shown until the API responds (kept modest / non-misleading). */
 const FALLBACK_STATS: LandingStats = { programs: 0, students: 0, certificatesIssued: 0 };
 
-/** Static Scrum-Journal cards (no backend — the real blog lives in `insights`). */
-const FALLBACK_INSIGHT_POSTS: InsightPost[] = [
+/** Number of recent articles shown in the landing "Scrum Journal" strip. */
+const INSIGHT_POST_LIMIT = 3;
+
+/** Shown only if the blog has nothing published yet, or `GET /blog` fails. */
+const FALLBACK_INSIGHT_POSTS: InsightCardPost[] = [
   {
     id: 'post-1',
     date: 'Apr 15, 2026',
@@ -65,6 +74,7 @@ const FALLBACK_INSIGHT_POSTS: InsightPost[] = [
 @Injectable({ providedIn: 'root' })
 export class LandingStore {
   private readonly api = inject(LandingApi);
+  private readonly insightsApi = inject(InsightsApi);
 
   /** Live `/landing` payload — null until loaded (or on error). */
   private readonly _data = signal<LandingData | null>(null);
@@ -80,26 +90,47 @@ export class LandingStore {
   );
   readonly stats = computed<LandingStats>(() => this._data()?.stats ?? FALLBACK_STATS);
 
-  /** Static Scrum-Journal cards (not server-driven). */
-  readonly insightPosts = signal<readonly InsightPost[]>(FALLBACK_INSIGHT_POSTS).asReadonly();
+  /** Real published articles from `GET /blog`, falling back to static demo posts. */
+  private readonly _insightPosts = signal<readonly InsightCardPost[]>(FALLBACK_INSIGHT_POSTS);
+  readonly insightPosts = this._insightPosts.asReadonly();
   /** Static section-badge label for the Scrum-Journal block. */
   readonly insightSectionBadge = signal('Insights').asReadonly();
 
   /**
-   * Load the server-driven landing blocks. Never throws — failures surface via
-   * {@link error} and the page keeps its fallbacks.
+   * Load the server-driven landing blocks (`/landing` + the latest blog
+   * posts). Never throws — failures surface via {@link error} (for the
+   * `/landing` call) and the page keeps its fallbacks; a failed/empty blog
+   * fetch is silently absorbed by {@link loadInsightPosts} since the journal
+   * strip has always had a static fallback.
    */
   async load(): Promise<void> {
     if (this._status() === 'loading') return;
     this._status.set('loading');
     this._error.set(null);
     try {
-      const data = await firstValueFrom(this.api.getPageData());
+      const [data] = await Promise.all([
+        firstValueFrom(this.api.getPageData()),
+        this.loadInsightPosts(),
+      ]);
       this._data.set(data);
       this._status.set('success');
     } catch (err) {
       this._status.set('error');
       this._error.set(problemDetailMessage(err) ?? 'Failed to load landing content');
+    }
+  }
+
+  /**
+   * Fetch the most recent published articles for the landing page. Keeps the
+   * static {@link FALLBACK_INSIGHT_POSTS} when the blog has nothing published
+   * or the request fails — this never throws, so it can't fail {@link load}.
+   */
+  private async loadInsightPosts(): Promise<void> {
+    try {
+      const page = await firstValueFrom(this.insightsApi.list({ limit: INSIGHT_POST_LIMIT }));
+      if (page.items.length > 0) this._insightPosts.set(page.items);
+    } catch {
+      // Keep the static fallback — the journal strip should never block the page.
     }
   }
 }

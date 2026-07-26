@@ -20,6 +20,11 @@ export interface CatalogItemDto {
   readonly price: string;
   readonly currency: string;
   readonly thumbnailUrl: string | null;
+  readonly badgeImageUrl?: string | null;
+  readonly track?: string | null;
+  readonly level?: 'foundation' | 'practitioner' | 'authority' | null;
+  readonly durationHours?: number | null;
+  readonly syllabusUrl?: string | null;
   readonly active: boolean;
   readonly locale: string;
   readonly direction: 'ltr' | 'rtl';

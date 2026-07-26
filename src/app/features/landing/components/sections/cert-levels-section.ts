@@ -4,17 +4,30 @@
  * Manages active-tab state locally (UI state).
  *
  * ## Data ownership
- * All certification structure is static — cert abbreviations, full names, badge
- * colors, prices, and route links are structural constants that only change with
- * a new product release.  Translatable strings (tab labels, descriptions, CTA
- * text, audience descriptions) are locale-reactive via `lang.t()`.
- * No store input is needed.
+ * Cert abbreviations, full names, badge colors, and route links are structural
+ * constants that only change with a new product release. Translatable strings
+ * (tab labels, descriptions, CTA text, audience descriptions) are locale-reactive
+ * via `lang.t()`.
+ *
+ * ## Real vs. demo data
+ * A local toggle (`useRealData`) switches the whole section between two
+ * independent data sources:
+ * - **Demo** (`useRealData() === false`): the static, hardcoded role tabs
+ *   (Scrum Master / Product Owner / Scrum Facilitator) mirroring the exact
+ *   catalog on `all-certifications.page.ts` — ESM/ESM-P/ESM-A, EPO/EPO-P/
+ *   EPO-A, and ESF (Scrum Facilitator only ships a Foundation tier there, so
+ *   no ESF-P/ESF-A card is shown here either).
+ * - **Live** (`useRealData() === true`): tabs are the 3 backend `level`
+ *   tiers (Foundation/Practitioner/Authority) — one tab per level that
+ *   actually has published certificates — and each tab's cards are every
+ *   `PublicCatalogStore` item at that level, regardless of `track`.
  */
 
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   type ElementRef,
   inject,
   signal,
@@ -27,6 +40,9 @@ import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
 import type { LucideIconName } from '@ui';
 import { CertCard, type CertCardData } from '../cert-card';
+import { PublicCatalogStore } from '../../data-access/catalog.store';
+import { formatPrice } from '../../data-access/catalog.mappers';
+import type { PublicCertificate } from '../../data-access/catalog.model';
 
 // ---------------------------------------------------------------------------
 // Local shape (structural only — never goes to the API)
@@ -68,25 +84,76 @@ interface CertLevelDef {
           <p class="text-[16px] text-ios-fg-mid leading-relaxed mb-5">
             {{ lang.t('landing.sections.threeLevelsSubtitle') }}
           </p>
-          <div class="w-36 h-1 bg-ios-brand-gold rounded-full"></div>
-        </div>
+          <div class="w-36 h-1 bg-ios-brand-gold rounded-full mb-6"></div>
 
-        <!-- Tab row -->
-        <div class="grid grid-cols-4 items-center mb-8">
-          @for (level of levels(); track level.id; let idx = $index) {
+          <!-- Data source toggle: real (backend-overlaid) vs. fake (demo) -->
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-[13px] font-medium text-ios-fg-mid">
+              {{ lang.t('landing.levels.dataToggle.label') }}
+            </span>
             <button
               type="button"
-              (click)="selectLevel(idx)"
-              class="px-2 py-2 text-[15px] transition-colors text-start
+              role="switch"
+              [attr.aria-checked]="useRealData()"
+              (click)="toggleDataSource()"
+              class="relative w-11 h-6 rounded-full transition-colors cursor-pointer
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-              [class.font-bold]="activeLevelIdx() === idx"
-              [class.text-ios-fg-13]="activeLevelIdx() === idx"
-              [class.font-medium]="activeLevelIdx() !== idx"
-              [class.text-ios-fg-mid]="activeLevelIdx() !== idx"
+              [class.bg-ios-brand-primary]="useRealData()"
+              [class.bg-ios-fg-7]="!useRealData()"
             >
-              {{ level.tabLabel }}
+              <span
+                class="absolute top-0.5 start-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform"
+                [class.translate-x-5]="useRealData()"
+              ></span>
             </button>
-          }
+            <span class="text-[13px] font-medium text-ios-fg-mid">
+              {{
+                useRealData()
+                  ? lang.t('landing.levels.dataToggle.real')
+                  : lang.t('landing.levels.dataToggle.fake')
+              }}
+            </span>
+            @if (useRealData() && catalogStore.loading()) {
+              <span class="text-[12px] text-ios-fg-7">{{
+                lang.t('landing.levels.dataToggle.loading')
+              }}</span>
+            }
+            @if (useRealData() && catalogStore.error()) {
+              <span class="text-[12px] text-ios-brand-primary">{{
+                lang.t('landing.levels.dataToggle.error')
+              }}</span>
+            }
+          </div>
+        </div>
+
+        <!-- Tab row — tab count varies (demo: 3 roles; live: up to 3 level tiers) -->
+        <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 mb-8">
+          <div class="flex flex-wrap items-center gap-x-6 gap-y-2" role="tablist">
+            @for (level of levels(); track level.id; let idx = $index) {
+              <button
+                type="button"
+                role="tab"
+                [attr.aria-selected]="activeLevelIdx() === idx"
+                (click)="selectLevel(idx)"
+                class="px-2 py-2 text-[15px] text-start cursor-pointer
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+              >
+                <!-- inline-block so the underline sizes to the label text, not the button -->
+                <span
+                  class="inline-block pb-1 border-b-2 transition-colors"
+                  [class.font-bold]="activeLevelIdx() === idx"
+                  [class.text-ios-fg-13]="activeLevelIdx() === idx"
+                  [class.border-ios-brand-primary]="activeLevelIdx() === idx"
+                  [class.font-medium]="activeLevelIdx() !== idx"
+                  [class.text-ios-fg-mid]="activeLevelIdx() !== idx"
+                  [class.border-transparent]="activeLevelIdx() !== idx"
+                  [class.hover:text-ios-brand-primary]="activeLevelIdx() !== idx"
+                >
+                  {{ level.tabLabel }}
+                </span>
+              </button>
+            }
+          </div>
 
           <!-- Prev / Next arrows -->
           <div class="flex items-center justify-end gap-2">
@@ -184,20 +251,124 @@ interface CertLevelDef {
 })
 export class CertLevelsSection {
   protected readonly lang = inject(LanguageService);
+  protected readonly catalogStore = inject(PublicCatalogStore);
   protected readonly activeLevelIdx = signal(0);
+
+  /**
+   * Data source toggle — `true` builds tabs/cards straight from the live
+   * catalog (grouped by `level`); `false` shows the static demo grid.
+   * Defaults to demo data (falls back to it automatically until the live
+   * catalog has loaded, or if it's empty/errored).
+   */
+  protected readonly useRealData = signal(false);
 
   private readonly carouselTrack = viewChild<ElementRef<HTMLDivElement>>('carouselTrack');
 
+  /** Badge colors keyed by backend `level` — mirrors the demo palette. */
+  private static readonly LEVEL_BADGE_COLOR: Record<string, string> = {
+    foundation: '#426981',
+    practitioner: '#2d5f7a',
+    authority: '#1a3a4a',
+  };
+  private static readonly UNKNOWN_LEVEL_COLOR = '#5a5a5a';
+  /** Tab order for the live view: Foundation → Practitioner → Authority. */
+  private static readonly LEVEL_ORDER = ['foundation', 'practitioner', 'authority'] as const;
+  /** Generic placeholder used when the backend has no `badgeImageUrl` set. */
+  private static readonly FALLBACK_BADGE_IMAGE = '/assets/icons/certificate_budge.svg';
+
+  constructor() {
+    // Fetch the catalogue once, lazily, the first time real data is requested.
+    effect(() => {
+      if (this.useRealData()) {
+        void this.catalogStore.load();
+      }
+    });
+    // Switching data source changes the tab count/order — land on the first tab.
+    effect(() => {
+      this.useRealData();
+      this.activeLevelIdx.set(0);
+    });
+  }
+
+  protected toggleDataSource(): void {
+    this.useRealData.update((v) => !v);
+  }
+
+  private levelLabel(level: 'foundation' | 'practitioner' | 'authority' | null): string {
+    return level
+      ? this.lang.t(`landing.levels.${level}.levelLabel`)
+      : this.lang.t('landing.levels.live.noLevel');
+  }
+
+  private levelBadgeColor(level: 'foundation' | 'practitioner' | 'authority' | null): string {
+    return (level && CertLevelsSection.LEVEL_BADGE_COLOR[level]) ?? CertLevelsSection.UNKNOWN_LEVEL_COLOR;
+  }
+
   /**
-   * Static certification level definitions.
-   * Tab labels, descriptions, CTA text, and audience descriptions are
-   * locale-reactive (read via `lang.t()`). Badge colors, prices, abbreviations,
-   * and route links are structural constants.
+   * Live tabs built directly from `PublicCatalogStore.items()`, split by
+   * `level` (Foundation/Practitioner/Authority) — one tab per tier that has
+   * at least one published certificate, in that order. Certificates without
+   * a `level` are grouped into a trailing "General" tab so nothing is
+   * dropped. Within a tab, each card's chip shows the cert's `track` (its
+   * role) since the tab itself already conveys the level.
    */
-  protected readonly levels = computed<CertLevelDef[]>(() => {
+  private buildLiveLevels(): CertLevelDef[] {
+    const items = this.catalogStore.items();
+    const byLevel = new Map<'foundation' | 'practitioner' | 'authority' | null, PublicCertificate[]>();
+    for (const item of items) {
+      const key = item.level ?? null;
+      const list = byLevel.get(key) ?? [];
+      list.push(item);
+      byLevel.set(key, list);
+    }
+
+    const orderedKeys: ('foundation' | 'practitioner' | 'authority' | null)[] = [
+      ...CertLevelsSection.LEVEL_ORDER,
+      null,
+    ];
+
+    return orderedKeys
+      .filter((level) => (byLevel.get(level) ?? []).length > 0)
+      .map((level): CertLevelDef => {
+        const certs = byLevel.get(level) ?? [];
+        const tabLabel = this.levelLabel(level);
+        return {
+          id: level ?? 'general',
+          icon: 'users',
+          tabLabel,
+          description: this.lang.t('landing.levels.live.description'),
+          explorePath: this.lang.t('landing.levels.live.explorePath'),
+          exploreLink: '/certifications',
+          audienceDesc: this.lang.t('landing.levels.live.audienceDesc'),
+          certCards: certs.map((cert) => ({
+            id: cert.id,
+            abbreviation: cert.programCode,
+            fullName: cert.title,
+            levelBadge: cert.track?.trim() || tabLabel,
+            badgeColor: this.levelBadgeColor(level),
+            badgeImage: cert.badgeImageUrl || CertLevelsSection.FALLBACK_BADGE_IMAGE,
+            price: formatPrice(cert.price, cert.currency, this.lang.locale()),
+            detailLink: `/certifications/${cert.programCode.toLowerCase()}`,
+          })),
+        };
+      });
+  }
+
+  /**
+   * Static demo grid — mirrors `all-certifications.page.ts` exactly: 3 role
+   * tabs (Scrum Master/Product Owner/Scrum Facilitator), each with the same
+   * abbreviations, full names, and price ("CAD $180" for every card there).
+   * Scrum Facilitator only ships a Foundation-tier product on that page
+   * (no `/certifications/esf-p` or `esf-a` route exists), so this tab
+   * likewise has just the one ESF card. Structural constants (abbreviations,
+   * theme colors, prices, route links) only change with a new product
+   * release; copy is locale-reactive via `lang.t()`.
+   */
+  private buildStaticLevels(): CertLevelDef[] {
     const foundationLabel = this.lang.t('landing.levels.foundation.levelLabel');
     const practitionerLabel = this.lang.t('landing.levels.practitioner.levelLabel');
     const authorityLabel = this.lang.t('landing.levels.authority.levelLabel');
+    const price = 'CAD $180'; // same for every card on all-certifications.page.ts
 
     return [
       {
@@ -215,26 +386,29 @@ export class CertLevelsSection {
             fullName: this.lang.t('landing.certs.esm'),
             levelBadge: foundationLabel,
             badgeColor: '#426981',
-            price: 'CAD $180',
+            badgeImage: '/assets/badge/endorsed_scrum_master.svg',
+            price,
             detailLink: '/certifications/esm',
           },
           {
-            id: 'psm',
-            abbreviation: 'PSM',
+            id: 'esm-p',
+            abbreviation: 'ESM-P',
             fullName: this.lang.t('landing.certs.psm'),
             levelBadge: practitionerLabel,
-            badgeColor: '#2d5f7a',
-            price: 'CAD $220',
-            detailLink: '/certifications/psm',
+            badgeColor: '#426981',
+            badgeImage: '/assets/badge/endorsed_scrum_master_practitioner.svg',
+            price,
+            detailLink: '/certifications/esm-p',
           },
           {
-            id: 'asm',
-            abbreviation: 'ASM',
+            id: 'esm-a',
+            abbreviation: 'ESM-A',
             fullName: this.lang.t('landing.certs.asm'),
             levelBadge: authorityLabel,
-            badgeColor: '#1a3a4a',
-            price: 'CAD $260',
-            detailLink: '/certifications/asm',
+            badgeColor: '#426981',
+            badgeImage: '/assets/badge/endorsed_scrum_master_authority.svg',
+            price,
+            detailLink: '/certifications/esm-a',
           },
         ],
       },
@@ -252,27 +426,30 @@ export class CertLevelsSection {
             abbreviation: 'EPO',
             fullName: this.lang.t('landing.certs.epo'),
             levelBadge: foundationLabel,
-            badgeColor: '#426981',
-            price: 'CAD $180',
+            badgeColor: '#515e4d',
+            badgeImage: '/assets/badge/endorsed_product_owner.svg',
+            price,
             detailLink: '/certifications/epo',
           },
           {
-            id: 'ppo',
-            abbreviation: 'PPO',
+            id: 'epo-p',
+            abbreviation: 'EPO-P',
             fullName: this.lang.t('landing.certs.ppo'),
             levelBadge: practitionerLabel,
-            badgeColor: '#2d5f7a',
-            price: 'CAD $220',
-            detailLink: '/certifications/ppo',
+            badgeColor: '#515e4d',
+            badgeImage: '/assets/badge/endorsed_product_owner_practitioner.svg',
+            price,
+            detailLink: '/certifications/epo-p',
           },
           {
-            id: 'apo',
-            abbreviation: 'APO',
+            id: 'epo-a',
+            abbreviation: 'EPO-A',
             fullName: this.lang.t('landing.certs.apo'),
             levelBadge: authorityLabel,
-            badgeColor: '#1a3a4a',
-            price: 'CAD $260',
-            detailLink: '/certifications/apo',
+            badgeColor: '#515e4d',
+            badgeImage: '/assets/badge/endorsed_product_owner_authority.svg',
+            price,
+            detailLink: '/certifications/epo-a',
           },
         ],
       },
@@ -290,31 +467,27 @@ export class CertLevelsSection {
             abbreviation: 'ESF',
             fullName: this.lang.t('landing.certs.esf'),
             levelBadge: foundationLabel,
-            badgeColor: '#426981',
-            price: 'CAD $180',
+            badgeColor: '#a69075',
+            badgeImage: '/assets/badge/endorsed_scrum_facilitator.svg',
+            price,
             detailLink: '/certifications/esf',
-          },
-          {
-            id: 'psf',
-            abbreviation: 'PSF',
-            fullName: this.lang.t('landing.certs.psf'),
-            levelBadge: practitionerLabel,
-            badgeColor: '#2d5f7a',
-            price: 'CAD $220',
-            detailLink: '/certifications/psf',
-          },
-          {
-            id: 'asf',
-            abbreviation: 'ASF',
-            fullName: this.lang.t('landing.certs.asf'),
-            levelBadge: authorityLabel,
-            badgeColor: '#1a3a4a',
-            price: 'CAD $260',
-            detailLink: '/certifications/asf',
           },
         ],
       },
     ];
+  }
+
+  /**
+   * Resolves to the live grouping while {@link useRealData} is on and the
+   * catalog has at least one item, otherwise falls back to the static demo
+   * grid (covers "not loaded yet", "load failed", and "off" in one branch).
+   */
+  protected readonly levels = computed<CertLevelDef[]>(() => {
+    if (this.useRealData()) {
+      const live = this.buildLiveLevels();
+      if (live.length > 0) return live;
+    }
+    return this.buildStaticLevels();
   });
 
   protected selectLevel(idx: number): void {

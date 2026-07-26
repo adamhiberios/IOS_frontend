@@ -4,7 +4,9 @@
  * Renders up to three insight post cards using the shared `InsightsCard` component.
  *
  * ## Data split
- * • `posts`  — server-driven CMS content (titles, dates, excerpts, images).
+ * • `posts`  — real published articles from the public blog (`GET /blog`, via
+ *              `LandingStore.insightPosts`), falling back to a small static
+ *              set if the backend has nothing published yet or the call fails.
  * • `badge`  — server-driven section badge label (e.g. "Insights"), so admins
  *              can relabel the section without a deploy.
  * • All other labels (heading, "View all" link) are static via `lang.t()`.
@@ -17,8 +19,7 @@ import { LucideArrowRight } from '@lucide/angular';
 import { LanguageService } from '@core/i18n';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
 
-import { InsightsCard } from '../../../insights/components/insights-card';
-import type { InsightPost } from '../../data-access/landing.model';
+import { InsightsCard, type InsightCardPost } from '../../../insights/components/insights-card';
 
 @Component({
   selector: 'ios-insights-section',
@@ -75,8 +76,8 @@ import type { InsightPost } from '../../data-access/landing.model';
   `,
 })
 export class InsightsSection {
-  /** Static Scrum-Journal cards passed from the landing store. */
-  readonly posts = input.required<readonly InsightPost[]>();
+  /** Real (or fallback) Scrum-Journal cards passed from the landing store. */
+  readonly posts = input.required<readonly InsightCardPost[]>();
   /** Admin-configurable section badge label — fetched from server. */
   readonly badge = input.required<string>();
 

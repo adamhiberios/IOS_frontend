@@ -293,6 +293,20 @@
         "hours": "15+ hrs",
         "online": "Fully Online",
         "exam": "45-question Test"
+      },
+      "dataToggle": {
+        "label": "Data source",
+        "real": "Live",
+        "fake": "Demo",
+        "loading": "Loading…",
+        "error": "Couldn't load live data — showing demo data"
+      },
+      "live": {
+        "description": "Live certifications currently published in our catalog.",
+        "audienceDesc": "Pulled directly from our course catalog — availability and pricing may change as new certifications launch.",
+        "explorePath": "View Certifications",
+        "noLevel": "General",
+        "empty": "No live certifications are published yet."
       }
     },
     "certs": {

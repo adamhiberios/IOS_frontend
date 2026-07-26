@@ -7,8 +7,11 @@
  * copy (headings, cert-level structure, prices in the marketing carousel) stays
  * in the section components via `lang.t()` / constants.
  *
- * The Scrum-Journal / insight posts on the landing page have **no `/landing`
- * backing** — they render from a static list the store owns (see `landing.store`).
+ * The Scrum-Journal / insight cards on the landing page are **not** part of the
+ * `/landing` payload — `LandingStore` fetches them straight from the public
+ * blog (`GET /blog`, via the `insights` feature's `InsightsApi`), keeping a
+ * small static fallback for when nothing is published yet or the call fails
+ * (see `landing.store`).
  */
 
 import { type PublicCertificate } from './catalog.model';
@@ -24,21 +27,4 @@ export interface LandingStats {
 export interface LandingData {
   readonly featuredPrograms: readonly PublicCertificate[];
   readonly stats: LandingStats;
-}
-
-/**
- * A single Scrum-Journal card on the landing page. Static content (no backend);
- * the public blog itself lives in the `insights` feature.
- */
-export interface InsightPost {
-  /** Stable slug / id. */
-  id: string;
-  /** Human-readable date, e.g. "Apr 15, 2026". */
-  date: string;
-  title: string;
-  excerpt: string;
-  /** E.g. "5 min read". */
-  readTime: string;
-  imageUrl: string;
-  link: string;
 }

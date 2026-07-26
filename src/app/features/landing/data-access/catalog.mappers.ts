@@ -12,6 +12,9 @@ export function toPublicCertificate(dto: CatalogItemDto): PublicCertificate {
     currency: dto.currency,
     thumbnailUrl: dto.thumbnailUrl,
     fallbackUsed: dto.fallbackUsed,
+    track: dto.track ?? null,
+    level: dto.level ?? null,
+    badgeImageUrl: dto.badgeImageUrl ?? null,
   };
 }
 

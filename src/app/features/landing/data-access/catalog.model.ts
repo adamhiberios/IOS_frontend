@@ -21,6 +21,12 @@ export interface PublicCertificate {
   readonly thumbnailUrl: string | null;
   /** True when the row fell back to English because the locale had no translation. */
   readonly fallbackUsed: boolean;
+  /** Backend grouping — free-text career track, e.g. "Scrum Master", "Product Owner". */
+  readonly track: string | null;
+  /** Backend tier for this certificate, when set. */
+  readonly level: 'foundation' | 'practitioner' | 'authority' | null;
+  /** Certificate badge image URL, when the backend has one configured. */
+  readonly badgeImageUrl: string | null;
 }
 
 /** Query for `GET /catalog` (browse list). */

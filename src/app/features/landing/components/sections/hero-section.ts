@@ -20,25 +20,13 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
   template: `
     <section
       [attr.aria-label]="lang.t('landing.hero.sectionAriaLabel')"
-      class="relative overflow-hidden min-h-[480px] lg:min-h-[520px] flex items-center"
+      class="relative overflow-hidden  bg-white lg:overflow-visible min-h-[480px] lg:min-h-[520px] flex flex-col lg:flex-row items-stretch"
     >
-      <!-- Full-section background image -->
-      <img
-        ngSrc="/assets/images/landing_hero.png"
-        [alt]="lang.t('landing.hero.imageAlt')"
-        width="1672"
-        height="941"
-        class="absolute inset-0 w-full h-full object-cover"
-        priority
-        aria-hidden="true"
-      />
-
-      <!-- Dark overlay for text contrast -->
-      <div class="absolute inset-0 bg-black/40" aria-hidden="true"></div>
-
-      <!-- Content card — 80% opaque white, no border radius -->
-      <div class="relative w-full px-6 md:px-16 lg:px-[120px] py-10 lg:py-16">
-        <div class="bg-white/80 backdrop-blur-sm shadow-xl p-6 lg:p-8 max-w-[580px]">
+      <!-- Content panel — solid white, holds badge/headline/CTAs -->
+      <div
+        class="relative w-full lg:w-1/2 flex items-center px-6 md:px-16 lg:px-[80px] py-10 lg:py-16"
+      >
+        <div class="max-w-[580px]">
           <!-- Badge -->
           <div class="mb-4">
             <ios-section-badge [text]="lang.t('landing.hero.badge')" variant="amber" />
@@ -83,6 +71,19 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
             {{ lang.t('landing.hero.source') }}
           </p>
         </div>
+      </div>
+
+      <div
+        class="relative hidden lg:flex w-full lg:w-1/2 items-center justify-center py-6 lg:py-0 lg:-ml-16 z-10"
+      >
+        <img
+          ngSrc="/assets/images/landing_hero.png"
+          [alt]="lang.t('landing.hero.imageAlt')"
+          width="1672"
+          height="941"
+          class="w-[440px] h-[360px] lg:w-[560px] lg:h-[440px] object-cover object-top shadow-2xl"
+          priority
+        />
       </div>
     </section>
   `,

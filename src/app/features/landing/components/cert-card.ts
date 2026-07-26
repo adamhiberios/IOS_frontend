@@ -18,7 +18,6 @@
  */
 
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
   LucideClock,
@@ -28,12 +27,13 @@ import {
 } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { IosIcon, provideIcons } from '@ui';
+import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
 
 /**
  * Shape of one certification card.
  * Owned by the component — never server-driven; only structural constants
- * (abbreviation, colors, price, links) and locale-resolved full name.
+ * (abbreviation, colors, badge image, price, links) and locale-resolved full
+ * name.
  */
 export interface CertCardData {
   id: string;
@@ -41,27 +41,28 @@ export interface CertCardData {
   fullName: string;
   levelBadge: string;
   badgeColor: string;
+  /** Path to the certificate badge SVG, e.g. `/assets/badge/endorsed_scrum_master.svg`. */
+  badgeImage: string;
   price: string;
   detailLink: string;
 }
 
 @Component({
   selector: 'ios-cert-card',
-  imports: [NgOptimizedImage, RouterLink, IosIcon],
+  imports: [RouterLink, IosIcon, CertificatesBadge],
   providers: [provideIcons(LucideClock, LucideArrowRight, LucideMonitor, LucideCircleQuestionMark)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex flex-col gap-4 border border-ios-border-light rounded-xl p-4 bg-white h-full">
       <!-- Badge image + level chip / abbreviation / name -->
       <div class="flex gap-4 items-start">
-        <img
-          ngSrc="/assets/images/landing_budget.png"
-          width="368"
-          height="461"
-          alt=""
-          class="w-[130px] h-auto flex-shrink-0"
-          loading="lazy"
-        />
+        <div class="w-[80px] flex-shrink-0">
+          <ios-certificates-badge
+            [svgPath]="cert().badgeImage"
+            [code]="cert().abbreviation"
+            [fullName]="cert().fullName"
+          />
+        </div>
         <div class="flex flex-col gap-1 pt-1 min-w-0">
           <!-- Level chip — color comes from backend/store -->
           <span
