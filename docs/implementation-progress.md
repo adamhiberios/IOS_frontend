@@ -1,8 +1,78 @@
 # Implementation Progress — IOS LMS Frontend ↔ Real Backend
 
 > **Single source of truth for implementation progress.** Updated continuously.
-> Last updated: 2026-07-25 (doc reconciliation against frontend HEAD `904a478`
+> Last updated: 2026-07-26 (doc reconciliation against frontend HEAD `4a11ae9`
 > and backend HEAD `72a711c`).
+
+---
+
+> **2026-07-26 — resumed from the 2026-07-25 backlog (§"Next recommended
+> step" items 13–14).** Two things were true on pickup that this doc hadn't
+> caught up with yet:
+>
+> - **Item 13 (BE-I-29) was already fixed** — `1c2fcdb` ("feat(admin): fix
+>   some bugs and do adam requests", by a teammate, ahead of this doc's
+>   recorded HEAD) made `contentText` required end-to-end: `CreateLessonBody`
+>   (`curriculum.dto.ts`), `toCreateLessonBody()` (`curriculum.mappers.ts`),
+>   and the `lessonForm` validator + a new `ios-rich-text` editor
+>   (`admin-curriculum.page.ts`). No further work needed — verified, not
+>   re-done. **The same commit also closed backlog items 8 and 9**
+>   (`AdminDashboardApi.getOverviewByDateRange(from, to)` +
+>   `AdminDashboardStore.setDateRange`; `StudentDetail.certificates[] /
+>   attempts[] / exams{assigned,purchases}` mapped in `users.model.ts`).
+> - **Item 14 — student dashboard overview → real data — done this session**
+>   (`4a11ae9`). See the new entry below.
+>
+> Backlog table below updated accordingly. Remaining open items: CMS-PUBLIC/
+> CMS-ADMIN (2–3), blog E2E re-test (5), `complete-account` wizard (6, blocked
+> by BE-I-25), legacy `/dashboard/certificates` demo (7), exam-authoring
+> preview (10). Two reviews still outstanding: C1 security review, real-exam
+> engine architect review.
+
+### Phase 4 · Student dashboard overview → real data (checklist item 14) — ✅ committed (`4a11ae9`)
+
+Retired the last hardcoded student-facing store. `DashboardStore`
+(`features/dashboard/data-access/dashboard.store.ts`) no longer ships the
+three canned "empty / one-cert / two-certs" datasets — it's now a pure
+aggregator (no server state of its own) over three already-real stores:
+
+- **`validCertifications`** ← `CoursesStore.progress()` (`GET
+  /learning/progress`) joined with `PublicCatalogStore.byCode()` for the
+  catalog title. The backend has no per-course "family"/"badge" field, so
+  `resolveCertFamily()` / `resolveBadgeAsset()` (new, `dashboard.model.ts`)
+  derive them deterministically from `programCode` (`ESM*` → esm,
+  `EPO*` → epo, else esf; `-P`/`-A` suffix → practitioner/authority artwork)
+  — reuses the existing `assets/badge/*.svg` set, no new assets.
+- **`monthlyScores` / `examSummary`** (bar + donut charts) ← `MockStore.
+history()` (`GET /mock/history`), bucketed client-side by month/pass-fail.
+  **Correction, not a new build:** these charts were always meant to show
+  *mock*-exam data (`dashboard.charts.mockTestScores` i18n key existed
+  already) — the old mock data just fabricated numbers under a generic
+  label. **Documented caveat:** `MockStore.history()` holds only the latest
+  cursor page (20 items) — there's no monthly-aggregation endpoint, so the
+  chart reflects recent attempts, not a guaranteed-complete year. Same
+  trade-off already accepted for the real-exam history list (A7).
+- **`learningCard`** — derived from the least-complete in-progress
+  enrolment (continue vs. start copy); `null` when nothing is in progress.
+  New i18n keys `dashboard.learning.{continueHeading,startHeading,
+  lessonsProgress,ctaContinue}` (en/fr/ar; Arabic pending pro review, per
+  the existing project convention).
+- **Footer visibility** now keyed off a real `hasActivity` computed (any
+  cert progress or mock history) instead of the removed `demoMode` toggle.
+- `ios-cert-progress-card`'s "Show details" link now routes to the real
+  `/courses/:certId` curriculum page instead of the legacy
+  `/dashboard/certificates` demo (task 7 below — untouched, still mocked).
+
+**Not touched:** the KPI tiles and real-exam history list were already real
+(`StudentInsightsStore` / `ExamAttemptsStore`, A5/A7) — this slice only
+covers what `overview.page.ts:307`'s `store.*` calls still faked.
+
+- **Verification:** `npm run typecheck` ✓ · `npm run lint` ✓ on all touched
+  files (4 pre-existing errors surfaced in `admin-audit-logs.page.ts` —
+  unrelated, introduced by `1c2fcdb`, not touched by this change) ·
+  `ng build --configuration production` ✓ (initial gzip ~103.8 kB, same
+  known raw-size budget warning).
+- **Committed** on `feat/real-backend-integration` (`4a11ae9`).
 
 ---
 
@@ -1633,19 +1703,19 @@ student dashboard overview's `DashboardStore` and the legacy
 OTP~~ (`ae6ae44` — **security review pending**). All primary Phase-4 student + auth
 surfaces are wired.
 
-**Open FE backlog (2026-07-25), highest impact first:**
+**Open FE backlog (updated 2026-07-26 — items 1/13, 4/14, 8, 9 closed):**
 
 | #   | Task                                                            | Why now                                                                                                                                                                                                                | Blocked by                                                                 |
 | --- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| 1   | **BE-I-29 — lesson `contentText` required**                     | Admin lesson creation 400s today (`curriculum.mappers.ts:83-94` vs `72a711c`)                                                                                                                                          | — (FE-only fix)                                                            |
+| ~~1~~ | ~~**BE-I-29 — lesson `contentText` required**~~ | ✅ done — fixed by `1c2fcdb` (verified 2026-07-26, not re-done) | — |
 | 2   | **CMS-PUBLIC** — CMS section renderer for the marketing site    | Whole new backend surface (`3e52625`) with zero FE consumption                                                                                                                                                         | `contact_form` needs **BE-I-26**; `/landing` vs `/cms/pages/home` decision |
 | 3   | **CMS-ADMIN** — page/section/globals editor                     | Same                                                                                                                                                                                                                   | Degraded by **BE-I-27** (no media upload), **BE-I-28** (no draft preview)  |
-| 4   | **Student dashboard overview → real data**                      | `features/dashboard/data-access/dashboard.store.ts` is still hardcoded ("Mock datasets", `:38-120`) and drives `overview.page.ts:307`; `GET /learning/progress` now exists and is already mapped in `features/courses` | —                                                                          |
+| ~~4~~ | ~~**Student dashboard overview → real data**~~ | ✅ done — `4a11ae9` (2026-07-26): `validCertifications`/`monthlyScores`/`examSummary`/`learningCard` now real | — |
 | 5   | **Blog E2E re-test** (BE-I-21 fixed by `30bfff5`)               | Authoring was never verified against a working backend                                                                                                                                                                 | needs api-dev credentials                                                  |
 | 6   | **`complete-account` wizard**                                   | Still a stub (`complete-account.page.ts:947`)                                                                                                                                                                          | **BE-I-25** (no DOB field) + a `ProfileApi` boundary decision              |
 | 7   | **Legacy `/dashboard/certificates` demo pages**                 | `certificates.page` / `cert-detail.page` / `cert-session.page` still read hardcoded `ESM_P_*` data from `certificates.store.ts:356-644`, duplicating the real `/dashboard/credentials` (A3) and the real mock runner   | product decision: rewire or retire                                         |
-| 8   | **Admin dashboard date window** (`from`/`to`, `72a711c`)        | `dashboard.api.ts:27` sends `months` only                                                                                                                                                                              | —                                                                          |
-| 9   | **Admin student detail enrichment**                             | Backend now returns `certificates[]`/`attempts[]`/`exams.{assigned,purchases}`; FE maps `counts` only (`users.model.ts:20-31`)                                                                                         | —                                                                          |
+| ~~8~~ | ~~**Admin dashboard date window** (`from`/`to`, `72a711c`)~~ | ✅ done — `AdminDashboardApi.getOverviewByDateRange` + `AdminDashboardStore.setDateRange` shipped in `1c2fcdb` | — |
+| ~~9~~ | ~~**Admin student detail enrichment**~~ | ✅ done — `StudentDetail.certificates[]/attempts[]/exams{}` mapped in `1c2fcdb` | — |
 | 10  | **Exam-authoring preview** (`GET /admin/exams/:examId/preview`) | Minor, never wired                                                                                                                                                                                                     | —                                                                          |
 
 **Known backend blockers (see [`backend-blockers-report.md`](./backend-blockers-report.md)):**
