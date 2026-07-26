@@ -660,7 +660,11 @@
       "readyToPass": "نعتقد أنك مستعد لاجتياز الاختبار! ({code})",
       "amazingResults": "لقد حققت نتائج مذهلة في الاختبار التجريبي، وراجعت جميع الملفات المرفقة.",
       "ctaFinalTest": "ابدأ الاختبار النهائي",
-      "ctaStartExam": "ابدأ الامتحان"
+      "ctaStartExam": "ابدأ الامتحان",
+      "continueHeading": "أكمل من حيث توقفت ({code})",
+      "startHeading": "ابدأ دورة {code}",
+      "lessonsProgress": "{completed}/{total} دروس",
+      "ctaContinue": "متابعة التعلم"
     },
     "charts": {
       "mockTestScores": "نتائج الاختبار التجريبي",

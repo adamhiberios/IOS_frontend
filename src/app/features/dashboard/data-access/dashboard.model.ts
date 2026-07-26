@@ -1,24 +1,27 @@
 /**
  * Dashboard domain types — student overview surface.
  *
- * Covers three view states driven by the student's enrolment & certification count:
- *  · empty     — 0 programs enrolled, 0 exams taken, no subscription
- *  · one-cert  — enrolled, 0 exams taken, 1 valid certification
- *  · two-certs — enrolled, 44 exams taken (24 passed / 20 failed), 2 certifications
+ * Wired to real data (checklist item 14, 2026-07-26):
+ *  · `validCertifications` ← `CoursesStore.progress()` (`GET /learning/progress`)
+ *    joined with `PublicCatalogStore` for the catalog title/track.
+ *  · `monthlyScores` / `examSummary` ← `MockStore.history()` (`GET /mock/history`,
+ *    the source the Figma "Mock test scores" chart always meant — matches the
+ *    `dashboard.charts.mockTestScores` i18n key), bucketed client-side.
+ *  · `learningCard` ← derived from the least-complete in-progress enrolment.
+ *
+ * The old three canned "empty / one-cert / two-certs" scenarios are gone —
+ * `DashboardStore` is now a pure aggregator over other feature stores.
  */
 
-// Chart primitive types live in @shared so any feature can use them without
-// cross-feature imports. Imported here for use in this file; re-exported for
-// backward-compatibility so existing imports from this module keep working.
 import type { ExamSummary, MonthlyScore, ScoreFilterYear } from '@shared';
 
 export type { ExamSummary, MonthlyScore, ScoreFilterYear };
 
 /**
  * Certification family — drives the card background colour.
- * · 'esm' → ESM/esm-1  #E8EDF0 (blue-soft)
- * · 'epo' → EPO/epo-1  #EEEFED (green-soft)
- * · 'esf' → neutral    #F6F6F6
+ * · 'esm' → ESM family (Endorsed Scrum Master)   #E8EDF0 (blue-soft)
+ * · 'epo' → EPO family (Endorsed Product Owner)  #EEEFED (green-soft)
+ * · 'esf' → everything else (e.g. Endorsed Scrum Facilitator)  #F6F6F6
  */
 export type CertFamily = 'esm' | 'epo' | 'esf';
 
@@ -34,6 +37,8 @@ export interface ValidCertification {
   readonly progressPercent: number;
   /** Determines the card background colour. */
   readonly family: CertFamily;
+  /** Underlying certificate id — used to route "Show details" / "Continue". */
+  readonly certId: string;
 }
 
 /**
@@ -65,11 +70,6 @@ export interface LearningCardContent {
  * The store exposes a `computed()` of this type.
  */
 export interface DashboardStats {
-  readonly programsEnrolled: number;
-  /** Weighted average mock-test score across all attempts (0–100). */
-  readonly averageScorePercent: number;
-  /** Total learning time in minutes. Displayed as "Xh Ym" / "00h". */
-  readonly totalTimeMinutes: number;
   readonly monthlyScores: readonly MonthlyScore[];
   readonly examSummary: ExamSummary;
   /**
@@ -84,4 +84,37 @@ export interface DashboardStats {
    * non-null → charts row is 3-col [bar | donut | learning-card].
    */
   readonly learningCard: LearningCardContent | null;
+}
+
+/** Badge asset base name per family — mirrors `src/app/assets/badge/*.svg`. */
+const BADGE_BASE: Record<CertFamily, string> = {
+  esm: 'endorsed_scrum_master',
+  epo: 'endorsed_product_owner',
+  esf: 'endorsed_scrum_facilitator',
+};
+
+/**
+ * Derive the certification family from a `programCode` (e.g. `"ESM-P"` → `esm`,
+ * `"EPO-A"` → `epo`, anything else → `esf`). Codes are backend-issued short
+ * strings (`ESM`, `ESM-P`, `ESM-A`, `EPO`, `EPO-P`, `EPO-A`, `ESF`, …).
+ */
+export function resolveCertFamily(programCode: string): CertFamily {
+  const upper = programCode.toUpperCase();
+  if (upper.startsWith('ESM')) return 'esm';
+  if (upper.startsWith('EPO')) return 'epo';
+  return 'esf';
+}
+
+/**
+ * Resolve the local badge SVG for a `programCode`. `esf` has no level variants
+ * today — only `esm`/`epo` ship `_practitioner`/`_authority` artwork.
+ */
+export function resolveBadgeAsset(programCode: string): string {
+  const family = resolveCertFamily(programCode);
+  const base = BADGE_BASE[family];
+  if (family === 'esf') return `assets/badge/${base}.svg`;
+  const upper = programCode.toUpperCase();
+  if (upper.endsWith('-P')) return `assets/badge/${base}_practitioner.svg`;
+  if (upper.endsWith('-A')) return `assets/badge/${base}_authority.svg`;
+  return `assets/badge/${base}.svg`;
 }

@@ -660,7 +660,11 @@
       "readyToPass": "We think you are ready to pass Test! ({code})",
       "amazingResults": "You achieved amazing results in the mock exam, and reviewed all the attached files.",
       "ctaFinalTest": "Start Final Test",
-      "ctaStartExam": "Start Exam"
+      "ctaStartExam": "Start Exam",
+      "continueHeading": "Pick up where you left off ({code})",
+      "startHeading": "Start your {code} course",
+      "lessonsProgress": "{completed}/{total} lessons",
+      "ctaContinue": "Continue learning"
     },
     "charts": {
       "mockTestScores": "Mock test scores",

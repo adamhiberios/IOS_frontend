@@ -660,7 +660,11 @@
       "readyToPass": "Nous pensons que vous êtes prêt à réussir le test ! ({code})",
       "amazingResults": "Vous avez obtenu des résultats exceptionnels à l'examen blanc et révisé tous les fichiers joints.",
       "ctaFinalTest": "Commencer l'examen final",
-      "ctaStartExam": "Commencer l'examen"
+      "ctaStartExam": "Commencer l'examen",
+      "continueHeading": "Reprenez là où vous vous êtes arrêté ({code})",
+      "startHeading": "Commencez votre cours {code}",
+      "lessonsProgress": "{completed}/{total} leçons",
+      "ctaContinue": "Continuer l'apprentissage"
     },
     "charts": {
       "mockTestScores": "Scores des tests blancs",

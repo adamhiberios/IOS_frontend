@@ -1,16 +1,19 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 
 import { LanguageService } from '@core/i18n';
-import type {
-  DashboardStats,
-  LearningCardContent,
-  MonthlyScore,
-  ScoreFilterYear,
-} from './dashboard.model';
+import { CoursesStore } from '@features/courses/data-access/courses.store';
+import { MockStore } from '@features/certificates/data-access/mock.store';
+import { PublicCatalogStore } from '@features/landing/data-access/catalog.store';
 
-/* --------------------------------------------------------------------------
- * Shared helpers
- * -------------------------------------------------------------------------- */
+import {
+  type DashboardStats,
+  type LearningCardContent,
+  type MonthlyScore,
+  type ScoreFilterYear,
+  type ValidCertification,
+  resolveBadgeAsset,
+  resolveCertFamily,
+} from './dashboard.model';
 
 const MONTHS = [
   'Jan',
@@ -27,175 +30,130 @@ const MONTHS = [
   'Dec',
 ] as const;
 
-function monthScores(scoreMap: Partial<Record<string, number>>): readonly MonthlyScore[] {
-  return MONTHS.map((month) => ({
-    month,
-    score: scoreMap[month] ?? null,
-  }));
-}
-
-/* --------------------------------------------------------------------------
- * Mock datasets — replaced by real HTTP in a later epic
- * -------------------------------------------------------------------------- */
-
-/** Empty state: 0 programmes, 0 exams, no subscription. */
-const EMPTY_STATS: DashboardStats = {
-  programsEnrolled: 0,
-  averageScorePercent: 0,
-  totalTimeMinutes: 0,
-  monthlyScores: monthScores({ Feb: 68 }),
-  examSummary: { passed: 0, failed: 0 },
-  validCertifications: [],
-  learningCard: null,
-};
-
 /**
- * One-cert state: enrolled, 1 active certification, 0 exams taken yet.
- * Layout: 3-column [bar | donut | learning-card], cert section below.
- * Figma: node 13570-24378 — "First file is ready to explore!" variant.
- */
-const ONE_CERT_STATS: DashboardStats = {
-  programsEnrolled: 12,
-  averageScorePercent: 43,
-  totalTimeMinutes: 763, // 12h 43m
-  monthlyScores: monthScores({ Feb: 65 }),
-  examSummary: { passed: 0, failed: 0 },
-  validCertifications: [
-    {
-      code: 'ESM-P',
-      name: 'Endorsed Scrum Master Practitioner',
-      badgeAsset: 'assets/badge/endorsed_scrum_master_practitioner.svg',
-      progressPercent: 53,
-      family: 'esm',
-    },
-  ],
-  learningCard: {
-    illustration: 'assets/illustrations/file-ready.svg',
-    heading: 'First file is ready to explore!',
-    body: 'Agile Methodologies Overview',
-    meta: '15 pages',
-    ctaLabel: 'Start learning',
-    ctaStyle: 'primary',
-    ctaRoute: '/dashboard',
-  },
-};
-
-/**
- * Two-cert state: enrolled, 2 active certifications, 44 exams taken.
- * Layout: 3-col [bar | donut | learning-card] + cert grid with 2 cards below.
- * Figma: node 17453-34583 — "Ready to pass the test" variant.
- */
-const TWO_CERT_STATS: DashboardStats = {
-  programsEnrolled: 12,
-  averageScorePercent: 43,
-  totalTimeMinutes: 763,
-  monthlyScores: monthScores({ Feb: 65, Mar: 45, Apr: 50, May: 28 }),
-  examSummary: { passed: 24, failed: 20 },
-  validCertifications: [
-    {
-      code: 'ESM-P',
-      name: 'Endorsed Scrum Master Practitioner',
-      badgeAsset: 'assets/badge/endorsed_scrum_master_practitioner.svg',
-      progressPercent: 53,
-      family: 'esm',
-    },
-    {
-      code: 'EPO-A',
-      name: 'Endorsed Product Owner Authority',
-      badgeAsset: 'assets/badge/endorsed_product_owner_authority.svg',
-      progressPercent: 53,
-      family: 'epo',
-    },
-  ],
-  learningCard: {
-    illustration: 'assets/illustrations/ready-to-test.svg',
-    heading: 'We think you are ready to pass Test! (ESM-P)',
-    body: 'You achieved amazing results in the mock exam, and reviewed all the attached files.',
-    ctaLabel: 'Start Final Test',
-    ctaStyle: 'dark',
-    ctaRoute: '/dashboard',
-  },
-};
-
-/** Three demo scenarios the dev can cycle through. */
-export type DemoMode = 'empty' | 'one-cert' | 'two-certs';
-
-const DATASET: Record<DemoMode, DashboardStats> = {
-  empty: EMPTY_STATS,
-  'one-cert': ONE_CERT_STATS,
-  'two-certs': TWO_CERT_STATS,
-};
-
-/**
- * DashboardStore — signals-based store for the student overview page.
+ * `DashboardStore` — signals-based aggregator for the student overview page.
+ *
+ * Owns no server state of its own: it composes {@link CoursesStore} (enrolled
+ * certs + progress, `GET /learning/progress`), {@link MockStore} (practice-exam
+ * history, `GET /mock/history` — the real source for the "Mock test scores" bar
+ * chart and the pass/fail donut), and {@link PublicCatalogStore} (public catalog
+ * titles, `GET /catalog`) into the `DashboardStats` shape the overview template
+ * renders. KPI tiles and the real-exam history list are wired separately on the
+ * page via `StudentInsightsStore` / `ExamAttemptsStore`.
+ *
+ * Caveat (documented, not silently hidden): `MockStore.history()` only holds the
+ * most-recently-loaded page (20 items, cursor-paginated) — there is no
+ * backend monthly-aggregation endpoint, so the bar chart reflects the latest
+ * attempts, not a guaranteed-complete year. Same trade-off already accepted for
+ * the real-exam history list.
  *
  * Public API:
- *   · `stats`              Signal<DashboardStats>
- *   · `yearFilter`         Signal<ScoreFilterYear>
- *   · `demoMode`           Signal<DemoMode>
+ *   · `stats`        Signal<DashboardStats>
+ *   · `yearFilter`    Signal<ScoreFilterYear>
  *   · setYearFilter(year)
- *   · setDemoMode(mode)
- *   · toggleDemoMode()     cycles empty → one-cert → two-certs
+ *   · loadAll()        triggers the underlying stores' fetches
  */
 @Injectable({ providedIn: 'root' })
 export class DashboardStore {
-  /* ── private state ───────────────────────────────────────────────────── */
-
   private readonly lang = inject(LanguageService);
-  // Demo switcher removed from the overview UI; the mode is now fixed to a
-  // populated state so the mock renders fully until the page is wired to the
-  // real backend (checklist A7). Kept as a signal for that upcoming rewire.
-  private readonly _demoMode = signal<DemoMode>('two-certs');
+  private readonly courses = inject(CoursesStore);
+  private readonly mock = inject(MockStore);
+  private readonly catalog = inject(PublicCatalogStore);
+
   private readonly _yearFilter = signal<ScoreFilterYear>('this_year');
-
-  /* ── public read-only views ──────────────────────────────────────────── */
-
-  readonly demoMode = this._demoMode.asReadonly();
   readonly yearFilter = this._yearFilter.asReadonly();
-  readonly stats = computed<DashboardStats>(() => DATASET[this._demoMode()]);
 
-  /* ── convenience derivations ─────────────────────────────────────────── */
+  /* ── validCertifications ─────────────────────────────────────────────── */
 
-  readonly programsEnrolled = computed(() => this.stats().programsEnrolled);
-  readonly averageScorePercent = computed(() => this.stats().averageScorePercent);
-  readonly totalTimeMinutes = computed(() => this.stats().totalTimeMinutes);
-  readonly monthlyScores = computed(() => this.stats().monthlyScores);
-  readonly examSummary = computed(() => this.stats().examSummary);
-  readonly validCertifications = computed(() => this.stats().validCertifications);
-  readonly learningCard = computed<LearningCardContent | null>(() => {
-    const card = this.stats().learningCard;
-    if (!card) return null;
-    if (card.ctaStyle === 'primary') {
+  readonly validCertifications = computed<readonly ValidCertification[]>(() =>
+    this.courses.progress().map((p) => {
+      const catalogEntry = this.catalog.byCode(p.programCode);
       return {
-        ...card,
-        heading: this.lang.t('dashboard.learning.firstFileReady'),
-        body: this.lang.t('dashboard.learning.agileOverview'),
-        meta: this.lang.t('dashboard.learning.pagesCount', { count: '15' }),
-        ctaLabel: this.lang.t('dashboard.learning.ctaStart'),
+        code: p.programCode,
+        name: catalogEntry?.title ?? p.title,
+        badgeAsset: resolveBadgeAsset(p.programCode),
+        progressPercent: p.percentComplete,
+        family: resolveCertFamily(p.programCode),
+        certId: p.certId,
       };
+    }),
+  );
+
+  /* ── monthlyScores + examSummary (from mock-exam history) ───────────────── */
+
+  private readonly submittedMockAttempts = computed(() =>
+    this.mock.history().filter((h) => h.submittedAt !== null && h.score !== null),
+  );
+
+  readonly monthlyScores = computed<readonly MonthlyScore[]>(() => {
+    const year = this.yearTarget();
+    const buckets = new Map<number, { sum: number; count: number }>();
+    for (const attempt of this.submittedMockAttempts()) {
+      const d = new Date(attempt.submittedAt as string);
+      if (d.getFullYear() !== year) continue;
+      const bucket = buckets.get(d.getMonth()) ?? { sum: 0, count: 0 };
+      bucket.sum += attempt.score as number;
+      bucket.count += 1;
+      buckets.set(d.getMonth(), bucket);
     }
+    return MONTHS.map((month, i) => {
+      const bucket = buckets.get(i);
+      return { month, score: bucket ? Math.round(bucket.sum / bucket.count) : null };
+    });
+  });
+
+  readonly examSummary = computed(() => {
+    let passed = 0;
+    let failed = 0;
+    for (const attempt of this.submittedMockAttempts()) {
+      if (attempt.readyForFinal) passed++;
+      else failed++;
+    }
+    return { passed, failed };
+  });
+
+  /* ── learningCard — nudge toward the least-complete in-progress course ──── */
+
+  readonly learningCard = computed<LearningCardContent | null>(() => {
+    const inProgress = this.courses
+      .progress()
+      .filter((p) => p.percentComplete < 100)
+      .sort((a, b) => a.percentComplete - b.percentComplete)[0];
+    if (!inProgress) return null;
+    const started = inProgress.completedLessons > 0;
     return {
-      ...card,
-      heading: this.lang.t('dashboard.learning.readyToPass', { code: 'ESM-P' }),
-      body: this.lang.t('dashboard.learning.amazingResults'),
-      ctaLabel: this.lang.t('dashboard.learning.ctaFinalTest'),
+      illustration: started
+        ? 'assets/illustrations/ready-to-test.svg'
+        : 'assets/illustrations/file-ready.svg',
+      heading: started
+        ? this.lang.t('dashboard.learning.continueHeading', { code: inProgress.programCode })
+        : this.lang.t('dashboard.learning.startHeading', { code: inProgress.programCode }),
+      body: inProgress.title,
+      meta: this.lang.t('dashboard.learning.lessonsProgress', {
+        completed: String(inProgress.completedLessons),
+        total: String(inProgress.totalLessons),
+      }),
+      ctaLabel: started
+        ? this.lang.t('dashboard.learning.ctaContinue')
+        : this.lang.t('dashboard.learning.ctaStart'),
+      ctaStyle: started ? 'dark' : 'primary',
+      ctaRoute: `/courses/${inProgress.certId}`,
     };
   });
 
-  readonly totalTimeFormatted = computed<string>(() => {
-    const mins = this.totalTimeMinutes();
-    if (mins === 0) return this.lang.t('dashboard.certs.hoursAbbr', { count: '00' });
-    const h = Math.floor(mins / 60);
-    const m = mins % 60;
-    const hStr = h.toString();
-    if (m > 0) {
-      return `${this.lang.t('dashboard.certs.hoursAbbr', { count: hStr })} ${this.lang.t('dashboard.certs.minutesAbbr', { count: m.toString() })}`;
-    }
-    return this.lang.t('dashboard.certs.hoursAbbr', { count: hStr });
-  });
+  /* ── combined snapshot ───────────────────────────────────────────────── */
 
-  /** "0%" or "43%" */
-  readonly averageScoreFormatted = computed<string>(() => `${this.averageScorePercent()}%`);
+  readonly stats = computed<DashboardStats>(() => ({
+    monthlyScores: this.monthlyScores(),
+    examSummary: this.examSummary(),
+    validCertifications: this.validCertifications(),
+    learningCard: this.learningCard(),
+  }));
+
+  /** True once the student has any enrolment or mock-attempt history — drives the footer. */
+  readonly hasActivity = computed(
+    () => this.validCertifications().length > 0 || this.submittedMockAttempts().length > 0,
+  );
 
   /* ── actions ─────────────────────────────────────────────────────────── */
 
@@ -203,15 +161,17 @@ export class DashboardStore {
     this._yearFilter.set(year);
   }
 
-  setDemoMode(mode: DemoMode): void {
-    this._demoMode.set(mode);
+  /** Kick off the underlying stores' fetches (idempotent-ish; safe to call on init). */
+  async loadAll(): Promise<void> {
+    await Promise.all([
+      this.courses.loadProgress(),
+      this.mock.loadHistory(),
+      this.catalog.load(),
+    ]);
   }
 
-  /** Cycle: empty → one-cert → two-certs → empty */
-  toggleDemoMode(): void {
-    const order: DemoMode[] = ['empty', 'one-cert', 'two-certs'];
-    const current = this._demoMode();
-    const next = order[(order.indexOf(current) + 1) % order.length];
-    this._demoMode.set(next);
+  private yearTarget(): number {
+    const currentYear = new Date().getFullYear();
+    return this._yearFilter() === 'this_year' ? currentYear : currentYear - 1;
   }
 }

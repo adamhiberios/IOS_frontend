@@ -289,7 +289,7 @@ import { formatPassRate } from '../data-access/insights.model';
         </div>
       </main>
 
-      @if (store.demoMode() !== 'empty') {
+      @if (store.hasActivity()) {
         <footer class="bg-ios-brand-dark w-full py-4">
           <div
             class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
@@ -319,6 +319,7 @@ export class DashboardOverviewPage implements OnInit {
 
   ngOnInit(): void {
     void this.insights.load();
+    void this.store.loadAll();
   }
 
   protected onRetryInsights(): void {
