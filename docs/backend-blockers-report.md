@@ -1,10 +1,10 @@
-# Backend Stoppers Report — retriaged 2026-07-25
+# Backend Stoppers Report — retriaged 2026-07-27
 
-> **🟠 ACTIVE again (as of 2026-07-25).** The 2026-07-16 "everything is closed"
-> banner was correct for the original 2026-07-12/13 wave, but four real-exam /
-> onboarding limitations (**BE-I-22 … BE-I-25**) and three gaps in the new CMS
-> module (**BE-I-26 … BE-I-28**) are open and do stop or degrade frontend work.
-> They are listed in §1 below.
+> **🟠 ACTIVE (as of 2026-07-27).** The backend moved twice while this report was
+> being rewritten. **BE-I-22** (exam answer review) and **BE-I-26** (contact-form
+> submission) were **fixed on 2026-07-26/27** and have moved to §2 as frontend
+> follow-ups. **BE-I-30 is new and urgent:** `GET /landing` was deleted, so the
+> shipped landing page 404s. Active stoppers are in §1.
 >
 > **Purpose (unchanged):** track backend gaps that **stop or degrade** frontend
 > work. Full technical detail per item lives in
@@ -32,41 +32,46 @@
   for where the audit trail now lives.
 - **`BE-I-21` (blog create 404) is fixed** on the backend (`30bfff5`) and the FE
   was already built (`5404e77`) → **removed**; only an E2E re-test remains.
-- **7 active stoppers**: `BE-I-22`, `BE-I-23`, `BE-I-24` (real-exam limitations —
-  FE shipped degraded workarounds), `BE-I-25` (no DOB — `complete-account` wizard
-  cannot ship), and `BE-I-26`/`27`/`28` (CMS contact-form submission, media
-  upload, draft preview — they cap what the CMS frontend can do).
-- **One backend change owes the FE a fix, not the reverse**: `BE-I-29` —
-  `contentText` is now required on lesson create; the admin curriculum form still
-  omits it when blank. Tracked in §2.
+- **4 active stoppers** (§1): `BE-I-23`, `BE-I-24` (real-exam resume + entry
+  `certId` — FE shipped degraded workarounds), `BE-I-25` (no DOB —
+  `complete-account` cannot ship), `BE-I-28` (no CMS draft preview). `BE-I-27` is
+  **narrowed** — catalog images can now be uploaded, CMS sections and blog bodies
+  still cannot.
+- **Four items now owe FRONTEND work, not backend work** (§2): **`BE-I-30`** ⛔
+  `GET /landing` was deleted and the landing page 404s **right now**;
+  **`BE-I-29`** lesson `contentText` is required and the admin form breaks;
+  **`BE-I-22`** (exam answer review) and **`BE-I-26`** (contact submissions) were
+  fixed on the backend but nothing consumes them yet.
 
 ---
 
 ## 1. Active stoppers — backend NOT fixed
 
-| #           | Blocks / degrades                                       | Backend evidence (verified 2026-07-25)                                                                                                                                                                                                                                                 | FE status today                                                                                                                                            |
+| #           | Blocks / degrades                                       | Backend evidence (verified 2026-07-27)                                                                                                                                                                                                                                                 | FE status today                                                                                                                                            |
 | ----------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **BE-I-22** | Real-exam **"Review correct answers"** after submission | No review endpoint on `exam.controller.ts` (routes: pre-exam-confirmation, validate-access, start, sessions/:id\[/autosave,submit,late-submit\], attempts — `exam.controller.ts:48-209`). Options are stripped of `isCorrect`; `GET /exam/attempts` never returns the answer snapshot. | Shipped **degraded** (`b951242`): result page shows score/passed only; the review section is commented out, not deleted.                                   |
-| **BE-I-23** | Reload-**resume** of a live exam                        | `ExamService.getSessionStatus()` returns `{ sessionId, remainingSeconds, answers, status }` only — no questions (`exam.service.ts:529-550`).                                                                                                                                           | Shipped with a **workaround** (`b951242`): a local IndexedDB question snapshot rebuilds the paper; if IndexedDB is unavailable the resume degrades.        |
-| **BE-I-24** | Driving `POST /exam/pre-exam-confirmation` from the FE  | `certId` appears only on `PreExamConfirmationDto` / `AssignExamDto` inputs (`dto/exam.dtos.ts:53,99`); neither `validate-access` nor `start` returns a `certId` (`exam.service.ts:298-421`).                                                                                           | Shipped **deferred** (`b951242`): the FE relies on `start`'s 409 "identity confirmation required"; the confirmation step is not reachable from exam entry. |
-| **BE-I-25** | `/auth/complete-account` onboarding wizard              | No date-of-birth column anywhere (`grep -r "date_of_birth\|dateOfBirth" src/database/entities src/modules/profile` → 0 hits) and `UpdateProfileDto` accepts only phone/locale/country/city/street/address/postalCode/occupation/position.                                              | **Stub** — `complete-account.page.ts:947` still `TODO`s the submit. Cannot ship without dropping the birthday step or a backend DOB field.                 |
-| **BE-I-26** | CMS **Contact** page (`contact_form` section)           | Section type exists (`cms.entity.ts:42`) and the seed ships a `contact` page, but no contact/enquiry endpoint exists in any controller.                                                                                                                                                | Not built. First CMS renderer slice must skip or read-only the section.                                                                                    |
-| **BE-I-27** | Image handling in the **admin CMS / blog** editors      | Presigned upload exists for avatars only (`POST /me/avatar-upload-url`); no admin/content equivalent. Confirmed deferred in the backend's own `CMS-HANDOFF.md`.                                                                                                                        | Not built. Editors will have to accept pasted URLs.                                                                                                        |
-| **BE-I-28** | **Draft preview** in the admin CMS editor               | `CmsService.getPublicPage()` 404s anything not PUBLISHED (`cms.service.ts:89-92`); the admin read returns the raw, un-hydrated shape.                                                                                                                                                  | Not built. A true WYSIWYG preview is impossible; structural preview only.                                                                                  |
-
-**Severity call:** only **BE-I-25** and **BE-I-26** are hard stoppers for the
-screens they touch. **BE-I-22/23/24** are degraders — the real-exam engine ships
-and works, with a documented reduction in behaviour. **BE-I-27/28** cap editor
-quality but do not stop the CMS work.
+| **BE-I-23** | Reload-**resume** of a live exam                       | `ExamService.getSessionStatus()` returns `{ sessionId, remainingSeconds, answers, status }` only — no questions (`exam.service.ts:529-550`). Unchanged at HEAD `7160f11`.                                                                | Shipped with a **workaround** (`b951242`): a local IndexedDB question snapshot rebuilds the paper; if IndexedDB is unavailable the resume degrades.        |
+| **BE-I-24** | Driving `POST /exam/pre-exam-confirmation` from the FE | `certId` appears only on `PreExamConfirmationDto` / `AssignExamDto` inputs (`dto/exam.dtos.ts:53,99`); neither `validate-access` nor `start` returns a `certId` (`exam.service.ts:298-421`). Unchanged at HEAD `7160f11`.               | Shipped **deferred** (`b951242`): the FE relies on `start`'s 409 "identity confirmation required"; the confirmation step is not reachable from exam entry. |
+| **BE-I-25** | `/auth/complete-account` onboarding wizard             | No date-of-birth column anywhere (`grep -r "date_of_birth\|dateOfBirth" src/database/entities src/modules/profile` → 0 hits) and `UpdateProfileDto` accepts only phone/locale/country/city/street/address/postalCode/occupation/position. | **Stub** — `complete-account.page.ts:947` still `TODO`s the submit. Cannot ship without dropping the birthday step or a backend DOB field.                 |
+| **BE-I-27** | Images in the **admin CMS / blog** editors             | **Narrowed 2026-07-27.** `66a7632` added `POST /admin/catalog/:id/image-upload-url` (certificate images, public-read ACL) — but CMS section image fields, page `ogImageUrl` and blog `contentHtml` images still have no upload path.     | Not built. The catalog form can gain a real picker; CMS/blog editors keep a "paste a URL" field.                                                          |
+| **BE-I-28** | **Draft preview** in the admin CMS editor              | `CmsService.getPublicPage()` 404s anything not PUBLISHED (`cms.service.ts:89-92`); the admin read returns the raw, un-hydrated shape. No preview route exists at HEAD `7160f11`.                                                        | Not built. A true WYSIWYG preview is impossible; structural preview only.                                                                                  |
+**Severity call:** **BE-I-25** is the only hard stopper left — it blocks the
+`complete-account` wizard outright. **BE-I-23/24** are degraders: the real-exam
+engine ships and works with a documented reduction in behaviour. **BE-I-27/28**
+cap CMS editor quality but do not stop the CMS work.
 
 ## 2. Resolved on backend → FE follow-up tracked in Implementation Progress
 
 | #                    | Backend fix (evidence)                                                                                                                                                                | FE work now unblocked (tracked in IP)                                                                                                                                                                  |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **BE-I-29**          | _(inverse case)_ `72a711c` made `contentText` required on `CreateLessonDto` (`learning/dto/lesson.dtos.ts:41-49`) — a breaking change, not a gap.                                     | **FE fix owed:** `toCreateLessonBody()` omits `contentText` when blank (`features/admin/data-access/curriculum.mappers.ts:83-94`) → 400 today. Make the admin lesson-content field required.           |
-| **CMS**              | New module merged `3e52625` (`4ec6423`, `e0f74d8`): public `GET /cms/pages/:slug` + `/cms/globals/:key`, admin `admin/cms/*` (`cms.controller.ts`, `cms-admin.controller.ts:70-295`). | **Entirely unconsumed** — no `*.api.ts` in `src/app` references `/cms`. Two new FE workstreams (public CMS renderer, admin CMS editor) + the `/landing` vs `/cms/pages/home` source-of-truth decision. |
-| **Analytics window** | `72a711c` added `from`/`to` to `DashboardQueryDto` (overrides `months`).                                                                                                              | B6 admin dashboard can gain a real date-range picker; `dashboard.api.ts:27` sends `months` only.                                                                                                       |
-| **Student detail**   | `72a711c` expanded `StudentDetailDto` with `certificates[]`, `attempts[]`, `exams.{assigned,purchases}` (`users/dto/student-detail-response.dto.ts`).                                 | Additive — FE maps `counts` only (`users.model.ts:20-31`). Optional enrichment of the admin student-detail page.                                                                                       |
+| **BE-I-30** ⛔       | _(inverse case)_ `66a7632` **deleted `GET /landing`** (`LandingController` + `landing-response.dto.ts` removed); replacement is `GET /analytics/public-stats` → `{ stats:{ programs, students, certificatesIssued } }` (`analytics/public-stats.controller.ts:20-31`), with featured programs from `GET /catalog` and static content from `GET /cms/pages/home`. | **⛔ Landing 404s today** — `features/landing/data-access/landing.api.ts:21-25` still calls `/landing`. Fix = Slice 1 of [`cms-frontend-plan.md`](./cms-frontend-plan.md).                                     |
+| **BE-I-22**          | ✅ Fixed `66a7632` — `GET /exam/attempts/:attemptId/review` (`exam.controller.ts:224-249`): owner-only, terminal attempts only (422 otherwise), returns `options[].isCorrect`, `selectedOptionId`, `correctOptionId`, per-question `isCorrect`, `explanation`.                                                                                                  | **FE follow-up:** re-enable the review section on `exam-result.page.ts` (commented out, not deleted, in `b951242`) and add the transport to `exam.api.ts`.                                                    |
+| **BE-I-26**          | ✅ Fixed `2976be0` → `7160f11` — public `POST /contact` (throttled 3/60 s, honeypot `company`, uniform 201) + admin `/admin/contact` list/detail/status/delete (`contact.controller.ts:36-66`, `contact-admin.controller.ts:48-111`).                                                                                                                           | **FE follow-up:** the CMS `contact_form` section can submit for real (plan Slice 6) and an admin inbox page is newly possible (plan Slice 10).                                                                |
+| **BE-I-29**          | _(inverse case)_ `72a711c` made `contentText` required on `CreateLessonDto` (`learning/dto/lesson.dtos.ts:41-49`) — a breaking change, not a gap.                                                                                                                                                                                                              | **FE fix owed:** `toCreateLessonBody()` omits `contentText` when blank (`features/admin/data-access/curriculum.mappers.ts:83-94`) → 400 today. Make the admin lesson-content field required.                  |
+| **SEO**              | `43bd2d8` → `a0a153a`: `GET /sitemap.xml` + `GET /robots.txt` (served under `/api/v1`; edge rewrite expected) and `seo.jsonLd` embedded in CMS page / blog detail / catalog detail responses.                                                                                                                                                                  | **FE follow-up:** render `seo.jsonLd` into `<script type="application/ld+json">` (plan Slice 5); sitemap/robots are an edge-config task, not an FE route.                                                     |
+| **CMS**              | New module merged `3e52625` (`4ec6423`, `e0f74d8`): public `GET /cms/pages/:slug` + `/cms/globals/:key`, admin `admin/cms/*` (`cms.controller.ts`, `cms-admin.controller.ts:70-295`).                                                                                                                                                                          | **Entirely unconsumed** — no `*.api.ts` in `src/app` references `/cms`. Full build plan: [`cms-frontend-plan.md`](./cms-frontend-plan.md) (11 slices, Stage 2).                                               |
+| **Catalog images**   | `66a7632`: `POST /admin/catalog/:id/image-upload-url` `{ imageType, contentType }` → `{ uploadUrl, requiredHeaders, key, publicUrl }` (echo `requiredHeaders` incl. `x-amz-acl: public-read` on the PUT).                                                                                                                                                      | **FE follow-up:** replace the pasted-URL fields in the admin catalog form (B8) with a real picker, reusing the A1 avatar-upload pattern.                                                                      |
+| **Analytics window** | `72a711c` added `from`/`to` to `DashboardQueryDto` (overrides `months`).                                                                                                                                                                                                                                                                                      | B6 admin dashboard can gain a real date-range picker; `dashboard.api.ts:27` sends `months` only.                                                                                                             |
+| **Student detail**   | `72a711c` expanded `StudentDetailDto` with `certificates[]`, `attempts[]`, `exams.{assigned,purchases}` (`users/dto/student-detail-response.dto.ts`).                                                                                                                                                                                                         | Additive — FE maps `counts` only (`users.model.ts:20-31`). Optional enrichment of the admin student-detail page.                                                                                             |
 
 ## 3. Removed from this file — resolved end-to-end (backend + frontend)
 
@@ -115,9 +120,13 @@ cookie consent** (BE `65bf4e8` → FE `6fddf8e`, C2).
 - **Week-9 i18n (`be902fe`/`d67d7ff`)** — backend `SUPPORTED_LOCALES` is
   `en/tr/fr/es/ar/de`; validation errors + emails are localized by `X-Lang`. No FE
   break (app UI stays en/fr/ar; the extra locales are authoring targets).
-- **Marketing homepage has two backends** — `GET /landing` (consumed today, A6)
-  and the CMS `home` page (`GET /cms/pages/home`). Not a defect; a decision the FE
-  must record before building the CMS renderer.
+- **Marketing homepage — decision made for us (2026-07-26).** `GET /landing` was
+  deleted (`66a7632`), so the CMS `home` page is now the single source for static
+  home content, `GET /catalog` for featured programs and
+  `GET /analytics/public-stats` for the live counters. See **BE-I-30**.
+- **SEO plumbing is backend-served** — `GET /sitemap.xml` and `GET /robots.txt`
+  live under `/api/v1` (`43bd2d8`); getting them to the site root is an edge/CDN
+  rewrite, not an Angular route. Non-production `robots.txt` is `Disallow: /`.
 
 ## What's next
 

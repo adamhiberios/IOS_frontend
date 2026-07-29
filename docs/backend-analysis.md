@@ -506,6 +506,29 @@ against source on 2026-07-25.
 | `4ec6423`/`e0f74d8` (→ `3e52625`, 2026-07-21/22) | `feat(cms)`: **new typed-section CMS** — `cms_pages` → ordered `cms_sections` + `cms_globals`, 16 section types, public read + SEO, admin CRUD/publish/translations/reorder, seed of 8 pages.                                                                                                                                            | **New, entirely unconsumed FE surface** (no `*.api.ts` references `/cms`). Two workstreams: a public CMS-driven marketing renderer and an admin CMS editor. See the inventory below + **BE-I-26/27/28**.                                                                                                                                                                          |
 | `72a711c` (2026-07-22)                           | `feat(analytics)`: `GET /admin/dashboard/overview` accepts `from`/`to` (ISO) which override `months`; `feat(users)`: student detail now also returns `certificates[]`, `attempts[]`, `exams.{assigned,purchases}`; `feat(learning)`: **`contentText` is now required and non-empty on `CreateLessonDto`** (and non-blankable on update). | **(a)** B6 dashboard can offer a real date-range picker (`dashboard.api.ts:27` sends only `months`). **(b)** Admin student detail can show real lists (FE maps only `counts` — `users.model.ts:20-31`); additive, nothing breaks. **(c)** ⚠️ **breaking** — FE omits `contentText` when the field is blank (`curriculum.mappers.ts:83-94`), which now 400s. Filed as **BE-I-29**. |
 
+## 6.9c Latest backend sync (2026-07-27) — ⚠️ `GET /landing` removed, exam review, contact, SEO
+
+Backend HEAD is now **`7160f11`** (merge of PR #23). Four more merges landed after
+§6.9b was written; **one of them breaks a shipped frontend screen.**
+
+| BE commit                        | Change                                                                                                                                                                                                                | Frontend impact                                                                                                                                                                    |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `66a7632` (2026-07-26) ⚠️        | `refactor(analytics)`: **`LandingController` deleted**; `GET /landing` replaced by **`GET /analytics/public-stats`** → `{ stats:{ programs, students, certificatesIssued } }` (`public-stats.controller.ts:20-31`). Featured programs are expected from `GET /catalog`, static home content from `GET /cms/pages/home`. | ⛔ **The landing page 404s today** — `features/landing/data-access/landing.api.ts:21-25` still calls `GET /landing`. Filed as **BE-I-30**; fixed in CMS plan Slice 1.                |
+| `66a7632`                        | `feat(exam)`: **`GET /exam/attempts/:attemptId/review`** (`exam.controller.ts:224-249`) — owner-only, terminal attempts only (422 otherwise), returns options with `isCorrect`, `selectedOptionId`, `correctOptionId`, per-question `isCorrect`, `explanation`. | ✅ **Resolves BE-I-22.** The real-exam result page's review section can be re-enabled (it was commented out, not deleted, in `b951242`).                                            |
+| `66a7632`                        | `feat(catalog)`: **`POST /admin/catalog/:id/image-upload-url`** `{ imageType, contentType }` → `{ uploadUrl, requiredHeaders, key, publicUrl }` (public-read ACL).                                                    | Partially resolves **BE-I-27** — catalog certificate images can now be uploaded; CMS sections and blog bodies still have no upload path.                                            |
+| `43bd2d8` → `a0a153a` (2026-07-27) | `feat: improve cms seo` — new **SEO module**: `GET /sitemap.xml` + `GET /robots.txt` (served under `/api/v1`; the edge/CDN is expected to rewrite them to the site root), plus **`seo.jsonLd`** (schema.org) now embedded in CMS page (`cms.service.ts:125-143`), blog detail (`blog.service.ts:550`) and catalog detail (`catalog.service.ts:461`) responses. | FE should render `seo.jsonLd` into a `<script type="application/ld+json">`. Non-prod `robots.txt` is a blanket `Disallow: /`. Sitemap/robots need an edge rewrite, not FE routes.  |
+| `2976be0` → `7160f11` (2026-07-27) | `CMS-C — contact-form submission handling`: public **`POST /contact`** (throttled, default 3 req / 60 s via `CONTACT_THROTTLE_LIMIT`/`_TTL`; honeypot field `company` silently drops the submission; **always 201**; 400 validation, 429 over-rate) and admin **`/admin/contact`** list/detail/`PATCH :id` status/`DELETE :id`. | ✅ **Resolves BE-I-26** — the CMS `contact_form` section is now buildable end-to-end, plus a new optional admin inbox page.                                                          |
+
+**Contact contract** (`contact.controller.ts:36-66`, `contact-admin.controller.ts:48-111`):
+
+| Method | Path                 | Auth / roles                                   | Notes                                                                                                                             |
+| ------ | -------------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| POST   | `/contact`           | `@Public()`, throttled                         | `{ name(≤120), email(≤255), subject?(≤160), message(≤5000), pageSlug?(≤255), company?(honeypot — leave empty) }` → 201 `{ data }`. |
+| GET    | `/admin/contact`     | support_admin, learning_admin                  | `?status=&cursor=&limit=` — cursor page `(created_at DESC, id DESC)`, same shape as blog/cms admin lists.                          |
+| GET    | `/admin/contact/:id` | support_admin, learning_admin                  | `{ data }` detail (includes the message body + IP/user-agent capture).                                                             |
+| PATCH  | `/admin/contact/:id` | support_admin, learning_admin                  | `{ status }` — `new` \| `read` \| `archived` \| `spam`.                                                                           |
+| DELETE | `/admin/contact/:id` | learning_admin                                 | **Hard delete** (GDPR erasure — no soft-delete here) → `{ id, deleted:true }`.                                                     |
+
 ### CMS endpoints (`3e52625`) — public `@Controller('cms')` + admin `@Controller('admin/cms')`
 
 Public (`@Public()`, GET only; `cms.controller.ts:15-39`). Both return
@@ -540,12 +563,10 @@ Admin `admin/cms` (`cms-admin.controller.ts:70-295`; RolesGuard, RLS-audited wri
 `testimonials`, `stats`, `media_embed`, `contact_form`. \* dynamic — hydrated at
 read time from catalog / blog (`data.certifications[]` / `data.articles[]`).
 
-> **Overlap to decide (FE):** `GET /landing` (`analytics/landing.controller.ts:15`)
-> still exists and is what the FE landing page consumes (A6, `469f429`), while the
-> CMS seeds a `home` page whose `certifications`/`journal` sections cover the same
-> ground. The backend now has **two sources of truth for the marketing homepage**.
-> Neither is deprecated — pick one per screen and record the decision before
-> building the CMS renderer.
+> **Overlap resolved (2026-07-26):** `GET /landing` was **deleted** in `66a7632`
+> (see §6.9c / **BE-I-30**). The CMS `home` page is now the single source for
+> static home content, `GET /catalog` supplies featured programs and
+> `GET /analytics/public-stats` the live counters.
 
 ---
 
@@ -781,13 +802,17 @@ issuance flows (e.g. the verification and reset **links** point at the
 > together with the status block. Frontend follow-ups:
 > [`frontend-unblock-checklist.md`](./frontend-unblock-checklist.md).
 >
-> **UPDATE 2026-07-25 (backend HEAD `72a711c`).** **BE-I-21 is resolved**
-> (`30bfff5`). Still open: **BE-I-22/23/24** (real-exam limitations, FE has
-> workarounds), **BE-I-25** (no DOB → `complete-account` wizard blocked), and the
-> newly filed **BE-I-26/27/28** (CMS contact-form submission, media upload, draft
-> preview) plus **BE-I-29** (lesson `contentText` breaking change — FE fix owed).
+> **UPDATE 2026-07-27 (backend HEAD `7160f11`).** Resolved since the last sync:
+> **BE-I-21** (`30bfff5`), **BE-I-22** (`66a7632` — exam attempt review) and
+> **BE-I-26** (`2976be0` — contact submissions); **BE-I-27** is narrowed to CMS
+> sections + blog bodies (catalog images got an upload URL in `66a7632`).
+> Still open: **BE-I-23/24** (real-exam resume + entry `certId`), **BE-I-25**
+> (no DOB → `complete-account` blocked), **BE-I-28** (no CMS draft preview),
+> **BE-I-29** (lesson `contentText` breaking change) and the newly filed
+> **BE-I-30** (⛔ `GET /landing` deleted — the shipped landing page 404s).
 > The ones that still stop or degrade frontend work are tracked in
-> [`backend-blockers-report.md`](./backend-blockers-report.md).
+> [`backend-blockers-report.md`](./backend-blockers-report.md); the CMS build plan
+> is [`cms-frontend-plan.md`](./cms-frontend-plan.md).
 
 ### Resolution status (2026-07-13)
 
@@ -814,23 +839,24 @@ issuance flows (e.g. the verification and reset **links** point at the
 | BE-I-19 | ✅ Resolved              | `65bf4e8`            | Wire delete-account + export (A2).                                                                                                                                                                                              |
 | BE-I-20 | ✅ Resolved              | `1515dff`            | Build Insights + rewire Landing (A5, A6).                                                                                                                                                                                       |
 | BE-I-21 | ✅ Resolved              | `30bfff5`            | **Blog create/update now return the in-hand entity** — authoring works E2E; FE `admin/blog` (`5404e77`) needs no change, only a re-test. See below.                                                                             |
-| BE-I-22 | ⚠️ **Open (limitation)** | —                    | **Real-exam APIs never return the answer key / per-question correctness** — blocks the result-page "Review Correct Answers" section; see below.                                                                                 |
+| BE-I-22 | ✅ Resolved              | `66a7632`            | **`GET /exam/attempts/:attemptId/review`** now returns the answer key for terminal attempts — **FE follow-up:** re-enable the result page's review section (commented out in `b951242`). See below.                              |
 | BE-I-23 | ⚠️ **Open (limitation)** | —                    | **`GET /exam/sessions/:id` returns no questions** — reload-resume can't redraw the exam from the server; FE persists a local question snapshot to work around it. See below.                                                    |
 | BE-I-24 | ⚠️ **Open (limitation)** | —                    | **No `certId` exposed at exam-entry** — `validate-access` returns only `exam.{id,title,…}`, so the FE can't call `pre-exam-confirmation` (needs `certId`); it relies on `start`'s 409. See below.                               |
 | BE-I-25 | ⚠️ **Open (gap)**        | —                    | **No date-of-birth storage** — the User entity + `PATCH /me` (`UpdateProfileDto`) accept no DOB, but the `complete-account` onboarding wizard's step 1 collects a birthday, so the wizard can't be faithfully wired. See below. |
-| BE-I-26 | ⚠️ **Open (gap)**        | —                    | **CMS `contact_form` section has no submission endpoint** — the section type renders but nothing receives/stores/emails a submission. See below.                                                                                |
-| BE-I-27 | ⚠️ **Open (gap)**        | —                    | **No media upload for CMS/admin content** — image fields hold pasted URLs; the presigned-upload flow exists for user avatars only (`POST /me/avatar-upload-url`). See below.                                                    |
+| BE-I-26 | ✅ Resolved              | `2976be0`            | **`POST /contact`** (public, throttled, honeypot) + `/admin/contact` inbox shipped — **FE follow-up:** build the contact section + optional admin inbox. See §6.9c and below.                                                    |
+| BE-I-27 | ⚠️ **Open (narrowed)**   | partly `66a7632`     | **Still no media upload for CMS sections or blog bodies.** Catalog certificate images gained `POST /admin/catalog/:id/image-upload-url` (`66a7632`); avatars already had one. See below.                                        |
 | BE-I-28 | ⚠️ **Open (gap)**        | —                    | **No CMS draft preview** — public reads are PUBLISHED-only, so an editor cannot preview an unpublished page. See below.                                                                                                         |
 | BE-I-29 | ⚠️ **Open (breaking)**   | —                    | **`contentText` became required on `POST /admin/lessons`** (`72a711c`) with no version/deprecation note; the FE omits it when blank and now gets a 400. FE fix required. See below.                                             |
+| BE-I-30 | ⛔ **Open (breaking)**   | —                    | **`GET /landing` was deleted** (`66a7632`) in favour of `GET /analytics/public-stats` + `GET /catalog` + `GET /cms/pages/home`. The shipped landing page (A6, `469f429`) 404s at runtime. FE fix required. See below.           |
 
 **Also new (not original issues):** two-step admin **OTP login** (`e97de75`,
 checklist C1) and **GDPR cookie consent** (`65bf4e8`, checklist C2); catalog
 `?active=false` parse fix (`5133b4e`, B8); the **CMS module** (`3e52625`) — new
 public + admin surface, no FE consumer yet (see §6.9b and BE-I-26/27/28).
 
-**Last verified against backend source:** 2026-07-25, backend HEAD `72a711c`
-(2026-07-22). Verification method: read `IOS_Backend/src/modules/**` controllers,
-services, DTOs and entities directly; `git log` for provenance.
+**Last verified against backend source:** 2026-07-27, backend HEAD `7160f11`
+(merge of PR #23). Verification method: read `IOS_Backend/src/modules/**`
+controllers, services, DTOs and entities directly; `git log` for provenance.
 
 #### BE-I-21 — ✅ RESOLVED (`30bfff5`, 2026-07-21) — Blog `POST /admin/blog` 404 "Article not found" (read-after-write across two connections)
 
@@ -893,7 +919,25 @@ correct (verified payload, id handling, and the Quill editor output). BLOG-ADMIN
 create/edit and, transitively, any end-to-end test of the public blog rewire
 (BLOG-PUBLIC) are **blocked** on this.
 
-#### BE-I-22 — ⚠️ Real-exam APIs never return the answer key or per-question correctness (blocks "Review Correct Answers")
+#### BE-I-22 — ✅ RESOLVED (`66a7632`, 2026-07-26) — Real-exam answer key / per-question correctness
+
+> **Resolution (verified against `IOS_Backend/src/modules/exam/exam.controller.ts:224-249`).**
+> New endpoint **`GET /exam/attempts/:attemptId/review`**: owner-only (403
+> otherwise), **terminal attempts only** (422 while in progress), 404 for unknown
+> attempts, and it runs on the request RLS runner. Response
+> (`dto/exam-attempt-review-response.dto.ts`): `{ attemptId, examId, examTitle,
+> program, score, passed, correctCount, totalCount, questions:[{ questionId,
+> questionText, questionType, position, options:[{ id, optionText, isCorrect }],
+> selectedOptionId, correctOptionId, isCorrect, explanation }] }`. This is the only
+> real-exam endpoint that exposes the key — `start`/`sessions/:id` still strip it,
+> so the anti-cheat posture during the exam is unchanged.
+> **Frontend follow-up (not done):** re-enable the review section on
+> `exam-result.page.ts` — it was commented out rather than deleted in `b951242`
+> for exactly this. Tracked in `implementation-progress.md`.
+
+**Original finding —** the text below described the gap before the fix.
+
+#### BE-I-22 (original) — Real-exam APIs never return the answer key or per-question correctness
 
 **Severity: Medium — the real-exam result page cannot show a per-question answer
 review; it can only show the aggregate score.** Not a bug — a deliberate anti-cheat
@@ -1058,7 +1102,26 @@ birthday — a data-loss/UX issue — and also requires a boundary decision, sin
 auth-feature-local `PATCH /me` transport. Deferred pending (a) the DOB decision
 above and (b) that boundary decision.
 
-#### BE-I-26 — ⚠️ CMS `contact_form` section has no submission endpoint
+#### BE-I-26 — ✅ RESOLVED (`2976be0` → `7160f11`, 2026-07-27) — CMS `contact_form` submission
+
+> **Resolution (verified against `contact.controller.ts:36-66`,
+> `contact-admin.controller.ts:48-111`, `contact-submission.entity.ts`).** A full
+> contact module shipped: public **`POST /contact`** (throttled — default 3 per
+> 60 s, `CONTACT_THROTTLE_LIMIT`/`CONTACT_THROTTLE_TTL`), a **honeypot** field
+> `company` whose presence silently drops the submission, a **uniform 201** for
+> every non-validation outcome (mail failure never fails the request), 400 on
+> validation and 429 over-rate. Submissions persist to `contact_submissions` with
+> `status ∈ {new, read, archived, spam}` and are managed through
+> **`/admin/contact`** (list/detail/PATCH status for support_admin +
+> learning_admin; hard **DELETE** for learning_admin, deliberately not a
+> soft-delete because the point is PII erasure). Full contract in §6.9c.
+> **Frontend follow-up (not done):** the `contact_form` section can now submit for
+> real, and an optional admin inbox page is newly possible. Tracked in
+> `cms-frontend-plan.md` (Slices 6 and 10).
+
+**Original finding:**
+
+#### BE-I-26 (original) — CMS `contact_form` section has no submission endpoint
 
 **Severity: Medium — the Contact page can be composed in the CMS but cannot
 function.** Discovered 2026-07-25 while inventorying the new CMS module.
@@ -1077,24 +1140,28 @@ persisting and/or emailing via the existing mail renderer.
 nowhere to go. Either skip `contact_form` in the first CMS renderer slice or
 render it read-only (mailto fallback) until this lands.
 
-#### BE-I-27 — ⚠️ No media/image upload for CMS or admin content
+#### BE-I-27 — ⚠️ NARROWED (`66a7632`) — no media upload for CMS sections or blog bodies
 
-**Severity: Medium — every image in CMS/blog/catalog content must be a
-hand-pasted URL.** Discovered 2026-07-25 (CMS inventory; confirmed in
-`CMS-HANDOFF.md` → Deferred).
+**Severity: Medium — images in CMS sections and blog bodies must still be
+hand-pasted URLs.** Filed 2026-07-25; narrowed 2026-07-27.
 
-A presigned-upload flow already exists for **user avatars**
-(`POST /me/avatar-upload-url` → `{ uploadUrl, key, expiresInSeconds }`, BE-I-08)
-and `StorageService` backs it, but there is no admin/content equivalent. CMS
-section image fields, blog `contentHtml` images and catalog `badgeImageUrl` all
-accept URLs only.
+**What is now covered.** Two presigned-upload paths exist: user avatars
+(`POST /me/avatar-upload-url`, BE-I-08) and, since `66a7632`, **catalog
+certificate images** — `POST /admin/catalog/:id/image-upload-url`
+`{ imageType, contentType }` → `{ uploadUrl, requiredHeaders, key, publicUrl }`
+(public-read ACL; the caller must echo `requiredHeaders`, including
+`x-amz-acl: public-read`, on the `PUT`).
 
-**Expected contract:** an admin-scoped presigned-upload endpoint (e.g.
-`POST /admin/media/upload-url` `{ contentType }` → `{ uploadUrl, publicUrl, key }`)
-reusing the avatar mechanics with admin roles + a content-type allowlist.
+**What is still missing.** No generic admin media endpoint. CMS section image
+fields (`hero`, `logo_cloud`, `media_embed`, page `ogImageUrl`, …) and blog
+`contentHtml` images have no upload path.
 
-**Frontend impact:** the admin CMS/blog editors must ship a "paste an image URL"
-field rather than a picker; a media picker is a follow-up once this exists.
+**Expected contract:** an admin-scoped `POST /admin/media/upload-url`
+`{ contentType, scope? }` → `{ uploadUrl, requiredHeaders, key, publicUrl }`,
+reusing the catalog mechanics with a content-type allowlist.
+
+**Frontend impact:** the catalog form can gain a real picker now; the CMS/blog
+editors must keep a "paste an image URL" field and say so in the UI.
 
 #### BE-I-28 — ⚠️ No CMS draft preview (public reads are PUBLISHED-only)
 
@@ -1133,6 +1200,30 @@ and always send it. Tracked as an FE task in `implementation-progress.md`.
 
 **Backend ask:** flag required-field tightenings separately from feature work so
 the contract change is reviewable.
+
+#### BE-I-30 — ⛔ `GET /landing` deleted without a deprecation window (breaks a shipped screen)
+
+**Severity: High — the public landing page 404s against the current backend.**
+Discovered 2026-07-27 by diffing `66a7632`.
+
+`LandingController` and `landing-response.dto.ts` were **removed**; the composite
+`GET /landing` (`{ featuredPrograms, stats }`) no longer exists. Its replacement is
+deliberately narrower: **`GET /analytics/public-stats`** →
+`{ stats:{ programs, students, certificatesIssued } }`
+(`analytics/public-stats.controller.ts:20-31`). Per the controller's own doc
+comment, the other two halves of the old payload now come from **`GET /catalog`**
+(featured programs) and **`GET /cms/pages/home`** (static content).
+
+**Frontend impact.** `features/landing/data-access/landing.api.ts:21-25` still
+calls `${apiBaseUrl}/landing`, so the landing page's dynamic block fails at
+runtime. The endpoint was consumed by A6 (`469f429`) — a screen the backend team
+knew was live. **FE fix:** repoint `LandingApi` to `GET /analytics/public-stats`
+(+ `GET /catalog` for featured programs) and reshape `landing.dto/model/mappers`;
+scheduled as **Slice 1** of [`cms-frontend-plan.md`](./cms-frontend-plan.md), since
+the same slice introduces the CMS home page that owns the static content.
+
+**Backend ask:** removing a public endpoint that a shipped client consumes needs a
+deprecation note ahead of the merge — the same request as BE-I-29.
 
 ### Endpoints added 2026-07-13 (blocker fixes)
 

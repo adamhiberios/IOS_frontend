@@ -9,6 +9,30 @@
 > `problemDetailMessage`.
 > Created 2026-07-13.
 
+## Status (updated 2026-07-27) — ⛔ landing regression + Stage 2 planned
+
+> **Read this first.** Backend HEAD is now **`7160f11`** and it moved three times
+> since the 2026-07-25 pass:
+>
+> - ⛔ **`GET /landing` was deleted** (`66a7632`) — `landing.api.ts:21-25` still
+>   calls it, so the landing page **404s today**. Filed **BE-I-30**; the fix is
+>   **Slice 1** of [`cms-frontend-plan.md`](./cms-frontend-plan.md).
+> - ✅ **BE-I-22 fixed** (`66a7632`) — `GET /exam/attempts/:attemptId/review`.
+>   FE follow-up: re-enable the exam result page's review section.
+> - ✅ **BE-I-26 fixed** (`2976be0`) — `POST /contact` + `/admin/contact` inbox.
+>   The CMS `contact_form` section is now buildable (plan Slices 6 and 10).
+> - 🆕 **SEO module** (`43bd2d8`) — `sitemap.xml`/`robots.txt` (edge rewrite, not
+>   an FE route) and `seo.jsonLd` on CMS/blog/catalog responses.
+> - 🆕 **Catalog image upload** (`66a7632`) — `POST /admin/catalog/:id/image-upload-url`
+>   narrows **BE-I-27** to CMS sections + blog bodies.
+>
+> Also closed on the frontend since 2026-07-25: **E1/BE-I-29** (`1c2fcdb`), the
+> **student dashboard overview** rewire (`4a11ae9`) and the admin dashboard
+> date-window + student-detail enrichment (`1c2fcdb`). §E below is annotated
+> accordingly. **All CMS work now lives in
+> [`cms-frontend-plan.md`](./cms-frontend-plan.md)** (11 slices, Stage 2) — §E2/E3
+> are kept as the endpoint-level summary only.
+
 ## Status (updated 2026-07-25) — **every A/B/C item is DONE, including C1**
 
 Verified against frontend HEAD `904a478` (`feat/real-backend-integration`) and
@@ -34,12 +58,14 @@ only an E2E re-test against api-dev.
 
 **🆕 New work discovered on 2026-07-25 — see [§E](#e-new-since-the-checklist-was-written-2026-07-25):**
 the backend merged a whole **CMS module** (`3e52625`) with no FE consumer, made
-lesson `contentText` **required** (breaks admin lesson creation today — **BE-I-29**),
-and added an analytics date window + richer admin student detail (`72a711c`).
+lesson `contentText` **required** (**BE-I-29** — since fixed by `1c2fcdb`), and
+added an analytics date window + richer admin student detail (`72a711c` — since
+adopted in `1c2fcdb`).
 
-**Still backend-blocked:** **BE-I-25** (no DOB → `complete-account`),
-**BE-I-26/27/28** (CMS contact-form submission / media upload / draft preview),
-**BE-I-22** (no exam answer key → review UI stays disabled). Full triage:
+**Still backend-blocked** *(as of 2026-07-27 — narrowed since this block was
+written)*: **BE-I-25** (no DOB → `complete-account`) and **BE-I-27/28** (CMS media
+upload / draft preview). **BE-I-22** and **BE-I-26** were fixed on 2026-07-26/27 —
+see the current status block at the top. Full triage:
 [`backend-blockers-report.md`](./backend-blockers-report.md).
 
 ---
@@ -301,7 +327,7 @@ introduced. Detail:
 [`implementation-progress.md` → Remaining tasks](./implementation-progress.md#remaining-tasks-high-level)
 and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync-2026-07-25b--cms-module-blog-fix-analytics-window).
 
-### E1. BE-I-29 — lesson `contentText` is now required (⛔ breaks admin lesson creation today)
+### E1. BE-I-29 — lesson `contentText` is now required — ✅ DONE (`1c2fcdb`, 2026-07-26)
 
 - [ ] `72a711c` made `contentText` required + non-empty on `CreateLessonDto`
       (`IOS_Backend/src/modules/learning/dto/lesson.dtos.ts:41-49`). The FE omits
@@ -312,7 +338,7 @@ and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync
       `contentText` from `toCreateLessonBody()`. Update on `UpdateLessonDto` is
       optional-but-non-blankable — the current update body already always sends it.
 
-### E2. CMS-PUBLIC — render CMS pages on the marketing site (new surface, `3e52625`)
+### E2. CMS-PUBLIC — render CMS pages on the marketing site — **now planned as Slices 2–8 of [`cms-frontend-plan.md`](./cms-frontend-plan.md)**
 
 - [ ] `GET /cms/pages/:slug` (public) → `{ data:{ slug, title, locale, direction,
   sections[], seo{…} }, meta:{ locale } }`; PUBLISHED-only (404 otherwise).
@@ -326,13 +352,16 @@ and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync
       — do **not** refetch catalog/blog for them.
 - [ ] Honour `locale`/`direction`/`fallbackUsed` per block and inject the `seo`
       block into `<head>`.
-- [ ] **Decide first:** the landing page uses `GET /landing` (A6, `469f429`) while
-      the CMS seeds a `home` page covering the same ground — two sources of truth.
-      Record the decision in `implementation-progress.md`.
-- [ ] **BE-I-26:** `contact_form` has no submission endpoint — skip or render
-      read-only (mailto fallback); do not fake a submit.
+- [x] ~~**Decide first:** `/landing` vs `/cms/pages/home`~~ — **settled by the
+      backend on 2026-07-26**: `GET /landing` was deleted (`66a7632`, **BE-I-30**).
+      CMS owns static home content, `GET /catalog` owns featured programs,
+      `GET /analytics/public-stats` owns the counters.
+- [x] ~~**BE-I-26:** `contact_form` has no submission endpoint~~ — **fixed**
+      (`2976be0`). Wire `POST /contact`: honeypot field `company` (render visually
+      hidden, always send empty), **429** when throttled (default 3 / 60 s), 400 for
+      validation, and treat **any 201 as success**. Plan Slice 6.
 
-### E3. CMS-ADMIN — page / section / globals editor (new surface, `3e52625`)
+### E3. CMS-ADMIN — page / section / globals editor — **now planned as Slices 9–10 of [`cms-frontend-plan.md`](./cms-frontend-plan.md)** (+ the new `/admin/contact` inbox)
 
 - [ ] Pages: `POST/GET/PATCH /admin/cms/pages[/:id]`, `PATCH …/translations`,
       `POST …/publish|unpublish` (learning_admin), `DELETE …/:id` (archive;
@@ -347,10 +376,12 @@ and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync
 - [ ] Publish gate returns 409 `CMS_PAGE_NOT_PUBLISHABLE` with
       `errors[]=[{field:"_root",code:"NOT_PUBLISHABLE",…}]` — surface the reasons
       like B7 does, not a generic message.
-- [ ] **BE-I-27:** no media upload — image fields take pasted URLs; say so in the UI.
+- [ ] **BE-I-27 (narrowed):** still no upload for CMS section images or blog
+      bodies — pasted URLs, say so in the UI. Catalog certificate images **do** have
+      `POST /admin/catalog/:id/image-upload-url` now (`66a7632`) — separate task.
 - [ ] **BE-I-28:** no draft preview — structural preview only; do not imply WYSIWYG.
 
-### E4. Backend additions worth adopting (`72a711c`) — small, optional
+### E4. Backend additions worth adopting (`72a711c`) — ✅ both DONE (`1c2fcdb`)
 
 - [ ] **Admin dashboard date window:** `GET /admin/dashboard/overview` now accepts
       `from`/`to` (ISO), which override `months`. `dashboard.api.ts:27` sends
@@ -361,10 +392,9 @@ and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync
 
 ### E5. Carried-over FE debt (not backend-driven)
 
-- [ ] **Student dashboard overview** still renders from the hardcoded
-      `features/dashboard/data-access/dashboard.store.ts` ("Mock datasets", `:38-120`,
-      consumed at `overview.page.ts:307`). `GET /learning/progress` is live and
-      already mapped in `features/courses` — swap it in.
+- [x] ~~**Student dashboard overview** on hardcoded `DashboardStore`~~ — ✅ done
+      (`4a11ae9`, 2026-07-26): `validCertifications` / `monthlyScores` /
+      `examSummary` / `learningCard` now come from real learning + mock data.
 - [ ] **Legacy `/dashboard/certificates` demo pages** — `certificates.page`,
       `cert-detail.page`, `cert-session.page` read hardcoded `ESM_P_*` fixtures
       (`certificates.store.ts:356-644`), duplicating the real `/dashboard/credentials`
@@ -375,24 +405,52 @@ and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync
       **blocked by BE-I-25** (no DOB field) plus a `ProfileApi` boundary decision.
 - [ ] **Exam-authoring preview** — `GET /admin/exams/:examId/preview` never wired.
 
+### E6. New on 2026-07-26/27 (backend `66a7632`, `43bd2d8`, `2976be0`)
+
+- [ ] ⛔ **BE-I-30 — landing regression (P0).** `GET /landing` was deleted; repoint
+      `LandingApi` (`landing.api.ts:21-25`) to **`GET /analytics/public-stats`**
+      (bare `{ stats:{ programs, students, certificatesIssued } }`) and compose
+      featured programs from `GET /catalog` via the existing `PublicCatalogStore`.
+      Reshape `landing.dto/model/mappers`; keep the static fallback.
+      = **Slice 1** of [`cms-frontend-plan.md`](./cms-frontend-plan.md).
+- [ ] **Real-exam answer review (BE-I-22 fixed).** Add
+      `GET /exam/attempts/:attemptId/review` to `exam.api.ts` and re-enable the
+      review section on `exam-result.page.ts` (commented out, not deleted, in
+      `b951242`). Owner-only; **422** while the attempt is not terminal; response
+      carries `options[].isCorrect`, `selectedOptionId`, `correctOptionId`,
+      per-question `isCorrect`, `explanation`.
+- [ ] **Catalog image picker (BE-I-27 narrowed).**
+      `POST /admin/catalog/:id/image-upload-url` `{ imageType, contentType }` →
+      `{ uploadUrl, requiredHeaders, key, publicUrl }`. Replace the pasted-URL
+      fields in the B8 catalog form; **echo `requiredHeaders`** (incl.
+      `x-amz-acl: public-read`) on the `PUT`, and bypass `authInterceptor` for the
+      storage host exactly as A1 does.
+- [ ] **Render `seo.jsonLd`** on blog and catalog detail pages (`blog.service.ts:550`,
+      `catalog.service.ts:461`) into `<script type="application/ld+json">`. CMS pages
+      are covered by plan Slice 5.
+- [ ] **Infra (not FE):** `GET /sitemap.xml` and `GET /robots.txt` are served under
+      `/api/v1` — raise the edge/CDN rewrite to the site root with infra. Non-prod
+      `robots.txt` is a blanket `Disallow: /` by design.
+
 ---
 
-## Suggested order (updated 2026-07-25)
+## Suggested order (updated 2026-07-27)
 
-**✅ Done & committed:** A1–A7 (A7 partially — see E5), B1–B8, C1, C2,
-BLOG-PUBLIC, BLOG-ADMIN, **and** the four net-new student/auth features
-(real exam `b951242`, courses `172f35a`, mock `37b5c57`/`f4752ad`/`6d9e406`/`904a478`,
-email verify `9e06730`). Every backend-rewire/unblock item is complete.
+**✅ Done & committed:** A1–A7, B1–B8, C1, C2, BLOG-PUBLIC, BLOG-ADMIN, the four
+net-new student/auth features (real exam `b951242`, courses `172f35a`, mock
+`37b5c57`/`f4752ad`/`6d9e406`/`904a478`, email verify `9e06730`), **E1/BE-I-29**
+(`1c2fcdb`), **E4** (`1c2fcdb`) and the **dashboard overview rewire** (`4a11ae9`).
 
 **▶ Next:**
 
-1. **E1 — BE-I-29 fix** (admin lesson creation is broken right now).
-2. **E5 — student dashboard overview → `GET /learning/progress`** (last hardcoded
-   store on a live user-facing screen).
-3. **E2 — CMS-PUBLIC** (decide `/landing` vs `/cms/pages/home` first), then
-   **E3 — CMS-ADMIN**.
+1. **E6 — BE-I-30 landing fix** (a live public page is 404-ing).
+2. **Stage 2 — CMS**, per [`cms-frontend-plan.md`](./cms-frontend-plan.md):
+   Slices 2–8 (public renderer → home cutover), then 9–10 (admin editor + contact
+   inbox), then 11 (hardening).
+3. **E6 — real-exam answer review UI** (BE-I-22 is fixed).
 4. **E5 — blog E2E re-test**; `/dashboard/certificates` legacy pages (rewire or retire).
-5. **E4 + exam-authoring preview** — minor.
+5. **E6 minor** — catalog image picker, `seo.jsonLd` on blog/catalog detail,
+   exam-authoring preview.
 
 **Gating reviews, not build work:** C1 (`ae6ae44`) needs the **security review**
 before shipping; the real-exam engine (`b951242`) needs the **architect review**.
