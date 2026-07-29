@@ -2630,7 +2630,8 @@
         "staff": "Staff",
         "promo": "Promo codes",
         "audit": "Audit logs",
-        "blog": "Blog"
+        "blog": "Blog",
+        "contact": "Contact inbox"
       }
     },
     "home": {
@@ -3327,6 +3328,53 @@
       "trTitleLabel": "Title",
       "trMetaLabel": "Meta description",
       "trContentLabel": "Content"
+    },
+    "contact": {
+      "title": "Contact inbox",
+      "subtitle": "Messages sent through the website’s contact form.",
+      "filterStatus": "Status",
+      "allStatuses": "All statuses",
+      "loading": "Loading messages…",
+      "empty": "No messages yet.",
+      "error": "We couldn’t load the messages. Please try again.",
+      "saveError": "We couldn’t apply that change. Please try again.",
+      "detailError": "We couldn’t load this message. Please try again.",
+      "retry": "Try again",
+      "loadMore": "Load more",
+      "close": "Close",
+      "cancel": "Cancel",
+      "colFrom": "From",
+      "colSubject": "Subject",
+      "colStatus": "Status",
+      "colReceived": "Received",
+      "colActions": "Actions",
+      "status": {
+        "new": "New",
+        "read": "Read",
+        "archived": "Archived",
+        "spam": "Spam"
+      },
+      "markAs": {
+        "read": "Mark read",
+        "archived": "Archive",
+        "spam": "Mark spam",
+        "new": "Mark new"
+      },
+      "view": "View",
+      "noSubject": "(no subject)",
+      "email": "Email",
+      "message": "Message",
+      "page": "Sent from",
+      "locale": "Language",
+      "technical": "Technical details",
+      "ipHash": "IP fingerprint",
+      "userAgent": "Browser",
+      "ipHashHint": "The IP address itself is never stored — only this one-way fingerprint, kept for spotting abuse.",
+      "delete": "Delete",
+      "deleteConfirm": "Delete permanently",
+      "deleteTitle": "Permanently delete this message?",
+      "deleteBody": "This erases the message and the sender’s details for",
+      "deleteWarning": "This cannot be undone. Unlike archiving, nothing is kept — use this for erasure requests."
     }
   },
   "consent": {

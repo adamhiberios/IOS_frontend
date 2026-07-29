@@ -32,11 +32,19 @@
   for where the audit trail now lives.
 - **`BE-I-21` (blog create 404) is fixed** on the backend (`30bfff5`) and the FE
   was already built (`5404e77`) → **removed**; only an E2E re-test remains.
-- **4 active stoppers** (§1): `BE-I-23`, `BE-I-24` (real-exam resume + entry
+- **5 active stoppers** (§1): `BE-I-23`, `BE-I-24` (real-exam resume + entry
   `certId` — FE shipped degraded workarounds), `BE-I-25` (no DOB —
-  `complete-account` cannot ship), `BE-I-28` (no CMS draft preview). `BE-I-27` is
-  **narrowed** — catalog images can now be uploaded, CMS sections and blog bodies
-  still cannot.
+  `complete-account` cannot ship), `BE-I-28` (no CMS draft preview), and
+  **`BE-I-31`** (new 2026-07-29 — CMS conflict sentinels aren't error `code`s).
+  `BE-I-27` is **narrowed** — catalog images can now be uploaded, CMS sections
+  and blog bodies still cannot.
+- **`BE-I-26` is now closed end-to-end**: the backend shipped `POST /contact` +
+  the `/admin/contact` inbox (`2976be0`), and the **frontend inbox is built and
+  staged** (2026-07-29). The public `contact_form` *section* still awaits the CMS
+  public renderer.
+- **Note on the CMS rows below:** a CMS admin frontend was built and rolled back
+  on 2026-07-29, so BE-I-27/28/31 have **no FE consumer** today. They remain open
+  backend issues and will be hit again on rebuild.
 - **Four items now owe FRONTEND work, not backend work** (§2): **`BE-I-30`** ⛔
   `GET /landing` was deleted and the landing page 404s **right now**;
   **`BE-I-29`** lesson `contentText` is required and the admin form breaks;
@@ -54,10 +62,12 @@
 | **BE-I-25** | `/auth/complete-account` onboarding wizard             | No date-of-birth column anywhere (`grep -r "date_of_birth\|dateOfBirth" src/database/entities src/modules/profile` → 0 hits) and `UpdateProfileDto` accepts only phone/locale/country/city/street/address/postalCode/occupation/position. | **Stub** — `complete-account.page.ts:947` still `TODO`s the submit. Cannot ship without dropping the birthday step or a backend DOB field.                 |
 | **BE-I-27** | Images in the **admin CMS / blog** editors             | **Narrowed 2026-07-27.** `66a7632` added `POST /admin/catalog/:id/image-upload-url` (certificate images, public-read ACL) — but CMS section image fields, page `ogImageUrl` and blog `contentHtml` images still have no upload path.     | Not built. The catalog form can gain a real picker; CMS/blog editors keep a "paste a URL" field.                                                          |
 | **BE-I-28** | **Draft preview** in the admin CMS editor              | `CmsService.getPublicPage()` 404s anything not PUBLISHED (`cms.service.ts:89-92`); the admin read returns the raw, un-hydrated shape. No preview route exists at HEAD `7160f11`.                                                        | Not built. A true WYSIWYG preview is impossible; structural preview only.                                                                                  |
+| **BE-I-31** | Telling CMS conflicts apart by error `code`           | `SLUG_LOCKED`, `SYSTEM_PAGE_PROTECTED` and `SECTION_NOT_IN_PAGE` are raised as plain `Conflict`/`BadRequest` exceptions with the sentinel only in the message, so all flatten to a generic `code` (`cms.service.ts:292,416,544` + `global-exception.filter.ts:270`). Filed 2026-07-29. | **No FE consumer** — the CMS admin client that found this was rolled back the same day. The defect is unchanged and will be hit again on rebuild; the same pattern already affects blog. Workaround when needed: substring-match `detail` in one isolated place. |
 **Severity call:** **BE-I-25** is the only hard stopper left — it blocks the
 `complete-account` wizard outright. **BE-I-23/24** are degraders: the real-exam
 engine ships and works with a documented reduction in behaviour. **BE-I-27/28**
-cap CMS editor quality but do not stop the CMS work.
+cap CMS editor quality but do not stop the CMS work. **BE-I-31** is contract
+hygiene, not a stopper — it costs one fragile string-match, not a feature.
 
 ## 2. Resolved on backend → FE follow-up tracked in Implementation Progress
 
@@ -65,7 +75,7 @@ cap CMS editor quality but do not stop the CMS work.
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **BE-I-30** ⛔       | _(inverse case)_ `66a7632` **deleted `GET /landing`** (`LandingController` + `landing-response.dto.ts` removed); replacement is `GET /analytics/public-stats` → `{ stats:{ programs, students, certificatesIssued } }` (`analytics/public-stats.controller.ts:20-31`), with featured programs from `GET /catalog` and static content from `GET /cms/pages/home`. | **⛔ Landing 404s today** — `features/landing/data-access/landing.api.ts:21-25` still calls `/landing`. Fix = Slice 1 of [`cms-frontend-plan.md`](./cms-frontend-plan.md).                                     |
 | **BE-I-22**          | ✅ Fixed `66a7632` — `GET /exam/attempts/:attemptId/review` (`exam.controller.ts:224-249`): owner-only, terminal attempts only (422 otherwise), returns `options[].isCorrect`, `selectedOptionId`, `correctOptionId`, per-question `isCorrect`, `explanation`.                                                                                                  | **FE follow-up:** re-enable the review section on `exam-result.page.ts` (commented out, not deleted, in `b951242`) and add the transport to `exam.api.ts`.                                                    |
-| **BE-I-26**          | ✅ Fixed `2976be0` → `7160f11` — public `POST /contact` (throttled 3/60 s, honeypot `company`, uniform 201) + admin `/admin/contact` list/detail/status/delete (`contact.controller.ts:36-66`, `contact-admin.controller.ts:48-111`).                                                                                                                           | **FE follow-up:** the CMS `contact_form` section can submit for real (plan Slice 6) and an admin inbox page is newly possible (plan Slice 10).                                                                |
+| **BE-I-26**          | ✅ Fixed `2976be0` → `7160f11` — public `POST /contact` (throttled 3/60 s, honeypot `company`, uniform 201) + admin `/admin/contact` list/detail/status/delete (`contact.controller.ts:36-66`, `contact-admin.controller.ts:48-111`).                                                                                                                           | ✅ **Admin inbox built & staged** 2026-07-29 (`features/admin/…/contact.*` + `admin-contact.page.ts`). **Remaining:** the public `contact_form` section, which needs the CMS public renderer (plan Slice 6).   |
 | **BE-I-29**          | _(inverse case)_ `72a711c` made `contentText` required on `CreateLessonDto` (`learning/dto/lesson.dtos.ts:41-49`) — a breaking change, not a gap.                                                                                                                                                                                                              | **FE fix owed:** `toCreateLessonBody()` omits `contentText` when blank (`features/admin/data-access/curriculum.mappers.ts:83-94`) → 400 today. Make the admin lesson-content field required.                  |
 | **SEO**              | `43bd2d8` → `a0a153a`: `GET /sitemap.xml` + `GET /robots.txt` (served under `/api/v1`; edge rewrite expected) and `seo.jsonLd` embedded in CMS page / blog detail / catalog detail responses.                                                                                                                                                                  | **FE follow-up:** render `seo.jsonLd` into `<script type="application/ld+json">` (plan Slice 5); sitemap/robots are an edge-config task, not an FE route.                                                     |
 | **CMS**              | New module merged `3e52625` (`4ec6423`, `e0f74d8`): public `GET /cms/pages/:slug` + `/cms/globals/:key`, admin `admin/cms/*` (`cms.controller.ts`, `cms-admin.controller.ts:70-295`).                                                                                                                                                                          | **Entirely unconsumed** — no `*.api.ts` in `src/app` references `/cms`. Full build plan: [`cms-frontend-plan.md`](./cms-frontend-plan.md) (11 slices, Stage 2).                                               |

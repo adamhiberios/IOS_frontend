@@ -2630,7 +2630,8 @@
         "staff": "Personnel",
         "promo": "Codes promo",
         "audit": "Journaux d’audit",
-        "blog": "Blog"
+        "blog": "Blog",
+        "contact": "Messages de contact"
       }
     },
     "home": {
@@ -3327,6 +3328,53 @@
       "trTitleLabel": "Titre",
       "trMetaLabel": "Méta-description",
       "trContentLabel": "Contenu"
+    },
+    "contact": {
+      "title": "Messages de contact",
+      "subtitle": "Messages envoyés via le formulaire de contact du site.",
+      "filterStatus": "Statut",
+      "allStatuses": "Tous les statuts",
+      "loading": "Chargement des messages…",
+      "empty": "Aucun message pour le moment.",
+      "error": "Impossible de charger les messages. Veuillez réessayer.",
+      "saveError": "Impossible d’appliquer ce changement. Veuillez réessayer.",
+      "detailError": "Impossible de charger ce message. Veuillez réessayer.",
+      "retry": "Réessayer",
+      "loadMore": "Charger plus",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "colFrom": "De",
+      "colSubject": "Objet",
+      "colStatus": "Statut",
+      "colReceived": "Reçu",
+      "colActions": "Actions",
+      "status": {
+        "new": "Nouveau",
+        "read": "Lu",
+        "archived": "Archivé",
+        "spam": "Indésirable"
+      },
+      "markAs": {
+        "read": "Marquer comme lu",
+        "archived": "Archiver",
+        "spam": "Marquer indésirable",
+        "new": "Marquer nouveau"
+      },
+      "view": "Voir",
+      "noSubject": "(sans objet)",
+      "email": "E-mail",
+      "message": "Message",
+      "page": "Envoyé depuis",
+      "locale": "Langue",
+      "technical": "Détails techniques",
+      "ipHash": "Empreinte IP",
+      "userAgent": "Navigateur",
+      "ipHashHint": "L’adresse IP n’est jamais conservée — seulement cette empreinte à sens unique, gardée pour détecter les abus.",
+      "delete": "Supprimer",
+      "deleteConfirm": "Supprimer définitivement",
+      "deleteTitle": "Supprimer définitivement ce message ?",
+      "deleteBody": "Ceci efface le message et les coordonnées de",
+      "deleteWarning": "Cette action est irréversible. Contrairement à l’archivage, rien n’est conservé — à utiliser pour les demandes d’effacement."
     }
   },
   "consent": {

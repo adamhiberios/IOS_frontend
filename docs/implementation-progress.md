@@ -1,8 +1,96 @@
 # Implementation Progress — IOS LMS Frontend ↔ Real Backend
 
 > **Single source of truth for implementation progress.** Updated continuously.
-> Last updated: 2026-07-26 (doc reconciliation against frontend HEAD `4a11ae9`
-> and backend HEAD `72a711c`).
+> Last updated: 2026-07-29, against frontend HEAD `4f9e267` and backend HEAD
+> `7160f11`. **CMS-ADMIN was built and then rolled back this session** — only the
+> `/admin/contact` inbox was kept (staged, awaiting review). See the first two
+> entries below.
+
+---
+
+### Stage 2 · CMS-ADMIN — ⛔ BUILT THEN ROLLED BACK (2026-07-29). Only the contact inbox survives.
+
+**Status: the CMS admin surface is NOT built. Do not read the CMS rows elsewhere
+in this file or in `cms-frontend-plan.md` as done.**
+
+Slices 9 and 10 of [`cms-frontend-plan.md`](./cms-frontend-plan.md) were built in
+one session on 2026-07-29 (page list/editor, the shared 16-type section registry,
+the descriptor-driven section editor, and the globals editor), verified green
+(typecheck / lint / production build), and then **rolled back at the user's
+direction before review**. Every CMS file was deleted and every CMS edit to a
+shared file reverted; `src/` contains **no** reference to `/cms`, `AdminCms*`, or
+`CmsSection*`. The backend CMS module is once again entirely unconsumed, exactly
+as it was at frontend HEAD `4f9e267`.
+
+**What was kept from that session — and why it is separable.** The
+**`/admin/contact` inbox** (BE-I-26, plan Slice 10) never depended on the CMS
+code: it talks to its own `/admin/contact` endpoints, has its own data-access
+layer, and shares nothing with the CMS files beyond a route and a nav entry.
+It is **staged and ready to commit** — see the entry below.
+
+**Rebuilding note for whoever picks CMS up again.** Three findings from the
+rolled-back attempt are worth not rediscovering; they are properties of the
+*backend*, not of the deleted code:
+
+1. **`GET /admin/cms/pages/:id` and `GET /admin/cms/globals/:key` are bare** —
+   no `{ data }` wrapper — while every write on the same controller *is*
+   wrapped, and `DELETE` returns only `{ id, status }`
+   (`cms-admin.controller.ts:90-101` vs `:82-84`). Map per endpoint (BE-I-01).
+2. **`SLUG_LOCKED` / `SYSTEM_PAGE_PROTECTED` / `SECTION_NOT_IN_PAGE` are not
+   error `code`s** — they are message prefixes on plain Nest exceptions, so they
+   flatten to generic codes and cannot be branched on as the plan assumes. Filed
+   as **BE-I-31**; the finding stands whether or not any FE code consumes it.
+3. **Reorder (`PUT /pages/:id/sections/order`) is `learning_admin` only** —
+   narrower than the `content_creator`-allowed section edits it reorders.
+
+**Still true and still the top priority:** **Slice 1 / BE-I-30** — `GET /landing`
+was deleted and the public landing page 404s in production. It is untouched by
+all of the above.
+
+---
+
+### Stage 2 · Admin contact inbox (`/admin/contact`, BE-I-26) — 🟢 built & staged, awaiting review
+
+Kept from the 2026-07-29 session after the CMS rollback. Consumes the
+contact-submission API the backend shipped in `2976be0` → `7160f11`, which had
+**no frontend consumer at all** until now. Independent of the CMS work.
+
+- **`features/admin/data-access/contact.{dto,model,mappers,api,store}.ts`** —
+  standard layering, blog/users as the precedent. Envelopes are per-endpoint
+  again (BE-I-01): the list is `{ data, meta.pagination }`, detail and
+  status-update are `{ data }`, and **`DELETE` is bare** `{ id, deleted }`
+  (`contact-admin.controller.ts:60-110`).
+- **`features/admin/pages/admin-contact.page.ts`** — cursor list with a status
+  filter, detail dialog with the full message, triage transitions, and delete.
+  Route `/admin/contact` + a nav item filtered to `support_admin` /
+  `learning_admin`.
+- **Triage model.** `new → read → archived`, with `spam` as a **side branch that
+  keeps the row** — the backend's own comment says it exists so an admin can flag
+  what the honeypot missed *without* deleting it, for abuse-pattern review. `new`
+  is the server's initial state and is not offered as a manual target.
+- **Two deliberate choices, flagged for review:**
+  - **Opening a message does not auto-mark it read.** That would be a silent
+    write on a mere glance, and with several admins triaging one inbox it hides
+    who actually handled a message. Marking read is an explicit action.
+  - **The delete confirmation names it as irreversible GDPR erasure.** Every
+    other admin list in this app soft-deletes; this endpoint is a hard delete by
+    design (the point is removing the submitter's email and free-text message),
+    so the UI has to make that difference obvious rather than reuse the usual
+    "are you sure?" copy.
+- **PII handling.** The store is cleared on `user.logged-out` — rows carry
+  submitter email and message text and must not outlive the session in memory.
+  The `ipHash` is shown only inside a collapsed "technical details" block, with a
+  note that the raw IP is never stored (the backend keeps a sha256 only).
+- **i18n:** new `admin.contact.*` (35 keys) + `admin.shell.nav.contact`, en/fr/ar,
+  key trees verified identical. Arabic machine-drafted, **pending professional
+  review** (CLAUDE.md §9).
+- **Verification:** `npm run typecheck` ✓ · `npm run lint` ✓ (0 errors; 3 known
+  `prefer-ngsrc` warnings) · `ng build --configuration production` ✓. Initial
+  gzip **104.13 kB** — the page is lazy, confirmed by checking that no chunk
+  referenced from `index.html` contains the contact code. Status-transition logic
+  exercised by a throwaway harness, then removed (no test runner; SOW §6.2.14).
+- **Not runtime-tested against api-dev** — needs admin credentials. Unverified
+  live: cursor paging past page 1, the status `PATCH`, and the hard delete.
 
 ---
 
@@ -1734,7 +1822,8 @@ surfaces are wired.
 | **0** | ⛔ **BE-I-30 — landing 404s** — repoint `LandingApi` to `GET /analytics/public-stats` + `GET /catalog` | `66a7632` deleted `GET /landing`; `landing.api.ts:21-25` still calls it (re-verified 2026-07-27). A live public page is broken. | — · **Slice 1** of [`cms-frontend-plan.md`](./cms-frontend-plan.md)       |
 | ~~1~~ | ~~**BE-I-29 — lesson `contentText` required**~~                 | ✅ done — fixed by `1c2fcdb` (verified 2026-07-26, not re-done)                                                                                                                                                       | —                                                                         |
 | 2     | **CMS-PUBLIC** — CMS section renderer for the marketing site    | Whole new backend surface (`3e52625`) with zero FE consumption                                                                                                                                                       | Unblocked — **BE-I-26 fixed** (`2976be0`) and the `/landing` question is settled (it's gone). Plan Slices 2–8 |
-| 3     | **CMS-ADMIN** — page/section/globals editor + contact inbox     | Same, plus the new `/admin/contact` inbox                                                                                                                                                                            | Degraded by **BE-I-27** (no CMS media upload), **BE-I-28** (no draft preview). Plan Slices 9–10 |
+| 3     | **CMS-ADMIN** — page/section/globals editor                     | Whole new backend surface with zero FE consumption                                                                                                                                                                   | ⬜ **Not built.** Built and **rolled back** 2026-07-29 — see the top entry. Plan Slices 9–10. Degraded when rebuilt by **BE-I-27** (no CMS media upload), **BE-I-28** (no draft preview), **BE-I-31** (conflict sentinels aren't codes) |
+| 3b    | ~~**Admin contact inbox** (`/admin/contact`)~~                  | The `2976be0` inbox had no FE consumer                                                                                                                                                                               | 🟢 **Built & staged 2026-07-29** — kept when the CMS work was rolled back; independent of it                                                                                                                          |
 | ~~4~~ | ~~**Student dashboard overview → real data**~~                  | ✅ done — `4a11ae9` (2026-07-26): `validCertifications`/`monthlyScores`/`examSummary`/`learningCard` now real                                                                                                          | —                                                                         |
 | 5     | **Blog E2E re-test** (BE-I-21 fixed by `30bfff5`)               | Authoring was never verified against a working backend                                                                                                                                                               | needs api-dev credentials                                                 |
 | 6     | **`complete-account` wizard**                                   | Still a stub (`complete-account.page.ts:947`)                                                                                                                                                                        | **BE-I-25** (no DOB field) + a `ProfileApi` boundary decision             |

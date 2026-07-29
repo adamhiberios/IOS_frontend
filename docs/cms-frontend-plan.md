@@ -1,6 +1,28 @@
 # CMS Frontend Plan — Stage 2
 
-> **Status: NOT STARTED — planned work, do not treat any slice below as done.**
+> **Status (updated 2026-07-29): NOT STARTED — no slice below is done.**
+>
+> Slices **9 and 10 were built on 2026-07-29 and then rolled back** at the user's
+> direction before review. Every CMS file was deleted and every CMS edit to a
+> shared file reverted; `src/` contains no reference to `/cms`. Treat this plan as
+> unexecuted. The one piece kept from that session is the **`/admin/contact`
+> inbox** (part of Slice 10 below, but dependent only on the separate
+> `/admin/contact` API) — it is built and staged, so **skip it when working
+> Slice 10**.
+>
+> **Slice 1 (BE-I-30) remains the highest-priority item**: the public landing page
+> 404s in production until it ships.
+>
+> **Three findings from the rolled-back attempt are recorded below and are worth
+> keeping** — they are properties of the *backend*, not of the deleted code:
+> the bare-vs-wrapped envelope split on the admin CMS controller (§1), the fact
+> that `SLUG_LOCKED` / `SYSTEM_PAGE_PROTECTED` / `SECTION_NOT_IN_PAGE` are **not**
+> error `code`s (**BE-I-31**, §1), and that section **reorder is `learning_admin`
+> only** (§Slice 10). The section-union design note under Slice 2 also stands as a
+> recommendation, though no code for it now exists.
+>
+> Context: [`implementation-progress.md`](./implementation-progress.md) →
+> "Stage 2 · CMS-ADMIN — built then rolled back".
 > Stage 1 (Phases 1–4: auth, admin app, student engines) is complete and committed
 > on `feat/real-backend-integration`. This document is the slice-by-slice plan for
 > **Stage 2**, whose scope is the CMS surface the backend merged on 2026-07-22 →
@@ -101,9 +123,14 @@ detail carry their own `seo.jsonLd` too (`blog.service.ts:550`,
 | `GET/PATCH /globals/:key`(`/translations`) | read: any admin · write: learning_admin | upsert                                    |
 | `GET/GET :id/PATCH :id/DELETE :id` on `/admin/contact` | support_admin, learning_admin (delete: learning_admin) | contact inbox; delete is a **hard** GDPR delete |
 
-**Error codes to branch on:** `SLUG_LOCKED`, `SYSTEM_PAGE_PROTECTED`,
-`CMS_PAGE_NOT_PUBLISHABLE`, `SECTION_NOT_IN_PAGE` — key off `code`, not status
-(BE-I-01/12).
+**Error codes to branch on:** `CMS_PAGE_NOT_PUBLISHABLE` is a real RFC-7807
+`code`. ⚠️ **Corrected 2026-07-29 (BE-I-31):** `SLUG_LOCKED`,
+`SYSTEM_PAGE_PROTECTED` and `SECTION_NOT_IN_PAGE` are **not** — they are plain
+`Conflict`/`BadRequest` exceptions carrying the sentinel only as a message
+prefix, so they flatten to generic codes and cannot be told apart by `code`. The
+"key off `code`, not status" rule (BE-I-01/12) therefore cannot be followed for
+those three; Slice 9 substring-matches `detail` in one documented place
+(`cms.store.ts#classifyFailure`) — **reuse that helper, don't reinvent the match.**
 
 ---
 
@@ -161,10 +188,19 @@ Each slice is one session's work: build → `typecheck`/`lint`/`build` → updat
 **Goal:** typed transport + store for the public CMS, consumed by nothing yet.
 
 - **Files (new):** `features/cms/data-access/cms.{dto,model,mappers,api,store}.ts`.
-- **Modelling:** a **discriminated union** on `type` for sections
-  (`CmsSection = HeroSection | FaqSection | …`), so each component receives a
-  narrowed type and `switch` in the renderer is exhaustive. Keep `config`/`content`
-  shapes verbatim from `SECTION_SCHEMAS` (`IOS_Backend/src/modules/cms/dto/section.dtos.ts:496-552`).
+- **Modelling:** a **discriminated union** on `type` for sections, so each
+  component receives a narrowed type and the renderer's `switch` is exhaustive.
+  Keep `config`/`content` shapes verbatim from `SECTION_SCHEMAS`
+  (`IOS_Backend/src/modules/cms/dto/section.dtos.ts:496-552`).
+  - **Recommendation carried over from the rolled-back attempt:** put the
+    registry in **`@shared/types`**, not in this feature. Both the public
+    renderer *and* the admin editor (Slices 9–10) need the same `config`+`content`
+    pairing; defining it twice guarantees drift. Give each feature a thin carrier
+    over it — the public one resolves a single `content` block per section, the
+    admin one keeps the per-locale `translations` map.
+  - Pair it with a **compile-time assertion** that the type list and the registry
+    cover each other, so adding a 17th type without describing it fails
+    `typecheck` rather than rendering an empty section at runtime.
 - **Store:** `CmsPageStore` (page by slug, loading/error/`fallbackUsed`) and
   `CmsGlobalsStore` (nav/footer/announcement, fetched once, cached).
 - **Acceptance:** typecheck clean; tree-shakes out of the bundle (no consumer yet);
@@ -251,8 +287,14 @@ Each slice is one session's work: build → `typecheck`/`lint`/`build` → updat
 
 ### Slice 9 — Admin CMS: pages list + editor
 
+> ⚠️ Built on 2026-07-29 and **rolled back** — not done. Notes from that attempt
+> are inline below.
+
 - **Files:** `features/admin/data-access/cms.{dto,model,mappers,api,store}.ts`,
   `features/admin/pages/admin-cms-pages.page.ts` (+ nav item, role-filtered).
+- **Envelope warning (verified against source):** the list is `{ data, meta }`,
+  but `GET /admin/cms/pages/:id` is **bare**, writes are `{ data }`, and
+  `DELETE` returns only `{ id, status }`. Map per endpoint.
 - List (`?status=&search=&cursor=&limit=`, cursor pagination via `@core/http`
   `toPage`/`toHttpParams`), create, edit, publish/unpublish, archive.
 - **Surface the publish gate reasons** from the 409 `CMS_PAGE_NOT_PUBLISHABLE`
@@ -262,15 +304,40 @@ Each slice is one session's work: build → `typecheck`/`lint`/`build` → updat
 - **Acceptance:** a draft page can be created, edited, published and unpublished;
   every documented 409 renders a specific message.
 
-### Slice 10 — Admin CMS: section editor, globals, contact inbox
+### Slice 10 — Admin CMS: section editor, globals — ⚠️ contact inbox is DONE, the rest is not
+
+> Built on 2026-07-29 and **rolled back**, except the contact inbox. Two
+> recommendations from that attempt are worth keeping:
+>
+> 1. **Generate the per-type section forms from descriptors rather than
+>    hand-writing 32 shapes.** Hand-writing them duplicates the backend's
+>    `SECTION_SCHEMAS` as a second validation source that drifts, and the drift
+>    shows up as an editor blocked from saving something the server would accept.
+>    Let descriptors drive layout only, keep the backend authoritative, and
+>    surface its 400 `errors[]` (which are per-field, e.g.
+>    `"columns: columns must not be greater than 6"`) verbatim beside the form.
+> 2. **Globals have no per-key schema on the backend** (`global.dtos.ts:11-30`
+>    accepts any object), so there is no contract to generate a form from. A
+>    validated JSON editor is the honest interim; a structured editor should wait
+>    until Slice 7 settles what the public chrome actually reads.
 
 - **Per-type section forms** driven by the same union as Slice 2 — add, edit,
   delete, **reorder** (`PUT /pages/:id/sections/order`), and per-locale
   translations (replace-merge, same idiom as catalog/exam/blog editors).
-- **Globals editor** for nav/footer/announcement.
-- **Admin contact inbox** (`/admin/contact`): cursor list + status transitions
-  (`new → read → archived | spam`) + hard delete for learning_admin, behind a
-  confirm dialog that names it as **GDPR erasure** (it is not reversible).
+  ⚠️ **Reorder is `learning_admin` only** — narrower than the `content_creator`-
+  allowed section edits it reorders. Verified against source.
+- ⚠️ **Index-paired fields** (`config.ctas[i]` ↔ `content.ctaLabels[i]`, and the
+  same idiom on `indicator_band`, `feature_cards`, `logo_cloud`, `level_matrix`,
+  `steps_timeline`, `stats`): the backend does **not** enforce equal lengths, so
+  the editor is the only place a mismatch can be caught. Warn on it.
+- **Globals editor** for nav/footer/announcement. A **404 on read is a normal
+  empty state**, not an error — the global simply hasn't been created yet, and
+  `PATCH` will create it.
+- ~~**Admin contact inbox**~~ — ✅ **DONE** (built & staged 2026-07-29, kept
+  through the CMS rollback because it depends only on the separate
+  `/admin/contact` API). Cursor list + status transitions
+  (`new → read → archived | spam`) + hard delete for learning_admin behind a
+  confirm dialog naming it as **GDPR erasure**. **Skip this bullet.**
 - **BE-I-27:** image fields are URL inputs with an explicit "paste a URL" hint.
   **BE-I-28:** the preview is structural only — label it.
 - **Acceptance:** a page can be composed end-to-end in the UI and rendered by the

@@ -848,6 +848,7 @@ issuance flows (e.g. the verification and reset **links** point at the
 | BE-I-28 | ⚠️ **Open (gap)**        | —                    | **No CMS draft preview** — public reads are PUBLISHED-only, so an editor cannot preview an unpublished page. See below.                                                                                                         |
 | BE-I-29 | ⚠️ **Open (breaking)**   | —                    | **`contentText` became required on `POST /admin/lessons`** (`72a711c`) with no version/deprecation note; the FE omits it when blank and now gets a 400. FE fix required. See below.                                             |
 | BE-I-30 | ⛔ **Open (breaking)**   | —                    | **`GET /landing` was deleted** (`66a7632`) in favour of `GET /analytics/public-stats` + `GET /catalog` + `GET /cms/pages/home`. The shipped landing page (A6, `469f429`) 404s at runtime. FE fix required. See below.           |
+| BE-I-31 | ⚠️ **Open (contract)**   | —                    | **CMS conflict sentinels aren't error `code`s** — `SLUG_LOCKED`, `SYSTEM_PAGE_PROTECTED` and `SECTION_NOT_IN_PAGE` are plain message prefixes, so all three flatten to a generic `code`; the FE must string-match to tell them apart. Found while building CMS-ADMIN Slice 9. See below.                    |
 
 **Also new (not original issues):** two-step admin **OTP login** (`e97de75`,
 checklist C1) and **GDPR cookie consent** (`65bf4e8`, checklist C2); catalog
@@ -1224,6 +1225,46 @@ the same slice introduces the CMS home page that owns the static content.
 
 **Backend ask:** removing a public endpoint that a shipped client consumes needs a
 deprecation note ahead of the merge — the same request as BE-I-29.
+
+#### BE-I-31 — ⚠️ CMS conflict sentinels are message prefixes, not error `code`s
+
+**Severity: Low (contract hygiene) — a workaround exists but it is a fragile one.**
+Discovered 2026-07-29 while building CMS-ADMIN Slice 9.
+
+§1.5 of this document, and the CMS plan, both instruct the frontend to *"key off
+`code`, not the HTTP status"*. For the CMS module that instruction cannot be
+followed for three of its four documented error conditions:
+
+| Condition               | Raised as                                                          | RFC-7807 `code` actually emitted |
+| ----------------------- | ------------------------------------------------------------------ | -------------------------------- |
+| `CMS_PAGE_NOT_PUBLISHABLE` | `CmsPageNotPublishableException` (`cms.errors.ts:12-29`)        | ✅ `CMS_PAGE_NOT_PUBLISHABLE`    |
+| `SLUG_LOCKED`           | `new ConflictException('SLUG_LOCKED: …')` (`cms.service.ts:292-295`) | ❌ `RESOURCE_ALREADY_EXISTS`     |
+| `SYSTEM_PAGE_PROTECTED` | `new ConflictException('SYSTEM_PAGE_PROTECTED: …')` (`cms.service.ts:416-420`) | ❌ `RESOURCE_ALREADY_EXISTS` |
+| `SECTION_NOT_IN_PAGE`   | `new BadRequestException('SECTION_NOT_IN_PAGE: …')` (`cms.service.ts:544-548`) | ❌ `VALIDATION_FAILED`      |
+
+Only the first is a real `AppException` with its own code. The other three are
+plain Nest exceptions, and `GlobalExceptionFilter` maps them purely by status
+(`global-exception.filter.ts:270`) — so a genuine slug collision, a locked slug
+and a protected system page are **indistinguishable by `code`**. The sentinel
+survives only as a prefix inside the human-readable `detail` string.
+
+**Frontend impact.** Any CMS admin client that wants to tell these apart — to say
+"unpublish the page first" rather than leak `SLUG_LOCKED: the slug of a published
+page cannot be changed` at the user — must substring-match `detail`. That is a
+string dependency on a message no contract promises to keep stable, and one that
+would break silently the moment `detail` is localised (which the backend already
+does elsewhere via `X-Lang`).
+
+> **Status note (2026-07-29).** The CMS admin frontend that surfaced this was
+> built and then rolled back the same day, so **no frontend code currently
+> depends on the sentinels**. The backend defect is unaffected by that and the
+> issue stays open: it will be hit again by whoever rebuilds CMS-ADMIN, and it
+> already applies to the identical pattern in the blog module.
+
+**Backend ask:** promote the three sentinels to real `ErrorCode` entries with
+their own `AppException` subclasses, exactly as `CMS_PAGE_NOT_PUBLISHABLE`
+already is. The prefixes suggest that was the intent. Blog has the same pattern
+for its own `SLUG_LOCKED`, so a fix would help both modules.
 
 ### Endpoints added 2026-07-13 (blocker fixes)
 

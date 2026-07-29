@@ -449,12 +449,12 @@ export class AdminAuditLogsPage implements OnInit {
    * For a pure INSERT (no oldData) every field is `added`; for a pure DELETE
    * (no newData) every field is `removed`.
    */
-  protected diffRows(entry: AuditLogEntry): Array<{
+  protected diffRows(entry: AuditLogEntry): {
     key: string;
     oldValue: unknown;
     newValue: unknown;
     kind: 'added' | 'removed' | 'changed' | 'unchanged';
-  }> {
+  }[] {
     const oldData = entry.oldData;
     const newData = entry.newData;
     const keys = new Set([...Object.keys(oldData ?? {}), ...Object.keys(newData ?? {})]);
@@ -464,8 +464,8 @@ export class AdminAuditLogsPage implements OnInit {
       .map((key) => {
         const hasOld = oldData !== null && Object.hasOwn(oldData, key);
         const hasNew = newData !== null && Object.hasOwn(newData, key);
-        const oldValue = hasOld ? oldData![key] : undefined;
-        const newValue = hasNew ? newData![key] : undefined;
+        const oldValue = hasOld ? oldData[key] : undefined;
+        const newValue = hasNew ? newData[key] : undefined;
 
         let kind: 'added' | 'removed' | 'changed' | 'unchanged';
         if (!hasOld && hasNew) kind = 'added';
@@ -493,7 +493,13 @@ export class AdminAuditLogsPage implements OnInit {
       return value ? this.lang.t('common.yes') : this.lang.t('common.no');
     }
     if (typeof value === 'object') return JSON.stringify(value);
-    return String(value);
+    // `value` is a primitive here (null/undefined/boolean/object already
+    // returned), so this can never produce "[object Object]". Narrowed
+    // explicitly rather than cast, so the guarantee is checked, not asserted.
+    if (typeof value === 'string') return value;
+    if (typeof value === 'number' || typeof value === 'bigint') return value.toString();
+    if (typeof value === 'symbol') return value.toString();
+    return JSON.stringify(value) ?? '—';
   }
 }
 
