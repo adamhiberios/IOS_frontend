@@ -5,7 +5,11 @@ import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 
 import { AdminExamAuthoringApi } from './exam-authoring.api';
-import { type ExamDetail, type QuestionDraft } from './exam-authoring.model';
+import {
+  type ExamDetail,
+  type ExamPreview,
+  type QuestionDraft,
+} from './exam-authoring.model';
 
 /**
  * Signal store for the exam question editor (`GET/POST/PATCH/DELETE
@@ -57,6 +61,45 @@ export class AdminExamQuestionsStore {
   async reload(): Promise<void> {
     const id = this._examId();
     if (id !== null) await this.load(id);
+  }
+
+  /* ─── Student preview (`GET /admin/exams/:examId/preview`) ─── */
+
+  private readonly _preview = signal<ExamPreview | null>(null);
+  private readonly _previewLoading = signal(false);
+  private readonly _previewError = signal<string | null>(null);
+
+  readonly preview = this._preview.asReadonly();
+  readonly previewLoading = this._previewLoading.asReadonly();
+  readonly previewError = this._previewError.asReadonly();
+
+  /**
+   * Fetch the paper as a candidate will see it. Kept as **separate state** from
+   * `exam` rather than derived from it: the authoring view is the wrong source
+   * for this — deriving would mean stripping `isCorrect` client-side and trusting
+   * that stripping, whereas the endpoint is what the student engine actually
+   * serves. If they ever diverge, the preview should show the server's answer.
+   */
+  async loadPreview(): Promise<void> {
+    const id = this._examId();
+    if (id === null) return;
+    this._preview.set(null);
+    this._previewError.set(null);
+    this._previewLoading.set(true);
+    try {
+      this._preview.set(await firstValueFrom(this.api.preview(id)));
+    } catch (err) {
+      this._previewError.set(
+        problemDetailMessage(err) ?? this.lang.t('admin.examQuestions.previewError'),
+      );
+    } finally {
+      this._previewLoading.set(false);
+    }
+  }
+
+  clearPreview(): void {
+    this._preview.set(null);
+    this._previewError.set(null);
   }
 
   /**

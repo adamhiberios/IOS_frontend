@@ -42,3 +42,37 @@ export interface CatalogDetailResponseDto {
   readonly data: CatalogDetailDto;
   readonly meta: { readonly locale: string };
 }
+
+/**
+ * `POST /admin/catalog/:id/image-upload-url` (backend `66a7632`, narrows
+ * BE-I-27) — request a short-lived presigned PUT so the browser uploads the
+ * badge / thumbnail straight to object storage, bypassing the API for the bytes.
+ * **Bare** response, no `{ data }` envelope (`catalog-admin.controller.ts:112`).
+ *
+ * Flow, mirroring the A1 avatar precedent (`242a11d`):
+ *   1. POST here → `{ uploadUrl, requiredHeaders, key, publicUrl }`
+ *   2. PUT the bytes to `uploadUrl` **echoing every `requiredHeaders` entry** —
+ *      the presigned signature covers `Content-Type` *and* `x-amz-acl`, so
+ *      dropping either fails the upload (or leaves the object unreadable).
+ *   3. `PATCH /admin/catalog/:id` with `publicUrl` as `badgeImageUrl` /
+ *      `thumbnailUrl`. Note this differs from the avatar flow, which persists
+ *      the `key`; here the backend hands back a permanent public URL because the
+ *      certificates bucket is public-read.
+ *
+ * 400 on an unsupported image/content type, 404 when the certificate is unknown
+ * — which is why uploading is only possible **after** the certificate exists.
+ */
+export interface CertificateImageUploadUrlRequestDto {
+  readonly imageType: string;
+  readonly contentType: string;
+}
+
+export interface CertificateImageUploadUrlResponseDto {
+  readonly uploadUrl: string;
+  /** Must all be sent verbatim on the PUT (`Content-Type`, `x-amz-acl`). */
+  readonly requiredHeaders: Readonly<Record<string, string>>;
+  readonly key: string;
+  /** Permanent public URL to persist on the certificate. */
+  readonly publicUrl: string;
+  readonly expiresInSeconds: number;
+}

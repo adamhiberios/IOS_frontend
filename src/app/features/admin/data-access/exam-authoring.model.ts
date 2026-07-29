@@ -71,6 +71,43 @@ export interface ExamDetail {
   readonly questions: readonly ExamQuestion[];
 }
 
+/* ─── Preview (student-facing shape) ─── */
+
+/**
+ * An option **as a candidate sees it**. Deliberately has no `isCorrect` field:
+ * the backend strips it, and mirroring that omission in the type means the
+ * preview UI *cannot* render a correct-answer hint even by accident.
+ */
+export interface ExamPreviewOption {
+  readonly id: string;
+  readonly optionText: string;
+}
+
+/** A question as a candidate sees it — no `marks`, no correctness. */
+export interface ExamPreviewQuestion {
+  readonly id: string;
+  readonly questionText: string;
+  readonly questionType: ExamQuestionType;
+  readonly position: number;
+  readonly options: readonly ExamPreviewOption[];
+}
+
+/**
+ * The exam paper as it will be served to a candidate. Lets an author check
+ * wording, option order and length before publishing — the publish gate is
+ * irreversible enough (unpublish 409s once codes are issued) that seeing the
+ * real paper first is worth a click.
+ */
+export interface ExamPreview {
+  readonly id: string;
+  readonly title: string;
+  readonly examOrder: number;
+  readonly passingScore: number;
+  readonly durationMinutes: number;
+  readonly status: ExamStatus;
+  readonly questions: readonly ExamPreviewQuestion[];
+}
+
 /** One option in a question draft (no id — the backend assigns it). */
 export interface QuestionOptionDraft {
   readonly optionText: string;

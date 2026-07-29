@@ -403,7 +403,11 @@ and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync
       translations → publish → public read against api-dev. No FE change expected.
 - [ ] **`complete-account` wizard** — still a stub (`complete-account.page.ts:947`);
       **blocked by BE-I-25** (no DOB field) plus a `ProfileApi` boundary decision.
-- [ ] **Exam-authoring preview** — `GET /admin/exams/:examId/preview` never wired.
+- [x] ~~**Exam-authoring preview**~~ — ✅ **DONE 2026-07-29**. Worth knowing: the
+      page already had a "Preview" toggle, but it re-rendered the *authoring* data
+      with the answer ticks hidden while still showing `marks` and positions no
+      candidate sees. It now fetches `GET /admin/exams/:examId/preview`, so the
+      preview is the paper the exam engine actually serves.
 
 ### E6. New on 2026-07-26/27 (backend `66a7632`, `43bd2d8`, `2976be0`)
 
@@ -419,12 +423,13 @@ and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync
       `b951242`). Owner-only; **422** while the attempt is not terminal; response
       carries `options[].isCorrect`, `selectedOptionId`, `correctOptionId`,
       per-question `isCorrect`, `explanation`.
-- [ ] **Catalog image picker (BE-I-27 narrowed).**
-      `POST /admin/catalog/:id/image-upload-url` `{ imageType, contentType }` →
-      `{ uploadUrl, requiredHeaders, key, publicUrl }`. Replace the pasted-URL
-      fields in the B8 catalog form; **echo `requiredHeaders`** (incl.
-      `x-amz-acl: public-read`) on the `PUT`, and bypass `authInterceptor` for the
-      storage host exactly as A1 does.
+- [x] ~~**Catalog image picker (BE-I-27 narrowed).**~~ — ✅ **DONE 2026-07-29**
+      (`components/cert-image-upload.ts` + `catalog.{dto,model,mappers,api}.ts`).
+      `requiredHeaders` echoed in full; storage PUT goes through an
+      interceptor-free `HttpClient(HttpBackend)` as A1 does. **Note:** the
+      certificate stores `publicUrl` (not the `key`, unlike A1 — the certificates
+      bucket is public-read), and uploading needs a **saved** certificate because
+      the endpoint 404s an unknown id, so the picker is hidden on the create form.
 - [ ] **Render `seo.jsonLd`** on blog and catalog detail pages (`blog.service.ts:550`,
       `catalog.service.ts:461`) into `<script type="application/ld+json">`. CMS pages
       are covered by plan Slice 5.
@@ -449,8 +454,8 @@ net-new student/auth features (real exam `b951242`, courses `172f35a`, mock
    inbox), then 11 (hardening).
 3. **E6 — real-exam answer review UI** (BE-I-22 is fixed).
 4. **E5 — blog E2E re-test**; `/dashboard/certificates` legacy pages (rewire or retire).
-5. **E6 minor** — catalog image picker, `seo.jsonLd` on blog/catalog detail,
-   exam-authoring preview.
+5. **E6 minor** — ~~catalog image picker~~ ✅, ~~exam-authoring preview~~ ✅ (both
+   2026-07-29); **`seo.jsonLd` on blog/catalog detail** remains.
 
 **Gating reviews, not build work:** C1 (`ae6ae44`) needs the **security review**
 before shipping; the real-exam engine (`b951242`) needs the **architect review**.

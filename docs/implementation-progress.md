@@ -2,9 +2,73 @@
 
 > **Single source of truth for implementation progress.** Updated continuously.
 > Last updated: 2026-07-29, against frontend HEAD `4f9e267` and backend HEAD
-> `7160f11`. **CMS-ADMIN was built and then rolled back this session** — only the
-> `/admin/contact` inbox was kept (staged, awaiting review). See the first two
-> entries below.
+> `7160f11`. This session: **CMS-ADMIN was built and then rolled back** (only the
+> `/admin/contact` inbox was kept, staged), and the two remaining non-CMS admin
+> backlog items — **catalog image picker** and **exam student preview** — were
+> built. See the first three entries below.
+
+---
+
+### Admin follow-ups — catalog image picker + exam student preview — 🔵 built, awaiting review (uncommitted)
+
+Closes backlog items **12** and **10**. Both are admin-side, both were unblocked,
+and neither touches CMS.
+
+**1 · Catalog image picker (item 12, BE-I-27 narrowed by backend `66a7632`).**
+The B8 catalog form took pasted URLs for `thumbnailUrl` / `badgeImageUrl`; it now
+also uploads.
+
+- `catalog.{dto,model,mappers,api}.ts` — `POST /admin/catalog/:id/image-upload-url`
+  (**bare** response) → presigned PUT → persist `publicUrl`.
+- **Reuses the A1 avatar pattern** (`242a11d`): an interceptor-free
+  `HttpClient(HttpBackend)` for the storage PUT, so no `Authorization`, `X-Lang`
+  or refresh cookie reaches the storage host and no extra header invalidates the
+  signature. **Difference from A1, deliberate:** every `requiredHeaders` entry is
+  echoed rather than just `Content-Type` — the signature also covers
+  `x-amz-acl: public-read`, so dropping it fails the upload. And the certificate
+  stores the returned **`publicUrl`**, not the `key` as the avatar flow does,
+  because the certificates bucket is public-read.
+- `components/cert-image-upload.ts` — writes **through the existing
+  `FormControl`**, so uploading is an alternative way to fill the same field and
+  the form's save path is untouched. It does **not** PATCH the certificate; the
+  form's own save does, so upload-then-cancel can't half-commit.
+- **Upload needs an existing certificate** — the endpoint 404s an unknown id, so
+  on the *create* form the picker is hidden and the field says to save first,
+  rather than offering an action that cannot work.
+- Content type is checked client-side against the four the backend will sign, so
+  an unsupported file is an instant message instead of a round trip.
+
+**2 · Exam student preview (item 10, `GET /admin/exams/:examId/preview`).**
+
+> **This replaced a preview that was quietly misleading.** The page already had a
+> "Preview" toggle, but it re-rendered the *authoring* data with the correct-answer
+> ticks hidden — while still showing `#position` and `marks`, which no candidate
+> ever receives. It looked like the student paper without being it. The toggle now
+> fetches the real endpoint and renders from that, so what an author checks before
+> publishing is what the exam engine will actually serve.
+
+- `exam-authoring.{dto,model,mappers,api}.ts` + `exam-questions.store.ts` —
+  preview kept as **separate state**, not derived from the authoring view:
+  deriving would mean stripping `isCorrect` client-side and trusting that
+  stripping, rather than reading what the server serves.
+- The preview types **omit `isCorrect` entirely**, so leaking a correct answer
+  into the preview UI is a compile error rather than something review has to
+  catch. The mapper copies options field-by-field instead of spreading, so a
+  backend regression that re-included the flag would be dropped here.
+- Refetched on each entry, so an author who just edited a question sees it.
+
+- **i18n:** 8 new `admin.catalog.form.image*` keys + 6 `admin.examQuestions.preview*`
+  keys, en/fr/ar, key sets verified identical. Arabic machine-drafted, **pending
+  professional review** (CLAUDE.md §9).
+- **Verification:** `npm run typecheck` ✓ · `npm run lint` ✓ (0 errors; the same
+  3 known `prefer-ngsrc` warnings — the new preview `<img>` carries a scoped,
+  reasoned suppression rather than adding a 4th, since `NgOptimizedImage` is for
+  pre-sized layout-critical images, not an arbitrary operator-supplied URL that
+  may not resolve) · `ng build --configuration production` ✓, initial gzip
+  **104.13 kB, unchanged**.
+- **Not runtime-tested against api-dev** — needs admin credentials. Unverified
+  live: the presigned PUT actually succeeding with the echoed headers (the part
+  most likely to bite), and the preview payload shape on a published exam.
 
 ---
 
@@ -1830,9 +1894,9 @@ surfaces are wired.
 | 7     | **Legacy `/dashboard/certificates` demo pages**                 | `certificates.page` / `cert-detail.page` / `cert-session.page` still read hardcoded `ESM_P_*` data from `certificates.store.ts:356-644`, duplicating the real `/dashboard/credentials` (A3) and the real mock runner | product decision: rewire or retire                                        |
 | ~~8~~ | ~~**Admin dashboard date window** (`from`/`to`, `72a711c`)~~    | ✅ done — `AdminDashboardApi.getOverviewByDateRange` + `AdminDashboardStore.setDateRange` shipped in `1c2fcdb`                                                                                                        | —                                                                         |
 | ~~9~~ | ~~**Admin student detail enrichment**~~                         | ✅ done — `StudentDetail.certificates[]/attempts[]/exams{}` mapped in `1c2fcdb`                                                                                                                                       | —                                                                         |
-| 10    | **Exam-authoring preview** (`GET /admin/exams/:examId/preview`) | Minor, never wired                                                                                                                                                                                                   | —                                                                         |
+| ~~10~~ | ~~**Exam-authoring preview**~~                                 | ✅ done 2026-07-29 — replaced the client-side faux-preview with the real endpoint                                                                                                                                     | —                                                                         |
 | **11** | **Real-exam answer review UI** — `GET /exam/attempts/:attemptId/review` | **BE-I-22 is fixed** (`66a7632`). The result page's review section was commented out (not deleted) in `b951242` for exactly this; add the transport + re-enable it. Terminal attempts only (422 otherwise), owner-only. | —                                                                         |
-| **12** | **Catalog image picker** — `POST /admin/catalog/:id/image-upload-url` | `66a7632` added presigned upload for certificate images; the B8 form still takes pasted URLs. Reuse the A1 avatar pattern (echo `requiredHeaders`, incl. `x-amz-acl: public-read`). | —                                                                         |
+| ~~12~~ | ~~**Catalog image picker**~~                                   | ✅ done 2026-07-29 — presigned upload wired into the B8 form, A1 pattern reused, `requiredHeaders` echoed. Upload requires a saved certificate (endpoint 404s an unknown id)                                           | —                                                                         |
 | **13** | **SEO — render `seo.jsonLd`** on blog/catalog detail pages     | `43bd2d8` embeds schema.org JSON-LD in blog (`blog.service.ts:550`) and catalog (`catalog.service.ts:461`) detail responses; nothing renders it. CMS pages are covered by plan Slice 5. | `sitemap.xml`/`robots.txt` need an **edge rewrite** (infra, not FE)       |
 
 **Known backend blockers (see [`backend-blockers-report.md`](./backend-blockers-report.md)):**

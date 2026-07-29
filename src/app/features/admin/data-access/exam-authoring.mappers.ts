@@ -1,12 +1,16 @@
 import {
   type ExamDetailDto,
   type ExamListItemDto,
+  type ExamPreviewDto,
+  type ExamPreviewQuestionDto,
   type ExamQuestionDto,
   type ExamQuestionOptionDto,
 } from './exam-authoring.dto';
 import {
   type AdminExam,
   type ExamDetail,
+  type ExamPreview,
+  type ExamPreviewQuestion,
   type ExamQuestion,
   type ExamQuestionOption,
   isExamQuestionType,
@@ -64,5 +68,37 @@ export function toExamDetail(dto: ExamDetailDto): ExamDetail {
     durationMinutes: dto.durationMinutes,
     translations: flattenTranslations(dto.translations),
     questions: dto.questions.map(toQuestion),
+  };
+}
+
+/* ─── Preview ─── */
+
+/**
+ * Map one preview question. Options are mapped field-by-field rather than
+ * spread, so that if the backend ever regressed and included `isCorrect`, it
+ * would be dropped here instead of flowing into the UI.
+ */
+function toExamPreviewQuestion(dto: ExamPreviewQuestionDto): ExamPreviewQuestion {
+  return {
+    id: dto.id,
+    questionText: dto.questionText,
+    questionType: isExamQuestionType(dto.questionType) ? dto.questionType : 'mcq',
+    position: dto.position,
+    options: (dto.options ?? []).map((o) => ({ id: o.id, optionText: o.optionText })),
+  };
+}
+
+/** Map the student-shape preview, questions sorted by `position`. */
+export function toExamPreview(dto: ExamPreviewDto): ExamPreview {
+  return {
+    id: dto.id,
+    title: dto.title,
+    examOrder: dto.examOrder,
+    passingScore: dto.passingScore,
+    durationMinutes: dto.durationMinutes,
+    status: isExamStatus(dto.status) ? dto.status : 'draft',
+    questions: [...(dto.questions ?? [])]
+      .map(toExamPreviewQuestion)
+      .sort((a, b) => a.position - b.position),
   };
 }

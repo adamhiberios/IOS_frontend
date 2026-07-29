@@ -15,6 +15,7 @@ import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 import { Button, Checkbox, Input as IosInput, Select, type SelectOption } from '@ui';
 
+import { CertImageUpload } from '../components/cert-image-upload';
 import { AdminCatalogApi } from '../data-access/catalog.api';
 import {
   type CertLevel,
@@ -43,7 +44,15 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
  */
 @Component({
   selector: 'ios-admin-catalog-form-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Button, Checkbox, Select],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    IosInput,
+    Button,
+    Checkbox,
+    Select,
+    CertImageUpload,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -131,21 +140,22 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
             ></textarea>
           </div>
 
-          <ios-input
-            id="cert-thumbnail"
-            [label]="lang.t('admin.catalog.form.thumbnailLabel')"
-            type="url"
+          <!-- Image slots: pasted URL or a direct upload (BE-I-27 / 66a7632) -->
+          <ios-cert-image-upload
+            imageType="thumbnail"
             [control]="form.controls.thumbnailUrl"
+            [certId]="certId"
+            [label]="lang.t('admin.catalog.form.thumbnailLabel')"
             [placeholder]="lang.t('admin.catalog.form.thumbnailPlaceholder')"
           />
 
           <!-- Catalog-card metadata (BE-I-04) -->
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <ios-input
-              id="cert-badge"
-              [label]="lang.t('admin.catalog.form.badgeLabel')"
-              type="url"
+            <ios-cert-image-upload
+              imageType="badge"
               [control]="form.controls.badgeImageUrl"
+              [certId]="certId"
+              [label]="lang.t('admin.catalog.form.badgeLabel')"
               [placeholder]="lang.t('admin.catalog.form.badgePlaceholder')"
             />
             <ios-input

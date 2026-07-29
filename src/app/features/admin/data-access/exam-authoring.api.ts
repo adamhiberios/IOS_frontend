@@ -9,12 +9,13 @@ import {
   type CreateQuestionBody,
   type ExamDetailResponseDto,
   type ExamListResponseDto,
+  type ExamPreviewResponseDto,
   type UpdateExamBody,
   type UpdateExamTranslationsBody,
   type UpdateQuestionBody,
 } from './exam-authoring.dto';
-import { toAdminExam, toExamDetail } from './exam-authoring.mappers';
-import { type AdminExam, type ExamDetail } from './exam-authoring.model';
+import { toAdminExam, toExamDetail, toExamPreview } from './exam-authoring.mappers';
+import { type AdminExam, type ExamDetail, type ExamPreview } from './exam-authoring.model';
 
 /**
  * Admin exam-authoring transport (`docs/backend-analysis.md` §6.5).
@@ -77,6 +78,17 @@ export class AdminExamAuthoringApi {
     return this.http
       .get<ExamDetailResponseDto>(`${this.base}/exams/${examId}`)
       .pipe(map((res) => toExamDetail(res.data)));
+  }
+
+  /**
+   * `GET /admin/exams/:examId/preview` — the paper **as a candidate will see
+   * it**: `isCorrect` stripped, mirroring `POST /exam/start`'s question shape
+   * (`exam-authoring.service.ts:296-331`). Works on draft and published exams.
+   */
+  preview(examId: string): Observable<ExamPreview> {
+    return this.http
+      .get<ExamPreviewResponseDto>(`${this.base}/exams/${examId}/preview`)
+      .pipe(map((res) => toExamPreview(res.data)));
   }
 
   /** `PATCH /admin/exams/:examId/translations` — merge per-locale title translations. */

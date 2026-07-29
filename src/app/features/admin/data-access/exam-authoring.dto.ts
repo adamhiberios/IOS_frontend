@@ -81,6 +81,44 @@ export interface ExamDetailResponseDto {
   readonly data: ExamDetailDto;
 }
 
+/* ─── Preview (`GET /admin/exams/:examId/preview`) ─── */
+
+/**
+ * The student-facing shape of a question: **`isCorrect` is stripped**, exactly
+ * as `POST /exam/start` returns it (`exam-authoring.service.ts:320-329`). The
+ * type omitting the field is the point — it makes leaking a correct answer into
+ * the preview UI a compile error rather than a review catch.
+ */
+export interface ExamPreviewOptionDto {
+  readonly id: string;
+  readonly optionText: string;
+}
+
+export interface ExamPreviewQuestionDto {
+  readonly id: string;
+  readonly questionText: string;
+  /** `mcq | true_false`. */
+  readonly questionType: string;
+  readonly position: number;
+  readonly options: readonly ExamPreviewOptionDto[];
+}
+
+/** Note: no `marks` and no `translations` — narrower than the authoring view. */
+export interface ExamPreviewDto {
+  readonly id: string;
+  readonly title: string;
+  readonly examOrder: number;
+  readonly passingScore: number;
+  readonly durationMinutes: number;
+  readonly status: string;
+  readonly questions: readonly ExamPreviewQuestionDto[];
+}
+
+/** `GET /admin/exams/:examId/preview` — `{ data }` envelope. */
+export interface ExamPreviewResponseDto {
+  readonly data: ExamPreviewDto;
+}
+
 /** One option in a question write payload (`CreateOptionDto`). */
 export interface QuestionOptionInput {
   readonly optionText: string;

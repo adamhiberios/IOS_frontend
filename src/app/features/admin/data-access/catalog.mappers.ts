@@ -1,7 +1,12 @@
-import { type CatalogDetailDto, type CatalogItemDto } from './catalog.dto';
+import {
+  type CatalogDetailDto,
+  type CatalogItemDto,
+  type CertificateImageUploadUrlResponseDto,
+} from './catalog.dto';
 import {
   type AdminCertificate,
   type AdminCertificateDetail,
+  type CertificateImageUploadTarget,
   type CertificateLocaleFields,
   isCertLevel,
 } from './catalog.model';
@@ -38,4 +43,22 @@ export function toAdminCertificateDetail(dto: CatalogDetailDto): AdminCertificat
     translations[locale] = toLocaleFields(fields);
   }
   return { ...toAdminCertificate(dto), translations };
+}
+
+/**
+ * Map the presigned-upload response (bare, no envelope) to the domain target.
+ * `requiredHeaders` is copied rather than aliased so a later mutation of the
+ * response object can't change what gets sent on the signed PUT, and defaults to
+ * `{}` so a malformed response degrades to a failed upload rather than a crash.
+ */
+export function toCertificateImageUploadTarget(
+  dto: CertificateImageUploadUrlResponseDto,
+): CertificateImageUploadTarget {
+  return {
+    uploadUrl: dto.uploadUrl,
+    requiredHeaders: { ...(dto.requiredHeaders ?? {}) },
+    key: dto.key,
+    publicUrl: dto.publicUrl,
+    expiresInSeconds: dto.expiresInSeconds,
+  };
 }

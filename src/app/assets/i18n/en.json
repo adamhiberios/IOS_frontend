@@ -2977,7 +2977,15 @@
         "loading": "Loading certificate…",
         "loadError": "Couldn’t load this certificate.",
         "backToList": "Back to certificates",
-        "genericError": "Couldn’t save the certificate. Please check the fields and try again."
+        "genericError": "Couldn’t save the certificate. Please check the fields and try again.",
+        "imageUpload": "Upload an image",
+        "imageUploading": "Uploading…",
+        "imageRemove": "Remove image",
+        "imageUploadAfterSave": "Save the certificate first, then you can upload an image here.",
+        "imageTypeError": "That file type isn’t supported. Use PNG, JPEG, WebP or SVG.",
+        "imageUploadError": "The upload didn’t finish. Please try again.",
+        "imagePreviewAlt": "Current image",
+        "imagePreviewFailed": "The image couldn’t be displayed. Check that the URL is reachable."
       },
       "translations": {
         "button": "Translations",
@@ -3273,7 +3281,13 @@
       "translationsTitle": "Exam title translations",
       "translationsHint": "Translate the exam title shown to students. Leave a field blank to keep the current value; English uses the exam’s main title.",
       "canonicalLabel": "English (canonical)",
-      "translationsError": "Couldn’t save translations. Please try again."
+      "translationsError": "Couldn’t save translations. Please try again.",
+      "previewNote": "This is the paper exactly as a candidate will receive it — no marks, no correct answers.",
+      "previewLoading": "Loading the preview…",
+      "previewError": "We couldn’t load the preview. Please try again.",
+      "previewDuration": "Time limit",
+      "previewPassing": "Pass mark",
+      "previewCount": "Questions"
     },
     "blog": {
       "title": "Blog",

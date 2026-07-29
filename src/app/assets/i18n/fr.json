@@ -2977,7 +2977,15 @@
         "loading": "Chargement de la certification…",
         "loadError": "Impossible de charger cette certification.",
         "backToList": "Retour aux certifications",
-        "genericError": "Impossible d’enregistrer la certification. Vérifiez les champs et réessayez."
+        "genericError": "Impossible d’enregistrer la certification. Vérifiez les champs et réessayez.",
+        "imageUpload": "Téléverser une image",
+        "imageUploading": "Téléversement…",
+        "imageRemove": "Retirer l’image",
+        "imageUploadAfterSave": "Enregistrez d’abord la certification, puis vous pourrez téléverser une image ici.",
+        "imageTypeError": "Ce type de fichier n’est pas pris en charge. Utilisez PNG, JPEG, WebP ou SVG.",
+        "imageUploadError": "Le téléversement n’a pas abouti. Veuillez réessayer.",
+        "imagePreviewAlt": "Image actuelle",
+        "imagePreviewFailed": "L’image n’a pas pu être affichée. Vérifiez que l’URL est accessible."
       },
       "translations": {
         "button": "Traductions",
@@ -3273,7 +3281,13 @@
       "translationsTitle": "Traductions du titre de l’examen",
       "translationsHint": "Traduisez le titre de l’examen affiché aux étudiants. Laissez un champ vide pour conserver la valeur actuelle ; l’anglais utilise le titre principal de l’examen.",
       "canonicalLabel": "Anglais (canonique)",
-      "translationsError": "Impossible d’enregistrer les traductions. Veuillez réessayer."
+      "translationsError": "Impossible d’enregistrer les traductions. Veuillez réessayer.",
+      "previewNote": "Voici l’épreuve telle qu’un candidat la recevra — sans points ni bonnes réponses.",
+      "previewLoading": "Chargement de l’aperçu…",
+      "previewError": "Impossible de charger l’aperçu. Veuillez réessayer.",
+      "previewDuration": "Durée",
+      "previewPassing": "Note de passage",
+      "previewCount": "Questions"
     },
     "blog": {
       "title": "Blog",

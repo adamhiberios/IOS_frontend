@@ -123,7 +123,71 @@ const required: ValidatorFn = (control) => Validators.required(control);
           </div>
         }
 
-        @if (store.isEmpty()) {
+        @if (preview()) {
+          <!--
+            Student preview — served by GET /admin/exams/:examId/preview, i.e.
+            the exact paper the exam engine will hand a candidate. Rendered from
+            store.preview(), NOT from the authoring data with the ticks hidden:
+            the authoring view carries isCorrect and marks, which no candidate
+            ever receives, so re-skinning it would be a guess at the student
+            shape rather than the student shape itself.
+          -->
+          <p class="mb-4 rounded-lg bg-gray-100 p-3 text-xs text-gray-600">
+            {{ lang.t('admin.examQuestions.previewNote') }}
+          </p>
+
+          @if (store.previewLoading()) {
+            <p class="py-10 text-center text-sm text-gray-500" role="status" aria-live="polite">
+              {{ lang.t('admin.examQuestions.previewLoading') }}
+            </p>
+          } @else if (store.previewError()) {
+            <div class="rounded-xl border border-red-200 bg-red-50 p-6 text-center">
+              <p class="text-sm text-red-700">{{ store.previewError() }}</p>
+              <ios-button class="mt-3 inline-block" variant="secondary" (clicked)="retryPreview()">
+                {{ lang.t('admin.examQuestions.retry') }}
+              </ios-button>
+            </div>
+          } @else if (store.preview(); as paper) {
+            <div class="mb-4 flex flex-wrap gap-x-6 gap-y-1 text-xs text-gray-500">
+              <span>
+                {{ lang.t('admin.examQuestions.previewDuration') }}: {{ paper.durationMinutes }}
+                {{ lang.t('admin.examQuestions.minutes') }}
+              </span>
+              <span>
+                {{ lang.t('admin.examQuestions.previewPassing') }}: {{ paper.passingScore }}%
+              </span>
+              <span>
+                {{ lang.t('admin.examQuestions.previewCount') }}: {{ paper.questions.length }}
+              </span>
+            </div>
+
+            @if (paper.questions.length === 0) {
+              <div class="rounded-xl border border-gray-200 bg-white p-10 text-center">
+                <p class="text-sm text-gray-500">{{ lang.t('admin.examQuestions.empty') }}</p>
+              </div>
+            } @else {
+              <ol class="flex flex-col gap-3">
+                @for (q of paper.questions; track q.id) {
+                  <li class="rounded-xl border border-gray-200 bg-white p-4">
+                    <p class="mb-2 font-medium text-ios-brand-dark" dir="auto">
+                      <span class="me-2 text-gray-400">{{ $index + 1 }}.</span>{{ q.questionText }}
+                    </p>
+                    <ul class="flex flex-col gap-1" role="list">
+                      @for (o of q.options; track o.id) {
+                        <li class="flex items-center gap-2 text-sm">
+                          <span
+                            class="inline-block h-4 w-4 shrink-0 rounded-full border border-gray-300"
+                          ></span>
+                          <span class="text-gray-700" dir="auto">{{ o.optionText }}</span>
+                        </li>
+                      }
+                    </ul>
+                  </li>
+                }
+              </ol>
+            }
+          }
+        } @else if (store.isEmpty()) {
           <div class="rounded-xl border border-gray-200 bg-white p-10 text-center">
             <p class="text-sm text-gray-500">{{ lang.t('admin.examQuestions.empty') }}</p>
           </div>
@@ -146,27 +210,21 @@ const required: ValidatorFn = (control) => Validators.required(control);
                     <ul class="mt-2 flex flex-col gap-1">
                       @for (o of q.options; track o.id) {
                         <li class="flex items-center gap-2 text-sm">
-                          @if (!preview()) {
-                            <span
-                              class="inline-flex items-center justify-center w-4 h-4 rounded-full text-xs"
-                              [class.bg-green-100]="o.isCorrect"
-                              [class.text-green-700]="o.isCorrect"
-                              [class.bg-gray-100]="!o.isCorrect"
-                              [class.text-transparent]="!o.isCorrect"
-                              [attr.aria-label]="
-                                o.isCorrect ? lang.t('admin.examQuestions.correct') : null
-                              "
-                            >
-                              ✓
-                            </span>
-                          } @else {
-                            <span
-                              class="inline-block w-4 h-4 rounded-full border border-gray-300"
-                            ></span>
-                          }
                           <span
-                            [class.font-medium]="o.isCorrect && !preview()"
-                            [class.text-gray-600]="!(o.isCorrect && !preview())"
+                            class="inline-flex items-center justify-center w-4 h-4 rounded-full text-xs"
+                            [class.bg-green-100]="o.isCorrect"
+                            [class.text-green-700]="o.isCorrect"
+                            [class.bg-gray-100]="!o.isCorrect"
+                            [class.text-transparent]="!o.isCorrect"
+                            [attr.aria-label]="
+                              o.isCorrect ? lang.t('admin.examQuestions.correct') : null
+                            "
+                          >
+                            ✓
+                          </span>
+                          <span
+                            [class.font-medium]="o.isCorrect"
+                            [class.text-gray-600]="!o.isCorrect"
                           >
                             {{ o.optionText }}
                           </span>
@@ -174,7 +232,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                       }
                     </ul>
                   </div>
-                  @if (canManage() && store.isDraft() && !preview()) {
+                  @if (canManage() && store.isDraft()) {
                     <div class="flex shrink-0 flex-col items-end gap-2">
                       <button
                         type="button"
@@ -531,8 +589,22 @@ export class AdminExamQuestionsPage implements OnInit {
     void this.store.reload();
   }
 
-  protected togglePreview(): void {
-    this.preview.update((v) => !v);
+  /**
+   * Enter / leave the student preview. Entering **fetches** the paper from
+   * `GET /admin/exams/:examId/preview` rather than re-rendering the authoring
+   * data with the answer ticks hidden — that older approach only looked like a
+   * preview; this is the shape the exam engine actually serves. Refetched on
+   * every entry so an author who just edited a question sees the change.
+   */
+  protected async togglePreview(): Promise<void> {
+    const next = !this.preview();
+    this.preview.set(next);
+    if (next) await this.store.loadPreview();
+    else this.store.clearPreview();
+  }
+
+  protected async retryPreview(): Promise<void> {
+    await this.store.loadPreview();
   }
 
   protected localeLabel(code: string): string {

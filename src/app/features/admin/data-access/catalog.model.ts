@@ -88,3 +88,49 @@ export interface CatalogListQuery {
   readonly limit?: number;
   readonly sort?: '-created_at' | 'created_at';
 }
+
+/* ─── Certificate image upload (BE-I-27, narrowed by backend `66a7632`) ─── */
+
+/**
+ * The two image slots a certificate has. Each maps to one form field:
+ * `badge` → `badgeImageUrl`, `thumbnail` → `thumbnailUrl`.
+ */
+export const CERTIFICATE_IMAGE_TYPES = ['badge', 'thumbnail'] as const;
+export type CertificateImageType = (typeof CERTIFICATE_IMAGE_TYPES)[number];
+
+/**
+ * Content types the backend will sign an upload for
+ * (`certificate-image-upload-url.dto.ts:15-20`). Anything else is a 400, so the
+ * file picker filters to these and rejects others before spending a request.
+ */
+export const CERTIFICATE_IMAGE_CONTENT_TYPES = [
+  'image/png',
+  'image/jpeg',
+  'image/webp',
+  'image/svg+xml',
+] as const;
+export type CertificateImageContentType = (typeof CERTIFICATE_IMAGE_CONTENT_TYPES)[number];
+
+/** True when the browser-reported MIME type is one the backend will sign. */
+export function isCertificateImageContentType(
+  value: string,
+): value is CertificateImageContentType {
+  return (CERTIFICATE_IMAGE_CONTENT_TYPES as readonly string[]).includes(value);
+}
+
+/** `accept` attribute for the file input, derived from the allowed types. */
+export const CERTIFICATE_IMAGE_ACCEPT = CERTIFICATE_IMAGE_CONTENT_TYPES.join(',');
+
+/**
+ * A signed upload target. `requiredHeaders` is kept **as returned** rather than
+ * reduced to a `Content-Type` — the signature covers `x-amz-acl` too, and the
+ * backend is free to add more, so the client echoes whatever it is told.
+ */
+export interface CertificateImageUploadTarget {
+  readonly uploadUrl: string;
+  readonly requiredHeaders: Readonly<Record<string, string>>;
+  readonly key: string;
+  /** Persist this on the certificate — not the `key` (cf. the avatar flow). */
+  readonly publicUrl: string;
+  readonly expiresInSeconds: number;
+}
