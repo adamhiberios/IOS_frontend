@@ -30,7 +30,9 @@
     "less": "Less",
     "viewAll": "View all",
     "learnMore": "Learn more",
-    "nextLevel": "Next level"
+    "nextLevel": "Next level",
+    "previousCertification": "Previous certification",
+    "nextCertification": "Next certification"
   },
   "lang": {
     "en": "English",
@@ -249,43 +251,40 @@
       }
     },
     "levels": {
-      "foundation": {
-        "tabLabel": "Scrum Master",
-        "levelLabel": "Foundation",
-        "title": "Foundation Level",
-        "description": "Facilitate Scrum events, remove impediments, and guide your team to consistent delivery. Our Scrum Master certifications progress from foundational facilitation skills through to expert-level coaching and organizational transformation.",
-        "audience": {
-          "careerChangers": "Career changers entering Agile",
-          "newPractitioners": "New Scrum practitioners",
-          "teamMembers": "Team members seeking structure"
-        },
-        "explorePath": "Explore Scrum Master Path",
-        "audienceDesc": "For professionals in the Scrum Master role — from those entering the field through to experienced Agile coaches driving enterprise-level change."
+      "tiers": {
+        "foundation": "Foundation",
+        "practitioner": "Practitioner",
+        "authority": "Authority",
+        "unknown": "General"
       },
-      "practitioner": {
-        "tabLabel": "Product Owner",
-        "levelLabel": "Practitioner",
-        "title": "Practitioner Level",
-        "description": "Own the product vision, prioritize the backlog, and maximize value for your stakeholders. Our Product Owner certifications develop the decision-making and strategic thinking skills your role demands at every level.",
-        "audience": {
-          "professionals": "Active Scrum Masters & coaches"
+      "tracks": {
+        "scrumMaster": {
+          "tabLabel": "Scrum Master",
+          "description": "Facilitate Scrum events, remove impediments, and guide your team to consistent delivery. Our Scrum Master certifications progress from foundational facilitation skills through to expert-level coaching and organizational transformation.",
+          "explorePath": "Explore Scrum Master Path",
+          "audienceDesc": "For professionals in the Scrum Master role — from those entering the field through to experienced Agile coaches driving enterprise-level change."
         },
-        "explorePath": "Explore Product Owner Path",
-        "audienceDesc": "For professionals responsible for product vision and backlog ownership — from those entering product roles through to senior strategists shaping long-term direction."
-      },
-      "authority": {
-        "tabLabel": "Scrum Facilitator",
-        "levelLabel": "Authority",
-        "title": "Authority Level",
-        "description": "Design and lead powerful collaborative workshops that drive alignment and unlock team potential. Our Scrum Facilitator certifications build specialized expertise in structured facilitation and organizational engagement.",
-        "audience": {
-          "senior": "Senior Agile leaders & strategists"
+        "productOwner": {
+          "tabLabel": "Product Owner",
+          "description": "Own the product vision, prioritize the backlog, and maximize value for your stakeholders. Our Product Owner certifications develop the decision-making and strategic thinking skills your role demands at every level.",
+          "explorePath": "Explore Product Owner Path",
+          "audienceDesc": "For professionals responsible for product vision and backlog ownership — from those entering product roles through to senior strategists shaping long-term direction."
         },
-        "explorePath": "Explore Scrum Facilitator Path",
-        "audienceDesc": "For professionals who design and facilitate workshops, retrospectives, and collaborative sessions — from those new to facilitation through to expert change agents."
+        "scrumFacilitator": {
+          "tabLabel": "Scrum Facilitator",
+          "description": "Design and lead powerful collaborative workshops that drive alignment and unlock team potential. Our Scrum Facilitator certifications build specialized expertise in structured facilitation and organizational engagement.",
+          "explorePath": "Explore Scrum Facilitator Path",
+          "audienceDesc": "For professionals who design and facilitate workshops, retrospectives, and collaborative sessions — from those new to facilitation through to expert change agents."
+        },
+        "other": {
+          "description": "Live certifications currently published in our catalog.",
+          "explorePath": "View Certifications",
+          "audienceDesc": "Pulled directly from our course catalog — availability and pricing may change as new certifications launch."
+        }
       },
       "passMark": "Pass mark: 75%",
       "whoShouldPursue": "Who Should Pursue This",
+      "whoShouldPursueToggle": "Show who should pursue this",
       "cert": {
         "startingAt": "Starting at",
         "downloadGuide": "Download Guide",
@@ -293,20 +292,6 @@
         "hours": "15+ hrs",
         "online": "Fully Online",
         "exam": "45-question Test"
-      },
-      "dataToggle": {
-        "label": "Data source",
-        "real": "Live",
-        "fake": "Demo",
-        "loading": "Loading…",
-        "error": "Couldn't load live data — showing demo data"
-      },
-      "live": {
-        "description": "Live certifications currently published in our catalog.",
-        "audienceDesc": "Pulled directly from our course catalog — availability and pricing may change as new certifications launch.",
-        "explorePath": "View Certifications",
-        "noLevel": "General",
-        "empty": "No live certifications are published yet."
       }
     },
     "certs": {
@@ -492,7 +477,14 @@
       "homeAriaLabel": "Institute of Scrum — home",
       "languageToggle": "Switch language",
       "userMenuAriaLabel": "User menu",
-      "logoAlt": "Institute of Scrum"
+      "logoAlt": "Institute of Scrum",
+      "aboutMenuAriaLabel": "About menu",
+      "aboutItems": {
+        "mockExam": "About Mock Exam",
+        "scrumMaster": "About Scrum Master",
+        "productOwner": "About Product Owner",
+        "scrumFacilitator": "About Scrum Facilitator"
+      }
     },
     "footer": {
       "tagline": "Canada's premier provider of industry-recognized Scrum certifications.",

@@ -153,11 +153,16 @@ interface AnswerOption {
         ></div>
 
         <!-- Main image -->
-        <div class="relative rounded-2xl overflow-hidden shadow-xl">
+        <!-- The height lives on the wrapper because NgOptimizedImage's fill
+             mode absolutely positions the image against its nearest positioned
+             ancestor. Fill rather than width/height: the rendered size is
+             CSS-driven, so there is no meaningful intrinsic size to declare. -->
+        <div class="relative rounded-2xl overflow-hidden shadow-xl h-[440px]">
           <img
             [ngSrc]="'/assets/images/about_mock_test.jpg'"
             [attr.alt]="lang.t('mockExam.whatIs.imageAlt')"
-            class="w-full h-[440px] object-cover"
+            fill
+            class="object-cover"
             loading="lazy"
             decoding="async"
           />
@@ -512,11 +517,13 @@ interface AnswerOption {
       <div class="relative">
         <!-- Background image with gradient fade — constrained so CTA card extends beyond it -->
         <div class="relative rounded-2xl overflow-hidden h-[495px] max-w-[700px] mx-auto">
+          <!-- Wrapper already sets the height, so fill needs no extra sizing. -->
           <img
             [ngSrc]="'/assets/images/about_mock_test.jpg'"
             alt=""
             aria-hidden="true"
-            class="w-full h-full object-cover object-top"
+            fill
+            class="object-cover object-top"
             loading="lazy"
             decoding="async"
           />

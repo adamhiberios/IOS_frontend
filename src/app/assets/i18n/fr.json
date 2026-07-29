@@ -8,6 +8,8 @@
     "selectLanguage": "Choisir la langue",
     "previousLevel": "Niveau précédent",
     "nextLevel": "Niveau suivant",
+    "previousCertification": "Certification précédente",
+    "nextCertification": "Certification suivante",
     "loading": "Chargement...",
     "error": "Une erreur est survenue",
     "retry": "Réessayer",
@@ -249,43 +251,40 @@
       }
     },
     "levels": {
-      "foundation": {
-        "tabLabel": "Scrum Master",
-        "levelLabel": "Fondation",
-        "title": "Niveau Fondamental",
-        "description": "Facilitez les événements Scrum, levez les obstacles et guidez votre équipe vers des résultats constants. Nos certifications Scrum Master progressent des compétences fondamentales de facilitation jusqu'au coaching expert et à la transformation organisationnelle.",
-        "audience": {
-          "careerChangers": "Reconversion vers l'Agile",
-          "newPractitioners": "Nouveaux praticiens Scrum",
-          "teamMembers": "Membres d'équipe recherchant une structure"
-        },
-        "explorePath": "Explorer le parcours Scrum Master",
-        "audienceDesc": "Pour les professionnels dans le rôle de Scrum Master — des débutants aux coachs Agile expérimentés qui pilotent le changement à l'échelle de l'entreprise."
+      "tiers": {
+        "foundation": "Fondation",
+        "practitioner": "Praticien",
+        "authority": "Autorité",
+        "unknown": "Général"
       },
-      "practitioner": {
-        "tabLabel": "Product Owner",
-        "levelLabel": "Praticien",
-        "title": "Niveau Praticien",
-        "description": "Portez la vision produit, priorisez le backlog et maximisez la valeur pour vos parties prenantes. Nos certifications Product Owner développent les compétences décisionnelles et la pensée stratégique que votre rôle exige à chaque niveau.",
-        "audience": {
-          "professionals": "Scrum Masters et coachs actifs"
+      "tracks": {
+        "scrumMaster": {
+          "tabLabel": "Scrum Master",
+          "description": "Facilitez les événements Scrum, levez les obstacles et guidez votre équipe vers des résultats constants. Nos certifications Scrum Master progressent des compétences fondamentales de facilitation jusqu'au coaching expert et à la transformation organisationnelle.",
+          "explorePath": "Explorer le parcours Scrum Master",
+          "audienceDesc": "Pour les professionnels dans le rôle de Scrum Master — des débutants aux coachs Agile expérimentés qui pilotent le changement à l'échelle de l'entreprise."
         },
-        "explorePath": "Explorer le parcours Product Owner",
-        "audienceDesc": "Pour les professionnels responsables de la vision produit et de la gestion du backlog — des nouveaux entrants aux stratèges seniors qui façonnent la direction à long terme."
-      },
-      "authority": {
-        "tabLabel": "Scrum Facilitator",
-        "levelLabel": "Autorité",
-        "title": "Niveau Autorité",
-        "description": "Concevez et animez des ateliers collaboratifs puissants qui favorisent l'alignement et libèrent le potentiel des équipes. Nos certifications Scrum Facilitator bâtissent une expertise spécialisée en facilitation structurée et en engagement organisationnel.",
-        "audience": {
-          "senior": "Leaders et stratèges Agile seniors"
+        "productOwner": {
+          "tabLabel": "Product Owner",
+          "description": "Portez la vision produit, priorisez le backlog et maximisez la valeur pour vos parties prenantes. Nos certifications Product Owner développent les compétences décisionnelles et la pensée stratégique que votre rôle exige à chaque niveau.",
+          "explorePath": "Explorer le parcours Product Owner",
+          "audienceDesc": "Pour les professionnels responsables de la vision produit et de la gestion du backlog — des nouveaux entrants aux stratèges seniors qui façonnent la direction à long terme."
         },
-        "explorePath": "Explorer le parcours Scrum Facilitator",
-        "audienceDesc": "Pour les professionnels qui conçoivent et animent des ateliers, rétrospectives et sessions collaboratives — des nouveaux facilitateurs aux agents de changement experts."
+        "scrumFacilitator": {
+          "tabLabel": "Scrum Facilitator",
+          "description": "Concevez et animez des ateliers collaboratifs puissants qui favorisent l'alignement et libèrent le potentiel des équipes. Nos certifications Scrum Facilitator bâtissent une expertise spécialisée en facilitation structurée et en engagement organisationnel.",
+          "explorePath": "Explorer le parcours Scrum Facilitator",
+          "audienceDesc": "Pour les professionnels qui conçoivent et animent des ateliers, rétrospectives et sessions collaboratives — des nouveaux facilitateurs aux agents de changement experts."
+        },
+        "other": {
+          "description": "Certifications actuellement publiées dans notre catalogue.",
+          "explorePath": "Voir les certifications",
+          "audienceDesc": "Provient directement de notre catalogue de cours — la disponibilité et les prix peuvent changer."
+        }
       },
       "passMark": "Seuil de réussite : 75 %",
       "whoShouldPursue": "À qui s'adresse cette certification",
+      "whoShouldPursueToggle": "Afficher à qui s'adresse cette certification",
       "cert": {
         "startingAt": "À partir de",
         "downloadGuide": "Télécharger le guide",
@@ -293,20 +292,6 @@
         "hours": "+20 h",
         "online": "100 % en ligne",
         "exam": "Examen de 45 questions"
-      },
-      "dataToggle": {
-        "label": "Source des données",
-        "real": "En direct",
-        "fake": "Démo",
-        "loading": "Chargement…",
-        "error": "Échec du chargement des données en direct — affichage des données de démonstration"
-      },
-      "live": {
-        "description": "Certifications actuellement publiées dans notre catalogue.",
-        "audienceDesc": "Provient directement de notre catalogue de cours — la disponibilité et les prix peuvent changer.",
-        "explorePath": "Voir les certifications",
-        "noLevel": "Général",
-        "empty": "Aucune certification en direct n'est publiée pour le moment."
       }
     },
     "certs": {
@@ -492,7 +477,14 @@
       "homeAriaLabel": "Institute of Scrum — accueil",
       "logoAlt": "Institut Scrum",
       "languageToggle": "Changer de langue",
-      "userMenuAriaLabel": "Menu utilisateur"
+      "userMenuAriaLabel": "Menu utilisateur",
+      "aboutMenuAriaLabel": "Menu À propos",
+      "aboutItems": {
+        "mockExam": "À propos de l'examen blanc",
+        "scrumMaster": "À propos du Scrum Master",
+        "productOwner": "À propos du Product Owner",
+        "scrumFacilitator": "À propos du Scrum Facilitator"
+      }
     },
     "footer": {
       "tagline": "Le fournisseur de premier plan au Canada de certifications Scrum reconnues par l'industrie.",

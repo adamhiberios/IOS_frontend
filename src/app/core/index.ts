@@ -11,3 +11,4 @@ export * from './consent';
 export * from './http';
 export * from './i18n';
 export * from './event-bus';
+export * from './viewport';
