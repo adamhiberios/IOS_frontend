@@ -137,7 +137,10 @@ export class DashboardStore {
         ? this.lang.t('dashboard.learning.ctaContinue')
         : this.lang.t('dashboard.learning.ctaStart'),
       ctaStyle: started ? 'dark' : 'primary',
-      ctaRoute: `/courses/${inProgress.certId}`,
+      // The learning hub is `/dashboard/certificates`, keyed by **program code**
+      // (the parallel `/courses` pages were removed as duplicates). `certId` is
+      // still the backend key, but it isn't what this route takes.
+      ctaRoute: `/dashboard/certificates/${inProgress.programCode}`,
     };
   });
 

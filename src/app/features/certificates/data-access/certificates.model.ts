@@ -253,8 +253,12 @@ export interface CertDetail {
   readonly yearFilter: ScoreFilterYear;
   /** Active week filter for the line chart. */
   readonly weekFilter: ScoreFilterWeek;
-  /** Session files shown in the Learning Materials tab. */
-  readonly learningMaterials: readonly LearningMaterial[];
+  /*
+   * NOTE: `learningMaterials` was removed. The Learning Materials tab is built
+   * from the real curriculum (`GET /learning/certs/:certId/curriculum`) in
+   * `cert-detail.page.ts`, so each row carries a real lesson UUID. It is not
+   * part of this fixture-backed snapshot any more.
+   */
   /** Aggregate KPIs for the Mock test tab. */
   readonly mockTestStats: MockTestStats;
   /** Ordered list of mock test attempts shown in the history list. */
@@ -348,12 +352,16 @@ export interface MockTestSettings {
   readonly questionCount: number;
 }
 
-/** Full store snapshot for the certificates feature. */
+/**
+ * Remaining fixture-backed snapshot for the certificate **detail** page.
+ *
+ * `enrolledCerts`, `allCerts` and `sessions` were removed when the list and
+ * session pages were wired to `/learning/*`: enrolments come from
+ * `GET /learning/progress` and lessons from `GET /learning/lessons/:id`. What is
+ * left here still backs the detail page's Overview charts and mock-test section,
+ * which have no real data source yet.
+ */
 export interface CertificatesState {
-  /** Enrolled cert header rows shown at the top of the list page. */
-  readonly enrolledCerts: readonly EnrolledCertHeader[];
-  /** All available certifications shown in the bottom grid. */
-  readonly allCerts: readonly CertListCard[];
   /**
    * Certificate detail currently selected.
    * null → no cert selected / navigating from a list with no selection.
@@ -361,6 +369,4 @@ export interface CertificatesState {
   readonly selectedDetail: CertDetail | null;
   /** Which side-nav section is active in the detail view. */
   readonly activeSection: CertDetailSection;
-  /** All session viewer data sets, keyed by materialId. */
-  readonly sessions: readonly CertSessionData[];
 }

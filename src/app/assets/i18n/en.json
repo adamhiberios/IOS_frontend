@@ -641,7 +641,16 @@
       "materialContinue": "Continue",
       "materialInProgress": "In Progress",
       "materialNotStarted": "Not Started",
-      "materialCompleted": "Completed"
+      "materialCompleted": "Completed",
+      "lessonLoading": "Loading the lesson…",
+      "lessonNoContent": "This lesson has no written content yet.",
+      "markComplete": "Mark as complete",
+      "materialsLoading": "Loading your lessons…",
+      "materialsEmpty": "No lessons are available for this certification yet.",
+      "openLesson": "Open",
+      "reviewLesson": "Review",
+      "noEnrolments": "You are not enrolled in any certification yet.",
+      "browseCertifications": "Browse certifications"
     },
     "learning": {
       "title": "Complete your learning",

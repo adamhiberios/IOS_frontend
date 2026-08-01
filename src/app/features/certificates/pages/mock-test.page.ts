@@ -86,7 +86,7 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
                 role="list"
               >
                 <li>
-                  <a routerLink="/courses" class="hover:text-ios-fg-10 transition-colors">{{
+                  <a routerLink="/dashboard/certificates" class="hover:text-ios-fg-10 transition-colors">{{
                     lang.t('courses.index.title')
                   }}</a>
                 </li>
@@ -120,7 +120,7 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
               <div class="py-16 text-center flex flex-col items-center gap-4" role="alert">
                 <p class="text-ios-fg-10">{{ store.runnerError() ?? lang.t('mock.startError') }}</p>
                 <a
-                  routerLink="/courses"
+                  routerLink="/dashboard/certificates"
                   class="inline-flex h-11 items-center rounded-xl bg-ios-fg-13 px-6 font-semibold text-white"
                   >{{ lang.t('mock.goToCourses') }}</a
                 >
@@ -130,7 +130,7 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
               <div class="py-16 text-center flex flex-col items-center gap-4" role="status">
                 <p class="text-ios-fg-10">{{ lang.t('mock.noAttempt') }}</p>
                 <a
-                  routerLink="/courses"
+                  routerLink="/dashboard/certificates"
                   class="inline-flex h-11 items-center rounded-xl bg-ios-fg-13 px-6 font-semibold text-white"
                   >{{ lang.t('mock.goToCourses') }}</a
                 >

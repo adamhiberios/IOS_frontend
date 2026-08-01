@@ -84,7 +84,7 @@ const FAMILY_BG: Record<string, string> = {
         </span>
 
         <a
-          [routerLink]="['/courses', cert().certId]"
+          [routerLink]="['/dashboard/certificates', cert().code]"
           class="flex items-center gap-1 text-sm font-semibold leading-[1.4] text-ios-fg-8 hover:text-ios-fg-10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 rounded px-1"
         >
           {{ lang.t('dashboard.certs.showDetails') }}

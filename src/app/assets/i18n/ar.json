@@ -641,7 +641,16 @@
       "materialContinue": "متابعة",
       "materialInProgress": "قيد التقدم",
       "materialNotStarted": "لم يبدأ",
-      "materialCompleted": "مكتمل"
+      "materialCompleted": "مكتمل",
+      "lessonLoading": "جارٍ تحميل الدرس…",
+      "lessonNoContent": "لا يحتوي هذا الدرس على محتوى مكتوب بعد.",
+      "markComplete": "وضع علامة مكتمل",
+      "materialsLoading": "جارٍ تحميل الدروس…",
+      "materialsEmpty": "لا توجد دروس متاحة لهذه الشهادة بعد.",
+      "openLesson": "فتح",
+      "reviewLesson": "مراجعة",
+      "noEnrolments": "لست مسجّلًا في أي شهادة بعد.",
+      "browseCertifications": "تصفّح الشهادات"
     },
     "learning": {
       "title": "أكمل تعلمك",

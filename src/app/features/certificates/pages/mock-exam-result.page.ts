@@ -31,7 +31,7 @@ import { MockStore } from '../data-access/mock.store';
           <!-- ── Breadcrumb row ─────────────────────────────────────── -->
           <div class="flex items-center gap-3">
             <a
-              routerLink="/courses"
+              routerLink="/dashboard/certificates"
               class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
               [attr.aria-label]="lang.t('dashboard.certs.backToCertDetail')"
             >
@@ -43,7 +43,7 @@ import { MockStore } from '../data-access/mock.store';
                 role="list"
               >
                 <li>
-                  <a routerLink="/courses" class="hover:text-ios-fg-10 transition-colors">{{
+                  <a routerLink="/dashboard/certificates" class="hover:text-ios-fg-10 transition-colors">{{
                     lang.t('courses.index.title')
                   }}</a>
                 </li>
@@ -232,7 +232,7 @@ import { MockStore } from '../data-access/mock.store';
                 {{ lang.t('dashboard.examRunner.noResultsFound') }}
               </p>
               <a
-                routerLink="/courses"
+                routerLink="/dashboard/certificates"
                 class="text-ios-brand-primary underline hover:no-underline"
                 >{{ lang.t('mock.goToCourses') }}</a
               >

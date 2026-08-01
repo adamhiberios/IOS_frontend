@@ -27,7 +27,7 @@ import { type MockHistoryItem } from '../data-access/mock.model';
       <main class="flex-1 w-full px-4 md:px-20 py-8" id="main-content">
         <div class="max-w-[900px] mx-auto flex flex-col gap-6">
           <a
-            routerLink="/courses"
+            routerLink="/dashboard/certificates"
             class="inline-flex items-center gap-2 text-[14px] font-medium text-ios-fg-8 hover:text-ios-fg-11 transition-colors w-fit"
           >
             <ios-icon name="arrow-left" class="w-4 h-4 rtl:rotate-180" aria-hidden="true" />

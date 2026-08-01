@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  type OnInit,
+  computed,
+  inject,
+} from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import {
@@ -15,10 +21,16 @@ import { LanguageService } from '@core/i18n';
 import { CanadaFlag, CertificatesBadge, DonutChart, IosIcon, LineChart, provideIcons } from '@ui';
 
 import { DashboardNavbar } from '@layouts';
+import { CoursesStore } from '@features/courses/data-access/courses.store';
 import { CertLearningMaterials } from '../components/cert-learning-materials';
 import { CertMockTest } from '../components/cert-mock-test';
 import { CertSideNav } from '../components/cert-side-nav';
-import type { CertDetailSection, MockTestSettings } from '../data-access/certificates.model';
+import type {
+  CertDetailSection,
+  LearningMaterial,
+  MaterialStatus,
+  MockTestSettings,
+} from '../data-access/certificates.model';
 import { CertificatesStore } from '../data-access/certificates.store';
 
 /**
@@ -342,10 +354,30 @@ import { CertificatesStore } from '../data-access/certificates.store';
                    LEARNING MATERIALS section
               ══════════════════════════════════════════════ -->
               @if (store.activeSection() === 'materials') {
-                @if (detail()) {
+                @if (courses.curriculumError(); as message) {
+                  <div class="rounded-2xl bg-ios-surface-muted px-6 py-10 text-center" role="alert">
+                    <p class="text-[15px] font-medium text-ios-fg-13">{{ message }}</p>
+                  </div>
+                } @else if (courses.curriculumLoading() && realMaterials().length === 0) {
+                  <p class="py-10 text-center text-ios-fg-8" role="status" aria-live="polite">
+                    {{ lang.t('dashboard.certs.materialsLoading') }}
+                  </p>
+                } @else if (realMaterials().length === 0) {
+                  <div class="rounded-2xl bg-ios-surface-muted px-6 py-10 text-center">
+                    <p class="text-[15px] text-ios-fg-8">
+                      {{ lang.t('dashboard.certs.materialsEmpty') }}
+                    </p>
+                  </div>
+                } @else if (detail()) {
+                  <!--
+                    materials comes from the real curriculum, so each row's id
+                    is a lesson UUID. It used to be the ESM_P_MATERIALS fixture,
+                    whose slug ids ("session-1-a") made the session route 400
+                    with "Validation failed (uuid is expected)".
+                  -->
                   <ios-cert-learning-materials
                     [cert]="detail()!.certificationCard"
-                    [materials]="detail()!.learningMaterials"
+                    [materials]="realMaterials()"
                     (open)="onMaterialOpen($event)"
                   />
                 }
@@ -383,9 +415,10 @@ import { CertificatesStore } from '../data-access/certificates.store';
     </div>
   `,
 })
-export class CertDetailPage {
+export class CertDetailPage implements OnInit {
   protected readonly lang = inject(LanguageService);
   protected readonly store = inject(CertificatesStore);
+  protected readonly courses = inject(CoursesStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
@@ -393,6 +426,63 @@ export class CertDetailPage {
   protected readonly yearStr = String(this.currentYear);
 
   protected readonly detail = computed(() => this.store.selectedDetail());
+
+  /** Route `:code` — a **program code** (e.g. `ESM`), not a UUID. */
+  private readonly certCode = this.route.snapshot.params['code'] as string;
+
+  /**
+   * The enrolled certificate matching the route's program code. The backend
+   * keys everything by `certId` (UUID) while the URL carries the human-readable
+   * code, so `GET /learning/progress` is the lookup table between them — and it
+   * only lists **enrolled** certificates, which is exactly the right gate here.
+   */
+  private readonly enrolled = computed(() =>
+    this.courses.progress().find((p) => p.programCode === this.certCode),
+  );
+
+  /**
+   * Learning-material rows built from the real curriculum. Each row's `id` is a
+   * **lesson UUID**, which is what the session route now requires.
+   *
+   * Fields the design has but the backend does not (`currentPage`,
+   * `totalPages`) are set to `0` rather than invented: there is no per-lesson
+   * page tracking anywhere in the API, and showing a fabricated "page 3 of 12"
+   * would be a lie the UI can't back up. `completionPercent` collapses to the
+   * only real signal available — the boolean `completed`.
+   */
+  protected readonly realMaterials = computed<readonly LearningMaterial[]>(() => {
+    const curriculum = this.courses.curriculum();
+    if (!curriculum) return [];
+    return curriculum.modules.flatMap((module) =>
+      module.lessons.map((lesson) => ({
+        id: lesson.id,
+        title: lesson.title,
+        currentPage: 0,
+        totalPages: 0,
+        completionPercent: lesson.completed ? 100 : 0,
+        status: (lesson.completed ? 'completed' : 'not_started') satisfies MaterialStatus,
+        actionLabel: this.lang.t(
+          lesson.completed ? 'dashboard.certs.reviewLesson' : 'dashboard.certs.openLesson',
+        ),
+      })),
+    );
+  });
+
+  ngOnInit(): void {
+    void this.loadRealCurriculum();
+  }
+
+  /**
+   * Resolve the program code to a `certId` and load its curriculum. Progress is
+   * fetched first because it is the only code → id mapping available; when the
+   * code isn't in the enrolled list there is nothing to load, and the materials
+   * section renders its empty state rather than firing a doomed request.
+   */
+  private async loadRealCurriculum(): Promise<void> {
+    await this.courses.loadProgress();
+    const certId = this.enrolled()?.certId;
+    if (certId) await this.courses.loadCurriculum(certId);
+  }
 
   /** Show "Start Final Test" CTA when completion ≥ 80%. */
   protected readonly showFinalTestCta = computed(

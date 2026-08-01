@@ -2,10 +2,24 @@ import { ChangeDetectionStrategy, Component, inject, input, output } from '@angu
 
 import { LanguageService } from '@core/i18n';
 
-import type { SessionChapter } from '../data-access/certificates.model';
+/**
+ * The minimum an item needs to appear in this nav. Widened from the old
+ * `SessionChapter` (which also carried `paragraphs`) when the session viewer was
+ * rewired to real lessons: the nav only ever read `id` + `title`, so demanding a
+ * body it never renders forced callers to fabricate one.
+ */
+export interface CertNavItem {
+  readonly id: string;
+  readonly title: string;
+}
 
 /**
- * `ios-cert-chapter-nav` — left vertical chapter list for the session viewer.
+ * `ios-cert-chapter-nav` — left vertical list for the session viewer.
+ *
+ * Now lists the **sibling lessons of the current module** rather than chapters
+ * within one document: a backend lesson is a single `contentHtml` blob with no
+ * chapter structure, so lesson-to-lesson is the real navigation the design's
+ * chapter list was standing in for.
  *
  * Width: 354 px (Figma spec).
  *
@@ -45,8 +59,8 @@ import type { SessionChapter } from '../data-access/certificates.model';
 })
 export class CertChapterNav {
   protected readonly lang = inject(LanguageService);
-  /** Ordered list of chapters to render in the sidebar. */
-  readonly chapters = input.required<readonly SessionChapter[]>();
+  /** Ordered list of items to render in the sidebar. */
+  readonly chapters = input.required<readonly CertNavItem[]>();
   /** ID of the currently active chapter. */
   readonly activeChapterId = input.required<string>();
   /** Emits the chapter ID when the user clicks a sidebar item. */

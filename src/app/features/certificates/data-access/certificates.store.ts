@@ -5,203 +5,16 @@ import { LanguageService } from '@core/i18n';
 import type {
   CertDetail,
   CertDetailSection,
-  CertListCard,
-  CertSessionData,
   CertificatesState,
-  EnrolledCertHeader,
-  LearningMaterial,
   MockTestAttempt,
   MockTestQuestion,
   MockTestStats,
   ScoreFilterWeek,
-  SessionChapter,
   WeeklyScore,
 } from './certificates.model';
 
 /* --------------------------------------------------------------------------
  * Learning materials mock data — shared across all demo states for ESM-P
- * -------------------------------------------------------------------------- */
-
-const ESM_P_MATERIALS: readonly LearningMaterial[] = [
-  {
-    id: 'session-1-a',
-    title: 'Session 1',
-    currentPage: 5,
-    totalPages: 15,
-    completionPercent: 0,
-    status: 'not_started',
-    actionLabel: 'Open',
-  },
-  {
-    id: 'session-1-b',
-    title: 'Session 1',
-    currentPage: 5,
-    totalPages: 15,
-    completionPercent: 53,
-    status: 'in_progress',
-    actionLabel: 'Continue',
-  },
-  {
-    id: 'session-1-c',
-    title: 'Session 1',
-    currentPage: 5,
-    totalPages: 15,
-    completionPercent: 100,
-    status: 'completed',
-    actionLabel: 'Open',
-  },
-  {
-    id: 'session-2',
-    title: 'Session 2',
-    currentPage: 3,
-    totalPages: 12,
-    completionPercent: 75,
-    status: 'in_progress',
-    actionLabel: 'In Progress',
-  },
-  {
-    id: 'session-3',
-    title: 'Session 3',
-    currentPage: 2,
-    totalPages: 10,
-    completionPercent: 20,
-    status: 'not_started',
-    actionLabel: 'Not Started',
-  },
-  {
-    id: 'session-4',
-    title: 'Session 4',
-    currentPage: 4,
-    totalPages: 14,
-    completionPercent: 50,
-    status: 'in_progress',
-    actionLabel: 'Open',
-  },
-  {
-    id: 'session-5',
-    title: 'Session 5',
-    currentPage: 6,
-    totalPages: 18,
-    completionPercent: 90,
-    status: 'completed',
-    actionLabel: 'Completed',
-  },
-];
-
-/* --------------------------------------------------------------------------
- * Session viewer mock data — ESM-P, Session 1
- * Figma: node 13110-52150
- * -------------------------------------------------------------------------- */
-
-const INTRO_PARAGRAPHS: readonly string[] = [
-  "The Project Management Core Certificate is designed to establish a strong, practical foundation in project management for professionals who are involved in planning, coordinating, or delivering projects within their organizations. In today's dynamic business environment, organizations rely on projects to drive change, implement strategy, and deliver value. As a result, project management is no longer a specialized skill reserved for a single role—it is a core competency required across functions, industries, and levels of responsibility.",
-  'This program focuses on the core principles, practices, and responsibilities that underpin successful project delivery. Rather than emphasizing theory alone, the Project Management Core Certificate bridges the gap between conceptual knowledge and real-world application. Participants will gain a clear understanding of how projects are structured, how decisions are made, and how constraints are balanced to achieve defined objectives within agreed timelines and budgets.',
-  'The first session serves as the foundation for the entire certificate. It introduces the fundamental language of project management and establishes a shared understanding of what constitutes a project, how projects differ from operational work, and why structured project management is essential for organizational success. This session ensures that all participants—regardless of background or industry—start with a consistent framework that will be expanded and applied throughout the program.',
-  'A key focus of this introduction is the role of the project manager at the core level. Participants will explore the responsibilities associated with managing scope, time, cost, quality, resources, and stakeholders, while understanding that effective project management is as much about leadership and communication as it is about tools and processes. Emphasis is placed on accountability, decision-making, and alignment with business objectives, helping learners recognize how project outcomes directly impact organizational performance.',
-  'The session also provides an overview of the project lifecycle, highlighting how projects progress from initiation through planning, execution, monitoring, and closure. Understanding this lifecycle enables participants to see how different activities, deliverables, and decisions fit together, and how early choices influence project success later on. This structured view helps reduce uncertainty, improve predictability, and support better control throughout the project.',
-  'In addition, participants will be introduced to the concepts of programs and portfolios, clarifying how individual projects contribute to broader strategic goals. This perspective reinforces the idea that projects are not isolated efforts but part of a larger system designed to deliver value and competitive advantage.',
-  'Throughout this introductory session, attention is given to common challenges and causes of project failure, such as unclear objectives, poor communication, unmanaged risks, and lack of stakeholder engagement. By understanding these pitfalls early, learners are better prepared to recognize warning signs and apply corrective actions in their own project environments.',
-  'By the end of this session, participants will have a clear understanding of the purpose of project management, the expectations of a project manager at the core level, and the structure of the learning journey ahead. This foundation enables learners to engage confidently with subsequent sessions, apply concepts consistently, and begin developing the professional mindset required for successful project delivery.',
-  'The Project Management Core Certificate is not only about acquiring knowledge—it is about building capability. This first session sets the tone for a practical, disciplined, and value-driven approach to managing projects, empowering participants to contribute more effectively to their teams, organizations, and careers.',
-];
-
-const SHORT_PLACEHOLDER: readonly string[] = [
-  'This chapter covers the key concepts and frameworks that underpin this topic. Participants will develop a solid understanding of the terminology, principles, and practical applications relevant to this section of the program.',
-  'Through structured examples and real-world scenarios, learners will be able to apply the concepts discussed here to their professional contexts and contribute more effectively to project outcomes.',
-];
-
-const ESM_P_SESSION_1_CHAPTERS: readonly SessionChapter[] = [
-  { id: 'ch-what-is-project', title: 'What Is a Project?', paragraphs: SHORT_PLACEHOLDER },
-  { id: 'ch-introduction', title: 'Introduction', paragraphs: INTRO_PARAGRAPHS },
-  { id: 'ch-pm-vs-ops', title: 'Project Management vs. Operations', paragraphs: SHORT_PLACEHOLDER },
-  { id: 'ch-role-pm', title: 'The Role of the Project Manager', paragraphs: SHORT_PLACEHOLDER },
-  {
-    id: 'ch-programs-portfolios',
-    title: 'Projects, Programs, and Portfolios Overview',
-    paragraphs: SHORT_PLACEHOLDER,
-  },
-  {
-    id: 'ch-best-practices',
-    title: 'Project Management Best Practices',
-    paragraphs: SHORT_PLACEHOLDER,
-  },
-  {
-    id: 'ch-agile-waterfall',
-    title: 'Agile vs Waterfall Methodologies',
-    paragraphs: SHORT_PLACEHOLDER,
-  },
-  {
-    id: 'ch-kpis',
-    title: 'Key Performance Indicators (KPIs) in Project Management',
-    paragraphs: SHORT_PLACEHOLDER,
-  },
-  {
-    id: 'ch-risk-management',
-    title: 'Risk Management Strategies for Successful Projects',
-    paragraphs: SHORT_PLACEHOLDER,
-  },
-];
-
-const ESM_P_SESSIONS: readonly CertSessionData[] = [
-  {
-    materialId: 'session-1-a',
-    sessionTitle: 'Session 1',
-    certCode: 'ESM-P',
-    chapters: ESM_P_SESSION_1_CHAPTERS,
-  },
-  {
-    materialId: 'session-1-b',
-    sessionTitle: 'Session 1',
-    certCode: 'ESM-P',
-    chapters: ESM_P_SESSION_1_CHAPTERS,
-  },
-  {
-    materialId: 'session-1-c',
-    sessionTitle: 'Session 1',
-    certCode: 'ESM-P',
-    chapters: ESM_P_SESSION_1_CHAPTERS,
-  },
-  {
-    materialId: 'session-2',
-    sessionTitle: 'Session 2',
-    certCode: 'ESM-P',
-    chapters: [
-      { id: 'ch-s2-intro', title: 'Introduction to Session 2', paragraphs: SHORT_PLACEHOLDER },
-      { id: 'ch-s2-scope', title: 'Defining Project Scope', paragraphs: SHORT_PLACEHOLDER },
-      { id: 'ch-s2-wbs', title: 'Work Breakdown Structure', paragraphs: SHORT_PLACEHOLDER },
-    ],
-  },
-  {
-    materialId: 'session-3',
-    sessionTitle: 'Session 3',
-    certCode: 'ESM-P',
-    chapters: [
-      { id: 'ch-s3-intro', title: 'Introduction to Session 3', paragraphs: SHORT_PLACEHOLDER },
-      { id: 'ch-s3-schedule', title: 'Project Scheduling', paragraphs: SHORT_PLACEHOLDER },
-    ],
-  },
-  {
-    materialId: 'session-4',
-    sessionTitle: 'Session 4',
-    certCode: 'ESM-P',
-    chapters: [
-      { id: 'ch-s4-intro', title: 'Introduction to Session 4', paragraphs: SHORT_PLACEHOLDER },
-      { id: 'ch-s4-budget', title: 'Budget Management', paragraphs: SHORT_PLACEHOLDER },
-    ],
-  },
-  {
-    materialId: 'session-5',
-    sessionTitle: 'Session 5',
-    certCode: 'ESM-P',
-    chapters: [
-      { id: 'ch-s5-intro', title: 'Introduction to Session 5', paragraphs: SHORT_PLACEHOLDER },
-      { id: 'ch-s5-closing', title: 'Project Closure', paragraphs: SHORT_PLACEHOLDER },
-    ],
-  },
-];
-
-/* --------------------------------------------------------------------------
- * Static helpers
  * -------------------------------------------------------------------------- */
 
 const MONTHS = [
@@ -237,120 +50,6 @@ function weekScores(scoreMap: Partial<Record<string, number>>): readonly WeeklyS
 
 /* --------------------------------------------------------------------------
  * Mock data — "All certifications" grid (bottom section, same in both states)
- * -------------------------------------------------------------------------- */
-
-const ALL_CERTS: readonly CertListCard[] = [
-  {
-    code: 'ESM',
-    name: 'Endorsed Scrum Master',
-    description: 'Foundation level — core Scrum principles and practices.',
-    badgeAsset: 'assets/badge/endorsed_scrum_master.svg',
-    family: 'esm',
-    level: 'Foundation',
-    isEnrolled: true,
-    progressPercent: 53,
-    examResult: {
-      score: 74,
-      passed: true,
-      status: 'earned',
-      duration: '40 min',
-      date: '03/06/2026 - 2:00pm',
-      correct: 31,
-      incorrect: 43,
-    },
-  },
-  {
-    code: 'ESM-P',
-    name: 'Endorsed Scrum Master Practitioner',
-    description: 'Practitioner level — advanced facilitation and coaching.',
-    badgeAsset: 'assets/badge/endorsed_scrum_master_practitioner.svg',
-    family: 'esm',
-    level: 'Practitioner',
-    isEnrolled: true,
-    progressPercent: 53,
-    examResult: {
-      score: 32,
-      passed: false,
-      status: 'failed',
-      duration: '40 min',
-      date: '03/06/2026 - 2:00pm',
-      correct: 14,
-      incorrect: 29,
-    },
-  },
-  {
-    code: 'ESM-A',
-    name: 'Endorsed Scrum Master Authority',
-    description: 'Authority level — enterprise-wide Agile transformation.',
-    badgeAsset: 'assets/badge/endorsed_scrum_master_authority.svg',
-    family: 'esm',
-    level: 'Authority',
-    isEnrolled: false,
-    progressPercent: 0,
-    examResult: null,
-  },
-  {
-    code: 'EPO-P',
-    name: 'Endorsed Product Owner Practitioner',
-    description: 'Practitioner level — advanced product strategy and OKRs.',
-    badgeAsset: 'assets/badge/endorsed_product_owner_practitioner.svg',
-    family: 'epo',
-    level: 'Practitioner',
-    isEnrolled: false,
-    progressPercent: 0,
-    examResult: {
-      score: 64,
-      passed: true,
-      status: 'earned',
-      duration: '40 min',
-      date: '03/06/2026 - 2:00pm',
-      correct: 31,
-      incorrect: 43,
-    },
-  },
-  {
-    code: 'EPO-A',
-    name: 'Endorsed Product Owner Authority',
-    description: 'Authority level — product-led growth and portfolio management.',
-    badgeAsset: 'assets/badge/endorsed_product_owner_authority.svg',
-    family: 'epo',
-    level: 'Authority',
-    isEnrolled: false,
-    progressPercent: 0,
-    examResult: {
-      score: 28,
-      passed: false,
-      status: 'revoked',
-      duration: '40 min',
-      date: '03/06/2026 - 2:00pm',
-      correct: 10,
-      incorrect: 45,
-    },
-  },
-  {
-    code: 'ESF',
-    name: 'Endorsed Scrum Facilitator',
-    description: 'Foundation level — Scrum facilitation and team dynamics.',
-    badgeAsset: 'assets/badge/endorsed_scrum_facilitator.svg',
-    family: 'esf',
-    level: 'Foundation',
-    isEnrolled: false,
-    progressPercent: 0,
-    examResult: {
-      score: 85,
-      passed: true,
-      status: 'earned',
-      duration: '40 min',
-      date: '03/06/2026 - 2:00pm',
-      correct: 38,
-      incorrect: 27,
-    },
-  },
-];
-
-/* --------------------------------------------------------------------------
- * Mock test question bank — ESM-P
- * Figma: nodes 17737-49884, 13144-55249, 13434-35306 (runner screens)
  * -------------------------------------------------------------------------- */
 
 const ESM_P_MOCK_TEST_QUESTIONS: readonly MockTestQuestion[] = [
@@ -596,7 +295,6 @@ const ESM_P_DETAIL_LOW: CertDetail = {
   examSummary: { passed: 0, failed: 0 },
   yearFilter: 'this_year',
   weekFilter: 'this_week',
-  learningMaterials: ESM_P_MATERIALS,
   mockTestStats: ESM_P_MOCK_TEST_STATS,
   mockTestHistory: ESM_P_MOCK_TEST_HISTORY,
   mockTestQuestions: ESM_P_MOCK_TEST_QUESTIONS,
@@ -638,7 +336,6 @@ const ESM_P_DETAIL_HIGH: CertDetail = {
   examSummary: { passed: 24, failed: 20 },
   yearFilter: 'this_year',
   weekFilter: 'this_week',
-  learningMaterials: ESM_P_MATERIALS,
   mockTestStats: ESM_P_MOCK_TEST_STATS,
   mockTestHistory: ESM_P_MOCK_TEST_HISTORY,
   mockTestQuestions: ESM_P_MOCK_TEST_QUESTIONS,
@@ -648,44 +345,6 @@ const ESM_P_DETAIL_HIGH: CertDetail = {
  * Enrolled cert headers — 1-cert and 2-cert list states
  * -------------------------------------------------------------------------- */
 
-const ESM_P_HEADER: EnrolledCertHeader = {
-  code: 'ESM-P',
-  family: 'esm',
-  familyLabel: 'ESM',
-  certType: 'Practitioner',
-  fullName: 'ESM - Endorsed Scrum Master',
-  badgeAsset: 'assets/badge/endorsed_scrum_master_practitioner.svg',
-  progressPercent: 53,
-  isActive: true,
-  hasCertificate: false,
-};
-
-const EPO_A_HEADER: EnrolledCertHeader = {
-  code: 'EPO-A',
-  family: 'epo',
-  familyLabel: 'EPO',
-  certType: 'Authority',
-  fullName: 'EPO - Endorsed Product Owner',
-  badgeAsset: 'assets/badge/endorsed_product_owner_authority.svg',
-  progressPercent: 53,
-  isActive: true,
-  hasCertificate: false,
-};
-
-/* --------------------------------------------------------------------------
- * Helpers
- * -------------------------------------------------------------------------- */
-
-function translateActionLabel(label: string, lang: LanguageService): string {
-  const keyMap: Record<string, string> = {
-    Open: 'dashboard.certs.materialOpen',
-    Continue: 'dashboard.certs.materialContinue',
-    'In Progress': 'dashboard.certs.materialInProgress',
-    'Not Started': 'dashboard.certs.materialNotStarted',
-    Completed: 'dashboard.certs.materialCompleted',
-  };
-  return lang.t(keyMap[label] ?? label);
-}
 
 /* --------------------------------------------------------------------------
  * Demo mode
@@ -700,32 +359,20 @@ export type CertDemoMode =
 
 const STATES: Record<CertDemoMode, CertificatesState> = {
   'one-cert-low': {
-    enrolledCerts: [ESM_P_HEADER],
-    allCerts: ALL_CERTS,
     selectedDetail: ESM_P_DETAIL_LOW,
     activeSection: 'overview',
-    sessions: ESM_P_SESSIONS,
   },
   'one-cert-high': {
-    enrolledCerts: [ESM_P_HEADER],
-    allCerts: ALL_CERTS,
     selectedDetail: ESM_P_DETAIL_HIGH,
     activeSection: 'overview',
-    sessions: ESM_P_SESSIONS,
   },
   'two-certs-low': {
-    enrolledCerts: [ESM_P_HEADER, EPO_A_HEADER],
-    allCerts: ALL_CERTS,
     selectedDetail: ESM_P_DETAIL_LOW,
     activeSection: 'overview',
-    sessions: ESM_P_SESSIONS,
   },
   'two-certs-high': {
-    enrolledCerts: [ESM_P_HEADER, EPO_A_HEADER],
-    allCerts: ALL_CERTS,
     selectedDetail: ESM_P_DETAIL_HIGH,
     activeSection: 'overview',
-    sessions: ESM_P_SESSIONS,
   },
 };
 
@@ -742,8 +389,13 @@ const STATES: Record<CertDemoMode, CertificatesState> = {
  *   · setDemoMode(mode)
  *   · setActiveSection(section)
  *   · setYearFilter(year)   — changes the year filter on the detail chart
- *   · Derived signals: enrolledCerts, allCerts, selectedDetail, activeSection,
- *     totalTimeFormatted, averageScoreFormatted, trendFormatted, yearFilter
+ *   · Derived signals: selectedDetail, activeSection, totalTimeFormatted,
+ *     averageScoreFormatted, trendFormatted, yearFilter
+ *
+ * Scope note: this store is now **detail-page only**. The list and session
+ * pages read real data from `CoursesStore` (`/learning/*`); what remains here
+ * backs the Overview charts and the mock-test section, which have no real
+ * source yet.
  */
 @Injectable({ providedIn: 'root' })
 export class CertificatesStore {
@@ -754,8 +406,6 @@ export class CertificatesStore {
   private readonly _activeSection = signal<CertDetailSection>('overview');
   private readonly _yearFilter = signal<'this_year' | 'last_year'>('this_year');
   private readonly _weekFilter = signal<ScoreFilterWeek>('this_week');
-  /** ID of the chapter currently active in the session viewer. */
-  private readonly _activeChapterId = signal<string | null>(null);
 
   /* ── public read-only views ──────────────────────────────────────────── */
 
@@ -763,23 +413,15 @@ export class CertificatesStore {
   readonly state = computed<CertificatesState>(() => STATES[this._demoMode()]);
   readonly yearFilter = this._yearFilter.asReadonly();
   readonly weekFilter = this._weekFilter.asReadonly();
-  readonly activeChapterId = this._activeChapterId.asReadonly();
 
   /* ── convenience derivations ─────────────────────────────────────────── */
 
-  readonly enrolledCerts = computed(() => this.state().enrolledCerts);
-  readonly allCerts = computed(() => this.state().allCerts);
   readonly selectedDetail = computed(() => {
     const detail = this.state().selectedDetail;
     if (!detail) return null;
-    const materials = detail.learningMaterials.map((m) => ({
-      ...m,
-      actionLabel: translateActionLabel(m.actionLabel, this.lang),
-    }));
     if (detail.learningCtaLabel === 'Start learning') {
       return {
         ...detail,
-        learningMaterials: materials,
         learningHeading: this.lang.t('dashboard.learning.firstFileReady'),
         learningBody: this.lang.t('dashboard.learning.agileOverview'),
         learningMeta: this.lang.t('dashboard.learning.pagesCount', { count: '15' }),
@@ -788,7 +430,6 @@ export class CertificatesStore {
     }
     return {
       ...detail,
-      learningMaterials: materials,
       learningHeading: this.lang.t('dashboard.learning.readyToPass', { code: detail.code }),
       learningBody: this.lang.t('dashboard.learning.amazingResults'),
       learningCtaLabel: this.lang.t(
@@ -799,12 +440,6 @@ export class CertificatesStore {
     };
   });
   readonly activeSection = computed(() => this._activeSection());
-  readonly sessions = computed(() => this.state().sessions);
-
-  /** Look up a session by materialId (used by CertSessionPage via route param). */
-  sessionByMaterialId(materialId: string): CertSessionData | null {
-    return this.sessions().find((s) => s.materialId === materialId) ?? null;
-  }
 
   readonly stats = computed(() => this.selectedDetail()?.stats ?? null);
 
@@ -855,18 +490,4 @@ export class CertificatesStore {
     this._weekFilter.set(week);
   }
 
-  /**
-   * Opens a session viewer and sets the active chapter.
-   * Pass `chapterId = null` to default to the first chapter of that session.
-   */
-  openSession(materialId: string, chapterId: string | null = null): void {
-    const session = this.sessionByMaterialId(materialId);
-    if (!session) return;
-    const firstChapterId = session.chapters[0]?.id ?? null;
-    this._activeChapterId.set(chapterId ?? firstChapterId);
-  }
-
-  setActiveChapter(chapterId: string): void {
-    this._activeChapterId.set(chapterId);
-  }
 }

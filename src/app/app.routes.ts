@@ -44,12 +44,11 @@ export const routes: Routes = [
     canMatch: [authGuard],
     title: 'Dashboard',
   },
-  {
-    path: 'courses',
-    loadChildren: () => import('@features/courses/courses.routes'),
-    canMatch: [authGuard],
-    title: 'Courses',
-  },
+  // NOTE: there is no `/courses` route. The student learning hub is
+  // `/dashboard/certificates` (the designed surface). `/courses` briefly hosted a
+  // second, plainer set of pages over the same `/learning/*` endpoints; they were
+  // removed as duplicates and the designed pages were wired to the real API
+  // instead. `features/courses/data-access` remains — it *is* that API layer.
   {
     path: 'assessments',
     loadChildren: () => import('@features/assessments/assessments.routes'),

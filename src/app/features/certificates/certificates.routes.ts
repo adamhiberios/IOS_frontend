@@ -36,7 +36,10 @@ const CERTIFICATES_ROUTES: Routes = [
   // The three multi-segment `:code/...` routes below MUST stay above the bare `:code` route.
   // Otherwise the router matches `:code` first and the inner segments never resolve.
   {
-    path: ':code/session/:materialId',
+    // `:lessonId` is the lesson **UUID**. It was `:materialId` (a fixture slug
+    // like `session-1-a`) until the viewer was wired to `GET /learning/lessons/:id`
+    // — backend lessons have no slug, so old fixture URLs no longer resolve.
+    path: ':code/session/:lessonId',
     title: 'Learning Session',
     loadComponent: () => import('./pages/cert-session.page').then((m) => m.CertSessionPage),
   },

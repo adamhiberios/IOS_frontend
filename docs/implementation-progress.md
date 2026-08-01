@@ -9,6 +9,86 @@
 
 ---
 
+### Learning hub de-duplicated — `/dashboard/certificates` wired to real data, `/courses` removed — 🔵 in progress (uncommitted)
+
+**Correcting a mistake in `172f35a`.** That commit added `features/courses` with
+three pages — `CoursesIndexPage`, `CurriculumPage`, `LessonPage` — over the real
+`/learning/*` endpoints. But a designed learning hub already existed at
+`/dashboard/certificates` (`certificates.page` / `cert-detail.page` /
+`cert-session.page`), running on hardcoded `ESM_P_*` fixtures. The result was two
+parallel hubs for the same job — and they cross-linked each other, which is how
+it surfaced. The nav (`dashboard-navbar`, `user-menu-dropdown`) always pointed at
+`/dashboard/certificates`, so that is the surface that should have been rewired.
+
+**Done so far:**
+
+- **`cert-session.page.ts`** → `GET /learning/lessons/:id`. Two forced departures
+  from the fixture design: the sidebar lists **sibling lessons, not chapters** (a
+  lesson is one `contentHtml` blob — there is no chapter structure to navigate),
+  and navigation now **changes the URL**, since a lesson is addressable and a
+  chapter wasn't. `contentHtml` renders via `[innerHTML]` through Angular's
+  sanitizer — never `bypassSecurityTrust*`.
+- **Route `:code/session/:materialId` → `:code/session/:lessonId`.** ⚠️ **Breaking
+  for old links.** Backend lessons have no slug, so fixture URLs like
+  `/dashboard/certificates/ESF/session/session-1-a` no longer resolve — they were
+  returning `Validation failed (uuid is expected)` from `ParseUUIDPipe`.
+- **`cert-detail.page.ts`** — the Learning Materials list is built from the real
+  curriculum, so each row's id is a **lesson UUID**. `:code` (a program code) is
+  resolved to a `certId` via `GET /learning/progress`, which doubles as the
+  enrolment gate. This was the source of the UUID error above: the page was
+  emitting fixture slugs into a route that now expects UUIDs.
+- **`certificates.page.ts`** — lists **only real enrolments**. It previously
+  rendered a hardcoded `[ESM_P_HEADER]`, which is why it showed certifications
+  the student had never enrolled in. The fixture "All certifications" grid (six
+  cards with invented scores) was **removed** rather than left showing fake data;
+  a genuine browse-all section would come from `PublicCatalogStore`.
+- **`/courses` deleted** — `courses/pages/*` and `courses.routes.ts` removed, the
+  route dropped from `app.routes.ts`. **`courses/data-access/*` is kept**: that
+  layer *is* the real `/learning/*` wiring and is what the certificates pages now
+  consume. Inbound links repointed: `cert-progress-card`, `dashboard.store`
+  `ctaRoute`, and the three mock pages. Note the dashboard links used `certId`
+  while the hub route takes a **program code** — `ValidCertification.code` and
+  `CourseProgress.programCode` supplied it.
+
+**Data deliberately omitted rather than invented** (visible gaps, flagged):
+
+- Per-lesson `currentPage` / `totalPages` are `0` — there is no page tracking
+  anywhere in the API. `completionPercent` collapses to the boolean `completed`.
+- `hasCertificate` is `false` on every row — issuance lives behind
+  `GET /me/certificates`, which progress cannot answer.
+- `family` / `badgeAsset` **are** derived, reusing `resolveCertFamily` /
+  `resolveBadgeAsset` from the dashboard rewire (`4a11ae9`) so both surfaces show
+  the same artwork for the same programme.
+
+- **`ESM_P_*` learning fixtures stripped** — `certificates.store.ts` is down from
+  **872 → 493 lines**. Removed: `ESM_P_MATERIALS`, `INTRO_PARAGRAPHS`,
+  `SHORT_PLACEHOLDER`, `ESM_P_SESSION_1_CHAPTERS`, `ESM_P_SESSIONS`, `ALL_CERTS`,
+  `ESM_P_HEADER`, `EPO_A_HEADER`, the `translateActionLabel` helper, and the
+  store members they fed (`enrolledCerts`, `allCerts`, `sessions`,
+  `sessionByMaterialId`, `openSession`, `setActiveChapter`, `activeChapterId`).
+  `CertificatesState` lost `enrolledCerts`/`allCerts`/`sessions` and `CertDetail`
+  lost `learningMaterials`.
+  **Deliberately kept** (still consumed, no real source yet): the mock-test
+  fixtures and the two `ESM_P_DETAIL_*` snapshots that back the detail page's
+  Overview charts and mock section. The store is now **detail-page only** — its
+  header says so.
+
+**Still open on this rewire:**
+
+- **The detail page's Overview tiles need a product decision.** `averageScore`
+  and the charts could come from real mock history (precedent: `4a11ae9`), but
+  **`totalTimeMinutes` and `trendDelta` have no backend source at all**.
+- **`cert-grid-card.ts` is now orphaned** — its only consumer was the fixture
+  "All certifications" grid. Left in place rather than deleted: it is the
+  designed component a real browse-all section (from `PublicCatalogStore`) would
+  reuse. Delete it if that section isn't planned.
+
+- **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 known `prefer-ngsrc`
+  warnings) · production build ✓, initial gzip **104.25 kB**.
+- **Not runtime-tested against api-dev** — needs an enrolled student session.
+
+---
+
 ### BE-I-30 landing repoint + real-exam answer review — 🔵 built, awaiting review (uncommitted)
 
 Closes backlog items **0** and **11**. Neither involves CMS.
@@ -1955,7 +2035,7 @@ surfaces are wired.
 | ~~4~~ | ~~**Student dashboard overview → real data**~~                  | ✅ done — `4a11ae9` (2026-07-26): `validCertifications`/`monthlyScores`/`examSummary`/`learningCard` now real                                                                                                          | —                                                                         |
 | 5     | **Blog E2E re-test** (BE-I-21 fixed by `30bfff5`)               | Authoring was never verified against a working backend                                                                                                                                                               | needs api-dev credentials                                                 |
 | 6     | **`complete-account` wizard**                                   | Still a stub (`complete-account.page.ts:947`)                                                                                                                                                                        | **BE-I-25** (no DOB field) + a `ProfileApi` boundary decision             |
-| 7     | **Legacy `/dashboard/certificates` demo pages**                 | `certificates.page` / `cert-detail.page` / `cert-session.page` still read hardcoded `ESM_P_*` data from `certificates.store.ts:356-644`, duplicating the real `/dashboard/credentials` (A3) and the real mock runner | product decision: rewire or retire                                        |
+| 7     | **Legacy `/dashboard/certificates` demo pages**                 | 🔵 **Decision taken 2026-08-01: rewire** (not retire). All three pages now read real `/learning/*` data and the duplicate `/courses` pages are deleted — see the top entry. **Remaining:** strip the `ESM_P_*` fixtures from `certificates.store.ts` and settle the Overview tiles that have no backend source | —                                                                         |
 | ~~8~~ | ~~**Admin dashboard date window** (`from`/`to`, `72a711c`)~~    | ✅ done — `AdminDashboardApi.getOverviewByDateRange` + `AdminDashboardStore.setDateRange` shipped in `1c2fcdb`                                                                                                        | —                                                                         |
 | ~~9~~ | ~~**Admin student detail enrichment**~~                         | ✅ done — `StudentDetail.certificates[]/attempts[]/exams{}` mapped in `1c2fcdb`                                                                                                                                       | —                                                                         |
 | ~~10~~ | ~~**Exam-authoring preview**~~                                 | ✅ done 2026-07-29 — replaced the client-side faux-preview with the real endpoint                                                                                                                                     | —                                                                         |

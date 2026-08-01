@@ -625,7 +625,7 @@
       "learningMaterialsNav": "Matériel pédagogique",
       "files": "Fichiers",
       "pagesProgress": "{current}/{total} pages",
-      "completed": "Terminé",
+      "completed": "Terminée",
       "questions": "Questions",
       "sessionChapters": "Chapitres de la session",
       "mockExamSettingsTitle": "Choisissez les paramètres de l'examen blanc pour commencer",
@@ -641,7 +641,16 @@
       "materialContinue": "Continuer",
       "materialInProgress": "En cours",
       "materialNotStarted": "Pas commencé",
-      "materialCompleted": "Terminé"
+      "materialCompleted": "Terminé",
+      "lessonLoading": "Chargement de la leçon…",
+      "lessonNoContent": "Cette leçon n’a pas encore de contenu écrit.",
+      "markComplete": "Marquer comme terminée",
+      "materialsLoading": "Chargement de vos leçons…",
+      "materialsEmpty": "Aucune leçon n’est encore disponible pour cette certification.",
+      "openLesson": "Ouvrir",
+      "reviewLesson": "Revoir",
+      "noEnrolments": "Vous n’êtes inscrit à aucune certification pour le moment.",
+      "browseCertifications": "Parcourir les certifications"
     },
     "learning": {
       "title": "Complétez votre apprentissage",
