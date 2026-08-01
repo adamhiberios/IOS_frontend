@@ -1,24 +1,33 @@
 /**
- * Landing page API response DTO — `GET /landing` (public, BE-I-20).
+ * Landing page API response DTO — `GET /analytics/public-stats` (public).
  *
- * Bare payload (no envelope): `{ featuredPrograms, stats }`. `featuredPrograms`
- * are full `CatalogItemDto`s (localized by `X-Lang`, same shape the public
- * catalog returns), and `stats` are live platform counters. Static landing copy
- * (headings, cert-level structure, insight posts) is owned by the section
- * components / i18n and is never fetched.
+ * **Replaces the deleted `GET /landing`** (BE-I-30). The backend removed that
+ * composite endpoint in `66a7632` and split its payload three ways:
+ *
+ *   - live counters      → `GET /analytics/public-stats`  ← this file
+ *   - featured programs  → `GET /catalog`                  (composed in
+ *                                                          `landing.store` from
+ *                                                          the existing
+ *                                                          `PublicCatalogStore`)
+ *   - static home copy   → `GET /cms/pages/home`           (**not consumed** —
+ *                                                          landing copy still
+ *                                                          lives in the section
+ *                                                          components + i18n)
+ *
+ * The response is **wrapped in `stats`** — `{ stats: {...} }`, neither a bare
+ * object nor the usual `{ data }` envelope
+ * (`public-stats-response.dto.ts:24-27`). Counters are safe aggregates only;
+ * the backend never exposes per-user rows here.
  */
 
-import { type CatalogItemDto } from './catalog.dto';
-
 /** Live platform counters shown in the landing stats strip. */
-export interface LandingStatsDto {
+export interface PublicStatsDto {
   readonly programs: number;
   readonly students: number;
   readonly certificatesIssued: number;
 }
 
-/** `GET /landing` — bare `{ featuredPrograms, stats }`. */
-export interface LandingResponseDto {
-  readonly featuredPrograms: readonly CatalogItemDto[];
-  readonly stats: LandingStatsDto;
+/** `GET /analytics/public-stats` — `{ stats }`. */
+export interface PublicStatsResponseDto {
+  readonly stats: PublicStatsDto;
 }

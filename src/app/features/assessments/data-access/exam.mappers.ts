@@ -5,8 +5,10 @@
  */
 
 import {
+  type ExamAttemptReviewDto,
   type ExamOptionDto,
   type ExamQuestionDto,
+  type ReviewQuestionDto,
   type ScoreResultDto,
   type SessionStatusResponseDto,
   type StartExamResponseDto,
@@ -15,9 +17,11 @@ import {
 import {
   type AnswerMap,
   type ExamAccessPreview,
+  type ExamAttemptReview,
   type ExamOption,
   type ExamQuestion,
   type ExamQuestionType,
+  type ExamReviewQuestion,
   type ExamScoreResult,
   type ExamSessionSnapshot,
   type ExamSessionStart,
@@ -104,4 +108,49 @@ export function toExamScoreResult(dto: ScoreResultDto): ExamScoreResult {
  */
 export function toAnswersDto(answers: AnswerMap): Record<string, string> {
   return { ...answers };
+}
+
+/* ─── Post-submission answer review (BE-I-22) ─── */
+
+/** Map one reviewed question, narrowing `questionType` and sorting nothing. */
+function toExamReviewQuestion(dto: ReviewQuestionDto): ExamReviewQuestion {
+  return {
+    questionId: dto.questionId,
+    questionText: dto.questionText,
+    questionType: dto.questionType === 'true_false' ? 'true_false' : 'mcq',
+    position: dto.position,
+    options: (dto.options ?? []).map((o) => ({
+      id: o.id,
+      optionText: o.optionText,
+      isCorrect: o.isCorrect === true,
+    })),
+    selectedOptionId: dto.selectedOptionId,
+    correctOptionId: dto.correctOptionId,
+    isCorrect: dto.isCorrect === true,
+    explanation: dto.explanation,
+  };
+}
+
+/**
+ * Map the review payload. Questions are sorted by `position` so the review
+ * reads in the same order the candidate sat the paper — the backend orders
+ * them already, but the review is a side-by-side comparison against memory of
+ * that order, so it isn't left to response ordering.
+ */
+export function toExamAttemptReview(dto: ExamAttemptReviewDto): ExamAttemptReview {
+  return {
+    attemptId: dto.attemptId,
+    examId: dto.examId,
+    examTitle: dto.examTitle,
+    program: dto.program,
+    score: dto.score,
+    passed: dto.passed,
+    correctCount: dto.correctCount,
+    totalCount: dto.totalCount,
+    submittedAt: dto.submittedAt,
+    status: dto.status,
+    questions: [...(dto.questions ?? [])]
+      .map(toExamReviewQuestion)
+      .sort((a, b) => a.position - b.position),
+  };
 }

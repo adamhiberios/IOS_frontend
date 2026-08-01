@@ -105,3 +105,60 @@ export interface ScoreResultDto {
   readonly correctCount: number;
   readonly totalCount: number;
 }
+
+/* ─── Post-submission answer review (BE-I-22, fixed by backend `66a7632`) ─── */
+
+/**
+ * `GET /exam/attempts/:attemptId/review` — the **only** real-exam surface that
+ * exposes the answer key (`exam-attempt-review-response.dto.ts`).
+ *
+ * Owner-only (`exam_attempts` is FORCE-RLS) and gated to **terminal** attempts:
+ *   - **403** the attempt belongs to someone else
+ *   - **404** unknown attempt
+ *   - **422** the attempt is still in progress
+ *
+ * Unlike every other student exam endpoint, options here carry `isCorrect`.
+ */
+export interface ReviewOptionDto {
+  readonly id: string;
+  readonly optionText: string;
+  readonly isCorrect: boolean;
+}
+
+export interface ReviewQuestionDto {
+  readonly questionId: string;
+  readonly questionText: string;
+  /** `mcq | true_false`. */
+  readonly questionType: string;
+  readonly position: number;
+  readonly options: readonly ReviewOptionDto[];
+  /** The student's pick, or `null` when they left it unanswered. */
+  readonly selectedOptionId: string | null;
+  readonly correctOptionId: string | null;
+  readonly isCorrect: boolean;
+  /**
+   * Rationale for the correct answer. **Always `null` today** — the backend
+   * documents it as reserved until an explanation field is added to the
+   * question bank, so the UI must treat it as optional, not assume prose.
+   */
+  readonly explanation: string | null;
+}
+
+export interface ExamAttemptReviewDto {
+  readonly attemptId: string;
+  readonly examId: string;
+  readonly examTitle: string;
+  readonly program: string;
+  readonly score: number;
+  readonly passed: boolean;
+  readonly correctCount: number;
+  readonly totalCount: number;
+  readonly submittedAt: string;
+  readonly status: string;
+  readonly questions: readonly ReviewQuestionDto[];
+}
+
+/** `{ data }` envelope. */
+export interface ExamAttemptReviewResponseDto {
+  readonly data: ExamAttemptReviewDto;
+}

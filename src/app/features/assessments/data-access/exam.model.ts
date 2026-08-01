@@ -205,3 +205,52 @@ export interface PersistedExamSession {
   readonly expiresAt: string;
   readonly questions: readonly ExamQuestion[];
 }
+
+/* ─── Post-submission answer review (BE-I-22, fixed by backend `66a7632`) ─── */
+
+/**
+ * An option in the answer review. This is the **only** place in the real-exam
+ * domain where `isCorrect` exists — {@link ExamOption}, used during the live
+ * exam, deliberately omits it so a correct answer cannot reach the runner.
+ */
+export interface ExamReviewOption {
+  readonly id: string;
+  readonly optionText: string;
+  readonly isCorrect: boolean;
+}
+
+/** One reviewed question: the paper, the student's pick, and the answer key. */
+export interface ExamReviewQuestion {
+  readonly questionId: string;
+  readonly questionText: string;
+  readonly questionType: ExamQuestionType;
+  readonly position: number;
+  readonly options: readonly ExamReviewOption[];
+  /** `null` when the student left this question unanswered. */
+  readonly selectedOptionId: string | null;
+  readonly correctOptionId: string | null;
+  readonly isCorrect: boolean;
+  /** Reserved by the backend; `null` until the question bank gains the field. */
+  readonly explanation: string | null;
+}
+
+/**
+ * A terminal attempt with its full answer key.
+ *
+ * **Keyed by `attemptId`, which the submit response does not return** — so the
+ * result page cannot deep-link its own review, and this is reached from the
+ * attempt history instead (see `BE-I-32` in `backend-analysis.md`).
+ */
+export interface ExamAttemptReview {
+  readonly attemptId: string;
+  readonly examId: string;
+  readonly examTitle: string;
+  readonly program: string;
+  readonly score: number;
+  readonly passed: boolean;
+  readonly correctCount: number;
+  readonly totalCount: number;
+  readonly submittedAt: string;
+  readonly status: string;
+  readonly questions: readonly ExamReviewQuestion[];
+}

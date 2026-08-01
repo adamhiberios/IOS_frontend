@@ -61,6 +61,14 @@ export const ASSESSMENTS_ROUTES: Routes = [
         title: 'Exam Results — Institute of Scrum',
         loadComponent: () => import('./pages/exam-result.page').then((m) => m.ExamResultPage),
       },
+      {
+        // Keyed by attemptId, not sessionId — the review endpoint takes the
+        // attempt, and `submit` doesn't return one (BE-I-32). Reached from the
+        // dashboard's real-exam history, which has the id.
+        path: 'review/:attemptId',
+        title: 'Answer Review — Institute of Scrum',
+        loadComponent: () => import('./pages/exam-review.page').then((m) => m.ExamReviewPage),
+      },
     ],
   },
 ];

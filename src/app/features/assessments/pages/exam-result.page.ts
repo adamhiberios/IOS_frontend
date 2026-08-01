@@ -16,13 +16,22 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
  * `/assessments/result/:sessionId`). The aggregate `ExamScoreResult` arrives via
  * `router.getCurrentNavigation()?.extras?.state` (see `ExamResultNavState`).
  *
- * ⚠️ BE-I-22 — the backend never returns the answer key or per-question
- * correctness after submission, so the design's **"Review Correct Answers"**
- * section CANNOT be implemented for real exams. It is DISABLED (kept as a
- * commented reference block below, not deleted) until a review endpoint ships;
- * this page shows only the aggregate score / pass-fail. `score` may be `null`
- * for a terminal race (already-submitted / grace-closed auto-submit) — then a
- * neutral "submitted, see your history" state is shown.
+ * **BE-I-22 is fixed** (backend `66a7632`): `GET /exam/attempts/:attemptId/review`
+ * now returns the answer key for terminal attempts, and the review UI is built
+ * — as `ios-exam-review-page` at `/assessments/review/:attemptId`.
+ *
+ * ⚠️ It is deliberately **not inlined here**, and cannot be: this route is keyed
+ * by **sessionId**, while the review endpoint takes an **attemptId** that the
+ * submit response does not return (`ScoreResult` is
+ * `{ score, passed, correctCount, totalCount }`). Filed as **BE-I-32**. Until
+ * submit returns the attempt id, the review is reached from the dashboard's
+ * real-exam history, which has it. Do not "fix" this by fetching
+ * `GET /exam/attempts` here and guessing which row is the attempt just
+ * submitted — that is racy with a concurrent attempt and wrong under retakes.
+ *
+ * This page therefore shows the aggregate score / pass-fail. `score` may be
+ * `null` for a terminal race (already-submitted / grace-closed auto-submit) —
+ * then a neutral "submitted, see your history" state is shown.
  *
  * Design ref: Figma node 13172-56939.
  */
@@ -241,17 +250,11 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
             </div>
 
             <!--
-              "Review Correct Answers" section — DISABLED (BE-I-22).
-              The backend returns no answer key or per-question correctness after
-              submission, so the design's per-question review list (each question
-              with its correct option and the student's pick, marked right/wrong)
-              cannot be built for real exams. It was intentionally removed from the
-              live template rather than deleted from history: restore the
-              question-history block from git (the pre-Slice-5 revision of this
-              file) once a post-submission review endpoint ships. See
-              docs/backend-analysis.md BE-I-22 and the email to the backend team.
-              DO NOT re-add without that endpoint. (No Angular syntax kept here on
-              purpose — bindings in a disabled block still get compiled.)
+              The per-question "Review Correct Answers" list lives at
+              /assessments/review/:attemptId (ios-exam-review-page), not here:
+              this route only knows the sessionId, and the review endpoint is
+              keyed by attemptId which submit does not return (BE-I-32). It is
+              linked from the dashboard's real-exam history, which has the id.
             -->
           } @else {
             <!-- Terminal race (already submitted / grace-closed auto-submit): no score body. -->

@@ -1,21 +1,23 @@
 /**
  * LandingStore — signal store for the public landing page.
  *
- * Fetches the server-driven blocks from `GET /landing` (BE-I-20):
- *   • `featuredPrograms` — live catalog cards (title, price, link)
- *   • `stats`            — platform counters (programs / students / certs issued)
+ * ## Composed from three independent sources (BE-I-30, backend `66a7632`)
+ * The backend deleted the composite `GET /landing`, so this store now assembles
+ * what that endpoint used to return:
  *
- * The Scrum-Journal insight cards are **not** part of the `/landing` payload —
- * this store fetches the 3 most recent published articles straight from the
- * public blog (`GET /blog`) via the `insights` feature's `InsightsApi`/mapper,
- * so the section always shows real content. All other landing copy (headings,
- * cert levels, step text) lives directly in the section components via `lang.t()`.
+ *   • `stats`            — `GET /analytics/public-stats` via {@link LandingApi}
+ *   • `featuredPrograms` — `GET /catalog` via the shared `PublicCatalogStore`
+ *   • `insightPosts`     — `GET /blog` via the `insights` feature's `InsightsApi`
+ *
+ * All other landing copy (headings, cert levels, step text) lives directly in
+ * the section components via `lang.t()`.
  *
  * ## Fallback behaviour
- * On error the store keeps static `FALLBACK_STATS` and an empty featured list
- * (the featured section hides itself). Insight posts fall back to a small
- * static set — independently of the `/landing` call — when the blog has
- * nothing published yet or the request fails, so the page always renders.
+ * **Each source fails independently and none can take the page down.** A failed
+ * stats call keeps `FALLBACK_STATS` (zeros — deliberately not invented numbers
+ * on a public marketing page); a failed catalog load leaves the featured list
+ * empty and that section hides itself; a failed or empty blog fetch keeps the
+ * static insight posts. `load()` never throws.
  */
 
 import { Injectable, computed, inject, signal } from '@angular/core';
@@ -24,9 +26,10 @@ import { firstValueFrom } from 'rxjs';
 import { problemDetailMessage } from '@core/http';
 import { InsightsApi } from '@features/insights/data-access/insights.api';
 
+import { PublicCatalogStore } from './catalog.store';
 import { LandingApi } from './landing.api';
 import { type PublicCertificate } from './catalog.model';
-import { type LandingData, type LandingStats } from './landing.model';
+import { type LandingStats } from './landing.model';
 import type { InsightCardPost } from '../../insights/components/insights-card';
 
 type LoadStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -36,6 +39,17 @@ const FALLBACK_STATS: LandingStats = { programs: 0, students: 0, certificatesIss
 
 /** Number of recent articles shown in the landing "Scrum Journal" strip. */
 const INSIGHT_POST_LIMIT = 3;
+
+/**
+ * How many catalog certificates the "featured" strip shows.
+ *
+ * The deleted `GET /landing` chose this set server-side; nothing replaced that,
+ * so the choice is now the frontend's. Taking the first N of the catalog's own
+ * ordering (newest-first) is the least surprising rule available without a
+ * backend "featured" flag — if the product wants curation, that needs a backend
+ * field, not a heuristic here.
+ */
+const FEATURED_PROGRAM_LIMIT = 3;
 
 /** Shown only if the blog has nothing published yet, or `GET /blog` fails. */
 const FALLBACK_INSIGHT_POSTS: InsightCardPost[] = [
@@ -75,9 +89,10 @@ const FALLBACK_INSIGHT_POSTS: InsightCardPost[] = [
 export class LandingStore {
   private readonly api = inject(LandingApi);
   private readonly insightsApi = inject(InsightsApi);
+  private readonly catalogStore = inject(PublicCatalogStore);
 
-  /** Live `/landing` payload — null until loaded (or on error). */
-  private readonly _data = signal<LandingData | null>(null);
+  /** Live counters — null until loaded (or on error). */
+  private readonly _stats = signal<LandingStats | null>(null);
   private readonly _status = signal<LoadStatus>('idle');
   private readonly _error = signal<string | null>(null);
 
@@ -85,10 +100,16 @@ export class LandingStore {
   readonly error = this._error.asReadonly();
   readonly isLoading = computed(() => this._status() === 'loading');
 
-  readonly featuredPrograms = computed<readonly PublicCertificate[]>(
-    () => this._data()?.featuredPrograms ?? [],
+  /**
+   * Featured programs, derived from the shared catalog store rather than
+   * fetched separately — the catalog is already loaded for `/certifications`,
+   * so this reuses that cache instead of issuing a second request for the same
+   * rows.
+   */
+  readonly featuredPrograms = computed<readonly PublicCertificate[]>(() =>
+    this.catalogStore.items().slice(0, FEATURED_PROGRAM_LIMIT),
   );
-  readonly stats = computed<LandingStats>(() => this._data()?.stats ?? FALLBACK_STATS);
+  readonly stats = computed<LandingStats>(() => this._stats() ?? FALLBACK_STATS);
 
   /** Real published articles from `GET /blog`, falling back to static demo posts. */
   private readonly _insightPosts = signal<readonly InsightCardPost[]>(FALLBACK_INSIGHT_POSTS);
@@ -97,26 +118,31 @@ export class LandingStore {
   readonly insightSectionBadge = signal('Insights').asReadonly();
 
   /**
-   * Load the server-driven landing blocks (`/landing` + the latest blog
-   * posts). Never throws — failures surface via {@link error} (for the
-   * `/landing` call) and the page keeps its fallbacks; a failed/empty blog
-   * fetch is silently absorbed by {@link loadInsightPosts} since the journal
-   * strip has always had a static fallback.
+   * Load the three server-driven landing blocks in parallel. **Never throws**,
+   * and one source failing never suppresses another: `allSettled` is used
+   * rather than `all` precisely so a catalog outage can't blank the counters,
+   * or a stats outage the featured strip. `status`/`error` track the counters
+   * only — the other two carry their own fallbacks.
    */
   async load(): Promise<void> {
     if (this._status() === 'loading') return;
     this._status.set('loading');
     this._error.set(null);
-    try {
-      const [data] = await Promise.all([
-        firstValueFrom(this.api.getPageData()),
-        this.loadInsightPosts(),
-      ]);
-      this._data.set(data);
+
+    const [statsResult] = await Promise.allSettled([
+      firstValueFrom(this.api.getPublicStats()),
+      this.catalogStore.load(),
+      this.loadInsightPosts(),
+    ]);
+
+    if (statsResult.status === 'fulfilled') {
+      this._stats.set(statsResult.value);
       this._status.set('success');
-    } catch (err) {
+    } else {
       this._status.set('error');
-      this._error.set(problemDetailMessage(err) ?? 'Failed to load landing content');
+      this._error.set(
+        problemDetailMessage(statsResult.reason) ?? 'Failed to load landing content',
+      );
     }
   }
 

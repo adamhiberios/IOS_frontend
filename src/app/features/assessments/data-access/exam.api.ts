@@ -7,6 +7,7 @@ import { environment } from '@env/environment';
 import {
   type AnswersRequestDto,
   type AutosaveResponseDto,
+  type ExamAttemptReviewResponseDto,
   type PreExamConfirmationRequestDto,
   type PreExamConfirmationResponseDto,
   type ScoreResultDto,
@@ -19,6 +20,7 @@ import {
 import {
   toAnswersDto,
   toExamAccessPreview,
+  toExamAttemptReview,
   toExamScoreResult,
   toExamSessionSnapshot,
   toExamSessionStart,
@@ -26,6 +28,7 @@ import {
 import {
   type AnswerMap,
   type ExamAccessPreview,
+  type ExamAttemptReview,
   type ExamScoreResult,
   type ExamSessionSnapshot,
   type ExamSessionStart,
@@ -137,5 +140,23 @@ export class ExamApi {
     return this.http
       .post<ScoreResultDto>(`${this.base}/sessions/${sessionId}/late-submit`, body)
       .pipe(map(toExamScoreResult));
+  }
+
+  /**
+   * `GET /exam/attempts/:attemptId/review` — the answer key for one of the
+   * caller's own **terminal** attempts (BE-I-22, fixed by backend `66a7632`).
+   *
+   * Error contract for the caller to branch on:
+   *   - **403** the attempt isn't the caller's
+   *   - **404** unknown attempt
+   *   - **422** the attempt is still in progress
+   *
+   * Note this is keyed by **attemptId**, which `submit` does not return — see
+   * `BE-I-32`. Callers reach it from the attempt history, which has the id.
+   */
+  getAttemptReview(attemptId: string): Observable<ExamAttemptReview> {
+    return this.http
+      .get<ExamAttemptReviewResponseDto>(`${this.base}/attempts/${attemptId}/review`)
+      .pipe(map((res) => toExamAttemptReview(res.data)));
   }
 }

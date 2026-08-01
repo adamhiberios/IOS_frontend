@@ -411,18 +411,21 @@ and [`backend-analysis.md` §6.9b](./backend-analysis.md#69b-latest-backend-sync
 
 ### E6. New on 2026-07-26/27 (backend `66a7632`, `43bd2d8`, `2976be0`)
 
-- [ ] ⛔ **BE-I-30 — landing regression (P0).** `GET /landing` was deleted; repoint
-      `LandingApi` (`landing.api.ts:21-25`) to **`GET /analytics/public-stats`**
-      (bare `{ stats:{ programs, students, certificatesIssued } }`) and compose
-      featured programs from `GET /catalog` via the existing `PublicCatalogStore`.
-      Reshape `landing.dto/model/mappers`; keep the static fallback.
-      = **Slice 1** of [`cms-frontend-plan.md`](./cms-frontend-plan.md).
-- [ ] **Real-exam answer review (BE-I-22 fixed).** Add
-      `GET /exam/attempts/:attemptId/review` to `exam.api.ts` and re-enable the
-      review section on `exam-result.page.ts` (commented out, not deleted, in
-      `b951242`). Owner-only; **422** while the attempt is not terminal; response
-      carries `options[].isCorrect`, `selectedOptionId`, `correctOptionId`,
-      per-question `isCorrect`, `explanation`.
+- [x] ~~**BE-I-30 — landing regression.**~~ — ✅ **DONE 2026-08-01.** `LandingApi`
+      repointed to `GET /analytics/public-stats` (response is **wrapped in
+      `stats`**, not bare as this line previously said); featured programs
+      composed from the shared `PublicCatalogStore`. **The "P0 / page is broken"
+      framing was wrong** — both consumers were commented out in `f3c425d`, so
+      the symptom was a failing background request, not a broken screen.
+      Satisfies plan Slice 1 with **no** CMS work.
+- [x] ~~**Real-exam answer review (BE-I-22 fixed).**~~ — ✅ **DONE 2026-08-01** as
+      `ios-exam-review-page` at `/assessments/review/:attemptId`, linked from the
+      dashboard exam history. ⚠️ **It could not be re-enabled on
+      `exam-result.page.ts` as this line assumed:** that route is keyed by
+      `sessionId`, while the endpoint takes an `attemptId` that `submit` does not
+      return — filed as **BE-I-32**. Do not "fix" it by fetching
+      `GET /exam/attempts` and taking the newest row (racy under retakes and
+      concurrent attempts).
 - [x] ~~**Catalog image picker (BE-I-27 narrowed).**~~ — ✅ **DONE 2026-07-29**
       (`components/cert-image-upload.ts` + `catalog.{dto,model,mappers,api}.ts`).
       `requiredHeaders` echoed in full; storage PUT goes through an
@@ -448,11 +451,13 @@ net-new student/auth features (real exam `b951242`, courses `172f35a`, mock
 
 **▶ Next:**
 
-1. **E6 — BE-I-30 landing fix** (a live public page is 404-ing).
+1. ~~**E6 — BE-I-30 landing fix**~~ ✅ 2026-08-01 (and the "live public page is
+   404-ing" premise was wrong — see the E6 entry).
 2. **Stage 2 — CMS**, per [`cms-frontend-plan.md`](./cms-frontend-plan.md):
    Slices 2–8 (public renderer → home cutover), then 9–10 (admin editor + contact
    inbox), then 11 (hardening).
-3. **E6 — real-exam answer review UI** (BE-I-22 is fixed).
+3. ~~**E6 — real-exam answer review UI**~~ ✅ 2026-08-01 (routed off the attempt
+   history, not the result page — **BE-I-32**).
 4. **E5 — blog E2E re-test**; `/dashboard/certificates` legacy pages (rewire or retire).
 5. **E6 minor** — ~~catalog image picker~~ ✅, ~~exam-authoring preview~~ ✅ (both
    2026-07-29); **`seo.jsonLd` on blog/catalog detail** remains.

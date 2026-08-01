@@ -854,7 +854,9 @@
       "passed": "Passed",
       "failed": "Failed",
       "late": "Late",
-      "loadMore": "Load more"
+      "loadMore": "Load more",
+      "review": "Review answers",
+      "actions": "Actions"
     }
   },
   "insights": {
@@ -2269,6 +2271,27 @@
       "body": "Please check your Email: to take your exam",
       "goBack": "Go back",
       "openEmail": "Ok, Open email"
+    },
+    "review": {
+      "breadcrumbParent": "Dashboard",
+      "breadcrumbCurrent": "Answer review",
+      "loading": "Loading your answers…",
+      "backToDashboard": "Back to dashboard",
+      "passed": "Passed",
+      "failed": "Not passed",
+      "score": "Score",
+      "correctOf": "Correct",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "correctAnswer": "Correct answer",
+      "yourAnswer": "Your answer",
+      "unanswered": "You did not answer this question.",
+      "failure": {
+        "notFound": "We couldn’t find that exam attempt.",
+        "forbidden": "That exam attempt isn’t yours to view.",
+        "notTerminal": "This exam hasn’t been submitted yet, so there are no answers to review.",
+        "unknown": "We couldn’t load your answers. Please try again."
+      }
     }
   },
   "termsOfUse": {

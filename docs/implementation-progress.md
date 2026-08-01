@@ -9,7 +9,71 @@
 
 ---
 
-### Admin follow-ups — catalog image picker + exam student preview — 🔵 built, awaiting review (uncommitted)
+### BE-I-30 landing repoint + real-exam answer review — 🔵 built, awaiting review (uncommitted)
+
+Closes backlog items **0** and **11**. Neither involves CMS.
+
+**1 · BE-I-30 — landing repointed off the deleted `GET /landing`.**
+
+> **Correction to how this was recorded.** Every prior entry said "the landing
+> page 404s". It didn't: `f3c425d` had commented out both consumers
+> (`store.stats()` and `store.featuredPrograms()`) in the page template, so the
+> only symptom was one failing background request per page load, silently
+> absorbed. Worth fixing, but it was never a broken screen — the P0 framing
+> carried through several documents was wrong.
+
+- `landing.{api,dto,model,mappers}.ts` — `LandingApi` now calls
+  `GET /analytics/public-stats` (**wrapped in `stats`**, neither bare nor
+  `{ data }`). Counters run through a coercion helper so a malformed field
+  renders `0`, not `NaN`, on a public page.
+- **Featured programs come from the shared `PublicCatalogStore`**, not a second
+  bespoke mapper — the catalog is already loaded for `/certifications`, so this
+  reuses that cache. `LandingData.featuredPrograms` was deleted rather than
+  re-homed: a second model for the same rows is what drifts.
+- The count shown is a **frontend choice now** (`FEATURED_PROGRAM_LIMIT = 3`,
+  first N of the catalog's own newest-first order). The deleted endpoint made
+  that choice server-side and nothing replaced it; real curation needs a backend
+  "featured" flag, not a heuristic here. Flagged in the constant's docs.
+- `load()` uses **`Promise.allSettled`**, so a catalog outage can't blank the
+  counters and a stats outage can't blank the featured strip. Each source keeps
+  its own fallback; `load()` never throws.
+- **No CMS work.** Plan Slice 1 is satisfied; the Slice 8 CMS home cutover is
+  untouched and still not started.
+
+**2 · Real-exam answer review (BE-I-22, fixed by backend `66a7632`).**
+
+- `exam.{dto,model,mappers,api}.ts` + new `ios-exam-review-page` at
+  `/assessments/review/:attemptId`: per-question paper with the answer key, the
+  student's pick, right/wrong marking, and unanswered questions called out.
+- The 403 / 404 / **422** contract maps to specific copy. 422 matters — it means
+  the attempt is still in progress, which would otherwise read as a broken link.
+- `ExamReviewOption` is the **only** place `isCorrect` exists in the real-exam
+  domain; the live-runner `ExamOption` still omits it, so the answer key cannot
+  reach the runner by type.
+- **It is not on the result page, and can't be — see BE-I-32 (filed).** That
+  route is keyed by `sessionId`; the review endpoint takes an `attemptId` that
+  `ScoreResult` never returns. It is reached from the dashboard's exam history,
+  which has the id. The workaround of fetching `GET /exam/attempts` and taking
+  the newest row was rejected: wrong under retakes and concurrent attempts, and
+  not a guess worth making on a page that reveals the answer key.
+- **i18n:** `assessments.review.*` (13 keys + 4 failure modes) +
+  `studentInsights.examHistory.{review,actions}`, en/fr/ar, trees verified
+  identical. Arabic machine-drafted, **pending professional review**.
+
+- **Verification:** `npm run typecheck` ✓ · `npm run lint` ✓ (0 errors; 3 known
+  `prefer-ngsrc` warnings) · `ng build --configuration production` ✓, initial
+  gzip **104.16 kB**.
+- **Not runtime-tested against api-dev** — needs a real student session with a
+  terminal attempt. Unverified live: the review payload shape and the 422 path.
+
+> **Session note (2026-08-01):** an accidental `git cherry-pick 172f35a` left
+> unresolved conflicts in the three i18n files, two `features/courses` pages and
+> this document. It was **aborted** at the user's request after taking a full
+> working-tree snapshot; no work was lost and no conflict markers remain.
+
+---
+
+### Admin follow-ups — catalog image picker + exam student preview — ✅ committed (`ad30b66`)
 
 Closes backlog items **12** and **10**. Both are admin-side, both were unblocked,
 and neither touches CMS.
@@ -1883,7 +1947,7 @@ surfaces are wired.
 
 | #     | Task                                                            | Why now                                                                                                                                                                                                              | Blocked by                                                                |
 | ----- | --------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| **0** | ⛔ **BE-I-30 — landing 404s** — repoint `LandingApi` to `GET /analytics/public-stats` + `GET /catalog` | `66a7632` deleted `GET /landing`; `landing.api.ts:21-25` still calls it (re-verified 2026-07-27). A live public page is broken. | — · **Slice 1** of [`cms-frontend-plan.md`](./cms-frontend-plan.md)       |
+| ~~0~~ | ~~**BE-I-30 — landing repoint**~~                               | ✅ done 2026-08-01 — `LandingApi` → `GET /analytics/public-stats`; featured programs from the shared `PublicCatalogStore`. **Correction:** the page never visibly 404'd (both consumers were commented out in `f3c425d`) — the symptom was a failing background request. Done with **no** CMS work | —                                                                         |
 | ~~1~~ | ~~**BE-I-29 — lesson `contentText` required**~~                 | ✅ done — fixed by `1c2fcdb` (verified 2026-07-26, not re-done)                                                                                                                                                       | —                                                                         |
 | 2     | **CMS-PUBLIC** — CMS section renderer for the marketing site    | Whole new backend surface (`3e52625`) with zero FE consumption                                                                                                                                                       | Unblocked — **BE-I-26 fixed** (`2976be0`) and the `/landing` question is settled (it's gone). Plan Slices 2–8 |
 | 3     | **CMS-ADMIN** — page/section/globals editor                     | Whole new backend surface with zero FE consumption                                                                                                                                                                   | ⬜ **Not built.** Built and **rolled back** 2026-07-29 — see the top entry. Plan Slices 9–10. Degraded when rebuilt by **BE-I-27** (no CMS media upload), **BE-I-28** (no draft preview), **BE-I-31** (conflict sentinels aren't codes) |
@@ -1895,7 +1959,7 @@ surfaces are wired.
 | ~~8~~ | ~~**Admin dashboard date window** (`from`/`to`, `72a711c`)~~    | ✅ done — `AdminDashboardApi.getOverviewByDateRange` + `AdminDashboardStore.setDateRange` shipped in `1c2fcdb`                                                                                                        | —                                                                         |
 | ~~9~~ | ~~**Admin student detail enrichment**~~                         | ✅ done — `StudentDetail.certificates[]/attempts[]/exams{}` mapped in `1c2fcdb`                                                                                                                                       | —                                                                         |
 | ~~10~~ | ~~**Exam-authoring preview**~~                                 | ✅ done 2026-07-29 — replaced the client-side faux-preview with the real endpoint                                                                                                                                     | —                                                                         |
-| **11** | **Real-exam answer review UI** — `GET /exam/attempts/:attemptId/review` | **BE-I-22 is fixed** (`66a7632`). The result page's review section was commented out (not deleted) in `b951242` for exactly this; add the transport + re-enable it. Terminal attempts only (422 otherwise), owner-only. | —                                                                         |
+| ~~11~~ | ~~**Real-exam answer review UI**~~                             | ✅ done 2026-08-01 — `ios-exam-review-page` at `/assessments/review/:attemptId`, linked from the dashboard exam history. **Not** on the result page: that route is keyed by `sessionId` and submit returns no attempt id (**BE-I-32**, filed)                            | —                                                                         |
 | ~~12~~ | ~~**Catalog image picker**~~                                   | ✅ done 2026-07-29 — presigned upload wired into the B8 form, A1 pattern reused, `requiredHeaders` echoed. Upload requires a saved certificate (endpoint 404s an unknown id)                                           | —                                                                         |
 | **13** | **SEO — render `seo.jsonLd`** on blog/catalog detail pages     | `43bd2d8` embeds schema.org JSON-LD in blog (`blog.service.ts:550`) and catalog (`catalog.service.ts:461`) detail responses; nothing renders it. CMS pages are covered by plan Slice 5. | `sitemap.xml`/`robots.txt` need an **edge rewrite** (infra, not FE)       |
 

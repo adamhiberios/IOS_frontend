@@ -848,6 +848,7 @@ issuance flows (e.g. the verification and reset **links** point at the
 | BE-I-28 | ⚠️ **Open (gap)**        | —                    | **No CMS draft preview** — public reads are PUBLISHED-only, so an editor cannot preview an unpublished page. See below.                                                                                                         |
 | BE-I-29 | ⚠️ **Open (breaking)**   | —                    | **`contentText` became required on `POST /admin/lessons`** (`72a711c`) with no version/deprecation note; the FE omits it when blank and now gets a 400. FE fix required. See below.                                             |
 | BE-I-30 | ⛔ **Open (breaking)**   | —                    | **`GET /landing` was deleted** (`66a7632`) in favour of `GET /analytics/public-stats` + `GET /catalog` + `GET /cms/pages/home`. The shipped landing page (A6, `469f429`) 404s at runtime. FE fix required. See below.           |
+| BE-I-32 | ⚠️ **Open (gap)**        | —                    | **`submit` returns no `attemptId`**, but `GET /exam/attempts/:attemptId/review` is keyed by one — so the result screen (keyed by `sessionId`) cannot link a student to their own answer review. Found while building the BE-I-22 review UI. See below. |
 | BE-I-31 | ⚠️ **Open (contract)**   | —                    | **CMS conflict sentinels aren't error `code`s** — `SLUG_LOCKED`, `SYSTEM_PAGE_PROTECTED` and `SECTION_NOT_IN_PAGE` are plain message prefixes, so all three flatten to a generic `code`; the FE must string-match to tell them apart. Found while building CMS-ADMIN Slice 9. See below.                    |
 
 **Also new (not original issues):** two-step admin **OTP login** (`e97de75`,
@@ -1265,6 +1266,41 @@ does elsewhere via `X-Lang`).
 their own `AppException` subclasses, exactly as `CMS_PAGE_NOT_PUBLISHABLE`
 already is. The prefixes suggest that was the intent. Blog has the same pattern
 for its own `SLUG_LOCKED`, so a fix would help both modules.
+
+#### BE-I-32 — ⚠️ `submit` returns no `attemptId`, so a student can't be linked to their own review
+
+**Severity: Low–Medium (UX gap, no data risk).** Discovered 2026-08-01 while
+building the BE-I-22 answer-review UI.
+
+`POST /exam/sessions/:sessionId/submit` and `.../late-submit` both resolve to
+`ScoreResult` — `{ score, passed, correctCount, totalCount }`
+(`exam.service.ts:71-76`). There is **no `attemptId`** on it, and no other field
+identifying the attempt row that was just written.
+
+But the review endpoint added in `66a7632` is keyed by exactly that:
+`GET /exam/attempts/:attemptId/review`. The consequence is structural, not
+cosmetic — the result screen is routed as `/assessments/result/:sessionId`, so
+after finishing an exam the frontend holds a **session** id and a score, and has
+no way to name the **attempt** it just produced. It therefore cannot deep-link
+the student to the review of the exam they just sat.
+
+**Why the obvious workaround was rejected.** The frontend could call
+`GET /exam/attempts`, take the newest row, and assume it is the one just
+submitted. That is wrong under two real conditions: a retake submitted moments
+earlier, and any concurrent attempt on another device. Guessing an identity for
+a page that reveals the answer key is not a trade worth making, so the review is
+instead reached from the attempt-history list, where the id is unambiguous.
+
+**Frontend impact.** `ios-exam-review-page` is routed at
+`/assessments/review/:attemptId` and linked from the dashboard's real-exam
+history rather than from the result screen. Functionally complete, one extra
+click, and the design's "review right after your result" flow is not achievable
+until this is fixed.
+
+**Backend ask:** add `attemptId` to `ScoreResult` (both submit and late-submit).
+It is already in hand at that point — `scoreAndPersist` writes the row — so this
+is an additive field, not new work. With it, the result page can link straight
+through and the history entry point stays as a secondary path.
 
 ### Endpoints added 2026-07-13 (blocker fixes)
 

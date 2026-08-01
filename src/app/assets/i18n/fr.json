@@ -854,7 +854,9 @@
       "passed": "Réussi",
       "failed": "Échoué",
       "late": "En retard",
-      "loadMore": "Charger plus"
+      "loadMore": "Charger plus",
+      "review": "Revoir les réponses",
+      "actions": "Actions"
     }
   },
   "insights": {
@@ -2269,6 +2271,27 @@
       "body": "Veuillez vérifier votre e-mail : pour passer votre examen",
       "goBack": "Retour",
       "openEmail": "OK, ouvrir l'e-mail"
+    },
+    "review": {
+      "breadcrumbParent": "Tableau de bord",
+      "breadcrumbCurrent": "Revue des réponses",
+      "loading": "Chargement de vos réponses…",
+      "backToDashboard": "Retour au tableau de bord",
+      "passed": "Réussi",
+      "failed": "Non réussi",
+      "score": "Score",
+      "correctOf": "Bonnes réponses",
+      "correct": "Correct",
+      "incorrect": "Incorrect",
+      "correctAnswer": "Bonne réponse",
+      "yourAnswer": "Votre réponse",
+      "unanswered": "Vous n’avez pas répondu à cette question.",
+      "failure": {
+        "notFound": "Cette tentative d’examen est introuvable.",
+        "forbidden": "Cette tentative d’examen ne vous appartient pas.",
+        "notTerminal": "Cet examen n’a pas encore été soumis, il n’y a donc pas de réponses à consulter.",
+        "unknown": "Impossible de charger vos réponses. Veuillez réessayer."
+      }
     }
   },
   "termsOfUse": {

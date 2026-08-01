@@ -1,8 +1,13 @@
 /**
- * LandingApi — transport for the public landing page (`GET /landing`, BE-I-20).
+ * LandingApi — transport for the public landing page's live counters
+ * (`GET /analytics/public-stats`).
  *
- * Bare `{ featuredPrograms, stats }`, no auth, localized by `X-Lang` (via
- * `localeInterceptor`). Titles/prices arrive resolved into the requested locale.
+ * **BE-I-30:** this used to call `GET /landing`, which the backend deleted in
+ * `66a7632`; the call 404'd against the deployed API until this repoint. See
+ * `landing.dto.ts` for where the rest of that composite payload went.
+ *
+ * Public (no auth), localized by `X-Lang` via `localeInterceptor` — though the
+ * payload is numeric, so the locale only affects error messages.
  */
 
 import { HttpClient } from '@angular/common/http';
@@ -11,17 +16,19 @@ import { type Observable, map } from 'rxjs';
 
 import { environment } from '@env/environment';
 
-import { type LandingResponseDto } from './landing.dto';
-import { toLandingData } from './landing.mappers';
-import { type LandingData } from './landing.model';
+import { type PublicStatsResponseDto } from './landing.dto';
+import { toLandingStats } from './landing.mappers';
+import { type LandingStats } from './landing.model';
 
 @Injectable({ providedIn: 'root' })
 export class LandingApi {
   private readonly http = inject(HttpClient);
-  private readonly base = `${environment.apiBaseUrl}/landing`;
+  private readonly base = `${environment.apiBaseUrl}/analytics`;
 
-  /** `GET /landing` — featured programs + live platform stats. */
-  getPageData(): Observable<LandingData> {
-    return this.http.get<LandingResponseDto>(this.base).pipe(map(toLandingData));
+  /** `GET /analytics/public-stats` — live platform counters. */
+  getPublicStats(): Observable<LandingStats> {
+    return this.http
+      .get<PublicStatsResponseDto>(`${this.base}/public-stats`)
+      .pipe(map(toLandingStats));
   }
 }

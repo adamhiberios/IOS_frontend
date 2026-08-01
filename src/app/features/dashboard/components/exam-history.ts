@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { LanguageService } from '@core/i18n';
 import { Button } from '@ui';
@@ -19,7 +20,7 @@ import { formatDuration, formatScore } from '../data-access/exam-attempts.model'
  */
 @Component({
   selector: 'ios-exam-history',
-  imports: [DatePipe, Button],
+  imports: [DatePipe, RouterLink, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section aria-labelledby="exam-history-heading" class="flex flex-col gap-4">
@@ -73,6 +74,9 @@ import { formatDuration, formatScore } from '../data-access/exam-attempts.model'
                 <th scope="col" class="text-start font-medium px-6 py-3">
                   {{ lang.t('studentInsights.examHistory.submitted') }}
                 </th>
+                <th scope="col" class="text-end font-medium px-6 py-3">
+                  <span class="sr-only">{{ lang.t('studentInsights.examHistory.actions') }}</span>
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -109,6 +113,20 @@ import { formatDuration, formatScore } from '../data-access/exam-attempts.model'
                     {{ formatDuration(a.durationSeconds) ?? '—' }}
                   </td>
                   <td class="px-6 py-3 text-ios-fg-8">{{ a.submittedAt | date: 'medium' }}</td>
+                  <td class="px-6 py-3 text-end">
+                    <!--
+                      Answer review (BE-I-22, fixed by backend 66a7632). Keyed by
+                      the attempt id, which only exists here — the result screen
+                      is keyed by sessionId and submit returns no attempt id
+                      (BE-I-32), so this row is the only entry point.
+                    -->
+                    <a
+                      [routerLink]="['/assessments/review', a.id]"
+                      class="text-sm font-medium text-ios-brand-primary underline whitespace-nowrap"
+                    >
+                      {{ lang.t('studentInsights.examHistory.review') }}
+                    </a>
+                  </td>
                 </tr>
               }
             </tbody>
