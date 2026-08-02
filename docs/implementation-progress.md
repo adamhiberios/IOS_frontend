@@ -73,19 +73,99 @@ it surfaced. The nav (`dashboard-navbar`, `user-menu-dropdown`) always pointed a
   Overview charts and mock section. The store is now **detail-page only** — its
   header says so.
 
-**Still open on this rewire:**
+- **Overview section rebuilt on real data.** It was the last fixture-driven thing
+  a student actually saw, and it was worse than stale: it read
+  `ESM_P_DETAIL_*`, so **`/dashboard/certificates/PSM` showed ESM's numbers** —
+  same completion %, same charts, same certificate card, on every certificate.
+  The breadcrumb had the same bug (`detail()?.code` rendered "ESM-P" on `/PSM`),
+  as did the header's "Start Final Test" CTA, which gated on fixture completion
+  and so appeared identically everywhere.
 
-- **The detail page's Overview tiles need a product decision.** `averageScore`
-  and the charts could come from real mock history (precedent: `4a11ae9`), but
-  **`totalTimeMinutes` and `trendDelta` have no backend source at all**.
+  Replaced with three tiles that are all real and all **this** certificate's,
+  from `GET /learning/progress`: **completion %**, **lessons completed / total**,
+  **lessons remaining** — plus a progress bar and a "continue where you left off"
+  card that deep-links to the first incomplete lesson (and flips to the final-exam
+  CTA once everything is done).
+
+  **Removed rather than re-sourced**, because nothing backs them: average mock
+  score, total learning time, trend delta, the weekly line chart, the exam donut,
+  and the certificate award card. Average score and the charts *could* come from
+  mock history (precedent: `4a11ae9`), but they belong to the mock-test section,
+  not a learning-progress overview — worth revisiting there rather than
+  reinstating here. Total time and trend have no backend source at all.
+
+- **Mock test section rebuilt on real data (2026-08-02).** The last fixture
+  surface on this page: `ESM_P_MOCK_TEST_STATS`/`ESM_P_MOCK_TEST_HISTORY` — a
+  fixed `{5 attempts, 95% best, 46% avg, 10h40m}` and 7 hardcoded rows — were
+  shown identically under every certificate, same as the Overview bug above.
+  The cert banner at the top of the tab had the same problem one level up:
+  both Materials and Mock test rendered `detail()!.certificationCard`, always
+  ESM-P's title/badge/completion regardless of which cert was open.
+
+  Replaced with `certificationCard()` — one real computed built from
+  `CoursesStore.progress()`, now shared by both tabs — and
+  `realMockStats()` / `realMockHistory()`, built by filtering
+  `MockStore.history()` (`GET /mock/history`, global across all certs — there
+  is no `certId` filter server-side) down to this cert's **submitted**
+  attempts. `totalTimeMinutes` is derived from `submittedAt − startedAt` per
+  attempt (the backend doesn't return a duration field). `status` maps from
+  the advisory `readyForFinal` flag — the closest real equivalent to
+  "passed". `issuer`/`isEarned`/`issuedDate`/`expiryDate` on the card follow
+  the same "don't invent it" rule as `certificates.page.ts`'s
+  `hasCertificate: false` — real issuance data lives behind
+  `GET /me/certificates`, which this page doesn't consume.
+
+  **Two functional bugs found and fixed alongside the data, both silent —
+  neither ever surfaced in the fixture UI because there was no real attempt
+  to click through to:**
+  - **"Start mock test" did nothing.** `onStartTest()` navigated to
+    `:code/mock-test` with `{ count, time }` query params. The real runner
+    (`mock-test.page.ts`) only ever reads `?certId=` (start) or `?attemptId=`
+    (resume) — it has no `count`/`time` params to read, because
+    `POST /mock/start` doesn't accept them (the backend samples its own
+    question set and duration). Without `certId` the runner never called
+    `store.start()` and sat on "no active attempt" forever. Fixed by passing
+    `certId` instead; `MockTestSettings` and its dialog are left in place
+    (harmless, gates the click) but are now documented as collecting values
+    the backend has no knob for.
+  - **"Show details" on a history row started a new exam** (user-reported).
+    It reused the cert-card's `dialogOpen.set(true)` handler — same button,
+    same effect — so clicking a past attempt silently launched a fresh one
+    instead of showing its answers. `MockTestAttempt` had no field to carry
+    the real attempt id back out, because the type predates any real
+    attempt existing. Added `attemptId` to `MockTestAttempt`, added a
+    `viewAttempt` output to `CertMockTest` fired with that id, and wired it in
+    `cert-detail.page.ts` to navigate to `:code/mock-test/result?attemptId=`
+    (`MockExamResultPage`, already built for this — `GET /mock/attempts/:id`).
+
+  `MockTestQuestion`/`MockTestOption` (the fixture's local question bank)
+  were also removed from `certificates.model.ts` — dead once the mock-test
+  fixtures went, and never consumed by the real runner, which samples
+  questions from the backend via `MockStore.questions()`
+  (`mock.model.ts`'s `MockQuestion`, a separate real type).
+
+  **With this, `CertificatesStore` no longer has any fixture-backed
+  `CertDetail` snapshot left to hold.** `certificates.store.ts` is down to a
+  single `activeSection` signal (the side-nav's job); everything else the
+  detail page needs now comes straight from `CoursesStore` / `MockStore`.
+  Removed from `certificates.model.ts`: `CertDetail`, `CertDetailStats`,
+  `SessionChapter`, `CertSessionData` (dead since the session-viewer rewire,
+  never cleaned up), the `@shared` chart-type re-exports (`MonthlyScore` /
+  `WeeklyScore` / `ExamSummary` / `ScoreFilterYear` / `ScoreFilterWeek` — no
+  in-feature consumer left), and `CertificatesState.selectedDetail`.
+  `CertListCard`/`CertExamResult` were **kept** — `cert-grid-card.ts` (see
+  below) still imports them.
+
+**Still open on this rewire:**
 - **`cert-grid-card.ts` is now orphaned** — its only consumer was the fixture
   "All certifications" grid. Left in place rather than deleted: it is the
   designed component a real browse-all section (from `PublicCatalogStore`) would
   reuse. Delete it if that section isn't planned.
 
 - **Verification:** typecheck ✓ · lint ✓ (0 errors; 3 known `prefer-ngsrc`
-  warnings) · production build ✓, initial gzip **104.25 kB**.
-- **Not runtime-tested against api-dev** — needs an enrolled student session.
+  warnings) · production build ✓, initial gzip **104.24 kB** (unchanged).
+- **Not runtime-tested against api-dev** — needs an enrolled student session
+  with at least one submitted mock attempt to see non-empty stats/history.
 
 ---
 

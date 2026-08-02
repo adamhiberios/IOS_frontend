@@ -635,6 +635,7 @@
       "numberOfQuestions": "عدد الأسئلة",
       "closeSettings": "إغلاق الإعدادات",
       "tests": "{count} اختبارات",
+      "mockTestAttemptLabel": "اختبار تجريبي {number}",
       "hoursAbbr": "{count} س",
       "minutesAbbr": "{count} د",
       "materialOpen": "فتح",
@@ -650,7 +651,13 @@
       "openLesson": "فتح",
       "reviewLesson": "مراجعة",
       "noEnrolments": "لست مسجّلًا في أي شهادة بعد.",
-      "browseCertifications": "تصفّح الشهادات"
+      "browseCertifications": "تصفّح الشهادات",
+      "lessonsCompleted": "الدروس المكتملة",
+      "lessonsRemaining": "الدروس المتبقية",
+      "notEnrolled": "أنت غير مسجّل في هذه الشهادة.",
+      "continueHeading": "تابع من حيث توقفت",
+      "allLessonsDone": "لقد أنهيت جميع الدروس",
+      "continueCta": "متابعة التعلّم"
     },
     "learning": {
       "title": "أكمل تعلمك",

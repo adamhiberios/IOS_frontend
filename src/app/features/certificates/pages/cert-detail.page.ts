@@ -1,37 +1,29 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  type OnInit,
-  computed,
-  inject,
-} from '@angular/core';
-import { NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component, type OnInit, computed, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import {
-  LucideArrowLeft,
-  LucideArrowRight,
-  LucideChartBar,
-  LucideClock,
-  LucidePercent,
-  LucideTrendingUp,
-} from '@lucide/angular';
+import { LucideArrowLeft, LucideChartBar, LucideClock, LucidePercent } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 
-import { CanadaFlag, CertificatesBadge, DonutChart, IosIcon, LineChart, provideIcons } from '@ui';
+import { CanadaFlag, IosIcon, provideIcons } from '@ui';
 
 import { DashboardNavbar } from '@layouts';
 import { CoursesStore } from '@features/courses/data-access/courses.store';
+import { resolveBadgeAsset } from '@features/dashboard/data-access/dashboard.model';
 import { CertLearningMaterials } from '../components/cert-learning-materials';
 import { CertMockTest } from '../components/cert-mock-test';
 import { CertSideNav } from '../components/cert-side-nav';
 import type {
   CertDetailSection,
+  CertificationCard,
   LearningMaterial,
   MaterialStatus,
+  MockTestAttempt,
   MockTestSettings,
+  MockTestStats,
+  MockTestStatus,
 } from '../data-access/certificates.model';
 import { CertificatesStore } from '../data-access/certificates.store';
+import { MockStore } from '../data-access/mock.store';
 
 /**
  * `ios-cert-detail-page` — Certificate detail view.
@@ -41,40 +33,35 @@ import { CertificatesStore } from '../data-access/certificates.store';
  * │  [← Back] breadcrumb                     [Start Final Test]               │
  * │                                                                            │
  * │  ┌─ side nav (228px) ──┐  ┌─ content ──────────────────────────────────┐  │
- * │  │   Overview          │  │  OVERVIEW:   4 stat cards                  │  │
- * │  │ • Learning Materials│  │             row 1: [Learning] [Cert card]  │  │
- * │  │   Mock test         │  │             row 2: [Line chart] [Donut]    │  │
- * │  └─────────────────────┘  │  MATERIALS: [Cert banner] + files list     │  │
+ * │  │   Overview          │  │  OVERVIEW:  3 stat tiles + progress bar +   │  │
+ * │  │ • Learning Materials│  │             "continue learning" card        │  │
+ * │  │   Mock test         │  │  MATERIALS: [Cert banner] + files list      │  │
+ * │  └─────────────────────┘  │  MOCK TEST: [Cert banner] + 4 KPI cards +   │  │
+ * │                           │             attempt history                 │  │
  * │                           └────────────────────────────────────────────┘  │
  * └────────────────────────────────────────────────────────────────────────────┘
  *
- * Figma: node 13567-14984 (overview) / 13567-15374 (learning materials).
+ * All three tabs are wired to real data: Overview + the cert banner from
+ * `CoursesStore` (`GET /learning/progress`, `GET /learning/certs/:id/curriculum`),
+ * Mock test's KPIs/history from `MockStore` (`GET /mock/history`, filtered to
+ * this cert). Nothing here reads the old `CertificatesStore` fixture snapshot
+ * any more — that store now only tracks which side-nav tab is active.
+ *
+ * Figma: node 13567-14984 (overview) / 13567-15374 (learning materials) /
+ * 13567-16238 (mock test).
  */
 @Component({
   selector: 'ios-cert-detail-page',
   imports: [
-    NgOptimizedImage,
     DashboardNavbar,
     CertSideNav,
     CertLearningMaterials,
     CertMockTest,
-    LineChart,
-    DonutChart,
-    CertificatesBadge,
     RouterLink,
     IosIcon,
     CanadaFlag,
   ],
-  providers: [
-    provideIcons(
-      LucideArrowLeft,
-      LucideArrowRight,
-      LucidePercent,
-      LucideClock,
-      LucideTrendingUp,
-      LucideChartBar,
-    ),
-  ],
+  providers: [provideIcons(LucideArrowLeft, LucidePercent, LucideClock, LucideChartBar)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -112,7 +99,9 @@ import { CertificatesStore } from '../data-access/certificates.store';
                   </li>
                   <li aria-hidden="true">/</li>
                   <li>
-                    <span class="text-ios-fg-13 font-semibold">{{ detail()?.code ?? '—' }}</span>
+                    <!-- The route's own code, not the fixture's: this used to
+                         read detail()?.code and so showed "ESM-P" on /PSM. -->
+                    <span class="text-ios-fg-13 font-semibold">{{ certCode }}</span>
                   </li>
                 </ol>
               </nav>
@@ -143,208 +132,137 @@ import { CertificatesStore } from '../data-access/certificates.store';
                    OVERVIEW section
               ══════════════════════════════════════════════ -->
               @if (store.activeSection() === 'overview') {
-                <!-- ── 4 Stat cards ── -->
-                <section
-                  aria-label="Certification statistics"
-                  class="grid grid-cols-2 lg:grid-cols-4 gap-4"
-                >
-                  <!-- Overall Completion -->
-                  <div class="flex items-center gap-3 bg-ios-surface-muted rounded-2xl px-5 py-3">
-                    <ios-icon
-                      name="chart-bar"
-                      class="w-8 h-8 text-ios-fg shrink-0"
-                      aria-hidden="true"
-                    />
-                    <div class="flex flex-col min-w-0">
-                      <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
-                        {{ detail()?.stats?.completionPercent ?? 0 }}%
-                      </span>
-                      <span class="text-[16px] font-medium leading-[1.4] text-ios-fg">
-                        {{ lang.t('dashboard.certs.overallCompletion') }}
-                      </span>
-                    </div>
+                @if (courses.progressLoading() && !enrolled()) {
+                  <p class="py-10 text-center text-ios-fg-8" role="status" aria-live="polite">
+                    {{ lang.t('dashboard.certs.materialsLoading') }}
+                  </p>
+                } @else if (!enrolled()) {
+                  <div class="rounded-2xl bg-ios-surface-muted px-6 py-10 text-center">
+                    <p class="text-[15px] text-ios-fg-8">
+                      {{ lang.t('dashboard.certs.notEnrolled') }}
+                    </p>
+                    <a
+                      routerLink="/dashboard/certificates"
+                      class="mt-5 inline-flex h-11 items-center justify-center rounded-xl bg-ios-fg-13 px-5 font-semibold text-white hover:bg-ios-fg transition-colors"
+                    >
+                      {{ lang.t('dashboard.certs.backToCertificates') }}
+                    </a>
                   </div>
-
-                  <!-- Average Mock Score -->
-                  <div class="flex items-center gap-3 bg-ios-surface-muted rounded-2xl px-5 py-3">
-                    <ios-icon
-                      name="percent"
-                      class="w-8 h-8 text-ios-fg shrink-0"
-                      aria-hidden="true"
-                    />
-                    <div class="flex flex-col min-w-0">
-                      <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
-                        {{ store.averageScoreFormatted() }}
-                      </span>
-                      <span class="text-[16px] font-medium leading-[1.4] text-ios-fg">
-                        {{ lang.t('dashboard.certs.averageMockScore') }}
-                      </span>
-                    </div>
-                  </div>
-
-                  <!-- Time Spent -->
-                  <div class="flex items-center gap-3 bg-ios-surface-muted rounded-2xl px-5 py-3">
-                    <ios-icon
-                      name="clock"
-                      class="w-8 h-8 text-ios-fg shrink-0"
-                      aria-hidden="true"
-                    />
-                    <div class="flex flex-col min-w-0">
-                      <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
-                        {{ store.totalTimeFormatted() }}
-                      </span>
-                      <span class="text-[16px] font-medium leading-[1.4] text-ios-fg">
-                        {{ lang.t('dashboard.certs.timeSpent') }}
-                      </span>
-                    </div>
-                  </div>
-
-                  <!-- Trend -->
-                  <div class="flex items-center gap-3 bg-ios-surface-muted rounded-2xl px-5 py-3">
-                    <ios-icon
-                      name="trending-up"
-                      class="w-8 h-8 text-ios-fg shrink-0"
-                      aria-hidden="true"
-                    />
-                    <div class="flex flex-col min-w-0">
-                      <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
-                        {{ store.trendFormatted() }}
-                      </span>
-                      <span class="text-[16px] font-medium leading-[1.4] text-ios-fg">
-                        {{ lang.t('dashboard.certs.trend') }}
-                      </span>
-                    </div>
-                  </div>
-                </section>
-
-                <!-- ── Row 1: "Complete your learning" + "Certification" ── -->
-                @if (detail()) {
+                } @else if (enrolled(); as progress) {
+                  <!-- Real, certificate-specific progress. Every figure here comes
+                       from GET /learning/progress for THIS cert. -->
                   <section
-                    aria-label="Learning progress"
-                    class="grid grid-cols-1 lg:grid-cols-[1fr_354px] gap-6"
+                    aria-label="Certification progress"
+                    class="grid grid-cols-1 sm:grid-cols-3 gap-4"
                   >
-                    <!-- "Complete your learning" -->
-                    <div class="flex flex-col gap-3">
-                      <h2 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13">
-                        {{ lang.t('dashboard.learning.title') }}
-                      </h2>
-
-                      <div
-                        class="bg-ios-surface-muted rounded-2xl px-4 py-6 flex items-start gap-6 flex-1"
-                      >
-                        <!-- test.svg illustration -->
-                        <img
-                          ngSrc="assets/icons/test.svg"
-                          alt=""
-                          class="w-[148px] h-[148px] object-contain shrink-0"
-                          width="148"
-                          height="148"
-                          loading="lazy"
-                          decoding="async"
-                          aria-hidden="true"
-                        />
-
-                        <!-- Text + CTA -->
-                        <div class="flex flex-col gap-6 flex-1 min-w-0 pt-[18px]">
-                          <div class="flex flex-col gap-1">
-                            <p class="text-[18px] font-bold leading-[1.2] text-ios-fg">
-                              {{ detail()!.learningHeading }}
-                            </p>
-                            <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-10">
-                              {{ detail()!.learningBody }}
-                            </p>
-                            @if (detail()!.learningMeta) {
-                              <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-8">
-                                {{ detail()!.learningMeta }}
-                              </p>
-                            }
-                          </div>
-                          <div class="flex justify-end">
-                            <button
-                              type="button"
-                              class="inline-flex items-center justify-center h-11 px-6 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-                            >
-                              {{ detail()!.learningCtaLabel }}
-                            </button>
-                          </div>
-                        </div>
+                    <div class="flex items-center gap-3 bg-ios-surface-muted rounded-2xl px-5 py-3">
+                      <ios-icon
+                        name="chart-bar"
+                        class="w-8 h-8 text-ios-fg shrink-0"
+                        aria-hidden="true"
+                      />
+                      <div class="flex flex-col min-w-0">
+                        <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
+                          {{ completionPercent() }}%
+                        </span>
+                        <span class="text-[16px] font-medium leading-[1.4] text-ios-fg">
+                          {{ lang.t('dashboard.certs.overallCompletion') }}
+                        </span>
                       </div>
                     </div>
 
-                    <!-- "Certification" card -->
-                    <div class="flex flex-col gap-3">
-                      <h2 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13">
-                        {{ lang.t('dashboard.certs.certification') }}
-                      </h2>
+                    <div class="flex items-center gap-3 bg-ios-surface-muted rounded-2xl px-5 py-3">
+                      <ios-icon
+                        name="percent"
+                        class="w-8 h-8 text-ios-fg shrink-0"
+                        aria-hidden="true"
+                      />
+                      <div class="flex flex-col min-w-0">
+                        <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
+                          {{ progress.completedLessons }} / {{ progress.totalLessons }}
+                        </span>
+                        <span class="text-[16px] font-medium leading-[1.4] text-ios-fg">
+                          {{ lang.t('dashboard.certs.lessonsCompleted') }}
+                        </span>
+                      </div>
+                    </div>
 
-                      <div
-                        class="bg-cer-blue-soft rounded-2xl px-6 py-4 flex flex-col gap-3 flex-1 justify-center"
-                      >
-                        <!-- Badge + code + name row -->
-                        <div class="flex items-center gap-4">
-                          <div class="relative shrink-0" style="width:98px;">
-                            <ios-certificates-badge
-                              [svgPath]="detail()!.certificationCard.imageAsset"
-                              [code]="detail()!.certificationCard.code"
-                              [fullName]="detail()!.certificationCard.title"
-                              class="block"
-                            />
-                            <!-- Active indicator dot -->
-                            <span
-                              class="absolute top-2 -end-1.5 w-3 h-3 rounded-full bg-ios-success-mid border-2 border-white"
-                              [attr.aria-label]="lang.t('dashboard.certs.active')"
-                            ></span>
-                          </div>
-                          <div class="flex flex-col min-w-0">
-                            <p
-                              class="text-[18px] font-bold leading-[1.2] text-ios-fg whitespace-nowrap"
-                            >
-                              {{ detail()!.certificationCard.code }}
-                            </p>
-                            <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-10">
-                              {{ detail()!.certificationCard.title }}
-                            </p>
-                          </div>
-                        </div>
-
-                        <!-- Progress + Show details row -->
-                        <div class="flex items-center justify-between gap-4">
-                          <p
-                            class="text-[14px] font-semibold leading-[1.4] text-ios-fg-10 whitespace-nowrap"
-                          >
-                            {{ detail()!.certificationCard.progressPercent
-                            }}{{ lang.t('dashboard.certs.percentCompleted') }}
-                          </p>
-                          <button
-                            type="button"
-                            class="inline-flex items-center justify-center gap-1 h-11 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 whitespace-nowrap"
-                            (click)="onShowDetails()"
-                          >
-                            {{ lang.t('dashboard.certs.showDetails') }}
-                            <ios-icon
-                              name="arrow-right"
-                              class="w-[18px] h-[18px] shrink-0 rtl:rotate-180"
-                              aria-hidden="true"
-                            />
-                          </button>
-                        </div>
+                    <div class="flex items-center gap-3 bg-ios-surface-muted rounded-2xl px-5 py-3">
+                      <ios-icon
+                        name="clock"
+                        class="w-8 h-8 text-ios-fg shrink-0"
+                        aria-hidden="true"
+                      />
+                      <div class="flex flex-col min-w-0">
+                        <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
+                          {{ lessonsRemaining() }}
+                        </span>
+                        <span class="text-[16px] font-medium leading-[1.4] text-ios-fg">
+                          {{ lang.t('dashboard.certs.lessonsRemaining') }}
+                        </span>
                       </div>
                     </div>
                   </section>
-                }
 
-                <!-- ── Row 2: Mock test scores (line) + Total mock test Taken (donut) ── -->
-                @if (detail()) {
+                  <!-- Progress bar -->
+                  <section aria-label="Completion" class="flex flex-col gap-2">
+                    <div class="flex items-center justify-between text-[14px] text-ios-fg-8">
+                      <span>{{ progress.title }}</span>
+                      <span class="tabular-nums">{{ completionPercent() }}%</span>
+                    </div>
+                    <div
+                      class="h-2 w-full rounded-full bg-ios-surface-soft overflow-hidden"
+                      role="progressbar"
+                      [attr.aria-valuenow]="completionPercent()"
+                      aria-valuemin="0"
+                      aria-valuemax="100"
+                    >
+                      <div
+                        class="h-full rounded-full bg-ios-brand-primary transition-[width]"
+                        [style.width.%]="completionPercent()"
+                      ></div>
+                    </div>
+                  </section>
+
+                  <!-- Continue where you left off -->
                   <section
-                    aria-label="Mock test performance"
-                    class="grid grid-cols-1 lg:grid-cols-[1fr_354px] gap-6 items-stretch"
+                    aria-label="Continue learning"
+                    class="bg-ios-surface-muted rounded-2xl px-6 py-6 flex flex-wrap items-center justify-between gap-4"
                   >
-                    <ios-line-chart
-                      [scores]="detail()!.weeklyScores"
-                      [weekFilter]="store.weekFilter()"
-                      (filterChange)="store.setWeekFilter($event)"
-                    />
-                    <ios-donut-chart [summary]="detail()!.examSummary" />
+                    <div class="flex flex-col gap-1 min-w-0">
+                      <h2 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13">
+                        {{
+                          nextLesson()
+                            ? lang.t('dashboard.certs.continueHeading')
+                            : lang.t('dashboard.certs.allLessonsDone')
+                        }}
+                      </h2>
+                      @if (nextLesson(); as next) {
+                        <p class="text-[16px] text-ios-fg-8 truncate" dir="auto">
+                          {{ next.title }}
+                        </p>
+                      }
+                    </div>
+                    @if (nextLesson(); as next) {
+                      <a
+                        [routerLink]="[
+                          '/dashboard/certificates',
+                          progress.programCode,
+                          'session',
+                          next.id,
+                        ]"
+                        class="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-ios-fg-13 px-6 font-semibold text-white hover:bg-ios-fg transition-colors"
+                      >
+                        {{ lang.t('dashboard.certs.continueCta') }}
+                      </a>
+                    } @else {
+                      <a
+                        routerLink="/assessments/verify"
+                        class="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-ios-brand-primary px-6 font-semibold text-ios-brand-primary-soft hover:bg-ios-brand-primary-deep transition-colors"
+                      >
+                        {{ lang.t('dashboard.certs.startFinalTest') }}
+                      </a>
+                    }
                   </section>
                 }
               }
@@ -368,7 +286,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
                       {{ lang.t('dashboard.certs.materialsEmpty') }}
                     </p>
                   </div>
-                } @else if (detail()) {
+                } @else if (certificationCard(); as card) {
                   <!--
                     materials comes from the real curriculum, so each row's id
                     is a lesson UUID. It used to be the ESM_P_MATERIALS fixture,
@@ -376,7 +294,7 @@ import { CertificatesStore } from '../data-access/certificates.store';
                     with "Validation failed (uuid is expected)".
                   -->
                   <ios-cert-learning-materials
-                    [cert]="detail()!.certificationCard"
+                    [cert]="card"
                     [materials]="realMaterials()"
                     (open)="onMaterialOpen($event)"
                   />
@@ -387,12 +305,35 @@ import { CertificatesStore } from '../data-access/certificates.store';
                    MOCK TEST section
               ══════════════════════════════════════════════ -->
               @if (store.activeSection() === 'mock-test') {
-                @if (detail()) {
+                @if (courses.progressLoading() && !certificationCard()) {
+                  <p class="py-10 text-center text-ios-fg-8" role="status" aria-live="polite">
+                    {{ lang.t('dashboard.certs.materialsLoading') }}
+                  </p>
+                } @else if (!certificationCard()) {
+                  <div class="rounded-2xl bg-ios-surface-muted px-6 py-10 text-center">
+                    <p class="text-[15px] text-ios-fg-8">
+                      {{ lang.t('dashboard.certs.notEnrolled') }}
+                    </p>
+                    <a
+                      routerLink="/dashboard/certificates"
+                      class="mt-5 inline-flex h-11 items-center justify-center rounded-xl bg-ios-fg-13 px-5 font-semibold text-white hover:bg-ios-fg transition-colors"
+                    >
+                      {{ lang.t('dashboard.certs.backToCertificates') }}
+                    </a>
+                  </div>
+                } @else if (certificationCard(); as card) {
+                  <!--
+                    stats/history come from GET /mock/history filtered to this
+                    cert's submitted attempts. It used to be the fixed
+                    ESM_P_MOCK_TEST_STATS/HISTORY (5 attempts, 95% best score,
+                    10h40m) shown identically under every certificate.
+                  -->
                   <ios-cert-mock-test
-                    [cert]="detail()!.certificationCard"
-                    [stats]="detail()!.mockTestStats"
-                    [history]="detail()!.mockTestHistory"
+                    [cert]="card"
+                    [stats]="realMockStats()"
+                    [history]="realMockHistory()"
                     (startTest)="onStartTest($event)"
+                    (viewAttempt)="onViewAttempt($event)"
                     class="flex flex-col gap-6"
                   />
                 }
@@ -419,16 +360,15 @@ export class CertDetailPage implements OnInit {
   protected readonly lang = inject(LanguageService);
   protected readonly store = inject(CertificatesStore);
   protected readonly courses = inject(CoursesStore);
+  protected readonly mock = inject(MockStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
   protected readonly currentYear = new Date().getFullYear();
   protected readonly yearStr = String(this.currentYear);
 
-  protected readonly detail = computed(() => this.store.selectedDetail());
-
   /** Route `:code` — a **program code** (e.g. `ESM`), not a UUID. */
-  private readonly certCode = this.route.snapshot.params['code'] as string;
+  protected readonly certCode = this.route.snapshot.params['code'] as string;
 
   /**
    * The enrolled certificate matching the route's program code. The backend
@@ -436,9 +376,34 @@ export class CertDetailPage implements OnInit {
    * code, so `GET /learning/progress` is the lookup table between them — and it
    * only lists **enrolled** certificates, which is exactly the right gate here.
    */
-  private readonly enrolled = computed(() =>
+  protected readonly enrolled = computed(() =>
     this.courses.progress().find((p) => p.programCode === this.certCode),
   );
+
+  /** Whole-number completion for this certificate. */
+  protected readonly completionPercent = computed(() =>
+    Math.round(this.enrolled()?.percentComplete ?? 0),
+  );
+
+  protected readonly lessonsRemaining = computed(() => {
+    const p = this.enrolled();
+    return p ? Math.max(0, p.totalLessons - p.completedLessons) : 0;
+  });
+
+  /**
+   * The first incomplete lesson, in curriculum order — the "continue where you
+   * left off" target. `null` once everything is done, which is what flips the
+   * card's CTA to the final exam.
+   */
+  protected readonly nextLesson = computed(() => {
+    const curriculum = this.courses.curriculum();
+    if (!curriculum) return null;
+    for (const module of curriculum.modules) {
+      const lesson = module.lessons.find((l) => !l.completed);
+      if (lesson) return lesson;
+    }
+    return null;
+  });
 
   /**
    * Learning-material rows built from the real curriculum. Each row's `id` is a
@@ -468,8 +433,120 @@ export class CertDetailPage implements OnInit {
     );
   });
 
+  /**
+   * The certification-card data shown at the top of both the Materials and
+   * Mock test tabs. Built from real enrolment data — it used to be
+   * `detail()!.certificationCard`, a hardcoded ESM-P fixture that displayed
+   * the same title, badge and completion on every certificate's card.
+   *
+   * `issuer` is a static, cert-independent business fact (this platform is
+   * the sole issuer), not fabricated data. `isEarned`/`issuedDate`/
+   * `expiryDate` are left at their "not earned" defaults rather than guessed:
+   * whether a credential has actually been issued lives behind
+   * `GET /me/certificates` (the credentials feature), which this page does
+   * not consume — same reasoning as `certificates.page.ts`'s `hasCertificate`.
+   */
+  protected readonly certificationCard = computed<CertificationCard | null>(() => {
+    const progress = this.enrolled();
+    if (!progress) return null;
+    return {
+      code: progress.programCode,
+      title: progress.title,
+      issuer: 'Institute of Scrum',
+      imageAsset: resolveBadgeAsset(progress.programCode),
+      isEarned: false,
+      issuedDate: null,
+      expiryDate: null,
+      progressPercent: this.completionPercent(),
+    };
+  });
+
+  /**
+   * This certificate's submitted mock attempts, newest first — the real
+   * source for the Mock test tab. `MockStore.history()` is global across all
+   * of the student's certifications (there is no `certId` filter on
+   * `GET /mock/history`), so it's filtered client-side here. In-progress
+   * (unsubmitted) attempts are excluded: the KPI cards and history rows both
+   * assume a final score, which only exists once an attempt is submitted.
+   */
+  private readonly certMockAttempts = computed(() => {
+    const certId = this.enrolled()?.certId;
+    if (!certId) return [];
+    return this.mock
+      .history()
+      .filter((h) => h.certId === certId && h.status === 'submitted' && h.score !== null);
+  });
+
+  /**
+   * Aggregate KPIs for the Mock test tab's 4-card stat row. Previously
+   * `ESM_P_MOCK_TEST_STATS` — a fixed `{5, 95%, 46%, 640min}` shown
+   * identically regardless of certificate or actual attempt history.
+   * `totalTimeMinutes` is derived from `submittedAt - startedAt`, since the
+   * backend doesn't return a duration field directly.
+   */
+  protected readonly realMockStats = computed<MockTestStats>(() => {
+    const attempts = this.certMockAttempts();
+    const totalAttempts = attempts.length;
+    if (totalAttempts === 0) {
+      return { totalAttempts: 0, bestScorePercent: 0, avgScorePercent: 0, totalTimeMinutes: 0 };
+    }
+    const scores = attempts.map((a) => a.score ?? 0);
+    const totalTimeMinutes = attempts.reduce((sum, a) => {
+      if (!a.submittedAt) return sum;
+      const startedMs = new Date(a.startedAt).getTime();
+      const submittedMs = new Date(a.submittedAt).getTime();
+      if (Number.isNaN(startedMs) || Number.isNaN(submittedMs) || submittedMs <= startedMs) {
+        return sum;
+      }
+      return sum + Math.round((submittedMs - startedMs) / 60_000);
+    }, 0);
+    return {
+      totalAttempts,
+      bestScorePercent: Math.round(Math.max(...scores)),
+      avgScorePercent: Math.round(scores.reduce((sum, s) => sum + s, 0) / totalAttempts),
+      totalTimeMinutes,
+    };
+  });
+
+  /**
+   * "History of mock test" rows. Previously `ESM_P_MOCK_TEST_HISTORY` — 7
+   * hardcoded attempts (same dates, same scores) shown under every
+   * certificate. `status` maps from the backend's `readyForFinal` advisory
+   * flag (the closest real equivalent to "passed"); attempt numbers are
+   * assigned oldest-first (`history()` itself is newest-first) so the label
+   * reads the way the original design intended — "mock test 1" is the first
+   * one taken, not the most recent.
+   */
+  protected readonly realMockHistory = computed<readonly MockTestAttempt[]>(() => {
+    const attempts = this.certMockAttempts();
+    const total = attempts.length;
+    return attempts.map((a, i) => ({
+      attemptId: a.attemptId,
+      title: this.lang.t('dashboard.certs.mockTestAttemptLabel', { number: String(total - i) }),
+      totalQuestions: a.totalCount ?? 0,
+      date: this.formatAttemptDate(a.submittedAt ?? a.startedAt),
+      correct: a.correctCount ?? 0,
+      incorrect: a.falseCount ?? Math.max(0, (a.totalCount ?? 0) - (a.correctCount ?? 0)),
+      status: (a.readyForFinal ? 'passed' : 'failed') satisfies MockTestStatus,
+      scorePercent: Math.round(a.score ?? 0),
+    }));
+  });
+
+  private formatAttemptDate(iso: string): string {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return d.toLocaleString(undefined, {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+  }
+
   ngOnInit(): void {
     void this.loadRealCurriculum();
+    void this.mock.loadHistory();
   }
 
   /**
@@ -484,10 +561,12 @@ export class CertDetailPage implements OnInit {
     if (certId) await this.courses.loadCurriculum(certId);
   }
 
-  /** Show "Start Final Test" CTA when completion ≥ 80%. */
-  protected readonly showFinalTestCta = computed(
-    () => (this.detail()?.stats?.completionPercent ?? 0) >= 80,
-  );
+  /**
+   * Show the "Start Final Test" CTA at ≥ 80 % completion — now measured against
+   * **this** certificate's real progress. It previously read the fixture's
+   * completion, so the CTA appeared (or didn't) identically on every cert.
+   */
+  protected readonly showFinalTestCta = computed(() => this.completionPercent() >= 80);
 
   protected onShowDetails(): void {
     // Navigate to cert list / trigger detail action — wired up when routing is finalised.
@@ -497,14 +576,37 @@ export class CertDetailPage implements OnInit {
     this.store.setActiveSection(section);
   }
 
-  /** Navigate to the mock test runner when the user clicks "Start" in the settings dialog. */
-  protected onStartTest(settings: MockTestSettings): void {
-    const code = this.route.snapshot.params['code'] as string;
-    const queryParams: Record<string, string> = { count: String(settings.questionCount) };
-    if (settings.timeMinutes !== null) {
-      queryParams['time'] = String(settings.timeMinutes);
-    }
-    void this.router.navigate(['/dashboard/certificates', code, 'mock-test'], { queryParams });
+  /**
+   * Navigate to the mock test runner when the user clicks "Start" in the
+   * settings dialog.
+   *
+   * Fix: this used to pass `{ count, time }` query params and no `certId`.
+   * The real runner (`mock-test.page.ts`) only ever reads `?certId=` to start
+   * a fresh attempt or `?attemptId=` to resume one — it has no `count`/`time`
+   * params to read, because `POST /mock/start` doesn't accept them (the
+   * backend samples its own question set and duration). Without `certId` the
+   * runner never called `store.start()` and sat on "no active attempt"
+   * forever, so the button silently did nothing. `settings` is still threaded
+   * through in case the backend grows real knobs for it later.
+   */
+  protected onStartTest(_settings: MockTestSettings): void {
+    const certId = this.enrolled()?.certId;
+    if (!certId) return;
+    void this.router.navigate(['/dashboard/certificates', this.certCode, 'mock-test'], {
+      queryParams: { certId },
+    });
+  }
+
+  /**
+   * Navigate to the real review for a past mock attempt. "Show details" on a
+   * history row used to reuse the "Start Mock Test" handler and reopen the
+   * settings dialog — clicking it silently launched a brand new attempt
+   * instead of showing the one the student clicked on.
+   */
+  protected onViewAttempt(attemptId: string): void {
+    void this.router.navigate(['/dashboard/certificates', this.certCode, 'mock-test', 'result'], {
+      queryParams: { attemptId },
+    });
   }
 
   /** Navigate to the session viewer when a file row CTA is clicked. */

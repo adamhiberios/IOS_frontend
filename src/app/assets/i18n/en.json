@@ -57,7 +57,7 @@
       "passwordError": "Password required",
       "forgotPassword": "Forget password?",
       "submit": "Login",
-      "noAccount": "Haven't account?",
+      "noAccount": "don't have an account?",
       "registerLink": "Register now",
       "session": {
         "idle": "You were signed out due to inactivity.",
@@ -635,6 +635,7 @@
       "numberOfQuestions": "Number of questions",
       "closeSettings": "Close settings",
       "tests": "{count} tests",
+      "mockTestAttemptLabel": "mock test {number}",
       "hoursAbbr": "{count}h",
       "minutesAbbr": "{count}m",
       "materialOpen": "Open",
@@ -650,7 +651,13 @@
       "openLesson": "Open",
       "reviewLesson": "Review",
       "noEnrolments": "You are not enrolled in any certification yet.",
-      "browseCertifications": "Browse certifications"
+      "browseCertifications": "Browse certifications",
+      "lessonsCompleted": "Lessons completed",
+      "lessonsRemaining": "Lessons remaining",
+      "notEnrolled": "You are not enrolled in this certification.",
+      "continueHeading": "Continue where you left off",
+      "allLessonsDone": "You have finished every lesson",
+      "continueCta": "Continue learning"
     },
     "learning": {
       "title": "Complete your learning",

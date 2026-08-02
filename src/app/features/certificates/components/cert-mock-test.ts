@@ -183,7 +183,7 @@ import { CertMockSettingsDialog } from './cert-mock-settings-dialog';
 
       <!-- List container -->
       <div class="bg-ios-surface-muted rounded-2xl px-6 py-4 flex flex-col">
-        @for (attempt of history(); track attempt.title; let last = $last) {
+        @for (attempt of history(); track attempt.attemptId; let last = $last) {
           <!-- Row -->
           <div class="flex items-center gap-9 py-4">
             <!-- Left: icon + name + questions -->
@@ -276,12 +276,12 @@ import { CertMockSettingsDialog } from './cert-mock-settings-dialog';
               }
             </div>
 
-            <!-- Show details CTA — opens settings dialog -->
+            <!-- Show details CTA — opens the real review for THIS attempt. -->
             <button
               type="button"
               class="inline-flex items-center justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0"
               [attr.aria-label]="lang.t('dashboard.certs.showDetails')"
-              (click)="dialogOpen.set(true)"
+              (click)="viewAttempt.emit(attempt.attemptId)"
             >
               {{ lang.t('dashboard.certs.showDetails') }}
               <ios-icon
@@ -317,6 +317,17 @@ export class CertMockTest {
    * The parent page navigates to the exam runner.
    */
   readonly startTest = output<MockTestSettings>();
+
+  /**
+   * Emitted when "Show details" is clicked on a history row, carrying that
+   * attempt's real id. The parent page navigates to its review.
+   *
+   * Fix: this used to reopen the "Start Mock Test" settings dialog (same
+   * handler as the cert-card CTA), so clicking "Show details" on a past
+   * attempt silently started a brand new mock exam instead of showing that
+   * attempt's answers.
+   */
+  readonly viewAttempt = output<string>();
 
   /** Controls dialog visibility. */
   protected readonly dialogOpen = signal<boolean>(false);

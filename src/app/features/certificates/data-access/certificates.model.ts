@@ -6,18 +6,6 @@
  *  · Certificate detail page   — left side-nav, stat cards, charts, cert card
  */
 
-import type {
-  ExamSummary,
-  MonthlyScore,
-  ScoreFilterYear,
-  WeeklyScore,
-  ScoreFilterWeek,
-} from '@shared';
-
-// Re-export shared chart types so pages/components within this feature
-// don't need a second import.
-export type { ExamSummary, MonthlyScore, ScoreFilterYear, WeeklyScore, ScoreFilterWeek };
-
 /* ─────────────────────────────────────────────────────────────────────────────
  * Learning Materials
  * ───────────────────────────────────────────────────────────────────────────── */
@@ -54,42 +42,6 @@ export interface LearningMaterial {
    * Examples: "Open", "Continue", "In Progress", "Not Started", "Completed".
    */
   readonly actionLabel: string;
-}
-
-/* ─────────────────────────────────────────────────────────────────────────────
- * Session viewer
- * ───────────────────────────────────────────────────────────────────────────── */
-
-/**
- * One chapter/section in the left sidebar of the session viewer.
- * Active item is highlighted with a dark left border (`#143d56`).
- *
- * Figma: node 17732-48585.
- */
-export interface SessionChapter {
-  /** Stable identifier — e.g. "ch-introduction". */
-  readonly id: string;
-  /** Sidebar label — e.g. "Introduction". */
-  readonly title: string;
-  /** Body content rendered in the main reading area (array of paragraphs). */
-  readonly paragraphs: readonly string[];
-}
-
-/**
- * Full data for a single session viewer page.
- *
- * Mounted at `/dashboard/certificates/:code/session/:materialId`.
- * Figma: node 13110-52150.
- */
-export interface CertSessionData {
-  /** Matches `LearningMaterial.id` — used as the URL `:materialId` param. */
-  readonly materialId: string;
-  /** Display label for the session header card — e.g. "Session 1". */
-  readonly sessionTitle: string;
-  /** Cert code — used in the breadcrumb and Back link. */
-  readonly certCode: string;
-  /** Ordered list of chapters shown in the left sidebar. */
-  readonly chapters: readonly SessionChapter[];
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
@@ -191,18 +143,6 @@ export interface CertDetailNavItem {
   readonly label: string;
 }
 
-/** The four KPI tiles at the top of the certificate detail page. */
-export interface CertDetailStats {
-  /** Overall course completion 0–100 (drives the circular progress ring). */
-  readonly completionPercent: number;
-  /** Weighted average mock-test score 0–100. */
-  readonly averageScorePercent: number;
-  /** Total learning time in minutes. */
-  readonly totalTimeMinutes: number;
-  /** Score trend relative to the previous period — e.g. "+5" or "-2". */
-  readonly trendDelta: number;
-}
-
 /**
  * Content shown in the "Certification" card on the detail page right column.
  * Mirrors the actual credential the student earns.
@@ -226,47 +166,6 @@ export interface CertificationCard {
   readonly progressPercent: number;
 }
 
-/** Full data snapshot for the certificate detail page. */
-export interface CertDetail {
-  /** Short code — used in the breadcrumb and page title. */
-  readonly code: string;
-  /** Full certification name. */
-  readonly fullName: string;
-  readonly family: CertFamily;
-  readonly badgeAsset: string;
-  readonly stats: CertDetailStats;
-  /** "Complete your learning" card content (left card in row 1). */
-  readonly learningHeading: string;
-  readonly learningBody: string;
-  readonly learningMeta?: string;
-  readonly learningCtaLabel: string;
-  readonly learningCtaStyle: 'primary' | 'dark';
-  /** Certification award card (right card in row 1). */
-  readonly certificationCard: CertificationCard;
-  /** Monthly mock-test scores for the bar chart (row 2 left). */
-  readonly monthlyScores: readonly MonthlyScore[];
-  /** Weekly mock-test scores for the line chart (row 2 left). */
-  readonly weeklyScores: readonly WeeklyScore[];
-  /** Exam passed/failed summary for the donut chart (row 2 right). */
-  readonly examSummary: ExamSummary;
-  /** Active year filter for the bar chart. */
-  readonly yearFilter: ScoreFilterYear;
-  /** Active week filter for the line chart. */
-  readonly weekFilter: ScoreFilterWeek;
-  /*
-   * NOTE: `learningMaterials` was removed. The Learning Materials tab is built
-   * from the real curriculum (`GET /learning/certs/:certId/curriculum`) in
-   * `cert-detail.page.ts`, so each row carries a real lesson UUID. It is not
-   * part of this fixture-backed snapshot any more.
-   */
-  /** Aggregate KPIs for the Mock test tab. */
-  readonly mockTestStats: MockTestStats;
-  /** Ordered list of mock test attempts shown in the history list. */
-  readonly mockTestHistory: readonly MockTestAttempt[];
-  /** Full question bank for this certification's mock exams. */
-  readonly mockTestQuestions: readonly MockTestQuestion[];
-}
-
 /* ─────────────────────────────────────────────────────────────────────────────
  * Mock test section
  * ───────────────────────────────────────────────────────────────────────────── */
@@ -281,6 +180,8 @@ export type MockTestStatus = 'passed' | 'failed';
  * One row in the "History of mock test" list.
  */
 export interface MockTestAttempt {
+  /** Backend attempt id — used to deep-link "Show details" to the real review. */
+  readonly attemptId: string;
   /** Display label — e.g. "mock test 1". */
   readonly title: string;
   /** Total questions in this attempt. */
@@ -312,61 +213,20 @@ export interface MockTestStats {
   readonly totalTimeMinutes: number;
 }
 
-/* ─────────────────────────────────────────────────────────────────────────────
- * Mock test runner
- * ───────────────────────────────────────────────────────────────────────────── */
-
-/** A single answer choice inside a mock test question. */
-export interface MockTestOption {
-  /** Letter identifier shown in the option badge — 'A' | 'B' | 'C' | 'D'. */
-  readonly id: 'A' | 'B' | 'C' | 'D';
-  /** Answer text displayed to the learner. */
-  readonly text: string;
-}
-
-/**
- * One question in the mock exam question bank.
- * Figma: nodes 17737-49884, 13144-55249, 13434-35306 (runner screens).
- */
-export interface MockTestQuestion {
-  /** Stable unique identifier — e.g. "q-esm-p-01". */
-  readonly id: string;
-  /** Full question text shown in the question panel. */
-  readonly text: string;
-  /** Exactly 4 answer options in display order. */
-  readonly options: readonly MockTestOption[];
-  /** The id of the correct option ('A' | 'B' | 'C' | 'D'). */
-  readonly correctOptionId: 'A' | 'B' | 'C' | 'D';
-  /** Hint text revealed when the learner clicks "Hint". */
-  readonly hint: string;
-}
-
 /**
  * Settings chosen in the pre-exam dialog before starting a mock test.
  * Figma: node 13116-52954 (settings dialog).
+ *
+ * NOTE: the real `POST /mock/start` takes only a `certId` — the backend
+ * samples its own question count and duration; there is no server-side
+ * knob for either. `questionCount`/`timeMinutes` are collected here but not
+ * sent anywhere; the dialog still gates the "Start" click. See the fix note
+ * in `cert-detail.page.ts` (`onStartTest`) for what actually launches the
+ * real attempt.
  */
 export interface MockTestSettings {
   /** Time limit in minutes; null = no time limit. */
   readonly timeMinutes: number | null;
   /** Number of questions drawn from the bank. */
   readonly questionCount: number;
-}
-
-/**
- * Remaining fixture-backed snapshot for the certificate **detail** page.
- *
- * `enrolledCerts`, `allCerts` and `sessions` were removed when the list and
- * session pages were wired to `/learning/*`: enrolments come from
- * `GET /learning/progress` and lessons from `GET /learning/lessons/:id`. What is
- * left here still backs the detail page's Overview charts and mock-test section,
- * which have no real data source yet.
- */
-export interface CertificatesState {
-  /**
-   * Certificate detail currently selected.
-   * null → no cert selected / navigating from a list with no selection.
-   */
-  readonly selectedDetail: CertDetail | null;
-  /** Which side-nav section is active in the detail view. */
-  readonly activeSection: CertDetailSection;
 }

@@ -635,6 +635,7 @@
       "numberOfQuestions": "Nombre de questions",
       "closeSettings": "Fermer les paramètres",
       "tests": "{count} tests",
+      "mockTestAttemptLabel": "test blanc {number}",
       "hoursAbbr": "{count}h",
       "minutesAbbr": "{count}m",
       "materialOpen": "Ouvrir",
@@ -650,7 +651,13 @@
       "openLesson": "Ouvrir",
       "reviewLesson": "Revoir",
       "noEnrolments": "Vous n’êtes inscrit à aucune certification pour le moment.",
-      "browseCertifications": "Parcourir les certifications"
+      "browseCertifications": "Parcourir les certifications",
+      "lessonsCompleted": "Leçons terminées",
+      "lessonsRemaining": "Leçons restantes",
+      "notEnrolled": "Vous n’êtes pas inscrit à cette certification.",
+      "continueHeading": "Reprendre où vous vous êtes arrêté",
+      "allLessonsDone": "Vous avez terminé toutes les leçons",
+      "continueCta": "Continuer l’apprentissage"
     },
     "learning": {
       "title": "Complétez votre apprentissage",
