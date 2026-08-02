@@ -65,8 +65,8 @@ import { NgOptimizedImage } from '@angular/common';
           <!-- Badge pill -->
           <span
             class="inline-flex items-center justify-center px-6 py-2 rounded-full border
-                   font-heading font-semibold text-[14px] text-ios-brand-primary whitespace-nowrap"
-            class="bg-ios-brand-yellow-soft border-ios-brand-gold"
+                   font-heading font-semibold text-[14px] text-ios-brand-primary whitespace-nowrap
+                   bg-ios-brand-yellow-soft border-ios-brand-gold"
           >
             {{ badge() }}
           </span>
@@ -82,8 +82,7 @@ import { NgOptimizedImage } from '@angular/common';
                 <span style="color: #ffe477;">{{ heading2() }}</span>
               </h2>
               <p
-                class="font-body font-medium text-[16px] leading-[1.4] w-full max-w-[940px]"
-                class="text-ios-surface-mid"
+                class="font-body font-medium text-[16px] leading-[1.4] w-full max-w-[940px] text-ios-surface-mid"
               >
                 {{ description() }}
               </p>

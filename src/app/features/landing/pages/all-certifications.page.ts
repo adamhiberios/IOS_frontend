@@ -188,8 +188,8 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
 
         <!-- Stat 1: 12,000+ — bottom-left, 254x84 at (0, 417) -->
         <div
-          class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6"
-          class="border-ios-brand-amber" style="inset-inline-start: 0%; top: 75.68%; width: 21.75%; height: 15.25%; z-index: 4;"
+          class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6 border-ios-brand-amber"
+          style="inset-inline-start: 0%; top: 75.68%; width: 21.75%; height: 15.25%; z-index: 4;"
         >
           <span class="font-heading font-black text-[24px] leading-[1.2] text-ios-brand-primary">
             {{ lang.t('allCertifications.intro.stat1Value') }}
@@ -201,8 +201,8 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
 
         <!-- Stat 2: 6,000+ — middle-right, 249x84 at (919, 223) -->
         <div
-          class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6"
-          class="border-ios-brand-amber" style="inset-inline-start: 78.68%; top: 40.47%; width: 21.32%; height: 15.25%; z-index: 4;"
+          class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6 border-ios-brand-amber"
+          style="inset-inline-start: 78.68%; top: 40.47%; width: 21.32%; height: 15.25%; z-index: 4;"
         >
           <span class="font-heading font-black text-[24px] leading-[1.2] text-ios-brand-primary">
             {{ lang.t('allCertifications.intro.stat2Value') }}
@@ -440,8 +440,8 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
         <!-- Badge pill -->
         <span
           class="self-start inline-flex items-center px-4 py-1.5 rounded-full border
-                 font-heading font-semibold text-[13px] leading-[1.4]"
-          class="bg-ios-brand-yellow-soft border-ios-brand-gold text-ios-brand-primary"
+                 font-heading font-semibold text-[13px] leading-[1.4]
+                 bg-ios-brand-yellow-soft border-ios-brand-gold text-ios-brand-primary"
         >
           {{ lang.t('allCertifications.comparison.badge') }}
         </span>
@@ -623,17 +623,16 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
               class="w-full h-[64px] flex items-center justify-between gap-4 px-5
                      font-heading font-semibold text-[16px] text-start
                      hover:bg-neutral-50 transition-colors
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ios-brand-gold"
-               class="text-ios-fg"
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ios-brand-gold
+                     text-ios-fg"
                [attr.aria-expanded]="openFaq() === $index"
               (click)="toggleFaq($index)"
             >
               <span>{{ item.q }}</span>
               <ios-icon
                 name="chevron-down"
-                class="w-5 h-5 shrink-0 transition-transform duration-200"
+                class="w-5 h-5 shrink-0 transition-transform duration-200 text-ios-fg"
                 [class.rotate-180]="openFaq() === $index"
-                class="text-ios-fg"
                 aria-hidden="true"
               />
             </button>

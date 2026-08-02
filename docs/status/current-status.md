@@ -47,6 +47,30 @@ before building or reviewing any feature.
   `certDefs` — verified they match the component's own `input()` defaults).
   typecheck/lint clean, build bundle generation clean. Not runtime-tested
   against api-dev.
+- **Duplicate-`class`-attribute bug, fixed codebase-wide** — 🔵 built,
+  uncommitted. Found while investigating a user-reported styling bug
+  (`ios-landing-contact-section`'s submit button and the `/certifications`
+  FAQ questions rendering with no padding/margin). Root cause: several landing
+  templates had two static `class="..."` attributes on one element (e.g.
+  `class="w-full flex ... px-8 py-4 rounded-2xl ..." class="bg-cer-brown-dark
+  text-cer-brown-soft"`). Angular does **not** merge these — each becomes a
+  separate `setAttribute` call at element creation, so the **second** one
+  silently wins and every class from the first is dropped. Merged all
+  instances into single `class` strings across: `components/contact-section.ts`
+  (submit button — was losing all padding/layout, kept only bg/text color),
+  `pages/all-certifications.page.ts` (FAQ button + chevron icon, both floating
+  stat cards in the "What is this?" section — was losing `absolute`
+  positioning entirely, comparison-table badge pill),
+  `pages/about-scrum-master.page.ts`, `pages/about-scrum-facilitator.page.ts`,
+  `pages/about-product-owner.page.ts` (badge-trio underline, cert-path badge
+  pill, "?" icon + heading in the info box, "Explore other Certifications"
+  link — 5 instances each, same pattern in every track page), and the two
+  shared components used across all 7 cert-detail pages:
+  `components/cert-page-hero.ts` (breadcrumb + `h1` text color) and
+  `components/cert-faq-cta.ts` (badge pill, description text color).
+  `grep`-verified zero remaining duplicate-`class` elements in `src/`.
+  typecheck/lint clean, build bundle generation clean. Not runtime-tested
+  against api-dev.
 
 Otherwise nothing in flight — the three items below (SEO json-ld,
 learning-hub dedup, BE-I-30 landing repoint + exam review) were committed by

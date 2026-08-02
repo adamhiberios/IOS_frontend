@@ -100,8 +100,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
           [attr.aria-label]="lang.t('productOwner.intro.badgesAlt')"
         >
           <div
-            class="absolute top-0 inset-x-0 h-4 rounded-sm"
-            class="bg-cer-blue-softer"
+            class="absolute top-0 inset-x-0 h-4 rounded-sm bg-cer-blue-softer"
             aria-hidden="true"
           ></div>
 
@@ -196,8 +195,8 @@ import { CertFaqCta } from '../components/cert-faq-cta';
         <div class="flex flex-col gap-4 flex-1">
           <span
             class="self-start inline-flex items-center justify-center px-6 py-2 rounded-full border
-                   font-heading font-semibold text-[14px] text-ios-brand-primary whitespace-nowrap"
-            class="bg-ios-brand-gold-soft border-ios-brand-gold"
+                   font-heading font-semibold text-[14px] text-ios-brand-primary whitespace-nowrap
+                   bg-ios-brand-gold-soft border-ios-brand-gold"
           >
             {{ lang.t('productOwner.certPath.badge') }}
           </span>
@@ -238,14 +237,13 @@ import { CertFaqCta } from '../components/cert-faq-cta';
             aria-hidden="true"
           >
             <span
-              class="font-heading font-bold text-[16px] leading-none"
-              class="text-ios-fg-10"
+              class="font-heading font-bold text-[16px] leading-none text-ios-fg-10"
               aria-hidden="true"
               >?</span
             >
           </div>
           <div class="flex flex-col gap-1">
-            <p class="font-heading font-semibold text-[20px] leading-[1.2]" class="text-ios-fg-10">
+            <p class="font-heading font-semibold text-[20px] leading-[1.2] text-ios-fg-10">
               {{ lang.t('productOwner.certPath.whoShouldPursue') }}
             </p>
             <p class="font-body font-medium text-[16px] leading-[1.4] text-ios-fg-muted">
@@ -307,8 +305,9 @@ import { CertFaqCta } from '../components/cert-faq-cta';
         class="inline-flex items-center gap-2 px-4 py-3 h-11 rounded-xl border-[1.5px]
                font-body font-semibold text-[16px] leading-[1.4] whitespace-nowrap
                hover:opacity-80 transition-opacity
-               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
-        class="bg-ios-brand-gold-soft" style="border-color: #ffea96; color: #736428;"
+               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1
+               bg-ios-brand-gold-soft"
+        style="border-color: #ffea96; color: #736428;"
       >
         {{ lang.t('productOwner.certPath.exploreOthers') }}
         <ios-icon name="arrow-right" class="w-5 h-5 rtl:rotate-180" aria-hidden="true" />

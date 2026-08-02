@@ -214,8 +214,8 @@ import { IosIcon, provideIcons } from '@ui';
                      font-body font-semibold text-[16px] leading-[1.4]
                      hover:opacity-90 transition-opacity
                      focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1
-                     disabled:opacity-50 disabled:cursor-not-allowed"
-              class="bg-cer-brown-dark text-cer-brown-soft"
+                     disabled:opacity-50 disabled:cursor-not-allowed
+                     bg-cer-brown-dark text-cer-brown-soft"
               style="--tw-ring-color: rgb(142 102 54 / 0.5);"
               [disabled]="submitting()"
             >

@@ -77,8 +77,7 @@ import { IosIcon, provideIcons } from '@ui';
           <div class="flex flex-col gap-1">
             <nav [attr.aria-label]="lang.t('common.breadcrumbAriaLabel')">
               <ol
-                class="flex items-center gap-2 text-[14px] font-heading font-medium"
-                class="text-ios-border-light"
+                class="flex items-center gap-2 text-[14px] font-heading font-medium text-ios-border-light"
               >
                 <li>
                   <a href="/" class="hover:text-white transition-colors">
@@ -90,8 +89,7 @@ import { IosIcon, provideIcons } from '@ui';
             </nav>
             <h1
               [id]="headingId()"
-              class="font-heading font-semibold text-[24px] leading-[1.2]"
-              class="text-ios-surface-mid"
+              class="font-heading font-semibold text-[24px] leading-[1.2] text-ios-surface-mid"
             >
               {{ title() }}
             </h1>
