@@ -2038,7 +2038,7 @@
     "passwordUpdatedDialog": {
       "title": "Password update successfully",
       "description": "Your password has been changed. For your security you've been signed out of all devices — please sign in again with your new password.",
-      "ok": "Ok"
+      "ok": "Ok, go back to sign in"
     }
   },
   "catalog": {

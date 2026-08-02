@@ -197,7 +197,7 @@ const COUNTRIES: readonly { code: string; name: string }[] = [
               >
                 {{ lang.t('auth.register.privacy') }}
                 <a
-                  routerLink="/privacy"
+                  routerLink="/privacy-policy"
                   class="underline font-medium text-ios-brand-primary"
                   target="_blank"
                   rel="noopener"

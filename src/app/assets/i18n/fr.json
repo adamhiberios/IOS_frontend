@@ -2038,7 +2038,7 @@
     "passwordUpdatedDialog": {
       "title": "Mot de passe mis à jour avec succès",
       "description": "Votre mot de passe a été modifié. Pour votre sécurité, vous avez été déconnecté de tous les appareils — veuillez vous reconnecter avec votre nouveau mot de passe.",
-      "ok": "OK"
+      "ok": "OK, je me reconnecte"
     }
   },
   "catalog": {

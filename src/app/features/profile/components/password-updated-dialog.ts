@@ -1,101 +1,64 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { LanguageService } from '@core/i18n';
+import { Button } from '@ui';
 
 /**
  * `ios-profile-password-updated-dialog` — success dialog shown after a
- * successful password change.
+ * successful password change on `/dashboard/profile/change-password`.
  *
- * Figma: node 13477-27384 (password update successfully).
+ * Same green-checkmark success-popup design as
+ * `auth/pages/new-password.page.ts`'s post-reset popup, reused here for
+ * visual consistency across both password-success moments in the app.
  *
- * ┌── 724 px white card ───────────────────────────────────────────────────┐
- * │              ┌───────────────┐                                          │
- * │              │  padlock icon │  (80 × 80, inside #F1F1F1 circle)       │
- * │              └───────────────┘                                          │
- * │         Password update successfully                                    │
- * │   The password you just changed is your new password.                  │
- * │                    ┌──────┐                                             │
- * │                    │  Ok  │                                             │
- * │                    └──────┘                                             │
+ * ┌── centered white card ───────────────────────────────────────────────┐
+ * │              ┌───────────────┐                                        │
+ * │              │  check icon   │  (green, inside a green-50 circle)     │
+ * │              └───────────────┘                                        │
+ * │           Password update successfully                                │
+ * │                    ┌──────┐                                           │
+ * │                    │  Ok  │                                           │
+ * │                    └──────┘                                           │
  * └─────────────────────────────────────────────────────────────────────────┘
  */
 @Component({
   selector: 'ios-profile-password-updated-dialog',
+  imports: [Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
-      class="fixed inset-0 z-50 flex items-center justify-center bg-black/60"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
       role="dialog"
       aria-modal="true"
       aria-labelledby="pwd-updated-title"
     >
-      <div
-        class="bg-white rounded-2xl w-full max-w-[724px] mx-4 p-8 flex flex-col gap-9 items-center shadow-2xl"
-      >
-        <!-- Icon -->
-        <div class="bg-ios-surface-soft flex items-center p-4 rounded-full shrink-0" aria-hidden="true">
-          <!-- Padlock + checkmark illustration from Figma -->
-          <div class="size-20 shrink-0 flex items-center justify-center">
+      <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 shadow-xl">
+        <div class="flex flex-col items-center gap-6">
+          <!-- Success Icon -->
+          <div class="w-32 h-32 bg-green-50 rounded-full flex items-center justify-center">
             <svg
-              viewBox="0 0 80 80"
+              class="w-20 h-20 text-green-600"
               fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              class="size-full"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
             >
-              <!-- Padlock body -->
-              <rect x="12" y="34" width="44" height="32" rx="4" fill="#2178BC" />
-              <!-- Padlock shackle -->
               <path
-                d="M20 34v-10a14 14 0 0 1 28 0v10"
-                stroke="#2178BC"
-                stroke-width="5"
-                stroke-linecap="round"
-                fill="none"
-              />
-              <!-- Keyhole -->
-              <circle cx="34" cy="50" r="5" fill="white" />
-              <rect x="31" y="52" width="6" height="8" rx="2" fill="white" />
-              <!-- Dots row -->
-              <circle cx="10" cy="66" r="3" fill="#2178BC" />
-              <circle cx="20" cy="66" r="3" fill="#2178BC" />
-              <circle cx="30" cy="66" r="3" fill="#2178BC" />
-              <circle cx="40" cy="66" r="3" fill="#2178BC" />
-              <circle cx="50" cy="66" r="3" fill="#2178BC" />
-              <!-- Red checkmark badge -->
-              <circle cx="58" cy="28" r="14" fill="#C0392B" />
-              <path
-                d="M51 28l5 5 10-10"
-                stroke="white"
-                stroke-width="3"
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                fill="none"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
               />
             </svg>
           </div>
-        </div>
 
-        <!-- Text -->
-        <div class="flex flex-col gap-1 items-center text-center w-full">
-          <h2
-            id="pwd-updated-title"
-            class="text-[24px] font-semibold leading-[1.2] text-ios-fg-11 w-full"
-          >
+          <!-- Title -->
+          <h2 id="pwd-updated-title" class="text-2xl font-semibold text-center text-gray-800">
             {{ lang.t('profile.passwordUpdatedDialog.title') }}
           </h2>
-          <p class="text-[18px] font-medium leading-[1.4] text-ios-fg-10 w-full">
-            {{ lang.t('profile.passwordUpdatedDialog.description') }}
-          </p>
-        </div>
 
-        <!-- OK button -->
-        <div class="flex items-center justify-center w-full">
-          <button
-            type="button"
-            class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg-13 text-white text-[16px] font-semibold leading-[1.4] w-[184px] hover:bg-ios-fg transition-colors focus-visible:outline-none"
-            (click)="confirmed.emit()"
-          >
+          <!-- Button -->
+          <ios-button variant="primary" [fullWidth]="true" (clicked)="confirmed.emit()">
             {{ lang.t('profile.passwordUpdatedDialog.ok') }}
-          </button>
+          </ios-button>
         </div>
       </div>
     </div>
@@ -103,6 +66,6 @@ import { LanguageService } from '@core/i18n';
 })
 export class ProfilePasswordUpdatedDialog {
   protected readonly lang = inject(LanguageService);
-  /** Emitted when the user clicks "Ok". */
+  /** Emitted when the user clicks "Ok" — page owns the post-success navigation. */
   readonly confirmed = output<void>();
 }

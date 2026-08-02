@@ -27,6 +27,47 @@ before building or reviewing any feature.
 
 ## What's in flight right now (uncommitted / awaiting review, as of 2026-08-03)
 
+- **Change-password success dialog restyled** — 🔵 built, uncommitted, at the
+  user's explicit direction (pasted the target markup). `ProfilePasswordUpdatedDialog`
+  (shown on `/dashboard/profile/change-password` when
+  `store.passwordSubmitStatus() === 'success'`) previously used a padlock
+  illustration in a 724px card with a title + description. Replaced with the
+  simpler green-checkmark popup design already used by
+  `auth/pages/new-password.page.ts`'s post-reset success popup (max-w-md
+  card, green-50 circle, checkmark icon, title only, `ios-button`) — same
+  visual language now for both password-success moments in the app. Kept the
+  existing `(confirmed)` output contract (page still owns
+  `onPasswordSaved()` → `auth.logout()`) rather than adding a
+  navigation-owning method inside the dialog, so no changes were needed in
+  `change-password.page.ts` itself. Reused the existing
+  `profile.passwordUpdatedDialog.title`/`.ok` i18n keys (already in
+  en/fr/ar); `profile.passwordUpdatedDialog.description` is now unused since
+  the new design has no description line — left in place as a harmless
+  orphan. typecheck/lint clean, build bundle generation clean. Not
+  runtime-tested against api-dev.
+- **Copyright year fixed app-wide** — 🔵 built, uncommitted. Audit found two
+  bug classes: (1) 4 pages called `lang.t('common.copyright')` with **no**
+  `{ year }` param (`login.page.ts`, `admin-login.page.ts`,
+  `reset-password.page.ts`, `new-password.page.ts`) — the unresolved
+  `"© {year} Institute of Scrum..."` literal `{year}` text was rendering on
+  screen; (2) `mock-history.page.ts` and `exam-runner.page.ts` passed a
+  hardcoded `{ year: '2026' }` instead of computing it; (3)
+  `auth.completeAccount.copyright` and `landing.footer.copyright` had `©
+  2026`/`© ٢٠٢٦` hardcoded directly in en/ar/fr i18n (no `{year}` placeholder
+  at all) and were called with no params from `complete-account.page.ts` and
+  the two shared footers `auth-footer.ts` / `landing-footer.ts` (the latter
+  covers every landing/cert-detail page in one fix). Fixed all of the above
+  to compute `new Date().getFullYear()` and pass it through, and updated the
+  two i18n keys to use the `{year}` placeholder like `common.copyright`
+  already did. `grep`-verified no remaining un-parameterized `.copyright')`
+  call or hardcoded `202x` year literal in `src/`. typecheck/lint clean,
+  build bundle generation clean. Not runtime-tested against api-dev.
+- **Fixed dead `/privacy` link on register** — 🔵 built, uncommitted. Found
+  while checking the copyright fix's neighboring markup:
+  `register.page.ts`'s privacy-policy checkbox link pointed to `/privacy`,
+  which isn't a route (the real route, and what the footer/cookie-consent
+  banner correctly link to, is `/privacy-policy`). Fixed to match.
+  typecheck/lint clean.
 - **Removed "Or continue with" social login section** (known-issues.md gap)
   — 🔵 built, uncommitted, at the user's explicit direction. Removed the
   divider + `ios-social-button` row from both `login.page.ts` and
