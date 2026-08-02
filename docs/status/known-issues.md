@@ -63,7 +63,11 @@ items still believed current:
 - **`/contact`** (the old static marketing page, not the CMS `contact_form`
   section) — still a `setTimeout`-faked stub. Superseded by CMS Slice 6 once
   the CMS renderer ships.
-- **Login/register social buttons** are no-ops (no OAuth handoff exists).
+- ~~Login/register social buttons are no-ops~~ — ✅ resolved 2026-08-03: the
+  "Or continue with" divider + social-provider buttons were removed from both
+  `login.page.ts` and `register.page.ts` at the user's direction, rather than
+  left as dead UI. `ui/social-button/` component itself is untouched (kept in
+  case OAuth is picked up later) — it's just unused for now.
 
 ## Cross-cutting debt
 

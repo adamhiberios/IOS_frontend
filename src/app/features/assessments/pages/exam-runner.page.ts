@@ -318,7 +318,7 @@ import {
                    text-ios-fg-7 text-xs"
           >
             <ios-canada-flag aria-hidden="true" />
-            <span>{{ lang.t('common.copyright', { year: '2026' }) }}</span>
+            <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
           </div>
         </footer>
       </div>
@@ -327,6 +327,7 @@ import {
 })
 export class ExamRunnerPage {
   protected readonly lang = inject(LanguageService);
+  protected readonly yearStr = String(new Date().getFullYear());
   protected readonly store = inject(ExamSessionStore);
   protected readonly ws = inject(ExamSessionWs);
   private readonly router = inject(Router);

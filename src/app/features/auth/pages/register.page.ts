@@ -19,9 +19,7 @@ import {
   Dropdown,
   Input as IosInput,
   PasswordStrength,
-  SocialButton,
   WarningCard,
-  type SocialProvider,
 } from '@ui';
 
 import { matchFieldsValidator } from '../utils/match-fields.validator';
@@ -47,15 +45,12 @@ const COUNTRIES: readonly { code: string; name: string }[] = [
   { code: 'FR', name: 'France' },
 ];
 
-const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
-
 /**
  * Register page (EPIC 3 — UI only, backend mocked).
  *
  * Composition:
  *   - `<ios-auth-header>` and `<ios-auth-footer>` from `@layouts/auth-shell`
- *   - `<ios-input>`, `<ios-warning-card>`, `<ios-password-strength>`,
- *     `<ios-social-button>` from `@ui`
+ *   - `<ios-input>`, `<ios-warning-card>`, `<ios-password-strength>` from `@ui`
  */
 @Component({
   selector: 'ios-register-page',
@@ -71,7 +66,6 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
     IosInput,
     WarningCard,
     PasswordStrength,
-    SocialButton,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -237,22 +231,6 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
             </ios-button>
           </form>
 
-          <div class="flex items-center gap-3 my-5">
-            <span class="flex-1 h-px bg-gray-200"></span>
-            <span class="text-sm text-gray-500 whitespace-nowrap">
-              {{ lang.t('common.orContinueWith') }}
-            </span>
-            <span class="flex-1 h-px bg-gray-200"></span>
-          </div>
-
-          <ul class="flex justify-center gap-4" aria-label="Continue with a social provider">
-            @for (provider of socials; track provider) {
-              <li>
-                <ios-social-button [provider]="provider" (selected)="onSocialSelect($event)" />
-              </li>
-            }
-          </ul>
-
           <p class="text-center text-sm text-gray-600 mt-6">
             {{ lang.t('auth.register.hasAccount') }}
             <a routerLink="/auth/login" class="text-ios-brand-primary font-medium underline">
@@ -275,7 +253,6 @@ export class RegisterPage {
     value: c.code,
     label: c.name,
   }));
-  protected readonly socials = SOCIALS;
   protected readonly minLength = STRONG_PASSWORD_MIN_LENGTH;
 
   protected readonly form = this.fb.group(
@@ -390,10 +367,6 @@ export class RegisterPage {
       .catch(() => {
         /* error already in AuthStore.submitState() */
       });
-  }
-
-  protected onSocialSelect(_provider: SocialProvider): void {
-    // Mocked — real OAuth handoff lands with the auth API in a later task.
   }
 }
 

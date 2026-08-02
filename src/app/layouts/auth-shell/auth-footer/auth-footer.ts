@@ -20,11 +20,12 @@ import { CanadaFlag } from '@ui';
       class="w-full py-4 flex items-center justify-center gap-2
              bg-ios-brand-dark text-ios-brand-muted"
     >
-      <small class="text-xs"> {{ lang.t('landing.footer.copyright') }} </small>
+      <small class="text-xs"> {{ lang.t('landing.footer.copyright', { year: currentYear }) }} </small>
       <ios-canada-flag />
     </footer>
   `,
 })
 export class AuthFooter {
   protected readonly lang = inject(LanguageService);
+  protected readonly currentYear = new Date().getFullYear();
 }

@@ -199,7 +199,7 @@
       "nextButton": "التالي",
       "backAriaLabel": "الرجوع",
       "submitButton": "حفظ والمتابعة",
-      "copyright": "© 2026 معهد سكرم. جميع الحقوق محفوظة.",
+      "copyright": "© {year} معهد سكرم. جميع الحقوق محفوظة.",
       "greeting": "مرحباً {name}، أكمل حسابك",
       "progressLabel": "الخطوة {step} من {total}",
       "searchCountry": "ابحث عن دولة…",
@@ -488,7 +488,7 @@
     },
     "footer": {
       "tagline": "المزود الرائد في كندا لشهادات سكرم المعتمدة في المجال.",
-      "copyright": "© ٢٠٢٦ معهد سكرم. جميع الحقوق محفوظة.",
+      "copyright": "© {year} معهد سكرم. جميع الحقوق محفوظة.",
       "privacy": "سياسة الخصوصية",
       "terms": "شروط الخدمة",
       "certifications": {

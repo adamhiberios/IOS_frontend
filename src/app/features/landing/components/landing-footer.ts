@@ -209,7 +209,7 @@ import { CanadaFlag } from '@ui';
       <div class="flex items-center justify-center gap-2 px-6 pb-6">
         <ios-canada-flag />
         <p class="text-ios-brand-muted text-[14px] font-medium leading-[1.4]">
-          {{ lang.t('landing.footer.copyright') }}
+          {{ lang.t('landing.footer.copyright', { year: currentYear }) }}
         </p>
       </div>
     </footer>
@@ -217,4 +217,5 @@ import { CanadaFlag } from '@ui';
 })
 export class LandingFooter {
   protected readonly lang = inject(LanguageService);
+  protected readonly currentYear = new Date().getFullYear();
 }

@@ -144,7 +144,7 @@ import {
           </form>
 
           <p class="text-center text-xs text-gray-400 mt-6">
-            {{ lang.t('common.copyright') }}
+            {{ lang.t('common.copyright', { year: currentYear }) }}
           </p>
         </section>
       </main>
@@ -203,6 +203,7 @@ export class NewPasswordPage {
   readonly token = input('');
 
   protected readonly lang = inject(LanguageService);
+  protected readonly currentYear = new Date().getFullYear();
   protected readonly submitState = signal<'idle' | 'pending' | 'submitted'>('idle');
   protected readonly showPopup = signal(false);
   protected readonly errorMessage = signal('');

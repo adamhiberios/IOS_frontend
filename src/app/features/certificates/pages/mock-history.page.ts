@@ -133,7 +133,7 @@ import { type MockHistoryItem } from '../data-access/mock.model';
           class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-xs"
         >
           <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: '2026' }) }}</span>
+          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
         </div>
       </footer>
     </div>
@@ -142,6 +142,7 @@ import { type MockHistoryItem } from '../data-access/mock.model';
 export class MockHistoryPage {
   protected readonly lang = inject(LanguageService);
   protected readonly store = inject(MockStore);
+  protected readonly yearStr = String(new Date().getFullYear());
 
   constructor() {
     void this.store.loadHistory();

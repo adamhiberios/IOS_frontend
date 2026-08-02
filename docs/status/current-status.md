@@ -27,6 +27,15 @@ before building or reviewing any feature.
 
 ## What's in flight right now (uncommitted / awaiting review, as of 2026-08-03)
 
+- **Removed "Or continue with" social login section** (known-issues.md gap)
+  — 🔵 built, uncommitted, at the user's explicit direction. Removed the
+  divider + `ios-social-button` row from both `login.page.ts` and
+  `register.page.ts` (`SocialButton`/`SocialProvider` imports, the `socials`
+  field, `onSocialLogin`/`onSocialSelect` no-op handlers). The
+  `ui/social-button/` component itself is untouched, just unused now; the
+  `common.orContinueWith` i18n key is left in place (orphaned, harmless) in
+  case OAuth returns later. typecheck/lint clean, build bundle generation
+  clean. Not runtime-tested against api-dev.
 - **Landing page dead certification links** (known-issues.md gap) — 🔵 built,
   uncommitted. `market-stats-section.ts#certTableRows`'s 4 wrong slugs
   (`psm`/`asm`/`ppo`/`apo`) now point to the real routes

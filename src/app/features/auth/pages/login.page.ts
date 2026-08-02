@@ -8,29 +8,18 @@ import { map } from 'rxjs/operators';
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
-import { AccentBars, Button, Input as IosInput, SocialButton, type SocialProvider } from '@ui';
-
-const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
+import { AccentBars, Button, Input as IosInput } from '@ui';
 
 /**
  * Login page (EPIC 3 — UI only, backend mocked).
  *
  * Composition:
  *   - `<ios-auth-header>` and `<ios-auth-footer>` from `@layouts/auth-shell`
- *   - `<ios-input>`, `<ios-accent-bars>`, `<ios-social-button>` from `@ui`
+ *   - `<ios-input>`, `<ios-accent-bars>` from `@ui`
  */
 @Component({
   selector: 'ios-login-page',
-  imports: [
-    ReactiveFormsModule,
-    RouterLink,
-    AuthHeader,
-    AuthFooter,
-    AccentBars,
-    IosInput,
-    Button,
-    SocialButton,
-  ],
+  imports: [ReactiveFormsModule, RouterLink, AuthHeader, AuthFooter, AccentBars, IosInput, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -125,22 +114,6 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
             </ios-button>
           </form>
 
-          <!-- Divider -->
-          <div class="flex items-center gap-3 my-5">
-            <div class="flex-1 h-px bg-gray-300"></div>
-            <p class="text-sm text-gray-600 whitespace-nowrap">
-              {{ lang.t('common.orContinueWith') }}
-            </p>
-            <div class="flex-1 h-px bg-gray-300"></div>
-          </div>
-
-          <!-- Social Login -->
-          <div class="flex justify-center gap-3">
-            @for (provider of socials; track provider) {
-              <ios-social-button [provider]="provider" (click)="onSocialLogin(provider)" />
-            }
-          </div>
-
           <!-- Register Link -->
           <p class="text-center text-sm text-gray-600 mt-5">
             {{ lang.t('auth.login.noAccount') }}
@@ -150,7 +123,7 @@ const SOCIALS: readonly SocialProvider[] = ['google', 'apple', 'linkedin'];
           </p>
 
           <p class="text-center text-xs text-gray-400 mt-5">
-            {{ lang.t('common.copyright') }}
+            {{ lang.t('common.copyright', { year: currentYear }) }}
           </p>
         </section>
       </main>
@@ -165,7 +138,7 @@ export class LoginPage {
   private readonly route = inject(ActivatedRoute);
 
   protected readonly lang = inject(LanguageService);
-  protected readonly socials = SOCIALS;
+  protected readonly currentYear = new Date().getFullYear();
 
   protected readonly form = this.fb.group({
     identifier: this.fb.control('', {
@@ -224,10 +197,6 @@ export class LoginPage {
     void this.auth.login(this.form.getRawValue(), this.returnUrl()).catch(() => {
       /* error already in AuthStore.submitState() */
     });
-  }
-
-  protected onSocialLogin(_provider: SocialProvider): void {
-    // Social OAuth handoff lands with the real auth API; mocked for now.
   }
 }
 

@@ -176,7 +176,9 @@ import { AccentBars, Button, Input as IosInput, SectionBadge } from '@ui';
             </form>
           }
 
-          <p class="text-center text-xs text-gray-400 mt-6">{{ lang.t('common.copyright') }}</p>
+          <p class="text-center text-xs text-gray-400 mt-6">
+            {{ lang.t('common.copyright', { year: currentYear }) }}
+          </p>
         </section>
       </main>
 
@@ -190,6 +192,7 @@ export class AdminLoginPage {
   private readonly route = inject(ActivatedRoute);
 
   protected readonly lang = inject(LanguageService);
+  protected readonly currentYear = new Date().getFullYear();
 
   protected readonly form = this.fb.group({
     email: this.fb.control('', { validators: [Validators.required, Validators.email] }),

@@ -191,7 +191,7 @@
       "nextButton": "Next",
       "backAriaLabel": "Go back",
       "submitButton": "Save & Continue",
-      "copyright": "© 2026 Institute of Scrum. All rights reserved.",
+      "copyright": "© {year} Institute of Scrum. All rights reserved.",
       "greeting": "Hi {name}, Complete your account",
       "progressLabel": "Step {step} of {total}",
       "searchCountry": "Search country…",
@@ -488,7 +488,7 @@
     },
     "footer": {
       "tagline": "Canada's premier provider of industry-recognized Scrum certifications.",
-      "copyright": "© 2026 Institute of Scrum. All rights reserved.",
+      "copyright": "© {year} Institute of Scrum. All rights reserved.",
       "privacy": "Privacy Policy",
       "terms": "Terms of Service",
       "certifications": {

@@ -781,7 +781,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
 
           <!-- ── Copyright ─────────────────────────────────────────────── -->
           <p class="text-center text-xs text-ios-brand-muted font-medium">
-            {{ lang.t('auth.completeAccount.copyright') }}
+            {{ lang.t('auth.completeAccount.copyright', { year: currentYear }) }}
           </p>
         </section>
       </main>
@@ -800,6 +800,7 @@ export class CompleteAccountPage {
   private readonly router = inject(Router);
 
   protected readonly lang = inject(LanguageService);
+  protected readonly currentYear = new Date().getFullYear();
 
   // ─── Static data ─────────────────────────────────────────────────────────
   protected readonly steps = STEPS;

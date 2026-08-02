@@ -199,7 +199,7 @@
       "nextButton": "Suivant",
       "backAriaLabel": "Retour",
       "submitButton": "Enregistrer et continuer",
-      "copyright": "© 2026 Institut Scrum. Tous droits réservés.",
+      "copyright": "© {year} Institut Scrum. Tous droits réservés.",
       "greeting": "Bonjour {name}, complétez votre compte",
       "progressLabel": "Étape {step} sur {total}",
       "searchCountry": "Rechercher un pays…",
@@ -488,7 +488,7 @@
     },
     "footer": {
       "tagline": "Le fournisseur de premier plan au Canada de certifications Scrum reconnues par l'industrie.",
-      "copyright": "© 2026 Institute of Scrum. Tous droits réservés.",
+      "copyright": "© {year} Institute of Scrum. Tous droits réservés.",
       "privacy": "Politique de confidentialité",
       "terms": "Conditions d'utilisation",
       "certifications": {
