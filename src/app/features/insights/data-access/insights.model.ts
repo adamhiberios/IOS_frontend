@@ -39,6 +39,12 @@ export interface InsightSeo {
   ogType: string;
   publishedAt: string | null;
   authorName: string;
+  /**
+   * schema.org `BlogPosting` JSON-LD, verbatim from the backend
+   * (`StructuredDataService.blogPosting`) — rendered by `JsonLdService`, never
+   * reconstructed client-side. Absent on backend builds that predate it.
+   */
+  jsonLd?: Record<string, unknown>;
 }
 
 /** Full article returned from the detail endpoint (`GET /blog/:slug`). */

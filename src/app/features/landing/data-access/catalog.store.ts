@@ -5,7 +5,7 @@ import { type Page, problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 
 import { PublicCatalogApi } from './catalog.api';
-import { type PublicCertificate } from './catalog.model';
+import { type PublicCertificate, type PublicCertificateSeo } from './catalog.model';
 
 /** Safety cap on the number of pages walked when building the full catalog. */
 const MAX_PAGES = 10;
@@ -45,6 +45,34 @@ export class PublicCatalogStore {
   /** The backend certificate for a marketing `programCode`, or `undefined`. */
   byCode(programCode: string): PublicCertificate | undefined {
     return this.byCodeMap().get(programCode.toUpperCase());
+  }
+
+  /**
+   * `seo` for one certificate, by marketing `programCode` — resolved to the
+   * real id via {@link byCode} (list data), then fetched from `GET
+   * /catalog/:id` (the only endpoint the backend attaches `seo`/`jsonLd` to).
+   *
+   * SEO-only: callers use this purely to populate `<title>`/meta/JSON-LD, not
+   * page content — the static marketing pages' copy stays as authored. Never
+   * throws; an unknown code, a 404, or a network failure all resolve to
+   * `undefined` so a page's structured data is simply absent, not broken.
+   * Cached per id for the life of the store.
+   */
+  private readonly seoCache = new Map<string, PublicCertificateSeo | undefined>();
+
+  async loadSeo(programCode: string): Promise<PublicCertificateSeo | undefined> {
+    await this.load();
+    const cert = this.byCode(programCode);
+    if (!cert) return undefined;
+    if (this.seoCache.has(cert.id)) return this.seoCache.get(cert.id);
+    try {
+      const detail = await firstValueFrom(this.api.getById(cert.id));
+      this.seoCache.set(cert.id, detail.seo);
+      return detail.seo;
+    } catch {
+      this.seoCache.set(cert.id, undefined);
+      return undefined;
+    }
   }
 
   /**

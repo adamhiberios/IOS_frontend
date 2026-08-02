@@ -10,8 +10,13 @@ import {
   type CatalogListResponseDto,
   type OutlineResponseDto,
 } from './catalog.dto';
-import { toCourseOutline, toPublicCertificate } from './catalog.mappers';
-import { type CatalogListQuery, type CourseOutline, type PublicCertificate } from './catalog.model';
+import { toCourseOutline, toPublicCertificate, toPublicCertificateDetail } from './catalog.mappers';
+import {
+  type CatalogListQuery,
+  type CourseOutline,
+  type PublicCertificate,
+  type PublicCertificateDetail,
+} from './catalog.model';
 
 /**
  * Public catalog transport — `@Controller('catalog')` (no auth). Active
@@ -38,11 +43,16 @@ export class PublicCatalogApi {
       .pipe(map((res) => toPage(res, toPublicCertificate)));
   }
 
-  /** `GET /catalog/:id` — one active certificate (404 if inactive/unknown). */
-  getById(id: string): Observable<PublicCertificate> {
+  /**
+   * `GET /catalog/:id` — one active certificate (404 if inactive/unknown),
+   * including the `seo` block (title/description/canonical/JSON-LD) that the
+   * list endpoint omits. No current page calls this — see
+   * `docs/implementation-progress.md` task 13.
+   */
+  getById(id: string): Observable<PublicCertificateDetail> {
     return this.http
       .get<CatalogDetailResponseDto>(`${this.base}/${id}`)
-      .pipe(map((res) => toPublicCertificate(res.data)));
+      .pipe(map((res) => toPublicCertificateDetail(res.data)));
   }
 
   /** `GET /catalog/:id/outline` — public curriculum outline (titles only). */

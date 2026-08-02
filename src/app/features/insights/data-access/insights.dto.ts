@@ -39,6 +39,12 @@ export interface BlogSeoDto {
   readonly ogType: string;
   readonly publishedAt: string | null;
   readonly authorName: string | null;
+  /**
+   * schema.org `BlogPosting` JSON-LD, verbatim-serializable into a
+   * `<script type="application/ld+json">` tag. Additive field — absent on
+   * responses from a backend build that predates it.
+   */
+  readonly jsonLd?: Record<string, unknown>;
 }
 
 /** The single-article payload (published only; 404 for draft/archived/unknown). */

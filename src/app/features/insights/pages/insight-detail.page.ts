@@ -17,12 +17,20 @@
  *   6. Scroll-to-top floating button
  */
 
-import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  type OnDestroy,
+  type OnInit,
+  effect,
+  inject,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { LucideArrowLeft, LucideClock, LucideUser } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
+import { JsonLdService } from '@core/seo';
 import { IosIcon, ScrollToTop, provideIcons } from '@ui';
 
 import { LandingNavbar } from '../../landing/components/landing-navbar';
@@ -280,13 +288,30 @@ import { InsightsStore } from '../data-access/insights.store';
     <ios-scroll-to-top />
   `,
 })
-export class InsightDetailPage implements OnInit {
+export class InsightDetailPage implements OnInit, OnDestroy {
   protected readonly store = inject(InsightsStore);
   protected readonly lang = inject(LanguageService);
   private readonly route = inject(ActivatedRoute);
+  private readonly jsonLd = inject(JsonLdService);
+
+  constructor() {
+    // Mirrors the loaded article's structured data into the shared JSON-LD
+    // <script> tag. Absent (older backend / mid-load) → leave whatever is
+    // already there alone rather than briefly clearing it.
+    effect(() => {
+      const jsonLd = this.store.currentDetail()?.seo.jsonLd;
+      if (jsonLd) {
+        this.jsonLd.set(jsonLd);
+      }
+    });
+  }
 
   ngOnInit(): void {
     const slug = this.route.snapshot.paramMap.get('slug') ?? '';
     void this.store.loadBySlug(slug);
+  }
+
+  ngOnDestroy(): void {
+    this.jsonLd.clear();
   }
 }

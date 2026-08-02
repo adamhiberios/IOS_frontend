@@ -1,11 +1,92 @@
 # Implementation Progress — IOS LMS Frontend ↔ Real Backend
 
 > **Single source of truth for implementation progress.** Updated continuously.
-> Last updated: 2026-07-29, against frontend HEAD `4f9e267` and backend HEAD
-> `7160f11`. This session: **CMS-ADMIN was built and then rolled back** (only the
-> `/admin/contact` inbox was kept, staged), and the two remaining non-CMS admin
-> backlog items — **catalog image picker** and **exam student preview** — were
-> built. See the first three entries below.
+> Last updated: 2026-08-03, against frontend HEAD `4f9e267` and backend HEAD
+> `7160f11`. This session: **task 13 (SEO `seo.jsonLd` rendering)** — both
+> blog and catalog now wired. See the first entry.
+
+---
+
+### SEO — render `seo.jsonLd` (task 13) — ✅ built, awaiting review (uncommitted)
+
+Closes backlog item **13** (both 13a/blog and 13b/catalog). Skipped anything
+CMS (Slice 5 covers CMS pages separately, untouched).
+
+**1 · Blog article (`/insights/:slug`) — done.**
+
+- `insights.dto.ts` `BlogSeoDto` / `insights.model.ts` `InsightSeo` gained the
+  optional `jsonLd` field the backend already sends
+  (`StructuredDataService.blogPosting`, `blog.service.ts:550`) but nothing on
+  the frontend captured. `insights.mappers.ts` `toInsightDetail` now passes it
+  through.
+- New `core/seo/json-ld.service.ts` (`JsonLdService`, root singleton) — owns a
+  single `<script type="application/ld+json">` tag in `<head>`, keyed by a
+  fixed id so re-navigating updates it in place rather than accumulating tags.
+  `set()` serializes verbatim; `clear()` removes it. **Never reconstructs the
+  JSON-LD client-side** — the backend's `Organization` node carries
+  name/logo/`sameAs` from server config the frontend has no access to, so
+  re-deriving it here would drift.
+- `insight-detail.page.ts` — an `effect()` mirrors
+  `store.currentDetail()?.seo.jsonLd` into the service on load, `ngOnDestroy`
+  clears it so a stale article's structured data doesn't linger after
+  navigating away (e.g. to a static page with none of its own).
+- **The app has no SSR** (plain CSR SPA — confirmed: no `server.ts`, no
+  `@angular/ssr` in `angular.json`), so this only reaches crawlers that
+  execute JavaScript (Googlebot does; not every scraper does). Not a
+  substitute for server-rendered structured data — noted in case Slice-5-style
+  SSR work ever happens.
+
+**2 · Catalog certificate detail — SEO-only fetch, page content stays static.**
+
+> **Correction to how this item was originally scoped.** Before touching
+> anything, I checked who calls `GET /catalog/:id` (the endpoint that carries
+> `seo`) on the frontend: **no one.** `PublicCatalogApi.getById()` existed but
+> was dead code — every consumer (`PublicCatalogStore.load()`) walks `GET
+> /catalog` (the *list* endpoint) instead, and the backend only attaches
+> `seo`/`jsonLd` to the single-item detail response (`CatalogDetailDto
+> extends CatalogItemDto`, not the list row). The seven marketing
+> certification-detail pages (`cert-details-esm.page.ts` and its six
+> siblings) are **entirely static** — hardcoded price/copy from i18n, not
+> reading `PublicCatalogStore` at all. First pass flagged this instead of
+> guessing at scope; **decision from the user:** keep those pages'
+> *content* static, but it's fine to fetch `GET /catalog/:id` on load
+> **purely for SEO** (title/description/JSON-LD) — the request exists only so
+> that metadata stays backend-managed, same as blog.
+
+- **`catalog.dto.ts`** — added `CatalogSeoDto` + `CatalogDetailItemDto`
+  (mirrors backend `CatalogSeoDto`/`CatalogDetailDto`); `CatalogDetailResponseDto.data`
+  was typed as bare `CatalogItemDto`, so `seo` never even reached the mapper
+  — fixed regardless of the wiring decision above.
+- **`catalog.model.ts`** — added `PublicCertificateSeo` + `PublicCertificateDetail`
+  (extends `PublicCertificate`). **`catalog.mappers.ts`** — new
+  `toPublicCertificateDetail()`. **`catalog.api.ts`** `getById()` now returns
+  `PublicCertificateDetail` (was `PublicCertificate`, silently discarding `seo`).
+- **`catalog.store.ts`** — new `PublicCatalogStore.loadSeo(programCode)`:
+  resolves the marketing code to the real id via the already-loaded list
+  (`byCode`, no separate id lookup endpoint exists), then fetches `GET
+  /catalog/:id` for its `seo` block, caching by id so revisiting a page in
+  the same session doesn't re-fetch. Never throws — an unknown code, a 404,
+  or a network failure all resolve to `undefined`, same "never breaks the
+  page" contract as `load()`.
+- **`cert-details-template.ts`** — the one shared component all seven pages
+  render through, so the fetch is wired **once**, not duplicated seven times.
+  A constructor `effect()` reads `cfg().code`, calls `loadSeo()`, and on a
+  hit passes `seo.jsonLd` to `JsonLdService.set()` (the same service and
+  script tag `insight-detail.page.ts` uses); `ngOnDestroy` clears it. Nothing
+  in the template's render output changed — `metaTitle`/`metaDescription`
+  are fetched but **not applied**: this app has no existing `Title`/`Meta`
+  service usage anywhere (checked — genuinely zero), and introducing that
+  pattern felt like a second decision beyond "reuse JsonLdService for
+  JSON-LD" — flagged rather than assumed. Easy follow-up if wanted.
+
+- **Verification:** `npm run typecheck` ✓ · `npm run lint` ✓ (0 errors; same 3
+  known `prefer-ngsrc` warnings) · `ng build --configuration production` ✓,
+  initial gzip **104.24 kB** (+0.02 kB, noise).
+- **Not runtime-tested against api-dev** — needs a real certificate id to
+  confirm `GET /catalog/:id` resolves and its `jsonLd` round-trips into the
+  `<script>` tag; also unverified: behavior when `byCode()` can't resolve a
+  page's marketing code to any backend cert (should just skip silently, per
+  `loadSeo`'s contract, but not exercised against live data).
 
 ---
 
@@ -2121,7 +2202,8 @@ surfaces are wired.
 | ~~10~~ | ~~**Exam-authoring preview**~~                                 | ✅ done 2026-07-29 — replaced the client-side faux-preview with the real endpoint                                                                                                                                     | —                                                                         |
 | ~~11~~ | ~~**Real-exam answer review UI**~~                             | ✅ done 2026-08-01 — `ios-exam-review-page` at `/assessments/review/:attemptId`, linked from the dashboard exam history. **Not** on the result page: that route is keyed by `sessionId` and submit returns no attempt id (**BE-I-32**, filed)                            | —                                                                         |
 | ~~12~~ | ~~**Catalog image picker**~~                                   | ✅ done 2026-07-29 — presigned upload wired into the B8 form, A1 pattern reused, `requiredHeaders` echoed. Upload requires a saved certificate (endpoint 404s an unknown id)                                           | —                                                                         |
-| **13** | **SEO — render `seo.jsonLd`** on blog/catalog detail pages     | `43bd2d8` embeds schema.org JSON-LD in blog (`blog.service.ts:550`) and catalog (`catalog.service.ts:461`) detail responses; nothing renders it. CMS pages are covered by plan Slice 5. | `sitemap.xml`/`robots.txt` need an **edge rewrite** (infra, not FE)       |
+| 13a    | ~~**SEO — render `seo.jsonLd`** on the blog article page~~     | ✅ done 2026-08-03 — `JsonLdService` + `insight-detail.page.ts`. See the top entry | —                                                                         |
+| 13b    | ~~**SEO — `seo.jsonLd`** on the 7 catalog certificate marketing pages~~ | ✅ done 2026-08-03 — user decision: keep page content static, add an SEO-only `GET /catalog/:id` fetch. Wired once in the shared `cert-details-template.ts`, reuses `JsonLdService`. `metaTitle`/`metaDescription` fetched but not applied (no `Title`/`Meta` precedent in the app — flagged, not assumed) | — |
 
 **Known backend blockers (see [`backend-blockers-report.md`](./backend-blockers-report.md)):**
 **BE-I-25** (no DOB → task 6 cannot ship), **BE-I-27/28** (CMS media upload + draft

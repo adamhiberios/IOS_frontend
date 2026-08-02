@@ -1,5 +1,15 @@
-import { type CatalogItemDto, type OutlineModuleDto, type OutlineResponseDto } from './catalog.dto';
-import { type CourseOutline, type OutlineModule, type PublicCertificate } from './catalog.model';
+import {
+  type CatalogDetailItemDto,
+  type CatalogItemDto,
+  type OutlineModuleDto,
+  type OutlineResponseDto,
+} from './catalog.dto';
+import {
+  type CourseOutline,
+  type OutlineModule,
+  type PublicCertificate,
+  type PublicCertificateDetail,
+} from './catalog.model';
 
 /** Map a wire `CatalogItemDto` to the frontend `PublicCertificate` model. */
 export function toPublicCertificate(dto: CatalogItemDto): PublicCertificate {
@@ -15,6 +25,26 @@ export function toPublicCertificate(dto: CatalogItemDto): PublicCertificate {
     track: dto.track ?? null,
     level: dto.level ?? null,
     badgeImageUrl: dto.badgeImageUrl ?? null,
+  };
+}
+
+/**
+ * Map the `GET /catalog/:id` response to the frontend `PublicCertificateDetail`
+ * model — `toPublicCertificate` plus the optional `seo` block, which the list
+ * endpoint never returns.
+ */
+export function toPublicCertificateDetail(dto: CatalogDetailItemDto): PublicCertificateDetail {
+  return {
+    ...toPublicCertificate(dto),
+    seo: dto.seo
+      ? {
+          metaTitle: dto.seo.metaTitle,
+          metaDescription: dto.seo.metaDescription,
+          canonicalUrl: dto.seo.canonicalUrl,
+          ogType: dto.seo.ogType,
+          jsonLd: dto.seo.jsonLd,
+        }
+      : undefined,
   };
 }
 

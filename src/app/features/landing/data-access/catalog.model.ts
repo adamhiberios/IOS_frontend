@@ -29,6 +29,26 @@ export interface PublicCertificate {
   readonly badgeImageUrl: string | null;
 }
 
+/**
+ * SEO metadata for a single certificate — only returned by the detail fetch
+ * (`GET /catalog/:id`), never the list. `jsonLd` is the backend's schema.org
+ * `Course` node, rendered verbatim by `JsonLdService` — never reconstructed
+ * client-side (Organization identity in it comes from backend config the
+ * frontend doesn't have).
+ */
+export interface PublicCertificateSeo {
+  readonly metaTitle: string;
+  readonly metaDescription: string | null;
+  readonly canonicalUrl: string;
+  readonly ogType: string;
+  readonly jsonLd?: Record<string, unknown>;
+}
+
+/** A single certificate as returned by `GET /catalog/:id`, `seo` included. */
+export interface PublicCertificateDetail extends PublicCertificate {
+  readonly seo?: PublicCertificateSeo;
+}
+
 /** Query for `GET /catalog` (browse list). */
 export interface CatalogListQuery {
   readonly search?: string;

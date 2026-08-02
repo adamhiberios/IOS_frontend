@@ -90,6 +90,7 @@ export function toInsightDetail(dto: BlogDetailDto, locale: string): InsightDeta
       ogType: dto.seo.ogType,
       publishedAt: dto.seo.publishedAt,
       authorName: dto.seo.authorName ?? '',
+      jsonLd: dto.seo.jsonLd,
     },
   };
 }

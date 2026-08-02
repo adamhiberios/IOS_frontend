@@ -36,9 +36,28 @@ export interface CatalogItemDto {
 /** `GET /catalog` — cursor-paginated list of active certificates. */
 export type CatalogListResponseDto = PagedResponse<CatalogItemDto, { locale: string }>;
 
+/**
+ * SEO metadata block — additive, present only on the single-certificate
+ * detail response (`GET /catalog/:id`), never on list rows.
+ */
+export interface CatalogSeoDto {
+  readonly metaTitle: string;
+  readonly metaDescription: string | null;
+  readonly canonicalUrl: string;
+  readonly ogType: string;
+  /**
+   * schema.org `Course` JSON-LD, verbatim-serializable into a
+   * `<script type="application/ld+json">` tag. Additive field.
+   */
+  readonly jsonLd?: Record<string, unknown>;
+}
+
+/** `GET /catalog/:id` data shape — `CatalogItemDto` plus the optional `seo` block. */
+export type CatalogDetailItemDto = CatalogItemDto & { readonly seo?: CatalogSeoDto };
+
 /** `GET /catalog/:id` — one active certificate (404 if inactive). */
 export interface CatalogDetailResponseDto {
-  readonly data: CatalogItemDto;
+  readonly data: CatalogDetailItemDto;
   readonly meta: { readonly locale: string };
 }
 

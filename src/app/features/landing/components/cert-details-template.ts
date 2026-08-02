@@ -44,7 +44,15 @@
  * page authoring flexibility without forcing every key under the i18n root.
  */
 
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  type OnDestroy,
+  computed,
+  effect,
+  inject,
+  input,
+} from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import {
   LucideArrowLeft,
@@ -54,7 +62,10 @@ import {
 } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
+import { JsonLdService } from '@core/seo';
 import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
+
+import { PublicCatalogStore } from '../data-access/catalog.store';
 
 /** Track palette used by the main page sections (hero, overview, stats, CTA). */
 export type CertTrack = 'blue' | 'green' | 'brown';
@@ -780,7 +791,7 @@ export interface CertDetailsConfig {
     </div>
   `,
 })
-export class CertDetailsTemplate {
+export class CertDetailsTemplate implements OnDestroy {
   /** All cert-specific data and theming. */
   readonly config = input.required<CertDetailsConfig>();
 
@@ -796,4 +807,27 @@ export class CertDetailsTemplate {
   protected readonly heroHeadingId = computed(() => `cert-hero-${this.cfg().code.toLowerCase()}`);
 
   protected readonly lang = inject(LanguageService);
+
+  private readonly catalogStore = inject(PublicCatalogStore);
+  private readonly jsonLd = inject(JsonLdService);
+
+  constructor() {
+    // SEO only — page content stays static/authored. Resolves the marketing
+    // `code` to the backend cert and fetches its `seo` block purely to feed
+    // JsonLdService; nothing here touches what the template renders.
+    effect(() => {
+      void this.applySeo(this.cfg().code);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.jsonLd.clear();
+  }
+
+  private async applySeo(programCode: string): Promise<void> {
+    const seo = await this.catalogStore.loadSeo(programCode);
+    if (seo?.jsonLd) {
+      this.jsonLd.set(seo.jsonLd);
+    }
+  }
 }
