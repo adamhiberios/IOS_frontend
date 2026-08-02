@@ -32,11 +32,31 @@ import { LandingContactSection } from '../components/contact-section';
 import { CertificationCard } from '../components/certification-card';
 import { CertPageHero } from '../components/cert-page-hero';
 
-/** One cert column in the comparison table. */
-interface CompCert {
+/**
+ * Single source of truth for every certification shown on this page — both
+ * the per-track card grids (sections 4–6) and the comparison table
+ * (section 7) render from the same array, keyed by `track`.
+ */
+interface CertDef {
   readonly code: string;
-  readonly levelBg: string;
-  readonly levelSuffix: string; // i18n key suffix in allCertifications.comparison.*
+  readonly track: 'scrumMaster' | 'productOwner' | 'scrumFacilitator';
+  /** Drives both `tracks.<track>.<level>Level` and `comparison.<level>Level` i18n keys. */
+  readonly level: 'foundation' | 'practitioner' | 'authority';
+  readonly svgPath: string;
+  /** i18n key suffix under `allCertifications.tracks.<track>.` for the full name, e.g. `esmName`. */
+  readonly nameKey: string;
+  readonly showStartingAtPrice: boolean;
+  // Card theme (ios-certification-card inputs)
+  readonly cardLevelBgColor: string;
+  readonly cardLevelTextColor: string;
+  readonly cardCodeColor: string;
+  readonly cardFullNameColor: string;
+  readonly cardPriceColor: string;
+  readonly cardDownloadBgColor: string;
+  readonly cardDownloadTextColor: string;
+  readonly cardEnrollBgColor: string;
+  // Comparison-table-only fields
+  readonly comparisonLevelBg: string;
   readonly prereqSuffix: string;
   readonly prereqColor: string;
 }
@@ -260,53 +280,33 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
         ></div>
       </div>
 
-      <!-- Three SM cards — navy theme (default certification-card colours) -->
+      <!-- SM cards — navy theme, driven by certDefs -->
       <div class="flex flex-col lg:flex-row gap-[24px] items-stretch w-full justify-center">
-        <ios-certification-card
-          class="flex-1 min-w-0"
-          svgPath="/assets/badge/endorsed_scrum_master.svg"
-          [level]="lang.t('allCertifications.tracks.scrumMaster.foundationLevel')"
-          code="ESM"
-          [fullName]="lang.t('allCertifications.tracks.scrumMaster.esmName')"
-          [hours]="lang.t('allCertifications.shared.hours')"
-          [onlineLabel]="lang.t('allCertifications.shared.online')"
-          [questions]="lang.t('allCertifications.shared.questions')"
-          [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
-          [price]="lang.t('allCertifications.shared.price')"
-          [downloadLabel]="lang.t('allCertifications.shared.download')"
-          [enrollLabel]="lang.t('allCertifications.shared.enroll')"
-          [showStartingAtPrice]="true"
-        />
-        <ios-certification-card
-          class="flex-1 min-w-0"
-          svgPath="/assets/badge/endorsed_scrum_master_practitioner.svg"
-          [level]="lang.t('allCertifications.tracks.scrumMaster.practitionerLevel')"
-          code="ESM-P"
-          [fullName]="lang.t('allCertifications.tracks.scrumMaster.esmpName')"
-          [hours]="lang.t('allCertifications.shared.hours')"
-          [onlineLabel]="lang.t('allCertifications.shared.online')"
-          [questions]="lang.t('allCertifications.shared.questions')"
-          [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
-          [price]="lang.t('allCertifications.shared.price')"
-          [downloadLabel]="lang.t('allCertifications.shared.download')"
-          [enrollLabel]="lang.t('allCertifications.shared.enroll')"
-          [showStartingAtPrice]="true"
-        />
-        <ios-certification-card
-          class="flex-1 min-w-0"
-          svgPath="/assets/badge/endorsed_scrum_master_authority.svg"
-          [level]="lang.t('allCertifications.tracks.scrumMaster.authorityLevel')"
-          code="ESM-A"
-          [fullName]="lang.t('allCertifications.tracks.scrumMaster.esmaName')"
-          [hours]="lang.t('allCertifications.shared.hours')"
-          [onlineLabel]="lang.t('allCertifications.shared.online')"
-          [questions]="lang.t('allCertifications.shared.questions')"
-          [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
-          [price]="lang.t('allCertifications.shared.price')"
-          [downloadLabel]="lang.t('allCertifications.shared.download')"
-          [enrollLabel]="lang.t('allCertifications.shared.enroll')"
-          [showStartingAtPrice]="true"
-        />
+        @for (cert of smCerts; track cert.code) {
+          <ios-certification-card
+            class="flex-1 min-w-0"
+            [svgPath]="cert.svgPath"
+            [level]="lang.t('allCertifications.tracks.scrumMaster.' + cert.level + 'Level')"
+            [code]="cert.code"
+            [fullName]="lang.t('allCertifications.tracks.scrumMaster.' + cert.nameKey)"
+            [hours]="lang.t('allCertifications.shared.hours')"
+            [onlineLabel]="lang.t('allCertifications.shared.online')"
+            [questions]="lang.t('allCertifications.shared.questions')"
+            [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
+            [price]="lang.t('allCertifications.shared.price')"
+            [downloadLabel]="lang.t('allCertifications.shared.download')"
+            [enrollLabel]="lang.t('allCertifications.shared.enroll')"
+            [showStartingAtPrice]="cert.showStartingAtPrice"
+            [levelBgColor]="cert.cardLevelBgColor"
+            [levelTextColor]="cert.cardLevelTextColor"
+            [codeColor]="cert.cardCodeColor"
+            [fullNameColor]="cert.cardFullNameColor"
+            [priceColor]="cert.cardPriceColor"
+            [downloadBgColor]="cert.cardDownloadBgColor"
+            [downloadTextColor]="cert.cardDownloadTextColor"
+            [enrollBgColor]="cert.cardEnrollBgColor"
+          />
+        }
       </div>
     </section>
 
@@ -340,68 +340,31 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
         ></div>
       </div>
 
-      <!-- Three PO cards — green theme -->
+      <!-- PO cards — green theme, driven by certDefs -->
       <div class="flex flex-col lg:flex-row gap-[24px] items-stretch w-full justify-center">
-        <ios-certification-card
-          class="flex-1 min-w-0"
-          svgPath="/assets/badge/endorsed_product_owner.svg"
-          [level]="lang.t('allCertifications.tracks.productOwner.foundationLevel')"
-          code="EPO"
-          [fullName]="lang.t('allCertifications.tracks.productOwner.epoName')"
-          [hours]="lang.t('allCertifications.shared.hours')"
-          [onlineLabel]="lang.t('allCertifications.shared.online')"
-          [questions]="lang.t('allCertifications.shared.questions')"
-          [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
-          [price]="lang.t('allCertifications.shared.price')"
-          [downloadLabel]="lang.t('allCertifications.shared.download')"
-          [enrollLabel]="lang.t('allCertifications.shared.enroll')"
-          levelBgColor="#515e4d"
-          levelTextColor="#eef3ec"
-          priceColor="#515e4d"
-          downloadBgColor="#eef3ec"
-          downloadTextColor="#2a3628"
-          enrollBgColor="#515e4d"
-        />
-        <ios-certification-card
-          class="flex-1 min-w-0"
-          svgPath="/assets/badge/endorsed_product_owner_practitioner.svg"
-          [level]="lang.t('allCertifications.tracks.productOwner.practitionerLevel')"
-          code="EPO-P"
-          [fullName]="lang.t('allCertifications.tracks.productOwner.epopName')"
-          [hours]="lang.t('allCertifications.shared.hours')"
-          [onlineLabel]="lang.t('allCertifications.shared.online')"
-          [questions]="lang.t('allCertifications.shared.questions')"
-          [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
-          [price]="lang.t('allCertifications.shared.price')"
-          [downloadLabel]="lang.t('allCertifications.shared.download')"
-          [enrollLabel]="lang.t('allCertifications.shared.enroll')"
-          levelBgColor="#515e4d"
-          levelTextColor="#eef3ec"
-          priceColor="#515e4d"
-          downloadBgColor="#eef3ec"
-          downloadTextColor="#2a3628"
-          enrollBgColor="#515e4d"
-        />
-        <ios-certification-card
-          class="flex-1 min-w-0"
-          svgPath="/assets/badge/endorsed_product_owner_authority.svg"
-          [level]="lang.t('allCertifications.tracks.productOwner.authorityLevel')"
-          code="EPO-A"
-          [fullName]="lang.t('allCertifications.tracks.productOwner.epoaName')"
-          [hours]="lang.t('allCertifications.shared.hours')"
-          [onlineLabel]="lang.t('allCertifications.shared.online')"
-          [questions]="lang.t('allCertifications.shared.questions')"
-          [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
-          [price]="lang.t('allCertifications.shared.price')"
-          [downloadLabel]="lang.t('allCertifications.shared.download')"
-          [enrollLabel]="lang.t('allCertifications.shared.enroll')"
-          levelBgColor="#515e4d"
-          levelTextColor="#eef3ec"
-          priceColor="#515e4d"
-          downloadBgColor="#eef3ec"
-          downloadTextColor="#2a3628"
-          enrollBgColor="#515e4d"
-        />
+        @for (cert of poCerts; track cert.code) {
+          <ios-certification-card
+            class="flex-1 min-w-0"
+            [svgPath]="cert.svgPath"
+            [level]="lang.t('allCertifications.tracks.productOwner.' + cert.level + 'Level')"
+            [code]="cert.code"
+            [fullName]="lang.t('allCertifications.tracks.productOwner.' + cert.nameKey)"
+            [hours]="lang.t('allCertifications.shared.hours')"
+            [onlineLabel]="lang.t('allCertifications.shared.online')"
+            [questions]="lang.t('allCertifications.shared.questions')"
+            [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
+            [price]="lang.t('allCertifications.shared.price')"
+            [downloadLabel]="lang.t('allCertifications.shared.download')"
+            [enrollLabel]="lang.t('allCertifications.shared.enroll')"
+            [showStartingAtPrice]="cert.showStartingAtPrice"
+            [levelBgColor]="cert.cardLevelBgColor"
+            [levelTextColor]="cert.cardLevelTextColor"
+            [priceColor]="cert.cardPriceColor"
+            [downloadBgColor]="cert.cardDownloadBgColor"
+            [downloadTextColor]="cert.cardDownloadTextColor"
+            [enrollBgColor]="cert.cardEnrollBgColor"
+          />
+        }
       </div>
     </section>
 
@@ -435,30 +398,33 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
         ></div>
       </div>
 
-      <!-- Single ESF card — centered, amber theme -->
+      <!-- SF cards — centered, amber theme, driven by certDefs (currently 1: ESF) -->
       <div class="flex justify-center w-full">
-        <ios-certification-card
-          class="w-full max-w-[480px]"
-          svgPath="/assets/badge/endorsed_scrum_facilitator.svg"
-          [level]="lang.t('allCertifications.tracks.scrumFacilitator.foundationLevel')"
-          code="ESF"
-          [fullName]="lang.t('allCertifications.tracks.scrumFacilitator.esfName')"
-          [hours]="lang.t('allCertifications.shared.hours')"
-          [onlineLabel]="lang.t('allCertifications.shared.online')"
-          [questions]="lang.t('allCertifications.shared.questions')"
-          [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
-          [price]="lang.t('allCertifications.shared.price')"
-          [downloadLabel]="lang.t('allCertifications.shared.download')"
-          [enrollLabel]="lang.t('allCertifications.shared.enroll')"
-          levelBgColor="#a69075"
-          levelTextColor="#ffffff"
-          codeColor="#8e6636"
-          fullNameColor="#654826"
-          priceColor="#8e6636"
-          downloadBgColor="#f4f0eb"
-          downloadTextColor="#402e18"
-          enrollBgColor="#8e6636"
-        />
+        @for (cert of sfCerts; track cert.code) {
+          <ios-certification-card
+            class="w-full max-w-[480px]"
+            [svgPath]="cert.svgPath"
+            [level]="lang.t('allCertifications.tracks.scrumFacilitator.' + cert.level + 'Level')"
+            [code]="cert.code"
+            [fullName]="lang.t('allCertifications.tracks.scrumFacilitator.' + cert.nameKey)"
+            [hours]="lang.t('allCertifications.shared.hours')"
+            [onlineLabel]="lang.t('allCertifications.shared.online')"
+            [questions]="lang.t('allCertifications.shared.questions')"
+            [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
+            [price]="lang.t('allCertifications.shared.price')"
+            [downloadLabel]="lang.t('allCertifications.shared.download')"
+            [enrollLabel]="lang.t('allCertifications.shared.enroll')"
+            [showStartingAtPrice]="cert.showStartingAtPrice"
+            [levelBgColor]="cert.cardLevelBgColor"
+            [levelTextColor]="cert.cardLevelTextColor"
+            [codeColor]="cert.cardCodeColor"
+            [fullNameColor]="cert.cardFullNameColor"
+            [priceColor]="cert.cardPriceColor"
+            [downloadBgColor]="cert.cardDownloadBgColor"
+            [downloadTextColor]="cert.cardDownloadTextColor"
+            [enrollBgColor]="cert.cardEnrollBgColor"
+          />
+        }
       </div>
     </section>
 
@@ -554,7 +520,7 @@ class="h-[50px] flex items-center px-4 border-b border-ios-border-light bg-ios-b
           </div>
 
           <!-- ── Cert data columns (one per certification) ──── -->
-          @for (cert of compCerts; track cert.code) {
+          @for (cert of certDefs; track cert.code) {
             <div class="flex flex-col flex-1 border-s border-ios-border-light">
               <!-- header -->
               <div
@@ -569,9 +535,9 @@ class="h-[50px] flex items-center px-4 border-b border-ios-border-light bg-ios-b
                 <span
                   class="inline-flex items-center justify-center px-2 py-0.5 rounded-full
                          font-heading font-medium text-[11px] text-white whitespace-nowrap"
-                  [style.background-color]="cert.levelBg"
+                  [style.background-color]="cert.comparisonLevelBg"
                 >
-                  {{ lang.t('allCertifications.comparison.' + cert.levelSuffix) }}
+                  {{ lang.t('allCertifications.comparison.' + cert.level + 'Level') }}
                 </span>
               </div>
               <!-- Duration -->
@@ -717,62 +683,159 @@ export class AllCertificationsPage {
     { q: this.lang.t('allCertifications.faq.q5'), a: this.lang.t('allCertifications.faq.a5') },
   ]);
 
-  /**
-   * Static cert data for the comparison table.
-   * `levelSuffix` and `prereqSuffix` are tailed onto
-   * `allCertifications.comparison.` to form the full i18n key.
+/**
+   * Single source of truth for the 7 certifications shown on this page.
+   * `level` drives both the track-section heading key
+   * (`allCertifications.tracks.<track>.<level>Level`) and the comparison-table
+   * badge key (`allCertifications.comparison.<level>Level`) — kept as one
+   * field instead of two duplicated suffix strings.
+   *
+   * Card theme colors are explicit for every entry, including the Scrum
+   * Master track (whose values equal `ios-certification-card`'s own
+   * defaults) — this is what lets sections 4–7 all read from this single
+   * array instead of three hardcoded template blocks + a separate
+   * comparison-only array.
    */
-  protected readonly compCerts: CompCert[] = [
+  protected readonly certDefs: readonly CertDef[] = [
     {
       code: 'ESM',
-      levelBg: '#184865',
-      levelSuffix: 'foundationLevel',
+      track: 'scrumMaster',
+      level: 'foundation',
+      svgPath: '/assets/badge/endorsed_scrum_master.svg',
+      nameKey: 'esmName',
+      showStartingAtPrice: true,
+      cardLevelBgColor: '#426981',
+      cardLevelTextColor: '#e8edf0',
+      cardCodeColor: '#143d56',
+      cardFullNameColor: '#113348',
+      cardPriceColor: '#184865',
+      cardDownloadBgColor: '#e8edf0',
+      cardDownloadTextColor: '#0b202d',
+      cardEnrollBgColor: '#184865',
+      comparisonLevelBg: '#184865',
       prereqSuffix: 'prerequisiteNone',
       prereqColor: '#c0c0c0',
     },
     {
       code: 'ESM-P',
-      levelBg: '#184865',
-      levelSuffix: 'practitionerLevel',
+      track: 'scrumMaster',
+      level: 'practitioner',
+      svgPath: '/assets/badge/endorsed_scrum_master_practitioner.svg',
+      nameKey: 'esmpName',
+      showStartingAtPrice: true,
+      cardLevelBgColor: '#426981',
+      cardLevelTextColor: '#e8edf0',
+      cardCodeColor: '#143d56',
+      cardFullNameColor: '#113348',
+      cardPriceColor: '#184865',
+      cardDownloadBgColor: '#e8edf0',
+      cardDownloadTextColor: '#0b202d',
+      cardEnrollBgColor: '#184865',
+      comparisonLevelBg: '#184865',
       prereqSuffix: 'prerequisiteNone',
       prereqColor: '#c0c0c0',
     },
     {
       code: 'ESM-A',
-      levelBg: '#184865',
-      levelSuffix: 'authorityLevel',
+      track: 'scrumMaster',
+      level: 'authority',
+      svgPath: '/assets/badge/endorsed_scrum_master_authority.svg',
+      nameKey: 'esmaName',
+      showStartingAtPrice: true,
+      cardLevelBgColor: '#426981',
+      cardLevelTextColor: '#e8edf0',
+      cardCodeColor: '#143d56',
+      cardFullNameColor: '#113348',
+      cardPriceColor: '#184865',
+      cardDownloadBgColor: '#e8edf0',
+      cardDownloadTextColor: '#0b202d',
+      cardEnrollBgColor: '#184865',
+      comparisonLevelBg: '#184865',
       prereqSuffix: 'prerequisiteCsm',
       prereqColor: '#959695',
     },
     {
       code: 'EPO',
-      levelBg: '#515e4d',
-      levelSuffix: 'foundationLevel',
+      track: 'productOwner',
+      level: 'foundation',
+      svgPath: '/assets/badge/endorsed_product_owner.svg',
+      nameKey: 'epoName',
+      showStartingAtPrice: false,
+      cardLevelBgColor: '#515e4d',
+      cardLevelTextColor: '#eef3ec',
+      cardCodeColor: '#143d56',
+      cardFullNameColor: '#113348',
+      cardPriceColor: '#515e4d',
+      cardDownloadBgColor: '#eef3ec',
+      cardDownloadTextColor: '#2a3628',
+      cardEnrollBgColor: '#515e4d',
+      comparisonLevelBg: '#515e4d',
       prereqSuffix: 'prerequisiteNone',
       prereqColor: '#c0c0c0',
     },
     {
       code: 'EPO-P',
-      levelBg: '#515e4d',
-      levelSuffix: 'practitionerLevel',
+      track: 'productOwner',
+      level: 'practitioner',
+      svgPath: '/assets/badge/endorsed_product_owner_practitioner.svg',
+      nameKey: 'epopName',
+      showStartingAtPrice: false,
+      cardLevelBgColor: '#515e4d',
+      cardLevelTextColor: '#eef3ec',
+      cardCodeColor: '#143d56',
+      cardFullNameColor: '#113348',
+      cardPriceColor: '#515e4d',
+      cardDownloadBgColor: '#eef3ec',
+      cardDownloadTextColor: '#2a3628',
+      cardEnrollBgColor: '#515e4d',
+      comparisonLevelBg: '#515e4d',
       prereqSuffix: 'prerequisiteExp',
       prereqColor: '#959695',
     },
     {
       code: 'EPO-A',
-      levelBg: '#515e4d',
-      levelSuffix: 'authorityLevel',
+      track: 'productOwner',
+      level: 'authority',
+      svgPath: '/assets/badge/endorsed_product_owner_authority.svg',
+      nameKey: 'epoaName',
+      showStartingAtPrice: false,
+      cardLevelBgColor: '#515e4d',
+      cardLevelTextColor: '#eef3ec',
+      cardCodeColor: '#143d56',
+      cardFullNameColor: '#113348',
+      cardPriceColor: '#515e4d',
+      cardDownloadBgColor: '#eef3ec',
+      cardDownloadTextColor: '#2a3628',
+      cardEnrollBgColor: '#515e4d',
+      comparisonLevelBg: '#515e4d',
       prereqSuffix: 'prerequisiteNone',
       prereqColor: '#c0c0c0',
     },
     {
       code: 'ESF',
-      levelBg: '#8e6636',
-      levelSuffix: 'foundationLevel',
+      track: 'scrumFacilitator',
+      level: 'foundation',
+      svgPath: '/assets/badge/endorsed_scrum_facilitator.svg',
+      nameKey: 'esfName',
+      showStartingAtPrice: false,
+      cardLevelBgColor: '#a69075',
+      cardLevelTextColor: '#ffffff',
+      cardCodeColor: '#8e6636',
+      cardFullNameColor: '#654826',
+      cardPriceColor: '#8e6636',
+      cardDownloadBgColor: '#f4f0eb',
+      cardDownloadTextColor: '#402e18',
+      cardEnrollBgColor: '#8e6636',
+      comparisonLevelBg: '#8e6636',
       prereqSuffix: 'prerequisiteNone',
       prereqColor: '#c0c0c0',
     },
   ];
+
+  /** Per-track slices of `certDefs`, feeding sections 4–6's card grids. */
+  protected readonly smCerts = this.certDefs.filter((c) => c.track === 'scrumMaster');
+  protected readonly poCerts = this.certDefs.filter((c) => c.track === 'productOwner');
+  protected readonly sfCerts = this.certDefs.filter((c) => c.track === 'scrumFacilitator');
 
   protected toggleFaq(i: number): void {
     this.openFaq.update((cur) => (cur === i ? -1 : i));

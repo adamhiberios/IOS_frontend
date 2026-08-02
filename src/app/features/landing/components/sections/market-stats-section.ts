@@ -265,16 +265,16 @@ export class MarketStatsSection {
         role: this.lang.t('landing.marketStats.table.smRole'),
         cells: [
           { name: `${this.lang.t('landing.certs.esm')} (ESM)`, link: '/certifications/esm' },
-          { name: `${this.lang.t('landing.certs.psm')} (ESM-P)`, link: '/certifications/psm' },
-          { name: `${this.lang.t('landing.certs.asm')} (ESM-A)`, link: '/certifications/asm' },
+          { name: `${this.lang.t('landing.certs.psm')} (ESM-P)`, link: '/certifications/esm-p' },
+          { name: `${this.lang.t('landing.certs.asm')} (ESM-A)`, link: '/certifications/esm-a' },
         ],
       },
       {
         role: this.lang.t('landing.marketStats.table.poRole'),
         cells: [
           { name: `${this.lang.t('landing.certs.epo')} (EPO)`, link: '/certifications/epo' },
-          { name: `${this.lang.t('landing.certs.ppo')} (EPO-P)`, link: '/certifications/ppo' },
-          { name: `${this.lang.t('landing.certs.apo')} (EPO-A)`, link: '/certifications/apo' },
+          { name: `${this.lang.t('landing.certs.ppo')} (EPO-P)`, link: '/certifications/epo-p' },
+          { name: `${this.lang.t('landing.certs.apo')} (EPO-A)`, link: '/certifications/epo-a' },
         ],
       },
       {

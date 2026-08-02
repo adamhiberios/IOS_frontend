@@ -43,9 +43,14 @@ items still believed current:
 - **`/courses` was an orphan route** (no nav entry) — being resolved by the
   in-flight learning-hub dedup (see [`current-status.md`](./current-status.md));
   confirm on next audit pass.
-- **Six `/certifications/{psm,asm,ppo,apo,psf,asf}` dead links** on the landing
-  page's certification-comparison grid (wrong slugs — should be
-  `esm-p`/`esm-a`/`epo-p`/`epo-a`; `psf`/`asf` have no page at all).
+- ~~Six `/certifications/{psm,asm,ppo,apo,psf,asf}` dead links on the landing
+  page's certification-comparison grid~~ — ✅ fixed 2026-08-03. The 4 wrong
+  slugs (`psm`/`asm`/`ppo`/`apo`) in `market-stats-section.ts#certTableRows`
+  now point to the real routes (`esm-p`/`esm-a`/`epo-p`/`epo-a`). `psf`/`asf`
+  were already non-issues by inspection — that Scrum Facilitator row's
+  practitioner/authority cells render as plain "coming soon" text
+  (`@if (cell.link)` guards the anchor, `link: ''`), not as links, so there
+  was never a dead link there; only the i18n labels exist for future use.
 - **`features/payments` is a dead feature** — checkout/retake/transactions
   data-access exists and works, but no page injects it; there is no
   purchase/enrolment flow in the routed app.
