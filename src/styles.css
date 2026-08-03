@@ -282,6 +282,9 @@
   --color-ios-success-soft: #ddeeb4;
   --color-ios-success-mid: #91c90e;
   --color-ios-success-strong: #3d5406;
+  /** Pale green badge background (Figma "Success/success-50") — the payment
+   * success dialog's checkmark badge. Distinct from `ios-success-soft`. */
+  --color-ios-success-50: #f4fae7;
   --color-warning-50: #fcf9e6;
   --color-warning-300: #eed454;
   --color-ios-warning: oklch(0.72 0.18 75);

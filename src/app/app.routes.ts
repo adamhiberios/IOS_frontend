@@ -69,6 +69,32 @@ export const routes: Routes = [
     title: 'Insights',
   },
   {
+    // Checkout — any authenticated account may buy; the backend recomputes
+    // and authorizes the charge server-side regardless of what the UI shows.
+    path: 'checkout',
+    loadChildren: () => import('@features/payments/payments.routes'),
+    canMatch: [authGuard],
+    title: 'Checkout',
+  },
+  // Stripe redirect targets — the backend hardcodes these exact paths as
+  // `successUrl`/`cancelUrl` on every checkout session
+  // (IOS_Backend `PaymentService.createEnrollmentCheckout` / `createRetakeCheckout`),
+  // so they live at `/payments/*`, not nested under `/checkout`.
+  {
+    path: 'payments/success',
+    loadComponent: () =>
+      import('@features/payments/pages/payment-success.page').then((m) => m.PaymentSuccessPage),
+    canMatch: [authGuard],
+    title: 'Payment successful',
+  },
+  {
+    path: 'payments/cancel',
+    loadComponent: () =>
+      import('@features/payments/pages/payment-cancel.page').then((m) => m.PaymentCancelPage),
+    canMatch: [authGuard],
+    title: 'Payment cancelled',
+  },
+  {
     path: 'forbidden',
     loadComponent: () => import('@features/forbidden/forbidden.page').then((m) => m.ForbiddenPage),
     title: 'Access denied',

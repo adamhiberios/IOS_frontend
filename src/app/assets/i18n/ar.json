@@ -2046,7 +2046,50 @@
   },
   "payments": {
     "checkoutError": "تعذّر بدء عملية الدفع. يُرجى المحاولة مرة أخرى.",
-    "transactionsError": "تعذّر تحميل معاملاتك. يُرجى المحاولة مرة أخرى."
+    "transactionsError": "تعذّر تحميل معاملاتك. يُرجى المحاولة مرة أخرى.",
+    "checkout": {
+      "title": "إتمام الدفع",
+      "emptyOrder": "لا يوجد شيء لإتمام شرائه حاليًا.",
+      "selectMethodLabel": "اختر طريقة الدفع",
+      "selectMethodPlaceholder": "اختر طريقة الدفع الخاصة بك",
+      "method": {
+        "visa": "فيزا",
+        "mastercard": "ماستركارد",
+        "amex": "أمريكان إكسبريس"
+      },
+      "promoLabel": "رمز الخصم (اختياري)",
+      "promoPlaceholder": "أدخل رمز الخصم",
+      "cardholderLabel": "اسم حامل البطاقة",
+      "cardholderPlaceholder": "أدخل الاسم كما هو مكتوب على البطاقة",
+      "cardNumberLabel": "رقم البطاقة",
+      "cardNumberPlaceholder": "أدخل رقم البطاقة",
+      "expiryLabel": "تاريخ الانتهاء",
+      "cvvLabel": "رمز التحقق CVV",
+      "cvvPlaceholder": "أدخل رمز CVV",
+      "acceptedMethods": "طرق الدفع الآمنة المقبولة",
+      "orderSummary": "ملخص الطلب",
+      "itemsAmount": "قيمة المنتجات",
+      "tax": "الضريبة",
+      "discount": "الخصم",
+      "total": "الإجمالي",
+      "completePayment": "إتمام الدفع",
+      "successDialog": {
+        "title": "لقد انضممت الآن إلى دورة {certTitle}",
+        "body": "يمكنك فتح سلة التسوق الخاصة بك لمتابعة عملية الشراء.",
+        "continueExplore": "متابعة الاستكشاف",
+        "goToDashboard": "حسنًا، الانتقال إلى لوحة التحكم"
+      },
+      "success": {
+        "title": "تم الدفع بنجاح",
+        "body": "شكرًا لشرائك. قد يستغرق ظهور ذلك في حسابك بعض الوقت — تحقق من شهاداتي بعد قليل.",
+        "viewCertificates": "الانتقال إلى شهاداتي"
+      },
+      "cancel": {
+        "title": "تم إلغاء الدفع",
+        "body": "تم إلغاء عملية الدفع ولم يتم خصم أي مبلغ. يمكنك المحاولة مرة أخرى في أي وقت.",
+        "backToCertificates": "العودة إلى شهاداتي"
+      }
+    }
   },
   "notifications": {
     "pageTitle": "الإشعارات",

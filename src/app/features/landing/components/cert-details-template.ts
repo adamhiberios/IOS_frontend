@@ -52,8 +52,10 @@ import {
   effect,
   inject,
   input,
+  signal,
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { Router } from '@angular/router';
 import {
   LucideArrowLeft,
   LucideArrowRight,
@@ -319,8 +321,11 @@ export interface CertDetailsConfig {
                   class="inline-flex items-center justify-center gap-3 h-12 sm:h-14 ps-6 pe-4 rounded-xl
                          font-body font-semibold text-[15px] md:text-[16px] lg:text-[18px] leading-[1.4] whitespace-nowrap
                          hover:opacity-90 transition-opacity
+                         disabled:opacity-60 disabled:cursor-not-allowed
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ios-brand-primary/60
                          bg-track-strong text-white"
+                  [disabled]="enrollPending()"
+                  (click)="onEnroll()"
                 >
                   {{ lang.t(cfg().namespace + '.hero.enroll') }}
                   <ios-icon
@@ -663,8 +668,11 @@ export interface CertDetailsConfig {
           class="inline-flex items-center justify-center gap-3 h-14 px-6 rounded-xl
                  font-body font-semibold text-[16px] md:text-[18px] leading-[1.4] whitespace-nowrap
                  hover:opacity-90 transition-opacity
+                 disabled:opacity-60 disabled:cursor-not-allowed
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/60
                  bg-track-soft text-track-text"
+          [disabled]="enrollPending()"
+          (click)="onEnroll()"
         >
           {{ lang.t(cfg().namespace + '.cta.button') }}
           <ios-icon name="arrow-right" class="w-6 h-6 rtl:rotate-180" aria-hidden="true" />
@@ -810,6 +818,10 @@ export class CertDetailsTemplate implements OnDestroy {
 
   private readonly catalogStore = inject(PublicCatalogStore);
   private readonly jsonLd = inject(JsonLdService);
+  private readonly router = inject(Router);
+
+  /** Disables both "Enroll Now" buttons while the catalog lookup is in flight. */
+  protected readonly enrollPending = signal(false);
 
   constructor() {
     // SEO only — page content stays static/authored. Resolves the marketing
@@ -828,6 +840,42 @@ export class CertDetailsTemplate implements OnDestroy {
     const seo = await this.catalogStore.loadSeo(programCode);
     if (seo?.jsonLd) {
       this.jsonLd.set(seo.jsonLd);
+    }
+  }
+
+  /**
+   * "Enroll Now" (hero + bottom CTA) — sends the visitor to `/checkout` with
+   * the item to buy in the query string. `PlaceOrderPage` owns no
+   * cross-feature import into `landing` (CLAUDE.md §5), so this template —
+   * which already injects `PublicCatalogStore` for SEO — is the right place
+   * to resolve the marketing `code` to the real backend certificate (`id`,
+   * `price`, `currency`) before navigating. A cert with no backend match
+   * (catalog not loaded yet, or no live listing) is not sent — nothing is
+   * fabricated; the button simply does nothing, matching the "never invent
+   * a price" rule.
+   */
+  protected async onEnroll(): Promise<void> {
+    if (this.enrollPending()) return;
+    this.enrollPending.set(true);
+    try {
+      await this.catalogStore.load();
+      const cert = this.catalogStore.byCode(this.cfg().code);
+      if (!cert) return;
+
+      const c = this.cfg();
+      await this.router.navigate(['/checkout'], {
+        queryParams: {
+          certId: cert.id,
+          title: c.fullName,
+          code: c.code,
+          subtitle: c.levelLabel,
+          price: cert.price,
+          currency: cert.currency,
+          badge: c.badgeSvgPath,
+        },
+      });
+    } finally {
+      this.enrollPending.set(false);
     }
   }
 }

@@ -2046,7 +2046,50 @@
   },
   "payments": {
     "checkoutError": "Nous n'avons pas pu démarrer le paiement. Veuillez réessayer.",
-    "transactionsError": "Nous n'avons pas pu charger vos transactions. Veuillez réessayer."
+    "transactionsError": "Nous n'avons pas pu charger vos transactions. Veuillez réessayer.",
+    "checkout": {
+      "title": "Finaliser le paiement",
+      "emptyOrder": "Il n'y a rien à commander pour le moment.",
+      "selectMethodLabel": "Sélectionner le mode de paiement",
+      "selectMethodPlaceholder": "Sélectionnez votre mode de paiement",
+      "method": {
+        "visa": "Visa",
+        "mastercard": "Mastercard",
+        "amex": "American Express"
+      },
+      "promoLabel": "Code promo (facultatif)",
+      "promoPlaceholder": "Entrez le code promo",
+      "cardholderLabel": "Nom du titulaire de la carte",
+      "cardholderPlaceholder": "Entrez le nom tel qu'il figure sur la carte",
+      "cardNumberLabel": "Numéro de carte",
+      "cardNumberPlaceholder": "Entrez le numéro de carte",
+      "expiryLabel": "Date d'expiration",
+      "cvvLabel": "CVV",
+      "cvvPlaceholder": "Entrez le numéro CVV",
+      "acceptedMethods": "Moyens de paiement sécurisés acceptés",
+      "orderSummary": "Récapitulatif de la commande",
+      "itemsAmount": "montant des articles",
+      "tax": "Taxe",
+      "discount": "Remise",
+      "total": "Total",
+      "completePayment": "Finaliser le paiement",
+      "successDialog": {
+        "title": "Vous avez rejoint la formation {certTitle}",
+        "body": "Vous pouvez ouvrir votre panier pour poursuivre votre achat.",
+        "continueExplore": "Continuer l'exploration",
+        "goToDashboard": "Ok, aller au tableau de bord"
+      },
+      "success": {
+        "title": "Paiement réussi",
+        "body": "Merci pour votre achat. Cela peut prendre un instant avant d'apparaître sur votre compte — consultez Mes certificats sous peu.",
+        "viewCertificates": "Aller à Mes certificats"
+      },
+      "cancel": {
+        "title": "Paiement annulé",
+        "body": "Votre paiement a été annulé et vous n'avez pas été débité. Vous pouvez réessayer à tout moment.",
+        "backToCertificates": "Retour à Mes certificats"
+      }
+    }
   },
   "notifications": {
     "pageTitle": "Notifications",

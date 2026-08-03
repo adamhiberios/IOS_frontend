@@ -2046,7 +2046,50 @@
   },
   "payments": {
     "checkoutError": "We couldn't start the checkout. Please try again.",
-    "transactionsError": "We couldn't load your transactions. Please try again."
+    "transactionsError": "We couldn't load your transactions. Please try again.",
+    "checkout": {
+      "title": "Complete payment",
+      "emptyOrder": "There's nothing to check out yet.",
+      "selectMethodLabel": "Select Payment Method",
+      "selectMethodPlaceholder": "Select your payment method",
+      "method": {
+        "visa": "Visa",
+        "mastercard": "Mastercard",
+        "amex": "American Express"
+      },
+      "promoLabel": "Promotion Code (Optional)",
+      "promoPlaceholder": "Enter promo code",
+      "cardholderLabel": "Cardholder name",
+      "cardholderPlaceholder": "Enter name as on card",
+      "cardNumberLabel": "Card number",
+      "cardNumberPlaceholder": "Enter Card number",
+      "expiryLabel": "Expiration date",
+      "cvvLabel": "CVV",
+      "cvvPlaceholder": "Enter CVV number",
+      "acceptedMethods": "Accepted secure payment methods",
+      "orderSummary": "Order summary",
+      "itemsAmount": "items amounts",
+      "tax": "Tax",
+      "discount": "Discount",
+      "total": "Total",
+      "completePayment": "Complete Payment",
+      "successDialog": {
+        "title": "You now joined the {certTitle} course",
+        "body": "You can open your shopping cart to continue your purchase.",
+        "continueExplore": "Continue explore",
+        "goToDashboard": "Ok, Go to dashboard"
+      },
+      "success": {
+        "title": "Payment successful",
+        "body": "Thanks for your purchase. It may take a moment to reflect in your account — check My Certificates shortly.",
+        "viewCertificates": "Go to My Certificates"
+      },
+      "cancel": {
+        "title": "Payment cancelled",
+        "body": "Your payment was cancelled and you were not charged. You can try again any time.",
+        "backToCertificates": "Back to My Certificates"
+      }
+    }
   },
   "notifications": {
     "pageTitle": "Notifications",

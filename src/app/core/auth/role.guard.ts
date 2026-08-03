@@ -2,6 +2,7 @@ import { type CanMatchFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 
 import { AuthStore } from './auth.store';
+import { buildReturnUrl } from './auth.guard';
 
 /**
  * Admin staff roles — mirror the backend `AdminRole` enum exactly
@@ -44,7 +45,7 @@ export function roleGuard(allowed: readonly AppRole[]): CanMatchFn {
     const router = inject(Router);
 
     if (!auth.isAuthenticated()) {
-      const returnUrl = '/' + segments.map((s) => s.path).join('/');
+      const returnUrl = buildReturnUrl(router, segments);
       return router.createUrlTree(['/auth/login'], { queryParams: { returnUrl } });
     }
 
