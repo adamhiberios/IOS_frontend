@@ -103,11 +103,12 @@ replaced with real data.
 
 ## Other structural observations
 
-- **`features/payments` is a dead feature.** Data-access is fully built
-  (`POST /payments/checkout`, `/retake`, `GET /payments/transactions`,
-  `PaymentsStore`) but **no page injects it** — there is no
-  purchase/enrolment flow in the routed app. `features/catalog/` is an
-  empty directory.
+- ~~`features/payments` is a dead feature~~ — resolved 2026-08-03: `/checkout`
+  (place-order page), `/payments/success`, `/payments/cancel`, and the
+  `/certifications/*` "Enroll Now" CTAs now drive `checkout` through
+  `PaymentsStore`. `retake` still has no UI entry point. See
+  [`../../status/current-status.md`](../../status/current-status.md).
+  `features/catalog/` is still an empty directory.
 - **`features/landing/data-access/catalog.api.ts`** was written but
   unconsumed at audit time — the marketing cert pages used static config
   instead. (Partially changed since — see [`landing-marketing.md`](./landing-marketing.md).)

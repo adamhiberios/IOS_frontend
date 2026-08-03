@@ -173,6 +173,46 @@ until this is fixed.
 **Backend ask:** add `attemptId` to `ScoreResult` (both submit and
 late-submit) — additive, the row is already in hand at `scoreAndPersist`.
 
+## BE-I-33 — Stripe `successUrl`/`cancelUrl` point at the API's own origin on `api-dev`
+
+**Severity: Medium (env/deploy config, not application code).** Blocks
+end-to-end verification of the *paid* checkout path on `api-dev`; the `$0`
+path and everything up to the Stripe redirect are unaffected.
+
+`PaymentService` builds the Stripe redirect targets from config, not a
+hardcoded literal:
+
+```ts
+this.frontendBaseUrl = (
+  this.config.get<string>('FRONTEND_BASE_URL') ||
+  this.config.getOrThrow<string>('APP_BASE_URL')
+).replace(/\/+$/, '');
+...
+successUrl: `${this.frontendBaseUrl}/payments/success?session_id={CHECKOUT_SESSION_ID}`,
+cancelUrl: `${this.frontendBaseUrl}/payments/cancel`,
+```
+
+Locally this resolves correctly (`.env`: `APP_BASE_URL=http://localhost:4200`,
+the Angular dev server's own origin). On the `api-dev` deployment it does
+not — confirmed 2026-08-03 by a real `POST /payments/checkout` call that
+returned a genuine Stripe Checkout session; completing payment redirected
+the browser to `https://api-dev.instituteofscrum.org/payments/success?session_id=…`
+— the **API's own host**, not wherever the Angular app is actually served —
+which 404'd there (`Cannot GET /payments/success?...`).
+
+**Expected fix:** set `FRONTEND_BASE_URL` (preferred over relying on
+`APP_BASE_URL`'s fallback) on the `api-dev` environment to the actual
+deployed frontend origin.
+
+**Frontend impact:** none once fixed — `/payments/success` and
+`/payments/cancel` are already routed
+(`features/payments/pages/payment-success.page.ts` /
+`payment-cancel.page.ts`, added 2026-08-03) and will catch the redirect
+correctly as soon as it points at the right host. Until then, the paid
+(non-`$0`) checkout path cannot be verified past the Stripe redirect on
+`api-dev` — the request/response contract up to that point (session
+creation, `checkoutUrl`) is already confirmed correct by the same test.
+
 ## Behavioural notes (not stoppers — the frontend already adapts)
 
 - **BE-I-01 / BE-I-12** — no global response envelope; validation errors

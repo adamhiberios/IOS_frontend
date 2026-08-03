@@ -151,9 +151,13 @@ Admin (`@UseGuards(RolesGuard)`):
 | GET | `/payments/transactions` | cursor-paginated own transactions |
 | POST | `/payments/webhook` | Public, `@SkipThrottle` — Stripe HMAC-verified, `{ received: true }` |
 
-**No frontend page currently injects `PaymentsStore`** — data-access is built
-and works, but there's no purchase/enrolment flow wired into the routed app
-(dead feature, see [`../pages/cross-cutting-findings.md`](../pages/cross-cutting-findings.md)).
+**Wired 2026-08-03**: `/checkout` (place-order page), `/payments/success`,
+`/payments/cancel`, and the `/certifications/*` "Enroll Now" CTAs now drive
+`checkout` through `PaymentsStore`. `retake` still has no UI entry point.
+See [`../../status/current-status.md`](../../status/current-status.md) and
+[`open-issues.md`](./open-issues.md) (**BE-I-33** — the `successUrl`/
+`cancelUrl` host misconfig on `api-dev` that's still blocking end-to-end
+verification of the paid path).
 
 ## Certificates — public `@Controller('verify')`, admin `@Controller('admin/certs')`
 

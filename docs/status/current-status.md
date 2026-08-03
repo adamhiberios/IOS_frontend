@@ -27,6 +27,68 @@ before building or reviewing any feature.
 
 ## What's in flight right now (uncommitted / awaiting review, as of 2026-08-03)
 
+- **`features/payments` — checkout flow built and wired** — 🔵 built,
+  uncommitted, **partially runtime-verified against api-dev**. Closes the
+  "dead feature" gap flagged in `known-issues.md` /
+  `../reference/backend/endpoints.md` /
+  `../reference/pages/cross-cutting-findings.md` (all three updated). New:
+  `features/payments/pages/place-order.page.ts` (pixel-matched to Figma
+  node `13044:11509`, route `/checkout`, guarded by `authGuard`, reads
+  `certId`/`title`/`code`/`price`/`currency`/`badge` from query params —
+  nothing fabricated; missing params render an empty-cart notice instead of
+  a fake order) and `components/payment-success-dialog.ts` (Figma node
+  `13049:12413`, shown for a `$0` charge — `checkout()` resolves `enrolled`
+  with no Stripe redirect). Order-summary panel is themed via the existing
+  `.cert-track-*` blue/green/brown tokens (new
+  `features/payments/utils/track-theme.ts`, a pure `programCode → class`
+  mapper — no cross-feature import needed). Payment-method field uses
+  `ios-select` (not a native `<select>`), bound to the reactive form.
+  `CertDetailsTemplate`'s two "Enroll Now" buttons (`components/cert-details-template.ts`,
+  shared by all 7 `/certifications/*` pages) now resolve the marketing
+  `code` to the real backend cert via the already-injected
+  `PublicCatalogStore` and `router.navigate(['/checkout'], { queryParams })`
+  — a cert with no backend match navigates nowhere rather than sending a
+  fabricated price. **PCI decision:** the Cardholder name/Card
+  number/Expiration/CVV fields are rendered to match Figma but their values
+  are never read or sent anywhere — `PaymentsStore.checkout()` only ever
+  gets `certId` + `promoCode`; a paid charge redirects to Stripe's own
+  hosted Checkout (`checkoutUrl`), a `$0` charge completes immediately. Also
+  fixed along the way: `authGuard`/`roleGuard` were dropping query params
+  from `returnUrl` (built from `UrlSegment[]`, path-only) — a user bounced
+  through login while enrolling landed back on `/checkout` with no
+  `certId`. Now built from `router.getCurrentNavigation().extractedUrl`
+  (new shared `buildReturnUrl()` helper in `core/auth/auth.guard.ts`).
+  Added `/payments/success` and `/payments/cancel`
+  (`features/payments/pages/payment-success.page.ts` /
+  `payment-cancel.page.ts`) — the backend hardcodes these exact paths as
+  Stripe's `successUrl`/`cancelUrl`
+  (`IOS_Backend/src/modules/payment/payment.service.ts`); without them every
+  *paid* checkout 404'd after a successful Stripe payment. Neither page
+  claims the charge is reconciled (no `GET /payments/session/:id` endpoint
+  exists — only the webhook flips `pending → completed`); copy is hedged
+  and the CTA points at My Certificates. i18n: all new strings added to
+  `en`/`ar`/`fr` under `payments.checkout.*`. typecheck/lint/Prettier clean,
+  `ng build --configuration=development` compiles clean (97 lazy chunks, +3
+  for the two new pages).
+  **Runtime evidence (2026-08-03, api-dev):** a real `Complete Payment`
+  click against api-dev returned a genuine Stripe Checkout session and
+  redirected the browser — confirms the `certId`/`promoCode` request
+  contract and the `PaidCheckoutDto`/`FreeEnrollmentDto` response mapping
+  are correct end-to-end. What it also caught: `api-dev`'s Stripe
+  `successUrl` pointed at `https://api-dev.instituteofscrum.org/payments/success`
+  — the **API's own origin**, not the Angular app's — so the post-payment
+  redirect 404'd on the API server, not on this app. That's an environment
+  variable misconfigured on the `api-dev` deploy (`FRONTEND_BASE_URL` /
+  `APP_BASE_URL`), not a frontend bug and not fixable from here — filed as
+  **BE-I-33** in
+  [`../reference/backend/open-issues.md`](../reference/backend/open-issues.md).
+  The `/payments/success`/`/payments/cancel` routes themselves are correct
+  and need no further frontend change once that variable is corrected.
+  Not otherwise runtime-tested (the `$0`/free-enrollment path, the
+  cardholder-name-mismatch-with-Stripe-hosted-fields UX, and the
+  success/cancel pages themselves are unverified against api-dev — blocked
+  on BE-I-33).
+
 - **Change-password success dialog restyled** — 🔵 built, uncommitted, at the
   user's explicit direction (pasted the target markup). `ProfilePasswordUpdatedDialog`
   (shown on `/dashboard/profile/change-password` when
@@ -148,6 +210,15 @@ Per the plan-of-record (updated 2026-07-27, still current):
 2. **Blog E2E re-test** (BE-I-21 fixed by backend `30bfff5`) — ⏸ still needs a **live** run (create → edit → translations → publish → public-read against api-dev); blocked on test credentials, not available in-session. Code-reviewed 2026-08-03 instead: `admin/blog.api.ts`'s `create`/`publish`/`translations` calls match the fixed contract (`BE-I-21` resolution notes: response now built from the entity already in hand, no read-after-write race); no FE code change needed, confirmed still true on current HEAD.
 3. **`/dashboard/certificates` legacy fixture cleanup** — ✅ verified 2026-08-03: no `ESM_P_*` fixture data remains in `certificates.store.ts` (only historical doc-comments referencing the old names); the three sourceless Overview tiles (average mock score, total learning time, trend delta) are fully removed from `cert-detail.page.ts`, not stubbed. Nothing further to do here.
 4. **`complete-account` wizard** — still a stub, confirmed 2026-08-03: `onSubmit()` just navigates to `/dashboard`, no API call wired. Still correctly blocked by **BE-I-25** (no DOB field) — see [`known-issues.md`](./known-issues.md). Not worked around.
+5. **Escalate BE-I-33** — `api-dev`'s Stripe `successUrl`/`cancelUrl`
+   (`FRONTEND_BASE_URL`/`APP_BASE_URL`) resolve to the API's own origin, not
+   the Angular app's, so the paid-checkout redirect 404s on the API server.
+   Not fixable from this repo (env var on the `api-dev` deploy) — needs
+   whoever owns that environment's config. Full detail:
+   [`../reference/backend/open-issues.md`](../reference/backend/open-issues.md)
+   (**BE-I-33**).
+   Once fixed, re-run the paid-checkout runtime test (free/`$0` path and the
+   two new success/cancel pages are also still unverified against api-dev).
 
 ## Working rules for new work
 

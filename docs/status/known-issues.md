@@ -28,11 +28,13 @@
 | **BE-I-28** | Draft preview in the admin CMS editor | Public reads are PUBLISHED-only; no tokenized preview route exists. Admin CMS editor can only offer a **structural** preview — must say so, not imply WYSIWYG. |
 | **BE-I-31** | Telling CMS conflict errors apart by RFC-7807 `code` | `SLUG_LOCKED` / `SYSTEM_PAGE_PROTECTED` / `SECTION_NOT_IN_PAGE` are plain exceptions with the sentinel only as a message prefix — all three flatten to a generic `code`. Workaround: substring-match `detail` in one isolated helper (`cms.store.ts#classifyFailure`, from the rolled-back session — reuse it, don't reinvent). Same pattern exists on blog's own `SLUG_LOCKED`. |
 | **BE-I-32** | Linking a student from their exam result straight to their own answer review | `submit`/`late-submit` return no `attemptId`. Shipped workaround: review is reached from the attempt-history list (unambiguous id) instead of the result page. Guessing the newest attempt was rejected — wrong under retakes/concurrent attempts. |
+| **BE-I-33** | Post-payment redirect after a real (paid) Stripe checkout on `api-dev` | Stripe's `successUrl`/`cancelUrl` are built from `api-dev`'s `FRONTEND_BASE_URL`/`APP_BASE_URL`, which is misconfigured to the **API's own origin** instead of the Angular app's — confirmed 2026-08-03 by a real checkout returning a Stripe session that redirected to `https://api-dev.instituteofscrum.org/payments/success` (404, wrong host). Frontend routes `/payments/success` and `/payments/cancel` are built and correct (see `current-status.md`); nothing to fix here once the env var is corrected on that deploy. Env/infra, not application code — not fixable by editing `IOS_Backend/` source. |
 
 **Severity note:** BE-I-25 is the only hard stopper. BE-I-23/24 are shipped
 degraders (real-exam engine works, with documented reduced behaviour).
 BE-I-27/28 cap CMS editor quality but don't block starting CMS work. BE-I-31/32
-are contract hygiene, not stoppers.
+are contract hygiene, not stoppers. BE-I-33 blocks *verifying* the paid
+checkout path end-to-end on `api-dev`, not the code itself.
 
 ## Known frontend gaps / bugs (from the 2026-07-25 static-analysis page audit)
 
@@ -51,9 +53,13 @@ items still believed current:
   practitioner/authority cells render as plain "coming soon" text
   (`@if (cell.link)` guards the anchor, `link: ''`), not as links, so there
   was never a dead link there; only the i18n labels exist for future use.
-- **`features/payments` is a dead feature** — checkout/retake/transactions
-  data-access exists and works, but no page injects it; there is no
-  purchase/enrolment flow in the routed app.
+- ~~`features/payments` is a dead feature~~ — ✅ resolved 2026-08-03. Wired a
+  full checkout flow: `/checkout` (place-order page, Figma-matched),
+  `/payments/success`, `/payments/cancel`, and both "Enroll Now" CTAs on the
+  `/certifications/*` pages. Retake (`PaymentsStore.retake()`) still has no
+  UI entry point — out of scope for this pass, data-access ready when
+  needed. See `current-status.md` for the full write-up and `BE-I-33` above
+  for the one thing still blocking end-to-end runtime verification.
 - **`/dashboard/settings`** — five notification toggles + newsletter email are
   UI-only (bound to nothing; `newsletterEmail` is a hardcoded placeholder
   address). No backend preferences endpoint exists.
