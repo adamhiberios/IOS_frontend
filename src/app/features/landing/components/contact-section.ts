@@ -13,22 +13,44 @@
  *   `${namespace}.heading2`        — coloured span text
  *   `${namespace}.subtitle`        — paragraph beneath the heading
  *   `${namespace}.form.name`
- *   `${namespace}.form.nameError`
+ *   `${namespace}.form.nameError`            — shown when name is empty
+ *   `${namespace}.form.nameMinLengthError`   — shown when name is too short
  *   `${namespace}.form.email`
  *   `${namespace}.form.emailError`
+ *   `${namespace}.form.subject`              — required select label
+ *   `${namespace}.form.subjectPlaceholder`
+ *   `${namespace}.form.subjectError`         — shown when no subject is chosen
  *   `${namespace}.form.message`
- *   `${namespace}.form.messageError`
+ *   `${namespace}.form.messageError`         — shown when message is empty
+ *   `${namespace}.form.messageMinLengthError` — shown when message is too short
  *   `${namespace}.form.submit`
  *   `${namespace}.form.sending`
  *   `${namespace}.form.success`
+ *   `${namespace}.form.error`     — fallback shown when `POST /contact` fails
+ *                                   and the response carries no problem-detail
+ *                                   message (validation/rate-limit errors
+ *                                   surface the backend's own message instead)
+ *
+ * ## Backend
+ * Submits to `POST /contact` (`PublicContactApi`, public, throttled 3/60s by
+ * default). A hidden honeypot field (`company`) is included per the backend
+ * contract — real visitors never see it; a bot that fills it gets a silent
+ * 201 with no email sent. See `docs/reference/backend/cms-blog-contact.md`.
+ *
+ * The Subject dropdown mirrors `ios-contact-page`'s: same 5 categories, same
+ * shared `contact.subjects.*` i18n keys (not namespace-scoped — the options
+ * are generic across every contact form, so they live in one place). The
+ * *submitted* value is the translated label (e.g. "General inquiry"), not the
+ * internal option code (`general`) — the backend field is freeform text with
+ * no enum, and admins reading the inbox need readable copy, not codes.
  *
  * ## Usage
  * ```html
  * <!-- default namespace = 'mockExam.contact' -->
  * <ios-landing-contact-section />
  *
- * <!-- override for another page -->
- * <ios-landing-contact-section namespace="scrumMaster.contact" />
+ * <!-- override for another page, and tag submissions with the CMS slug -->
+ * <ios-landing-contact-section namespace="scrumMaster.contact" pageSlug="about-scrum" />
  * ```
  *
  * ## RTL
@@ -42,12 +64,15 @@ import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angu
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideArrowUpRight, LucideSend } from '@lucide/angular';
 
+import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
-import { IosIcon, provideIcons } from '@ui';
+import { IosIcon, Select, type SelectOption, provideIcons } from '@ui';
+
+import { PublicContactApi } from '../data-access/contact.api';
 
 @Component({
   selector: 'ios-landing-contact-section',
-  imports: [IosIcon, ReactiveFormsModule],
+  imports: [IosIcon, ReactiveFormsModule, Select],
   providers: [provideIcons(LucideArrowUpRight, LucideSend)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -91,6 +116,20 @@ import { IosIcon, provideIcons } from '@ui';
             class="flex flex-col gap-6"
             novalidate
           >
+            <!-- Honeypot — hidden from real visitors, left empty by them. Bots
+                 that autofill every field trip this and the backend silently
+                 drops the submission (still returns the uniform 201). -->
+            <div class="absolute -left-[9999px] top-auto w-px h-px overflow-hidden" aria-hidden="true">
+              <label for="landing-contact-company">Company</label>
+              <input
+                id="landing-contact-company"
+                type="text"
+                formControlName="company"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+
             <!-- Name -->
             <div class="flex flex-col gap-1">
               <label for="landing-contact-name" class="sr-only">
@@ -119,13 +158,13 @@ import { IosIcon, provideIcons } from '@ui';
                   aria-describedby="landing-name-error"
                 />
               </div>
-              @if (contactForm.get('name')?.invalid && contactForm.get('name')?.touched) {
+              @if (nameError(); as error) {
                 <p
                   id="landing-name-error"
                   class="text-ios-danger text-[13px] leading-[1.4] ps-1"
                   aria-live="polite"
                 >
-                  {{ lang.t(namespace() + '.form.nameError') }}
+                  {{ error }}
                 </p>
               }
             </div>
@@ -169,6 +208,17 @@ import { IosIcon, provideIcons } from '@ui';
               }
             </div>
 
+            <!-- Subject -->
+            <ios-select
+              id="landing-contact-subject"
+              [label]="''"
+              [options]="subjectOptions"
+              [placeholder]="lang.t(namespace() + '.form.subjectPlaceholder')"
+              [control]="contactForm.controls.subject"
+              [required]="true"
+              [errorText]="lang.t(namespace() + '.form.subjectError')"
+            />
+
             <!-- Message -->
             <div class="flex flex-col gap-1">
               <label for="landing-contact-message" class="sr-only">
@@ -196,13 +246,13 @@ import { IosIcon, provideIcons } from '@ui';
                   aria-describedby="landing-message-error"
                 ></textarea>
               </div>
-              @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+              @if (messageError(); as error) {
                 <p
                   id="landing-message-error"
                   class="text-ios-danger text-[13px] leading-[1.4] ps-1"
                   aria-live="polite"
                 >
-                  {{ lang.t(namespace() + '.form.messageError') }}
+                  {{ error }}
                 </p>
               }
             </div>
@@ -238,6 +288,17 @@ import { IosIcon, provideIcons } from '@ui';
               {{ lang.t(namespace() + '.form.success') }}
             </p>
           }
+
+          <!-- Error message -->
+          @if (errorMessage(); as error) {
+            <p
+              class="text-center font-body font-semibold text-[15px] text-ios-danger"
+              aria-live="assertive"
+              role="alert"
+            >
+              {{ error }}
+            </p>
+          }
         </div>
       </div>
     </section>
@@ -251,31 +312,110 @@ export class LandingContactSection {
    */
   readonly namespace = input<string>('mockExam.contact');
 
+  /**
+   * Slug of the CMS page this section is embedded on. Sent as `pageSlug` so
+   * the backend can resolve a per-page recipient override. Optional —
+   * omitted when the host page has no CMS slug.
+   */
+  readonly pageSlug = input<string | undefined>(undefined);
+
   private readonly fb = inject(NonNullableFormBuilder);
+  private readonly contactApi = inject(PublicContactApi);
   protected readonly lang = inject(LanguageService);
 
   protected readonly submitting = signal(false);
   protected readonly submitted = signal(false);
+  protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly contactForm = this.fb.group({
     name: this.fb.control('', [(c) => Validators.required(c), (c) => Validators.minLength(2)(c)]),
     email: this.fb.control('', [(c) => Validators.required(c), (c) => Validators.email(c)]),
+    subject: this.fb.control('', [(c) => Validators.required(c)]),
     message: this.fb.control('', [
       (c) => Validators.required(c),
       (c) => Validators.minLength(10)(c),
     ]),
+    // Honeypot — real visitors never see or fill this (see template).
+    company: this.fb.control(''),
   });
+
+  /**
+   * Same 5 categories as `ios-contact-page`, sharing the ungated
+   * `contact.subjects.*` i18n keys rather than namespacing them per page —
+   * the options are generic across every contact form on the site.
+   */
+  protected readonly subjectOptions: SelectOption[] = [
+    { value: 'general', label: this.lang.t('contact.subjects.general') },
+    { value: 'certifications', label: this.lang.t('contact.subjects.certifications') },
+    { value: 'support', label: this.lang.t('contact.subjects.support') },
+    { value: 'partnership', label: this.lang.t('contact.subjects.partnership') },
+    { value: 'other', label: this.lang.t('contact.subjects.other') },
+  ];
+
+  /**
+   * `name` fails `required` OR `minlength` — each needs its own copy, not the
+   * generic "required" string for both (a value of e.g. "Jo" trips minlength
+   * while satisfying required, so showing the required-error text would be
+   * factually wrong).
+   */
+  protected nameError(): string | null {
+    return this.fieldError('name', 'nameError', 'nameMinLengthError');
+  }
+
+  /** Same required-vs-minlength split as {@link nameError}, for `message`. */
+  protected messageError(): string | null {
+    return this.fieldError('message', 'messageError', 'messageMinLengthError');
+  }
+
+  private fieldError(
+    controlName: 'name' | 'message',
+    requiredKey: string,
+    minLengthKey: string,
+  ): string | null {
+    const control = this.contactForm.get(controlName);
+    if (!control || !control.touched || control.valid) return null;
+    const key = control.errors?.['minlength'] ? minLengthKey : requiredKey;
+    return this.lang.t(`${this.namespace()}.form.${key}`);
+  }
+
+  /**
+   * The backend's `subject` field is freeform text (no enum) — send the
+   * translated label ("General inquiry"), not the internal option code
+   * (`general`), so admins reading the inbox see readable copy.
+   */
+  private subjectLabel(value: string): string {
+    return this.subjectOptions.find((o) => o.value === value)?.label ?? value;
+  }
 
   protected onSubmit(): void {
     this.contactForm.markAllAsTouched();
-    if (this.contactForm.invalid) return;
+    if (this.contactForm.invalid || this.submitting()) return;
 
     this.submitting.set(true);
-    // TODO: wire to ContactApi once backend endpoint is live (see docs/04-api-integration-data-flow.md)
-    setTimeout(() => {
-      this.submitting.set(false);
-      this.submitted.set(true);
-      this.contactForm.reset();
-    }, 1200);
+    this.errorMessage.set(null);
+
+    const { name, email, subject, message, company } = this.contactForm.getRawValue();
+    this.contactApi
+      .submit({
+        name,
+        email,
+        subject: this.subjectLabel(subject),
+        message,
+        company,
+        pageSlug: this.pageSlug(),
+      })
+      .subscribe({
+        next: () => {
+          this.submitting.set(false);
+          this.submitted.set(true);
+          this.contactForm.reset();
+        },
+        error: (err: unknown) => {
+          this.submitting.set(false);
+          this.errorMessage.set(
+            problemDetailMessage(err) ?? this.lang.t(this.namespace() + '.form.error'),
+          );
+        },
+      });
   }
 }

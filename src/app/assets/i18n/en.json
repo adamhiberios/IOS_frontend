@@ -553,7 +553,18 @@
       "subject": "Subject",
       "subjectPlaceholder": "Select a subject",
       "message": "Message",
-      "submit": "Send a message"
+      "submit": "Send a message",
+      "name": "Your Name",
+      "nameError": "Name is required.",
+      "email": "Your Email",
+      "emailError": "A valid email address is required.",
+      "messageError": "Message is required.",
+      "sending": "Sending…",
+      "success": "✓ Thank you! We'll be in touch shortly.",
+      "error": "Something went wrong. Please try again in a moment.",
+      "nameMinLengthError": "Name must be at least 2 characters.",
+      "messageMinLengthError": "Message must be at least 10 characters.",
+      "subjectError": "Please select a subject."
     },
     "subjects": {
       "general": "General inquiry",
@@ -823,7 +834,13 @@
         "success": "✓ Thank you! We'll be in touch shortly.",
         "nameError": "Name is required.",
         "emailError": "A valid email address is required.",
-        "messageError": "Message is required."
+        "messageError": "Message is required.",
+        "error": "Something went wrong. Please try again in a moment.",
+        "nameMinLengthError": "Name must be at least 2 characters.",
+        "messageMinLengthError": "Message must be at least 10 characters.",
+        "subject": "Subject",
+        "subjectError": "Please select a subject.",
+        "subjectPlaceholder": "Select a subject"
       }
     },
     "scrollToTop": "Scroll to top"
@@ -995,7 +1012,13 @@
         "messageError": "This field is required.",
         "submit": "Send Message",
         "sending": "Sending...",
-        "success": "Message Sent!"
+        "success": "Message Sent!",
+        "error": "Something went wrong. Please try again in a moment.",
+        "nameMinLengthError": "Name must be at least 2 characters.",
+        "messageMinLengthError": "Message must be at least 10 characters.",
+        "subject": "Subject",
+        "subjectError": "Please select a subject.",
+        "subjectPlaceholder": "Select a subject"
       }
     }
   },
@@ -1082,7 +1105,13 @@
         "messageError": "This field is required.",
         "submit": "Send Message",
         "sending": "Sending...",
-        "success": "Message Sent!"
+        "success": "Message Sent!",
+        "error": "Something went wrong. Please try again in a moment.",
+        "nameMinLengthError": "Name must be at least 2 characters.",
+        "messageMinLengthError": "Message must be at least 10 characters.",
+        "subject": "Subject",
+        "subjectError": "Please select a subject.",
+        "subjectPlaceholder": "Select a subject"
       }
     }
   },
@@ -1192,7 +1221,13 @@
         "messageError": "This field is required.",
         "submit": "Send Message",
         "sending": "Sending...",
-        "success": "Message Sent!"
+        "success": "Message Sent!",
+        "error": "Something went wrong. Please try again in a moment.",
+        "nameMinLengthError": "Name must be at least 2 characters.",
+        "messageMinLengthError": "Message must be at least 10 characters.",
+        "subject": "Subject",
+        "subjectError": "Please select a subject.",
+        "subjectPlaceholder": "Select a subject"
       }
     }
   },
@@ -1275,7 +1310,13 @@
         "messageError": "This field is required.",
         "submit": "Send Message",
         "sending": "Sending...",
-        "success": "Message Sent!"
+        "success": "Message Sent!",
+        "error": "Something went wrong. Please try again in a moment.",
+        "nameMinLengthError": "Name must be at least 2 characters.",
+        "messageMinLengthError": "Message must be at least 10 characters.",
+        "subject": "Subject",
+        "subjectError": "Please select a subject.",
+        "subjectPlaceholder": "Select a subject"
       }
     }
   },

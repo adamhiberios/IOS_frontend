@@ -553,7 +553,18 @@
       "subject": "Sujet",
       "subjectPlaceholder": "Sélectionnez un sujet",
       "message": "Message",
-      "submit": "Envoyer un message"
+      "submit": "Envoyer un message",
+      "name": "Votre nom",
+      "nameError": "Le nom est requis.",
+      "email": "Votre email",
+      "emailError": "Une adresse email valide est requise.",
+      "messageError": "Le message est requis.",
+      "sending": "Envoi en cours…",
+      "success": "✓ Merci ! Nous vous contacterons bientôt.",
+      "error": "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+      "nameMinLengthError": "Le nom doit contenir au moins 2 caractères.",
+      "messageMinLengthError": "Le message doit contenir au moins 10 caractères.",
+      "subjectError": "Veuillez sélectionner un sujet."
     },
     "subjects": {
       "general": "Demande générale",
@@ -823,7 +834,13 @@
         "success": "✓ Merci ! Nous vous contacterons bientôt.",
         "nameError": "Le nom est requis.",
         "emailError": "Une adresse e-mail valide est requise.",
-        "messageError": "Le message est requis."
+        "messageError": "Le message est requis.",
+        "error": "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+        "nameMinLengthError": "Le nom doit contenir au moins 2 caractères.",
+        "messageMinLengthError": "Le message doit contenir au moins 10 caractères.",
+        "subject": "Sujet",
+        "subjectError": "Veuillez sélectionner un sujet.",
+        "subjectPlaceholder": "Sélectionnez un sujet"
       }
     },
     "scrollToTop": "Retour en haut"
@@ -995,7 +1012,13 @@
         "messageError": "Ce champ est obligatoire.",
         "submit": "Envoyer le message",
         "sending": "Envoi en cours...",
-        "success": "Message envoyé !"
+        "success": "Message envoyé !",
+        "error": "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+        "nameMinLengthError": "Le nom doit contenir au moins 2 caractères.",
+        "messageMinLengthError": "Le message doit contenir au moins 10 caractères.",
+        "subject": "Sujet",
+        "subjectError": "Veuillez sélectionner un sujet.",
+        "subjectPlaceholder": "Sélectionnez un sujet"
       }
     }
   },
@@ -1082,7 +1105,13 @@
         "messageError": "Ce champ est obligatoire.",
         "submit": "Envoyer le message",
         "sending": "Envoi en cours...",
-        "success": "Message envoyé !"
+        "success": "Message envoyé !",
+        "error": "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+        "nameMinLengthError": "Le nom doit contenir au moins 2 caractères.",
+        "messageMinLengthError": "Le message doit contenir au moins 10 caractères.",
+        "subject": "Sujet",
+        "subjectError": "Veuillez sélectionner un sujet.",
+        "subjectPlaceholder": "Sélectionnez un sujet"
       }
     }
   },
@@ -1192,7 +1221,13 @@
         "messageError": "Ce champ est requis.",
         "submit": "Envoyer le message",
         "sending": "Envoi en cours...",
-        "success": "Message envoyé!"
+        "success": "Message envoyé!",
+        "error": "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+        "nameMinLengthError": "Le nom doit contenir au moins 2 caractères.",
+        "messageMinLengthError": "Le message doit contenir au moins 10 caractères.",
+        "subject": "Sujet",
+        "subjectError": "Veuillez sélectionner un sujet.",
+        "subjectPlaceholder": "Sélectionnez un sujet"
       }
     }
   },
@@ -1275,7 +1310,13 @@
         "messageError": "Ce champ est obligatoire.",
         "submit": "Envoyer le message",
         "sending": "Envoi en cours...",
-        "success": "Message envoyé !"
+        "success": "Message envoyé !",
+        "error": "Une erreur s'est produite. Veuillez réessayer dans un instant.",
+        "nameMinLengthError": "Le nom doit contenir au moins 2 caractères.",
+        "messageMinLengthError": "Le message doit contenir au moins 10 caractères.",
+        "subject": "Sujet",
+        "subjectError": "Veuillez sélectionner un sujet.",
+        "subjectPlaceholder": "Sélectionnez un sujet"
       }
     }
   },
