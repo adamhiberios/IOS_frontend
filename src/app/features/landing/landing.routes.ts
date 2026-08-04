@@ -18,6 +18,25 @@ const routes: Routes = [
     title: 'Contact — Institute of Scrum',
   },
   {
+    path: 'about-institute',
+    loadComponent: () =>
+      import('./pages/about-institute.page').then((m) => m.AboutInstitutePage),
+    title: 'About Institute of Scrum — Institute of Scrum',
+  },
+  {
+    path: 'about-agile',
+    loadComponent: () => import('./pages/about-agile.page').then((m) => m.AboutAgilePage),
+    title: 'About Agile — Institute of Scrum',
+  },
+  {
+    path: 'about-scrum',
+    loadComponent: () => import('./pages/about-scrum.page').then((m) => m.AboutScrumPage),
+    title: 'About Scrum — Institute of Scrum',
+  },
+  // ── Superseded "About" destinations — kept routable (in case anything still
+  // links to them) but no longer surfaced from the navbar's About menu; see
+  // `landing-navbar.ts` aboutItems. ──────────────────────────────────────────
+  {
     path: 'about-mock-exam',
     loadComponent: () => import('./pages/about-mock-exam.page').then((m) => m.AboutMockExamPage),
     title: 'About Mock Exam — Institute of Scrum',

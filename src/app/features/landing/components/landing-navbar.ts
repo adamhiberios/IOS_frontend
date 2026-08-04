@@ -1,11 +1,37 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { LucideArrowUpRight, LucideChevronDown, LucideMenu, LucideX } from '@lucide/angular';
+import {
+  LucideArrowUpRight,
+  LucideChevronDown,
+  LucideChevronRight,
+  LucideMenu,
+  LucideX,
+} from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { AuthStore } from '@core/auth';
-import { IosIcon, LanguageSelector, provideIcons } from '@ui';
+import { CertificatesBadge, IosIcon, LanguageSelector, provideIcons } from '@ui';
+import { PublicCatalogStore } from '../data-access/catalog.store';
+import { levelRank, normalizeTrack, TRACK_ORDER } from '../data-access/catalog.mappers';
+import type { PublicCertificate } from '../data-access/catalog.model';
+
+/** One certificate row rendered in the mega-menu (view model, never sent to the API). */
+interface CertMenuItem {
+  id: string;
+  code: string;
+  title: string;
+  badgeImage: string;
+  detailLink: string;
+  level: PublicCertificate['level'];
+}
+
+/** One track column in the mega-menu — omitted entirely when it has no published certs. */
+interface CertMenuGroup {
+  track: string;
+  tabLabel: string;
+  certs: CertMenuItem[];
+}
 
 /**
  * `ios-landing-navbar` — public-facing navbar for the landing page.
@@ -18,14 +44,22 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
  */
 @Component({
   selector: 'ios-landing-navbar',
-  imports: [LanguageSelector, RouterLink, IosIcon, NgOptimizedImage],
-  providers: [provideIcons(LucideArrowUpRight, LucideChevronDown, LucideMenu, LucideX)],
+  imports: [LanguageSelector, RouterLink, IosIcon, NgOptimizedImage, CertificatesBadge],
+  providers: [
+    provideIcons(
+      LucideArrowUpRight,
+      LucideChevronDown,
+      LucideChevronRight,
+      LucideMenu,
+      LucideX,
+    ),
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  // Dismiss the About menu on an outside click or Escape. Both no-op cheaply
-  // while it is already closed.
+  // Dismiss the About / Certifications menus on an outside click or Escape.
+  // Both no-op cheaply while already closed.
   host: {
-    '(document:click)': 'closeAbout()',
-    '(document:keydown.escape)': 'closeAbout()',
+    '(document:click)': 'closeAbout(); closeCert()',
+    '(document:keydown.escape)': 'closeAbout(); closeCert()',
   },
   template: `
     <nav
@@ -53,14 +87,118 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
 
         <!-- Nav links — hidden on mobile, visible on lg+ -->
         <div class="hidden lg:flex items-center gap-1">
-          <a
-            routerLink="/certifications"
-            class="text-center px-4 py-2 rounded-lg
-                   font-heading font-semibold text-[15px]
-                   text-ios-fg-10 hover:bg-ios-surface-strong transition-colors"
-          >
-            {{ lang.t('landing.nav.certifications') }}
-          </a>
+          <!-- Certifications: opens a mega-menu instead of navigating directly -->
+          <div class="relative">
+            <button
+              type="button"
+              (click)="toggleCert($event)"
+              [attr.aria-expanded]="certOpen()"
+              aria-haspopup="true"
+              aria-controls="cert-menu"
+              class="inline-flex items-center gap-1 text-center px-4 py-2 rounded-lg
+                     font-heading font-semibold text-[15px]
+                     text-ios-fg-10 hover:bg-ios-surface-strong transition-colors
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+            >
+              {{ lang.t('landing.nav.certifications') }}
+              <ios-icon
+                name="chevron-down"
+                class="w-4 h-4 transition-transform"
+                [class.rotate-180]="certOpen()"
+                aria-hidden="true"
+              />
+            </button>
+            @if (certOpen()) {
+              <div
+                id="cert-menu"
+                [attr.aria-label]="lang.t('landing.nav.certMenuAriaLabel')"
+                class="absolute z-50 top-full start-0 mt-1 w-[min(920px,calc(100vw-2rem))]
+                       rounded-2xl border border-ios-border-light bg-white shadow-lg
+                       px-8 py-6 flex flex-col gap-6"
+              >
+                <!-- Header -->
+                <div class="flex items-center justify-between">
+                  <p class="font-heading font-bold text-[20px] text-ios-fg-13">
+                    {{ lang.t('landing.nav.certifications') }}
+                  </p>
+                  <a
+                    routerLink="/certifications"
+                    (click)="closeCert()"
+                    class="inline-flex items-center gap-2
+                           font-heading font-semibold text-[15px] text-ios-brand-primary
+                           hover:underline focus-visible:outline-none focus-visible:ring-2
+                           focus-visible:ring-ios-brand-primary/50 rounded-lg"
+                  >
+                    {{ lang.t('landing.nav.certMenu.seeAll') }}
+                    <ios-icon
+                      name="arrow-up-right"
+                      class="w-4 h-4 rtl:rotate-180"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </div>
+
+                <!-- Track columns — one per published track, only rendered if it has certs -->
+                <div class="flex items-start gap-8">
+                  @for (group of certGroups(); track group.track) {
+                    <div class="flex flex-1 flex-col gap-2 min-w-0">
+                      <p class="font-heading font-semibold text-[15px] text-ios-fg-13">
+                        {{ group.tabLabel }}
+                      </p>
+                      <div class="border-t border-ios-border-light"></div>
+                      <div class="flex flex-col gap-3">
+                        @for (cert of group.certs; track cert.id) {
+                          <a
+                            [routerLink]="cert.detailLink"
+                            (click)="closeCert()"
+                            class="flex items-start gap-2 rounded-lg
+                                   hover:bg-ios-surface-strong transition-colors
+                                   focus-visible:outline-none focus-visible:ring-2
+                                   focus-visible:ring-ios-brand-primary/50"
+                          >
+                            <div class="w-[42px] flex-shrink-0">
+                              <ios-certificates-badge
+                                [svgPath]="cert.badgeImage"
+                                [code]="cert.code"
+                                [fullName]="cert.title"
+                              />
+                            </div>
+                            <div class="flex flex-col min-w-0 py-0.5">
+                              <span class="font-heading font-semibold text-[15px] text-ios-fg-13">
+                                {{ cert.code }}
+                              </span>
+                              <span class="text-[13px] text-ios-fg-8 leading-snug truncate">
+                                {{ cert.title }}
+                              </span>
+                            </div>
+                            <ios-icon
+                              name="chevron-right"
+                              class="w-5 h-5 flex-shrink-0 text-ios-fg-7 rtl:rotate-180 ms-auto"
+                              aria-hidden="true"
+                            />
+                          </a>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <div class="border-t border-ios-border-light"></div>
+
+                <a
+                  routerLink="/certifications"
+                  (click)="closeCert()"
+                  class="inline-flex items-center gap-2
+                         font-heading font-semibold text-[15px] text-ios-brand-primary
+                         hover:underline focus-visible:outline-none focus-visible:ring-2
+                         focus-visible:ring-ios-brand-primary/50 rounded-lg"
+                >
+                  {{ lang.t('landing.nav.certMenu.verify') }}
+                  <ios-icon name="arrow-up-right" class="w-4 h-4 rtl:rotate-180" aria-hidden="true" />
+                </a>
+              </div>
+            }
+          </div>
           <!-- About: a menu of links, not a destination of its own -->
           <div class="relative">
             <button
@@ -187,15 +325,56 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
         <div
           class="lg:hidden border-t border-ios-border-light px-6 md:px-16 pb-6 pt-4 flex flex-col gap-2"
         >
-          <a
-            routerLink="/certifications"
-            (click)="closeMobileMenu()"
-            class="w-full text-start px-4 py-3 rounded-lg
+          <!-- Certifications expands in place, same pattern as About below -->
+          <button
+            type="button"
+            (click)="toggleCert($event)"
+            [attr.aria-expanded]="certOpen()"
+            aria-controls="cert-menu-mobile"
+            class="w-full flex items-center justify-between text-start px-4 py-3 rounded-lg
                    font-heading font-semibold text-[15px]
-                   text-ios-fg-10 hover:bg-ios-surface-strong transition-colors"
+                   text-ios-fg-10 hover:bg-ios-surface-strong transition-colors
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
           >
             {{ lang.t('landing.nav.certifications') }}
-          </a>
+            <ios-icon
+              name="chevron-down"
+              class="w-4 h-4 transition-transform"
+              [class.rotate-180]="certOpen()"
+              aria-hidden="true"
+            />
+          </button>
+          @if (certOpen()) {
+            <div id="cert-menu-mobile" class="flex flex-col gap-3 ps-4">
+              <a
+                routerLink="/certifications"
+                (click)="closeMobileMenu()"
+                class="w-full text-start px-4 py-2 rounded-lg
+                       font-heading font-semibold text-[14px] text-ios-brand-primary
+                       hover:bg-ios-surface-strong transition-colors"
+              >
+                {{ lang.t('landing.nav.certMenu.seeAll') }}
+              </a>
+              @for (group of certGroups(); track group.track) {
+                <div class="flex flex-col gap-1">
+                  <p class="px-4 font-heading font-semibold text-[13px] text-ios-fg-mid">
+                    {{ group.tabLabel }}
+                  </p>
+                  @for (cert of group.certs; track cert.id) {
+                    <a
+                      [routerLink]="cert.detailLink"
+                      (click)="closeMobileMenu()"
+                      class="w-full text-start px-4 py-2 rounded-lg
+                             font-heading font-medium text-[14px]
+                             text-ios-fg-8 hover:bg-ios-surface-strong transition-colors"
+                    >
+                      {{ cert.code }} — {{ cert.title }}
+                    </a>
+                  }
+                </div>
+              }
+            </div>
+          }
           <!-- About expands in place rather than opening an overlay on top of
                a menu that is already an overlay -->
           <button
@@ -288,7 +467,11 @@ import { IosIcon, LanguageSelector, provideIcons } from '@ui';
 export class LandingNavbar {
   protected readonly lang = inject(LanguageService);
   protected readonly auth = inject(AuthStore);
+  private readonly catalogStore = inject(PublicCatalogStore);
   protected readonly mobileOpen = signal(false);
+
+  /** Generic placeholder used when the backend has no `badgeImageUrl` set. */
+  private static readonly FALLBACK_BADGE_IMAGE = '/assets/icons/certificate_budge.svg';
 
   /**
    * Shared by the desktop popover and the mobile in-place expansion — the two
@@ -298,14 +481,84 @@ export class LandingNavbar {
   protected readonly aboutOpen = signal(false);
 
   /**
+   * Same sharing rule as {@link aboutOpen} — one signal drives both the
+   * desktop mega-menu and the mobile in-place expansion.
+   */
+  protected readonly certOpen = signal(false);
+
+  constructor() {
+    // The mega-menu renders nothing until the catalogue resolves, so there is
+    // no lazier moment to ask for it. `load()` is idempotent and shared with
+    // `CertLevelsSection`, which also calls it — the store dedupes the fetch.
+    void this.catalogStore.load();
+  }
+
+  /**
+   * Certifications mega-menu columns — one per recognised track that has at
+   * least one published certificate, in product order (Scrum Master →
+   * Product Owner → Scrum Facilitator). Sourced entirely from
+   * `PublicCatalogStore`; a track with no certs yet is simply omitted.
+   */
+  protected readonly certGroups = computed<CertMenuGroup[]>(() => {
+    const byTrack = new Map<string, CertMenuItem[]>();
+
+    for (const cert of this.catalogStore.items()) {
+      const known = normalizeTrack(cert.track);
+      if (!known) continue; // unrecognised/untracked certs don't appear in the mega-menu
+      const list = byTrack.get(known) ?? [];
+      list.push({
+        id: cert.id,
+        code: cert.programCode,
+        title: cert.title,
+        badgeImage: cert.badgeImageUrl || LandingNavbar.FALLBACK_BADGE_IMAGE,
+        detailLink: `/certifications/${cert.programCode.toLowerCase()}`,
+        level: cert.level,
+      });
+      byTrack.set(known, list);
+    }
+
+    return TRACK_ORDER.filter((track) => byTrack.has(track)).map((track) => ({
+      track,
+      tabLabel: this.lang.t(`landing.levels.tracks.${track}.tabLabel`),
+      certs: [...byTrack.get(track)!].sort(
+        (a, b) => levelRank(a.level) - levelRank(b.level) || a.code.localeCompare(b.code),
+      ),
+    }));
+  });
+
+  /**
+   * Stops propagation so the document-level dismiss handler doesn't close the
+   * menu in the same click that opened it.
+   */
+  protected toggleCert(event: Event): void {
+    event.stopPropagation();
+    this.aboutOpen.set(false);
+    this.certOpen.update((open) => !open);
+  }
+
+  protected closeCert(): void {
+    if (this.certOpen()) this.certOpen.set(false);
+  }
+
+  /**
    * The "About" destinations. Routes are structural constants; labels resolve
    * through `lang.t()` so they stay locale-reactive.
+   *
+   * Superseded 2026-08-05 by three broader pages (Institute / Agile / Scrum).
+   * The old routes/pages still exist (`about-mock-exam`, `about-scrum-master`,
+   * `about-product-owner`, `about-scrum-facilitator`) — only this menu's
+   * entries changed. Left commented rather than deleted in case of rollback.
    */
+  // protected readonly aboutItems = [
+  //   { path: '/about-mock-exam', labelKey: 'landing.nav.aboutItems.mockExam' },
+  //   { path: '/about-scrum-master', labelKey: 'landing.nav.aboutItems.scrumMaster' },
+  //   { path: '/about-product-owner', labelKey: 'landing.nav.aboutItems.productOwner' },
+  //   { path: '/about-scrum-facilitator', labelKey: 'landing.nav.aboutItems.scrumFacilitator' },
+  // ] as const;
   protected readonly aboutItems = [
-    { path: '/about-mock-exam', labelKey: 'landing.nav.aboutItems.mockExam' },
-    { path: '/about-scrum-master', labelKey: 'landing.nav.aboutItems.scrumMaster' },
-    { path: '/about-product-owner', labelKey: 'landing.nav.aboutItems.productOwner' },
-    { path: '/about-scrum-facilitator', labelKey: 'landing.nav.aboutItems.scrumFacilitator' },
+    { path: '/about-institute', labelKey: 'landing.nav.aboutItems.institute' },
+    { path: '/about-agile', labelKey: 'landing.nav.aboutItems.agile' },
+    { path: '/about-scrum', labelKey: 'landing.nav.aboutItems.scrum' },
   ] as const;
 
   /**
@@ -314,6 +567,7 @@ export class LandingNavbar {
    */
   protected toggleAbout(event: Event): void {
     event.stopPropagation();
+    this.certOpen.set(false);
     this.aboutOpen.update((open) => !open);
   }
 
@@ -321,9 +575,10 @@ export class LandingNavbar {
     if (this.aboutOpen()) this.aboutOpen.set(false);
   }
 
-  /** Navigating from the mobile sheet dismisses the sheet and the submenu. */
+  /** Navigating from the mobile sheet dismisses the sheet and any open submenu. */
   protected closeMobileMenu(): void {
     this.aboutOpen.set(false);
+    this.certOpen.set(false);
     this.mobileOpen.set(false);
   }
 }

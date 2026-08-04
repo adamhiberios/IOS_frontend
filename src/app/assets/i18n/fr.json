@@ -216,7 +216,7 @@
       "headline": "La Certification Scrum",
       "headlineHighlight": "Qui Prouve Votre Expertise",
       "subtext": "Soutenues par l'Institute of Scrum, nos accréditations établissent un standard plus élevé — reconnaissant les professionnels qui obtiennent des résultats concrets et se distinguent par leurs compétences, leur jugement et leur impact.",
-      "source": "Les certifications approuvées exigent plus de 20 heures d'apprentissage structuré et un examen rigoureux de 45 questions — parce que votre diplôme doit prouver ce que vous savez faire.",
+      "source": "Nos certifications Scrum offrent un apprentissage ciblé et à fort impact à un tarif réellement abordable — parce que le chemin vers votre prochain rôle doit être clair, réalisable et à votre portée.",
       "cohortLabel": "La prochaine cohorte commence",
       "cohortDate": "2 juin 2026",
       "graduatesCount": "12 000+",
@@ -260,21 +260,21 @@
       "tracks": {
         "scrumMaster": {
           "tabLabel": "Scrum Master",
-          "description": "Facilitez les événements Scrum, levez les obstacles et guidez votre équipe vers des résultats constants. Nos certifications Scrum Master progressent des compétences fondamentales de facilitation jusqu'au coaching expert et à la transformation organisationnelle.",
+          "description": "Dirigez des équipes grâce au cadre Scrum avec un leadership de service, une maîtrise de la facilitation et une amélioration continue.",
           "explorePath": "Explorer le parcours Scrum Master",
-          "audienceDesc": "Pour les professionnels dans le rôle de Scrum Master — des débutants aux coachs Agile expérimentés qui pilotent le changement à l'échelle de l'entreprise."
+          "audienceDesc": "Dirigez des équipes grâce au cadre Scrum avec un leadership de service, une maîtrise de la facilitation et une amélioration continue."
         },
         "productOwner": {
           "tabLabel": "Product Owner",
-          "description": "Portez la vision produit, priorisez le backlog et maximisez la valeur pour vos parties prenantes. Nos certifications Product Owner développent les compétences décisionnelles et la pensée stratégique que votre rôle exige à chaque niveau.",
+          "description": "Maximisez la valeur produit grâce à une vision stratégique, une maîtrise du backlog et une collaboration avec les parties prenantes dans le cadre Scrum.",
           "explorePath": "Explorer le parcours Product Owner",
-          "audienceDesc": "Pour les professionnels responsables de la vision produit et de la gestion du backlog — des nouveaux entrants aux stratèges seniors qui façonnent la direction à long terme."
+          "audienceDesc": "Les chefs de produit, les analystes métier, les responsables produit et toute personne chargée de définir ce qu'une équipe Scrum construit."
         },
         "scrumFacilitator": {
           "tabLabel": "Scrum Facilitator",
-          "description": "Concevez et animez des ateliers collaboratifs puissants qui favorisent l'alignement et libèrent le potentiel des équipes. Nos certifications Scrum Facilitator bâtissent une expertise spécialisée en facilitation structurée et en engagement organisationnel.",
+          "description": "Concevez et animez des sessions collaboratives puissantes qui aident les équipes Scrum à obtenir de meilleurs résultats ensemble.",
           "explorePath": "Explorer le parcours Scrum Facilitator",
-          "audienceDesc": "Pour les professionnels qui conçoivent et animent des ateliers, rétrospectives et sessions collaboratives — des nouveaux facilitateurs aux agents de changement experts."
+          "audienceDesc": "Les chefs de produit, les analystes métier, les responsables produit et toute personne chargée de définir ce qu'une équipe Scrum construit."
         },
         "other": {
           "description": "Certifications actuellement publiées dans notre catalogue.",
@@ -483,7 +483,15 @@
         "mockExam": "À propos de l'examen blanc",
         "scrumMaster": "À propos du Scrum Master",
         "productOwner": "À propos du Product Owner",
-        "scrumFacilitator": "À propos du Scrum Facilitator"
+        "scrumFacilitator": "À propos du Scrum Facilitator",
+        "institute": "À propos de l'Institute of Scrum",
+        "agile": "À propos de l'Agilité",
+        "scrum": "À propos de Scrum"
+      },
+      "certMenuAriaLabel": "Menu des certifications",
+      "certMenu": {
+        "seeAll": "Voir toutes les certifications",
+        "verify": "Vérifier un certificat"
       }
     },
     "footer": {
@@ -742,6 +750,30 @@
       "exitDialogBody": "Êtes-vous sûr de vouloir annuler l'examen et partir ? Cet examen sera noté en fonction des points que vous avez obtenus jusqu'à présent."
     },
     "allCertifications": "Toutes les certifications"
+  },
+  "aboutInstitute": {
+    "hero": {
+      "back": "Retour à l'accueil",
+      "breadcrumb": { "home": "Accueil" },
+      "title": "À propos de l'Institute of Scrum"
+    },
+    "placeholder": "Contenu à venir."
+  },
+  "aboutAgile": {
+    "hero": {
+      "back": "Retour à l'accueil",
+      "breadcrumb": { "home": "Accueil" },
+      "title": "À propos de l'Agilité"
+    },
+    "placeholder": "Contenu à venir."
+  },
+  "aboutScrum": {
+    "hero": {
+      "back": "Retour à l'accueil",
+      "breadcrumb": { "home": "Accueil" },
+      "title": "À propos de Scrum"
+    },
+    "placeholder": "Contenu à venir."
   },
   "mockExam": {
     "hero": {

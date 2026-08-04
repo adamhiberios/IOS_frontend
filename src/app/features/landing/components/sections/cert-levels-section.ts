@@ -40,7 +40,13 @@ import { ViewportService } from '@core/viewport';
 import { IosIcon, SectionBadge, provideIcons } from '@ui';
 import { CertCard, type CertCardData } from '../cert-card';
 import { PublicCatalogStore } from '../../data-access/catalog.store';
-import { formatPrice } from '../../data-access/catalog.mappers';
+import {
+  formatPrice,
+  levelRank,
+  normalizeTrack,
+  TRACK_ORDER,
+  type KnownTrack,
+} from '../../data-access/catalog.mappers';
 import type { PublicCertificate } from '../../data-access/catalog.model';
 
 // ---------------------------------------------------------------------------
@@ -56,9 +62,6 @@ interface CertLevelDef {
   audienceDesc: string;
   certCards: CertCardData[];
 }
-
-/** The tracks that have bespoke marketing copy and a brand color. */
-type KnownTrack = 'scrumMaster' | 'productOwner' | 'scrumFacilitator';
 
 @Component({
   selector: 'ios-cert-levels-section',
@@ -392,25 +395,6 @@ export class CertLevelsSection {
   };
   /** Chip color for a track we ship no copy or palette for. */
   private static readonly UNKNOWN_TRACK_COLOR = '#5a5a5a';
-  /** Tab order for recognised tracks; anything else is appended after them. */
-  private static readonly TRACK_ORDER: readonly KnownTrack[] = [
-    'scrumMaster',
-    'productOwner',
-    'scrumFacilitator',
-  ];
-  /**
-   * Backend `track` is free text, so match it loosely: lower-cased with every
-   * non-alphanumeric stripped, which absorbs "Scrum Master", "scrum-master"
-   * and "SCRUM_MASTER" alike. An unmatched track still renders — it just gets
-   * generic copy and its raw string as the tab label.
-   */
-  private static readonly TRACK_ALIASES: Record<string, KnownTrack> = {
-    scrummaster: 'scrumMaster',
-    productowner: 'productOwner',
-    scrumfacilitator: 'scrumFacilitator',
-  };
-  /** Card order within a tab: Foundation → Practitioner → Authority. */
-  private static readonly LEVEL_ORDER = ['foundation', 'practitioner', 'authority'] as const;
   /** Generic placeholder used when the backend has no `badgeImageUrl` set. */
   private static readonly FALLBACK_BADGE_IMAGE = '/assets/icons/certificate_budge.svg';
 
@@ -465,21 +449,9 @@ export class CertLevelsSection {
   // Catalogue → view model
   // -------------------------------------------------------------------------
 
-  /** Normalises a backend `track` to a copy key, or `null` when unrecognised. */
-  private trackKey(track: string): KnownTrack | null {
-    const normalized = track.toLowerCase().replace(/[^a-z0-9]/g, '');
-    return CertLevelsSection.TRACK_ALIASES[normalized] ?? null;
-  }
-
   /** Locale-resolved tier name for a card's chip ("Foundation", "General", …). */
   private tierLabel(level: PublicCertificate['level']): string {
     return this.lang.t(level ? `landing.levels.tiers.${level}` : 'landing.levels.tiers.unknown');
-  }
-
-  /** Sort weight for a tier, with unset levels trailing the known ones. */
-  private static levelRank(level: PublicCertificate['level']): number {
-    const idx = level ? CertLevelsSection.LEVEL_ORDER.indexOf(level) : -1;
-    return idx === -1 ? CertLevelsSection.LEVEL_ORDER.length : idx;
   }
 
   /**
@@ -507,7 +479,7 @@ export class CertLevelsSection {
 
     for (const cert of this.catalogStore.items()) {
       const raw = cert.track?.trim() ?? '';
-      const known = raw ? this.trackKey(raw) : null;
+      const known = raw ? normalizeTrack(raw) : null;
       const id = known ?? (raw ? `track:${raw.toLowerCase()}` : 'track:unassigned');
 
       let group = groups.get(id);
@@ -515,7 +487,7 @@ export class CertLevelsSection {
         group = {
           id,
           sortKey: known
-            ? `0${CertLevelsSection.TRACK_ORDER.indexOf(known)}`
+            ? `0${TRACK_ORDER.indexOf(known)}`
             : `1${raw.toLowerCase() || '￿'}`,
           tabLabel: known
             ? this.lang.t(`landing.levels.tracks.${known}.tabLabel`)
@@ -546,7 +518,7 @@ export class CertLevelsSection {
           certCards: [...group.certs]
             .sort(
               (a, b) =>
-                CertLevelsSection.levelRank(a.level) - CertLevelsSection.levelRank(b.level) ||
+                levelRank(a.level) - levelRank(b.level) ||
                 a.programCode.localeCompare(b.programCode),
             )
             .map((cert) => ({

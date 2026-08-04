@@ -11,6 +11,48 @@ import {
   type PublicCertificateDetail,
 } from './catalog.model';
 
+// ---------------------------------------------------------------------------
+// Track / level normalization — shared by every view that groups the public
+// catalog by career track (landing navbar mega-menu, cert-levels-section).
+// Lives here rather than duplicated per-component so the two stay consistent.
+// ---------------------------------------------------------------------------
+
+/** The tracks that have bespoke marketing copy and a brand color/order. */
+export type KnownTrack = 'scrumMaster' | 'productOwner' | 'scrumFacilitator';
+
+/** Display/tab order for recognised tracks; anything else sorts after them. */
+export const TRACK_ORDER: readonly KnownTrack[] = [
+  'scrumMaster',
+  'productOwner',
+  'scrumFacilitator',
+];
+
+/** Card order within a track: Foundation → Practitioner → Authority. */
+export const LEVEL_ORDER = ['foundation', 'practitioner', 'authority'] as const;
+
+/**
+ * Backend `track` is free text, so match it loosely: lower-cased with every
+ * non-alphanumeric character stripped, which absorbs "Scrum Master",
+ * "scrum-master" and "SCRUM_MASTER" alike.
+ */
+const TRACK_ALIASES: Record<string, KnownTrack> = {
+  scrummaster: 'scrumMaster',
+  productowner: 'productOwner',
+  scrumfacilitator: 'scrumFacilitator',
+};
+
+/** Normalises a backend `track` string to a recognised track, or `null`. */
+export function normalizeTrack(track: string | null | undefined): KnownTrack | null {
+  const normalized = (track ?? '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  return TRACK_ALIASES[normalized] ?? null;
+}
+
+/** Sort weight for a tier, with unset levels trailing the known ones. */
+export function levelRank(level: PublicCertificate['level']): number {
+  const idx = level ? LEVEL_ORDER.indexOf(level) : -1;
+  return idx === -1 ? LEVEL_ORDER.length : idx;
+}
+
 /** Map a wire `CatalogItemDto` to the frontend `PublicCertificate` model. */
 export function toPublicCertificate(dto: CatalogItemDto): PublicCertificate {
   return {

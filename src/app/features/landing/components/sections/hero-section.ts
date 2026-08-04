@@ -20,7 +20,7 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
   template: `
     <section
       [attr.aria-label]="lang.t('landing.hero.sectionAriaLabel')"
-      class="relative overflow-hidden  bg-white lg:overflow-visible min-h-[480px] lg:min-h-[520px] flex flex-col lg:flex-row items-stretch"
+      class="relative overflow-hidden  bg-white lg:overflow-visible min-h-[480px] lg:min-h-[520px] flex flex-col-reverse lg:flex-row items-stretch"
     >
       <!-- Content panel — solid white, holds badge/headline/CTAs -->
       <div
@@ -73,15 +73,13 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
         </div>
       </div>
 
-      <div
-        class="relative hidden lg:flex w-full lg:w-1/2 items-center justify-center py-6 lg:py-0 lg:-ml-16 z-10"
-      >
+      <div class="relative flex w-full lg:w-1/2 z-10">
         <img
           ngSrc="/assets/images/landing_hero.png"
           [alt]="lang.t('landing.hero.imageAlt')"
           width="1672"
           height="941"
-          class="w-[440px] h-[360px] lg:w-[560px] lg:h-[440px] object-cover object-top shadow-2xl"
+          class="w-full h-[280px] sm:h-[340px] md:h-[400px] lg:h-full object-cover object-top"
           priority
         />
       </div>

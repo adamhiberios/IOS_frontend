@@ -216,7 +216,7 @@
       "headline": "The Scrum Credential",
       "headlineHighlight": "That Proves Your Expertise",
       "subtext": "Backed by the Institute of Scrum, our endorsed credentials set a higher standard — recognizing professionals who deliver results in the real world and stand apart through demonstrated skill, judgment, and impact.",
-      "source": "Endorsed certifications require 15+ hours of structured learning and a rigorous 45-question examination — because your credential should prove what you can do.",
+      "source": "Our Scrum certifications deliver focused, high-impact learning at a truly affordable fee — because the path to your next role should be clear, achievable, and within reach.",
       "cohortLabel": "Next cohort starts",
       "cohortDate": "June 2, 2026",
       "graduatesCount": "12,000+",
@@ -260,21 +260,21 @@
       "tracks": {
         "scrumMaster": {
           "tabLabel": "Scrum Master",
-          "description": "Facilitate Scrum events, remove impediments, and guide your team to consistent delivery. Our Scrum Master certifications progress from foundational facilitation skills through to expert-level coaching and organizational transformation.",
+          "description": "Lead teams through the Scrum framework with servant leadership, facilitation mastery, and continuous improvement.",
           "explorePath": "Explore Scrum Master Path",
-          "audienceDesc": "For professionals in the Scrum Master role — from those entering the field through to experienced Agile coaches driving enterprise-level change."
+          "audienceDesc": "Lead teams through the Scrum framework with servant leadership, facilitation mastery, and continuous improvement."
         },
         "productOwner": {
           "tabLabel": "Product Owner",
-          "description": "Own the product vision, prioritize the backlog, and maximize value for your stakeholders. Our Product Owner certifications develop the decision-making and strategic thinking skills your role demands at every level.",
+          "description": "Maximize product value through strategic vision, backlog mastery, and stakeholder collaboration within the Scrum framework.",
           "explorePath": "Explore Product Owner Path",
-          "audienceDesc": "For professionals responsible for product vision and backlog ownership — from those entering product roles through to senior strategists shaping long-term direction."
+          "audienceDesc": "Product managers, business analysts, product leaders, and anyone responsible for defining what a Scrum team builds."
         },
         "scrumFacilitator": {
           "tabLabel": "Scrum Facilitator",
-          "description": "Design and lead powerful collaborative workshops that drive alignment and unlock team potential. Our Scrum Facilitator certifications build specialized expertise in structured facilitation and organizational engagement.",
+          "description": "Design and lead powerful collaborative sessions that help Scrum teams achieve better outcomes together.",
           "explorePath": "Explore Scrum Facilitator Path",
-          "audienceDesc": "For professionals who design and facilitate workshops, retrospectives, and collaborative sessions — from those new to facilitation through to expert change agents."
+          "audienceDesc": "Product managers, business analysts, product leaders, and anyone responsible for defining what a Scrum team builds."
         },
         "other": {
           "description": "Live certifications currently published in our catalog.",
@@ -483,7 +483,15 @@
         "mockExam": "About Mock Exam",
         "scrumMaster": "About Scrum Master",
         "productOwner": "About Product Owner",
-        "scrumFacilitator": "About Scrum Facilitator"
+        "scrumFacilitator": "About Scrum Facilitator",
+        "institute": "About Institute of Scrum",
+        "agile": "About Agile",
+        "scrum": "About Scrum"
+      },
+      "certMenuAriaLabel": "Certifications menu",
+      "certMenu": {
+        "seeAll": "See all Certificate",
+        "verify": "Verify Certificate"
       }
     },
     "footer": {
@@ -742,6 +750,30 @@
       "exitDialogBody": "Are you sure you want to cancel the exam and leave? This exam will be graded based on the marks you have received so far."
     },
     "allCertifications": "All certifications"
+  },
+  "aboutInstitute": {
+    "hero": {
+      "back": "Go back to home",
+      "breadcrumb": { "home": "Home" },
+      "title": "About Institute of Scrum"
+    },
+    "placeholder": "Content coming soon."
+  },
+  "aboutAgile": {
+    "hero": {
+      "back": "Go back to home",
+      "breadcrumb": { "home": "Home" },
+      "title": "About Agile"
+    },
+    "placeholder": "Content coming soon."
+  },
+  "aboutScrum": {
+    "hero": {
+      "back": "Go back to home",
+      "breadcrumb": { "home": "Home" },
+      "title": "About Scrum"
+    },
+    "placeholder": "Content coming soon."
   },
   "mockExam": {
     "hero": {

@@ -55,7 +55,7 @@ export interface CertCardData {
   template: `
     <div class="flex flex-col gap-4 border border-ios-border-light rounded-xl p-4 bg-white h-full">
       <!-- Badge image + level chip / abbreviation / name -->
-      <div class="flex gap-4 items-start">
+      <div class="flex gap-4 items-start min-h-[128px]">
         <div class="w-[80px] flex-shrink-0">
           <ios-certificates-badge
             [svgPath]="cert().badgeImage"
@@ -76,7 +76,9 @@ export interface CertCardData {
             {{ cert().abbreviation }}
           </span>
           <!-- Full name -->
-          <span class="font-body font-medium text-[15px] text-cer-blue-text leading-snug">
+          <span
+            class="font-body font-medium text-[15px] text-cer-blue-text leading-snug line-clamp-2"
+          >
             {{ cert().fullName }}
           </span>
         </div>
