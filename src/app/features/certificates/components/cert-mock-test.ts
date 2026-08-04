@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 
 import { LanguageService } from '@core/i18n';
 import {
@@ -46,7 +47,7 @@ import { CertMockSettingsDialog } from './cert-mock-settings-dialog';
 @Component({
   selector: 'ios-cert-mock-test',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CertificatesBadge, IosIcon, CertMockSettingsDialog],
+  imports: [CertificatesBadge, IosIcon, CertMockSettingsDialog, NgOptimizedImage],
   providers: [
     provideIcons(
       LucideNewspaper,
@@ -183,7 +184,36 @@ import { CertMockSettingsDialog } from './cert-mock-settings-dialog';
 
       <!-- List container -->
       <div class="bg-ios-surface-muted rounded-2xl px-6 py-4 flex flex-col">
-        @for (attempt of history(); track attempt.attemptId; let last = $last) {
+        @if (history().length === 0) {
+          <!-- Empty state — no mock exam attempts yet -->
+          <div class="flex flex-col items-center justify-center gap-4 py-12 text-center" role="status">
+            <img
+              ngSrc="assets/icons/no_mock_tests_yet.svg"
+              alt=""
+              width="120"
+              height="161"
+              class="shrink-0"
+              loading="lazy"
+            />
+            <div class="flex flex-col gap-1">
+              <h3 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13">
+                {{ lang.t('dashboard.certs.noMockExamHeading') }}
+              </h3>
+              <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-8">
+                {{ lang.t('dashboard.certs.noMockExamBody') }}
+              </p>
+            </div>
+            <button
+              type="button"
+              class="inline-flex items-center justify-center gap-1 h-11 px-6 rounded-xl text-[15px] font-semibold leading-[1.4] text-white bg-ios-brand-primary hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+              (click)="dialogOpen.set(true)"
+            >
+              {{ lang.t('dashboard.certs.startMockExamCta') }}
+              <ios-icon name="arrow-right" class="w-[18px] h-[18px] shrink-0 rtl:rotate-180" aria-hidden="true" />
+            </button>
+          </div>
+        } @else {
+          @for (attempt of history(); track attempt.attemptId; let last = $last) {
           <!-- Row -->
           <div class="flex items-center gap-9 py-4">
             <!-- Left: icon + name + questions -->
@@ -292,9 +322,10 @@ import { CertMockSettingsDialog } from './cert-mock-settings-dialog';
             </button>
           </div>
 
-          <!-- Divider (omit after last row) -->
-          @if (!last) {
-            <hr class="border-t border-ios-border-light mx-0" />
+            <!-- Divider (omit after last row) -->
+            @if (!last) {
+              <hr class="border-t border-ios-border-light mx-0" />
+            }
           }
         }
       </div>

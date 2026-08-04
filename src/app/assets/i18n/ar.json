@@ -668,7 +668,10 @@
       "notEnrolled": "أنت غير مسجّل في هذه الشهادة.",
       "continueHeading": "تابع من حيث توقفت",
       "allLessonsDone": "لقد أنهيت جميع الدروس",
-      "continueCta": "متابعة التعلّم"
+      "continueCta": "متابعة التعلّم",
+      "noMockExamHeading": "لا يوجد اختبار تجريبي",
+      "noMockExamBody": "لم تقم بإجراء أي اختبار تجريبي من قبل",
+      "startMockExamCta": "ابدأ الاختبار التجريبي"
     },
     "learning": {
       "title": "أكمل تعلمك",

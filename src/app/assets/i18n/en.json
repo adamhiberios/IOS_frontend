@@ -668,7 +668,10 @@
       "notEnrolled": "You are not enrolled in this certification.",
       "continueHeading": "Continue where you left off",
       "allLessonsDone": "You have finished every lesson",
-      "continueCta": "Continue learning"
+      "continueCta": "Continue learning",
+      "noMockExamHeading": "No mock exam found",
+      "noMockExamBody": "You have not previously performed any mock exam",
+      "startMockExamCta": "Start mock exam"
     },
     "learning": {
       "title": "Complete your learning",

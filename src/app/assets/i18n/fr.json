@@ -668,7 +668,10 @@
       "notEnrolled": "Vous n’êtes pas inscrit à cette certification.",
       "continueHeading": "Reprendre où vous vous êtes arrêté",
       "allLessonsDone": "Vous avez terminé toutes les leçons",
-      "continueCta": "Continuer l’apprentissage"
+      "continueCta": "Continuer l’apprentissage",
+      "noMockExamHeading": "Aucun examen blanc trouvé",
+      "noMockExamBody": "Vous n'avez encore passé aucun examen blanc",
+      "startMockExamCta": "Commencer l'examen blanc"
     },
     "learning": {
       "title": "Complétez votre apprentissage",
