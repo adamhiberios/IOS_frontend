@@ -1928,7 +1928,7 @@
       "fullName": "Propriétaire de Produit Agréé Autorité",
       "trackName": "Certifications Propriétaire de Produit",
       "level": "Niveau Autorité",
-      "price": "CAD $275",
+      "price": "USD $275",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -2005,14 +2005,14 @@
         "epoP": {
           "fullName": "Propriétaire de Produit Agréé Praticien",
           "level": "Niveau Praticien",
-          "price": "CAD $150",
+          "price": "USD $150",
           "description": "Élevez vos compétences de propriétaire de produit du fondamental à l'avancé et prouvez que vous pouvez piloter le succès produit dans des environnements Scrum complexes.",
           "learnMore": "En savoir plus sur l'EPO-P"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
-          "level": "Niveau Fondation",
-          "price": "CAD $175",
+          "level": "Niveau Autorité",
+          "price": "USD $175",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées.",
           "learnMore": "En savoir plus sur l'ESF"
         }

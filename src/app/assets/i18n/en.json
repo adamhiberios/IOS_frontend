@@ -1928,7 +1928,7 @@
       "fullName": "Endorsed Product Owner Authority",
       "trackName": "Product Owner Certifications",
       "level": "Authority Level",
-      "price": "CAD $275",
+      "price": "USD $275",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -1996,7 +1996,7 @@
         "description": "Register for the EPO-A certification and lead your organization's product future with confidence.",
         "button": "Enroll in Endorsed Product Owner Authority (EPO-A)",
         "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "contactLink": "Contact Us"
       },
       "related": {
         "headingPart1": "Related",
@@ -2005,14 +2005,14 @@
         "epoP": {
           "fullName": "Endorsed Product Owner Practitioner",
           "level": "Practitioner Level",
-          "price": "CAD $150",
+          "price": "USD $150",
           "description": "Elevate your Product Owner skills from foundation to advanced and prove you can drive product success in complex Scrum environments.",
           "learnMore": "Learn More About EPO-P"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
-          "level": "Foundation Level",
-          "price": "CAD $175",
+          "level": "Authority Level",
+          "price": "USD $175",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques.",
           "learnMore": "Learn More About ESF"
         }
