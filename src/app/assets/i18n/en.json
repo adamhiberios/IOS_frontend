@@ -1743,21 +1743,21 @@
       "fullName": "Endorsed Product Owner Practitioner",
       "trackName": "Product Owner Certifications",
       "level": "Practitioner Level",
-      "price": "CAD $150",
+      "price": "USD $150",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
           "home": "Home",
           "all": "All Certifications"
         },
-        "description": "Elevate your Product Owner skills from foundation to advanced and prove you can drive product success in complex Scrum environments.",
+        "description": "Prove you can deliver real product value in complex environments and stand out as a practitioner who turns vision into measurable outcomes.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
         "startingAt": "Starting at"
       },
       "overview": {
         "title": "Overview",
-        "body": "The Endorsed Product Owner Practitioner (EPO-P) is the intermediate-level certification for experienced Product Owners ready to deepen their expertise. Building on the EPO foundation, it validates your ability to maximize product value, optimize delivery, and lead stakeholders through complex product challenges. This credential signals to employers that you are not just a backlog manager — you are a strategic product leader capable of driving measurable outcomes."
+        "body": "The Endorsed Product Owner Practitioner (EPO-P) is the intermediate-level certification for practicing Product Owners ready to sharpen their craft. Building on the EPO foundation, it validates your ability to manage complex backlogs, balance competing stakeholder priorities, and drive measurable business outcomes. This credential demonstrates that you have moved beyond theory — you can apply Product Owner practices to deliver meaningful value in real-world, high-pressure Agile environments."
       },
       "heroImage": {
         "alt": "Scrum team collaborating on sticky-note board",
@@ -1784,33 +1784,33 @@
         "badge": "Who Should Enroll",
         "headingPart1": "Who Should Invest in This",
         "headingPart2": "Certificate?",
-        "graduatesTitle": "EPO Graduates",
-        "graduatesDesc": "Professionals who have earned the EPO and want to elevate their product ownership skills.",
-        "seniorTitle": "Senior Product Managers",
-        "seniorDesc": "Product leaders seeking to formalize their Scrum expertise with a recognized credential.",
-        "leadersTitle": "Product Leaders",
-        "leadersDesc": "Team leads and managers driving product strategy and stakeholder alignment.",
-        "strategyTitle": "Strategy-Driven Professionals",
-        "strategyDesc": "Professionals who combine business analysis with product delivery expertise.",
-        "strategistTitle": "The Strategist",
-        "strategistDesc": "Senior product professionals preparing for the Authority level (EPO-A)."
+        "graduatesTitle": "Product Owners",
+        "graduatesDesc": "Practicing Product Owners ready to formalize and deepen their expertise.",
+        "seniorTitle": "Certified professionals",
+        "seniorDesc": "EPO-certified professionals advancing to the next stage of mastery.",
+        "leadersTitle": "Product managers",
+        "leadersDesc": "Product managers leading Agile product teams in growing organizations.",
+        "strategyTitle": "Analysts",
+        "strategyDesc": "Senior business analysts taking on product ownership responsibilities.",
+        "strategistTitle": "Strategy Professionals",
+        "strategistDesc": "Professionals pursuing leadership roles in product strategy and delivery."
       },
       "keyLearning": {
         "title": "Key Learning Points",
-        "point1": "Lead product strategy workshops and align stakeholders on product vision and roadmap.",
-        "point2": "Apply advanced backlog refinement techniques to maximize delivery value.",
-        "point3": "Navigate competing stakeholder priorities using evidence-based decision frameworks.",
-        "point4": "Optimize product-market fit through continuous discovery and validated learning.",
-        "point5": "Drive team performance through transparency, trust, and data-informed decisions.",
-        "point6": "Implement governance and scaling practices for complex product environments."
+        "point1": "Manage complex, multi-stakeholder Product Backlogs with confidence.",
+        "point2": "Balance competing priorities from customers, business units, and leadership.",
+        "point3": "Measure product outcomes using KPIs, OKRs, and value-based metrics.",
+        "point4": "Collaborate with multiple Scrum teams on shared product goals.",
+        "point5": "Negotiate scope, timelines, and trade-offs with stakeholders effectively.",
+        "point6": "Prepare for senior-level product leadership with the EPO-A credential."
       },
       "cta": {
-        "headingPart1": "Ready to step into the world of",
-        "headingPart2": "Agile?",
-        "description": "Enroll in the EPO-P certification today and start building the career you've been working toward.",
+        "headingPart1": "Advance your product career with a credential",
+        "headingPart2": "that proves you deliver results",
+        "description": "Register for the EPO-P certification and take the next step forward.",
         "button": "Enroll in Endorsed Product Owner Practitioner (EPO-P)",
         "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "contactLink": "Contact Us"
       },
       "related": {
         "headingPart1": "Related",
