@@ -11,7 +11,7 @@ import {
 
 import { LanguageService } from '@core/i18n';
 import { AuthStore } from '@core/auth';
-import { CertificatesBadge, IosIcon, LanguageSelector, provideIcons } from '@ui';
+import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
 import { PublicCatalogStore } from '../data-access/catalog.store';
 import { levelRank, normalizeTrack, TRACK_ORDER } from '../data-access/catalog.mappers';
 import type { PublicCertificate } from '../data-access/catalog.model';
@@ -44,15 +44,9 @@ interface CertMenuGroup {
  */
 @Component({
   selector: 'ios-landing-navbar',
-  imports: [LanguageSelector, RouterLink, IosIcon, NgOptimizedImage, CertificatesBadge],
+  imports: [RouterLink, IosIcon, NgOptimizedImage, CertificatesBadge],
   providers: [
-    provideIcons(
-      LucideArrowUpRight,
-      LucideChevronDown,
-      LucideChevronRight,
-      LucideMenu,
-      LucideX,
-    ),
+    provideIcons(LucideArrowUpRight, LucideChevronDown, LucideChevronRight, LucideMenu, LucideX),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   // Dismiss the About / Certifications menus on an outside click or Escape.
@@ -194,7 +188,11 @@ interface CertMenuGroup {
                          focus-visible:ring-ios-brand-primary/50 rounded-lg"
                 >
                   {{ lang.t('landing.nav.certMenu.verify') }}
-                  <ios-icon name="arrow-up-right" class="w-4 h-4 rtl:rotate-180" aria-hidden="true" />
+                  <ios-icon
+                    name="arrow-up-right"
+                    class="w-4 h-4 rtl:rotate-180"
+                    aria-hidden="true"
+                  />
                 </a>
               </div>
             }
@@ -300,7 +298,7 @@ interface CertMenuGroup {
               <ios-icon name="arrow-up-right" class="w-4 h-4" aria-hidden="true" />
             </a>
           }
-          <ios-language-selector />
+          <!-- <ios-language-selector /> -->
 
           <!-- Hamburger — visible only on mobile (< lg) -->
           <button

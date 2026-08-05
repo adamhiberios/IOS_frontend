@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { LanguageService } from '@core/i18n';
-import { LanguageSelector } from '@ui';
 
 /**
  * `ios-auth-header` — minimal, responsive top bar used across the auth shell
@@ -11,14 +10,13 @@ import { LanguageSelector } from '@ui';
  *
  * Contents (left → right, swapped automatically in RTL):
  *  - Brand logo as a link back to `/`.
- *  - Language selector.
  *
  * No background by default — pages choose their own surface and overlay this
  * header absolutely if they need the form to peek behind it.
  */
 @Component({
   selector: 'ios-auth-header',
-  imports: [NgOptimizedImage, RouterLink, LanguageSelector],
+  imports: [NgOptimizedImage, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
@@ -36,7 +34,7 @@ import { LanguageSelector } from '@ui';
             priority
           />
         </a>
-        <ios-language-selector />
+        <!-- <ios-language-selector /> -->
       </div>
     </header>
   `,

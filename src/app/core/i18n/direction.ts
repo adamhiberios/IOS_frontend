@@ -73,8 +73,8 @@ export class DirectionService {
     // Read whatever is on <html> at boot. The index.html ships with `lang="en"`,
     // so this default is effectively `en` until a persisted preference arrives
     // via the auth profile fetch (handled outside this service).
-    const fromDom = this.document.documentElement.lang as AppLocale | '';
-    if (fromDom === 'ar' || fromDom === 'fr') return fromDom;
+    // const fromDom = this.document.documentElement.lang as AppLocale | '';
+    // if (fromDom === 'ar' || fromDom === 'fr') return fromDom;
     return 'en';
   }
 }

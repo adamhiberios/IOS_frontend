@@ -33,8 +33,6 @@ const MENU_ITEMS: readonly MenuItem[] = [
  * │ Profile                 >  │
  * │ Settings                >  │
  * ├────────────────────────────┤
- * │ Language  [EN] [AR] [FR]   │
- * ├────────────────────────────┤
  * │  Logout                 >  │  (red, light red bg)
  * └────────────────────────────┘
  *
@@ -85,10 +83,10 @@ const MENU_ITEMS: readonly MenuItem[] = [
       </ul>
 
       <!-- Divider -->
-      <div class="h-px bg-ios-surface-soft mx-4"></div>
+      <!-- <div class="h-px bg-ios-surface-soft mx-4"></div> -->
 
       <!-- Language switcher -->
-      <div class="px-5 py-3" role="group" [attr.aria-label]="lang.t('common.selectLanguage')">
+      <!-- <div class="px-5 py-3" role="group" [attr.aria-label]="lang.t('common.selectLanguage')">
         <p class="text-xs font-medium text-ios-fg-7 mb-2">{{ lang.t('common.selectLanguage') }}</p>
         <div class="flex items-center gap-2">
           @for (option of lang.supportedLocales; track option.code) {
@@ -107,7 +105,7 @@ const MENU_ITEMS: readonly MenuItem[] = [
             </button>
           }
         </div>
-      </div>
+      </div> -->
 
       <!-- Divider -->
       <div class="h-px bg-ios-surface-soft mx-4"></div>
