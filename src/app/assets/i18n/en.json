@@ -1454,7 +1454,7 @@
       "fullName": "Endorsed Scrum Master Practitioner",
       "trackName": "Scrum Master Certifications",
       "level": "Practitioner Level",
-      "price": "CAD $150",
+      "price": "USD $150",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -1495,16 +1495,16 @@
         "badge": "Who Should Enroll",
         "headingPart1": "Who Should Invest in This",
         "headingPart2": "Certificate?",
-        "practitionerTitle": "ESM Graduates",
-        "practitionerDesc": "Professionals who have earned the ESM and want to take their skills to the next level.",
-        "teamCoachTitle": "Team Coaches",
-        "teamCoachDesc": "Scrum Masters and Agile coaches seeking to deepen their impact on team performance.",
-        "optimizationTitle": "Optimization Seekers",
-        "optimizationDesc": "Practitioners who want to master metrics, flow, and continuous delivery improvements.",
-        "leaderTitle": "Agile Leaders",
-        "leaderDesc": "Team leads and managers who want to build high-performing, self-organizing teams.",
-        "strategistTitle": "The Strategist",
-        "strategistDesc": "Senior Agile professionals preparing for the Authority level (ESM-A)."
+        "practitionerTitle": "Strengthen credentials",
+        "practitionerDesc": "Practicing Scrum Masters who want to strengthen their credentials and career trajectory.",
+        "teamCoachTitle": "Next level of mastery",
+        "teamCoachDesc": "ESM-certified professionals ready to advance to the next level of mastery.",
+        "optimizationTitle": "Team leaders",
+        "optimizationDesc": "Agile team leads coaching multiple teams or cross-functional groups.",
+        "leaderTitle": "Managers",
+        "leaderDesc": "Project and delivery managers operating inside Scrum frameworks.",
+        "strategistTitle": "Professionals leadership roles",
+        "strategistDesc": "Professionals pursuing leadership roles in Agile transformation initiatives."
       },
       "keyLearning": {
         "title": "Key Learning Points",
@@ -1517,12 +1517,12 @@
         "point7": "Prepare for senior-level coaching with the Endorsed Scrum Master Authority (ESM-A)."
       },
       "cta": {
-        "headingPart1": "Ready to step into the world of",
-        "headingPart2": "Agile?",
-        "description": "Enroll in the ESM-P certification today and start building the career you've been working toward.",
+        "headingPart1": "Take your Scrum Master career to the",
+        "headingPart2": "next level",
+        "description": "Register for the ESM-P certification and stand out as a practitioner who delivers results.",
         "button": "Enroll in Endorsed Scrum Master Practitioner (ESM-P)",
         "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "contactLink": "Contact Us"
       },
       "related": {
         "headingPart1": "Related",
