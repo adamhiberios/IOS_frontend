@@ -56,12 +56,7 @@ import {
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
-import {
-  LucideArrowLeft,
-  LucideArrowRight,
-  LucideBookOpenText,
-  LucideDownload,
-} from '@lucide/angular';
+import { LucideArrowLeft, LucideArrowRight, LucideBookOpenText } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { JsonLdService } from '@core/seo';
@@ -116,7 +111,7 @@ export interface CertDetailsConfig {
   readonly fullName: string;
   /** Badge SVG asset path (under `/assets/badge/`). */
   readonly badgeSvgPath: string;
-  /** Track name shown in breadcrumb, e.g. "Scrum Master Certifications". */
+  /** Track name shown in breadcrumb, e.g. "Scrum Master". */
   readonly trackName: string;
   /** Level label, e.g. "Foundation Level". */
   readonly levelLabel: string;
@@ -142,7 +137,7 @@ export interface CertDetailsConfig {
 @Component({
   selector: 'ios-cert-details-template',
   imports: [NgOptimizedImage, CertificatesBadge, IosIcon],
-  providers: [provideIcons(LucideArrowLeft, LucideArrowRight, LucideBookOpenText, LucideDownload)],
+  providers: [provideIcons(LucideArrowLeft, LucideArrowRight, LucideBookOpenText)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -303,19 +298,6 @@ export interface CertDetailsConfig {
                 class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center
                        justify-center lg:justify-start w-full sm:w-auto"
               >
-                <button
-                  type="button"
-                  class="inline-flex items-center justify-center gap-3 h-12 sm:h-14 ps-4 pe-6 rounded-xl
-                         font-body font-semibold text-[15px] md:text-[16px] lg:text-[18px] leading-[1.4]
-                         hover:opacity-85 transition-opacity
-                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-ios-brand-primary/60
-                         bg-track-soft text-track-deep"
-                >
-                  <ios-icon name="download" class="w-5 h-5 sm:w-6 sm:h-6" aria-hidden="true" />
-                  <span class="whitespace-normal sm:whitespace-nowrap text-start">
-                    {{ lang.t(cfg().namespace + '.hero.download') }}
-                  </span>
-                </button>
                 <button
                   type="button"
                   class="inline-flex items-center justify-center gap-3 h-12 sm:h-14 ps-6 pe-4 rounded-xl

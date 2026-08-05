@@ -1830,7 +1830,7 @@
   "certDetails": {
     "esm": {
       "fullName": "Endorsed Scrum Master",
-      "trackName": "Scrum Master Certifications",
+      "trackName": "Scrum Master",
       "level": "Foundation Level",
       "price": "USD $130",
       "hero": {
@@ -1924,7 +1924,7 @@
     },
     "esmP": {
       "fullName": "Endorsed Scrum Master Practitioner",
-      "trackName": "Scrum Master Certifications",
+      "trackName": "Scrum Master",
       "level": "Practitioner Level",
       "price": "USD $150",
       "hero": {
@@ -2025,7 +2025,7 @@
     },
     "esmA": {
       "fullName": "Endorsed Scrum Master Authority",
-      "trackName": "Scrum Master Certifications",
+      "trackName": "Scrum Master",
       "level": "Authority Level",
       "price": "USD $185",
       "hero": {
@@ -2119,7 +2119,7 @@
     },
     "epo": {
       "fullName": "Endorsed Product Owner",
-      "trackName": "Product Owner Certifications",
+      "trackName": "Product Owner",
       "level": "Foundation Level",
       "price": "USD $130",
       "hero": {
@@ -2213,7 +2213,7 @@
     },
     "epoP": {
       "fullName": "Endorsed Product Owner Practitioner",
-      "trackName": "Product Owner Certifications",
+      "trackName": "Product Owner",
       "level": "Practitioner Level",
       "price": "USD $150",
       "hero": {
@@ -2306,7 +2306,7 @@
     },
     "esf": {
       "fullName": "Endorsed Scrum Facilitator",
-      "trackName": "Scrum Facilitator Certifications",
+      "trackName": "Scrum Facilitator",
       "level": "Authority Level",
       "price": "USD $175",
       "hero": {
@@ -2400,7 +2400,7 @@
     },
     "epoA": {
       "fullName": "Endorsed Product Owner Authority",
-      "trackName": "Product Owner Certifications",
+      "trackName": "Product Owner",
       "level": "Authority Level",
       "price": "USD $275",
       "hero": {

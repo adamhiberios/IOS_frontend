@@ -91,7 +91,7 @@ export class CertDetailsEpoAPage {
         description: this.lang.t('certDetails.epoA.related.esf.description'),
         price: this.lang.t('certDetails.epoA.related.esf.price'),
         learnMoreLabel: this.lang.t('certDetails.epoA.related.esf.learnMore'),
-        learnMoreLink: '/certifications',
+        learnMoreLink: '/certifications/esf',
         levelText: this.lang.t('certDetails.epoA.related.esf.level'),
         track: 'brown',
       },

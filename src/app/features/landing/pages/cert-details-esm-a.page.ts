@@ -91,7 +91,7 @@ export class CertDetailsEsmAPage {
         description: this.lang.t('certDetails.esmA.related.esf.description'),
         price: this.lang.t('certDetails.esmA.related.esf.price'),
         learnMoreLabel: this.lang.t('certDetails.esmA.related.esf.learnMore'),
-        learnMoreLink: '/certifications',
+        learnMoreLink: '/certifications/esf',
         levelText: this.lang.t('certDetails.esmA.related.esf.level'),
         track: 'brown',
       },

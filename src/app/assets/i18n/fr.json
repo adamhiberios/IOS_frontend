@@ -1830,7 +1830,7 @@
   "certDetails": {
     "esm": {
       "fullName": "Maître Scrum Agréé",
-      "trackName": "Certifications Scrum Master",
+      "trackName": "Scrum Master",
       "level": "Niveau Fondation",
       "price": "USD $130",
       "hero": {
@@ -1924,7 +1924,7 @@
     },
     "esmP": {
       "fullName": "Maître Scrum Agréé Praticien",
-      "trackName": "Certifications Scrum Master",
+      "trackName": "Scrum Master",
       "level": "Niveau Praticien",
       "price": "USD $150",
       "hero": {
@@ -2025,7 +2025,7 @@
     },
     "esmA": {
       "fullName": "Maître Scrum Agréé Autorité",
-      "trackName": "Certifications Scrum Master",
+      "trackName": "Scrum Master",
       "level": "Niveau Autorité",
       "price": "USD $185",
       "hero": {
@@ -2119,7 +2119,7 @@
     },
     "epo": {
       "fullName": "Propriétaire de Produit Agréé",
-      "trackName": "Certifications Propriétaire de Produit",
+      "trackName": "Propriétaire de Produit",
       "level": "Niveau Fondation",
       "price": "USD $130",
       "hero": {
@@ -2213,7 +2213,7 @@
     },
     "epoP": {
       "fullName": "Propriétaire de Produit Agréé Praticien",
-      "trackName": "Certifications Product Owner",
+      "trackName": "Product Owner",
       "level": "Niveau Praticien",
       "price": "USD $150",
       "hero": {
@@ -2306,7 +2306,7 @@
     },
     "esf": {
       "fullName": "Facilitateur Scrum Agréé",
-      "trackName": "Certifications Scrum Facilitateur",
+      "trackName": "Scrum Facilitateur",
       "level": "Niveau Autorité",
       "price": "USD $175",
       "hero": {
@@ -2400,7 +2400,7 @@
     },
     "epoA": {
       "fullName": "Propriétaire de Produit Agréé Autorité",
-      "trackName": "Certifications Propriétaire de Produit",
+      "trackName": "Propriétaire de Produit",
       "level": "Niveau Autorité",
       "price": "USD $275",
       "hero": {
