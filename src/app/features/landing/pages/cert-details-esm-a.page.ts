@@ -37,7 +37,7 @@ export class CertDetailsEsmAPage {
     trackName: this.lang.t('certDetails.esmA.trackName'),
     levelLabel: this.lang.t('certDetails.esmA.level'),
     price: this.lang.t('certDetails.esmA.price'),
-    heroImageSrc: '/assets/images/certification_1.png',
+    heroImageSrc: '/assets/images/esm-a.png',
     namespace: 'certDetails.esmA',
     track: 'blue',
 

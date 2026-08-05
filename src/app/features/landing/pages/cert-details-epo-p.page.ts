@@ -37,7 +37,7 @@ export class CertDetailsEpoPPage {
     trackName: this.lang.t('certDetails.epoP.trackName'),
     levelLabel: this.lang.t('certDetails.epoP.level'),
     price: this.lang.t('certDetails.epoP.price'),
-    heroImageSrc: '/assets/images/certification_1.png',
+    heroImageSrc: '/assets/images/epo-p.png',
     namespace: 'certDetails.epoP',
     track: 'green',
 

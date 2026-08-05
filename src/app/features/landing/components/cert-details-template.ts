@@ -31,7 +31,7 @@
  * Sections (top → bottom):
  *   1. Hero            — themed dark band with breadcrumb, badge, title, CTA
  *   2. Overview        — light track band, intro copy
- *   3. Image           — full-width photo with two floating info cards
+ *   3. Image           — full-width, fixed-height (834px) cert photo
  *   4. Stats           — 5 metric cards with decorative side bars
  *   5. Key Learning    — cream band, bullet list (book-open-text icon)
  *   6. Who Should Enroll — white band, badge + heading + 5 audience cards
@@ -341,13 +341,12 @@ export interface CertDetailsConfig {
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════
-           2 + 3. Overview band that continues down behind the top half
-                   of the hero image (visual overlap effect).
+           2 + 3. Overview band, followed by the full-width cert image.
       ═══════════════════════════════════════════════════════════ -->
       <section class="bg-white" aria-labelledby="cert-overview-heading">
-        <!-- Track-tinted Overview band — tall, the image will overlap it -->
+        <!-- Track-tinted Overview band -->
         <div
-          class="bg-track-soft px-6 md:px-10 lg:px-16 xl:px-[246px] pt-[56px] pb-[180px] md:pb-[220px] lg:pb-[280px] xl:pb-[320px]"
+          class="bg-track-soft px-6 md:px-10 lg:px-16 xl:px-[246px] pt-[56px] pb-[56px] lg:pb-[72px]"
         >
           <div class="flex flex-col gap-3">
             <h2
@@ -364,58 +363,16 @@ export interface CertDetailsConfig {
           </div>
         </div>
 
-        <!-- Image — pulled UP so it overlaps the bottom of the overview band by ~50% -->
-        <div class="px-6 md:px-10 lg:px-16 xl:px-[246px] pb-[56px] lg:pb-[72px]">
-          <div
-            class="relative max-w-[1236px] mx-auto -mt-[140px] md:-mt-[180px] lg:-mt-[240px] xl:-mt-[280px]"
-          >
-            <div class="relative w-full aspect-[1236/597] rounded-3xl overflow-hidden shadow-xl">
-              <img
-                [ngSrc]="cfg().heroImageSrc"
-                [alt]="lang.t(cfg().namespace + '.heroImage.alt')"
-                class="object-cover"
-                fill
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-
-            <!-- Floating: language card — top-end -->
-            <div
-              class="absolute top-[8%] lg:top-[20%] end-[6%] lg:end-[-6%] xl:end-[-9%]
-                     bg-white border-2 border-ios-brand-amber rounded-[14px] shadow-lg flex flex-col gap-1 px-5 py-3 lg:px-6 lg:py-4 max-w-[200px] lg:max-w-[260px]"
-              role="note"
-            >
-              <span
-                class="font-heading font-black text-[18px] md:text-[20px] lg:text-[24px] leading-[1.2] text-ios-brand-primary"
-              >
-                {{ lang.t(cfg().namespace + '.heroImage.languageValue') }}
-              </span>
-              <span
-                class="font-body text-[12px] md:text-[13px] lg:text-[14px] leading-[1.4] text-gray-500"
-              >
-                {{ lang.t(cfg().namespace + '.heroImage.languageLabel') }}
-              </span>
-            </div>
-
-            <!-- Floating: testing card — bottom-start -->
-            <div
-              class="absolute bottom-[6%] start-[6%] lg:start-[-4%] xl:start-[-7%]
-                     bg-white border-2 border-ios-brand-amber rounded-[14px] shadow-lg flex flex-col gap-1 px-5 py-3 lg:px-6 lg:py-4 max-w-[200px] lg:max-w-[260px]"
-              role="note"
-            >
-              <span
-                class="font-heading font-black text-[18px] md:text-[20px] lg:text-[24px] leading-[1.2] text-ios-brand-primary"
-              >
-                {{ lang.t(cfg().namespace + '.heroImage.testingValue') }}
-              </span>
-              <span
-                class="font-body text-[12px] md:text-[13px] lg:text-[14px] leading-[1.4] text-gray-500"
-              >
-                {{ lang.t(cfg().namespace + '.heroImage.testingLabel') }}
-              </span>
-            </div>
-          </div>
+        <!-- Image — full-width, fixed-height cert photo -->
+        <div class="relative w-full h-[834px]">
+          <img
+            [ngSrc]="cfg().heroImageSrc"
+            [alt]="lang.t(cfg().namespace + '.heroImage.alt')"
+            class="object-cover"
+            fill
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </section>
 

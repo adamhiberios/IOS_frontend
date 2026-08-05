@@ -37,7 +37,7 @@ export class CertDetailsEsmFPage {
     trackName: this.lang.t('certDetails.esf.trackName'),
     levelLabel: this.lang.t('certDetails.esf.level'),
     price: this.lang.t('certDetails.esf.price'),
-    heroImageSrc: '/assets/images/certification_1.png',
+    heroImageSrc: '/assets/images/esf.png',
     namespace: 'certDetails.esf',
     track: 'brown',
 
@@ -70,7 +70,7 @@ export class CertDetailsEsmFPage {
       },
     ],
 
-    keyLearningCount: 5,
+    keyLearningCount: 7,
 
     related: [
       {

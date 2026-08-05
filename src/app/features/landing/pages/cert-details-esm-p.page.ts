@@ -37,7 +37,7 @@ export class CertDetailsEsmPPage {
     trackName: this.lang.t('certDetails.esmP.trackName'),
     levelLabel: this.lang.t('certDetails.esmP.level'),
     price: this.lang.t('certDetails.esmP.price'),
-    heroImageSrc: '/assets/images/certification_1.png',
+    heroImageSrc: '/assets/images/esm-p.png',
     namespace: 'certDetails.esmP',
     track: 'blue',
 
