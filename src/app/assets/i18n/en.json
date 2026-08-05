@@ -1555,7 +1555,7 @@
       "fullName": "Endorsed Scrum Master Authority",
       "trackName": "Scrum Master Certifications",
       "level": "Authority Level",
-      "price": "CAD $185",
+      "price": "USD $185",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -1596,16 +1596,16 @@
         "badge": "Who Should Enroll",
         "headingPart1": "Who Should Invest in This",
         "headingPart2": "Certificate?",
-        "enterpriseTitle": "Enterprise Leaders",
-        "enterpriseDesc": "Senior Scrum Masters and Agile coaches ready to lead large-scale transformations.",
-        "mentorTitle": "Mentors",
-        "mentorDesc": "Experienced practitioners who want to develop and mentor other Scrum Masters.",
-        "scalingTitle": "Scaling Experts",
-        "scalingDesc": "Professionals working with LeSS, Nexus, SAFe, or similar scaling frameworks.",
-        "executiveTitle": "Executive Influencers",
-        "executiveDesc": "Leaders who need to align Agile strategy with business objectives.",
-        "authorityTitle": "The Authority",
-        "authorityDesc": "Professionals seeking the highest credential to drive organizational change."
+        "enterpriseTitle": "Coaches and Consultants",
+        "enterpriseDesc": "Agile coaches and consultants leading transformations in mid-to-large enterprises.",
+        "mentorTitle": "Scaling leaders",
+        "mentorDesc": "Transformation leaders responsible for scaling Agile across departments.",
+        "scalingTitle": "Certified professionals",
+        "scalingDesc": "ESM-P-certified professionals ready to reach the pinnacle of the Scrum Master path.",
+        "executiveTitle": "Seniors",
+        "executiveDesc": "Senior Scrum Masters with multi-team or multi-year experience.",
+        "authorityTitle": "Enterprise leaders",
+        "authorityDesc": "Enterprise leaders shaping Agile strategy, culture, and delivery excellence."
       },
       "keyLearning": {
         "title": "Key Learning Points",
@@ -1615,15 +1615,15 @@
         "point4": "Influence executive stakeholders and align Agile with business strategy.",
         "point5": "Diagnose systemic organizational impediments and design effective interventions.",
         "point6": "Drive cultural change that sustains Agility long after transformation ends.",
-        "point7": "Build a legacy as a recognized authority in the Scrum and Agile community."
+        "point7": "Position yourself as a trusted authority in the global Agile community."
       },
       "cta": {
-        "headingPart1": "Ready to step into the world of",
-        "headingPart2": "Agile?",
-        "description": "Enroll in the ESM-A certification today and start building the career you've been working toward.",
+        "headingPart1": "Claim your place among the industry's top",
+        "headingPart2": "Agile authorities",
+        "description": "Register for the ESM-A certification and lead transformation at the highest level.",
         "button": "Enroll in Endorsed Scrum Master Authority (ESM-A)",
         "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "contactLink": "Contact Us"
       },
       "related": {
         "headingPart1": "Related",
