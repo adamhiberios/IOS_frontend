@@ -1836,7 +1836,7 @@
       "fullName": "Facilitateur Scrum Agréé",
       "trackName": "Certifications Scrum Facilitateur",
       "level": "Niveau Autorité",
-      "price": "CAD $175",
+      "price": "USD $175",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -1890,11 +1890,13 @@
       },
       "keyLearning": {
         "title": "Points d'Apprentissage Clés",
-        "point1": "Maîtriser les techniques de facilitation qui dynamisent les équipes et poussent à des décisions claires.",
-        "point2": "Concevoir et animer des sessions de Planification, Revue et Rétrospective Sprint puissantes.",
-        "point3": "Construire la sécurité psychologique et favoriser la véritable collaboration dans chaque session.",
-        "point4": "Naviguer les conflits, aligner les parties prenantes et gérer la dynamique de groupe avec confiance.",
-        "point5": "Appliquer des outils avancés comme Liberating Structures, 1-2-4-All et plus pour maximiser la participation."
+        "point1": "Maîtriser des techniques de facilitation qui dynamisent les équipes et favorisent des décisions claires.",
+        "point2": "Concevoir et animer des sessions de Planification, Revue et Rétrospective de Sprint percutantes.",
+        "point3": "Gérer les conflits, les désaccords et la dynamique de groupe avec un savoir-faire professionnel.",
+        "point4": "Utiliser efficacement la facilitation visuelle, le dialogue structuré et les Liberating Structures.",
+        "point5": "Faciliter des événements à distance, hybrides et en présentiel avec la même aisance.",
+        "point6": "Créer des espaces psychologiquement sûrs où les équipes s'expriment librement et innovent.",
+        "point7": "Mesurer l'efficacité de votre facilitation et améliorer continuellement votre pratique."
       },
       "cta": {
         "headingPart1": "Prêt à entrer dans le monde de l'",
@@ -1911,14 +1913,14 @@
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $130",
+          "price": "USD $130",
           "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement.",
           "learnMore": "En savoir plus sur l'ESM"
         },
         "epo": {
           "fullName": "Propriétaire de Produit Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $180",
+          "price": "USD $130",
           "description": "Commencez votre parcours vers la création de produits que les gens adorent.",
           "learnMore": "En savoir plus sur l'EPO"
         }

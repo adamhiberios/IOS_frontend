@@ -1836,7 +1836,7 @@
       "fullName": "Endorsed Scrum Facilitator",
       "trackName": "Scrum Facilitator Certifications",
       "level": "Authority Level",
-      "price": "CAD $175",
+      "price": "USD $175",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -1877,32 +1877,34 @@
         "badge": "Who Should Enroll",
         "headingPart1": "Who Should Invest in This",
         "headingPart2": "Certificate?",
-        "consultantTitle": "The Consultant",
-        "consultantDesc": "Professionals seeking to offer expert facilitation as a standalone service.",
-        "leaderTitle": "The Leader",
-        "leaderDesc": "Team leads and managers who need to run high-impact collaborative sessions.",
-        "coachTitle": "The Coach",
-        "coachDesc": "Agile coaches and consultants who want a recognized facilitation credential.",
-        "productTitle": "The Product Expert",
-        "productDesc": "Product Owners and managers who want to design and lead more effective events.",
-        "expertTitle": "The Scrum Expert",
-        "expertDesc": "Scrum Masters and Product Owners looking to deepen their facilitation skills beyond the basics."
+        "consultantTitle": "Product Owners",
+        "consultantDesc": "Scrum Masters and Product Owners seeking to elevate their facilitation impact.",
+        "leaderTitle": "Coaches",
+        "leaderDesc": "Agile coaches who regularly facilitate team and stakeholder workshops.",
+        "coachTitle": "Leaders",
+        "coachDesc": "Leaders responsible for running high-stakes meetings and planning sessions.",
+        "productTitle": "Change agents",
+        "productDesc": "Change agents guiding teams through Agile adoption and transformation.",
+        "expertTitle": "Consultants",
+        "expertDesc": "Consultants working with distributed, cross-functional, or hybrid teams."
       },
       "keyLearning": {
         "title": "Key Learning Points",
         "point1": "Master facilitation techniques that energize teams and drive clear decisions.",
         "point2": "Design and run powerful Sprint Planning, Review, and Retrospective sessions.",
-        "point3": "Build psychological safety and foster genuine collaboration in every session.",
-        "point4": "Navigate conflict, align stakeholders, and manage difficult group dynamics with confidence.",
-        "point5": "Apply advanced tools likeLiberating Structures, 1-2-4-All, and more to maximize participation."
+        "point3": "Navigate conflict, disagreement, and group dynamics with professional skill.",
+        "point4": "Use visual facilitation, structured dialogue, and liberating structures effectively.",
+        "point5": "Facilitate remote, hybrid, and in-person events with equal confidence.",
+        "point6": "Create psychologically safe spaces where teams speak openly and innovate.",
+        "point7": "Measure facilitation effectiveness and continuously improve your practice."
       },
       "cta": {
-        "headingPart1": "Ready to step into the world of",
-        "headingPart2": "Agile?",
-        "description": "Enroll in the ESF certification today and start building the career you've been working toward.",
+        "headingPart1": "Become the facilitator every Agile team",
+        "headingPart2": "wishes they had",
+        "description": "Register for the ESF certification and unlock a skill set that defines great Agile leaders.",
         "button": "Enroll in Endorsed Scrum Facilitator (ESF)",
         "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "contactLink": "Contact Us"
       },
       "related": {
         "headingPart1": "Related",
@@ -1911,14 +1913,14 @@
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
-          "price": "CAD $130",
+          "price": "USD $130",
           "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
           "learnMore": "Learn More About ESM"
         },
         "epo": {
           "fullName": "Endorsed Product Owner",
           "level": "Foundation Level",
-          "price": "CAD $180",
+          "price": "USD $130",
           "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
           "learnMore": "Learn More About EPO"
         }
