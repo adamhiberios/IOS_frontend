@@ -8,8 +8,7 @@
  *   4. Why Take a Mock test? — dark-red left panel (mock exam icon + pills) + benefits list on right
  *   5. How Our Mock Exams Work — numbered steps on left + dark mock-exam preview card on right
  *   6. Training with Mock Exam CTA — image + white CTA card
- *   7. Feel free to get in touch — icon + heading on left, contact form on right
- *   8. Footer        — reuses ios-landing-footer
+ *   7. Footer        — reuses ios-landing-footer
  *
  * All text is routed through `LanguageService.t()` for EN / AR / FR i18n.
  * Keys live under the `mockExam.*` namespace in assets/i18n/*.json.
@@ -37,7 +36,6 @@ import type { LucideIconName } from '@ui/icon/icon-names';
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
 import { PageHero } from '../components/page-hero';
-import { LandingContactSection } from '../components/contact-section';
 
 // ─── Local interfaces ────────────────────────────────────────────────────────
 
@@ -77,7 +75,6 @@ interface AnswerOption {
     PageHero,
     IosIcon,
     ScrollToTop,
-    LandingContactSection,
   ],
   providers: [
     provideIcons(
@@ -578,12 +575,7 @@ interface AnswerOption {
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════
-         7. Feel free to get in touch
-    ═══════════════════════════════════════════════════════════ -->
-    <ios-landing-contact-section namespace="mockExam.contact" />
-
-    <!-- ═══════════════════════════════════════════════════════════
-         8. Footer
+         7. Footer
     ═══════════════════════════════════════════════════════════ -->
     <ios-landing-footer />
 

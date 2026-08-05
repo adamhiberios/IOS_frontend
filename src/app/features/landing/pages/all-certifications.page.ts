@@ -11,9 +11,8 @@
  *   6.  Scrum Facilitator   — #f4f0eb, centered, 1 card  (amber)
  *   7.  Compare table       — white, column-based flex layout
  *   8.  FAQ accordion       — #fffcee, 5 items
- *   9.  Contact             — ios-landing-contact-section
- *  10.  Footer              — ios-landing-footer
- *  11.  Scroll-to-top
+ *   9.  Footer              — ios-landing-footer
+ *  10.  Scroll-to-top
  *
  * All user-visible strings are resolved through `LanguageService.t()`.
  * Keys live under `allCertifications.*` in assets/i18n/{en,ar,fr}.json.
@@ -28,7 +27,6 @@ import { IosIcon, ScrollToTop, provideIcons } from '@ui';
 
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
-import { LandingContactSection } from '../components/contact-section';
 import { CertificationCard } from '../components/certification-card';
 import { CertPageHero } from '../components/cert-page-hero';
 
@@ -65,7 +63,6 @@ interface CertDef {
     NgOptimizedImage,
     LandingNavbar,
     LandingFooter,
-    LandingContactSection,
     CertificationCard,
     IosIcon,
     ScrollToTop,
@@ -280,7 +277,7 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
       </div>
 
       <!-- SM cards — navy theme, driven by certDefs -->
-      <div class="flex flex-col lg:flex-row gap-[24px] items-stretch w-full justify-center">
+      <div class="flex flex-col xl:flex-row gap-[24px] items-stretch w-full justify-center">
         @for (cert of smCerts; track cert.code) {
           <ios-certification-card
             class="flex-1 min-w-0"
@@ -338,7 +335,7 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
       </div>
 
       <!-- PO cards — green theme, driven by certDefs -->
-      <div class="flex flex-col lg:flex-row gap-[24px] items-stretch w-full justify-center">
+      <div class="flex flex-col xl:flex-row gap-[24px] items-stretch w-full justify-center">
         @for (cert of poCerts; track cert.code) {
           <ios-certification-card
             class="flex-1 min-w-0"
@@ -644,11 +641,6 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
         }
       </div>
     </section>
-
-    <!-- ═══════════════════════════════════════════════════════════
-         9. Contact
-    ═══════════════════════════════════════════════════════════ -->
-    <ios-landing-contact-section namespace="allCertifications.contact" />
 
     <!-- ═══════════════════════════════════════════════════════════
         10. Footer

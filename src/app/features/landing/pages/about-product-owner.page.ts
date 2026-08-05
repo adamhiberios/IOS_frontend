@@ -10,9 +10,8 @@
  *   6. Career Opps       — ios-cert-info-section (warm, image first)
  *   7. FAQ / CTA         — ios-cert-faq-cta
  *   8. Certification Path — cream bg, three certification cards (EPO / EPO-P / EPO-A)
- *   9. Contact section   — ios-landing-contact-section
- *  10. Footer            — ios-landing-footer
- *  11. Scroll-to-top     — ios-scroll-to-top
+ *   9. Footer            — ios-landing-footer
+ *  10. Scroll-to-top     — ios-scroll-to-top
  *
  * All text is routed through `LanguageService.t()` for EN / AR / FR i18n.
  * Keys live under the `productOwner.*` namespace in assets/i18n/*.json.
@@ -26,7 +25,6 @@ import { CertificatesBadge, IosIcon, ScrollToTop, provideIcons } from '@ui';
 
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
-import { LandingContactSection } from '../components/contact-section';
 import { CertificationCard } from '../components/certification-card';
 import { CertPageHero } from '../components/cert-page-hero';
 import { CertInfoSection } from '../components/cert-info-section';
@@ -37,7 +35,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
   imports: [
     LandingNavbar,
     LandingFooter,
-    LandingContactSection,
     CertificationCard,
     CertificatesBadge,
     IosIcon,
@@ -313,11 +310,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
         <ios-icon name="arrow-right" class="w-5 h-5 rtl:rotate-180" aria-hidden="true" />
       </a>
     </section>
-
-    <!-- ═══════════════════════════════════════════════════════════
-         9. Contact
-    ═══════════════════════════════════════════════════════════ -->
-    <ios-landing-contact-section namespace="productOwner.contact" />
 
     <!-- ═══════════════════════════════════════════════════════════
         10. Footer
