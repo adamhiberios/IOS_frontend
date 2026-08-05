@@ -5,7 +5,12 @@ import {
   provideBrowserGlobalErrorListeners,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideRouter, withComponentInputBinding, withViewTransitions } from '@angular/router';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withInMemoryScrolling,
+  withViewTransitions,
+} from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { provideAppHttp } from '@core/http';
@@ -17,7 +22,19 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideBrowserGlobalErrorListeners(),
-    provideRouter(routes, withComponentInputBinding(), withViewTransitions()),
+    /**
+     * `scrollPositionRestoration: 'top'` — every route navigation (e.g. the
+     * "Enroll Now" cert cards) lands at the top of the new page instead of
+     * keeping the previous page's scroll offset, which without this made the
+     * destination page appear to open mid-content. `anchorScrolling` keeps
+     * `#fragment` links (e.g. in-page anchors) working as expected alongside it.
+     */
+    provideRouter(
+      routes,
+      withComponentInputBinding(),
+      withViewTransitions(),
+      withInMemoryScrolling({ scrollPositionRestoration: 'top', anchorScrolling: 'enabled' }),
+    ),
     provideAppHttp(),
 
     /**

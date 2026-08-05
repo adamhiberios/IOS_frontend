@@ -192,8 +192,17 @@ interface CertLevelDef {
                   cause horizontal overflow. The start/end insets plus the
                   mirrored rtl: translate keep them on the correct sides in
                   Arabic.
+
+                  The touch-pan-y class lets the browser keep handling vertical
+                  page scroll while we read the horizontal component ourselves,
+                  so a swipe steps the card instead of being swallowed as a
+                  page scroll gesture.
                 -->
-                  <div class="relative w-full">
+                  <div
+                    class="relative w-full touch-pan-y"
+                    (touchstart)="onCardTouchStart($event)"
+                    (touchend)="onCardTouchEnd($event, level.id, cards.length)"
+                  >
                     @if (cards[idx]; as cert) {
                       <ios-cert-card [cert]="cert" />
                     }
@@ -243,8 +252,19 @@ interface CertLevelDef {
               }
             </div>
           } @else {
-            <!-- Tab row — one tab per published track -->
-            <div class="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 mb-8">
+            <!--
+            Tab row — one tab per published track, plus the Prev/Next arrows.
+            Sticky at the absolute top of the viewport (top-0) while the
+            section is in view, so it stays reachable without any scroll-back.
+            z-[60] — above the navbar's z-50 — so this bar takes over the top
+            edge and sits in front of the navbar rather than being hidden
+            behind it once both reach the same stuck position. The navbar
+            reappears once the user scrolls back above this section.
+          -->
+            <div
+              class="sticky top-0 z-[60] bg-ios-surface-warm
+                   flex flex-wrap items-center justify-between gap-x-6 gap-y-3 mb-8 py-3"
+            >
               <div class="flex flex-wrap items-center gap-x-6 gap-y-2" role="tablist">
                 @for (level of levels(); track level.id; let idx = $index) {
                   <button
@@ -430,6 +450,35 @@ export class CertLevelsSection {
       const next = Math.min(Math.max((map[levelId] ?? 0) + delta, 0), Math.max(total - 1, 0));
       return { ...map, [levelId]: next };
     });
+  }
+
+  /** Horizontal start position of an in-flight swipe on the mobile card, if any. */
+  private swipeStartX: number | null = null;
+
+  /** Minimum horizontal travel (px) before a touch gesture counts as a swipe. */
+  private static readonly SWIPE_THRESHOLD_PX = 40;
+
+  /** Records the touch start X so `onCardTouchEnd` can measure swipe distance. */
+  protected onCardTouchStart(event: TouchEvent): void {
+    this.swipeStartX = event.touches[0]?.clientX ?? null;
+  }
+
+  /**
+   * Mobile swipe support for the single-card-at-a-time carousel: a left swipe
+   * steps to the next certificate, a right swipe steps back, mirroring what
+   * the prev/next arrow buttons already do. `stepCard` clamps at the ends, so
+   * a swipe past the last/first card is simply a no-op.
+   */
+  protected onCardTouchEnd(event: TouchEvent, levelId: string, total: number): void {
+    const startX = this.swipeStartX;
+    this.swipeStartX = null;
+    if (startX === null || total <= 1) return;
+
+    const endX = event.changedTouches[0]?.clientX ?? startX;
+    const deltaX = endX - startX;
+    if (Math.abs(deltaX) < CertLevelsSection.SWIPE_THRESHOLD_PX) return;
+
+    this.stepCard(levelId, deltaX < 0 ? 1 : -1, total);
   }
 
   /**

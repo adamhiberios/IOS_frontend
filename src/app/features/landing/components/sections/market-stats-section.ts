@@ -60,7 +60,7 @@ interface CertTableRow {
         </div>
 
         <!-- Three level cards with floating arrow dividers -->
-        <div class="w-full flex flex-col md:flex-row items-stretch">
+        <div class="w-full flex flex-col lg:flex-row items-stretch">
           @for (lvl of marketLevels(); track lvl.name; let last = $last) {
             <div
               class="relative flex-1 flex flex-col gap-6 p-6 border border-[#dcdcdc] rounded-lg bg-white"
@@ -148,7 +148,7 @@ interface CertTableRow {
                   />
                 </div>
               </div>
-              <div class="md:hidden h-4"></div>
+              <div class="lg:hidden h-4"></div>
             }
           }
         </div>
