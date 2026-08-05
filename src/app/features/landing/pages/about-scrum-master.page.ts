@@ -71,7 +71,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
          3. Intro — heading + description + ESM badge trio
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-white px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px]"
+      class="bg-white px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] max-w-[1440px] mx-auto"
       aria-labelledby="sm-intro-heading"
     >
       <div class="flex flex-col lg:flex-row items-center gap-12 xl:gap-[93px]">
@@ -186,7 +186,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
          8. Certification Path — cream bg
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]
+      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] max-w-[1440px] mx-auto
              flex flex-col gap-8 items-center"
       aria-labelledby="sm-cert-heading"
     >

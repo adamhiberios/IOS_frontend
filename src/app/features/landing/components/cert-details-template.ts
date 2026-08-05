@@ -156,7 +156,7 @@ export interface CertDetailsConfig {
       ═══════════════════════════════════════════════════════════ -->
       <section class="relative overflow-hidden bg-white" [attr.aria-labelledby]="heroHeadingId()">
         <!-- ── Track-coloured band ───────────────────────────────── -->
-        <div class="relative bg-track-bg">
+        <div class="relative bg-track-bg max-w-[1440px] mx-auto">
           <!-- Clipping layer for the decorative top-end circle so the
                badge below can still extend beyond the dark band. -->
           <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
@@ -286,7 +286,7 @@ export interface CertDetailsConfig {
         </div>
 
         <!-- ── White block — bottom half of the badge, description, buttons ── -->
-        <div class="bg-white px-6 md:px-10 lg:px-16 xl:px-[120px] pt-4 pb-[40px] lg:pb-[56px]">
+        <div class="bg-white px-6 md:px-10 lg:px-16 xl:px-[120px] pt-4 pb-[40px] lg:pb-[56px] max-w-[1440px] mx-auto">
           <div class="grid grid-cols-1 lg:grid-cols-[210px_1fr] gap-6 lg:gap-10 items-start">
             <div class="hidden lg:block w-[210px]" aria-hidden="true"></div>
 
@@ -346,7 +346,7 @@ export interface CertDetailsConfig {
       <section class="bg-white" aria-labelledby="cert-overview-heading">
         <!-- Track-tinted Overview band -->
         <div
-          class="bg-track-soft px-6 md:px-10 lg:px-16 xl:px-[246px] pt-[56px] pb-[56px] lg:pb-[72px]"
+          class="bg-track-soft px-6 md:px-10 lg:px-16 xl:px-[246px] pt-[56px] pb-[56px] lg:pb-[72px] max-w-[1440px] mx-auto"
         >
           <div class="flex flex-col gap-3">
             <h2
@@ -364,7 +364,7 @@ export interface CertDetailsConfig {
         </div>
 
         <!-- Image — full-width, fixed-height cert photo -->
-        <div class="relative w-full h-[834px]">
+        <div class="relative w-full h-[834px] max-w-[1440px] mx-auto">
           <img
             [ngSrc]="cfg().heroImageSrc"
             [alt]="lang.t(cfg().namespace + '.heroImage.alt')"
@@ -380,7 +380,7 @@ export interface CertDetailsConfig {
            4. Stats bar — track-tinted band with decorative side bars
       ═══════════════════════════════════════════════════════════ -->
       <section
-        class="relative overflow-hidden px-6 md:px-10 lg:px-16 xl:px-[242px] py-[56px] lg:py-[72px] bg-track-softer"
+        class="relative overflow-hidden px-6 md:px-10 lg:px-16 xl:px-[242px] py-[56px] lg:py-[72px] bg-track-softer max-w-[1440px] mx-auto"
         [attr.aria-label]="lang.t('certDetails.certFactsAriaLabel')"
       >
         <!-- Decorative side bars — desktop only -->
@@ -484,7 +484,7 @@ export interface CertDetailsConfig {
            5. Who Should Enroll — white band
       ═══════════════════════════════════════════════════════════ -->
       <section
-        class="bg-white px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] lg:py-[72px]
+        class="bg-white px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] lg:py-[72px] max-w-[1440px] mx-auto
                flex flex-col gap-12 items-center"
         aria-labelledby="cert-audience-heading"
       >
@@ -566,7 +566,7 @@ export interface CertDetailsConfig {
            6. Key Learning Points — cream band
       ═══════════════════════════════════════════════════════════ -->
       <section
-        class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px]"
+        class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] max-w-[1440px] mx-auto"
         aria-labelledby="cert-key-learning-heading"
       >
         <div class="flex flex-col gap-4">
@@ -600,7 +600,7 @@ export interface CertDetailsConfig {
            7. Ready CTA — track-coloured dark band
       ═══════════════════════════════════════════════════════════ -->
       <section
-        class="bg-track-strong px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px]
+        class="bg-track-strong px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] max-w-[1440px] mx-auto
                flex flex-col gap-6 items-center text-center"
         aria-labelledby="cert-cta-heading"
       >
@@ -652,7 +652,7 @@ export interface CertDetailsConfig {
       ═══════════════════════════════════════════════════════════ -->
       @if (cfg().related.length > 0) {
         <section
-          class="bg-white px-6 md:px-10 lg:px-16 xl:px-[120px] py-[56px] lg:py-[72px]
+          class="bg-white px-6 md:px-10 lg:px-16 xl:px-[120px] py-[56px] lg:py-[72px] max-w-[1440px] mx-auto
                  flex flex-col gap-6 items-center"
           aria-labelledby="cert-related-heading"
         >

@@ -106,7 +106,7 @@ import {
             <p class="sr-only" aria-live="polite">{{ syncStatusMessage() }}</p>
 
             <main
-              class="flex-1 px-4 md:px-20 py-8 flex flex-col gap-6"
+              class="flex-1 w-full max-w-[1440px] mx-auto px-4 md:px-20 py-8 flex flex-col gap-6"
               id="main-content"
               [attr.aria-label]="lang.t('assessments.runner.examQuestionsAriaLabel')"
             >

@@ -35,7 +35,7 @@ import { BulletStepList } from '@ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      class="px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]"
+      class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]"
       [class.bg-ios-surface-warm]="bg() === 'warm'"
       [class.bg-white]="bg() === 'white'"
       [attr.aria-labelledby]="headingId()"

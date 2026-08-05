@@ -62,7 +62,7 @@ import { PageHero } from '../components/page-hero';
         ></div>
       </div>
 
-      <div class="relative flex flex-col lg:flex-row gap-10 lg:gap-16 items-start justify-between">
+      <div class="relative max-w-[1440px] mx-auto flex flex-col lg:flex-row gap-10 lg:gap-16 items-start justify-between">
         <!-- Left: heading + subtitle -->
         <div class="flex flex-col gap-6 lg:w-[500px]">
           <!-- Icon badge -->

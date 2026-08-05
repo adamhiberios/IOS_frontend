@@ -156,7 +156,7 @@ const ADMIN_NAV: readonly AdminNavItem[] = [
           </div>
         </header>
 
-        <main class="flex-1 p-4 md:p-8">
+        <main class="flex-1 p-4 md:p-8 max-w-[1400px] mx-auto w-full">
           <router-outlet />
         </main>
       </div>

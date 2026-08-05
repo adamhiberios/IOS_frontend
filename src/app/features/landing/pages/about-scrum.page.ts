@@ -35,7 +35,7 @@ import { PageHero } from '../components/page-hero';
     />
 
     <!-- TODO: build out this page's content. -->
-    <section class="bg-white px-6 md:px-16 lg:px-[120px] py-20">
+    <section class="bg-white px-6 md:px-16 lg:px-[120px] py-20 max-w-[1440px] mx-auto">
       <p class="font-body text-[16px] text-ios-fg-8 text-center">
         {{ lang.t('aboutScrum.placeholder') }}
       </p>

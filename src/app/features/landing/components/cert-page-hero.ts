@@ -55,7 +55,7 @@ import { IosIcon, provideIcons } from '@ui';
         aria-hidden="true"
       ></div>
 
-      <div class="relative px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]">
+      <div class="relative max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]">
         <div class="flex items-start gap-3">
           <!-- Back button — arrow flips in RTL to point toward the reading start -->
           <a

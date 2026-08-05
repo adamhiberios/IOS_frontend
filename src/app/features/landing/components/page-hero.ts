@@ -40,7 +40,7 @@ import { IosIcon, provideIcons } from '@ui';
         aria-hidden="true"
       ></div>
 
-      <div class="relative px-10 md:px-32 lg:px-46 pt-14 pb-20">
+      <div class="relative max-w-[1440px] mx-auto px-10 md:px-32 lg:px-46 pt-14 pb-20">
         <div class="flex items-start gap-3">
           <!-- Back button -->
           <a

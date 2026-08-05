@@ -147,7 +147,7 @@ import { InsightsStore } from '../data-access/insights.store';
         aria-hidden="true"
       ></div>
 
-      <div class="relative px-6 md:px-16 lg:px-[120px] pt-14 pb-[200px]">
+      <div class="relative px-6 md:px-16 lg:px-[120px] pt-14 pb-[200px] max-w-[1440px] mx-auto">
         <div class="flex items-start gap-3">
           <!-- Back button -->
           <a

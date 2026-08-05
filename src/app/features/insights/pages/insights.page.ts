@@ -54,7 +54,7 @@ import { InsightsStore } from '../data-access/insights.store';
 
     <!-- Search bar -->
     <section class="bg-white pb-[72px]">
-      <div class="px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-10">
+      <div class="px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-10 max-w-[1440px] mx-auto">
         <div class="relative w-full max-w-[732px] mt-10">
           <div class="absolute inset-y-0 start-4 flex items-center pointer-events-none">
             <ios-icon name="search" class="w-6 h-6 text-ios-fg-8" />

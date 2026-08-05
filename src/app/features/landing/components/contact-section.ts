@@ -80,7 +80,8 @@ import { PublicContactApi } from '../data-access/contact.api';
       class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]"
       aria-labelledby="landing-contact-heading"
     >
-      <div class="flex flex-col lg:flex-row items-start justify-between gap-12">
+      <div class="max-w-[1440px] mx-auto">
+        <div class="flex flex-col lg:flex-row items-start justify-between gap-12">
         <!-- Start column — icon + heading + subtitle -->
         <div class="flex flex-col gap-6 lg:w-[635px]">
           <div
@@ -299,6 +300,7 @@ import { PublicContactApi } from '../data-access/contact.api';
               {{ error }}
             </p>
           }
+        </div>
         </div>
       </div>
     </section>

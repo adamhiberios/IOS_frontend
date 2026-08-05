@@ -57,7 +57,7 @@ import { NgOptimizedImage } from '@angular/common';
 
       <!-- Foreground content — sits above the decorative bg div -->
       <div
-        class="relative px-6 md:px-10 lg:px-16 xl:px-[246px] pt-[72px]
+        class="relative max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[246px] pt-[72px]
                flex flex-col gap-[42px] items-center"
       >
         <!-- Header block -->

@@ -102,9 +102,10 @@ interface CertDef {
                   at bottom-left and middle-right
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px]"
+      class="bg-ios-surface-warm py-[72px]"
       aria-labelledby="all-certs-intro-heading"
     >
+      <div class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[246px]">
       <!-- ── Centered header ──────────────────────────────────────── -->
       <div class="flex flex-col items-center gap-5 text-center mx-auto max-w-[1236px]">
         <!-- Badge pill -->
@@ -248,17 +249,17 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
           </div>
         </div>
       </div>
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════
          4. Scrum Master Track — #e8edf0, navy accent #184865
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-cer-blue-soft border-b border-ios-line
-             px-6 md:px-10 lg:px-[120px] py-[72px]
-             flex flex-col items-center gap-[24px]"
+      class="bg-cer-blue-soft border-b border-ios-line py-[72px]"
       aria-labelledby="all-certs-sm-heading"
     >
+      <div class="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-[120px] flex flex-col items-center gap-[24px]">
       <!-- Centered heading block -->
       <div class="flex flex-col items-center gap-4 text-center">
         <h2 id="all-certs-sm-heading" class="font-heading font-extrabold text-[36px] leading-[1.2]">
@@ -308,17 +309,17 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
           />
         }
       </div>
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════
          5. Product Owner Track — white, green accent #515e4d
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-white border-b border-ios-line
-             px-6 md:px-10 lg:px-[120px] py-[72px]
-             flex flex-col items-center gap-[24px]"
+      class="bg-white border-b border-ios-line py-[72px]"
       aria-labelledby="all-certs-po-heading"
     >
+      <div class="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-[120px] flex flex-col items-center gap-[24px]">
       <!-- Centered heading block -->
       <div class="flex flex-col items-center gap-4 text-center">
         <h2 id="all-certs-po-heading" class="font-heading font-extrabold text-[36px] leading-[1.2]">
@@ -366,17 +367,17 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
           />
         }
       </div>
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════
          6. Scrum Facilitator Track — #f4f0eb, amber accent #8e6636
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-cer-brown-soft border-b border-ios-line
-             px-6 md:px-10 lg:px-[120px] py-[72px]
-             flex flex-col items-center gap-[24px]"
+      class="bg-cer-brown-soft border-b border-ios-line py-[72px]"
       aria-labelledby="all-certs-sf-heading"
     >
+      <div class="w-full max-w-[1440px] mx-auto px-6 md:px-10 lg:px-[120px] flex flex-col items-center gap-[24px]">
       <!-- Centered heading block -->
       <div class="flex flex-col items-center gap-4 text-center">
         <h2 id="all-certs-sf-heading" class="font-heading font-extrabold text-[36px] leading-[1.2]">
@@ -426,13 +427,14 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
           />
         }
       </div>
+      </div>
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════
          7. Compare All Certifications — white, column-based table
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-white px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] flex flex-col gap-8"
+      class="bg-white px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] flex flex-col gap-8 max-w-[1440px] mx-auto"
       aria-labelledby="all-certs-comparison-heading"
     >
       <!-- Section header -->
@@ -582,7 +584,7 @@ class="h-[50px] flex items-center px-4 border-b border-ios-border-light bg-ios-b
          8. FAQ — cream bg #fffcee, 5 accordion items
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] flex flex-col gap-8"
+      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] flex flex-col gap-8 max-w-[1440px] mx-auto"
       aria-labelledby="all-certs-faq-heading"
     >
       <!-- Section header -->
