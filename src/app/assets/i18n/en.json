@@ -1360,7 +1360,7 @@
       "fullName": "Endorsed Scrum Master",
       "trackName": "Scrum Master Certifications",
       "level": "Foundation Level",
-      "price": "CAD $130",
+      "price": "USD $130",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -1428,7 +1428,7 @@
         "description": "Enroll in the ESM certification today and start building the career you’ve been working toward.",
         "button": "Enroll in Endorsed Scrum Master (ESM)",
         "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "contactLink": "Contact Us"
       },
       "related": {
         "headingPart1": "Related",
@@ -1437,14 +1437,14 @@
         "epo": {
           "fullName": "Endorsed Product Owner",
           "level": "Foundation Level",
-          "price": "CAD $180",
+          "price": "USD $130",
           "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
           "learnMore": "Learn More About EPO"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
-          "level": "Foundation Level",
-          "price": "CAD $180",
+          "level": "Authority Level",
+          "price": "USD $175",
           "description": "Endorsed Scrum Facilitator (ESF): Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }

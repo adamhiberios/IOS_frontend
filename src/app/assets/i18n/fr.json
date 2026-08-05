@@ -1360,7 +1360,7 @@
       "fullName": "Maître Scrum Agréé",
       "trackName": "Certifications Scrum Master",
       "level": "Niveau Fondation",
-      "price": "CAD $130",
+      "price": "USD $130",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -1437,14 +1437,14 @@
         "epo": {
           "fullName": "Propriétaire de Produit Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $180",
+          "price": "USD $130",
           "description": "Maîtrisez la vision produit, la gestion du backlog et la collaboration avec les parties prenantes. Un complément précieux aux compétences de Scrum Master pour les professionnels qui veulent comprendre la dynamique complète d'une équipe Scrum.",
           "learnMore": "En savoir plus sur l'EPO"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
-          "level": "Niveau Fondation",
-          "price": "CAD $180",
+          "level": "Niveau Autorité",
+          "price": "USD $175",
           "description": "Facilitateur Scrum Agréé (ESF) : Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
           "learnMore": "En savoir plus sur l'ESF"
         }
