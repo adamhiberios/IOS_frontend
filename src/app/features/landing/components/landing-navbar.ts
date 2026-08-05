@@ -83,8 +83,10 @@ interface CertMenuGroup {
 
         <!-- Nav links — hidden on mobile, visible on lg+ -->
         <div class="hidden lg:flex items-center gap-1">
-          <!-- Certifications: opens a mega-menu instead of navigating directly -->
-          <div class="relative">
+          <!-- Certifications: opens a mega-menu instead of navigating directly.
+               Opens on hover (desktop mouse users); click still works for
+               keyboard/touch users since mouseenter never fires for them. -->
+          <div class="relative" (mouseenter)="onCertMouseEnter()" (mouseleave)="onCertMouseLeave()">
             <button
               type="button"
               (click)="toggleCert($event)"
@@ -199,8 +201,10 @@ interface CertMenuGroup {
               </div>
             }
           </div>
-          <!-- About: a menu of links, not a destination of its own -->
-          <div class="relative">
+          <!-- About: a menu of links, not a destination of its own.
+               Opens on hover (desktop mouse users); click still works for
+               keyboard/touch users since mouseenter never fires for them. -->
+          <div class="relative" (mouseenter)="onAboutMouseEnter()" (mouseleave)="onAboutMouseLeave()">
             <button
               type="button"
               (click)="toggleAbout($event)"
@@ -486,6 +490,17 @@ export class LandingNavbar {
    */
   protected readonly certOpen = signal(false);
 
+  /**
+   * Pending close timers for the hover-driven desktop dropdowns. A short
+   * delay (rather than closing immediately on `mouseleave`) absorbs the
+   * gap between the trigger button and the absolutely-positioned panel
+   * below it, so crossing that gap doesn't flicker the menu shut before
+   * the pointer reaches the panel. Cleared whenever the pointer re-enters.
+   */
+  private certCloseTimer: ReturnType<typeof setTimeout> | null = null;
+  private aboutCloseTimer: ReturnType<typeof setTimeout> | null = null;
+  private static readonly HOVER_CLOSE_DELAY_MS = 150;
+
   constructor() {
     // The mega-menu renders nothing until the catalogue resolves, so there is
     // no lazier moment to ask for it. `load()` is idempotent and shared with
@@ -537,7 +552,29 @@ export class LandingNavbar {
   }
 
   protected closeCert(): void {
+    if (this.certCloseTimer) {
+      clearTimeout(this.certCloseTimer);
+      this.certCloseTimer = null;
+    }
     if (this.certOpen()) this.certOpen.set(false);
+  }
+
+  /** Opens the Certifications mega-menu on mouse hover (desktop). */
+  protected onCertMouseEnter(): void {
+    if (this.certCloseTimer) {
+      clearTimeout(this.certCloseTimer);
+      this.certCloseTimer = null;
+    }
+    this.aboutOpen.set(false);
+    this.certOpen.set(true);
+  }
+
+  /** Closes the Certifications mega-menu shortly after the pointer leaves. */
+  protected onCertMouseLeave(): void {
+    this.certCloseTimer = setTimeout(() => {
+      this.certOpen.set(false);
+      this.certCloseTimer = null;
+    }, LandingNavbar.HOVER_CLOSE_DELAY_MS);
   }
 
   /**
@@ -565,7 +602,29 @@ export class LandingNavbar {
   }
 
   protected closeAbout(): void {
+    if (this.aboutCloseTimer) {
+      clearTimeout(this.aboutCloseTimer);
+      this.aboutCloseTimer = null;
+    }
     if (this.aboutOpen()) this.aboutOpen.set(false);
+  }
+
+  /** Opens the About menu on mouse hover (desktop). */
+  protected onAboutMouseEnter(): void {
+    if (this.aboutCloseTimer) {
+      clearTimeout(this.aboutCloseTimer);
+      this.aboutCloseTimer = null;
+    }
+    this.certOpen.set(false);
+    this.aboutOpen.set(true);
+  }
+
+  /** Closes the About menu shortly after the pointer leaves. */
+  protected onAboutMouseLeave(): void {
+    this.aboutCloseTimer = setTimeout(() => {
+      this.aboutOpen.set(false);
+      this.aboutCloseTimer = null;
+    }, LandingNavbar.HOVER_CLOSE_DELAY_MS);
   }
 
   /** Navigating from the mobile sheet dismisses the sheet and any open submenu. */
