@@ -265,8 +265,8 @@ import { CertFaqCta } from '../components/cert-faq-cta';
             [questions]="lang.t('productOwner.certPath.questions')"
             [startingAtLabel]="lang.t('productOwner.certPath.startingAt')"
             [price]="lang.t('productOwner.certPath.price')"
-            [downloadLabel]="lang.t('productOwner.certPath.download')"
             [enrollLabel]="lang.t('productOwner.certPath.enroll')"
+            detailLink="/certifications/epo"
           />
           <ios-certification-card
             class="lg:flex-1 lg:min-w-0"
@@ -279,8 +279,8 @@ import { CertFaqCta } from '../components/cert-faq-cta';
             [questions]="lang.t('productOwner.certPath.questions')"
             [startingAtLabel]="lang.t('productOwner.certPath.startingAt')"
             [price]="lang.t('productOwner.certPath.price')"
-            [downloadLabel]="lang.t('productOwner.certPath.download')"
             [enrollLabel]="lang.t('productOwner.certPath.enroll')"
+            detailLink="/certifications/epo-p"
           />
           <ios-certification-card
             class="lg:flex-1 lg:min-w-0"
@@ -293,8 +293,8 @@ import { CertFaqCta } from '../components/cert-faq-cta';
             [questions]="lang.t('productOwner.certPath.questions')"
             [startingAtLabel]="lang.t('productOwner.certPath.startingAt')"
             [price]="lang.t('productOwner.certPath.price')"
-            [downloadLabel]="lang.t('productOwner.certPath.download')"
             [enrollLabel]="lang.t('productOwner.certPath.enroll')"
+            detailLink="/certifications/epo-a"
           />
         </div>
       </div>

@@ -52,8 +52,6 @@ interface CertDef {
   readonly cardCodeColor: string;
   readonly cardFullNameColor: string;
   readonly cardPriceColor: string;
-  readonly cardDownloadBgColor: string;
-  readonly cardDownloadTextColor: string;
   readonly cardEnrollBgColor: string;
   // Comparison-table-only fields
   readonly comparisonLevelBg: string;
@@ -295,16 +293,14 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
             [questions]="lang.t('allCertifications.shared.questions')"
             [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
             [price]="lang.t('allCertifications.shared.price')"
-            [downloadLabel]="lang.t('allCertifications.shared.download')"
             [enrollLabel]="lang.t('allCertifications.shared.enroll')"
+            [detailLink]="'/certifications/' + cert.code.toLowerCase()"
             [showStartingAtPrice]="cert.showStartingAtPrice"
             [levelBgColor]="cert.cardLevelBgColor"
             [levelTextColor]="cert.cardLevelTextColor"
             [codeColor]="cert.cardCodeColor"
             [fullNameColor]="cert.cardFullNameColor"
             [priceColor]="cert.cardPriceColor"
-            [downloadBgColor]="cert.cardDownloadBgColor"
-            [downloadTextColor]="cert.cardDownloadTextColor"
             [enrollBgColor]="cert.cardEnrollBgColor"
           />
         }
@@ -355,14 +351,12 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
             [questions]="lang.t('allCertifications.shared.questions')"
             [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
             [price]="lang.t('allCertifications.shared.price')"
-            [downloadLabel]="lang.t('allCertifications.shared.download')"
             [enrollLabel]="lang.t('allCertifications.shared.enroll')"
+            [detailLink]="'/certifications/' + cert.code.toLowerCase()"
             [showStartingAtPrice]="cert.showStartingAtPrice"
             [levelBgColor]="cert.cardLevelBgColor"
             [levelTextColor]="cert.cardLevelTextColor"
             [priceColor]="cert.cardPriceColor"
-            [downloadBgColor]="cert.cardDownloadBgColor"
-            [downloadTextColor]="cert.cardDownloadTextColor"
             [enrollBgColor]="cert.cardEnrollBgColor"
           />
         }
@@ -413,16 +407,14 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
             [questions]="lang.t('allCertifications.shared.questions')"
             [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
             [price]="lang.t('allCertifications.shared.price')"
-            [downloadLabel]="lang.t('allCertifications.shared.download')"
             [enrollLabel]="lang.t('allCertifications.shared.enroll')"
+            [detailLink]="'/certifications/' + cert.code.toLowerCase()"
             [showStartingAtPrice]="cert.showStartingAtPrice"
             [levelBgColor]="cert.cardLevelBgColor"
             [levelTextColor]="cert.cardLevelTextColor"
             [codeColor]="cert.cardCodeColor"
             [fullNameColor]="cert.cardFullNameColor"
             [priceColor]="cert.cardPriceColor"
-            [downloadBgColor]="cert.cardDownloadBgColor"
-            [downloadTextColor]="cert.cardDownloadTextColor"
             [enrollBgColor]="cert.cardEnrollBgColor"
           />
         }
@@ -710,8 +702,6 @@ export class AllCertificationsPage {
       cardCodeColor: '#143d56',
       cardFullNameColor: '#113348',
       cardPriceColor: '#184865',
-      cardDownloadBgColor: '#e8edf0',
-      cardDownloadTextColor: '#0b202d',
       cardEnrollBgColor: '#184865',
       comparisonLevelBg: '#184865',
       prereqSuffix: 'prerequisiteNone',
@@ -729,8 +719,6 @@ export class AllCertificationsPage {
       cardCodeColor: '#143d56',
       cardFullNameColor: '#113348',
       cardPriceColor: '#184865',
-      cardDownloadBgColor: '#e8edf0',
-      cardDownloadTextColor: '#0b202d',
       cardEnrollBgColor: '#184865',
       comparisonLevelBg: '#184865',
       prereqSuffix: 'prerequisiteNone',
@@ -748,8 +736,6 @@ export class AllCertificationsPage {
       cardCodeColor: '#143d56',
       cardFullNameColor: '#113348',
       cardPriceColor: '#184865',
-      cardDownloadBgColor: '#e8edf0',
-      cardDownloadTextColor: '#0b202d',
       cardEnrollBgColor: '#184865',
       comparisonLevelBg: '#184865',
       prereqSuffix: 'prerequisiteCsm',
@@ -767,8 +753,6 @@ export class AllCertificationsPage {
       cardCodeColor: '#143d56',
       cardFullNameColor: '#113348',
       cardPriceColor: '#515e4d',
-      cardDownloadBgColor: '#eef3ec',
-      cardDownloadTextColor: '#2a3628',
       cardEnrollBgColor: '#515e4d',
       comparisonLevelBg: '#515e4d',
       prereqSuffix: 'prerequisiteNone',
@@ -786,8 +770,6 @@ export class AllCertificationsPage {
       cardCodeColor: '#143d56',
       cardFullNameColor: '#113348',
       cardPriceColor: '#515e4d',
-      cardDownloadBgColor: '#eef3ec',
-      cardDownloadTextColor: '#2a3628',
       cardEnrollBgColor: '#515e4d',
       comparisonLevelBg: '#515e4d',
       prereqSuffix: 'prerequisiteExp',
@@ -805,8 +787,6 @@ export class AllCertificationsPage {
       cardCodeColor: '#143d56',
       cardFullNameColor: '#113348',
       cardPriceColor: '#515e4d',
-      cardDownloadBgColor: '#eef3ec',
-      cardDownloadTextColor: '#2a3628',
       cardEnrollBgColor: '#515e4d',
       comparisonLevelBg: '#515e4d',
       prereqSuffix: 'prerequisiteNone',
@@ -824,8 +804,6 @@ export class AllCertificationsPage {
       cardCodeColor: '#8e6636',
       cardFullNameColor: '#654826',
       cardPriceColor: '#8e6636',
-      cardDownloadBgColor: '#f4f0eb',
-      cardDownloadTextColor: '#402e18',
       cardEnrollBgColor: '#8e6636',
       comparisonLevelBg: '#8e6636',
       prereqSuffix: 'prerequisiteNone',

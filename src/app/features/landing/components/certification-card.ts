@@ -9,7 +9,7 @@
  *   - Hours / online / questions meta row
  *   - A divider
  *   - Price
- *   - Download + Enroll action buttons (enroll arrow flips in RTL)
+ *   - Enroll action button, linking to the cert's detail page (arrow flips in RTL)
  *
  * Usage:
  *   <ios-certification-card
@@ -22,16 +22,16 @@
  *     [questions]="lang.t('scrumMaster.certPath.questions')"
  *     [startingAtLabel]="lang.t('scrumMaster.certPath.startingAt')"
  *     [price]="lang.t('scrumMaster.certPath.price')"
- *     [downloadLabel]="lang.t('scrumMaster.certPath.download')"
  *     [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
+ *     detailLink="/certifications/esm"
  *   />
  */
 
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   LucideArrowRight,
   LucideClock,
-  LucideDownload,
   LucideCircleQuestionMark,
   LucideMonitor,
 } from '@lucide/angular';
@@ -40,15 +40,9 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
 
 @Component({
   selector: 'ios-certification-card',
-  imports: [CertificatesBadge, IosIcon],
+  imports: [CertificatesBadge, IosIcon, RouterLink],
   providers: [
-    provideIcons(
-      LucideArrowRight,
-      LucideClock,
-      LucideDownload,
-      LucideCircleQuestionMark,
-      LucideMonitor,
-    ),
+    provideIcons(LucideArrowRight, LucideClock, LucideCircleQuestionMark, LucideMonitor),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -156,26 +150,12 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
         </div>
       }
 
-      <!-- Actions — flex row mirrors automatically in RTL -->
-      <div class="flex gap-3 items-center">
-        <!-- Download brochure -->
-        <button
-          type="button"
-          class="flex-1 flex items-center justify-center gap-2 h-11 px-4 rounded-xl
-                 font-body font-semibold text-[16px] leading-[1.4] whitespace-nowrap
-                 hover:opacity-80 transition-opacity
-                 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
-          [style.background-color]="downloadBgColor()"
-          [style.color]="downloadTextColor()"
-        >
-          <ios-icon name="download" class="w-5 h-5" aria-hidden="true" />
-          {{ downloadLabel() }}
-        </button>
-
-        <!-- Enroll — arrow flips in RTL -->
-        <button
-          type="button"
-          class="flex items-center justify-center gap-2 h-11 px-6 rounded-xl
+      <!-- Actions -->
+      <div class="flex items-center">
+        <!-- Enroll — navigates to the cert's detail page; arrow flips in RTL -->
+        <a
+          [routerLink]="detailLink()"
+          class="w-full flex items-center justify-center gap-2 h-11 px-6 rounded-xl
                  font-body font-semibold text-[16px] leading-[1.4] text-white whitespace-nowrap
                  hover:opacity-90 transition-opacity
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-white/50"
@@ -183,7 +163,7 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
         >
           {{ enrollLabel() }}
           <ios-icon name="arrow-right" class="w-5 h-5 rtl:rotate-180" aria-hidden="true" />
-        </button>
+        </a>
       </div>
     </div>
   `,
@@ -216,11 +196,11 @@ export class CertificationCard {
   /** Price string, e.g. "CAD $180". */
   readonly price = input<string>('');
 
-  /** Label for the download brochure button. */
-  readonly downloadLabel = input<string>('');
-
   /** Label for the enroll button. */
   readonly enrollLabel = input<string>('');
+
+  /** Router link to the certification's detail page, e.g. `/certifications/esm`. */
+  readonly detailLink = input<string>('');
 
   /**
    * When `true`, displays the "starting at" label + price inline directly
@@ -246,12 +226,6 @@ export class CertificationCard {
 
   /** Colour of the price string. Default: SM navy #184865. */
   readonly priceColor = input<string>('#184865');
-
-  /** Background colour of the Download button. Default: SM light #e8edf0. */
-  readonly downloadBgColor = input<string>('#e8edf0');
-
-  /** Text colour of the Download button. Default: dark #0b202d. */
-  readonly downloadTextColor = input<string>('#0b202d');
 
   /** Background colour of the Enroll button. Default: SM navy #184865. */
   readonly enrollBgColor = input<string>('#184865');

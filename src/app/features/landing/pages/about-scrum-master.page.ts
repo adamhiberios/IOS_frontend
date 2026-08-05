@@ -265,8 +265,8 @@ import { CertFaqCta } from '../components/cert-faq-cta';
             [questions]="lang.t('scrumMaster.certPath.questions')"
             [startingAtLabel]="lang.t('scrumMaster.certPath.startingAt')"
             [price]="lang.t('scrumMaster.certPath.price')"
-            [downloadLabel]="lang.t('scrumMaster.certPath.download')"
             [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
+            detailLink="/certifications/esm"
           />
           <ios-certification-card
             class="lg:flex-1 lg:min-w-0"
@@ -279,8 +279,8 @@ import { CertFaqCta } from '../components/cert-faq-cta';
             [questions]="lang.t('scrumMaster.certPath.questions')"
             [startingAtLabel]="lang.t('scrumMaster.certPath.startingAt')"
             [price]="lang.t('scrumMaster.certPath.price')"
-            [downloadLabel]="lang.t('scrumMaster.certPath.download')"
             [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
+            detailLink="/certifications/esm-p"
           />
           <ios-certification-card
             class="lg:flex-1 lg:min-w-0"
@@ -293,8 +293,8 @@ import { CertFaqCta } from '../components/cert-faq-cta';
             [questions]="lang.t('scrumMaster.certPath.questions')"
             [startingAtLabel]="lang.t('scrumMaster.certPath.startingAt')"
             [price]="lang.t('scrumMaster.certPath.price')"
-            [downloadLabel]="lang.t('scrumMaster.certPath.download')"
             [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
+            detailLink="/certifications/esm-a"
           />
         </div>
       </div>
