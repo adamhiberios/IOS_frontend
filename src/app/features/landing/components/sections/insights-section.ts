@@ -31,7 +31,9 @@ import { InsightsCard, type InsightCardPost } from '../../../insights/components
       [attr.aria-label]="lang.t('landing.sections.insightsSectionAriaLabel')"
       class="bg-white py-[72px]"
     >
-      <div class="px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-8">
+      <div
+        class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-8"
+      >
         <!-- Header row -->
         <div
           class="flex flex-col lg:flex-row items-start lg:items-center justify-between w-full gap-6"

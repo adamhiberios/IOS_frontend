@@ -50,7 +50,7 @@ interface HowItWorksStep {
       [attr.aria-label]="lang.t('landing.sections.howItWorksSectionAriaLabel')"
       class="bg-ios-surface-warm py-[72px]"
     >
-      <div class="px-6 md:px-16 lg:px-[120px]">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px]">
         <!-- Header -->
         <div class="flex flex-col items-center gap-3 mb-16">
           <ios-section-badge [text]="lang.t('landing.sections.howItWorks')" variant="warm-red" />

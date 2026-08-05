@@ -81,7 +81,7 @@ interface CertLevelDef {
         [attr.aria-label]="lang.t('landing.sections.certLevelsSectionAriaLabel')"
         class="bg-ios-surface-warm py-20 lg:py-28"
       >
-        <div class="px-6 md:px-16 lg:px-[120px]">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px]">
           <!-- Header -->
           <div class="mb-10">
             <div class="mb-5">
@@ -486,9 +486,7 @@ export class CertLevelsSection {
       if (!group) {
         group = {
           id,
-          sortKey: known
-            ? `0${TRACK_ORDER.indexOf(known)}`
-            : `1${raw.toLowerCase() || '￿'}`,
+          sortKey: known ? `0${TRACK_ORDER.indexOf(known)}` : `1${raw.toLowerCase() || '￿'}`,
           tabLabel: known
             ? this.lang.t(`landing.levels.tracks.${known}.tabLabel`)
             : raw || this.lang.t('landing.levels.tiers.unknown'),

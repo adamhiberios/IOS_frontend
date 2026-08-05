@@ -62,7 +62,9 @@ interface CertMenuGroup {
              border-b-2 border-ios-border-light border-solid"
       [attr.aria-label]="lang.t('landing.nav.mainNavAriaLabel')"
     >
-      <div class="flex items-center justify-between px-6 md:px-16 lg:px-[120px] py-4">
+      <div
+        class="max-w-[1440px] mx-auto flex items-center justify-between px-6 md:px-16 lg:px-[120px] py-4"
+      >
         <!-- Brand -->
         <a
           routerLink="/"

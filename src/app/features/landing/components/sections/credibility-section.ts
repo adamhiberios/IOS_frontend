@@ -46,7 +46,7 @@ interface CredibilityCard {
         aria-hidden="true"
       ></div>
 
-      <div class="relative px-6 md:px-16 lg:px-[120px]">
+      <div class="relative max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px]">
         <!-- Section header -->
         <div class="text-center max-w-[600px] mx-auto mb-6">
           <div class="mb-2">

@@ -32,7 +32,7 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
         aria-hidden="true"
       ></div>
 
-      <div class="relative px-6 md:px-16 lg:px-[120px] text-center">
+      <div class="relative max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] text-center">
         <div class="mb-6">
           <ios-section-badge
             [text]="lang.t('landing.sections.allCertsAtGlance.badge')"

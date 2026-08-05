@@ -45,7 +45,9 @@ interface CertTableRow {
       [attr.aria-label]="lang.t('landing.sections.marketStatsSectionAriaLabel')"
       class="bg-white py-[72px]"
     >
-      <div class="px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-8">
+      <div
+        class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] flex flex-col items-center gap-8"
+      >
         <!-- Header -->
         <div class="flex flex-col items-center text-center gap-4">
           <ios-section-badge [text]="lang.t('landing.marketStats.badge')" variant="muted-light" />

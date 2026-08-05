@@ -32,7 +32,7 @@ interface ValuePropCard {
       [attr.aria-label]="lang.t('landing.sections.valuePropSectionAriaLabel')"
       class="bg-ios-surface-muted py-18 lg:py-16"
     >
-      <div class="px-6 md:px-16 lg:px-[120px]">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px]">
         <!-- Section header -->
         <div class="text-center max-w-[1100px] mx-auto mb-14">
           <div class="mb-6">

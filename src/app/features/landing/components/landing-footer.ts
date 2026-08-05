@@ -18,7 +18,7 @@ import { CanadaFlag } from '@ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="bg-ios-brand-dark text-white">
-      <div class="px-6 md:px-16 lg:px-[120px] pt-12 lg:pt-14">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] pt-12 lg:pt-14">
         <div class="flex flex-col lg:flex-row gap-10 lg:gap-16">
           <!-- Brand + social -->
           <div class="flex-shrink-0 lg:w-[240px]">
