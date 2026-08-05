@@ -1649,7 +1649,7 @@
       "fullName": "Propriétaire de Produit Agréé",
       "trackName": "Certifications Propriétaire de Produit",
       "level": "Niveau Fondation",
-      "price": "CAD $180",
+      "price": "USD $130",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -1726,14 +1726,14 @@
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $130",
+          "price": "USD $130",
           "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement.",
           "learnMore": "En savoir plus sur l'ESM"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
-          "level": "Niveau Fondation",
-          "price": "CAD $180",
+          "level": "Niveau Autorité",
+          "price": "USD $175",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
           "learnMore": "En savoir plus sur l'ESF"
         }

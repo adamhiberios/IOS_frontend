@@ -1649,7 +1649,7 @@
       "fullName": "Endorsed Product Owner",
       "trackName": "Product Owner Certifications",
       "level": "Foundation Level",
-      "price": "CAD $180",
+      "price": "USD $130",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -1690,16 +1690,16 @@
         "badge": "Who Should Enroll",
         "headingPart1": "Who Should Invest in This",
         "headingPart2": "Certificate?",
-        "aspiringTitle": "Aspiring Product Owners",
-        "aspiringDesc": "Professionals aiming to take ownership of product success in Scrum teams.",
-        "businessTitle": "Business Analysts",
-        "businessDesc": "Team members who want to translate business needs into actionable backlog items.",
-        "startupTitle": "Startup Founders",
-        "startupDesc": "Entrepreneurs building products who need to prioritize features and manage delivery.",
-        "careerTitle": "Career Changers",
-        "careerDesc": "Professionals transitioning into product roles and seeking formal credentials.",
-        "developerTitle": "Tech Professionals",
-        "developerDesc": "Developers and testers who want to understand the business side of product delivery."
+        "aspiringTitle": "Product Owners",
+        "aspiringDesc": "Aspiring Product Owners entering the Agile product management field.",
+        "businessTitle": "Analysts",
+        "businessDesc": "Business analysts and product managers working alongside Scrum teams.",
+        "startupTitle": "Development teams",
+        "startupDesc": "Subject matter experts representing business needs to development teams.",
+        "careerTitle": "Startup founders",
+        "careerDesc": "Startup founders and entrepreneurs building products with Agile methods.",
+        "developerTitle": "Professionals",
+        "developerDesc": "Professionals transitioning from waterfall project management to Agile delivery."
       },
       "keyLearning": {
         "title": "Key Learning Points",
@@ -1712,12 +1712,12 @@
         "point7": "Build a strong foundation for the Endorsed Product Owner Practitioner (EPO-P)."
       },
       "cta": {
-        "headingPart1": "Ready to step into the world of",
-        "headingPart2": "Agile?",
-        "description": "Enroll in the EPO certification today and start building the career you've been working toward.",
+        "headingPart1": "Ready to shape products that",
+        "headingPart2": "customers love?",
+        "description": "Enroll in the EPO certification today and take the first step toward an exciting product career.",
         "button": "Enroll in Endorsed Product Owner (EPO)",
         "questions": "Questions?",
-        "contactLink": "Contact a certification advisor"
+        "contactLink": "Contact Us"
       },
       "related": {
         "headingPart1": "Related",
@@ -1726,14 +1726,14 @@
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
-          "price": "CAD $130",
+          "price": "USD $130",
           "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
           "learnMore": "Learn More About ESM"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
-          "level": "Foundation Level",
-          "price": "CAD $180",
+          "level": "Authority Level",
+          "price": "USD $175",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }
