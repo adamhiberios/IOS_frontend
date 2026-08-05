@@ -754,26 +754,498 @@
   "aboutInstitute": {
     "hero": {
       "back": "Retour à l'accueil",
-      "breadcrumb": { "home": "Accueil" },
+      "breadcrumb": {
+        "home": "Accueil"
+      },
       "title": "À propos de l'Institute of Scrum"
     },
-    "placeholder": "Contenu à venir."
+    "intro": {
+      "eyebrow": "À propos de l'Institute of Scrum",
+      "title": "Découvrez",
+      "subtitle": "Une introduction à l'état d'esprit, aux frameworks et aux avantages qui façonnent les organisations les plus adaptatives d'aujourd'hui",
+      "imageAlt": "Professionnel se préparant à un examen de certification",
+      "paragraph1": "L'Institute of Scrum est un organisme de formation indépendant basé en Ontario, au Canada, spécialisé dans la formation et la certification Agile et Scrum. Nos programmes sont entièrement en ligne et conçus pour s'adapter au rythme de chaque apprenant.",
+      "paragraph2": "Notre organisation s'appuie sur de nombreuses années d'expérience professionnelle en Agile et Scrum en Amérique du Nord. Cette expérience façonne tous les aspects de nos programmes, de la structure de nos parcours d'apprentissage à la conception de nos tests de pratique et finaux. Le résultat est une formation pratique, actuelle et parfaitement alignée sur la façon dont Scrum est appliqué dans les environnements professionnels aujourd'hui.",
+      "titleHighlight": "l'Institute of Scrum"
+    },
+    "mission": {
+      "sectionLabel": "Notre mission et notre vision",
+      "title": "Notre Mission",
+      "iconAlt": "Icône de drapeau représentant notre mission",
+      "body1": "Notre mission est d'aider les professionnels à apprendre Scrum correctement, à renforcer cet apprentissage par une pratique réaliste et à obtenir une certification qui reflète une compétence authentique.",
+      "body2": "Pour accomplir cette mission, nous nous engageons à :",
+      "body3": "Fournir des supports de formation clairs et pratiques conçus pour un public mondial. Maintenir des prix justes et transparents, afin que le coût ne soit jamais un obstacle au développement professionnel. Concevoir des tests qui évaluent la véritable compréhension de Scrum, plutôt que la mémorisation. Offrir à chaque apprenant un ensemble complet — formation, pratique, test final et certificat numérique — dans un abonnement unique et simple."
+    },
+    "vision": {
+      "title": "Notre Vision",
+      "iconAlt": "Icône de visière représentant notre vision",
+      "body1": "Nous croyons que de solides compétences en Agile et Scrum devraient être accessibles à tout professionnel motivé, et non réservées à ceux qui ont les moyens de suivre des programmes en salle coûteux.",
+      "body2": "Notre vision est de devenir l'organisation la plus fiable au monde en matière de formation Agile et Scrum — une destination où les professionnels du monde entier peuvent développer des compétences pratiques, obtenir une certification crédible et faire progresser leur carrière en toute confiance."
+    },
+    "trackIncluded": {
+      "eyebrow": "Mission & Valeurs",
+      "title": "Ce que vous recevez avec votre",
+      "subtitle": "Chaque parcours d'apprentissage à l'Institute of Scrum est livré comme un ensemble complet. Votre inscription comprend",
+      "items": [
+        {
+          "title": "Supports de formation complets",
+          "body": "Qui expliquent le framework Scrum, ses rôles, ses événements et ses artefacts en des termes clairs, appuyés par des exemples pratiques."
+        },
+        {
+          "title": "Accès au test final",
+          "body": "Sans frais supplémentaires. Le test est inclus dans votre parcours et peut être passé lorsque vous vous sentez pleinement prêt."
+        },
+        {
+          "title": "Un certificat numérique",
+          "body": "Délivré à l'issue réussie, confirmant votre réussite."
+        },
+        {
+          "title": "Tout le contenu à votre rythme",
+          "body": "Vous pouvez étudier selon votre propre emploi du temps, revoir le matériel autant que nécessaire et passer le test final lorsque vous êtes prêt."
+        },
+        {
+          "title": "Test blanc",
+          "body": "Vous prépare au test final. Cette composante de pratique est conçue dans un seul but : garantir que vous êtes bien préparé et réduire la probabilité d'un échec au test final. Le test blanc vous permet d'évaluer vos connaissances, d'identifier les domaines à approfondir et d'affiner votre compréhension avant de continuer. Notre objectif est de vous mettre en position de réussir."
+        }
+      ],
+      "titleHighlight": "inscription à un parcours"
+    },
+    "offer": {
+      "eyebrow": "Services & périmètre",
+      "title": "Ce que nous",
+      "subtitle": "À l'Institute of Scrum, nous proposons des programmes de formation et de certification Scrum et Agile conçus pour aider les individus et les organisations à développer des compétences pratiques et prêtes pour l'emploi.",
+      "cards": [
+        {
+          "title": "Scrum Master",
+          "body": "Un Scrum Master aide l'équipe Scrum à comprendre et à appliquer efficacement les principes Scrum. Il supprime les obstacles, facilite les événements Scrum, encourage la collaboration et protège l'équipe des distractions. Il coache également le Product Owner, l'équipe de développement et l'organisation pour améliorer les pratiques Agile, la performance de l'équipe, la communication et la livraison continue de valeur.",
+          "learnMore": "En savoir plus",
+          "link": "/certifications/esm"
+        },
+        {
+          "title": "Product Owner",
+          "body": "Un Product Owner est responsable de maximiser la valeur d'un produit en définissant clairement les priorités, en gérant le backlog produit et en veillant à ce que l'équipe de développement comprenne les besoins de l'entreprise. Il sert de pont entre les parties prenantes et l'équipe Scrum, en décidant de ce qui doit être construit ensuite en fonction de la valeur client, des objectifs commerciaux et des retours.",
+          "learnMore": "En savoir plus",
+          "link": "/certifications/epo"
+        },
+        {
+          "title": "Scrum Facilitator",
+          "body": "Un Scrum Master aide l'équipe Scrum à comprendre et à appliquer efficacement les principes Scrum. Il supprime les obstacles, facilite les événements Scrum, encourage la collaboration et protège l'équipe des distractions. Il coache également le Product Owner, l'équipe de développement et l'organisation pour améliorer les pratiques Agile, la performance de l'équipe, la communication et la livraison continue de valeur.",
+          "learnMore": "En savoir plus",
+          "link": "/certifications/esf"
+        }
+      ],
+      "seeAll": "Tout voir",
+      "seeAllLink": "/certifications",
+      "titleHighlight": "offrons"
+    },
+    "apart": {
+      "eyebrow": "Services & périmètre",
+      "title": "Ce qui nous",
+      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "items": [
+        {
+          "title": "Une expérience fiable",
+          "body": "Notre formation est façonnée par une vaste expérience professionnelle en Agile et Scrum. Les bonnes pratiques que nous partageons sont ancrées dans un travail de livraison réel, pas dans la théorie seule."
+        },
+        {
+          "title": "Un langage accessible",
+          "body": "Nos supports sont rédigés dans un anglais simple et clair, garantissant que les concepts restent compréhensibles pour un public professionnel mondial."
+        },
+        {
+          "title": "Un chemin unique et clair",
+          "body": "Un abonnement. Un parcours d'apprentissage. Un test de pratique. Un test final. Un certificat. Aucun frais caché et aucune complexité inutile."
+        },
+        {
+          "title": "Un certificat numérique",
+          "body": "Une approche axée sur la pratique. Un test blanc est inclus dans chaque parcours. Notre intention est que vous abordiez le test final avec confiance plutôt qu'avec incertitude. S'entraîner à l'avance est le moyen le plus efficace de réduire le risque d'échec."
+        },
+        {
+          "title": "Un prix abordable",
+          "body": "La certification Agile a historiquement été coûteuse. Nous avons délibérément structuré nos prix pour rester accessibles aux apprenants individuels, sans compromettre la qualité de ce que nous proposons."
+        }
+      ],
+      "titleHighlight": "distingue"
+    },
+    "serve": {
+      "eyebrow": "Services & périmètre",
+      "title": "Qui nous",
+      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "paragraphs": [
+        "Nos apprenants sont des professionnels en activité issus de milieux très variés : des développeurs logiciels qui évoluent vers des postes de chef d'équipe, des chefs de projet qui passent à la livraison Agile, des analystes d'affaires qui collaborent avec des équipes Scrum et des professionnels en milieu de carrière qui se tournent vers les rôles produit et livraison.",
+        "Ce qu'ils partagent est familier à beaucoup : un temps limité, des échéances exigeantes et le besoin d'une certification qui a du poids dans un entretien d'embauche.",
+        "Que vous prépariez votre premier entretien de Scrum Master, que vous formalisiez des années d'expérience en tant que Product Owner ou que vous élargissiez votre profil professionnel avec des compétences Agile, nos programmes sont conçus pour vous rencontrer là où vous êtes."
+      ],
+      "titleHighlight": "servons"
+    },
+    "trust": {
+      "eyebrow": "Confiance & sécurité",
+      "title": "Une note sur la",
+      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "paragraphs": [
+        "Choisir un organisme de formation est, à bien des égards, une question de confiance. Vous placez votre confiance dans la valeur du contenu, l'équité du test et la crédibilité du certificat aux yeux d'un employeur.",
+        "Nous considérons cette confiance comme une responsabilité. Nos contenus sont soigneusement revus avant publication et nos tests restent alignés sur le framework Scrum actuel."
+      ],
+      "titleHighlight": "confiance"
+    },
+    "trainingCta": {
+      "title": "Entraînement avec",
+      "subtitle": "Si vous êtes prêt à franchir la prochaine étape de votre carrière Agile, nous serions ravis de vous accueillir. Bienvenue à l'Institute of Scrum.",
+      "learnMore": "En savoir plus",
+      "imageAlt": "Étudiant se préparant à un test blanc",
+      "titleHighlight": "test blanc"
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Questions fréquemment",
+      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "items": [
+        {
+          "question": "Comment s'inscrire à un programme de certification ?",
+          "answer": "Pour vous inscrire, créez un compte, choisissez votre certification, effectuez le paiement et vous obtiendrez immédiatement l'accès à vos supports de cours dans votre tableau de bord."
+        },
+        {
+          "question": "Quels sont les prérequis pour la certification ?",
+          "answer": "Il n'y a aucun prérequis formel. Tout professionnel souhaitant apprendre ou formaliser ses connaissances Scrum peut s'inscrire. Nos supports sont rédigés dans un anglais clair et accessible et conçus pour les professionnels en activité, quel que soit leur niveau d'expérience."
+        },
+        {
+          "question": "Combien de temps dure le processus de certification ?",
+          "answer": "Le rythme vous appartient entièrement. Tout le contenu est à votre rythme et vous pouvez passer le test final dès que vous vous sentez prêt. Il n'y a pas d'échéance fixe, vous pouvez donc concilier vos études et vos engagements professionnels."
+        },
+        {
+          "question": "Y a-t-il des exigences de recertification ?",
+          "answer": "Non. Une fois que vous avez obtenu votre certificat, il reste valable. Aucun frais de renouvellement ni aucune exigence permanente pour le conserver."
+        }
+      ],
+      "titleHighlight": "posées"
+    },
+    "ready": {
+      "title": "Prêt à",
+      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "exploreCertificates": "Explorer les certifications",
+      "startNow": "Commencer maintenant",
+      "titleHighlight": "nous rejoindre ?"
+    }
   },
   "aboutAgile": {
     "hero": {
       "back": "Retour à l'accueil",
-      "breadcrumb": { "home": "Accueil" },
+      "breadcrumb": {
+        "home": "Accueil"
+      },
       "title": "À propos de l'Agilité"
     },
-    "placeholder": "Contenu à venir."
+    "intro": {
+      "badge": "À propos de l'Agilité",
+      "title": "Une approche moderne",
+      "subtitle": "Une introduction à l'état d'esprit, aux cadres et aux avantages qui façonnent les organisations les plus adaptatives d'aujourd'hui",
+      "imageAlt": "Professionnel se préparant à un examen de certification",
+      "whatIsTitle": "Qu'est-ce que",
+      "whatIsHeading": "l'Agilité ?",
+      "paragraph1": "L'Agilité est un état d'esprit et une façon de travailler qui aide les équipes à apporter de la valeur aux clients rapidement, de manière itérative et en réponse au changement. Enracinée dans le Manifeste Agile publié en 2001, elle privilégie les individus et les interactions, les solutions opérationnelles, la collaboration client et la capacité à s'adapter plutôt que les plans rigides et les processus lourds.",
+      "paragraph2": "Plutôt que de tenter de définir chaque détail d'un projet à l'avance, les équipes Agile travaillent en cycles courts, inspectent les résultats, recueillent des retours et ajustent leur approche. Cela crée une boucle continue d'apprentissage et d'amélioration, permettant aux organisations de répondre aux priorités changeantes, aux idées émergentes et aux besoins clients en évolution sans perdre de l'élan.",
+      "titleHighlight": "pour apporter de la valeur"
+    },
+    "frameworks": {
+      "heading1": "Les principaux ",
+      "heading2": "cadres Agile",
+      "subtitle": "Si l'Agilité est elle-même une philosophie, plusieurs cadres traduisent ses principes en pratique. Les plus largement adoptés sont :",
+      "scrum": {
+        "title": "Comprendre Scrum",
+        "subtitle": "Un cadre itératif pour planifier, construire, examiner et améliorer le travail.",
+        "diagram": {
+          "refinement": {
+            "label": "Affinement",
+            "body": "Gardez les éléments clairs, calibrés et prêts."
+          },
+          "top": [
+            {
+              "label": "Backlog produit",
+              "body": "Opportunités et idées de travail classées."
+            },
+            {
+              "label": "Planification du sprint",
+              "body": "Choisissez l'objectif et planifiez le sprint."
+            },
+            {
+              "label": "Backlog du sprint",
+              "body": "Éléments sélectionnés décomposés en travaux actionnables."
+            }
+          ],
+          "bottom": [
+            {
+              "label": "Amélioration continue",
+              "body": "L'apprentissage de chaque sprint alimente le cycle suivant."
+            },
+            {
+              "label": "Rétrospective de sprint",
+              "body": "Réfléchir et améliorer la façon de travailler."
+            },
+            {
+              "label": "Revue de sprint",
+              "body": "Examiner les résultats avec les parties prenantes."
+            },
+            {
+              "label": "Incrément",
+              "body": "Un résultat utilisable qui répond à la définition de terminé."
+            },
+            {
+              "label": "Équipe Scrum",
+              "body": "Une équipe polyvalente apporte de la valeur pendant le sprint."
+            }
+          ]
+        }
+      },
+      "kanban": {
+        "title": "Kanban",
+        "subtitle": "Approche basée sur le flux pour la livraison continue.",
+        "columns": ["À faire", "En cours", "En revue", "Terminé"],
+        "features": [
+          "Visualise le travail sur un tableau",
+          "Limite le travail en cours (WIP)",
+          "Se concentre sur la livraison continue"
+        ],
+        "idealFor": "Idéal pour",
+        "roles": ["Support", "Opérations", "Maintenance"],
+        "footer": "Convient aux équipes confrontées à un flux régulier de demandes entrantes.",
+        "wipLimit": "Limite WIP 3"
+      },
+      "xp": {
+        "title": "Extreme Programming (XP)",
+        "subtitle": "Met l'accent sur l'excellence technique et la réactivité.",
+        "practices": [
+          {
+            "title": "Programmation en binôme",
+            "body": "Travaillez ensemble. Partagez le savoir."
+          },
+          {
+            "title": "Développement piloté par les tests",
+            "body": "Écrivez d'abord les tests. Construisez un meilleur code."
+          },
+          {
+            "title": "Intégration continue",
+            "body": "Intégrez souvent. Détectez les problèmes tôt."
+          }
+        ],
+        "footerTitle": "Excellence technique",
+        "footerBody": "Par la discipline et l'automatisation."
+      },
+      "lean": {
+        "title": "Lean",
+        "subtitle": "Inspiré du système de production de Toyota.",
+        "practices": [
+          {
+            "title": "Éliminer le gaspillage",
+            "body": "Supprimez les activités sans valeur ajoutée."
+          },
+          {
+            "title": "Améliorer le flux",
+            "body": "Créez un flux fluide et ininterrompu."
+          },
+          {
+            "title": "Apporter une valeur maximale",
+            "body": "Apportez la bonne valeur avec un minimum d'effort."
+          }
+        ],
+        "footerTitle": "Se concentrer sur la valeur",
+        "footerBody": "Pas seulement sur le rendement."
+      }
+    },
+    "why": {
+      "title": "Pourquoi",
+      "paragraph1": "L'environnement économique actuel se caractérise par un changement rapide, une perturbation numérique et des attentes clients croissantes. Les approches traditionnelles de gestion de projet, qui reposent sur de longs cycles de planification et des périmètres fixes, ont souvent du mal à suivre le rythme. L'Agilité relève ce défi en donnant aux équipes les moyens d'apprendre vite, de pivoter si nécessaire et de livrer des solutions opérationnelles tôt et souvent.",
+      "paragraph2": "Plus qu'un ensemble de pratiques, l'Agilité favorise une culture de transparence, de collaboration et de responsabilisation. Elle invite les équipes à expérimenter, à mesurer les résultats et à s'améliorer en continu, ce qui stimule à la fois l'innovation et l'engagement des collaborateurs.",
+      "imageAlt": "Illustration d'une personne debout avec assurance",
+      "titleHighlight": "l'Agilité est importante"
+    },
+    "whenWhere": {
+      "title": "Quand et où utiliser",
+      "paragraph1": "L'Agilité est particulièrement efficace dans les environnements où les exigences sont susceptibles d'évoluer, où les retours clients sont essentiels et où la rapidité de livraison compte. Bien qu'elle soit née dans le développement logiciel, l'Agilité s'est largement étendue au-delà de l'informatique et est aujourd'hui utilisée dans le marketing, le développement de produits, les ressources humaines, la finance, l'éducation et même la fabrication.",
+      "paragraph2": "L'Agilité est la plus précieuse lorsque le problème est complexe, lorsque la solution n'est pas entièrement connue au départ et lorsque l'innovation est une priorité. En revanche, un travail hautement prévisible, répétitif ou fortement réglementé peut bénéficier d'une approche mixte combinant l'Agilité et les méthodes traditionnelles.",
+      "imageAlt": "Illustration d'une personne soulevant une pancarte",
+      "titleHighlight": "l'Agilité"
+    },
+    "benefits": {
+      "title": "Principaux avantages de",
+      "intro": "Les organisations qui adoptent l'Agilité constatent régulièrement des améliorations significatives en matière de livraison, de culture et de résultats clients. Les avantages les plus notables incluent :",
+      "items": [
+        {
+          "title": "Délais plus courts",
+          "body": "Grâce à la livraison incrémentale et à des cycles de retour plus courts."
+        },
+        {
+          "title": "Plus grande adaptabilité",
+          "body": "Pour répondre aux priorités changeantes, aux évolutions du marché et aux besoins clients."
+        },
+        {
+          "title": "Résultats de meilleure qualité",
+          "body": "Portés par des tests, des revues et des améliorations continus."
+        },
+        {
+          "title": "Meilleure satisfaction client",
+          "body": "Grâce à une collaboration étroite et une livraison de valeur précoce et fréquente."
+        },
+        {
+          "title": "Engagement renforcé de l'équipe",
+          "body": "Car les personnes sont responsabilisées et contribuent par leurs idées."
+        },
+        {
+          "title": "Réduction des risques",
+          "body": "En détectant les problèmes tôt et en livrant par incréments petits et gérables."
+        }
+      ],
+      "titleHighlight": "l'Agilité"
+    },
+    "coreValues": {
+      "heading1": "Valeurs ",
+      "heading2": "fondamentales de l'Agilité",
+      "subtitle": "Les principes qui guident un travail d'équipe adaptatif et centré sur le client.",
+      "items": [
+        "Des solutions opérationnelles plutôt qu'une documentation exhaustive",
+        "Répondre au changement plutôt que de suivre un plan fixe",
+        "Les individus et les interactions plutôt que les processus et les outils",
+        "La collaboration client plutôt que la négociation de contrat"
+      ]
+    },
+    "finalThoughts": {
+      "title": "Dernières",
+      "body": "L'Agilité n'est pas une solution miracle, ni simplement un ensemble de cérémonies ou d'outils. C'est une façon de penser le travail, les personnes et la valeur. Une adoption réussie de l'Agilité exige un engagement du leadership, un changement culturel et une volonté d'apprendre et de s'améliorer en continu. Adoptée authentiquement, l'Agilité aide les organisations à construire de meilleurs produits, à développer des équipes plus fortes et à rester pertinentes dans un monde qui ne cesse de changer.",
+      "titleHighlight": "réflexions"
+    },
+    "ready": {
+      "title": "Prêt à",
+      "titleHighlight": "nous rejoindre ?",
+      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "exploreCertificates": "Explorer les certifications",
+      "startNow": "Commencer maintenant"
+    }
   },
   "aboutScrum": {
     "hero": {
       "back": "Retour à l'accueil",
-      "breadcrumb": { "home": "Accueil" },
+      "breadcrumb": {
+        "home": "Accueil"
+      },
       "title": "À propos de Scrum"
     },
-    "placeholder": "Contenu à venir."
+    "intro": {
+      "badge": "À propos de Scrum",
+      "heading1": "Un cadre pratique pour ",
+      "heading2": "créer de la valeur",
+      "description": "Une introduction aux rôles, événements et artefacts qui aident les équipes à transformer la complexité en résultats",
+      "imageAlt": "Équipe collaborant devant un tableau de post-it lors d'une session Scrum"
+    },
+    "whatIs": {
+      "heading1": "Qu'est-ce que ",
+      "heading2": "Scrum ?",
+      "para1": "Scrum est un cadre léger qui aide les individus, les équipes et les organisations à générer de la valeur grâce à des solutions adaptatives à des problèmes complexes. Formalisé pour la première fois par Ken Schwaber et Jeff Sutherland au début des années 1990, Scrum est devenu le cadre Agile le plus largement adopté au monde, utilisé par des millions de praticiens dans tous les secteurs.",
+      "para2": "À la base, Scrum repose sur l'empirisme et la pensée lean. Les décisions sont fondées sur l'observation, l'expérimentation et les faits plutôt que sur des prévisions détaillées établies à l'avance. Les équipes Scrum travaillent en cycles courts et ciblés, inspectant fréquemment leur progression et s'adaptant au fur et à mesure. Le cadre est volontairement simple, mais il exige discipline et engagement pour être bien appliqué."
+    },
+    "framework": {
+      "heading1": "Cadre ",
+      "heading2": "Scrum",
+      "subtitle": "Livraison itérative. Collaboration quotidienne. Inspection et adaptation continues.",
+      "step1Title": "Apport du Product Owner",
+      "step1Desc": "Recueille les idées, les besoins et les priorités.",
+      "step2Title": "Product Backlog",
+      "step2Desc": "Liste ordonnée du travail permettant de livrer de la valeur.",
+      "step3Title": "Sprint Planning",
+      "step3Desc": "Planifie le travail du prochain sprint.",
+      "step4Title": "Sprint Backlog",
+      "step4Desc": "Travail sélectionné, décomposé en tâches.",
+      "step5Title": "Équipe Scrum",
+      "step5Desc": "Collaborer, construire et livrer de la valeur à chaque sprint.",
+      "step6Title": "Incrément / Livrable",
+      "step6Desc": "Incrément de produit potentiellement livrable créé.",
+      "step7Title": "Sprint Review",
+      "step7Desc": "Inspecte l'incrément et recueille les retours des parties prenantes.",
+      "step8Title": "Sprint Retrospective",
+      "step8Desc": "Réfléchit au sprint et identifie des pistes d'amélioration.",
+      "dailyScrumTitle": "Daily Scrum",
+      "dailyScrumDesc": "Synchronisation de 15 minutes pour s'aligner et lever les blocages.",
+      "loopTitle": "Boucle d'amélioration continue",
+      "loopDesc": "Les enseignements tirés améliorent en continu le processus, le travail d'équipe et le produit."
+    },
+    "accountabilities": {
+      "badge": "Services & Actualités",
+      "heading1": "Responsabilités ",
+      "heading2": "Scrum ",
+      "subtitle": "Trois rôles clés qui aident les équipes Scrum à livrer de la valeur.",
+      "productOwnerTitle": "Product Owner",
+      "productOwnerDesc": "Maximise la valeur du produit en gérant le Product Backlog, en fixant les priorités et en veillant à ce que l'équipe travaille sur les éléments les plus importants.",
+      "scrumMasterTitle": "Scrum Master",
+      "scrumMasterDesc": "Agit comme un véritable leader qui coache l'équipe, lève les obstacles et aide l'organisation à adopter la pensée et les pratiques Scrum.",
+      "developersTitle": "Développeurs",
+      "developersDesc": "Groupe pluridisciplinaire de professionnels qui construisent l'incrément de produit, sont responsables de la qualité de leur travail et collaborent pour atteindre l'objectif du sprint.",
+      "banner": "Ensemble, ces responsabilités collaborent pour livrer des incréments de produit à forte valeur."
+    },
+    "events": {
+      "badge": "Services & Actualités",
+      "heading1": "Événements ",
+      "heading2": "Scrum",
+      "subtitle": "Trois rôles clés qui aident les équipes Scrum à livrer de la valeur.",
+      "sprintPlanningTitle": "Sprint Planning",
+      "sprintPlanningDesc": "L'équipe définit l'objectif du sprint et décide du travail à livrer.",
+      "dailyScrumTitle": "Daily Scrum",
+      "dailyScrumDesc": "Réunion courte et ciblée où les développeurs inspectent la progression et adaptent le plan.",
+      "sprintReviewTitle": "Sprint Review",
+      "sprintReviewDesc": "L'équipe et les parties prenantes inspectent l'incrément et décident des prochaines étapes.",
+      "sprintRetrospectiveTitle": "Sprint Retrospective",
+      "sprintRetrospectiveDesc": "L'équipe réfléchit à la manière d'améliorer ses façons de travailler.",
+      "sprintTitle": "Sprint",
+      "sprintDesc": "Le cœur battant de Scrum, où les idées se transforment en valeur.",
+      "closingPart1": "Ensemble, ces événements aident les équipes Scrum à ",
+      "closingHighlight1": "inspecter, s'adapter ",
+      "closingAnd": "et",
+      "closingPart2": " s'améliorer continuellement."
+    },
+    "artifacts": {
+      "badge": "Services & Actualités",
+      "heading1": "Artefacts ",
+      "heading2": "Scrum ",
+      "subtitle": "Trois rôles clés qui aident les équipes Scrum à livrer de la valeur.",
+      "productBacklogTitle": "Product Backlog",
+      "productBacklogDesc": "Liste ordonnée de tout ce qui pourrait être nécessaire au produit, alignée sur un Product Goal.",
+      "sprintBacklogTitle": "Sprint Backlog",
+      "sprintBacklogDesc": "Ensemble des éléments sélectionnés pour le sprint, ainsi que le plan pour les livrer, aligné sur le Sprint Goal.",
+      "incrementTitle": "Incrément",
+      "incrementDesc": "Un pas concret vers le Product Goal, utilisable et conforme à la Definition of Done de l'équipe."
+    },
+    "why": {
+      "heading1": "Pourquoi les organisations utilisent ",
+      "heading2": "Scrum ",
+      "description": "Les organisations se tournent vers Scrum car il apporte de la structure à la complexité sans sacrifier l'agilité. En livrant de petits incréments de valeur selon une cadence prévisible, les équipes réduisent les risques, détectent les problèmes tôt et renforcent la confiance des parties prenantes. Scrum favorise aussi la transparence, l'alignement et un fort sentiment de responsabilité partagée, aidant les organisations à avancer plus vite tout en restant concentrées sur ce qui compte le plus pour leurs clients.",
+      "imageAlt": "Professionnelle montrant un tableau Kanban en se préparant à un examen de certification"
+    },
+    "when": {
+      "heading1": "Quand et où utiliser ",
+      "heading2": "Scrum ",
+      "description": "Scrum est conçu pour un travail complexe où l'inconnu prévaut sur le connu et où les exigences sont susceptibles d'évoluer. Il est particulièrement efficace pour le développement produit, la livraison logicielle et les initiatives d'innovation, mais s'applique aussi avec succès au marketing, à la recherche, à l'éducation et aux opérations. Scrum fonctionne mieux lorsqu'une équipe dédiée et pluridisciplinaire peut se concentrer sur un produit ou un résultat clair, avec un accès régulier aux parties prenantes et aux utilisateurs finaux. Pour un travail simple, très répétitif ou purement transactionnel, d'autres approches peuvent être plus efficaces.",
+      "imageAlt": "Deux collègues examinant ensemble des post-it sur un tableau blanc"
+    },
+    "benefits": {
+      "heading1": "Principaux avantages de ",
+      "heading2": "Scrum ",
+      "description": "Comment Scrum améliore la livraison, la transparence, la qualité, l'alignement, l'engagement et la gestion des risques.",
+      "fasterTitle": "Livraison plus rapide de la valeur",
+      "fasterDesc": "Grâce à des sprints courts et ciblés qui produisent des incréments utilisables.",
+      "transparencyTitle": "Plus grande transparence",
+      "transparencyDesc": "Sur le travail, l'avancement et les priorités, pour l'équipe comme pour les parties prenantes.",
+      "qualityTitle": "Qualité améliorée",
+      "qualityDesc": "Grâce à une inspection continue, des Definitions of Done claires et des retours fréquents.",
+      "alignmentTitle": "Alignement renforcé",
+      "alignmentDesc": "Entre les objectifs métier, les besoins des clients et l'exécution de l'équipe.",
+      "engagedTitle": "Équipes responsabilisées et engagées",
+      "engagedDesc": "Les équipes s'autogèrent, s'approprient les résultats et s'améliorent en continu.",
+      "riskTitle": "Risque réduit",
+      "riskDesc": "En validant les idées tôt et en ajustant la direction selon des preuves concrètes."
+    },
+    "ready": {
+      "title": "Prêt à ",
+      "titleHighlight": "nous rejoindre ?",
+      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format de l'examen avant de passer la certification réelle.",
+      "exploreCertificates": "Explorer les certifications",
+      "startNow": "Commencer maintenant"
+    }
   },
   "mockExam": {
     "hero": {

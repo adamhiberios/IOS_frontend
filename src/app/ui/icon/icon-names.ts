@@ -1313,7 +1313,7 @@ export type LucideIconName =
   | 'settings2'
   | 'shapes'
   | 'share'
-  | 'share2'
+  | 'share-2'
   | 'sheet'
   | 'shell'
   | 'shelving-unit'

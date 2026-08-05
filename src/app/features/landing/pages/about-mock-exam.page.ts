@@ -115,7 +115,7 @@ interface AnswerOption {
          3. What is a Mock test?
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] max-w-[1440px] mx-auto"
+      class="bg-ios-surface-warm px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
       aria-labelledby="what-is-mock-heading"
     >
       <!-- Badge + heading + divider -->
@@ -202,7 +202,7 @@ interface AnswerOption {
          4. Why Take a Mock test?
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-white px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] max-w-[1440px] mx-auto"
+      class="bg-white px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
       aria-labelledby="why-mock-heading"
     >
       <div class="flex flex-col lg:flex-row gap-12 items-stretch">
@@ -327,7 +327,7 @@ interface AnswerOption {
          5. How Our Mock Exams Work
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] max-w-[1440px] mx-auto"
+      class="bg-ios-surface-warm px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
       aria-labelledby="how-it-works-heading"
     >
       <div class="flex flex-col lg:flex-row gap-12 items-stretch">
@@ -511,7 +511,7 @@ interface AnswerOption {
          6. Training with Mock Exam — CTA banner
     ═══════════════════════════════════════════════════════════ -->
     <section
-      class="px-6 md:px-10 lg:px-16 xl:px-[246px] py-[72px] max-w-[1440px] mx-auto"
+      class="px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
       aria-labelledby="training-cta-heading"
     >
       <div class="relative">

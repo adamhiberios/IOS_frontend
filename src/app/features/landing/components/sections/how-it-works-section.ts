@@ -68,7 +68,7 @@ interface HowItWorksStep {
         <!-- Zigzag timeline -->
         <!-- Rows sit much closer together on phones: the shrunken icons and
              top-aligned copy already read as separate steps without 64px of air. -->
-        <div class="relative mx-auto flex flex-col gap-6 md:gap-16">
+        <div class="relative mx-auto flex flex-col gap-4 md:gap-8">
           @for (step of steps(); track step.number; let even = $even) {
             <!-- items-start on mobile so the icon lines up with the first line
                  of the title rather than the middle of a tall text block. -->
