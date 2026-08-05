@@ -544,21 +544,14 @@ export class LandingNavbar {
    * The "About" destinations. Routes are structural constants; labels resolve
    * through `lang.t()` so they stay locale-reactive.
    *
-   * Superseded 2026-08-05 by three broader pages (Institute / Agile / Scrum).
-   * The old routes/pages still exist (`about-mock-exam`, `about-scrum-master`,
-   * `about-product-owner`, `about-scrum-facilitator`) — only this menu's
-   * entries changed. Left commented rather than deleted in case of rollback.
+   * The old routes/pages (`about-scrum-master`, `about-product-owner`,
+   * `about-scrum-facilitator`) still exist but are no longer surfaced here.
    */
-  // protected readonly aboutItems = [
-  //   { path: '/about-mock-exam', labelKey: 'landing.nav.aboutItems.mockExam' },
-  //   { path: '/about-scrum-master', labelKey: 'landing.nav.aboutItems.scrumMaster' },
-  //   { path: '/about-product-owner', labelKey: 'landing.nav.aboutItems.productOwner' },
-  //   { path: '/about-scrum-facilitator', labelKey: 'landing.nav.aboutItems.scrumFacilitator' },
-  // ] as const;
   protected readonly aboutItems = [
     { path: '/about-institute', labelKey: 'landing.nav.aboutItems.institute' },
     { path: '/about-agile', labelKey: 'landing.nav.aboutItems.agile' },
     { path: '/about-scrum', labelKey: 'landing.nav.aboutItems.scrum' },
+    { path: '/about-mock-exam', labelKey: 'landing.nav.aboutItems.mockExam' },
   ] as const;
 
   /**
