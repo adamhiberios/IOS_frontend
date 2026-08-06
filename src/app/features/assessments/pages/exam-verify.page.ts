@@ -43,37 +43,38 @@ import { type ExamReadyNavState } from '../data-access/exam.model';
 
       <div class="flex flex-col flex-1 pt-16">
         <nav
-          class="w-full border-b border-ios-surface-soft bg-white flex items-center
-                 px-4 md:px-20 h-[70px]"
+          class="w-full border-b border-ios-surface-soft bg-white"
           [attr.aria-label]="lang.t('assessments.verify.pageNavAriaLabel')"
         >
-          <div class="flex items-center gap-4">
-            <a
-              routerLink="/dashboard"
-              class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl
-                     bg-ios-surface-soft text-ios-fg-13 transition-colors hover:bg-ios-surface-hover
-                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
-                     focus-visible:ring-ios-brand-primary/50"
-              [attr.aria-label]="lang.t('assessments.verify.backAriaLabel')"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                aria-hidden="true"
+          <div class="max-w-[1440px] mx-auto flex items-center px-4 md:px-20 h-[70px]">
+            <div class="flex items-center gap-4">
+              <a
+                routerLink="/dashboard"
+                class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl
+                       bg-ios-surface-soft text-ios-fg-13 transition-colors hover:bg-ios-surface-hover
+                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+                       focus-visible:ring-ios-brand-primary/50"
+                [attr.aria-label]="lang.t('assessments.verify.backAriaLabel')"
               >
-                <path d="M19 12H5" />
-                <path d="M12 5l-7 7 7 7" />
-              </svg>
-            </a>
-            <span class="font-semibold text-ios-fg-13 text-base leading-tight" dir="auto">
-              {{ lang.t('assessments.verify.title') }}
-            </span>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M19 12H5" />
+                  <path d="M12 5l-7 7 7 7" />
+                </svg>
+              </a>
+              <span class="font-semibold text-ios-fg-13 text-base leading-tight" dir="auto">
+                {{ lang.t('assessments.verify.title') }}
+              </span>
+            </div>
           </div>
         </nav>
 

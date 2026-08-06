@@ -151,63 +151,67 @@ export interface CertDetailsConfig {
       ═══════════════════════════════════════════════════════════ -->
       <section class="relative overflow-hidden bg-white" [attr.aria-labelledby]="heroHeadingId()">
         <!-- ── Track-coloured band ───────────────────────────────── -->
-        <div class="relative bg-track-bg max-w-[1440px] mx-auto">
-          <!-- Clipping layer for the decorative top-end circle so the
-               badge below can still extend beyond the dark band. -->
+        <div class="relative bg-track-bg">
+          <!-- Clipping layer for the decorative top-end circle — sits on the
+               full-bleed band (not the capped 1440px column) so it renders at
+               the true edge of the screen on ultrawide viewports. The badge
+               below can still extend beyond the dark band since it lives
+               outside this clipped layer. -->
           <div class="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
             <div
               class="absolute top-[-157px] end-[-160px] w-[320px] h-[320px] rounded-full opacity-50 bg-track-mid"
             ></div>
           </div>
 
-          <div
-            class="relative px-6 md:px-10 lg:px-16 xl:px-[120px] pt-[32px] pb-[24px] lg:pt-[48px] lg:pb-[32px]"
-          >
-            <!-- Top row: back/breadcrumb (start) + price tag (end) -->
-            <div class="flex flex-col lg:flex-row lg:items-stretch lg:justify-between gap-5">
-              <div class="flex items-start gap-4 lg:gap-6 min-w-0">
-                <a
-                  href="/certifications"
-                  class="flex items-center justify-center w-11 h-11 rounded-xl bg-gray-100
+          <div class="relative max-w-[1440px] mx-auto">
+            <div
+              class="relative px-6 md:px-10 lg:px-16 xl:px-[120px] pt-[32px] pb-[24px] lg:pt-[48px] lg:pb-[32px]"
+            >
+              <!-- Top row: back/breadcrumb (start) + price tag (end) -->
+              <div class="flex flex-col lg:flex-row lg:items-stretch lg:justify-between gap-5">
+                <div class="flex items-start gap-4 lg:gap-6 min-w-0">
+                  <a
+                    href="/certifications"
+                    class="flex items-center justify-center w-11 h-11 rounded-xl bg-gray-100
                          hover:opacity-90 transition-opacity shrink-0
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-                  [attr.aria-label]="lang.t(cfg().namespace + '.hero.back')"
-                >
-                  <ios-icon
-                    name="arrow-left"
-                    class="w-5 h-5 rtl:rotate-180 text-track-bg"
-                    aria-hidden="true"
-                  />
-                </a>
-                <div class="flex flex-col gap-2 flex-1 min-w-0">
-                  <nav [attr.aria-label]="lang.t('common.breadcrumbAriaLabel')">
-                    <ol
-                      class="flex items-center gap-2 font-heading font-medium text-[13px] lg:text-[14px] leading-[1.4] text-ios-border-light"
-                    >
-                      <li>
-                        <a href="/" class="hover:text-white transition-colors">
-                          {{ lang.t(cfg().namespace + '.hero.breadcrumb.home') }}
-                        </a>
-                      </li>
-                      <li aria-hidden="true">/</li>
-                      <li>
-                        <a href="/certifications" class="hover:text-white transition-colors">
-                          {{ lang.t(cfg().namespace + '.hero.breadcrumb.all') }}
-                        </a>
-                      </li>
-                      <li aria-hidden="true">/</li>
-                    </ol>
-                  </nav>
-                  <h1
-                    [id]="heroHeadingId()"
-                    class="font-heading font-semibold text-[18px] md:text-[22px] lg:text-[24px] leading-[1.2] text-white/95"
+                    [attr.aria-label]="lang.t(cfg().namespace + '.hero.back')"
                   >
-                    {{ cfg().trackName }}
-                  </h1>
+                    <ios-icon
+                      name="arrow-left"
+                      class="w-5 h-5 rtl:rotate-180 text-track-bg"
+                      aria-hidden="true"
+                    />
+                  </a>
+                  <div class="flex flex-col gap-2 flex-1 min-w-0">
+                    <nav [attr.aria-label]="lang.t('common.breadcrumbAriaLabel')">
+                      <ol
+                        class="flex items-center gap-2 font-heading font-medium text-[13px] lg:text-[14px] leading-[1.4] text-ios-border-light"
+                      >
+                        <li>
+                          <a href="/" class="hover:text-white transition-colors">
+                            {{ lang.t(cfg().namespace + '.hero.breadcrumb.home') }}
+                          </a>
+                        </li>
+                        <li aria-hidden="true">/</li>
+                        <li>
+                          <a href="/certifications" class="hover:text-white transition-colors">
+                            {{ lang.t(cfg().namespace + '.hero.breadcrumb.all') }}
+                          </a>
+                        </li>
+                        <li aria-hidden="true">/</li>
+                      </ol>
+                    </nav>
+                    <h1
+                      [id]="heroHeadingId()"
+                      class="font-heading font-semibold text-[18px] md:text-[22px] lg:text-[24px] leading-[1.2] text-white/95"
+                    >
+                      {{ cfg().trackName }}
+                    </h1>
+                  </div>
                 </div>
-              </div>
 
-              <!--
+                <!--
               Price tag — always inline/in-flow (the md treatment), at every
               breakpoint. It used to switch to absolute positioning, pinned
               to the bottom-right corner, at lg+ (bottom-0, end-28), anchored
@@ -221,74 +225,75 @@ export interface CertDetailsConfig {
               next to the title, at every screen size, regardless of how
               long the title is.
             -->
-              <div class="relative self-start">
+                <div class="relative self-start">
+                  <div
+                    class="h-[60px] lg:h-[68px] px-5 lg:px-6 pt-3 lg:pt-4 bg-track-mid"
+                    [attr.aria-label]="lang.t('certDetails.startingPriceAriaLabel')"
+                  >
+                    <span
+                      class="font-heading font-medium text-[13px] lg:text-[14px] leading-[1.4] whitespace-nowrap block text-track-softer"
+                    >
+                      {{ lang.t(cfg().namespace + '.hero.startingAt') }}
+                    </span>
+                    <span
+                      class="font-heading font-extrabold text-[18px] lg:text-[20px] leading-[1.2] whitespace-nowrap block text-track-soft"
+                    >
+                      {{ cfg().price }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Hero content (TOP half on track band). -->
+              <div
+                class="relative grid grid-cols-1 lg:grid-cols-[210px_1fr] gap-6 lg:gap-10 mt-[32px] lg:mt-[40px]"
+              >
+                <!-- Mobile badge (white card on track band) -->
+                <div class="lg:hidden w-[180px] mx-auto">
+                  <ios-certificates-badge
+                    [svgPath]="cfg().badgeSvgPath"
+                    [code]="cfg().code"
+                    [fullName]="cfg().fullName"
+                  />
+                </div>
+                <!-- Desktop badge column spacer (real badge is absolute) -->
+                <div class="hidden lg:block w-[210px]" aria-hidden="true"></div>
+
+                <!-- Right column: pill + "Endorsed Scrum Master - ESM" -->
                 <div
-                  class="h-[60px] lg:h-[68px] px-5 lg:px-6 pt-3 lg:pt-4 bg-track-mid"
-                  [attr.aria-label]="lang.t('certDetails.startingPriceAriaLabel')"
+                  class="flex flex-col gap-3 items-center lg:items-start text-center lg:text-start lg:pt-2"
                 >
                   <span
-                    class="font-heading font-medium text-[13px] lg:text-[14px] leading-[1.4] whitespace-nowrap block text-track-softer"
+                    class="inline-flex items-center justify-center px-3 py-1 rounded-full
+                         font-heading font-medium text-[14px] leading-[1.4] whitespace-nowrap
+                         bg-track-mid text-track-soft"
                   >
-                    {{ lang.t(cfg().namespace + '.hero.startingAt') }}
+                    {{ cfg().levelLabel }}
                   </span>
-                  <span
-                    class="font-heading font-extrabold text-[18px] lg:text-[20px] leading-[1.2] whitespace-nowrap block text-track-soft"
+
+                  <p
+                    class="font-heading font-bold text-[22px] md:text-[28px] lg:text-[32px] leading-[1.2]
+                         flex flex-wrap justify-center lg:justify-start items-baseline gap-x-3 gap-y-1"
                   >
-                    {{ cfg().price }}
-                  </span>
+                    <span class="text-track-soft">{{ cfg().fullName }}</span>
+                    <span class="text-white">-</span>
+                    <span class="text-white">{{ cfg().code }}</span>
+                  </p>
                 </div>
               </div>
             </div>
 
-            <!-- Hero content (TOP half on track band). -->
+            <!-- Absolute desktop badge — vertical centre on the dark/white boundary -->
             <div
-              class="relative grid grid-cols-1 lg:grid-cols-[210px_1fr] gap-6 lg:gap-10 mt-[32px] lg:mt-[40px]"
+              class="hidden lg:block absolute z-10 top-full -translate-y-1/2 start-16 xl:start-[120px]"
             >
-              <!-- Mobile badge (white card on track band) -->
-              <div class="lg:hidden w-[180px] mx-auto">
+              <div class="w-[210px] bg-white p-3">
                 <ios-certificates-badge
                   [svgPath]="cfg().badgeSvgPath"
                   [code]="cfg().code"
                   [fullName]="cfg().fullName"
                 />
               </div>
-              <!-- Desktop badge column spacer (real badge is absolute) -->
-              <div class="hidden lg:block w-[210px]" aria-hidden="true"></div>
-
-              <!-- Right column: pill + "Endorsed Scrum Master - ESM" -->
-              <div
-                class="flex flex-col gap-3 items-center lg:items-start text-center lg:text-start lg:pt-2"
-              >
-                <span
-                  class="inline-flex items-center justify-center px-3 py-1 rounded-full
-                         font-heading font-medium text-[14px] leading-[1.4] whitespace-nowrap
-                         bg-track-mid text-track-soft"
-                >
-                  {{ cfg().levelLabel }}
-                </span>
-
-                <p
-                  class="font-heading font-bold text-[22px] md:text-[28px] lg:text-[32px] leading-[1.2]
-                         flex flex-wrap justify-center lg:justify-start items-baseline gap-x-3 gap-y-1"
-                >
-                  <span class="text-track-soft">{{ cfg().fullName }}</span>
-                  <span class="text-white">-</span>
-                  <span class="text-white">{{ cfg().code }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Absolute desktop badge — vertical centre on the dark/white boundary -->
-          <div
-            class="hidden lg:block absolute z-10 top-full -translate-y-1/2 start-16 xl:start-[120px]"
-          >
-            <div class="w-[210px] bg-white p-3">
-              <ios-certificates-badge
-                [svgPath]="cfg().badgeSvgPath"
-                [code]="cfg().code"
-                [fullName]="cfg().fullName"
-              />
             </div>
           </div>
         </div>
@@ -342,21 +347,23 @@ export interface CertDetailsConfig {
       ═══════════════════════════════════════════════════════════ -->
       <section class="bg-white" aria-labelledby="cert-overview-heading">
         <!-- Track-tinted Overview band -->
-        <div
-          class="bg-track-soft px-6 md:px-10 lg:px-16 xl:px-[246px] pt-[56px] pb-[56px] lg:pb-[72px] max-w-[1440px] mx-auto"
-        >
-          <div class="flex flex-col gap-3">
-            <h2
-              id="cert-overview-heading"
-              class="font-heading font-bold text-[24px] md:text-[28px] leading-[1.2] text-ios-fg-10"
-            >
-              {{ lang.t(cfg().namespace + '.overview.title') }}
-            </h2>
-            <p
-              class="font-body font-medium text-[15px] md:text-[16px] leading-[1.6] text-ios-fg-mid"
-            >
-              {{ lang.t(cfg().namespace + '.overview.body') }}
-            </p>
+        <div class="bg-track-soft">
+          <div
+            class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[246px] pt-[56px] pb-[56px] lg:pb-[72px]"
+          >
+            <div class="flex flex-col gap-3">
+              <h2
+                id="cert-overview-heading"
+                class="font-heading font-bold text-[24px] md:text-[28px] leading-[1.2] text-ios-fg-10"
+              >
+                {{ lang.t(cfg().namespace + '.overview.title') }}
+              </h2>
+              <p
+                class="font-body font-medium text-[15px] md:text-[16px] leading-[1.6] text-ios-fg-mid"
+              >
+                {{ lang.t(cfg().namespace + '.overview.body') }}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -377,101 +384,107 @@ export interface CertDetailsConfig {
            4. Stats bar — track-tinted band with decorative side bars
       ═══════════════════════════════════════════════════════════ -->
       <section
-        class="relative overflow-hidden px-6 md:px-10 lg:px-16 xl:px-[242px] py-[56px] lg:py-[72px] bg-track-softer max-w-[1440px] mx-auto"
+        class="relative overflow-hidden bg-track-softer"
         [attr.aria-label]="lang.t('certDetails.certFactsAriaLabel')"
       >
-        <div class="hidden lg:block relative h-0" aria-hidden="true">
-          <div
-            class="absolute top-[22px] -translate-y-1/2 start-[-260px] w-[224px] h-[13px] bg-track-line"
-          ></div>
-          <div
-            class="absolute top-[22px] -translate-y-1/2 end-[-260px] w-[224px] h-[13px] bg-track-line"
-          ></div>
-        </div>
-
-        <div class="relative z-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 items-start">
-          <!-- Stat 1: Prerequisite -->
-          <div class="flex flex-col gap-1">
-            <p
-              class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-track-text"
-            >
-              {{ lang.t(cfg().namespace + '.stats.prereqValue') }}
-            </p>
-            <p
-              class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
-            >
-              {{ lang.t(cfg().namespace + '.stats.prereqLabel') }}
-            </p>
+        <div
+          class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[242px] py-[56px] lg:py-[72px]"
+        >
+          <div class="hidden lg:block relative h-0" aria-hidden="true">
+            <div
+              class="absolute top-[22px] -translate-y-1/2 start-[-260px] w-[224px] h-[13px] bg-track-line"
+            ></div>
+            <div
+              class="absolute top-[22px] -translate-y-1/2 end-[-260px] w-[224px] h-[13px] bg-track-line"
+            ></div>
           </div>
 
-          <!-- Stat 2: Required Training (with /hours unit) -->
-          <div class="flex flex-col gap-1">
-            <div class="flex items-end gap-1">
+          <div
+            class="relative z-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 items-start"
+          >
+            <!-- Stat 1: Prerequisite -->
+            <div class="flex flex-col gap-1">
               <p
                 class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-track-text"
               >
-                {{ lang.t(cfg().namespace + '.stats.trainingValue') }}
+                {{ lang.t(cfg().namespace + '.stats.prereqValue') }}
               </p>
               <p
-                class="font-body font-medium text-[14px] md:text-[16px] leading-[1.4] mb-1 text-track-mid"
+                class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
               >
-                {{ lang.t(cfg().namespace + '.stats.trainingUnit') }}
+                {{ lang.t(cfg().namespace + '.stats.prereqLabel') }}
               </p>
             </div>
-            <p
-              class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
-            >
-              {{ lang.t(cfg().namespace + '.stats.trainingLabel') }}
-            </p>
-          </div>
 
-          <!-- Stat 3: Test Questions -->
-          <div class="flex flex-col gap-1">
-            <p
-              class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-track-text"
-            >
-              {{ lang.t(cfg().namespace + '.stats.questionsValue') }}
-            </p>
-            <p
-              class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
-            >
-              {{ lang.t(cfg().namespace + '.stats.questionsLabel') }}
-            </p>
-          </div>
+            <!-- Stat 2: Required Training (with /hours unit) -->
+            <div class="flex flex-col gap-1">
+              <div class="flex items-end gap-1">
+                <p
+                  class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-track-text"
+                >
+                  {{ lang.t(cfg().namespace + '.stats.trainingValue') }}
+                </p>
+                <p
+                  class="font-body font-medium text-[14px] md:text-[16px] leading-[1.4] mb-1 text-track-mid"
+                >
+                  {{ lang.t(cfg().namespace + '.stats.trainingUnit') }}
+                </p>
+              </div>
+              <p
+                class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
+              >
+                {{ lang.t(cfg().namespace + '.stats.trainingLabel') }}
+              </p>
+            </div>
 
-          <!-- Stat 4: Test Duration (with /minutes unit) -->
-          <div class="flex flex-col gap-1">
-            <div class="flex items-end gap-1">
+            <!-- Stat 3: Test Questions -->
+            <div class="flex flex-col gap-1">
               <p
                 class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-track-text"
               >
-                {{ lang.t(cfg().namespace + '.stats.durationValue') }}
+                {{ lang.t(cfg().namespace + '.stats.questionsValue') }}
               </p>
               <p
-                class="font-body font-medium text-[14px] md:text-[16px] leading-[1.4] mb-1 text-track-mid"
+                class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
               >
-                {{ lang.t(cfg().namespace + '.stats.durationUnit') }}
+                {{ lang.t(cfg().namespace + '.stats.questionsLabel') }}
               </p>
             </div>
-            <p
-              class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
-            >
-              {{ lang.t(cfg().namespace + '.stats.durationLabel') }}
-            </p>
-          </div>
 
-          <!-- Stat 5: Validity -->
-          <div class="flex flex-col gap-1">
-            <p
-              class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-track-text"
-            >
-              {{ lang.t(cfg().namespace + '.stats.validityValue') }}
-            </p>
-            <p
-              class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
-            >
-              {{ lang.t(cfg().namespace + '.stats.validityLabel') }}
-            </p>
+            <!-- Stat 4: Test Duration (with /minutes unit) -->
+            <div class="flex flex-col gap-1">
+              <div class="flex items-end gap-1">
+                <p
+                  class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-track-text"
+                >
+                  {{ lang.t(cfg().namespace + '.stats.durationValue') }}
+                </p>
+                <p
+                  class="font-body font-medium text-[14px] md:text-[16px] leading-[1.4] mb-1 text-track-mid"
+                >
+                  {{ lang.t(cfg().namespace + '.stats.durationUnit') }}
+                </p>
+              </div>
+              <p
+                class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
+              >
+                {{ lang.t(cfg().namespace + '.stats.durationLabel') }}
+              </p>
+            </div>
+
+            <!-- Stat 5: Validity -->
+            <div class="flex flex-col gap-1">
+              <p
+                class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-track-text"
+              >
+                {{ lang.t(cfg().namespace + '.stats.validityValue') }}
+              </p>
+              <p
+                class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] text-track-text"
+              >
+                {{ lang.t(cfg().namespace + '.stats.validityLabel') }}
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -479,273 +492,277 @@ export interface CertDetailsConfig {
       <!-- ═══════════════════════════════════════════════════════════
            5. Who Should Enroll — white band
       ═══════════════════════════════════════════════════════════ -->
-      <section
-        class="bg-white px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] lg:py-[72px] max-w-[1440px] mx-auto
-               flex flex-col gap-12 items-center"
-        aria-labelledby="cert-audience-heading"
-      >
-        <!-- Section header -->
-        <div class="flex flex-col gap-4 items-center text-center">
-          <span
-            class="inline-flex items-center justify-center px-6 py-2 rounded-full border
+      <section class="bg-white" aria-labelledby="cert-audience-heading">
+        <div
+          class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] lg:py-[72px]
+                 flex flex-col gap-12 items-center"
+        >
+          <!-- Section header -->
+          <div class="flex flex-col gap-4 items-center text-center">
+            <span
+              class="inline-flex items-center justify-center px-6 py-2 rounded-full border
                    font-heading font-medium text-[14px] leading-[1.4]
                    bg-ios-brand-yellow-soft border-ios-brand-gold text-ios-brand-primary"
-          >
-            {{ lang.t(cfg().namespace + '.audience.badge') }}
-          </span>
-          <h2
-            id="cert-audience-heading"
-            class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] flex flex-wrap justify-center gap-x-3"
-          >
-            <span class="text-ios-brand-dark">
-              {{ lang.t(cfg().namespace + '.audience.headingPart1') }}
-            </span>
-            <span class="text-ios-brand-primary">
-              {{ lang.t(cfg().namespace + '.audience.headingPart2') }}
-            </span>
-          </h2>
-          <div class="h-1 w-[274px] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
-        </div>
-
-        <!-- Audience cards grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-          @for (card of cfg().audience; track card.titleKey) {
-            <article
-              class="border border-ios-border-light rounded-xl p-6 flex gap-6 items-start"
-              [class.lg:col-span-2]="card.fullWidth"
             >
-              <!-- Icon disc -->
-              <div
-                class="bg-gray-100 shrink-0 flex items-center justify-center w-[104px] h-[104px] rounded-full"
-                aria-hidden="true"
+              {{ lang.t(cfg().namespace + '.audience.badge') }}
+            </span>
+            <h2
+              id="cert-audience-heading"
+              class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] flex flex-wrap justify-center gap-x-3"
+            >
+              <span class="text-ios-brand-dark">
+                {{ lang.t(cfg().namespace + '.audience.headingPart1') }}
+              </span>
+              <span class="text-ios-brand-primary">
+                {{ lang.t(cfg().namespace + '.audience.headingPart2') }}
+              </span>
+            </h2>
+            <div class="h-1 w-[274px] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
+          </div>
+
+          <!-- Audience cards grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+            @for (card of cfg().audience; track card.titleKey) {
+              <article
+                class="border border-ios-border-light rounded-xl p-6 flex gap-6 items-start"
+                [class.lg:col-span-2]="card.fullWidth"
               >
-                @if (card.iconSrc) {
-                  <img
-                    [ngSrc]="card.iconSrc"
-                    alt=""
-                    width="80"
-                    height="80"
-                    class="w-20 h-20 object-contain"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                } @else if (card.iconName) {
-                  <svg
-                    class="w-12 h-12"
-                    viewBox="0 0 148 148"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
+                <!-- Icon disc -->
+                <div
+                  class="bg-gray-100 shrink-0 flex items-center justify-center w-[104px] h-[104px] rounded-full"
+                  aria-hidden="true"
+                >
+                  @if (card.iconSrc) {
+                    <img
+                      [ngSrc]="card.iconSrc"
+                      alt=""
+                      width="80"
+                      height="80"
+                      class="w-20 h-20 object-contain"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  } @else if (card.iconName) {
+                    <svg
+                      class="w-12 h-12"
+                      viewBox="0 0 148 148"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <use [attr.href]="'#icon-' + card.iconName" />
+                    </svg>
+                  }
+                </div>
+                <div class="flex flex-col gap-2 flex-1 min-w-0 pt-3">
+                  <h3
+                    class="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] text-ios-fg-10"
                   >
-                    <use [attr.href]="'#icon-' + card.iconName" />
-                  </svg>
-                }
-              </div>
-              <div class="flex flex-col gap-2 flex-1 min-w-0 pt-3">
-                <h3
-                  class="font-heading font-bold text-[20px] md:text-[24px] leading-[1.2] text-ios-fg-10"
-                >
-                  {{ lang.t(cfg().namespace + '.audience.' + card.titleKey) }}
-                </h3>
-                <p
-                  class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] text-ios-fg-muted"
-                >
-                  {{ lang.t(cfg().namespace + '.audience.' + card.descKey) }}
-                </p>
-              </div>
-            </article>
-          }
+                    {{ lang.t(cfg().namespace + '.audience.' + card.titleKey) }}
+                  </h3>
+                  <p
+                    class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] text-ios-fg-muted"
+                  >
+                    {{ lang.t(cfg().namespace + '.audience.' + card.descKey) }}
+                  </p>
+                </div>
+              </article>
+            }
+          </div>
         </div>
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════
            6. Key Learning Points — cream band
       ═══════════════════════════════════════════════════════════ -->
-      <section
-        class="bg-ios-surface-warm px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] max-w-[1440px] mx-auto"
-        aria-labelledby="cert-key-learning-heading"
-      >
-        <div class="flex flex-col gap-4">
-          <h2
-            id="cert-key-learning-heading"
-            class="font-heading font-bold text-[24px] md:text-[28px] leading-[1.2] text-ios-fg-10"
-          >
-            {{ lang.t(cfg().namespace + '.keyLearning.title') }}
-          </h2>
+      <section class="bg-ios-surface-warm" aria-labelledby="cert-key-learning-heading">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px]">
+          <div class="flex flex-col gap-4">
+            <h2
+              id="cert-key-learning-heading"
+              class="font-heading font-bold text-[24px] md:text-[28px] leading-[1.2] text-ios-fg-10"
+            >
+              {{ lang.t(cfg().namespace + '.keyLearning.title') }}
+            </h2>
 
-          <ul class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-4">
-            @for (n of keyLearningRange(); track n) {
-              <li class="flex gap-3 items-start">
-                <ios-icon
-                  name="book-open-text"
-                  class="w-6 h-6 shrink-0 mt-0.5 text-ios-brand-gold"
-                  aria-hidden="true"
-                />
-                <span
-                  class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] flex-1 min-w-0 text-ios-fg-mid"
-                >
-                  {{ lang.t(cfg().namespace + '.keyLearning.point' + n) }}
-                </span>
-              </li>
-            }
-          </ul>
+            <ul class="grid grid-cols-1 lg:grid-cols-2 gap-x-6 gap-y-4">
+              @for (n of keyLearningRange(); track n) {
+                <li class="flex gap-3 items-start">
+                  <ios-icon
+                    name="book-open-text"
+                    class="w-6 h-6 shrink-0 mt-0.5 text-ios-brand-gold"
+                    aria-hidden="true"
+                  />
+                  <span
+                    class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] flex-1 min-w-0 text-ios-fg-mid"
+                  >
+                    {{ lang.t(cfg().namespace + '.keyLearning.point' + n) }}
+                  </span>
+                </li>
+              }
+            </ul>
+          </div>
         </div>
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════
            7. Ready CTA — track-coloured dark band
       ═══════════════════════════════════════════════════════════ -->
-      <section
-        class="bg-track-strong px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px] max-w-[1440px] mx-auto
-               flex flex-col gap-6 items-center text-center"
-        aria-labelledby="cert-cta-heading"
-      >
-        <h2
-          id="cert-cta-heading"
-          class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] flex flex-wrap justify-center gap-x-2"
+      <section class="bg-track-strong" aria-labelledby="cert-cta-heading">
+        <div
+          class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[246px] py-[56px]
+                 flex flex-col gap-6 items-center text-center"
         >
-          <span class="text-white">{{ lang.t(cfg().namespace + '.cta.headingPart1') }}</span>
-          <span class="text-ios-brand-yellow-bright">
-            {{ lang.t(cfg().namespace + '.cta.headingPart2') }}
-          </span>
-        </h2>
-        <p
-          class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] max-w-[820px] text-gray-100"
-        >
-          {{ lang.t(cfg().namespace + '.cta.description') }}
-        </p>
-        <div class="h-1 w-[274px] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
+          <h2
+            id="cert-cta-heading"
+            class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] flex flex-wrap justify-center gap-x-2"
+          >
+            <span class="text-white">{{ lang.t(cfg().namespace + '.cta.headingPart1') }}</span>
+            <span class="text-ios-brand-yellow-bright">
+              {{ lang.t(cfg().namespace + '.cta.headingPart2') }}
+            </span>
+          </h2>
+          <p
+            class="font-body font-medium text-[15px] md:text-[18px] leading-[1.4] max-w-[820px] text-gray-100"
+          >
+            {{ lang.t(cfg().namespace + '.cta.description') }}
+          </p>
+          <div class="h-1 w-[274px] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
 
-        <button
-          type="button"
-          class="inline-flex items-center justify-center gap-3 h-14 px-6 rounded-xl
+          <button
+            type="button"
+            class="inline-flex items-center justify-center gap-3 h-14 px-6 rounded-xl
                  font-body font-semibold text-[16px] md:text-[18px] leading-[1.4] whitespace-nowrap
                  hover:opacity-90 transition-opacity
                  disabled:opacity-60 disabled:cursor-not-allowed
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/60
                  bg-track-soft text-track-text"
-          [disabled]="enrollPending()"
-          (click)="onEnroll()"
-        >
-          {{ lang.t(cfg().namespace + '.cta.button') }}
-          <ios-icon name="arrow-right" class="w-6 h-6 rtl:rotate-180" aria-hidden="true" />
-        </button>
-
-        <p class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] text-track-softer">
-          {{ lang.t(cfg().namespace + '.cta.questions') }}
-          <a
-            href="/contact"
-            class="underline hover:text-white transition-colors
-                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded-sm"
+            [disabled]="enrollPending()"
+            (click)="onEnroll()"
           >
-            {{ lang.t(cfg().namespace + '.cta.contactLink') }}
-          </a>
-        </p>
+            {{ lang.t(cfg().namespace + '.cta.button') }}
+            <ios-icon name="arrow-right" class="w-6 h-6 rtl:rotate-180" aria-hidden="true" />
+          </button>
+
+          <p
+            class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] text-track-softer"
+          >
+            {{ lang.t(cfg().namespace + '.cta.questions') }}
+            <a
+              href="/contact"
+              class="underline hover:text-white transition-colors
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded-sm"
+            >
+              {{ lang.t(cfg().namespace + '.cta.contactLink') }}
+            </a>
+          </p>
+        </div>
       </section>
 
       <!-- ═══════════════════════════════════════════════════════════
            8. Related Certifications — white band
       ═══════════════════════════════════════════════════════════ -->
       @if (cfg().related.length > 0) {
-        <section
-          class="bg-white px-6 md:px-10 lg:px-16 xl:px-[120px] py-[56px] lg:py-[72px] max-w-[1440px] mx-auto
-                 flex flex-col gap-6 items-center"
-          aria-labelledby="cert-related-heading"
-        >
-          <div class="flex flex-col gap-4 items-center text-center">
-            <h2
-              id="cert-related-heading"
-              class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2]"
-            >
-              <span class="text-ios-brand-dark">
-                {{ lang.t(cfg().namespace + '.related.headingPart1') }}
-              </span>
-              <span class="text-ios-brand-primary">
-                {{ lang.t(cfg().namespace + '.related.headingPart2') }}
-              </span>
-            </h2>
-            <div class="h-1 w-[274px] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
-          </div>
-
-          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
-            @for (rel of cfg().related; track rel.code) {
-              <article
-                class="bg-white border border-ios-border-light rounded-xl p-6 flex flex-col gap-4 overflow-hidden"
-                [class.cert-track-blue]="rel.track === 'blue'"
-                [class.cert-track-green]="rel.track === 'green'"
-                [class.cert-track-brown]="rel.track === 'brown'"
-                [class.cert-track-primary]="rel.track === 'primary'"
-                [class.cert-track-olive]="rel.track === 'olive'"
+        <section class="bg-white" aria-labelledby="cert-related-heading">
+          <div
+            class="max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 xl:px-[120px] py-[56px] lg:py-[72px]
+                   flex flex-col gap-6 items-center"
+          >
+            <div class="flex flex-col gap-4 items-center text-center">
+              <h2
+                id="cert-related-heading"
+                class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2]"
               >
-                <!-- Top row: badge + level/code/full + price -->
-                <div class="flex gap-4 items-start">
-                  <div class="shrink-0 w-[150px]">
-                    <ios-certificates-badge
-                      [svgPath]="rel.badgeSvgPath"
-                      [code]="rel.code"
-                      [fullName]="rel.fullName"
-                    />
-                  </div>
-                  <div class="flex flex-col gap-2 pt-1 flex-1 min-w-0">
-                    <span
-                      class="self-start inline-flex items-center justify-center px-3 py-1 rounded-full
+                <span class="text-ios-brand-dark">
+                  {{ lang.t(cfg().namespace + '.related.headingPart1') }}
+                </span>
+                <span class="text-ios-brand-primary">
+                  {{ lang.t(cfg().namespace + '.related.headingPart2') }}
+                </span>
+              </h2>
+              <div class="h-1 w-[274px] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full">
+              @for (rel of cfg().related; track rel.code) {
+                <article
+                  class="bg-white border border-ios-border-light rounded-xl p-6 flex flex-col gap-4 overflow-hidden"
+                  [class.cert-track-blue]="rel.track === 'blue'"
+                  [class.cert-track-green]="rel.track === 'green'"
+                  [class.cert-track-brown]="rel.track === 'brown'"
+                  [class.cert-track-primary]="rel.track === 'primary'"
+                  [class.cert-track-olive]="rel.track === 'olive'"
+                >
+                  <!-- Top row: badge + level/code/full + price -->
+                  <div class="flex gap-4 items-start">
+                    <div class="shrink-0 w-[150px]">
+                      <ios-certificates-badge
+                        [svgPath]="rel.badgeSvgPath"
+                        [code]="rel.code"
+                        [fullName]="rel.fullName"
+                      />
+                    </div>
+                    <div class="flex flex-col gap-2 pt-1 flex-1 min-w-0">
+                      <span
+                        class="self-start inline-flex items-center justify-center px-3 py-1 rounded-full
                              font-heading font-medium text-[14px] leading-[1.4] whitespace-nowrap
                              bg-track-mid text-track-soft"
-                    >
-                      {{ rel.levelText }}
-                    </span>
-                    <span
-                      class="font-heading font-bold text-[24px] md:text-[28px] leading-[1.2] text-track-bg"
-                    >
-                      {{ rel.code }}
-                    </span>
-                    <span
-                      class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] break-words text-track-text"
-                    >
-                      {{ rel.fullName }}
-                    </span>
-                    <div class="flex flex-col mt-1">
-                      <span
-                        class="font-heading font-medium text-[13px] md:text-[14px] leading-[1.4] text-ios-brand-muted"
                       >
-                        {{ lang.t(cfg().namespace + '.related.startingAt') }}
+                        {{ rel.levelText }}
                       </span>
                       <span
-                        class="font-heading font-extrabold text-[18px] md:text-[20px] leading-[1.2] text-track-text"
+                        class="font-heading font-bold text-[24px] md:text-[28px] leading-[1.2] text-track-bg"
                       >
-                        {{ rel.price }}
+                        {{ rel.code }}
                       </span>
+                      <span
+                        class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] break-words text-track-text"
+                      >
+                        {{ rel.fullName }}
+                      </span>
+                      <div class="flex flex-col mt-1">
+                        <span
+                          class="font-heading font-medium text-[13px] md:text-[14px] leading-[1.4] text-ios-brand-muted"
+                        >
+                          {{ lang.t(cfg().namespace + '.related.startingAt') }}
+                        </span>
+                        <span
+                          class="font-heading font-extrabold text-[18px] md:text-[20px] leading-[1.2] text-track-text"
+                        >
+                          {{ rel.price }}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div class="h-px w-full bg-ios-border-light" aria-hidden="true"></div>
+                  <div class="h-px w-full bg-ios-border-light" aria-hidden="true"></div>
 
-                <p
-                  class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] text-ios-fg-mid"
-                >
-                  {{ rel.description }}
-                </p>
+                  <p
+                    class="font-body font-medium text-[15px] md:text-[16px] leading-[1.4] text-ios-fg-mid"
+                  >
+                    {{ rel.description }}
+                  </p>
 
-                <div class="h-px w-full bg-ios-border-light" aria-hidden="true"></div>
+                  <div class="h-px w-full bg-ios-border-light" aria-hidden="true"></div>
 
-                <a
-                  [href]="rel.learnMoreLink"
-                  class="self-start inline-flex items-center gap-2 h-11 ps-6 pe-4 rounded-xl
+                  <a
+                    [href]="rel.learnMoreLink"
+                    class="self-start inline-flex items-center gap-2 h-11 ps-6 pe-4 rounded-xl
                          font-body font-semibold text-[15px] md:text-[16px] leading-[1.4] whitespace-nowrap
                          hover:opacity-80 transition-opacity
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1
                          text-track-bg"
-                >
-                  {{ rel.learnMoreLabel }}
-                  <ios-icon
-                    name="arrow-right"
-                    class="w-5 h-5 rtl:rotate-180 text-track-bg"
-                    aria-hidden="true"
-                  />
-                </a>
-              </article>
-            }
+                  >
+                    {{ rel.learnMoreLabel }}
+                    <ios-icon
+                      name="arrow-right"
+                      class="w-5 h-5 rtl:rotate-180 text-track-bg"
+                      aria-hidden="true"
+                    />
+                  </a>
+                </article>
+              }
+            </div>
           </div>
         </section>
       }

@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  type OnInit,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, type OnInit, inject, signal } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -15,10 +9,7 @@ import { CanadaFlag } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { ExamApi } from '../data-access/exam.api';
-import {
-  type ExamAttemptReview,
-  type ExamReviewQuestion,
-} from '../data-access/exam.model';
+import { type ExamAttemptReview, type ExamReviewQuestion } from '../data-access/exam.model';
 
 /** Why the review couldn't be shown, mapped to specific copy. */
 type ReviewFailure = 'notFound' | 'forbidden' | 'notTerminal' | 'unknown';
@@ -53,10 +44,13 @@ type ReviewFailure = 'notFound' | 'forbidden' | 'notTerminal' | 'unknown';
       <ios-dashboard-navbar />
 
       <div class="w-full px-4 md:px-20 pt-5 pb-3">
-        <nav aria-label="Breadcrumb">
+        <nav class="max-w-[1400px] mx-auto" aria-label="Breadcrumb">
           <ol class="flex items-center gap-2 text-[14px] font-medium leading-[1.4]" role="list">
             <li>
-              <a routerLink="/dashboard" class="text-ios-fg-8 hover:text-ios-fg-11 transition-colors">
+              <a
+                routerLink="/dashboard"
+                class="text-ios-fg-8 hover:text-ios-fg-11 transition-colors"
+              >
                 {{ lang.t('assessments.review.breadcrumbParent') }}
               </a>
             </li>

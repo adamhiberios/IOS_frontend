@@ -68,14 +68,7 @@ interface AnswerOption {
 
 @Component({
   selector: 'ios-about-mock-exam-page',
-  imports: [
-    NgOptimizedImage,
-    LandingNavbar,
-    LandingFooter,
-    PageHero,
-    IosIcon,
-    ScrollToTop,
-  ],
+  imports: [NgOptimizedImage, LandingNavbar, LandingFooter, PageHero, IosIcon, ScrollToTop],
   providers: [
     provideIcons(
       LucideArrowRight,
@@ -111,85 +104,86 @@ interface AnswerOption {
     <!-- ═══════════════════════════════════════════════════════════
          3. What is a Mock test?
     ═══════════════════════════════════════════════════════════ -->
-    <section
-      class="bg-ios-surface-warm px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
-      aria-labelledby="what-is-mock-heading"
-    >
-      <!-- Badge + heading + divider -->
-      <div class="flex flex-col items-center gap-4 text-center mb-10">
-        <span
-          class="inline-flex items-center justify-center px-6 py-2 rounded-full
-                 bg-ios-brand-yellow-soft border border-ios-brand-gold
-                 font-body font-semibold text-[14px] text-ios-brand-primary"
-        >
-          {{ lang.t('mockExam.whatIs.badge') }}
-        </span>
-
-        <div class="flex flex-col gap-3 items-center w-full">
-          <h2
-            id="what-is-mock-heading"
-            class="font-heading font-extrabold text-[36px] leading-[1.2] text-ios-brand-dark"
+    <section class="bg-ios-surface-warm" aria-labelledby="what-is-mock-heading">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
+        <!-- Badge + heading + divider -->
+        <div class="flex flex-col items-center gap-4 text-center mb-10">
+          <span
+            class="inline-flex items-center justify-center px-6 py-2 rounded-full
+                   bg-ios-brand-yellow-soft border border-ios-brand-gold
+                   font-body font-semibold text-[14px] text-ios-brand-primary"
           >
-            {{ lang.t('mockExam.whatIs.heading1')
-            }}<span class="text-ios-brand-primary">{{ lang.t('mockExam.whatIs.heading2') }}</span>
-          </h2>
-          <p class="font-body font-medium text-[16px] leading-[1.4] text-ios-fg-muted max-w-2xl">
-            {{ lang.t('mockExam.whatIs.description') }}
-          </p>
-        </div>
+            {{ lang.t('mockExam.whatIs.badge') }}
+          </span>
 
-        <div class="w-[180px] h-1 rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
-      </div>
-
-      <!-- Image card with pass-rate badge -->
-      <div class="relative mx-auto max-w-[1032px] pb-8">
-        <!-- Depth shadow -->
-        <div
-          class="absolute inset-0 translate-y-3 translate-x-3 rounded-2xl bg-ios-brand-primary opacity-[0.07]"
-          aria-hidden="true"
-        ></div>
-
-        <!-- Main image -->
-        <!-- The height lives on the wrapper because NgOptimizedImage's fill
-             mode absolutely positions the image against its nearest positioned
-             ancestor. Fill rather than width/height: the rendered size is
-             CSS-driven, so there is no meaningful intrinsic size to declare. -->
-        <div class="relative rounded-2xl overflow-hidden shadow-xl h-[440px]">
-          <img
-            [ngSrc]="'/assets/images/about_mock_test.jpg'"
-            [attr.alt]="lang.t('mockExam.whatIs.imageAlt')"
-            fill
-            class="object-cover"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-
-        <!-- 90% Pass Rate badge -->
-        <div
-          class="absolute bottom-[-8px] start-0
-                 flex items-center gap-4
-                 bg-white border-2 border-ios-brand-amber rounded-[14px]
-                 shadow-[0_20px_25px_0_rgba(0,0,0,0.1),0_8px_10px_0_rgba(0,0,0,0.1)]
-                 px-5 py-4"
-          role="img"
-          [attr.aria-label]="
-            lang.t('mockExam.whatIs.passRate') + ' — ' + lang.t('mockExam.whatIs.passRateLocation')
-          "
-        >
-          <div
-            class="flex items-center justify-center w-10 h-10 rounded-[10px] bg-ios-brand-primary shrink-0"
-            aria-hidden="true"
-          >
-            <ios-icon name="chart-bar" class="w-5 h-5 text-white" />
+          <div class="flex flex-col gap-3 items-center w-full">
+            <h2
+              id="what-is-mock-heading"
+              class="font-heading font-extrabold text-[36px] leading-[1.2] text-ios-brand-dark"
+            >
+              {{ lang.t('mockExam.whatIs.heading1')
+              }}<span class="text-ios-brand-primary">{{ lang.t('mockExam.whatIs.heading2') }}</span>
+            </h2>
+            <p class="font-body font-medium text-[16px] leading-[1.4] text-ios-fg-muted max-w-2xl">
+              {{ lang.t('mockExam.whatIs.description') }}
+            </p>
           </div>
-          <div class="flex flex-col whitespace-nowrap">
-            <span class="font-body font-black text-[24px] leading-8 text-ios-brand-primary">
-              {{ lang.t('mockExam.whatIs.passRate') }}
-            </span>
-            <span class="font-body font-normal text-[14px] leading-5 text-[#6a7282]">
-              {{ lang.t('mockExam.whatIs.passRateLocation') }}
-            </span>
+
+          <div class="w-[180px] h-1 rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
+        </div>
+
+        <!-- Image card with pass-rate badge -->
+        <div class="relative mx-auto max-w-[1032px] pb-8">
+          <!-- Depth shadow -->
+          <div
+            class="absolute inset-0 translate-y-3 translate-x-3 rounded-2xl bg-ios-brand-primary opacity-[0.07]"
+            aria-hidden="true"
+          ></div>
+
+          <!-- Main image -->
+          <!-- The height lives on the wrapper because NgOptimizedImage's fill
+               mode absolutely positions the image against its nearest positioned
+               ancestor. Fill rather than width/height: the rendered size is
+               CSS-driven, so there is no meaningful intrinsic size to declare. -->
+          <div class="relative rounded-2xl overflow-hidden shadow-xl h-[440px]">
+            <img
+              [ngSrc]="'/assets/images/about_mock_test.jpg'"
+              [attr.alt]="lang.t('mockExam.whatIs.imageAlt')"
+              fill
+              class="object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+
+          <!-- 90% Pass Rate badge -->
+          <div
+            class="absolute bottom-[-8px] start-0
+                   flex items-center gap-4
+                   bg-white border-2 border-ios-brand-amber rounded-[14px]
+                   shadow-[0_20px_25px_0_rgba(0,0,0,0.1),0_8px_10px_0_rgba(0,0,0,0.1)]
+                   px-5 py-4"
+            role="img"
+            [attr.aria-label]="
+              lang.t('mockExam.whatIs.passRate') +
+              ' — ' +
+              lang.t('mockExam.whatIs.passRateLocation')
+            "
+          >
+            <div
+              class="flex items-center justify-center w-10 h-10 rounded-[10px] bg-ios-brand-primary shrink-0"
+              aria-hidden="true"
+            >
+              <ios-icon name="chart-bar" class="w-5 h-5 text-white" />
+            </div>
+            <div class="flex flex-col whitespace-nowrap">
+              <span class="font-body font-black text-[24px] leading-8 text-ios-brand-primary">
+                {{ lang.t('mockExam.whatIs.passRate') }}
+              </span>
+              <span class="font-body font-normal text-[14px] leading-5 text-[#6a7282]">
+                {{ lang.t('mockExam.whatIs.passRateLocation') }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -198,124 +192,123 @@ interface AnswerOption {
     <!-- ═══════════════════════════════════════════════════════════
          4. Why Take a Mock test?
     ═══════════════════════════════════════════════════════════ -->
-    <section
-      class="bg-white px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
-      aria-labelledby="why-mock-heading"
-    >
-      <div class="flex flex-col lg:flex-row gap-12 items-stretch">
-        <!-- Left panel — dark red -->
-        <div
-          class="relative bg-ios-brand-primary-deep rounded-2xl overflow-hidden
-                 flex flex-col gap-5 p-8 flex-1 min-w-0"
-        >
-          <!-- Decorative circles -->
+    <section class="bg-white" aria-labelledby="why-mock-heading">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
+        <div class="flex flex-col lg:flex-row gap-12 items-stretch">
+          <!-- Left panel — dark red -->
           <div
-            class="absolute top-[-80px] end-[-80px] w-40 h-40 rounded-full bg-[rgba(212,160,23,0.12)]"
-            aria-hidden="true"
-          ></div>
-          <div
-            class="absolute bottom-[-62px] start-[-62px] w-32 h-32 rounded-full bg-[rgba(212,160,23,0.08)]"
-            aria-hidden="true"
-          ></div>
-
-          <!-- Mock exam icon -->
-          <div
-            class="relative bg-ios-brand-primary-mid rounded-2xl flex items-center justify-center
-                   w-full max-w-[163px] h-[176px] mx-auto"
-            aria-hidden="true"
+            class="relative bg-ios-brand-primary-deep rounded-2xl overflow-hidden
+                   flex flex-col gap-5 p-8 flex-1 min-w-0"
           >
-            <ios-icon name="brain" class="w-16 h-16 text-ios-brand-gold" />
-          </div>
-
-          <!-- Badge + heading + rule -->
-          <div class="flex flex-col gap-3">
-            <span
-              class="self-start inline-flex items-center justify-center px-6 py-2 rounded-full
-                     bg-ios-brand-yellow-soft border border-ios-brand-gold
-                     font-body font-semibold text-[14px] text-ios-brand-primary"
-            >
-              {{ lang.t('mockExam.why.badge') }}
-            </span>
-            <h2
-              id="why-mock-heading"
-              class="font-heading font-extrabold text-[30px] leading-[1.2] text-white"
-            >
-              {{ lang.t('mockExam.why.heading1')
-              }}<span class="text-ios-brand-yellow-bright">{{
-                lang.t('mockExam.why.heading2')
-              }}</span>
-            </h2>
+            <!-- Decorative circles -->
             <div
-              class="w-[81px] h-1 rounded-full bg-ios-brand-yellow-bright"
+              class="absolute top-[-80px] end-[-80px] w-40 h-40 rounded-full bg-[rgba(212,160,23,0.12)]"
               aria-hidden="true"
             ></div>
-          </div>
+            <div
+              class="absolute bottom-[-62px] start-[-62px] w-32 h-32 rounded-full bg-[rgba(212,160,23,0.08)]"
+              aria-hidden="true"
+            ></div>
 
-          <!-- Stat pills -->
-          <div class="flex gap-3" role="list" [attr.aria-label]="lang.t('mockExam.why.badge')">
+            <!-- Mock exam icon -->
             <div
-              class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                     bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
-              role="listitem"
+              class="relative bg-ios-brand-primary-mid rounded-2xl flex items-center justify-center
+                     w-full max-w-[163px] h-[176px] mx-auto"
+              aria-hidden="true"
             >
-              <span
-                class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
-              >
-                {{ lang.t('mockExam.why.pills.questions') }}
-              </span>
+              <ios-icon name="brain" class="w-16 h-16 text-ios-brand-gold" />
             </div>
-            <div
-              class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                     bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
-              role="listitem"
-            >
-              <span
-                class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
-              >
-                {{ lang.t('mockExam.why.pills.timer') }}
-              </span>
-            </div>
-            <div
-              class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                     bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
-              role="listitem"
-            >
-              <span
-                class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
-              >
-                {{ lang.t('mockExam.why.pills.score') }}
-              </span>
-            </div>
-          </div>
-        </div>
 
-        <!-- Right panel — benefits list -->
-        <div class="flex flex-col gap-4 flex-1 justify-center">
-          @for (benefit of benefits(); track benefit.key) {
-            <div
-              class="flex items-center gap-6 px-4 py-4 rounded-[14px]
-                     bg-ios-surface-warm border border-ios-brand-gold"
-            >
-              <!-- Icon badge -->
+            <!-- Badge + heading + rule -->
+            <div class="flex flex-col gap-3">
+              <span
+                class="self-start inline-flex items-center justify-center px-6 py-2 rounded-full
+                       bg-ios-brand-yellow-soft border border-ios-brand-gold
+                       font-body font-semibold text-[14px] text-ios-brand-primary"
+              >
+                {{ lang.t('mockExam.why.badge') }}
+              </span>
+              <h2
+                id="why-mock-heading"
+                class="font-heading font-extrabold text-[30px] leading-[1.2] text-white"
+              >
+                {{ lang.t('mockExam.why.heading1')
+                }}<span class="text-ios-brand-yellow-bright">{{
+                  lang.t('mockExam.why.heading2')
+                }}</span>
+              </h2>
               <div
-                class="shrink-0 flex items-center justify-center w-9 h-9 rounded-[10px]
-                       bg-ios-brand-yellow-soft border border-[#ffe477]"
+                class="w-[81px] h-1 rounded-full bg-ios-brand-yellow-bright"
                 aria-hidden="true"
-              >
-                <ios-icon [name]="benefit.icon" class="w-5 h-5 text-ios-brand-primary" />
-              </div>
-              <!-- Label -->
-              <p class="flex-1 font-body font-medium text-[14px] leading-5 text-ios-brand-dark">
-                {{ lang.t('mockExam.why.benefits.' + benefit.key) }}
-              </p>
-              <!-- Check indicator -->
-              <ios-icon
-                name="square-check"
-                class="shrink-0 w-5 h-5 text-ios-brand-primary"
-                aria-hidden="true"
-              />
+              ></div>
             </div>
-          }
+
+            <!-- Stat pills -->
+            <div class="flex gap-3" role="list" [attr.aria-label]="lang.t('mockExam.why.badge')">
+              <div
+                class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
+                       bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
+                role="listitem"
+              >
+                <span
+                  class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
+                >
+                  {{ lang.t('mockExam.why.pills.questions') }}
+                </span>
+              </div>
+              <div
+                class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
+                       bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
+                role="listitem"
+              >
+                <span
+                  class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
+                >
+                  {{ lang.t('mockExam.why.pills.timer') }}
+                </span>
+              </div>
+              <div
+                class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
+                       bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
+                role="listitem"
+              >
+                <span
+                  class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
+                >
+                  {{ lang.t('mockExam.why.pills.score') }}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right panel — benefits list -->
+          <div class="flex flex-col gap-4 flex-1 justify-center">
+            @for (benefit of benefits(); track benefit.key) {
+              <div
+                class="flex items-center gap-6 px-4 py-4 rounded-[14px]
+                       bg-ios-surface-warm border border-ios-brand-gold"
+              >
+                <!-- Icon badge -->
+                <div
+                  class="shrink-0 flex items-center justify-center w-9 h-9 rounded-[10px]
+                         bg-ios-brand-yellow-soft border border-[#ffe477]"
+                  aria-hidden="true"
+                >
+                  <ios-icon [name]="benefit.icon" class="w-5 h-5 text-ios-brand-primary" />
+                </div>
+                <!-- Label -->
+                <p class="flex-1 font-body font-medium text-[14px] leading-5 text-ios-brand-dark">
+                  {{ lang.t('mockExam.why.benefits.' + benefit.key) }}
+                </p>
+                <!-- Check indicator -->
+                <ios-icon
+                  name="square-check"
+                  class="shrink-0 w-5 h-5 text-ios-brand-primary"
+                  aria-hidden="true"
+                />
+              </div>
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -323,183 +316,182 @@ interface AnswerOption {
     <!-- ═══════════════════════════════════════════════════════════
          5. How Our Mock Exams Work
     ═══════════════════════════════════════════════════════════ -->
-    <section
-      class="bg-ios-surface-warm px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
-      aria-labelledby="how-it-works-heading"
-    >
-      <div class="flex flex-col lg:flex-row gap-12 items-stretch">
-        <!-- Left — numbered steps -->
-        <div class="flex flex-col gap-5 flex-1 min-w-0">
-          <!-- Badge + heading + rule -->
-          <div class="flex flex-col gap-3">
-            <span
-              class="self-start inline-flex items-center justify-center px-6 py-2 rounded-full
-                     bg-ios-brand-yellow-soft border border-ios-brand-gold
-                     font-body font-semibold text-[14px] text-ios-brand-primary"
-            >
-              {{ lang.t('mockExam.howItWorks.badge') }}
-            </span>
+    <section class="bg-ios-surface-warm" aria-labelledby="how-it-works-heading">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
+        <div class="flex flex-col lg:flex-row gap-12 items-stretch">
+          <!-- Left — numbered steps -->
+          <div class="flex flex-col gap-5 flex-1 min-w-0">
+            <!-- Badge + heading + rule -->
             <div class="flex flex-col gap-3">
-              <h2
-                id="how-it-works-heading"
-                class="font-heading font-extrabold text-[30px] leading-[1.2] text-ios-brand-dark"
+              <span
+                class="self-start inline-flex items-center justify-center px-6 py-2 rounded-full
+                       bg-ios-brand-yellow-soft border border-ios-brand-gold
+                       font-body font-semibold text-[14px] text-ios-brand-primary"
               >
-                {{ lang.t('mockExam.howItWorks.heading1')
-                }}<span class="text-ios-brand-primary">{{
-                  lang.t('mockExam.howItWorks.heading2')
-                }}</span>
-              </h2>
-              <p class="font-body font-medium text-[14px] leading-[1.4] text-ios-fg-muted">
-                {{ lang.t('mockExam.howItWorks.description') }}
-              </p>
-              <div class="w-14 h-1 rounded-full bg-ios-brand-amber" aria-hidden="true"></div>
+                {{ lang.t('mockExam.howItWorks.badge') }}
+              </span>
+              <div class="flex flex-col gap-3">
+                <h2
+                  id="how-it-works-heading"
+                  class="font-heading font-extrabold text-[30px] leading-[1.2] text-ios-brand-dark"
+                >
+                  {{ lang.t('mockExam.howItWorks.heading1')
+                  }}<span class="text-ios-brand-primary">{{
+                    lang.t('mockExam.howItWorks.heading2')
+                  }}</span>
+                </h2>
+                <p class="font-body font-medium text-[14px] leading-[1.4] text-ios-fg-muted">
+                  {{ lang.t('mockExam.howItWorks.description') }}
+                </p>
+                <div class="w-14 h-1 rounded-full bg-ios-brand-amber" aria-hidden="true"></div>
+              </div>
             </div>
-          </div>
 
-          <!-- Steps list -->
-          <ol class="flex flex-col gap-4" [attr.aria-label]="lang.t('mockExam.howItWorks.badge')">
-            @for (step of steps(); track step.num) {
-              <li class="flex gap-3 items-start">
-                <div class="flex items-center pt-0.5 shrink-0">
-                  <div
-                    class="flex items-center justify-center w-9 h-9 rounded-[12px] bg-ios-brand-primary"
-                    aria-hidden="true"
-                  >
-                    <span class="font-body font-extrabold text-[13px] text-white">
-                      {{ step.num }}
-                    </span>
+            <!-- Steps list -->
+            <ol class="flex flex-col gap-4" [attr.aria-label]="lang.t('mockExam.howItWorks.badge')">
+              @for (step of steps(); track step.num) {
+                <li class="flex gap-3 items-start">
+                  <div class="flex items-center pt-0.5 shrink-0">
+                    <div
+                      class="flex items-center justify-center w-9 h-9 rounded-[12px] bg-ios-brand-primary"
+                      aria-hidden="true"
+                    >
+                      <span class="font-body font-extrabold text-[13px] text-white">
+                        {{ step.num }}
+                      </span>
+                    </div>
                   </div>
-                </div>
-                <div class="flex flex-col gap-0.5">
-                  <p class="font-body font-bold text-[15px] leading-[1.4] text-[#101828]">
-                    {{ lang.t('mockExam.howItWorks.steps.' + step.num + '.title') }}
-                  </p>
-                  <p class="font-body font-normal text-[13px] leading-[1.5] text-[#6a7282]">
-                    {{ lang.t('mockExam.howItWorks.steps.' + step.num + '.body') }}
-                  </p>
-                </div>
-              </li>
-            }
-          </ol>
-        </div>
-
-        <!-- Right — mock exam preview card -->
-        <div
-          class="relative bg-ios-brand-dark rounded-2xl overflow-hidden p-5 flex flex-col gap-4 flex-1 min-w-0"
-          role="img"
-          [attr.aria-label]="lang.t('mockExam.howItWorks.preview.title')"
-        >
-          <!-- Decorative glow -->
-          <div
-            class="absolute top-[-62px] end-[443px] w-[186px] h-[186px] rounded-full bg-ios-brand-amber opacity-[0.04]"
-            aria-hidden="true"
-          ></div>
-
-          <!-- Header row -->
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="font-body font-extrabold text-[16px] text-white leading-6">
-                {{ lang.t('mockExam.howItWorks.preview.title') }}
-              </p>
-              <p class="font-body font-normal text-[12px] text-white/50 leading-4 mt-0.5">
-                {{ lang.t('mockExam.howItWorks.preview.subtitle') }}
-              </p>
-            </div>
-            <div
-              class="flex items-center gap-2 h-8 px-3 py-1.5 rounded-[10px] bg-ios-fg-10"
-              [attr.aria-label]="
-                lang.t('mockExam.howItWorks.preview.timeRemainingLabel', { time: '12:00' })
-              "
-            >
-              <ios-icon name="clock" class="w-5 h-5 text-ios-brand-gold" aria-hidden="true" />
-              <span class="font-body font-bold text-[14px] text-ios-brand-gold">12:00</span>
-            </div>
+                  <div class="flex flex-col gap-0.5">
+                    <p class="font-body font-bold text-[15px] leading-[1.4] text-[#101828]">
+                      {{ lang.t('mockExam.howItWorks.steps.' + step.num + '.title') }}
+                    </p>
+                    <p class="font-body font-normal text-[13px] leading-[1.5] text-[#6a7282]">
+                      {{ lang.t('mockExam.howItWorks.steps.' + step.num + '.body') }}
+                    </p>
+                  </div>
+                </li>
+              }
+            </ol>
           </div>
 
-          <!-- Gold progress indicator -->
+          <!-- Right — mock exam preview card -->
           <div
-            class="w-full h-1 rounded-full bg-ios-brand-gold"
-            role="progressbar"
-            aria-valuenow="12"
-            aria-valuemin="0"
-            aria-valuemax="50"
-            [attr.aria-label]="lang.t('mockExam.howItWorks.preview.subtitle')"
-          ></div>
-
-          <!-- Question text -->
-          <div class="flex flex-col gap-2">
-            <p class="font-heading font-medium text-[14px] text-white/50 leading-[1.4]">
-              {{ lang.t('mockExam.howItWorks.preview.questionLabel') }}
-            </p>
-            <p class="font-body font-medium text-[16px] text-white leading-[1.4]">
-              {{ lang.t('mockExam.howItWorks.preview.question') }}
-            </p>
-          </div>
-
-          <!-- Answer options -->
-          <div
-            class="flex flex-col gap-3"
-            role="radiogroup"
-            [attr.aria-label]="lang.t('mockExam.howItWorks.preview.questionLabel')"
+            class="relative bg-ios-brand-dark rounded-2xl overflow-hidden p-5 flex flex-col gap-4 flex-1 min-w-0"
+            role="img"
+            [attr.aria-label]="lang.t('mockExam.howItWorks.preview.title')"
           >
-            @for (option of answerOptions(); track option.key) {
-              <div
-                class="flex items-center gap-3 p-[9px] rounded-[14px] border"
-                [class.bg-[#736428]]="option.selected"
-                [class.border-ios-brand-gold]="option.selected"
-                [class.bg-ios-fg-11]="!option.selected"
-                [class.border-ios-fg-mid]="!option.selected"
-              >
-                <div
-                  class="flex items-center justify-center w-6 h-6 rounded-full shrink-0"
-                  [class.bg-ios-brand-yellow-bright]="option.selected"
-                  [class.text-[#736428]]="option.selected"
-                  [class.bg-ios-fg-mid]="!option.selected"
-                  [class.text-ios-line]="!option.selected"
-                  aria-hidden="true"
-                >
-                  <span class="font-heading font-medium text-[14px] leading-[1.4]">
-                    {{ option.key }}
-                  </span>
-                </div>
-                <p
-                  class="flex-1 font-heading text-[14px] leading-[1.4]"
-                  [class.font-semibold]="option.selected"
-                  [class.text-ios-surface-warm]="option.selected"
-                  [class.font-medium]="!option.selected"
-                  [class.text-ios-surface-soft]="!option.selected"
-                >
-                  {{ lang.t('mockExam.howItWorks.preview.option' + option.key) }}
+            <!-- Decorative glow -->
+            <div
+              class="absolute top-[-62px] end-[443px] w-[186px] h-[186px] rounded-full bg-ios-brand-amber opacity-[0.04]"
+              aria-hidden="true"
+            ></div>
+
+            <!-- Header row -->
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="font-body font-extrabold text-[16px] text-white leading-6">
+                  {{ lang.t('mockExam.howItWorks.preview.title') }}
+                </p>
+                <p class="font-body font-normal text-[12px] text-white/50 leading-4 mt-0.5">
+                  {{ lang.t('mockExam.howItWorks.preview.subtitle') }}
                 </p>
               </div>
-            }
-          </div>
+              <div
+                class="flex items-center gap-2 h-8 px-3 py-1.5 rounded-[10px] bg-ios-fg-10"
+                [attr.aria-label]="
+                  lang.t('mockExam.howItWorks.preview.timeRemainingLabel', { time: '12:00' })
+                "
+              >
+                <ios-icon name="clock" class="w-5 h-5 text-ios-brand-gold" aria-hidden="true" />
+                <span class="font-body font-bold text-[14px] text-ios-brand-gold">12:00</span>
+              </div>
+            </div>
 
-          <!-- Progress bar -->
-          <div class="flex flex-col gap-2">
+            <!-- Gold progress indicator -->
             <div
-              class="flex items-center justify-between font-heading font-medium text-[14px] text-white/40"
-            >
-              <span>{{ lang.t('mockExam.howItWorks.preview.progressLabel') }}</span>
-              <span>12 / 50</span>
-            </div>
-            <div class="w-full h-2 rounded-full bg-ios-fg-10">
-              <div class="h-2 w-[24%] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
-            </div>
-          </div>
+              class="w-full h-1 rounded-full bg-ios-brand-gold"
+              role="progressbar"
+              aria-valuenow="12"
+              aria-valuemin="0"
+              aria-valuemax="50"
+              [attr.aria-label]="lang.t('mockExam.howItWorks.preview.subtitle')"
+            ></div>
 
-          <!-- CTA button -->
-          <button
-            type="button"
-            class="w-full flex items-center justify-center gap-3 h-11 rounded-xl
-                   bg-ios-brand-primary text-ios-brand-primary-soft
-                   font-body font-semibold text-[16px] leading-[1.4]
-                   hover:bg-ios-brand-primary-hover transition-colors
-                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
-          >
-            <ios-icon name="play" class="w-6 h-6" aria-hidden="true" />
-            {{ lang.t('mockExam.howItWorks.preview.cta') }}
-          </button>
+            <!-- Question text -->
+            <div class="flex flex-col gap-2">
+              <p class="font-heading font-medium text-[14px] text-white/50 leading-[1.4]">
+                {{ lang.t('mockExam.howItWorks.preview.questionLabel') }}
+              </p>
+              <p class="font-body font-medium text-[16px] text-white leading-[1.4]">
+                {{ lang.t('mockExam.howItWorks.preview.question') }}
+              </p>
+            </div>
+
+            <!-- Answer options -->
+            <div
+              class="flex flex-col gap-3"
+              role="radiogroup"
+              [attr.aria-label]="lang.t('mockExam.howItWorks.preview.questionLabel')"
+            >
+              @for (option of answerOptions(); track option.key) {
+                <div
+                  class="flex items-center gap-3 p-[9px] rounded-[14px] border"
+                  [class.bg-[#736428]]="option.selected"
+                  [class.border-ios-brand-gold]="option.selected"
+                  [class.bg-ios-fg-11]="!option.selected"
+                  [class.border-ios-fg-mid]="!option.selected"
+                >
+                  <div
+                    class="flex items-center justify-center w-6 h-6 rounded-full shrink-0"
+                    [class.bg-ios-brand-yellow-bright]="option.selected"
+                    [class.text-[#736428]]="option.selected"
+                    [class.bg-ios-fg-mid]="!option.selected"
+                    [class.text-ios-line]="!option.selected"
+                    aria-hidden="true"
+                  >
+                    <span class="font-heading font-medium text-[14px] leading-[1.4]">
+                      {{ option.key }}
+                    </span>
+                  </div>
+                  <p
+                    class="flex-1 font-heading text-[14px] leading-[1.4]"
+                    [class.font-semibold]="option.selected"
+                    [class.text-ios-surface-warm]="option.selected"
+                    [class.font-medium]="!option.selected"
+                    [class.text-ios-surface-soft]="!option.selected"
+                  >
+                    {{ lang.t('mockExam.howItWorks.preview.option' + option.key) }}
+                  </p>
+                </div>
+              }
+            </div>
+
+            <!-- Progress bar -->
+            <div class="flex flex-col gap-2">
+              <div
+                class="flex items-center justify-between font-heading font-medium text-[14px] text-white/40"
+              >
+                <span>{{ lang.t('mockExam.howItWorks.preview.progressLabel') }}</span>
+                <span>12 / 50</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-ios-fg-10">
+                <div class="h-2 w-[24%] rounded-full bg-ios-brand-gold" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <!-- CTA button -->
+            <button
+              type="button"
+              class="w-full flex items-center justify-center gap-3 h-11 rounded-xl
+                     bg-ios-brand-primary text-ios-brand-primary-soft
+                     font-body font-semibold text-[16px] leading-[1.4]
+                     hover:bg-ios-brand-primary-hover transition-colors
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+            >
+              <ios-icon name="play" class="w-6 h-6" aria-hidden="true" />
+              {{ lang.t('mockExam.howItWorks.preview.cta') }}
+            </button>
+          </div>
         </div>
       </div>
     </section>

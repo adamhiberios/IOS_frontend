@@ -129,8 +129,9 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
         <div class="${GOLD_BAR}" aria-hidden="true"></div>
       </div>
 
-      <!-- Full-bleed intro image -->
-      <div class="relative mt-10 w-full h-[300px] md:h-[521px]">
+      <!-- Intro image — capped at the same 1440px column as the rest of the
+           page content so it doesn't blow up past the container on huge screens. -->
+      <div class="relative mt-10 w-full max-w-[1440px] mx-auto h-[300px] md:h-[521px]">
         <img
           ngSrc="/assets/images/about_agile_hero.png"
           [attr.alt]="lang.t('aboutAgile.intro.imageAlt')"
@@ -172,63 +173,62 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
     <!-- ═══════════════════════════════════════════════════════════
          4. The Main Agile Frameworks
     ═══════════════════════════════════════════════════════════ -->
-    <section
-      class="bg-white px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
-      aria-labelledby="frameworks-heading"
-    >
-      <!-- Section header -->
-      <div class="flex flex-col items-center text-center gap-5 mb-10">
-        <div class="flex flex-col gap-4 items-center w-full">
-          <h2
-            id="frameworks-heading"
-            class="font-heading text-[clamp(1.75rem,4vw,36px)] leading-[1.2]"
-          >
-            <span class="font-bold text-ios-brand-dark">{{
-              lang.t('aboutAgile.frameworks.heading1')
-            }}</span>
-            <span class="font-extrabold text-ios-brand-primary">{{
-              lang.t('aboutAgile.frameworks.heading2')
-            }}</span>
-          </h2>
-          <p class="font-body font-medium text-[18px] leading-[1.4] text-ios-fg-mid max-w-3xl">
-            {{ lang.t('aboutAgile.frameworks.subtitle') }}
-          </p>
+    <section class="bg-white" aria-labelledby="frameworks-heading">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
+        <!-- Section header -->
+        <div class="flex flex-col items-center text-center gap-5 mb-10">
+          <div class="flex flex-col gap-4 items-center w-full">
+            <h2
+              id="frameworks-heading"
+              class="font-heading text-[clamp(1.75rem,4vw,36px)] leading-[1.2]"
+            >
+              <span class="font-bold text-ios-brand-dark">{{
+                lang.t('aboutAgile.frameworks.heading1')
+              }}</span>
+              <span class="font-extrabold text-ios-brand-primary">{{
+                lang.t('aboutAgile.frameworks.heading2')
+              }}</span>
+            </h2>
+            <p class="font-body font-medium text-[18px] leading-[1.4] text-ios-fg-mid max-w-3xl">
+              {{ lang.t('aboutAgile.frameworks.subtitle') }}
+            </p>
+          </div>
+
+          <div class="${GOLD_BAR}" aria-hidden="true"></div>
         </div>
 
-        <div class="${GOLD_BAR}" aria-hidden="true"></div>
-      </div>
-
-      <div class="flex flex-col gap-6">
-        <!-- ── Scrum step ─────────────────────────────────────────── -->
-        <img
-          [src]="'/assets/images/agile/step-1.svg'"
-          [alt]="lang.t('aboutAgile.frameworks.scrum.title')"
-          class="w-full h-auto"
-          loading="lazy"
-        />
-
-        <!-- ── Kanban step ────────────────────────────────────────── -->
-        <img
-          [src]="'/assets/images/agile/step-2.svg'"
-          [alt]="lang.t('aboutAgile.frameworks.kanban.title')"
-          class="w-full h-auto"
-          loading="lazy"
-        />
-
-        <!-- ── XP + Lean steps ────────────────────────────────────── -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="flex flex-col gap-6">
+          <!-- ── Scrum step ─────────────────────────────────────────── -->
           <img
-            [src]="'/assets/images/agile/step-3.svg'"
-            [alt]="lang.t('aboutAgile.frameworks.xp.title')"
+            [src]="'/assets/images/agile/step-1.svg'"
+            [alt]="lang.t('aboutAgile.frameworks.scrum.title')"
             class="w-full h-auto"
             loading="lazy"
           />
+
+          <!-- ── Kanban step ────────────────────────────────────────── -->
           <img
-            [src]="'/assets/images/agile/step-4.svg'"
-            [alt]="lang.t('aboutAgile.frameworks.lean.title')"
+            [src]="'/assets/images/agile/step-2.svg'"
+            [alt]="lang.t('aboutAgile.frameworks.kanban.title')"
             class="w-full h-auto"
             loading="lazy"
           />
+
+          <!-- ── XP + Lean steps ────────────────────────────────────── -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <img
+              [src]="'/assets/images/agile/step-3.svg'"
+              [alt]="lang.t('aboutAgile.frameworks.xp.title')"
+              class="w-full h-auto"
+              loading="lazy"
+            />
+            <img
+              [src]="'/assets/images/agile/step-4.svg'"
+              [alt]="lang.t('aboutAgile.frameworks.lean.title')"
+              class="w-full h-auto"
+              loading="lazy"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -236,42 +236,41 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
     <!-- ═══════════════════════════════════════════════════════════
          5. Why Agile Is Important
     ═══════════════════════════════════════════════════════════ -->
-    <section
-      class="bg-ios-surface-warm px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
-      aria-labelledby="why-agile-heading"
-    >
-      <div class="flex flex-col lg:flex-row items-stretch gap-8">
-        <div
-          class="flex flex-col justify-center gap-3 p-6 md:p-[21px] lg:w-[724px] min-w-0
-                 bg-white border border-ios-border-light rounded-lg"
-        >
-          <h2 id="why-agile-heading" class="font-heading text-[24px] leading-[1.2]">
-            <span class="font-bold text-ios-brand-dark">{{ lang.t('aboutAgile.why.title') }} </span>
-            <span class="font-extrabold text-ios-brand-primary">{{
-              lang.t('aboutAgile.why.titleHighlight')
-            }}</span>
-          </h2>
-          <div class="flex flex-col gap-4">
-            <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
-              {{ lang.t('aboutAgile.why.paragraph1') }}
-            </p>
-            <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
-              {{ lang.t('aboutAgile.why.paragraph2') }}
-            </p>
+    <section class="bg-ios-surface-warm" aria-labelledby="why-agile-heading">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
+        <div class="flex flex-col lg:flex-row items-stretch gap-8">
+          <div
+            class="flex flex-col justify-center gap-3 p-6 md:p-[21px] lg:w-[724px] min-w-0
+                   bg-white border border-ios-border-light rounded-lg"
+          >
+            <h2 id="why-agile-heading" class="font-heading text-[24px] leading-[1.2]">
+              <span class="font-bold text-ios-brand-dark"
+                >{{ lang.t('aboutAgile.why.title') }}
+              </span>
+              <span class="font-extrabold text-ios-brand-primary">{{
+                lang.t('aboutAgile.why.titleHighlight')
+              }}</span>
+            </h2>
+            <div class="flex flex-col gap-4">
+              <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
+                {{ lang.t('aboutAgile.why.paragraph1') }}
+              </p>
+              <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
+                {{ lang.t('aboutAgile.why.paragraph2') }}
+              </p>
+            </div>
           </div>
-        </div>
 
-        <div
-          class="relative lg:w-[480px] min-h-[280px] lg:min-h-0 rounded-lg overflow-hidden"
-        >
-          <img
-            [ngSrc]="'/assets/images/about_agile_1.png'"
-            [attr.alt]="lang.t('aboutAgile.why.imageAlt')"
-            fill
-            class="object-cover"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="relative lg:w-[480px] min-h-[280px] lg:min-h-0 rounded-lg overflow-hidden">
+            <img
+              [ngSrc]="'/assets/images/about_agile_1.png'"
+              [attr.alt]="lang.t('aboutAgile.why.imageAlt')"
+              fill
+              class="object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -279,43 +278,40 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
     <!-- ═══════════════════════════════════════════════════════════
          6. When and Where to Use Agile
     ═══════════════════════════════════════════════════════════ -->
-    <section
-      class="bg-white px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
-      aria-labelledby="when-where-heading"
-    >
-      <div class="flex flex-col-reverse lg:flex-row items-stretch gap-8">
-        <div
-          class="relative lg:w-[480px] min-h-[280px] lg:min-h-0 rounded-lg overflow-hidden"
-        >
-          <img
-            [ngSrc]="'/assets/images/about_agile_2.png'"
-            [attr.alt]="lang.t('aboutAgile.whenWhere.imageAlt')"
-            fill
-            class="object-cover"
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
+    <section class="bg-white" aria-labelledby="when-where-heading">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
+        <div class="flex flex-col-reverse lg:flex-row items-stretch gap-8">
+          <div class="relative lg:w-[480px] min-h-[280px] lg:min-h-0 rounded-lg overflow-hidden">
+            <img
+              [ngSrc]="'/assets/images/about_agile_2.png'"
+              [attr.alt]="lang.t('aboutAgile.whenWhere.imageAlt')"
+              fill
+              class="object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
 
-        <div
-          class="flex flex-col justify-center gap-3 p-6 md:p-[21px] lg:w-[724px] min-w-0
-                 bg-white border border-ios-border-light rounded-lg"
-        >
-          <h2 id="when-where-heading" class="font-heading text-[24px] leading-[1.2]">
-            <span class="font-bold text-ios-brand-dark"
-              >{{ lang.t('aboutAgile.whenWhere.title') }}
-            </span>
-            <span class="font-extrabold text-ios-brand-primary">{{
-              lang.t('aboutAgile.whenWhere.titleHighlight')
-            }}</span>
-          </h2>
-          <div class="flex flex-col gap-4">
-            <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
-              {{ lang.t('aboutAgile.whenWhere.paragraph1') }}
-            </p>
-            <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
-              {{ lang.t('aboutAgile.whenWhere.paragraph2') }}
-            </p>
+          <div
+            class="flex flex-col justify-center gap-3 p-6 md:p-[21px] lg:w-[724px] min-w-0
+                   bg-white border border-ios-border-light rounded-lg"
+          >
+            <h2 id="when-where-heading" class="font-heading text-[24px] leading-[1.2]">
+              <span class="font-bold text-ios-brand-dark"
+                >{{ lang.t('aboutAgile.whenWhere.title') }}
+              </span>
+              <span class="font-extrabold text-ios-brand-primary">{{
+                lang.t('aboutAgile.whenWhere.titleHighlight')
+              }}</span>
+            </h2>
+            <div class="flex flex-col gap-4">
+              <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
+                {{ lang.t('aboutAgile.whenWhere.paragraph1') }}
+              </p>
+              <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
+                {{ lang.t('aboutAgile.whenWhere.paragraph2') }}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -324,44 +320,45 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
     <!-- ═══════════════════════════════════════════════════════════
          7. Key Benefits of Agile
     ═══════════════════════════════════════════════════════════ -->
-    <section
-      class="bg-ios-surface-warm px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
-      aria-labelledby="benefits-heading"
-    >
-      <div class="flex flex-col lg:flex-row items-start gap-6">
-        <!-- Intro column -->
-        <div class="flex flex-col gap-3 lg:w-[438px] shrink-0">
-          <h2 id="benefits-heading" class="font-heading text-[24px] leading-[1.2]">
-            <span class="font-bold text-ios-brand-dark"
-              >{{ lang.t('aboutAgile.benefits.title') }}
-            </span>
-            <span class="font-extrabold text-ios-brand-primary">{{
-              lang.t('aboutAgile.benefits.titleHighlight')
-            }}</span>
-          </h2>
-          <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
-            {{ lang.t('aboutAgile.benefits.intro') }}
-          </p>
-        </div>
+    <section class="bg-ios-surface-warm" aria-labelledby="benefits-heading">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
+        <div class="flex flex-col lg:flex-row items-start gap-6">
+          <!-- Intro column -->
+          <div class="flex flex-col gap-3 lg:w-[438px] shrink-0">
+            <h2 id="benefits-heading" class="font-heading text-[24px] leading-[1.2]">
+              <span class="font-bold text-ios-brand-dark"
+                >{{ lang.t('aboutAgile.benefits.title') }}
+              </span>
+              <span class="font-extrabold text-ios-brand-primary">{{
+                lang.t('aboutAgile.benefits.titleHighlight')
+              }}</span>
+            </h2>
+            <p class="font-body text-[18px] leading-[1.4] text-ios-fg-mid">
+              {{ lang.t('aboutAgile.benefits.intro') }}
+            </p>
+          </div>
 
-        <!-- Benefit cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
-          @for (benefit of benefits(); track benefit.index) {
-            <div class="bg-white border border-ios-border-light rounded-lg p-4 flex flex-col gap-4">
+          <!-- Benefit cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
+            @for (benefit of benefits(); track benefit.index) {
               <div
-                class="flex items-center justify-center w-[46px] h-[46px] rounded-lg bg-ios-brand-gold-soft border border-ios-brand-gold shrink-0"
-                aria-hidden="true"
+                class="bg-white border border-ios-border-light rounded-lg p-4 flex flex-col gap-4"
               >
-                <ios-icon [name]="benefit.icon" class="w-7 h-7 text-ios-brand-gold" />
+                <div
+                  class="flex items-center justify-center w-[46px] h-[46px] rounded-lg bg-ios-brand-gold-soft border border-ios-brand-gold shrink-0"
+                  aria-hidden="true"
+                >
+                  <ios-icon [name]="benefit.icon" class="w-7 h-7 text-ios-brand-gold" />
+                </div>
+                <h3 class="font-heading font-bold text-[16px] leading-[1.2] text-ios-brand-dark">
+                  {{ lang.t('aboutAgile.benefits.items.' + benefit.index + '.title') }}
+                </h3>
+                <p class="font-body text-[14px] leading-[1.4] text-ios-fg-mid">
+                  {{ lang.t('aboutAgile.benefits.items.' + benefit.index + '.body') }}
+                </p>
               </div>
-              <h3 class="font-heading font-bold text-[16px] leading-[1.2] text-ios-brand-dark">
-                {{ lang.t('aboutAgile.benefits.items.' + benefit.index + '.title') }}
-              </h3>
-              <p class="font-body text-[14px] leading-[1.4] text-ios-fg-mid">
-                {{ lang.t('aboutAgile.benefits.items.' + benefit.index + '.body') }}
-              </p>
-            </div>
-          }
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -369,39 +366,38 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
     <!-- ═══════════════════════════════════════════════════════════
          8. Advance Your Career with Agile Core Values
     ═══════════════════════════════════════════════════════════ -->
-    <section
-      class="bg-white px-6 md:px-16 lg:px-[120px] py-[72px] max-w-[1440px] mx-auto"
-      aria-labelledby="core-values-heading"
-    >
-      <!-- Section header -->
-      <div class="flex flex-col items-center text-center gap-5 mb-12">
-        <div class="flex flex-col gap-4 items-center w-full">
-          <h2
-            id="core-values-heading"
-            class="font-heading text-[clamp(1.75rem,4vw,36px)] leading-[1.2]"
-          >
-            <span class="font-bold text-ios-brand-dark">{{
-              lang.t('aboutAgile.coreValues.heading1')
-            }}</span>
-            <span class="font-extrabold text-ios-brand-primary">{{
-              lang.t('aboutAgile.coreValues.heading2')
-            }}</span>
-          </h2>
-          <p class="font-body font-medium text-[18px] leading-[1.4] text-ios-fg-mid max-w-2xl">
-            {{ lang.t('aboutAgile.coreValues.subtitle') }}
-          </p>
+    <section class="bg-white" aria-labelledby="core-values-heading">
+      <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
+        <!-- Section header -->
+        <div class="flex flex-col items-center text-center gap-5 mb-12">
+          <div class="flex flex-col gap-4 items-center w-full">
+            <h2
+              id="core-values-heading"
+              class="font-heading text-[clamp(1.75rem,4vw,36px)] leading-[1.2]"
+            >
+              <span class="font-bold text-ios-brand-dark">{{
+                lang.t('aboutAgile.coreValues.heading1')
+              }}</span>
+              <span class="font-extrabold text-ios-brand-primary">{{
+                lang.t('aboutAgile.coreValues.heading2')
+              }}</span>
+            </h2>
+            <p class="font-body font-medium text-[18px] leading-[1.4] text-ios-fg-mid max-w-2xl">
+              {{ lang.t('aboutAgile.coreValues.subtitle') }}
+            </p>
+          </div>
+
+          <div class="${GOLD_BAR}" aria-hidden="true"></div>
         </div>
 
-        <div class="${GOLD_BAR}" aria-hidden="true"></div>
+        <!-- Core values illustration -->
+        <img
+          [src]="'/assets/images/agile/core-value.svg'"
+          [alt]="lang.t('aboutAgile.coreValues.heading2')"
+          class="w-full h-auto"
+          loading="lazy"
+        />
       </div>
-
-      <!-- Core values illustration -->
-      <img
-        [src]="'/assets/images/agile/core-value.svg'"
-        [alt]="lang.t('aboutAgile.coreValues.heading2')"
-        class="w-full h-auto"
-        loading="lazy"
-      />
     </section>
 
     <!-- ═══════════════════════════════════════════════════════════
@@ -501,5 +497,4 @@ export class AboutAgilePage {
     { icon: 'sparkles', index: 4 },
     { icon: 'triangle-alert', index: 5 },
   ]);
-
 }

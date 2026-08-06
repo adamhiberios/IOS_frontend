@@ -46,7 +46,7 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
 
       <!-- ── Breadcrumb ──────────────────────────────────────────────────── -->
       <div class="w-full px-4 md:px-20 pt-5 pb-3">
-        <nav aria-label="Breadcrumb">
+        <nav class="max-w-[1400px] mx-auto" aria-label="Breadcrumb">
           <ol class="flex items-center gap-2 text-[14px] font-medium leading-[1.4]" role="list">
             <li>
               <a

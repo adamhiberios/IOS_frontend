@@ -79,26 +79,29 @@ import {
           @default {
             <!-- ── Breadcrumb ───────────────────────────────────────────── -->
             <div
-              class="w-full border-b border-ios-surface-soft bg-white flex items-center
-                     justify-between gap-3 px-4 md:px-20 h-[70px]"
+              class="w-full border-b border-ios-surface-soft bg-white"
               [attr.aria-label]="lang.t('assessments.runner.currentPageAriaLabel')"
             >
-              <span class="font-semibold text-ios-fg-13 text-base leading-tight">{{
-                lang.t('assessments.runner.finalTest')
-              }}</span>
+              <div
+                class="max-w-[1440px] mx-auto flex items-center justify-between gap-3 px-4 md:px-20 h-[70px]"
+              >
+                <span class="font-semibold text-ios-fg-13 text-base leading-tight">{{
+                  lang.t('assessments.runner.finalTest')
+                }}</span>
 
-              <!-- Connection indicator -->
-              @if (connectionBanner(); as banner) {
-                <span
-                  class="inline-flex items-center gap-2 rounded-full bg-ios-surface-soft
-                         px-3 py-1.5 text-[13px] font-medium text-ios-fg-10"
-                  role="status"
-                  aria-live="polite"
-                >
-                  <ios-icon name="wifi-off" class="w-4 h-4 text-ios-fg-8" aria-hidden="true" />
-                  {{ banner }}
-                </span>
-              }
+                <!-- Connection indicator -->
+                @if (connectionBanner(); as banner) {
+                  <span
+                    class="inline-flex items-center gap-2 rounded-full bg-ios-surface-soft
+                           px-3 py-1.5 text-[13px] font-medium text-ios-fg-10"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    <ios-icon name="wifi-off" class="w-4 h-4 text-ios-fg-8" aria-hidden="true" />
+                    {{ banner }}
+                  </span>
+                }
+              </div>
             </div>
 
             <!-- Visually-hidden live regions for time warnings + sync status -->
@@ -314,7 +317,7 @@ import {
 
         <footer class="bg-ios-fg w-full py-4">
           <div
-            class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2
+            class="max-w-[1440px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2
                    text-ios-fg-7 text-xs"
           >
             <ios-canada-flag aria-hidden="true" />

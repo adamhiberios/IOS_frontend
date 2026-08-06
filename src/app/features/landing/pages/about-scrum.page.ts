@@ -154,8 +154,11 @@ interface LucideTextItem {
         </div>
       </div>
 
-      <!-- Full-bleed photo — breaks out of the max-w container, matches Figma edge-to-edge crop -->
-      <div class="relative w-full h-[220px] md:h-[360px] lg:h-[521px] mt-[56px] overflow-hidden">
+      <!-- Intro photo — capped at the same 1440px column as the rest of the
+           page content so it doesn't blow up past the container on huge screens. -->
+      <div
+        class="relative w-full max-w-[1440px] mx-auto h-[220px] md:h-[360px] lg:h-[521px] mt-[56px] overflow-hidden"
+      >
         <img
           [ngSrc]="'/assets/images/about_scrum_hero.png'"
           [alt]="lang.t('aboutScrum.intro.imageAlt')"
