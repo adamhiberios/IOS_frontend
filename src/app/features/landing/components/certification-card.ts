@@ -20,7 +20,7 @@
  *     [hours]="lang.t('scrumMaster.certPath.hours')"
  *     [onlineLabel]="lang.t('scrumMaster.certPath.online')"
  *     [questions]="lang.t('scrumMaster.certPath.questions')"
- *     [startingAtLabel]="lang.t('scrumMaster.certPath.startingAt')"
+ *     [totalFeeLabel]="lang.t('scrumMaster.certPath.totalFee')"
  *     [price]="lang.t('scrumMaster.certPath.price')"
  *     [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
  *     detailLink="/certifications/esm"
@@ -41,9 +41,7 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
 @Component({
   selector: 'ios-certification-card',
   imports: [CertificatesBadge, IosIcon, RouterLink],
-  providers: [
-    provideIcons(LucideArrowRight, LucideClock, LucideCircleQuestionMark, LucideMonitor),
-  ],
+  providers: [provideIcons(LucideArrowRight, LucideClock, LucideCircleQuestionMark, LucideMonitor)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -80,11 +78,11 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
               {{ fullName() }}
             </span>
           </div>
-          <!-- Inline price shown directly under fullName when showStartingAtPrice is true -->
-          @if (showStartingAtPrice()) {
+          <!-- Inline price shown directly under fullName when showTotalFeePrice is true -->
+          @if (showTotalFeePrice()) {
             <div class="flex flex-col mt-1">
               <span class="font-heading font-medium text-[13px] leading-[1.4] text-ios-brand-muted">
-                {{ startingAtLabel() }}
+                {{ totalFeeLabel() }}
               </span>
               <span
                 class="font-heading font-extrabold text-[18px] leading-[1.2]"
@@ -132,14 +130,14 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
         </div>
       </div>
 
-      @if (!showStartingAtPrice()) {
+      @if (!showTotalFeePrice()) {
         <!-- Divider -->
         <div class="h-px w-full bg-ios-border-light" aria-hidden="true"></div>
 
         <!-- Price -->
         <div class="flex flex-col ps-2">
           <span class="font-heading font-medium text-[14px] leading-[1.4] text-ios-brand-muted">
-            {{ startingAtLabel() }}
+            {{ totalFeeLabel() }}
           </span>
           <span
             class="font-heading font-extrabold text-[20px] leading-[1.2]"
@@ -190,8 +188,8 @@ export class CertificationCard {
   /** Test question count string, e.g. "45-question Test". */
   readonly questions = input<string>('');
 
-  /** "Starting at" label above the price. */
-  readonly startingAtLabel = input<string>('');
+  /** "Total Fee" label above the price. */
+  readonly totalFeeLabel = input<string>('');
 
   /** Price string, e.g. "CAD $180". */
   readonly price = input<string>('');
@@ -203,12 +201,12 @@ export class CertificationCard {
   readonly detailLink = input<string>('');
 
   /**
-   * When `true`, displays the "starting at" label + price inline directly
+   * When `true`, displays the "Total Fee" label + price inline directly
    * below the `fullName` inside the badge-details block (in addition to the
    * standard price row below the meta divider).
    * Default: `false` — existing behaviour is unchanged.
    */
-  readonly showStartingAtPrice = input<boolean>(false);
+  readonly showTotalFeePrice = input<boolean>(false);
 
   // ── Theming inputs (optional — SM blue defaults match existing pages) ──────
 

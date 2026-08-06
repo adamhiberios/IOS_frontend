@@ -107,7 +107,7 @@ export interface CertCardData {
       <!-- Price -->
       <div class="flex flex-col gap-0.5 px-1">
         <span class="text-[13px] font-medium text-ios-fg-7">
-          {{ lang.t('landing.levels.cert.startingAt') }}
+          {{ lang.t('landing.levels.cert.totalFee') }}
         </span>
         <span class="font-heading font-extrabold text-[20px] leading-tight text-ios-brand-dark">
           {{ cert().price }}

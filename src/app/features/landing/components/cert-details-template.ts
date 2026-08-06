@@ -233,7 +233,7 @@ export interface CertDetailsConfig {
                     <span
                       class="font-heading font-medium text-[13px] lg:text-[14px] leading-[1.4] whitespace-nowrap block text-track-softer"
                     >
-                      {{ lang.t(cfg().namespace + '.hero.startingAt') }}
+                      {{ lang.t(cfg().namespace + '.hero.totalFee') }}
                     </span>
                     <span
                       class="font-heading font-extrabold text-[18px] lg:text-[20px] leading-[1.2] whitespace-nowrap block text-track-soft"
@@ -724,7 +724,7 @@ export interface CertDetailsConfig {
                         <span
                           class="font-heading font-medium text-[13px] md:text-[14px] leading-[1.4] text-ios-brand-muted"
                         >
-                          {{ lang.t(cfg().namespace + '.related.startingAt') }}
+                          {{ lang.t(cfg().namespace + '.related.totalFee') }}
                         </span>
                         <span
                           class="font-heading font-extrabold text-[18px] md:text-[20px] leading-[1.2] text-track-text"

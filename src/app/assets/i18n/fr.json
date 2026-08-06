@@ -286,7 +286,7 @@
       "whoShouldPursue": "À qui s'adresse cette certification",
       "whoShouldPursueToggle": "Afficher à qui s'adresse cette certification",
       "cert": {
-        "startingAt": "À partir de",
+        "totalFee": "À partir de",
         "downloadGuide": "Télécharger le guide",
         "enrollNow": "S'inscrire",
         "hours": "+20 h",
@@ -1500,7 +1500,7 @@
       "hours": "15+ hrs",
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
-      "startingAt": "À partir de",
+      "totalFee": "À partir de",
       "price": "180 $ CAD",
       "download": "Télécharger",
       "enroll": "S'inscrire",
@@ -1593,7 +1593,7 @@
       "hours": "15+ hrs",
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
-      "startingAt": "À partir de",
+      "totalFee": "À partir de",
       "price": "180 $ CAD",
       "download": "Télécharger",
       "enroll": "S inscrire",
@@ -1676,7 +1676,7 @@
       "hours": "15+ hrs",
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
-      "startingAt": "À partir de",
+      "totalFee": "À partir de",
       "price": "180 $ CAD",
       "download": "Télécharger",
       "enroll": "S'inscrire"
@@ -1798,7 +1798,7 @@
       "hours": "15+ hrs",
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
-      "startingAt": "À partir de",
+      "totalFee": "À partir de",
       "price": "180 $ CAD",
       "download": "Télécharger",
       "enroll": "S inscrire",
@@ -1842,7 +1842,7 @@
         "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement qui ouvre des portes vers des rôles de Scrum Master très demandés dans le monde entier.",
         "download": "Télécharger la présentation du programme",
         "enroll": "S'inscrire maintenant",
-        "startingAt": "À partir de"
+        "totalFee": "À partir de"
       },
       "overview": {
         "title": "Aperçu",
@@ -1905,7 +1905,7 @@
       "related": {
         "headingPart1": "Certifications",
         "headingPart2": "connexes",
-        "startingAt": "À partir de",
+        "totalFee": "À partir de",
         "epo": {
           "fullName": "Propriétaire de Produit Agréé",
           "level": "Niveau Fondation",
@@ -1936,7 +1936,7 @@
         "description": "Élevez vos compétences de Maître Scrum de la théorie à la pratique et prouvez que vous pouvez guider de vraies équipes Agile vers un succès mesurable.",
         "download": "Télécharger la présentation du programme",
         "enroll": "S'inscrire maintenant",
-        "startingAt": "À partir de"
+        "totalFee": "À partir de"
       },
       "overview": {
         "title": "Aperçu",
@@ -1999,7 +1999,7 @@
       "related": {
         "headingPart1": "Certifications",
         "headingPart2": "connexes",
-        "startingAt": "À partir de",
+        "totalFee": "À partir de",
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
@@ -2037,7 +2037,7 @@
         "description": "Établissez-vous comme une autorité Scrum de premier ordre capable de guider les transformations Agile à l'échelle de l'entreprise et de mentorer la prochaine génération.",
         "download": "Télécharger la présentation du programme",
         "enroll": "S'inscrire maintenant",
-        "startingAt": "À partir de"
+        "totalFee": "À partir de"
       },
       "overview": {
         "title": "Aperçu",
@@ -2100,7 +2100,7 @@
       "related": {
         "headingPart1": "Certifications",
         "headingPart2": "Connexes",
-        "startingAt": "À partir de",
+        "totalFee": "À partir de",
         "esmP": {
           "fullName": "Maître Scrum Agréé Praticien",
           "level": "Niveau Praticien",
@@ -2131,7 +2131,7 @@
         "description": "Commencez votre parcours vers la création de produits que les gens adorent avec une certification fondamentale.",
         "download": "Télécharger l'Aperçu du Programme",
         "enroll": "S'inscrire Maintenant",
-        "startingAt": "À partir de"
+        "totalFee": "À partir de"
       },
       "overview": {
         "title": "Aperçu",
@@ -2194,7 +2194,7 @@
       "related": {
         "headingPart1": "Certifications",
         "headingPart2": "Connexes",
-        "startingAt": "À partir de",
+        "totalFee": "À partir de",
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
@@ -2225,7 +2225,7 @@
         "description": "Élevez vos compétences de Propriétaire de Produit du niveau fondation à avancé et provezvous capable de stimuler le succès produit dans des environnements Scrum complexes.",
         "download": "Télécharger l'Aperçu du Programme",
         "enroll": "S'inscrire Maintenant",
-        "startingAt": "À partir de"
+        "totalFee": "À partir de"
       },
       "overview": {
         "title": "Aperçu",
@@ -2287,7 +2287,7 @@
       "related": {
         "headingPart1": "Certifications",
         "headingPart2": "Connexes",
-        "startingAt": "À partir de",
+        "totalFee": "À partir de",
         "epo": {
           "fullName": "Propriétaire de Produit Agréé",
           "level": "Niveau Fondation",
@@ -2318,7 +2318,7 @@
         "description": "Maîtrisez l'art de la facilitation et devenez le guide de confiance dont chaque équipe Agile a besoin pour libérer clarté, alignement et résultats durables.",
         "download": "Télécharger l'Aperçu du Programme",
         "enroll": "S'inscrire Maintenant",
-        "startingAt": "À partir de"
+        "totalFee": "À partir de"
       },
       "overview": {
         "title": "Aperçu",
@@ -2381,7 +2381,7 @@
       "related": {
         "headingPart1": "Certifications",
         "headingPart2": "Connexes",
-        "startingAt": "À partir de",
+        "totalFee": "À partir de",
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
@@ -2412,7 +2412,7 @@
         "description": "Devenez le leader produit dont les organisations ont besoin pour façonner la stratégie, stimuler l'innovation et fournir des résultats métier transformateurs à grande échelle.",
         "download": "Télécharger l'Aperçu du Programme",
         "enroll": "S'inscrire Maintenant",
-        "startingAt": "À partir de"
+        "totalFee": "À partir de"
       },
       "overview": {
         "title": "Aperçu",
@@ -2475,7 +2475,7 @@
       "related": {
         "headingPart1": "Certifications",
         "headingPart2": "Connexes",
-        "startingAt": "À partir de",
+        "totalFee": "À partir de",
         "epoP": {
           "fullName": "Propriétaire de Produit Agréé Praticien",
           "level": "Niveau Praticien",

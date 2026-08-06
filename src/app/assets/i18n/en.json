@@ -286,7 +286,7 @@
       "whoShouldPursue": "Who Should Pursue This",
       "whoShouldPursueToggle": "Show who should pursue this",
       "cert": {
-        "startingAt": "Starting at",
+        "totalFee": "Total Fee",
         "downloadGuide": "Download Guide",
         "enrollNow": "Enroll Now",
         "hours": "15+ hrs",
@@ -1500,7 +1500,7 @@
       "hours": "15+ hrs",
       "online": "Fully Online",
       "questions": "45-question Test",
-      "startingAt": "Starting at",
+      "totalFee": "Total Fee",
       "price": "CAD $180",
       "download": "Download",
       "enroll": "Enroll Now",
@@ -1593,7 +1593,7 @@
       "hours": "15+ hrs",
       "online": "Fully Online",
       "questions": "45-question Test",
-      "startingAt": "Starting at",
+      "totalFee": "Total Fee",
       "price": "CAD $180",
       "download": "Download",
       "enroll": "Enroll Now",
@@ -1676,7 +1676,7 @@
       "hours": "15+ hrs",
       "online": "Fully Online",
       "questions": "45-question Test",
-      "startingAt": "Starting at",
+      "totalFee": "Total Fee",
       "price": "CAD $180",
       "download": "Download",
       "enroll": "Enroll Now"
@@ -1798,7 +1798,7 @@
       "hours": "15+ hrs",
       "online": "Fully Online",
       "questions": "45-question Test",
-      "startingAt": "Starting at",
+      "totalFee": "Total Fee",
       "price": "CAD $180",
       "download": "Download",
       "enroll": "Enroll Now",
@@ -1842,7 +1842,7 @@
         "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "totalFee": "Total Fee"
       },
       "overview": {
         "title": "Overview",
@@ -1905,7 +1905,7 @@
       "related": {
         "headingPart1": "Related",
         "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "totalFee": "Total Fee",
         "epo": {
           "fullName": "Endorsed Product Owner",
           "level": "Foundation Level",
@@ -1936,7 +1936,7 @@
         "description": "Elevate your Scrum Master skills from theory to practice and prove you can lead real Agile teams to measurable success.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "totalFee": "Total Fee"
       },
       "overview": {
         "title": "Overview",
@@ -1999,7 +1999,7 @@
       "related": {
         "headingPart1": "Related",
         "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "totalFee": "Total Fee",
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
@@ -2037,7 +2037,7 @@
         "description": "Establish yourself as a top-tier Scrum authority capable of leading enterprise-scale Agile transformations and mentoring the next generation.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "totalFee": "Total Fee"
       },
       "overview": {
         "title": "Overview",
@@ -2100,7 +2100,7 @@
       "related": {
         "headingPart1": "Related",
         "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "totalFee": "Total Fee",
         "esmP": {
           "fullName": "Endorsed Scrum Master Practitioner",
           "level": "Practitioner Level",
@@ -2131,7 +2131,7 @@
         "description": "Start your journey toward building products people love with a foundation credential.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "totalFee": "Total Fee"
       },
       "overview": {
         "title": "Overview",
@@ -2194,7 +2194,7 @@
       "related": {
         "headingPart1": "Related",
         "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "totalFee": "Total Fee",
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
@@ -2225,7 +2225,7 @@
         "description": "Prove you can deliver real product value in complex environments and stand out as a practitioner who turns vision into measurable outcomes.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "totalFee": "Total Fee"
       },
       "overview": {
         "title": "Overview",
@@ -2287,7 +2287,7 @@
       "related": {
         "headingPart1": "Related",
         "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "totalFee": "Total Fee",
         "epo": {
           "fullName": "Endorsed Product Owner",
           "level": "Foundation Level",
@@ -2318,7 +2318,7 @@
         "description": "Master the art of facilitation and become the trusted guide every Agile team needs to unlock clarity, alignment, and lasting results.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "totalFee": "Total Fee"
       },
       "overview": {
         "title": "Overview",
@@ -2381,7 +2381,7 @@
       "related": {
         "headingPart1": "Related",
         "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "totalFee": "Total Fee",
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
@@ -2412,7 +2412,7 @@
         "description": "Become the product leader organizations rely on to shape strategy, drive innovation, and deliver transformative business outcomes at scale.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
-        "startingAt": "Starting at"
+        "totalFee": "Total Fee"
       },
       "overview": {
         "title": "Overview",
@@ -2475,7 +2475,7 @@
       "related": {
         "headingPart1": "Related",
         "headingPart2": "Certifications",
-        "startingAt": "Starting at",
+        "totalFee": "Total Fee",
         "epoP": {
           "fullName": "Endorsed Product Owner Practitioner",
           "level": "Practitioner Level",

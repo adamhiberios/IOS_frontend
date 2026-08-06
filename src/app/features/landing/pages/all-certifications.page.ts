@@ -43,7 +43,7 @@ interface CertDef {
   readonly svgPath: string;
   /** i18n key suffix under `allCertifications.tracks.<track>.` for the full name, e.g. `esmName`. */
   readonly nameKey: string;
-  readonly showStartingAtPrice: boolean;
+  readonly showTotalFeePrice: boolean;
   // Card theme (ios-certification-card inputs)
   readonly cardLevelBgColor: string;
   readonly cardLevelTextColor: string;
@@ -289,11 +289,11 @@ interface CertDef {
               [hours]="lang.t('allCertifications.shared.hours')"
               [onlineLabel]="lang.t('allCertifications.shared.online')"
               [questions]="lang.t('allCertifications.shared.questions')"
-              [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
+              [totalFeeLabel]="lang.t('allCertifications.shared.totalFee')"
               [price]="lang.t('allCertifications.shared.price')"
               [enrollLabel]="lang.t('allCertifications.shared.enroll')"
               [detailLink]="'/certifications/' + cert.code.toLowerCase()"
-              [showStartingAtPrice]="cert.showStartingAtPrice"
+              [showTotalFeePrice]="cert.showTotalFeePrice"
               [levelBgColor]="cert.cardLevelBgColor"
               [levelTextColor]="cert.cardLevelTextColor"
               [codeColor]="cert.cardCodeColor"
@@ -347,11 +347,11 @@ interface CertDef {
               [hours]="lang.t('allCertifications.shared.hours')"
               [onlineLabel]="lang.t('allCertifications.shared.online')"
               [questions]="lang.t('allCertifications.shared.questions')"
-              [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
+              [totalFeeLabel]="lang.t('allCertifications.shared.totalFee')"
               [price]="lang.t('allCertifications.shared.price')"
               [enrollLabel]="lang.t('allCertifications.shared.enroll')"
               [detailLink]="'/certifications/' + cert.code.toLowerCase()"
-              [showStartingAtPrice]="cert.showStartingAtPrice"
+              [showTotalFeePrice]="cert.showTotalFeePrice"
               [levelBgColor]="cert.cardLevelBgColor"
               [levelTextColor]="cert.cardLevelTextColor"
               [priceColor]="cert.cardPriceColor"
@@ -403,11 +403,11 @@ interface CertDef {
               [hours]="lang.t('allCertifications.shared.hours')"
               [onlineLabel]="lang.t('allCertifications.shared.online')"
               [questions]="lang.t('allCertifications.shared.questions')"
-              [startingAtLabel]="lang.t('allCertifications.shared.startingAt')"
+              [totalFeeLabel]="lang.t('allCertifications.shared.totalFee')"
               [price]="lang.t('allCertifications.shared.price')"
               [enrollLabel]="lang.t('allCertifications.shared.enroll')"
               [detailLink]="'/certifications/' + cert.code.toLowerCase()"
-              [showStartingAtPrice]="cert.showStartingAtPrice"
+              [showTotalFeePrice]="cert.showTotalFeePrice"
               [levelBgColor]="cert.cardLevelBgColor"
               [levelTextColor]="cert.cardLevelTextColor"
               [codeColor]="cert.cardCodeColor"
@@ -700,7 +700,7 @@ export class AllCertificationsPage {
       level: 'foundation',
       svgPath: '/assets/badge/endorsed_scrum_master.svg',
       nameKey: 'esmName',
-      showStartingAtPrice: true,
+      showTotalFeePrice: true,
       cardLevelBgColor: '#426981',
       cardLevelTextColor: '#e8edf0',
       cardCodeColor: '#143d56',
@@ -717,7 +717,7 @@ export class AllCertificationsPage {
       level: 'practitioner',
       svgPath: '/assets/badge/endorsed_scrum_master_practitioner.svg',
       nameKey: 'esmpName',
-      showStartingAtPrice: true,
+      showTotalFeePrice: true,
       cardLevelBgColor: '#426981',
       cardLevelTextColor: '#e8edf0',
       cardCodeColor: '#143d56',
@@ -734,7 +734,7 @@ export class AllCertificationsPage {
       level: 'authority',
       svgPath: '/assets/badge/endorsed_scrum_master_authority.svg',
       nameKey: 'esmaName',
-      showStartingAtPrice: true,
+      showTotalFeePrice: true,
       cardLevelBgColor: '#426981',
       cardLevelTextColor: '#e8edf0',
       cardCodeColor: '#143d56',
@@ -751,7 +751,7 @@ export class AllCertificationsPage {
       level: 'foundation',
       svgPath: '/assets/badge/endorsed_product_owner.svg',
       nameKey: 'epoName',
-      showStartingAtPrice: false,
+      showTotalFeePrice: false,
       cardLevelBgColor: '#515e4d',
       cardLevelTextColor: '#eef3ec',
       cardCodeColor: '#143d56',
@@ -768,7 +768,7 @@ export class AllCertificationsPage {
       level: 'practitioner',
       svgPath: '/assets/badge/endorsed_product_owner_practitioner.svg',
       nameKey: 'epopName',
-      showStartingAtPrice: false,
+      showTotalFeePrice: false,
       cardLevelBgColor: '#515e4d',
       cardLevelTextColor: '#eef3ec',
       cardCodeColor: '#143d56',
@@ -785,7 +785,7 @@ export class AllCertificationsPage {
       level: 'authority',
       svgPath: '/assets/badge/endorsed_product_owner_authority.svg',
       nameKey: 'epoaName',
-      showStartingAtPrice: false,
+      showTotalFeePrice: false,
       cardLevelBgColor: '#515e4d',
       cardLevelTextColor: '#eef3ec',
       cardCodeColor: '#143d56',
@@ -802,7 +802,7 @@ export class AllCertificationsPage {
       level: 'foundation',
       svgPath: '/assets/badge/endorsed_scrum_facilitator.svg',
       nameKey: 'esfName',
-      showStartingAtPrice: false,
+      showTotalFeePrice: false,
       cardLevelBgColor: '#a69075',
       cardLevelTextColor: '#ffffff',
       cardCodeColor: '#8e6636',
