@@ -43,27 +43,27 @@ export class CertDetailsEsmPPage {
 
     audience: [
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-p-1.svg',
         titleKey: 'practitionerTitle',
         descKey: 'practitionerDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-p-2.svg',
         titleKey: 'teamCoachTitle',
         descKey: 'teamCoachDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-p-3.svg',
         titleKey: 'optimizationTitle',
         descKey: 'optimizationDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-p-4.svg',
         titleKey: 'leaderTitle',
         descKey: 'leaderDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-p-5.svg',
         titleKey: 'strategistTitle',
         descKey: 'strategistDesc',
         fullWidth: true,

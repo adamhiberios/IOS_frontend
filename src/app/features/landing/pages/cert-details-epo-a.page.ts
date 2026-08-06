@@ -43,27 +43,27 @@ export class CertDetailsEpoAPage {
 
     audience: [
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/epo-a-1.svg',
         titleKey: 'enterpriseTitle',
         descKey: 'enterpriseDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/epo-a-2.svg',
         titleKey: 'chiefProductTitle',
         descKey: 'chiefProductDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/epo-a-3.svg',
         titleKey: 'portfolioTitle',
         descKey: 'portfolioDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/epo-a-4.svg',
         titleKey: 'executiveTitle',
         descKey: 'executiveDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/epo-a-5.svg',
         titleKey: 'innovatorTitle',
         descKey: 'innovatorDesc',
         fullWidth: true,

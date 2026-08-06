@@ -43,27 +43,27 @@ export class CertDetailsEsmAPage {
 
     audience: [
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-a-1.svg',
         titleKey: 'enterpriseTitle',
         descKey: 'enterpriseDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-a-2.svg',
         titleKey: 'mentorTitle',
         descKey: 'mentorDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-a-3.svg',
         titleKey: 'scalingTitle',
         descKey: 'scalingDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-a-4.svg',
         titleKey: 'executiveTitle',
         descKey: 'executiveDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esm-a-5.svg',
         titleKey: 'authorityTitle',
         descKey: 'authorityDesc',
         fullWidth: true,

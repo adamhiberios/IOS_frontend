@@ -43,27 +43,27 @@ export class CertDetailsEsmFPage {
 
     audience: [
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esf-1.svg',
         titleKey: 'consultantTitle',
         descKey: 'consultantDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esf-2.svg',
         titleKey: 'leaderTitle',
         descKey: 'leaderDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esf-3.svg',
         titleKey: 'coachTitle',
         descKey: 'coachDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esf-4.svg',
         titleKey: 'productTitle',
         descKey: 'productDesc',
       },
       {
-        iconSrc: '/assets/icons/certificate_exam.svg',
+        iconSrc: '/assets/icons/certifications/esf-5.svg',
         titleKey: 'expertTitle',
         descKey: 'expertDesc',
         fullWidth: true,
