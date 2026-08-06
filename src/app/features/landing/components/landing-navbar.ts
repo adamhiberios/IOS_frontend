@@ -107,10 +107,23 @@ interface CertMenuGroup {
               />
             </button>
             @if (certOpen()) {
+              <!--
+              Fixed (viewport-relative) and horizontally centered, not
+              absolute + start-0 anchored to this trigger button. The
+              Certifications button sits near the left of the navbar, so a
+              920px-wide panel anchored to its left edge ran past the right
+              edge of the viewport on real desktop widths (1024-1400px-ish).
+              Centering under the viewport, capped at
+              min(920px, 100vw - 2rem), keeps equal margin on both sides so
+              it can never run off either edge, and top-[78px] lines up with
+              the navbar's own fixed height (44px logo + 16px*2 padding + 2px
+              border) regardless of scroll position.
+            -->
               <div
                 id="cert-menu"
                 [attr.aria-label]="lang.t('landing.nav.certMenuAriaLabel')"
-                class="absolute z-50 top-full start-0 mt-1 w-[min(920px,calc(100vw-2rem))]
+                class="fixed z-50 top-[78px] start-1/2 -translate-x-1/2 rtl:translate-x-1/2 mt-1
+                       w-[min(920px,calc(100vw-2rem))]
                        rounded-2xl border border-ios-border-light bg-white shadow-lg
                        px-8 py-6 flex flex-col gap-6"
               >

@@ -59,6 +59,14 @@ interface CertLevelDef {
   description: string;
   explorePath: string;
   exploreLink: string;
+  /**
+   * Optional URL fragment for `exploreLink`, bound separately via
+   * `[fragment]` on the `routerLink`. `routerLink` treats its string input
+   * as literal path commands — a `#fragment` embedded directly in that
+   * string is NOT parsed out as a fragment, it's matched as part of the
+   * path itself (and 404s, since no such route exists).
+   */
+  exploreFragment?: string;
   audienceDesc: string;
   certCards: CertCardData[];
 }
@@ -135,6 +143,7 @@ interface CertLevelDef {
                   </p>
                   <a
                     [routerLink]="level.exploreLink"
+                    [fragment]="level.exploreFragment"
                     class="inline-flex items-center gap-2 text-ios-brand-primary font-heading font-semibold text-[14px]
                          hover:underline focus-visible:outline-none focus-visible:ring-2
                          focus-visible:ring-ios-brand-primary/50 rounded-lg"
@@ -337,6 +346,7 @@ interface CertLevelDef {
                       <div class="col-span-1 flex justify-end">
                         <a
                           [routerLink]="level.exploreLink"
+                          [fragment]="level.exploreFragment"
                           class="inline-flex items-center gap-2 text-ios-brand-primary font-heading font-semibold text-[14px]
                              hover:underline focus-visible:outline-none focus-visible:ring-2
                              focus-visible:ring-ios-brand-primary/50 rounded-lg"
@@ -415,6 +425,18 @@ export class CertLevelsSection {
   };
   /** Chip color for a track we ship no copy or palette for. */
   private static readonly UNKNOWN_TRACK_COLOR = '#5a5a5a';
+  /**
+   * Heading id of each track's own section on the All Certifications page
+   * (`all-certifications.page.ts`) — the "Explore" link jumps straight to
+   * the matching track section instead of the generic page intro.
+   */
+  private static readonly TRACK_EXPLORE_FRAGMENT: Record<KnownTrack, string> = {
+    scrumMaster: 'all-certs-sm-heading',
+    productOwner: 'all-certs-po-heading',
+    scrumFacilitator: 'all-certs-sf-heading',
+  };
+  /** Fragment for a track we ship no dedicated section for — the page intro. */
+  private static readonly UNKNOWN_TRACK_EXPLORE_FRAGMENT = 'all-certs-intro-heading';
   /** Generic placeholder used when the backend has no `badgeImageUrl` set. */
   private static readonly FALLBACK_BADGE_IMAGE = '/assets/icons/certificate_budge.svg';
 
@@ -561,6 +583,13 @@ export class CertLevelsSection {
           description: this.lang.t(`${copyKey}.description`),
           explorePath: this.lang.t(`${copyKey}.explorePath`),
           exploreLink: '/certifications',
+          // Jumps straight to this track's own section on the All
+          // Certifications page (e.g. "Scrum Master Track") instead of
+          // landing at the top — the router's anchorScrolling (see
+          // app.config.ts) scrolls to it on navigation.
+          exploreFragment: group.known
+            ? CertLevelsSection.TRACK_EXPLORE_FRAGMENT[group.known]
+            : CertLevelsSection.UNKNOWN_TRACK_EXPLORE_FRAGMENT,
           audienceDesc: this.lang.t(`${copyKey}.audienceDesc`),
           certCards: [...group.certs]
             .sort(

@@ -182,7 +182,10 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
           />
         </div>
 
-        <!-- Stat 1: 12,000+ — bottom-left, 254x84 at (0, 417) -->
+        <!--
+        Stat 1 (12,000+, bottom-left) and Stat 2 (6,000+, middle-right)
+        floating cards — commented out per request.
+
         <div
           class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6 border-ios-brand-amber"
           style="inset-inline-start: 0%; top: 75.68%; width: 21.75%; height: 15.25%; z-index: 4;"
@@ -195,7 +198,6 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
           </span>
         </div>
 
-        <!-- Stat 2: 6,000+ — middle-right, 249x84 at (919, 223) -->
         <div
           class="absolute bg-white border-2 rounded-[14px] shadow-lg flex flex-col justify-center px-6 border-ios-brand-amber"
           style="inset-inline-start: 78.68%; top: 40.47%; width: 21.32%; height: 15.25%; z-index: 4;"
@@ -207,6 +209,7 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
             {{ lang.t('allCertifications.intro.stat2Label') }}
           </span>
         </div>
+        -->
       </div>
 
       <!-- Mobile / tablet (< lg): stacked fallback -->
@@ -221,6 +224,9 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
             decoding="async"
           />
         </div>
+        <!--
+        Mobile stat cards (12,000+ / 6,000+) — commented out per request.
+
         <div class="grid grid-cols-2 gap-4 w-full max-w-[480px]">
           <div
             class="bg-white border-2 rounded-[14px] shadow-md p-4 flex flex-col gap-1 border-ios-brand-amber"
@@ -243,6 +249,7 @@ class="inline-flex items-center px-4 py-1.5 rounded-full border
             </span>
           </div>
         </div>
+        -->
       </div>
       </div>
     </section>

@@ -1,3 +1,4 @@
+import { ViewportScroller } from '@angular/common';
 import {
   type ApplicationConfig,
   inject,
@@ -46,6 +47,16 @@ export const appConfig: ApplicationConfig = {
      * inside LanguageService.init() so <html lang dir> is set atomically.
      */
     provideAppInitializer(() => inject(LanguageService).init()),
+
+    /**
+     * Global offset for `#fragment` anchor scrolling (e.g. the cert-track
+     * "Explore" links) — without it, the target heading lands flush with the
+     * viewport top, right under the sticky navbar. 50px of headroom keeps it
+     * clear and gives a bit of breathing room above the heading.
+     */
+    provideAppInitializer(() => {
+      inject(ViewportScroller).setOffset([0, 60]);
+    }),
 
     /**
      * Silent re-authentication on app boot — /docs/07 §2.2.

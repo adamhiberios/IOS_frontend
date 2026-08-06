@@ -207,8 +207,21 @@ export interface CertDetailsConfig {
                 </div>
               </div>
 
-              <!-- Price tag — inline on mobile/sm, absolute at lg+ -->
-              <div class="relative self-start lg:self-auto lg:absolute lg:bottom-0 lg:end-28">
+              <!--
+              Price tag — always inline/in-flow (the md treatment), at every
+              breakpoint. It used to switch to absolute positioning, pinned
+              to the bottom-right corner, at lg+ (bottom-0, end-28), anchored
+              to the whole dark band (title + badge + level pill together)
+              rather than just this top row. That fixed position didn't
+              account for the certification title wrapping to two lines for
+              longer names (e.g. "Endorsed Scrum Master Authority - ESM-A"),
+              so the wrapped second line ran into the price tag underneath
+              it. Staying in normal flow lets the row's own flex layout
+              (justify-between on the parent) reserve real space for the tag
+              next to the title, at every screen size, regardless of how
+              long the title is.
+            -->
+              <div class="relative self-start">
                 <div
                   class="h-[60px] lg:h-[68px] px-5 lg:px-6 pt-3 lg:pt-4 bg-track-mid"
                   [attr.aria-label]="lang.t('certDetails.startingPriceAriaLabel')"
@@ -281,7 +294,9 @@ export interface CertDetailsConfig {
         </div>
 
         <!-- ── White block — bottom half of the badge, description, buttons ── -->
-        <div class="bg-white px-6 md:px-10 lg:px-16 xl:px-[120px] pt-4 pb-[40px] lg:pb-[56px] max-w-[1440px] mx-auto">
+        <div
+          class="bg-white px-6 md:px-10 lg:px-16 xl:px-[120px] pt-4 pb-[40px] lg:pb-[56px] max-w-[1440px] mx-auto"
+        >
           <div class="grid grid-cols-1 lg:grid-cols-[210px_1fr] gap-6 lg:gap-10 items-start">
             <div class="hidden lg:block w-[210px]" aria-hidden="true"></div>
 
@@ -365,17 +380,16 @@ export interface CertDetailsConfig {
         class="relative overflow-hidden px-6 md:px-10 lg:px-16 xl:px-[242px] py-[56px] lg:py-[72px] bg-track-softer max-w-[1440px] mx-auto"
         [attr.aria-label]="lang.t('certDetails.certFactsAriaLabel')"
       >
-        <!-- Decorative side bars — desktop only -->
-        <div
-          class="hidden lg:block absolute top-1/2 -translate-y-1/2 start-[-62px] w-[224px] h-[13px] bg-track-line"
-          aria-hidden="true"
-        ></div>
-        <div
-          class="hidden lg:block absolute top-1/2 -translate-y-1/2 end-[-62px] w-[224px] h-[13px] bg-track-line"
-          aria-hidden="true"
-        ></div>
+        <div class="hidden lg:block relative h-0" aria-hidden="true">
+          <div
+            class="absolute top-[22px] -translate-y-1/2 start-[-260px] w-[224px] h-[13px] bg-track-line"
+          ></div>
+          <div
+            class="absolute top-[22px] -translate-y-1/2 end-[-260px] w-[224px] h-[13px] bg-track-line"
+          ></div>
+        </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 items-start">
+        <div class="relative z-10 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-8 items-start">
           <!-- Stat 1: Prerequisite -->
           <div class="flex flex-col gap-1">
             <p
