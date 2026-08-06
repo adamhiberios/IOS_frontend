@@ -20,11 +20,11 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
   template: `
     <section
       [attr.aria-label]="lang.t('landing.hero.sectionAriaLabel')"
-      class="relative overflow-hidden  bg-white lg:overflow-visible min-h-[480px] lg:min-h-[520px]"
+      class="relative overflow-hidden  bg-white lg:overflow-visible min-h-[480px] lg:min-h-[482px]"
     >
       <!-- Caps the hero at a normal desktop width so it doesn't stretch edge-to-edge
            (and blow up in scale) on very large / ultrawide monitors. -->
-      <div class="max-w-[1440px] mx-auto flex flex-col-reverse lg:flex-row items-stretch">
+      <div class="h-full max-w-[1440px] mx-auto flex flex-col-reverse lg:flex-row items-stretch">
         <!-- Content panel — solid white, holds badge/headline/CTAs -->
         <div
           class="relative w-full lg:w-1/2 flex items-center px-6 md:px-16 lg:px-[80px] py-10 lg:py-16"
@@ -86,8 +86,8 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
           <img
             ngSrc="/assets/images/landing_hero_office.png"
             [alt]="lang.t('landing.hero.imageAlt')"
-            width="876"
-            height="724"
+            width="1800"
+            height="994"
             class="w-full h-[280px] sm:h-[340px] md:h-[400px] lg:h-full object-cover object-top"
             priority
           />
