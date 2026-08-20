@@ -28,6 +28,8 @@ interface MarketLevel {
 interface CertTableCell {
   name: string;
   link: string;
+  /** This track has no certification at this level — rendered as an em dash. */
+  notApplicable?: boolean;
 }
 
 interface CertTableRow {
@@ -194,7 +196,7 @@ interface CertTableRow {
                   >
                     {{ row.role }}
                   </td>
-                  @for (cell of row.cells; track cell.name; let lastCell = $last) {
+                  @for (cell of row.cells; track $index; let lastCell = $last) {
                     <td
                       class="px-6 py-4 border-t border-ios-border-light"
                       [class.border-e]="!lastCell"
@@ -208,6 +210,9 @@ interface CertTableRow {
                         >
                           {{ cell.name }}
                         </a>
+                      } @else if (cell.notApplicable) {
+                        <span class="text-[#c4c5c4] text-[14px]" aria-hidden="true">&mdash;</span>
+                        <span class="sr-only">{{ lang.t('landing.certs.notApplicable') }}</span>
                       } @else {
                         <span class="text-[#c4c5c4] text-[14px]">{{ cell.name }}</span>
                       }
@@ -261,7 +266,10 @@ export class MarketStatsSection {
    * route links are structural constants.
    */
   protected readonly certTableRows = computed<CertTableRow[]>(() => {
-    const comingSoon = this.lang.t('landing.certs.comingSoon');
+    /** Scrum Facilitator is a single-level track — Foundation and Intermediate
+     *  do not exist for it and are not planned, so they read as "not
+     *  applicable" rather than "coming soon". */
+    const notApplicable: CertTableCell = { name: '', link: '', notApplicable: true };
     return [
       {
         role: this.lang.t('landing.marketStats.table.smRole'),
@@ -282,8 +290,8 @@ export class MarketStatsSection {
       {
         role: this.lang.t('landing.marketStats.table.sfRole'),
         cells: [
-          { name: comingSoon, link: '' },
-          { name: comingSoon, link: '' },
+          notApplicable,
+          notApplicable,
           { name: `${this.lang.t('landing.certs.esf')} (ESF)`, link: '/certifications/esf' },
         ],
       },

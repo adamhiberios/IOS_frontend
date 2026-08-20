@@ -304,7 +304,8 @@
       "asm": "Endorsed Scrum Master Authority",
       "apo": "Endorsed Product Owner Authority",
       "asf": "Endorsed Scrum Facilitator Authority",
-      "comingSoon": "قريباً..."
+      "comingSoon": "قريباً...",
+      "notApplicable": "غير متاح"
     },
     "howItWorks": {
       "choose": {
@@ -312,11 +313,11 @@
         "description": "اختر مسار سكرم والمستوى الأنسب لأهدافك."
       },
       "review": {
-        "title": "راجع مواد التعلم",
+        "title": "ادرس المادة التعليمية",
         "description": "ادرس المواد المقدمة لبناء معرفتك والاستعداد للامتحان."
       },
       "practice": {
-        "title": "تدرب بالاختبارات التجريبية",
+        "title": "تدرب بالاختبار التجريبي",
         "description": "أجرِ اختبارات تجريبية لتقييم مستوى استعدادك وتعزيز فهمك."
       },
       "access": {
@@ -365,9 +366,8 @@
     },
     "sections": {
       "whyChooseUs": {
-        "badge": "لماذا تختارنا",
         "why": "لماذا",
-        "scrumCertifications": "شهادات سكرم",
+        "instituteOfScrum": "معهد سكرم",
         "description": "اعتماد من معهد سكرم هو تأكيد على إثبات كفاءتك العملية والمتخصصة من خلال تقييم صارم. عندما يرى أصحاب العمل هذا الاعتماد، فإنهم يعلمون أن حامله قد حقق معايير تتجاوز بكثير الحضور والحفظ."
       },
       "credibilityIndicators": "لماذا تهم شهادة سكرم",
@@ -388,10 +388,10 @@
       "scrumJournalPart2": "مجلة سكرم",
       "howItWorks": "كيف يعمل",
       "howItWorksSectionAriaLabel": "كيف يعمل",
-      "whyChooseUsSectionAriaLabel": "لماذا تختارنا",
+      "whyChooseUsSectionAriaLabel": "لماذا معهد سكرم",
       "marketStatsSectionAriaLabel": "شرح مستويات الشهادة",
-      "pathToCertification": "مسارك نحو",
-      "pathToCertificationSuffixes": "الشهادة المعتمدة",
+      "pathToCertification": "خارطة طريق",
+      "pathToCertificationSuffixes": "الشهادة",
       "insightsResources": "رؤى وموارد",
       "scrumJournal": "من مجلة سكرم",
       "allCertsAtGlanceSectionAriaLabel": "جميع الشهادات بنظرة واحدة",
@@ -498,35 +498,32 @@
       "tagline": "المزود الرائد في كندا لشهادات سكرم المعتمدة في المجال.",
       "copyright": "© {year} معهد سكرم. جميع الحقوق محفوظة.",
       "privacy": "سياسة الخصوصية",
-      "terms": "شروط الخدمة",
+      "terms": "شروط الاستخدام",
       "certifications": {
         "title": "الشهادات",
         "scrumMaster": "شهادات Scrum Master",
         "productOwner": "شهادات مالك المنتج",
         "scrumFacilitator": "شهادة ميسِّر سكرم"
       },
-      "company": {
-        "title": "المؤسسة",
-        "about": "عن معهد سكرم",
-        "whyScrum": "لماذا شهادات سكرم",
-        "support": "الحصول على الدعم"
+      "about": {
+        "title": "من نحن",
+        "institute": "عن معهد سكرم",
+        "agile": "عن أجايل",
+        "scrum": "عن سكرم"
       },
       "resources": {
         "title": "الموارد",
         "insights": "الرؤى",
-        "studentPortal": "تسجيل الدخول إلى بوابة الطالب"
-      },
-      "legal": {
-        "title": "قانوني",
-        "privacy": "سياسة الخصوصية",
-        "terms": "شروط الخدمة"
+        "studentPortal": "بوابة الطالب",
+        "support": "الحصول على الدعم"
       },
       "linkedinAriaLabel": "لينكد إن",
       "xAriaLabel": "إكس / تويتر",
       "facebookAriaLabel": "فيسبوك",
       "youtubeAriaLabel": "يوتيوب",
       "logoAlt": "معهد سكرم",
-      "socialLinksTitle": "روابط التواصل الاجتماعي"
+      "socialLinksTitle": "روابط التواصل الاجتماعي",
+      "legalLinksTitle": "روابط قانونية"
     },
     "stats": {
       "sectionAriaLabel": "معهد سكرم بالأرقام",

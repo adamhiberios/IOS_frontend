@@ -1,7 +1,8 @@
 import { NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { CanadaFlag } from '@ui';
 
@@ -18,6 +19,11 @@ import { CanadaFlag } from '@ui';
  * `pages/all-certifications.page.ts`; the router's `anchorScrolling` (see
  * `app.config.ts`) does the scrolling. Same convention as the "Explore" links
  * in `components/sections/cert-levels-section.ts`.
+ *
+ * "Student Portal" under Resources routes on session state — the portal for a
+ * signed-in visitor, the login form otherwise. Same precedent as the navbar's
+ * auth CTA (`components/landing-navbar.ts`). RBAC here is presentation only;
+ * `/dashboard` is still gated by `authGuard` (CLAUDE.md §8).
  */
 @Component({
   selector: 'ios-landing-footer',
@@ -78,7 +84,7 @@ import { CanadaFlag } from '@ui';
           </div>
 
           <!-- Nav columns — fill remaining space -->
-          <div class="flex-1 grid grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="flex-1 grid grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Certifications -->
             <div>
               <h3
@@ -117,37 +123,36 @@ import { CanadaFlag } from '@ui';
               </ul>
             </div>
 
-            <!-- Company -->
+            <!-- About -->
             <div>
               <h3
                 class="font-heading font-extrabold text-[16px] leading-[1.2] mb-3 text-ios-brand-gold"
               >
-                {{ lang.t('landing.footer.company.title') }}
+                {{ lang.t('landing.footer.about.title') }}
               </h3>
               <ul class="space-y-3">
                 <li>
                   <a
-                    href="#"
-                    (click)="$event.preventDefault()"
+                    routerLink="/about-institute"
                     class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
-                    >{{ lang.t('landing.footer.company.about') }}</a
+                    >{{ lang.t('landing.footer.about.institute') }}</a
                   >
                 </li>
                 <li>
                   <a
-                    routerLink="/certifications"
+                    routerLink="/about-agile"
                     class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
-                    >{{ lang.t('landing.footer.company.whyScrum') }}</a
+                    >{{ lang.t('landing.footer.about.agile') }}</a
                   >
                 </li>
                 <li>
                   <a
-                    routerLink="/contact"
+                    routerLink="/about-scrum"
                     class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
-                    >{{ lang.t('landing.footer.company.support') }}</a
+                    >{{ lang.t('landing.footer.about.scrum') }}</a
                   >
                 </li>
               </ul>
@@ -171,38 +176,18 @@ import { CanadaFlag } from '@ui';
                 </li>
                 <li>
                   <a
-                    href="#"
-                    (click)="$event.preventDefault()"
+                    [routerLink]="studentPortalLink()"
                     class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
                     >{{ lang.t('landing.footer.resources.studentPortal') }}</a
                   >
                 </li>
-              </ul>
-            </div>
-
-            <!-- Legal -->
-            <div>
-              <h3
-                class="font-heading font-extrabold text-[16px] leading-[1.2] mb-3 text-ios-brand-gold"
-              >
-                {{ lang.t('landing.footer.legal.title') }}
-              </h3>
-              <ul class="space-y-3">
                 <li>
                   <a
-                    routerLink="/privacy-policy"
+                    routerLink="/contact"
                     class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
-                    >{{ lang.t('landing.footer.legal.privacy') }}</a
-                  >
-                </li>
-                <li>
-                  <a
-                    routerLink="/terms-of-use"
-                    class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
-                         focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
-                    >{{ lang.t('landing.footer.legal.terms') }}</a
+                    >{{ lang.t('landing.footer.resources.support') }}</a
                   >
                 </li>
               </ul>
@@ -215,17 +200,45 @@ import { CanadaFlag } from '@ui';
         <div class="mt-10 mb-4 border-t border-white/10"></div>
       </div>
 
-      <!-- Bottom bar -->
-      <div class="flex items-center justify-center gap-2 px-6 pb-6">
-        <ios-canada-flag />
-        <p class="text-ios-brand-muted text-[14px] font-medium leading-[1.4]">
-          {{ lang.t('landing.footer.copyright', { year: currentYear }) }}
-        </p>
+      <!-- Bottom bar — copyright with the legal links alongside it. Stacks on
+           phones, sits on one centred row from sm up. -->
+      <div
+        class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-6 gap-y-3 px-6 pb-6"
+      >
+        <div class="flex items-center gap-2">
+          <ios-canada-flag />
+          <p class="text-ios-brand-muted text-[14px] font-medium leading-[1.4]">
+            {{ lang.t('landing.footer.copyright', { year: currentYear }) }}
+          </p>
+        </div>
+        <nav
+          class="flex items-center gap-x-6"
+          [attr.aria-label]="lang.t('landing.footer.legalLinksTitle')"
+        >
+          <a
+            routerLink="/privacy-policy"
+            class="text-ios-brand-muted text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
+                   focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
+            >{{ lang.t('landing.footer.privacy') }}</a
+          >
+          <a
+            routerLink="/terms-of-use"
+            class="text-ios-brand-muted text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
+                   focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
+            >{{ lang.t('landing.footer.terms') }}</a
+          >
+        </nav>
       </div>
     </footer>
   `,
 })
 export class LandingFooter {
   protected readonly lang = inject(LanguageService);
+  private readonly auth = inject(AuthStore);
   protected readonly currentYear = new Date().getFullYear();
+
+  /** Student Portal target — the portal itself when signed in, else login. */
+  protected readonly studentPortalLink = computed(() =>
+    this.auth.isAuthenticated() ? '/dashboard' : '/auth/login',
+  );
 }

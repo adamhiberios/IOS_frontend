@@ -1,5 +1,5 @@
 /**
- * `ios-how-it-works-section` — "Your Path to Endorsed Certification" zigzag timeline (section 9).
+ * `ios-how-it-works-section` — "Certification Road Map" zigzag timeline (section 9).
  *
  * ## Data ownership
  * All step data is static. Step numbers and icon names are structural constants;

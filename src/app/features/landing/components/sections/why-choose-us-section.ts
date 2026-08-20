@@ -1,5 +1,5 @@
 /**
- * `ios-why-choose-us-section` — "Why Scrum Certifications" dark-red section (section 6).
+ * `ios-why-choose-us-section` — "Why Institute of Scrum" dark-red section (section 6).
  *
  * Currently driven entirely by i18n. When the backend provides configurable
  * marketing copy, add a `data` input of type `WhyChooseUsData`.
@@ -8,11 +8,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { LanguageService } from '@core/i18n';
-import { SectionBadge } from '@ui';
 
 @Component({
   selector: 'ios-why-choose-us-section',
-  imports: [SectionBadge],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
@@ -31,16 +29,11 @@ import { SectionBadge } from '@ui';
 
       <div class="relative max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px]">
         <div class="flex flex-col items-center text-center gap-5">
-          <ios-section-badge
-            [text]="lang.t('landing.sections.whyChooseUs.badge')"
-            variant="muted-light"
-          />
-
-          <!-- Heading: "Why" (white) + "Scrum Certifications" (yellow-bright) -->
+          <!-- Heading: "Why" (white) + "Institute of Scrum" (yellow-bright) -->
           <h2 class="font-heading font-bold text-[clamp(1.75rem,4vw,2.75rem)] leading-tight">
             <span class="text-white">{{ lang.t('landing.sections.whyChooseUs.why') }}</span>
             <span class="ms-2 text-ios-brand-yellow-bright">
-              {{ lang.t('landing.sections.whyChooseUs.scrumCertifications') }}
+              {{ lang.t('landing.sections.whyChooseUs.instituteOfScrum') }}
             </span>
           </h2>
 

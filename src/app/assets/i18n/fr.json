@@ -304,7 +304,8 @@
       "asm": "Endorsed Scrum Master Autorité",
       "apo": "Endorsed Product Owner Autorité",
       "asf": "Endorsed Scrum Facilitator Autorité",
-      "comingSoon": "Bientôt disponible..."
+      "comingSoon": "Bientôt disponible...",
+      "notApplicable": "Non applicable"
     },
     "howItWorks": {
       "choose": {
@@ -312,11 +313,11 @@
         "description": "Sélectionnez le parcours Scrum et le niveau qui correspondent le mieux à vos objectifs."
       },
       "review": {
-        "title": "Révisez les supports d'apprentissage",
+        "title": "Étudiez le matériel pédagogique",
         "description": "Étudiez les supports fournis pour acquérir les connaissances nécessaires et vous préparer à l'examen."
       },
       "practice": {
-        "title": "Entraînez-vous avec des tests blancs",
+        "title": "Entraînez-vous avec l'examen blanc",
         "description": "Passez des examens pratiques pour évaluer votre niveau de préparation et renforcer votre compréhension."
       },
       "access": {
@@ -380,18 +381,17 @@
       "threeLevelsSubtitle": "Trois parcours professionnels distincts. Trois niveaux de maîtrise. Un seul standard rigoureux d'excellence.",
       "howItWorks": "Comment ça marche",
       "howItWorksSectionAriaLabel": "Comment ça marche",
-      "whyChooseUsSectionAriaLabel": "Pourquoi nous choisir",
+      "whyChooseUsSectionAriaLabel": "Pourquoi l'Institute of Scrum",
       "marketStatsSectionAriaLabel": "Niveaux de certification expliqués",
-      "pathToCertification": "Votre parcours vers",
-      "pathToCertificationSuffixes": "la certification approuvée",
+      "pathToCertification": "Feuille de route de la",
+      "pathToCertificationSuffixes": "certification",
       "insightsResources": "Perspectives et ressources",
       "scrumJournal": "Du Journal Scrum",
       "scrumJournalPart1": "Dernières actualités du",
       "scrumJournalPart2": "Journal Scrum",
       "whyChooseUs": {
-        "badge": "Pourquoi nous choisir",
         "why": "Pourquoi",
-        "scrumCertifications": "les certifications Scrum",
+        "instituteOfScrum": "l'Institute of Scrum",
         "description": "Un credential de l'Institute of Scrum valide que vous avez démontré une maîtrise pratique et spécialisée par rôle à travers une évaluation rigoureuse. Lorsque les employeurs voient cette désignation, ils savent que son titulaire a satisfait à des exigences qui vont bien au-delà de la simple présence et de la mémorisation."
       },
       "allCertsAtGlanceSectionAriaLabel": "Toutes les certifications en un coup d'œil",
@@ -505,28 +505,25 @@
         "productOwner": "Certifications Product Owner",
         "scrumFacilitator": "Certification Scrum Facilitator"
       },
-      "company": {
-        "title": "Entreprise",
-        "about": "À propos de l'Institute of Scrum",
-        "whyScrum": "Pourquoi les certifications Scrum",
-        "support": "Obtenir de l'aide"
+      "about": {
+        "title": "À propos",
+        "institute": "À propos de l'Institute of Scrum",
+        "agile": "À propos d’Agile",
+        "scrum": "À propos de Scrum"
       },
       "resources": {
         "title": "Ressources",
         "insights": "Perspectives",
-        "studentPortal": "Connexion portail étudiant"
-      },
-      "legal": {
-        "title": "Légal",
-        "privacy": "Politique de confidentialité",
-        "terms": "Conditions d'utilisation"
+        "studentPortal": "Portail étudiant",
+        "support": "Obtenir de l'aide"
       },
       "linkedinAriaLabel": "LinkedIn",
       "xAriaLabel": "X / Twitter",
       "facebookAriaLabel": "Facebook",
       "youtubeAriaLabel": "YouTube",
       "logoAlt": "Institut Scrum",
-      "socialLinksTitle": "Liens sociaux"
+      "socialLinksTitle": "Liens sociaux",
+      "legalLinksTitle": "Liens juridiques"
     },
     "stats": {
       "sectionAriaLabel": "L'Institut de Scrum en chiffres",

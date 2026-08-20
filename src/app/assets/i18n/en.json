@@ -304,7 +304,8 @@
       "asm": "Endorsed Scrum Master Authority",
       "apo": "Endorsed Product Owner Authority",
       "asf": "Endorsed Scrum Facilitator Authority",
-      "comingSoon": "Coming Soon..."
+      "comingSoon": "Coming Soon...",
+      "notApplicable": "Not applicable"
     },
     "howItWorks": {
       "choose": {
@@ -312,11 +313,11 @@
         "description": "Select the Scrum track and level that best align with your goals."
       },
       "review": {
-        "title": "Review the Learning Materials",
+        "title": "Study Learning Material",
         "description": "Study the provided materials to build your knowledge and prepare for the exam."
       },
       "practice": {
-        "title": "Practice with Mock Tests",
+        "title": "Practice with Mock Exam",
         "description": "Complete practice exams to assess your readiness and strengthen your understanding."
       },
       "access": {
@@ -365,9 +366,8 @@
     },
     "sections": {
       "whyChooseUs": {
-        "badge": "Why Choose Us",
         "why": "Why",
-        "scrumCertifications": "Scrum Certifications",
+        "instituteOfScrum": "Institute of Scrum",
         "description": "A credential from Institute of Scrum is a validation that you have proven practical, role-specific mastery through rigorous assessment. When employers see this designation, they know the holder has earned standards that go far beyond attendance and memorization."
       },
       "credibilityIndicators": "Why Scrum Certification Matters",
@@ -388,10 +388,10 @@
       "scrumJournalPart2": "Scrum Journal",
       "howItWorks": "How It Works",
       "howItWorksSectionAriaLabel": "How It Works",
-      "whyChooseUsSectionAriaLabel": "Why Choose Us",
+      "whyChooseUsSectionAriaLabel": "Why Institute of Scrum",
       "marketStatsSectionAriaLabel": "Certification Levels Explained",
-      "pathToCertification": "Your Path to",
-      "pathToCertificationSuffixes": "Endorsed Certification",
+      "pathToCertification": "Certification",
+      "pathToCertificationSuffixes": "Road Map",
       "insightsResources": "Insights & Resources",
       "scrumJournal": "From the Scrum Journal",
       "allCertsAtGlanceSectionAriaLabel": "All Certifications at a Glance",
@@ -498,35 +498,32 @@
       "tagline": "Canada's premier provider of industry-recognized Scrum certifications.",
       "copyright": "© {year} Institute of Scrum. All rights reserved.",
       "privacy": "Privacy Policy",
-      "terms": "Terms of Service",
+      "terms": "Terms of Use",
       "certifications": {
         "title": "Certifications",
         "scrumMaster": "Scrum Master Certifications",
         "productOwner": "Product Owner Certifications",
         "scrumFacilitator": "Scrum Facilitator Certification"
       },
-      "company": {
-        "title": "Company",
-        "about": "About Institute of Scrum",
-        "whyScrum": "Why Scrum Certifications",
-        "support": "Get Support"
+      "about": {
+        "title": "About",
+        "institute": "About Institute of Scrum",
+        "agile": "About Agile",
+        "scrum": "About Scrum"
       },
       "resources": {
         "title": "Resources",
         "insights": "Insights",
-        "studentPortal": "Student Portal Login"
-      },
-      "legal": {
-        "title": "Legal",
-        "privacy": "Privacy Policy",
-        "terms": "Terms of Service"
+        "studentPortal": "Student Portal",
+        "support": "Get Support"
       },
       "linkedinAriaLabel": "LinkedIn",
       "xAriaLabel": "X / Twitter",
       "facebookAriaLabel": "Facebook",
       "youtubeAriaLabel": "YouTube",
       "socialLinksTitle": "Social links",
-      "logoAlt": "Institute of Scrum"
+      "logoAlt": "Institute of Scrum",
+      "legalLinksTitle": "Legal links"
     },
     "stats": {
       "sectionAriaLabel": "Institute of Scrum by the numbers",
