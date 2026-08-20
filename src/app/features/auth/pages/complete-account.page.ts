@@ -18,6 +18,12 @@ import { Router } from '@angular/router';
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
+import {
+  countryOptions as allCountryOptions,
+  findCountry,
+  phoneCountries as allPhoneCountries,
+  type PhoneCountry,
+} from '@shared';
 import { AccentBars, Input as IosInput, Select, type SelectOption } from '@ui';
 
 /** Accepts 7–15 digits after stripping separators; empty value defers to Validators.required. */
@@ -30,98 +36,6 @@ function phoneNumberValidator(): ValidatorFn {
     return null;
   };
 }
-
-export interface PhoneCountry {
-  code: string; // ISO-3166 alpha-2
-  flag: string; // Emoji flag
-  dialCode: string; // e.g. "+1"
-  name: string;
-}
-
-const PHONE_COUNTRIES: readonly PhoneCountry[] = [
-  { code: 'AF', flag: '🇦🇫', dialCode: '+93', name: 'Afghanistan' },
-  { code: 'AL', flag: '🇦🇱', dialCode: '+355', name: 'Albania' },
-  { code: 'DZ', flag: '🇩🇿', dialCode: '+213', name: 'Algeria' },
-  { code: 'AR', flag: '🇦🇷', dialCode: '+54', name: 'Argentina' },
-  { code: 'AU', flag: '🇦🇺', dialCode: '+61', name: 'Australia' },
-  { code: 'AT', flag: '🇦🇹', dialCode: '+43', name: 'Austria' },
-  { code: 'AZ', flag: '🇦🇿', dialCode: '+994', name: 'Azerbaijan' },
-  { code: 'BH', flag: '🇧🇭', dialCode: '+973', name: 'Bahrain' },
-  { code: 'BD', flag: '🇧🇩', dialCode: '+880', name: 'Bangladesh' },
-  { code: 'BE', flag: '🇧🇪', dialCode: '+32', name: 'Belgium' },
-  { code: 'BR', flag: '🇧🇷', dialCode: '+55', name: 'Brazil' },
-  { code: 'CA', flag: '🇨🇦', dialCode: '+1', name: 'Canada' },
-  { code: 'CN', flag: '🇨🇳', dialCode: '+86', name: 'China' },
-  { code: 'CO', flag: '🇨🇴', dialCode: '+57', name: 'Colombia' },
-  { code: 'HR', flag: '🇭🇷', dialCode: '+385', name: 'Croatia' },
-  { code: 'CY', flag: '🇨🇾', dialCode: '+357', name: 'Cyprus' },
-  { code: 'CZ', flag: '🇨🇿', dialCode: '+420', name: 'Czech Republic' },
-  { code: 'DK', flag: '🇩🇰', dialCode: '+45', name: 'Denmark' },
-  { code: 'EG', flag: '🇪🇬', dialCode: '+20', name: 'Egypt' },
-  { code: 'EE', flag: '🇪🇪', dialCode: '+372', name: 'Estonia' },
-  { code: 'ET', flag: '🇪🇹', dialCode: '+251', name: 'Ethiopia' },
-  { code: 'FI', flag: '🇫🇮', dialCode: '+358', name: 'Finland' },
-  { code: 'FR', flag: '🇫🇷', dialCode: '+33', name: 'France' },
-  { code: 'DE', flag: '🇩🇪', dialCode: '+49', name: 'Germany' },
-  { code: 'GH', flag: '🇬🇭', dialCode: '+233', name: 'Ghana' },
-  { code: 'GR', flag: '🇬🇷', dialCode: '+30', name: 'Greece' },
-  { code: 'HK', flag: '🇭🇰', dialCode: '+852', name: 'Hong Kong' },
-  { code: 'HU', flag: '🇭🇺', dialCode: '+36', name: 'Hungary' },
-  { code: 'IN', flag: '🇮🇳', dialCode: '+91', name: 'India' },
-  { code: 'ID', flag: '🇮🇩', dialCode: '+62', name: 'Indonesia' },
-  { code: 'IQ', flag: '🇮🇶', dialCode: '+964', name: 'Iraq' },
-  { code: 'IE', flag: '🇮🇪', dialCode: '+353', name: 'Ireland' },
-  { code: 'IL', flag: '🇮🇱', dialCode: '+972', name: 'Israel' },
-  { code: 'IT', flag: '🇮🇹', dialCode: '+39', name: 'Italy' },
-  { code: 'JP', flag: '🇯🇵', dialCode: '+81', name: 'Japan' },
-  { code: 'JO', flag: '🇯🇴', dialCode: '+962', name: 'Jordan' },
-  { code: 'KZ', flag: '🇰🇿', dialCode: '+7', name: 'Kazakhstan' },
-  { code: 'KE', flag: '🇰🇪', dialCode: '+254', name: 'Kenya' },
-  { code: 'KW', flag: '🇰🇼', dialCode: '+965', name: 'Kuwait' },
-  { code: 'LB', flag: '🇱🇧', dialCode: '+961', name: 'Lebanon' },
-  { code: 'LY', flag: '🇱🇾', dialCode: '+218', name: 'Libya' },
-  { code: 'MY', flag: '🇲🇾', dialCode: '+60', name: 'Malaysia' },
-  { code: 'MX', flag: '🇲🇽', dialCode: '+52', name: 'Mexico' },
-  { code: 'MA', flag: '🇲🇦', dialCode: '+212', name: 'Morocco' },
-  { code: 'NL', flag: '🇳🇱', dialCode: '+31', name: 'Netherlands' },
-  { code: 'NZ', flag: '🇳🇿', dialCode: '+64', name: 'New Zealand' },
-  { code: 'NG', flag: '🇳🇬', dialCode: '+234', name: 'Nigeria' },
-  { code: 'NO', flag: '🇳🇴', dialCode: '+47', name: 'Norway' },
-  { code: 'OM', flag: '🇴🇲', dialCode: '+968', name: 'Oman' },
-  { code: 'PK', flag: '🇵🇰', dialCode: '+92', name: 'Pakistan' },
-  { code: 'PS', flag: '🇵🇸', dialCode: '+970', name: 'Palestine' },
-  { code: 'PH', flag: '🇵🇭', dialCode: '+63', name: 'Philippines' },
-  { code: 'PL', flag: '🇵🇱', dialCode: '+48', name: 'Poland' },
-  { code: 'PT', flag: '🇵🇹', dialCode: '+351', name: 'Portugal' },
-  { code: 'QA', flag: '🇶🇦', dialCode: '+974', name: 'Qatar' },
-  { code: 'RO', flag: '🇷🇴', dialCode: '+40', name: 'Romania' },
-  { code: 'RU', flag: '🇷🇺', dialCode: '+7', name: 'Russia' },
-  { code: 'SA', flag: '🇸🇦', dialCode: '+966', name: 'Saudi Arabia' },
-  { code: 'SN', flag: '🇸🇳', dialCode: '+221', name: 'Senegal' },
-  { code: 'SG', flag: '🇸🇬', dialCode: '+65', name: 'Singapore' },
-  { code: 'ZA', flag: '🇿🇦', dialCode: '+27', name: 'South Africa' },
-  { code: 'KR', flag: '🇰🇷', dialCode: '+82', name: 'South Korea' },
-  { code: 'ES', flag: '🇪🇸', dialCode: '+34', name: 'Spain' },
-  { code: 'LK', flag: '🇱🇰', dialCode: '+94', name: 'Sri Lanka' },
-  { code: 'SD', flag: '🇸🇩', dialCode: '+249', name: 'Sudan' },
-  { code: 'SE', flag: '🇸🇪', dialCode: '+46', name: 'Sweden' },
-  { code: 'CH', flag: '🇨🇭', dialCode: '+41', name: 'Switzerland' },
-  { code: 'SY', flag: '🇸🇾', dialCode: '+963', name: 'Syria' },
-  { code: 'TW', flag: '🇹🇼', dialCode: '+886', name: 'Taiwan' },
-  { code: 'TZ', flag: '🇹🇿', dialCode: '+255', name: 'Tanzania' },
-  { code: 'TH', flag: '🇹🇭', dialCode: '+66', name: 'Thailand' },
-  { code: 'TN', flag: '🇹🇳', dialCode: '+216', name: 'Tunisia' },
-  { code: 'TR', flag: '🇹🇷', dialCode: '+90', name: 'Turkey' },
-  { code: 'UG', flag: '🇺🇬', dialCode: '+256', name: 'Uganda' },
-  { code: 'UA', flag: '🇺🇦', dialCode: '+380', name: 'Ukraine' },
-  { code: 'AE', flag: '🇦🇪', dialCode: '+971', name: 'United Arab Emirates' },
-  { code: 'GB', flag: '🇬🇧', dialCode: '+44', name: 'United Kingdom' },
-  { code: 'US', flag: '🇺🇸', dialCode: '+1', name: 'United States' },
-  { code: 'UZ', flag: '🇺🇿', dialCode: '+998', name: 'Uzbekistan' },
-  { code: 'VE', flag: '🇻🇪', dialCode: '+58', name: 'Venezuela' },
-  { code: 'VN', flag: '🇻🇳', dialCode: '+84', name: 'Vietnam' },
-  { code: 'YE', flag: '🇾🇪', dialCode: '+967', name: 'Yemen' },
-];
 
 // ─── Static option lists ──────────────────────────────────────────────────────
 
@@ -206,35 +120,6 @@ const CITIES: SelectOption[] = [
   { value: 'istanbul', label: 'Istanbul' },
 ];
 
-const COUNTRIES: SelectOption[] = [
-  { value: 'SA', label: 'Saudi Arabia' },
-  { value: 'AE', label: 'United Arab Emirates' },
-  { value: 'EG', label: 'Egypt' },
-  { value: 'JO', label: 'Jordan' },
-  { value: 'KW', label: 'Kuwait' },
-  { value: 'QA', label: 'Qatar' },
-  { value: 'BH', label: 'Bahrain' },
-  { value: 'OM', label: 'Oman' },
-  { value: 'LB', label: 'Lebanon' },
-  { value: 'IQ', label: 'Iraq' },
-  { value: 'SY', label: 'Syria' },
-  { value: 'YE', label: 'Yemen' },
-  { value: 'LY', label: 'Libya' },
-  { value: 'TN', label: 'Tunisia' },
-  { value: 'MA', label: 'Morocco' },
-  { value: 'DZ', label: 'Algeria' },
-  { value: 'SD', label: 'Sudan' },
-  { value: 'CA', label: 'Canada' },
-  { value: 'US', label: 'United States' },
-  { value: 'GB', label: 'United Kingdom' },
-  { value: 'DE', label: 'Germany' },
-  { value: 'FR', label: 'France' },
-  { value: 'TR', label: 'Turkey' },
-  { value: 'PK', label: 'Pakistan' },
-  { value: 'IN', label: 'India' },
-  { value: 'AU', label: 'Australia' },
-];
-
 const OCCUPATIONS: SelectOption[] = [
   { value: 'scrum_master', label: 'Scrum Master' },
   { value: 'product_owner', label: 'Product Owner' },
@@ -259,8 +144,8 @@ const POSITIONS: SelectOption[] = [
 
 const STEPS = [1, 2, 3] as const;
 
-// ─── Default phone country ────────────────────────────────────────────────────
-const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
+/** Pre-selected dial code — IOS is Canada-based, so most sign-ups start there. */
+const DEFAULT_PHONE_COUNTRY_CODE = 'CA';
 
 /**
  * Complete Account page — 3-step wizard shown after registration.
@@ -632,7 +517,7 @@ const DEFAULT_PHONE_COUNTRY = PHONE_COUNTRIES.find((c) => c.code === 'CA')!;
                 id="country2"
                 [label]="lang.t('auth.completeAccount.countryMandatoryLabel')"
                 [placeholder]="lang.t('auth.completeAccount.countrySelectPlaceholder')"
-                [options]="countries"
+                [options]="countries()"
                 [control]="step2.controls.country"
                 [required]="true"
                 [errorText]="lang.t('auth.completeAccount.countryRequired')"
@@ -807,10 +692,13 @@ export class CompleteAccountPage {
   protected readonly days = DAYS;
   protected readonly years = YEARS;
   protected readonly cities = CITIES;
-  protected readonly countries = COUNTRIES;
+  /** Full ISO 3166-1 list, relabelled and re-sorted whenever the locale changes. */
+  protected readonly countries = computed<SelectOption[]>(() =>
+    allCountryOptions(this.lang.locale()),
+  );
   protected readonly occupations = OCCUPATIONS;
   protected readonly positions = POSITIONS;
-  protected readonly phoneCountries = PHONE_COUNTRIES;
+  protected readonly phoneCountries = computed(() => allPhoneCountries(this.lang.locale()));
 
   /** Month names localised to the active language. */
   protected readonly monthOptions = computed<SelectOption[]>(() => {
@@ -830,15 +718,32 @@ export class CompleteAccountPage {
   protected readonly firstName = computed(() => this.auth.user()?.firstName ?? 'there');
 
   // ─── Phone country picker ─────────────────────────────────────────────────
-  protected readonly selectedPhoneCountry = signal<PhoneCountry>(DEFAULT_PHONE_COUNTRY);
+  private readonly defaultPhoneCountry = computed<PhoneCountry>(
+    () =>
+      this.phoneCountries().find((c) => c.code === DEFAULT_PHONE_COUNTRY_CODE) ??
+      this.phoneCountries()[0],
+  );
+
+  /** `null` until the user picks one — the default then tracks the active locale. */
+  private readonly pickedPhoneCountry = signal<PhoneCountry | null>(null);
+  protected readonly selectedPhoneCountry = computed<PhoneCountry>(
+    () => this.pickedPhoneCountry() ?? this.defaultPhoneCountry(),
+  );
   protected readonly phoneDropdownOpen = signal(false);
   protected readonly phoneCountryFilter = signal('');
 
   protected readonly filteredPhoneCountries = computed(() => {
+    const all = this.phoneCountries();
     const q = this.phoneCountryFilter().trim().toLowerCase();
-    return q
-      ? PHONE_COUNTRIES.filter((c) => c.name.toLowerCase().includes(q) || c.dialCode.includes(q))
-      : PHONE_COUNTRIES;
+    if (!q) return all;
+    return all.filter(
+      (c) =>
+        c.name.toLowerCase().includes(q) ||
+        c.dialCode.includes(q) ||
+        c.code.toLowerCase() === q ||
+        // Match the English name too, so "Germany" still finds 🇩🇪 while the UI is in Arabic.
+        (findCountry(c.code)?.name.toLowerCase().includes(q) ?? false),
+    );
   });
 
   togglePhoneDropdown(): void {
@@ -847,7 +752,7 @@ export class CompleteAccountPage {
   }
 
   selectPhoneCountry(country: PhoneCountry): void {
-    this.selectedPhoneCountry.set(country);
+    this.pickedPhoneCountry.set(country);
     this.phoneDropdownOpen.set(false);
     this.phoneCountryFilter.set('');
   }

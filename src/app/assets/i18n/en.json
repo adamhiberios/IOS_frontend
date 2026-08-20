@@ -1501,7 +1501,7 @@
       "online": "Fully Online",
       "questions": "45-question Test",
       "totalFee": "Total Fee",
-      "price": "CAD $180",
+      "price": "USD $180",
       "download": "Download",
       "enroll": "Enroll Now",
       "exploreOthers": "Explore other Certifications"
@@ -1594,7 +1594,7 @@
       "online": "Fully Online",
       "questions": "45-question Test",
       "totalFee": "Total Fee",
-      "price": "CAD $180",
+      "price": "USD $180",
       "download": "Download",
       "enroll": "Enroll Now",
       "exploreOthers": "Explore other Certifications"
@@ -1677,7 +1677,7 @@
       "online": "Fully Online",
       "questions": "45-question Test",
       "totalFee": "Total Fee",
-      "price": "CAD $180",
+      "price": "USD $180",
       "download": "Download",
       "enroll": "Enroll Now"
     },
@@ -1799,7 +1799,7 @@
       "online": "Fully Online",
       "questions": "45-question Test",
       "totalFee": "Total Fee",
-      "price": "CAD $180",
+      "price": "USD $180",
       "download": "Download",
       "enroll": "Enroll Now",
       "exploreOthers": "Explore other Certifications"
@@ -2003,21 +2003,21 @@
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
-          "price": "CAD $130",
+          "price": "USD $130",
           "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
           "learnMore": "Learn More About ESM"
         },
         "esmA": {
           "fullName": "Endorsed Scrum Master Authority",
           "level": "Authority Level",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "The highest-level credential for Scrum Masters ready to mentor others, drive organizational transformation, and lead the profession forward.",
           "learnMore": "Learn More About ESM-A"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Foundation Level",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }
@@ -2104,14 +2104,14 @@
         "esmP": {
           "fullName": "Endorsed Scrum Master Practitioner",
           "level": "Practitioner Level",
-          "price": "CAD $150",
+          "price": "USD $150",
           "description": "Elevate your Scrum Master skills from theory to practice and prove you can lead real Agile teams to measurable success.",
           "learnMore": "Learn More About ESM-P"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Foundation Level",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }
@@ -2291,14 +2291,14 @@
         "epo": {
           "fullName": "Endorsed Product Owner",
           "level": "Foundation Level",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "Start your journey toward building products people love with a foundation credential.",
           "learnMore": "Learn More About EPO"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Foundation Level",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }

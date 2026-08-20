@@ -9,8 +9,8 @@ import {
   model,
   output,
   signal,
+  viewChild,
 } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { LanguageService } from '@core/i18n';
 
 export interface DropdownOption {
@@ -21,7 +21,7 @@ export interface DropdownOption {
 
 @Component({
   selector: 'ios-dropdown',
-  imports: [ReactiveFormsModule],
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '(document:click)': 'onClickOutside($event)',
@@ -77,8 +77,11 @@ export interface DropdownOption {
           @if (searchable()) {
             <div class="p-2 border-b border-gray-100">
               <input
+                #searchInput
                 type="text"
-                [formControl]="searchControl"
+                [value]="searchQuery()"
+                (input)="onSearchInput($event)"
+                [attr.aria-label]="lang.t('ui.searchPlaceholder')"
                 [placeholder]="lang.t('ui.searchPlaceholder')"
                 class="w-full h-11 px-3 text-sm rounded-md border border-gray-200 bg-gray-50
                        focus:outline-none focus:ring-2 focus:ring-ios-brand-primary/40 focus:border-ios-brand-primary
@@ -140,7 +143,12 @@ export class Dropdown {
   readonly value = model<string>('');
   readonly valueChange = output<string>();
 
-  readonly searchControl = new FormControl<string>('', { nonNullable: true });
+  /** Search query. A signal, not a `FormControl` — `filteredOptions` is a
+   *  `computed()`, and a control's `.value` is not reactive, so a control here
+   *  would leave the list unfiltered under zoneless change detection. */
+  readonly searchQuery = signal('');
+
+  private readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
   readonly isOpen = signal(false);
   readonly focusedIndex = signal(0);
@@ -148,7 +156,7 @@ export class Dropdown {
   readonly listboxId = computed(() => `${this.id()}-listbox`);
 
   readonly filteredOptions = computed(() => {
-    const search = this.searchControl.value.toLowerCase();
+    const search = this.searchQuery().trim().toLowerCase();
     if (!search) return this.options();
     return this.options().filter((o) => o.label.toLowerCase().includes(search));
   });
@@ -170,10 +178,19 @@ export class Dropdown {
 
   constructor() {
     effect(() => {
-      if (!this.isOpen()) {
-        this.searchControl.reset('');
+      if (this.isOpen()) {
+        // A long list is unusable if the query box has to be tabbed to first.
+        this.searchInput()?.nativeElement.focus();
+      } else {
+        this.searchQuery.set('');
       }
     });
+  }
+
+  protected onSearchInput(event: Event): void {
+    this.searchQuery.set((event.target as HTMLInputElement).value);
+    // The previous highlight can sit past the end of the narrowed list.
+    this.focusedIndex.set(0);
   }
 
   readonly optionClasses = (option: DropdownOption, _index: number): string => {
@@ -192,7 +209,7 @@ export class Dropdown {
     if (this.disabled()) return;
     this.isOpen.update((v) => !v);
     if (!this.isOpen()) {
-      this.searchControl.reset('');
+      this.searchQuery.set('');
     }
   }
 
@@ -201,7 +218,7 @@ export class Dropdown {
     this.value.set(option.value);
     this.valueChange.emit(option.value);
     this.isOpen.set(false);
-    this.searchControl.reset('');
+    this.searchQuery.set('');
   }
 
   onClickOutside(event: MouseEvent): void {

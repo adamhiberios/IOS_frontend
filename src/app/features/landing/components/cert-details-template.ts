@@ -91,7 +91,7 @@ export interface RelatedCertCard {
   readonly badgeSvgPath: string;
   /** Description text (already translated). */
   readonly description: string;
-  /** Price string e.g. "CAD $180". */
+  /** Price string e.g. "USD $180". */
   readonly price: string;
   /** "Learn More About …" button label. */
   readonly learnMoreLabel: string;
@@ -115,7 +115,7 @@ export interface CertDetailsConfig {
   readonly trackName: string;
   /** Level label, e.g. "Foundation Level". */
   readonly levelLabel: string;
-  /** Price string, e.g. "CAD $130". */
+  /** Price string, e.g. "USD $130". */
   readonly price: string;
   /** Hero photo (the "girls with sticky board" feature image). */
   readonly heroImageSrc: string;

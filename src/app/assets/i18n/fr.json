@@ -1501,7 +1501,7 @@
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "totalFee": "À partir de",
-      "price": "180 $ CAD",
+      "price": "180 $ USD",
       "download": "Télécharger",
       "enroll": "S'inscrire",
       "exploreOthers": "Explorer d'autres certifications"
@@ -1594,7 +1594,7 @@
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "totalFee": "À partir de",
-      "price": "180 $ CAD",
+      "price": "180 $ USD",
       "download": "Télécharger",
       "enroll": "S inscrire",
       "exploreOthers": "Explorer d autres certifications"
@@ -1677,7 +1677,7 @@
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "totalFee": "À partir de",
-      "price": "180 $ CAD",
+      "price": "180 $ USD",
       "download": "Télécharger",
       "enroll": "S'inscrire"
     },
@@ -1799,7 +1799,7 @@
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "totalFee": "À partir de",
-      "price": "180 $ CAD",
+      "price": "180 $ USD",
       "download": "Télécharger",
       "enroll": "S inscrire",
       "exploreOthers": "Explorer d autres certifications"
@@ -2003,21 +2003,21 @@
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $130",
+          "price": "USD $130",
           "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement qui ouvre des portes vers des rôles de Scrum Master très demandés.",
           "learnMore": "En savoir plus sur l'ESM"
         },
         "esmA": {
           "fullName": "Maître Scrum Agréé Autorité",
           "level": "Niveau Autorité",
-          "price": "CAD $185",
+          "price": "USD $185",
           "description": "Le plus haut niveau de certification pour les Scrum Masters prêts à mentorer d'autres, piloter la transformation organisationnelle et faire avancer la profession.",
           "learnMore": "En savoir plus sur l'ESM-A"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
           "learnMore": "En savoir plus sur l'ESF"
         }
@@ -2104,14 +2104,14 @@
         "esmP": {
           "fullName": "Maître Scrum Agréé Praticien",
           "level": "Niveau Praticien",
-          "price": "CAD $150",
+          "price": "USD $150",
           "description": "Élevez vos compétences de Scrum Master de la théorie à la pratique.",
           "learnMore": "En savoir plus sur l'ESM-P"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
           "learnMore": "En savoir plus sur l'ESF"
         }
@@ -2291,14 +2291,14 @@
         "epo": {
           "fullName": "Propriétaire de Produit Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "Commencez votre parcours vers la création de produits que les gens adorent avec une certification fondamentale.",
           "learnMore": "En savoir plus sur l'EPO"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Fondation",
-          "price": "CAD $180",
+          "price": "USD $180",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées.",
           "learnMore": "En savoir plus sur l'ESF"
         }

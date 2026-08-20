@@ -11,6 +11,13 @@ import { CanadaFlag } from '@ui';
  * Placeholder links that have no route yet use `href="#"` with a click handler
  * that prevents default navigation, instead of `routerLink="#"` which would
  * navigate to an invalid route.
+ *
+ * The Certifications column deep-links into the per-track sections of the All
+ * Certifications page via `[fragment]` rather than dropping the visitor at the
+ * top of it. The anchors are the track heading ids owned by
+ * `pages/all-certifications.page.ts`; the router's `anchorScrolling` (see
+ * `app.config.ts`) does the scrolling. Same convention as the "Explore" links
+ * in `components/sections/cert-levels-section.ts`.
  */
 @Component({
   selector: 'ios-landing-footer',
@@ -83,6 +90,7 @@ import { CanadaFlag } from '@ui';
                 <li>
                   <a
                     routerLink="/certifications"
+                    fragment="all-certs-sm-heading"
                     class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
                     >{{ lang.t('landing.footer.certifications.scrumMaster') }}</a
@@ -91,6 +99,7 @@ import { CanadaFlag } from '@ui';
                 <li>
                   <a
                     routerLink="/certifications"
+                    fragment="all-certs-po-heading"
                     class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
                     >{{ lang.t('landing.footer.certifications.productOwner') }}</a
@@ -99,6 +108,7 @@ import { CanadaFlag } from '@ui';
                 <li>
                   <a
                     routerLink="/certifications"
+                    fragment="all-certs-sf-heading"
                     class="text-ios-line text-[14px] font-medium leading-[1.4] hover:text-white transition-colors
                          focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ios-brand-primary/50 rounded"
                     >{{ lang.t('landing.footer.certifications.scrumFacilitator') }}</a

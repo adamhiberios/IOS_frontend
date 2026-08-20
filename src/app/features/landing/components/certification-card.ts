@@ -191,7 +191,7 @@ export class CertificationCard {
   /** "Total Fee" label above the price. */
   readonly totalFeeLabel = input<string>('');
 
-  /** Price string, e.g. "CAD $180". */
+  /** Price string, e.g. "USD $180". */
   readonly price = input<string>('');
 
   /** Label for the enroll button. */

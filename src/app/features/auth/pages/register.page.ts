@@ -12,6 +12,7 @@ import { startWith } from 'rxjs/operators';
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
+import { countryOptions as allCountryOptions } from '@shared';
 import {
   AccentBars,
   Button,
@@ -27,23 +28,6 @@ import {
   STRONG_PASSWORD_MIN_LENGTH,
   strongPasswordValidator,
 } from '../utils/strong-password.validator';
-
-/** Country / region options. Replace with API resolver once auth API ships. */
-const COUNTRIES: readonly { code: string; name: string }[] = [
-  { code: 'SA', name: 'Saudi Arabia' },
-  { code: 'AE', name: 'United Arab Emirates' },
-  { code: 'EG', name: 'Egypt' },
-  { code: 'JO', name: 'Jordan' },
-  { code: 'KW', name: 'Kuwait' },
-  { code: 'QA', name: 'Qatar' },
-  { code: 'BH', name: 'Bahrain' },
-  { code: 'OM', name: 'Oman' },
-  { code: 'CA', name: 'Canada' },
-  { code: 'US', name: 'United States' },
-  { code: 'GB', name: 'United Kingdom' },
-  { code: 'DE', name: 'Germany' },
-  { code: 'FR', name: 'France' },
-];
 
 /**
  * Register page (EPIC 3 — UI only, backend mocked).
@@ -126,8 +110,9 @@ const COUNTRIES: readonly { code: string; name: string }[] = [
               <ios-dropdown
                 id="country"
                 [label]="lang.t('auth.register.countryLabel')"
-                [options]="countryOptions"
+                [options]="countryOptions()"
                 [placeholder]="lang.t('auth.register.countryPlaceholder')"
+                [searchable]="true"
                 [required]="true"
                 [value]="form.controls.country.value"
                 (valueChange)="form.controls.country.setValue($event)"
@@ -249,10 +234,8 @@ export class RegisterPage {
   private readonly auth = inject(AuthStore);
 
   protected readonly lang = inject(LanguageService);
-  protected readonly countryOptions: { value: string; label: string }[] = COUNTRIES.map((c) => ({
-    value: c.code,
-    label: c.name,
-  }));
+  /** Full ISO 3166-1 list, relabelled and re-sorted whenever the locale changes. */
+  protected readonly countryOptions = computed(() => allCountryOptions(this.lang.locale()));
   protected readonly minLength = STRONG_PASSWORD_MIN_LENGTH;
 
   protected readonly form = this.fb.group(
