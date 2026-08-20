@@ -60,10 +60,10 @@ interface ValuePropCard {
           <!-- Image -->
           <div class="lg:w-[45%] flex-shrink-0 rounded-2xl overflow-hidden">
             <img
-              ngSrc="/assets/images/landing_value_proposition.png"
+              ngSrc="/assets/images/certification.png"
               [alt]="lang.t('landing.sections.valuePropImageAlt')"
-              width="2400"
-              height="1792"
+              width="4096"
+              height="2896"
               class="w-full h-full object-cover"
             />
           </div>

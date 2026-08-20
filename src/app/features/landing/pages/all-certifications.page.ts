@@ -25,6 +25,9 @@ import { LucideCheck, LucideChevronDown } from '@lucide/angular';
 import { LanguageService } from '@core/i18n';
 import { IosIcon, ScrollToTop, provideIcons } from '@ui';
 
+import { formatPrice } from '../data-access/catalog.mappers';
+import { PublicCatalogStore } from '../data-access/catalog.store';
+
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
 import { CertificationCard } from '../components/certification-card';
@@ -53,8 +56,6 @@ interface CertDef {
   readonly cardEnrollBgColor: string;
   // Comparison-table-only fields
   readonly comparisonLevelBg: string;
-  readonly prereqSuffix: string;
-  readonly prereqColor: string;
 }
 
 @Component({
@@ -511,7 +512,7 @@ interface CertDef {
             </div>
 
             <!-- ── Cert data columns (one per certification) ──── -->
-            @for (cert of certDefs; track cert.code) {
+            @for (cert of comparisonRows(); track cert.code) {
               <div class="flex flex-col flex-1 border-s border-ios-border-light">
                 <!-- header -->
                 <div
@@ -521,7 +522,7 @@ interface CertDef {
                     cert.code
                   }}</span>
                 </div>
-                <!-- Level badge -->
+                <!-- Level badge — backend tier (see comparisonRows) -->
                 <div
                   class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light"
                 >
@@ -530,7 +531,7 @@ interface CertDef {
                          font-heading font-medium text-[11px] text-white whitespace-nowrap"
                     [style.background-color]="cert.comparisonLevelBg"
                   >
-                    {{ lang.t('allCertifications.comparison.' + cert.level + 'Level') }}
+                    {{ cert.levelLabel }}
                   </span>
                 </div>
                 <!-- Duration -->
@@ -540,18 +541,19 @@ interface CertDef {
                 >
                   16 hrs
                 </div>
-                <!-- Price -->
+                <!-- Fee — backend price, locale-formatted -->
                 <div
                   class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light
                           font-heading font-extrabold text-[14px] text-ios-brand-primary"
                 >
-                  $299
+                  {{ cert.fee }}
                 </div>
-                <!-- Cert. Expiry ✓ -->
+                <!-- Cert. Expiry — these certifications do not expire -->
                 <div
-                  class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light"
+                  class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light
+                          font-body text-[13px] text-ios-fg"
                 >
-                  <ios-icon name="check" class="w-4 h-4 text-green-600" aria-label="Included" />
+                  {{ lang.t('allCertifications.comparison.no') }}
                 </div>
                 <!-- Mock Exam ✓ -->
                 <div
@@ -559,20 +561,18 @@ interface CertDef {
                 >
                   <ios-icon name="check" class="w-4 h-4 text-green-600" aria-label="Included" />
                 </div>
-                <!-- Test Included ✓ -->
+                <!-- Final Exam ✓ -->
                 <div
                   class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light"
                 >
                   <ios-icon name="check" class="w-4 h-4 text-green-600" aria-label="Included" />
                 </div>
-                <!-- Prerequisite -->
-                <div class="h-[48px] flex items-center justify-center px-2 text-center">
-                  <span
-                    class="font-body text-[12px] leading-[1.3]"
-                    [style.color]="cert.prereqColor"
-                  >
-                    {{ lang.t('allCertifications.comparison.' + cert.prereqSuffix) }}
-                  </span>
+                <!-- Prerequisite — none for any certification -->
+                <div
+                  class="h-[48px] flex items-center justify-center px-2 text-center
+                          font-body text-[13px] text-ios-fg"
+                >
+                  {{ lang.t('allCertifications.comparison.no') }}
                 </div>
               </div>
             }
@@ -664,6 +664,13 @@ interface CertDef {
 })
 export class AllCertificationsPage {
   protected readonly lang = inject(LanguageService);
+  private readonly catalogStore = inject(PublicCatalogStore);
+
+  constructor() {
+    // Feeds the comparison table's fee + level columns. `load()` is idempotent
+    // and shared, so this costs nothing when another surface already asked.
+    void this.catalogStore.load();
+  }
 
   /** Currently open FAQ index; -1 = all collapsed. */
   protected readonly openFaq = signal(-1);
@@ -677,7 +684,6 @@ export class AllCertificationsPage {
     { q: this.lang.t('allCertifications.faq.q2'), a: this.lang.t('allCertifications.faq.a2') },
     { q: this.lang.t('allCertifications.faq.q3'), a: this.lang.t('allCertifications.faq.a3') },
     { q: this.lang.t('allCertifications.faq.q4'), a: this.lang.t('allCertifications.faq.a4') },
-    { q: this.lang.t('allCertifications.faq.q5'), a: this.lang.t('allCertifications.faq.a5') },
   ]);
 
   /**
@@ -708,8 +714,6 @@ export class AllCertificationsPage {
       cardPriceColor: '#184865',
       cardEnrollBgColor: '#184865',
       comparisonLevelBg: '#184865',
-      prereqSuffix: 'prerequisiteNone',
-      prereqColor: '#c0c0c0',
     },
     {
       code: 'ESM-P',
@@ -725,8 +729,6 @@ export class AllCertificationsPage {
       cardPriceColor: '#184865',
       cardEnrollBgColor: '#184865',
       comparisonLevelBg: '#184865',
-      prereqSuffix: 'prerequisiteNone',
-      prereqColor: '#c0c0c0',
     },
     {
       code: 'ESM-A',
@@ -742,8 +744,6 @@ export class AllCertificationsPage {
       cardPriceColor: '#184865',
       cardEnrollBgColor: '#184865',
       comparisonLevelBg: '#184865',
-      prereqSuffix: 'prerequisiteCsm',
-      prereqColor: '#959695',
     },
     {
       code: 'EPO',
@@ -759,8 +759,6 @@ export class AllCertificationsPage {
       cardPriceColor: '#515e4d',
       cardEnrollBgColor: '#515e4d',
       comparisonLevelBg: '#515e4d',
-      prereqSuffix: 'prerequisiteNone',
-      prereqColor: '#c0c0c0',
     },
     {
       code: 'EPO-P',
@@ -776,8 +774,6 @@ export class AllCertificationsPage {
       cardPriceColor: '#515e4d',
       cardEnrollBgColor: '#515e4d',
       comparisonLevelBg: '#515e4d',
-      prereqSuffix: 'prerequisiteExp',
-      prereqColor: '#959695',
     },
     {
       code: 'EPO-A',
@@ -793,8 +789,6 @@ export class AllCertificationsPage {
       cardPriceColor: '#515e4d',
       cardEnrollBgColor: '#515e4d',
       comparisonLevelBg: '#515e4d',
-      prereqSuffix: 'prerequisiteNone',
-      prereqColor: '#c0c0c0',
     },
     {
       code: 'ESF',
@@ -810,8 +804,6 @@ export class AllCertificationsPage {
       cardPriceColor: '#8e6636',
       cardEnrollBgColor: '#8e6636',
       comparisonLevelBg: '#8e6636',
-      prereqSuffix: 'prerequisiteNone',
-      prereqColor: '#c0c0c0',
     },
   ];
 
@@ -819,6 +811,37 @@ export class AllCertificationsPage {
   protected readonly smCerts = this.certDefs.filter((c) => c.track === 'scrumMaster');
   protected readonly poCerts = this.certDefs.filter((c) => c.track === 'productOwner');
   protected readonly sfCerts = this.certDefs.filter((c) => c.track === 'scrumFacilitator');
+
+  /**
+   * Comparison-table rows (section 7) — the static `certDefs` layout with the
+   * backend's authoritative fields overlaid by `programCode`:
+   *
+   *   · **fee**   — `price`/`currency` from the catalogue, locale-formatted.
+   *   · **level** — the backend tier, read through the same
+   *     `landing.levels.tiers.*` keys the landing page's cert-levels section
+   *     uses, so the two surfaces cannot drift apart. A cert the backend
+   *     does not know keeps its static `certDefs` tier as a fallback.
+   *
+   * `certDefs` stays the row set rather than iterating the catalogue directly:
+   * it fixes the column order and keeps non-product rows (e.g. backend test
+   * fixtures) out of a public marketing table.
+   */
+  protected readonly comparisonRows = computed(() => {
+    const locale = this.lang.locale();
+    return this.certDefs.map((def) => {
+      const api = this.catalogStore.byCode(def.code);
+      return {
+        code: def.code,
+        comparisonLevelBg: def.comparisonLevelBg,
+        levelLabel: api?.level
+          ? this.lang.t(`landing.levels.tiers.${api.level}`)
+          : this.lang.t(`allCertifications.comparison.${def.level}Level`),
+        fee: api
+          ? formatPrice(api.price, api.currency, locale)
+          : this.lang.t('allCertifications.comparison.feeUnavailable'),
+      };
+    });
+  });
 
   protected toggleFaq(i: number): void {
     this.openFaq.update((cur) => (cur === i ? -1 : i));
