@@ -759,11 +759,11 @@
     "intro": {
       "eyebrow": "About Institute of scrum",
       "title": "Discover",
-      "subtitle": "An introduction to the mindset, frameworks, and benefits shaping today's most adaptive organizations",
+      "subtitle": "Empowering professionals and teams to build practical Scrum capabilities, strengthen collaboration, and deliver meaningful value in today’s evolving workplace.",
       "imageAlt": "Professional preparing for certification exam",
       "paragraph1": "Institute of Scrum is an independent training provider based in Ontario, Canada, specializing in Agile and Scrum training and certification. Our programs are delivered entirely online and structured to accommodate the learner's own pace.",
       "paragraph2": "Our organization is founded on many years of professional experience in Agile and Scrum across North America. This experience shapes every aspect of our programs, from the structure of our learning tracks to the design of our practice and final tests. The outcome is training that is practical, current, and fully aligned with the way Scrum is applied in professional environments today.",
-      "titleHighlight": "THE Institute of Scrum"
+      "titleHighlight": "Institute of Scrum"
     },
     "mission": {
       "sectionLabel": "Our Mission and Vision",
@@ -776,8 +776,8 @@
     "vision": {
       "title": "Our Vision",
       "iconAlt": "Visor icon representing our vision",
-      "body1": "We believe that strong Agile and Scrum competencies should be accessible to every motivated professional, and not reserved for those with the means to attend costly classroom programs.",
-      "body2": "Our vision is to become the most trusted organization in Agile and Scrum training worldwide — a destination where professionals anywhere in the world can develop practical skills, earn a credible certification, and advance their careers with confidence."
+      "body1": "We envision a future where practical Scrum knowledge and professional development are within reach for anyone committed to learning, growing, and contributing more effectively in the workplace.",
+      "body2": "Our vision is to build an inclusive learning community that helps professionals strengthen applied Scrum capabilities, earn meaningful credentials, and use their knowledge with confidence to support better collaboration, adaptability, leadership, and value delivery across teams and organizations."
     },
     "trackIncluded": {
       "eyebrow": "Mission & Values",
@@ -785,24 +785,24 @@
       "subtitle": "Each learning track at Institute of Scrum is delivered as a complete package. Your registration includes",
       "items": [
         {
-          "title": "Comprehensive training materials",
-          "body": "That explain the Scrum framework, its roles, events, and artifacts in clear terms, supported by practical examples."
+          "title": "Comprehensive Scrum materials",
+          "body": "Explore the Scrum framework, its roles, events, and artifacts through clear explanations, practical guidance, and relevant examples."
         },
         {
-          "title": "Access to the final test",
-          "body": "At no additional cost. The test is included within your track and may be taken when you feel fully prepared."
+          "title": "Access to the final exam",
+          "body": "Your final exam is included at no additional cost and can be completed whenever you feel confident, prepared, and ready."
         },
         {
           "title": "A digital certificate",
-          "body": "Issued upon successful completion, confirming your achievement."
+          "body": "Issued after successfully passing your final exam."
         },
         {
-          "title": "All content is self-paced",
-          "body": "You are able to study according to your own schedule, revisit the material as often as needed, and take the final test when you are ready."
+          "title": "All learning is self-paced",
+          "body": "Study at your own pace, revisit the learning materials whenever needed, and complete the final exam when you feel fully confident, prepared, and ready to proceed."
         },
         {
-          "title": "Mock test",
-          "body": "Prepare you for the final test. This practice component is designed with a single purpose: to ensure that you are properly prepared and to reduce the likelihood of an unsuccessful attempt on the final test. The mock test allows you to assess your knowledge, identify areas that require further study, and refine your understanding before proceeding. Our objective is to position you for success."
+          "title": "Mock Exam",
+          "body": "Prepare for the final exam with a focused practice experience designed to strengthen your readiness and help you approach the exam with greater confidence. The mock exam allows you to assess your knowledge, identify topics that may require additional review, reinforce key Scrum concepts, and improve your understanding before proceeding. Its purpose is to help you feel fully prepared and more confident for success."
         }
       ],
       "titleHighlight": "Track Registration"
@@ -836,43 +836,43 @@
       "titleHighlight": "offer"
     },
     "apart": {
-      "eyebrow": "Services & Scoops",
-      "title": "What Sets Us",
-      "subtitle": "Test your knowledge and get familiar with the test format before taking the real certification test.",
+      "eyebrow": "Program Benefits",
+      "title": "Why Learn",
+      "subtitle": "Strengthen your knowledge and become familiar with the exam format before taking your final certification exam.",
       "items": [
         {
-          "title": "Experience you can rely on",
-          "body": "Our training is shaped by extensive professional experience in Agile and Scrum. The best practices we share are grounded in real delivery work, not in theory alone."
+          "title": "Practical experience behind your learning",
+          "body": "Our learning is shaped by extensive professional experience in Agile and Scrum. The guidance we provide reflects practical delivery environments, real challenges, and meaningful workplace application."
         },
         {
-          "title": "Accessible language",
-          "body": "Our materials are written in straightforward English, ensuring that the concepts remain clear and accessible to a global professional audience."
+          "title": "Clear language",
+          "body": "Our learning materials use straightforward English, helping professionals understand key Scrum concepts clearly and apply their knowledge with greater confidence."
         },
         {
-          "title": "One clear path",
-          "body": "One subscription. One learning track. One practice test. One final test. One certificate. No hidden fees, and no unnecessary complexity."
+          "title": "A simple learning path",
+          "body": "One enrollment. One learning track. One mock exam. One final exam. One certificate. No hidden fees and no unnecessary complexity."
         },
         {
-          "title": "A digital certificate",
-          "body": "A practice-first approach. A mock test is included in every track. Our intention is for you to approach the final test with confidence rather than uncertainty. Practicing in advance is the most effective way to reduce the risk of failure."
+          "title": "Mock Exam Preparation",
+          "body": "A preparation-focused approach. A mock exam is included in every track. It helps you approach the final exam with greater confidence and readiness. Practicing beforehand allows you to identify areas for improvement and strengthen your understanding before proceeding."
         },
         {
-          "title": "Affordable pricing",
-          "body": "Agile certification has historically been costly. We have deliberately structured our pricing to remain accessible to individual learners, without compromising on the quality of what we deliver."
+          "title": "Affordable Fees",
+          "body": "Professional certification can be costly. We have intentionally structured our fees to remain accessible to individual learners, while continuing to provide a quality learning and certification experience."
         }
       ],
-      "titleHighlight": "Apart"
+      "titleHighlight": "With Us"
     },
     "serve": {
-      "eyebrow": "Services & Scoops",
+      "eyebrow": "Our Community",
       "title": "Who We",
-      "subtitle": "Test your knowledge and get familiar with the test format before taking the real certification test.",
+      "subtitle": "Designed for professionals seeking practical Scrum knowledge, meaningful credentials, and flexible learning that supports career growth.",
       "paragraphs": [
-        "Our learners are working professionals from a wide range of backgrounds: software developers advancing into team lead positions, project managers transitioning to Agile delivery, business analysts collaborating with Scrum teams, and mid-career professionals moving into product and delivery roles.",
-        "What they share in common is familiar to many: limited time, demanding deadlines, and a need for a certification that carries weight in a hiring conversation.",
-        "Whether you are preparing for your first Scrum Master interview, formalizing years of experience as a Product Owner, or expanding your professional profile with Agile skills, our programs are designed to meet you where you are."
+        "Our learners come from diverse professional backgrounds, including software developers moving into leadership roles, project managers adopting Agile delivery, business analysts working with Scrum teams, and experienced professionals building capabilities for product, delivery, leadership, and organizational change roles today.",
+        "They often share similar priorities: limited time, demanding schedules, and a desire for meaningful certification that strengthens practical skills, builds confidence, and supports future career opportunities.",
+        "Whether you are preparing for a Scrum Master role, strengthening your Product Owner capabilities, or expanding your profile with Agile skills, our programs provide practical learning designed to support your goals and growth at every stage."
       ],
-      "titleHighlight": "Serve"
+      "titleHighlight": "Support"
     },
     "trust": {
       "eyebrow": "Trust & security",
@@ -1833,7 +1833,7 @@
           "home": "Home",
           "all": "All Certifications"
         },
-        "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
+        "description": "Launch your Agile career with an Endorsed Scrum Master credential designed to build applied skills for confident, effective leadership.",
         "download": "Download Program Overview",
         "enroll": "Enroll Now",
         "totalFee": "Total Fee"

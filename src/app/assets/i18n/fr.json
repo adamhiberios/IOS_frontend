@@ -759,7 +759,7 @@
     "intro": {
       "eyebrow": "À propos de l'Institute of Scrum",
       "title": "Découvrez",
-      "subtitle": "Une introduction à l'état d'esprit, aux frameworks et aux avantages qui façonnent les organisations les plus adaptatives d'aujourd'hui",
+      "subtitle": "Accompagner les professionnels et les équipes dans le développement de compétences Scrum concrètes, le renforcement de la collaboration et la création d'une valeur significative dans un monde du travail en constante évolution.",
       "imageAlt": "Professionnel se préparant à un examen de certification",
       "paragraph1": "L'Institute of Scrum est un organisme de formation indépendant basé en Ontario, au Canada, spécialisé dans la formation et la certification Agile et Scrum. Nos programmes sont entièrement en ligne et conçus pour s'adapter au rythme de chaque apprenant.",
       "paragraph2": "Notre organisation s'appuie sur de nombreuses années d'expérience professionnelle en Agile et Scrum en Amérique du Nord. Cette expérience façonne tous les aspects de nos programmes, de la structure de nos parcours d'apprentissage à la conception de nos tests de pratique et finaux. Le résultat est une formation pratique, actuelle et parfaitement alignée sur la façon dont Scrum est appliqué dans les environnements professionnels aujourd'hui.",
@@ -776,8 +776,8 @@
     "vision": {
       "title": "Notre Vision",
       "iconAlt": "Icône de visière représentant notre vision",
-      "body1": "Nous croyons que de solides compétences en Agile et Scrum devraient être accessibles à tout professionnel motivé, et non réservées à ceux qui ont les moyens de suivre des programmes en salle coûteux.",
-      "body2": "Notre vision est de devenir l'organisation la plus fiable au monde en matière de formation Agile et Scrum — une destination où les professionnels du monde entier peuvent développer des compétences pratiques, obtenir une certification crédible et faire progresser leur carrière en toute confiance."
+      "body1": "Nous imaginons un avenir où les connaissances pratiques de Scrum et le développement professionnel sont à la portée de toute personne déterminée à apprendre, à progresser et à contribuer plus efficacement au travail.",
+      "body2": "Notre vision est de bâtir une communauté d'apprentissage inclusive qui aide les professionnels à renforcer leurs compétences Scrum appliquées, à obtenir des certifications qui ont du sens et à mettre leurs connaissances en pratique avec confiance, afin de favoriser une meilleure collaboration, une plus grande adaptabilité, le leadership et la création de valeur au sein des équipes et des organisations."
     },
     "trackIncluded": {
       "eyebrow": "Mission & Valeurs",
@@ -785,24 +785,24 @@
       "subtitle": "Chaque parcours d'apprentissage à l'Institute of Scrum est livré comme un ensemble complet. Votre inscription comprend",
       "items": [
         {
-          "title": "Supports de formation complets",
-          "body": "Qui expliquent le framework Scrum, ses rôles, ses événements et ses artefacts en des termes clairs, appuyés par des exemples pratiques."
+          "title": "Supports Scrum complets",
+          "body": "Explorez le framework Scrum, ses rôles, ses événements et ses artefacts grâce à des explications claires, des conseils pratiques et des exemples pertinents."
         },
         {
-          "title": "Accès au test final",
-          "body": "Sans frais supplémentaires. Le test est inclus dans votre parcours et peut être passé lorsque vous vous sentez pleinement prêt."
+          "title": "Accès à l'examen final",
+          "body": "Votre examen final est inclus sans frais supplémentaires et peut être passé dès que vous vous sentez confiant, préparé et prêt."
         },
         {
           "title": "Un certificat numérique",
-          "body": "Délivré à l'issue réussie, confirmant votre réussite."
+          "body": "Délivré après la réussite de votre examen final."
         },
         {
-          "title": "Tout le contenu à votre rythme",
-          "body": "Vous pouvez étudier selon votre propre emploi du temps, revoir le matériel autant que nécessaire et passer le test final lorsque vous êtes prêt."
+          "title": "Tout l'apprentissage se fait à votre rythme",
+          "body": "Étudiez à votre propre rythme, revoyez les supports d'apprentissage aussi souvent que nécessaire et passez l'examen final lorsque vous vous sentez pleinement confiant, préparé et prêt à poursuivre."
         },
         {
-          "title": "Test blanc",
-          "body": "Vous prépare au test final. Cette composante de pratique est conçue dans un seul but : garantir que vous êtes bien préparé et réduire la probabilité d'un échec au test final. Le test blanc vous permet d'évaluer vos connaissances, d'identifier les domaines à approfondir et d'affiner votre compréhension avant de continuer. Notre objectif est de vous mettre en position de réussir."
+          "title": "Examen blanc",
+          "body": "Préparez-vous à l'examen final grâce à une expérience pratique ciblée, conçue pour renforcer votre préparation et vous aider à aborder l'examen avec davantage de confiance. L'examen blanc vous permet d'évaluer vos connaissances, de repérer les sujets qui méritent une révision supplémentaire, de consolider les concepts clés de Scrum et d'améliorer votre compréhension avant de poursuivre. Son objectif est de vous aider à vous sentir pleinement préparé et plus confiant pour réussir."
         }
       ],
       "titleHighlight": "inscription à un parcours"
@@ -836,43 +836,43 @@
       "titleHighlight": "offrons"
     },
     "apart": {
-      "eyebrow": "Services & périmètre",
-      "title": "Ce qui nous",
-      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "eyebrow": "Avantages du programme",
+      "title": "Pourquoi apprendre",
+      "subtitle": "Renforcez vos connaissances et familiarisez-vous avec le format de l'examen avant de passer votre examen de certification final.",
       "items": [
         {
-          "title": "Une expérience fiable",
-          "body": "Notre formation est façonnée par une vaste expérience professionnelle en Agile et Scrum. Les bonnes pratiques que nous partageons sont ancrées dans un travail de livraison réel, pas dans la théorie seule."
+          "title": "Une expérience pratique derrière votre apprentissage",
+          "body": "Notre apprentissage est façonné par une vaste expérience professionnelle en Agile et Scrum. Les conseils que nous fournissons reflètent des environnements de livraison concrets, des défis réels et une application significative en milieu de travail."
         },
         {
-          "title": "Un langage accessible",
-          "body": "Nos supports sont rédigés dans un anglais simple et clair, garantissant que les concepts restent compréhensibles pour un public professionnel mondial."
+          "title": "Un langage clair",
+          "body": "Nos supports d'apprentissage emploient un anglais simple, aidant les professionnels à comprendre clairement les concepts clés de Scrum et à appliquer leurs connaissances avec plus d'assurance."
         },
         {
-          "title": "Un chemin unique et clair",
-          "body": "Un abonnement. Un parcours d'apprentissage. Un test de pratique. Un test final. Un certificat. Aucun frais caché et aucune complexité inutile."
+          "title": "Un parcours d'apprentissage simple",
+          "body": "Une seule inscription. Un seul parcours d'apprentissage. Un seul examen blanc. Un seul examen final. Un seul certificat. Aucuns frais cachés et aucune complexité inutile."
         },
         {
-          "title": "Un certificat numérique",
-          "body": "Une approche axée sur la pratique. Un test blanc est inclus dans chaque parcours. Notre intention est que vous abordiez le test final avec confiance plutôt qu'avec incertitude. S'entraîner à l'avance est le moyen le plus efficace de réduire le risque d'échec."
+          "title": "Préparation à l'examen blanc",
+          "body": "Une approche axée sur la préparation. Un examen blanc est inclus dans chaque parcours. Il vous aide à aborder l'examen final avec plus de confiance et de préparation. S'entraîner au préalable vous permet de repérer les points à améliorer et de consolider votre compréhension avant de poursuivre."
         },
         {
-          "title": "Un prix abordable",
-          "body": "La certification Agile a historiquement été coûteuse. Nous avons délibérément structuré nos prix pour rester accessibles aux apprenants individuels, sans compromettre la qualité de ce que nous proposons."
+          "title": "Des frais abordables",
+          "body": "Une certification professionnelle peut être coûteuse. Nous avons intentionnellement structuré nos frais pour qu'ils restent accessibles aux apprenants individuels, tout en continuant d'offrir une expérience d'apprentissage et de certification de qualité."
         }
       ],
-      "titleHighlight": "distingue"
+      "titleHighlight": "avec nous"
     },
     "serve": {
-      "eyebrow": "Services & périmètre",
+      "eyebrow": "Notre communauté",
       "title": "Qui nous",
-      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "subtitle": "Conçu pour les professionnels en quête de connaissances Scrum pratiques, de certifications qui ont du sens et d'un apprentissage flexible qui favorise l'évolution de carrière.",
       "paragraphs": [
-        "Nos apprenants sont des professionnels en activité issus de milieux très variés : des développeurs logiciels qui évoluent vers des postes de chef d'équipe, des chefs de projet qui passent à la livraison Agile, des analystes d'affaires qui collaborent avec des équipes Scrum et des professionnels en milieu de carrière qui se tournent vers les rôles produit et livraison.",
-        "Ce qu'ils partagent est familier à beaucoup : un temps limité, des échéances exigeantes et le besoin d'une certification qui a du poids dans un entretien d'embauche.",
-        "Que vous prépariez votre premier entretien de Scrum Master, que vous formalisiez des années d'expérience en tant que Product Owner ou que vous élargissiez votre profil professionnel avec des compétences Agile, nos programmes sont conçus pour vous rencontrer là où vous êtes."
+        "Nos apprenants viennent d'horizons professionnels variés : des développeurs logiciels qui évoluent vers des rôles de leadership, des chefs de projet qui adoptent la livraison Agile, des analystes d'affaires qui travaillent avec des équipes Scrum et des professionnels expérimentés qui développent des compétences pour les rôles liés au produit, à la livraison, au leadership et au changement organisationnel.",
+        "Ils partagent souvent les mêmes priorités : un temps limité, des emplois du temps exigeants et le souhait d'une certification utile qui renforce les compétences pratiques, développe la confiance et ouvre de futures perspectives de carrière.",
+        "Que vous prépariez un rôle de Scrum Master, que vous renforciez vos compétences de Product Owner ou que vous élargissiez votre profil avec des compétences Agile, nos programmes offrent un apprentissage pratique conçu pour soutenir vos objectifs et votre progression à chaque étape."
       ],
-      "titleHighlight": "servons"
+      "titleHighlight": "accompagnons"
     },
     "trust": {
       "eyebrow": "Confiance & sécurité",
@@ -1833,7 +1833,7 @@
           "home": "Accueil",
           "all": "Toutes les certifications"
         },
-        "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement qui ouvre des portes vers des rôles de Scrum Master très demandés dans le monde entier.",
+        "description": "Lancez votre carrière Agile avec une certification Endorsed Scrum Master conçue pour développer des compétences pratiques au service d'un leadership sûr et efficace.",
         "download": "Télécharger la présentation du programme",
         "enroll": "S'inscrire maintenant",
         "totalFee": "À partir de"
