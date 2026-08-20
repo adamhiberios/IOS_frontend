@@ -176,22 +176,22 @@ import {
               </ios-checkbox>
 
               <ios-checkbox
-                id="privacy"
-                formControlName="privacy"
-                [describedBy]="hasError('privacy', 'required') ? 'privacy-error' : ''"
+                id="terms"
+                formControlName="terms"
+                [describedBy]="hasError('terms', 'required') ? 'terms-error' : ''"
               >
-                {{ lang.t('auth.register.privacy') }}
+                {{ lang.t('auth.register.terms') }}
                 <a
-                  routerLink="/privacy-policy"
+                  routerLink="/terms-of-use"
                   class="underline font-medium text-ios-brand-primary"
                   target="_blank"
                   rel="noopener"
-                  >{{ lang.t('auth.register.privacyLink') }}</a
+                  >{{ lang.t('auth.register.termsLink') }}</a
                 >.
               </ios-checkbox>
-              @if (hasError('privacy', 'required')) {
-                <p id="privacy-error" role="alert" class="text-xs text-ios-brand-primary">
-                  {{ lang.t('auth.register.privacyRequired') }}
+              @if (hasError('terms', 'required')) {
+                <p id="terms-error" role="alert" class="text-xs text-ios-brand-primary">
+                  {{ lang.t('auth.register.termsRequired') }}
                 </p>
               }
             </div>
@@ -256,7 +256,7 @@ export class RegisterPage {
         validators: [Validators.required],
       }),
       newsletter: this.fb.control(false),
-      privacy: this.fb.control(false, {
+      terms: this.fb.control(false, {
         validators: [Validators.requiredTrue],
       }),
     },

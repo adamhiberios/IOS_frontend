@@ -2,22 +2,19 @@
  * `ios-cert-card` — feature-level certification card.
  *
  * Displays one certification offering: badge image, level chip, abbreviation,
- * full name, key stats (hours, format, exam questions), price, and two CTAs.
+ * full name, key stats (hours, format, exam questions), price, and a link to
+ * the certification detail page.
  *
  * Lives in `features/landing/components/` (not `ui/`) because it is
  * tightly coupled to the landing feature's cert card structure.
  *
  * ── Usage ─────────────────────────────────────────────────────────────────
  * ```html
- * <ios-cert-card
- *   [cert]="certCard"
- *   (downloadGuide)="onDownload($event)"
- *   (enrollNow)="onEnroll($event)"
- * />
+ * <ios-cert-card [cert]="certCard" />
  * ```
  */
 
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   LucideClock,
@@ -114,7 +111,7 @@ export interface CertCardData {
         </span>
       </div>
 
-      <!-- Action button -->
+      <!-- Action button — routes to the certification detail page -->
       <div class="mt-auto">
         <a
           [routerLink]="cert().detailLink"
@@ -124,7 +121,7 @@ export interface CertCardData {
                  hover:bg-cer-blue-deep transition-colors
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
         >
-          {{ lang.t('landing.levels.cert.enrollNow') }}
+          {{ lang.t('landing.levels.cert.moreDetails') }}
           <ios-icon
             name="arrow-right"
             class="w-4 h-4 flex-shrink-0 rtl:rotate-180"
@@ -137,9 +134,6 @@ export interface CertCardData {
 })
 export class CertCard {
   readonly cert = input.required<CertCardData>();
-
-  /** Emits the cert data when "Enroll Now" is clicked. */
-  readonly enrollNow = output<CertCardData>();
 
   protected readonly lang = inject(LanguageService);
 }
