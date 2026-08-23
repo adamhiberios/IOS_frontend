@@ -51,6 +51,32 @@ interface IconRow {
   index: number;
 }
 
+/**
+ * The Scrum and Kanban framework panels and the core-values chart are authored
+ * ~1236px across, while the XP and Lean panels are authored ~606px. Stacked
+ * into one column on a phone every panel collapses to the same ~380px, so the
+ * wide art lands at roughly half the scale of the narrow art — its baked-in
+ * labels rendered visibly smaller than XP's and Lean's, and the core-values
+ * labels came out unreadable (IDD-307). Since the type is part of the artwork
+ * it cannot be restyled from here; instead the wide art keeps a legible
+ * intrinsic width inside its own horizontal scroller below the md breakpoint,
+ * which puts it back at the scale of the XP and Lean panels, and returns to
+ * fitting the column from md up. The negative margin lets the scroller bleed
+ * to the screen edges so the gesture starts where the artwork does.
+ *
+ * The scroller is focusable so it can also be panned from the keyboard, per
+ * WCAG 2.1 — a scrollable region that only responds to touch strands keyboard
+ * users on the clipped half.
+ */
+const WIDE_DIAGRAM_SCROLLER = '-mx-6 px-6 overflow-x-auto md:mx-0 md:px-0 md:overflow-visible';
+/**
+ * `min-w` rather than `w`: Tailwind's preflight caps images at `max-width: 100%`,
+ * which would pin the art back to the column width. A min-width wins over a
+ * max-width, so the art keeps its legible size and the scroller handles the
+ * overflow. Released at `md`, where the column is wide enough on its own.
+ */
+const WIDE_DIAGRAM_IMG = 'w-full h-auto min-w-[760px] md:min-w-0';
+
 /** Gold underline bars — widths match each Figma section-header variant. */
 const GOLD_BAR = 'w-[180px] h-1 rounded-full bg-ios-brand-gold';
 const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
@@ -200,20 +226,34 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
 
         <div class="flex flex-col gap-6">
           <!-- ── Scrum step ─────────────────────────────────────────── -->
-          <img
-            [src]="'/assets/images/agile/step-1.svg'"
-            [alt]="lang.t('aboutAgile.frameworks.scrum.title')"
-            class="w-full h-auto"
-            loading="lazy"
-          />
+          <div
+            class="${WIDE_DIAGRAM_SCROLLER}"
+            tabindex="0"
+            role="group"
+            [attr.aria-label]="lang.t('aboutAgile.frameworks.scrum.title')"
+          >
+            <img
+              [src]="'/assets/images/agile/step-1.svg'"
+              [alt]="lang.t('aboutAgile.frameworks.scrum.title')"
+              class="${WIDE_DIAGRAM_IMG}"
+              loading="lazy"
+            />
+          </div>
 
           <!-- ── Kanban step ────────────────────────────────────────── -->
-          <img
-            [src]="'/assets/images/agile/step-2.svg'"
-            [alt]="lang.t('aboutAgile.frameworks.kanban.title')"
-            class="w-full h-auto"
-            loading="lazy"
-          />
+          <div
+            class="${WIDE_DIAGRAM_SCROLLER}"
+            tabindex="0"
+            role="group"
+            [attr.aria-label]="lang.t('aboutAgile.frameworks.kanban.title')"
+          >
+            <img
+              [src]="'/assets/images/agile/step-2.svg'"
+              [alt]="lang.t('aboutAgile.frameworks.kanban.title')"
+              class="${WIDE_DIAGRAM_IMG}"
+              loading="lazy"
+            />
+          </div>
 
           <!-- ── XP + Lean steps ────────────────────────────────────── -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -392,12 +432,19 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
         </div>
 
         <!-- Core values illustration -->
-        <img
-          [src]="'/assets/images/agile/core-value.svg'"
-          [alt]="lang.t('aboutAgile.coreValues.heading2')"
-          class="w-full h-auto"
-          loading="lazy"
-        />
+        <div
+          class="${WIDE_DIAGRAM_SCROLLER}"
+          tabindex="0"
+          role="group"
+          [attr.aria-label]="lang.t('aboutAgile.coreValues.heading2')"
+        >
+          <img
+            [src]="'/assets/images/agile/core-value.svg'"
+            [alt]="lang.t('aboutAgile.coreValues.heading2')"
+            class="${WIDE_DIAGRAM_IMG}"
+            loading="lazy"
+          />
+        </div>
       </div>
     </section>
 

@@ -248,8 +248,21 @@ export interface CertDetailsConfig {
               <div
                 class="relative grid grid-cols-1 lg:grid-cols-[210px_1fr] gap-6 lg:gap-10 mt-[32px] lg:mt-[40px]"
               >
-                <!-- Mobile badge (white card on track band) -->
-                <div class="lg:hidden w-[180px] mx-auto">
+                <!--
+                Mobile badge. The badge art carries its own square backdrop in
+                the track colour, which on the blue and green tracks reads as a
+                faint frame against the band. On brown that backdrop is
+                #8E6636 — the exact value of the track background token — so the frame
+                disappeared and the badge bled into the band (IDD-306). The
+                explicit ring and lightened panel below give every track a
+                deliberate edge instead of relying on the art coincidentally
+                differing from the background. Translucent rather than the
+                solid white card used on desktop: there the badge straddles the
+                dark/white boundary, here it sits wholly on the band.
+              -->
+                <div
+                  class="lg:hidden w-[180px] mx-auto rounded-xl p-2 bg-white/10 ring-1 ring-white/25"
+                >
                   <ios-certificates-badge
                     [svgPath]="cfg().badgeSvgPath"
                     [code]="cfg().code"
@@ -631,8 +644,8 @@ export interface CertDetailsConfig {
 
           <button
             type="button"
-            class="inline-flex items-center justify-center gap-3 h-14 px-6 rounded-xl
-                 font-body font-semibold text-[16px] md:text-[18px] leading-[1.4] whitespace-nowrap
+            class="inline-flex items-center justify-center gap-3 min-h-14 px-6 py-3 rounded-xl
+                 font-body font-semibold text-[16px] md:text-[18px] leading-[1.4] text-balance max-w-full
                  hover:opacity-90 transition-opacity
                  disabled:opacity-60 disabled:cursor-not-allowed
                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/60
@@ -641,7 +654,11 @@ export interface CertDetailsConfig {
             (click)="onEnroll()"
           >
             {{ lang.t(cfg().namespace + '.cta.button') }}
-            <ios-icon name="arrow-right" class="w-6 h-6 rtl:rotate-180" aria-hidden="true" />
+            <ios-icon
+              name="arrow-right"
+              class="w-6 h-6 shrink-0 rtl:rotate-180"
+              aria-hidden="true"
+            />
           </button>
 
           <p

@@ -82,6 +82,63 @@ interface CertLevelDef {
     '(document:click)': 'closeAudience()',
     '(document:keydown.escape)': 'closeAudience()',
   },
+  // Mobile card-swipe feedback (IDD-300). The card enters from the side the
+  // user swiped from, so forward and backward steps are distinguishable.
+  // `:host-context` is needed because `dir` lives on <html>, outside this
+  // component's emulated encapsulation.
+  styles: `
+    .cert-swipe {
+      animation: cert-swipe-forward 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .cert-swipe[data-dir='-1'] {
+      animation-name: cert-swipe-back;
+    }
+    :host-context([dir='rtl']) .cert-swipe {
+      animation-name: cert-swipe-back;
+    }
+    :host-context([dir='rtl']) .cert-swipe[data-dir='-1'] {
+      animation-name: cert-swipe-forward;
+    }
+
+    @keyframes cert-swipe-forward {
+      from {
+        opacity: 0;
+        transform: translateX(24px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    @keyframes cert-swipe-back {
+      from {
+        opacity: 0;
+        transform: translateX(-24px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    /* Motion-sensitive users still get a state-change cue, without travel. */
+    @media (prefers-reduced-motion: reduce) {
+      .cert-swipe,
+      .cert-swipe[data-dir='-1'],
+      :host-context([dir='rtl']) .cert-swipe,
+      :host-context([dir='rtl']) .cert-swipe[data-dir='-1'] {
+        animation: cert-swipe-fade 160ms ease-out both;
+      }
+      @keyframes cert-swipe-fade {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    }
+  `,
   template: `
     <!-- Nothing published (or still loading / errored) — omit the section entirely. -->
     @if (levels().length > 0) {
@@ -212,8 +269,18 @@ interface CertLevelDef {
                     (touchstart)="onCardTouchStart($event)"
                     (touchend)="onCardTouchEnd($event, level.id, cards.length)"
                   >
-                    @if (cards[idx]; as cert) {
-                      <ios-cert-card [cert]="cert" />
+                    <!--
+                    Rendered through @for over a single-element window rather
+                    than @if: swapping the index under @if only rebinds the
+                    input on the existing node, so the card's text changed with
+                    no visible motion and a swipe read as "nothing happened"
+                    (IDD-300). Tracking by id destroys and recreates the node
+                    on every step, which restarts the entry animation below.
+                  -->
+                    @for (cert of visibleCards(cards, idx); track cert.id) {
+                      <div class="cert-swipe" [attr.data-dir]="cardDir(level.id)">
+                        <ios-cert-card [cert]="cert" />
+                      </div>
                     }
 
                     @if (cards.length > 1) {
@@ -412,6 +479,13 @@ export class CertLevelsSection {
    */
   private readonly cardIdxByLevel = signal<Record<string, number>>({});
 
+  /**
+   * Mobile only — direction of each level's most recent card step (`1` forward,
+   * `-1` back), so the entry animation can travel the way the user swiped.
+   * Missing keys read as `1`, matching the first-paint direction.
+   */
+  private readonly cardDirByLevel = signal<Record<string, 1 | -1>>({});
+
   /** Mobile only — id of the level whose audience popover is open, if any. */
   protected readonly audienceOpenFor = signal<string | null>(null);
 
@@ -468,10 +542,27 @@ export class CertLevelsSection {
    * here would only ever be reachable through a stale click.
    */
   protected stepCard(levelId: string, delta: number, total: number): void {
+    this.cardDirByLevel.update((map) => ({ ...map, [levelId]: delta < 0 ? -1 : 1 }));
     this.cardIdxByLevel.update((map) => {
       const next = Math.min(Math.max((map[levelId] ?? 0) + delta, 0), Math.max(total - 1, 0));
       return { ...map, [levelId]: next };
     });
+  }
+
+  /** Direction of `levelId`'s last card step — drives the entry animation. */
+  protected cardDir(levelId: string): 1 | -1 {
+    return this.cardDirByLevel()[levelId] ?? 1;
+  }
+
+  /**
+   * The single card currently visible for a level, as a one-element list so the
+   * template can render it through `@for` and get a fresh DOM node (and so a
+   * fresh animation) on every step. Empty when the index has no card, which
+   * keeps `@for`'s `track cert.id` off an undefined entry.
+   */
+  protected visibleCards(cards: readonly CertCardData[], idx: number): CertCardData[] {
+    const card = cards[idx];
+    return card ? [card] : [];
   }
 
   /** Horizontal start position of an in-flight swipe on the mobile card, if any. */

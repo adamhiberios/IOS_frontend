@@ -336,6 +336,18 @@ body {
   height: 100%;
 }
 
+/* iOS Safari paints the canvas background across the rubber-band overscroll
+ * area, so scrolling past the dark footer revealed a tall band of the
+ * near-white `--color-ios-surface`. It reads as "there is more content below"
+ * and left the page feeling unfinished (IDD-301). Anchoring the scroll to the
+ * document ends the page at the footer, as the design intends. It also stops
+ * an accidental pull-to-refresh from discarding in-progress work — which
+ * matters most in the exam runner (CLAUDE.md §10). */
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
 body {
   background: var(--color-ios-surface);
   color: var(--color-ios-fg);
