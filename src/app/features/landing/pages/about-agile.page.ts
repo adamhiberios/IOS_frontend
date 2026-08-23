@@ -18,7 +18,7 @@
  * namespace in assets/i18n/{en,ar,fr}.json.
  */
 
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -33,6 +33,7 @@ import {
   LucideTriangleAlert,
 } from '@lucide/angular';
 
+import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { IosIcon, ScrollToTop, provideIcons } from '@ui';
 import type { LucideIconName } from '@ui/icon/icon-names';
@@ -463,7 +464,7 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
             <ios-icon name="arrow-right" class="w-5 h-5 rtl:rotate-180" aria-hidden="true" />
           </a>
           <a
-            routerLink="/register"
+            [routerLink]="getStartedLink()"
             class="inline-flex items-center gap-2 h-14 px-8 rounded-lg
                    bg-ios-brand-primary text-ios-brand-primary-soft
                    font-heading font-semibold text-[16px]
@@ -486,6 +487,17 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
 })
 export class AboutAgilePage {
   protected readonly lang = inject(LanguageService);
+  private readonly auth = inject(AuthStore);
+
+  /**
+   * "Get Started" target. Signed-in visitors go straight to their portal;
+   * everyone else starts at registration, which links on to `/auth/login`
+   * for visitors who already hold an account (the client cannot tell the
+   * two anonymous cases apart).
+   */
+  protected readonly getStartedLink = computed(() =>
+    this.auth.isAuthenticated() ? '/dashboard' : '/auth/register',
+  );
 
   // ── Benefits ───────────────────────────────────────────────────────────────
 

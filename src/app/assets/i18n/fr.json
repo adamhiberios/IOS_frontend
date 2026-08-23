@@ -875,21 +875,21 @@
       "titleHighlight": "accompagnons"
     },
     "trust": {
-      "eyebrow": "Confiance & sécurité",
-      "title": "Une note sur la",
-      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "eyebrow": "Confiance & intégrité",
+      "title": "Notre engagement envers la",
+      "subtitle": "La confiance commence par un apprentissage clair, des examens équitables et des pratiques de certification fondées sur des normes professionnelles cohérentes.",
       "paragraphs": [
-        "Choisir un organisme de formation est, à bien des égards, une question de confiance. Vous placez votre confiance dans la valeur du contenu, l'équité du test et la crédibilité du certificat aux yeux d'un employeur.",
-        "Nous considérons cette confiance comme une responsabilité. Nos contenus sont soigneusement revus avant publication et nos tests restent alignés sur le framework Scrum actuel."
+        "Choisir un organisme de formation suppose de la confiance. Vous comptez sur la qualité des supports d'apprentissage, l'équité de l'examen et la valeur professionnelle que représente le certificat, alors que vous investissez votre temps et vos efforts dans votre développement.",
+        "Nous prenons cette confiance au sérieux. Nos contenus pédagogiques sont soigneusement revus avant publication et nos examens sont maintenus afin de rester alignés sur le framework Scrum actuel."
       ],
       "titleHighlight": "confiance"
     },
     "trainingCta": {
       "title": "Entraînement avec",
-      "subtitle": "Si vous êtes prêt à franchir la prochaine étape de votre carrière Agile, nous serions ravis de vous accueillir. Bienvenue à l'Institute of Scrum.",
+      "subtitle": "Préparez-vous en toute confiance grâce à l'examen blanc pour évaluer vos connaissances, vous familiariser avec le format de l'examen et repérer les points à revoir avant de passer l'examen final.",
       "learnMore": "En savoir plus",
       "imageAlt": "Étudiant se préparant à un test blanc",
-      "titleHighlight": "test blanc"
+      "titleHighlight": "examen blanc"
     },
     "faq": {
       "eyebrow": "FAQ",
@@ -897,30 +897,30 @@
       "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
       "items": [
         {
-          "question": "Comment s'inscrire à un programme de certification ?",
-          "answer": "Pour vous inscrire, créez un compte, choisissez votre certification, effectuez le paiement et vous obtiendrez immédiatement l'accès à vos supports de cours dans votre tableau de bord."
+          "question": "Quelle certification Scrum me convient le mieux?",
+          "answer": "La certification qui vous convient dépend de votre expérience actuelle, de vos objectifs de carrière et du rôle Scrum que vous souhaitez développer. L'Institute of Scrum propose des parcours de certification pour les Scrum Masters, les Product Owners et les Scrum Facilitateurs à différents niveaux de compétence, ce qui vous permet de choisir le programme qui correspond le mieux à vos besoins de développement professionnel."
         },
         {
-          "question": "Quels sont les prérequis pour la certification ?",
-          "answer": "Il n'y a aucun prérequis formel. Tout professionnel souhaitant apprendre ou formaliser ses connaissances Scrum peut s'inscrire. Nos supports sont rédigés dans un anglais clair et accessible et conçus pour les professionnels en activité, quel que soit leur niveau d'expérience."
+          "question": "Ai-je besoin d'une expérience préalable de Scrum pour m'inscrire?",
+          "answer": "Non. De nombreux programmes de certification de l'Institute of Scrum sont conçus pour être accessibles aux apprenants qui découvrent Scrum. Vous pouvez consulter les détails de chaque certification pour choisir le niveau qui correspond le mieux à vos connaissances actuelles et à votre expérience professionnelle."
         },
         {
-          "question": "Combien de temps dure le processus de certification ?",
-          "answer": "Le rythme vous appartient entièrement. Tout le contenu est à votre rythme et vous pouvez passer le test final dès que vous vous sentez prêt. Il n'y a pas d'échéance fixe, vous pouvez donc concilier vos études et vos engagements professionnels."
+          "question": "Un examen final est-il requis pour obtenir la certification?",
+          "answer": "Oui. Les candidats à la certification doivent réussir l'examen final applicable afin de démontrer leur compréhension des concepts et des compétences couverts par le programme de certification."
         },
         {
-          "question": "Y a-t-il des exigences de recertification ?",
-          "answer": "Non. Une fois que vous avez obtenu votre certificat, il reste valable. Aucun frais de renouvellement ni aucune exigence permanente pour le conserver."
+          "question": "Les certifications de l'Institute of Scrum expirent-elles?",
+          "answer": "Non. Une fois que vous avez obtenu une certification de l'Institute of Scrum, celle-ci n'expire pas. Cela signifie qu'il n'y a aucune exigence de renouvellement continue ni de frais de renouvellement récurrents."
         }
       ],
       "titleHighlight": "posées"
     },
     "ready": {
       "title": "Prêt à",
-      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "subtitle": "Explorez les parcours de certification Scrum et choisissez le programme qui soutient le mieux vos objectifs professionnels et votre développement.",
       "exploreCertificates": "Explorer les certifications",
-      "startNow": "Commencer maintenant",
-      "titleHighlight": "nous rejoindre ?"
+      "startNow": "Commencer",
+      "titleHighlight": "passer à l'étape suivante ?"
     }
   },
   "aboutAgile": {
@@ -1110,10 +1110,10 @@
     },
     "ready": {
       "title": "Prêt à",
-      "titleHighlight": "nous rejoindre ?",
-      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format du test avant de passer le vrai test de certification.",
+      "titleHighlight": "passer à l'étape suivante ?",
+      "subtitle": "Explorez les parcours de certification Scrum et choisissez le programme qui soutient le mieux vos objectifs professionnels et votre développement.",
       "exploreCertificates": "Explorer les certifications",
-      "startNow": "Commencer maintenant"
+      "startNow": "Commencer"
     }
   },
   "aboutScrum": {
@@ -1237,11 +1237,11 @@
       "riskDesc": "En validant les idées tôt et en ajustant la direction selon des preuves concrètes."
     },
     "ready": {
-      "title": "Prêt à ",
-      "titleHighlight": "nous rejoindre ?",
-      "subtitle": "Testez vos connaissances et familiarisez-vous avec le format de l'examen avant de passer la certification réelle.",
+      "title": "Prêt à",
+      "titleHighlight": "passer à l'étape suivante ?",
+      "subtitle": "Explorez les parcours de certification Scrum et choisissez le programme qui soutient le mieux vos objectifs professionnels et votre développement.",
       "exploreCertificates": "Explorer les certifications",
-      "startNow": "Commencer maintenant"
+      "startNow": "Commencer"
     }
   },
   "mockExam": {
@@ -1257,19 +1257,14 @@
       "heading1": "Qu'est-ce qu'un ",
       "heading2": "examen blanc ?",
       "description": "Un examen blanc est un test d'entraînement qui reflète le vrai examen de certification. Il aide les candidats à comprendre le format, les types de questions et les contraintes de temps à l'avance.",
-      "passRate": "90% de réussite",
-      "passRateLocation": "Diplômés au Canada",
+      "passRate": "98% de réussite",
       "imageAlt": "Professionnel se préparant à un examen de certification"
     },
     "why": {
       "badge": "Avantages",
       "heading1": "Pourquoi passer un ",
       "heading2": "examen blanc ?",
-      "pills": {
-        "questions": "50-90 questions",
-        "timer": "Minuterie 30-60 min",
-        "score": "Score instantané"
-      },
+      "formatNote": "Même format, même durée et même nombre de questions que l'examen final",
       "benefits": {
         "anxiety": "Aide à réduire l'anxiété liée à l'examen",
         "gaps": "Identifie les lacunes avant le jour de l'examen",

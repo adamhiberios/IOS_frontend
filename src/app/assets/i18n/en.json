@@ -875,21 +875,21 @@
       "titleHighlight": "Support"
     },
     "trust": {
-      "eyebrow": "Trust & security",
-      "title": "A Note on",
-      "subtitle": "Test your knowledge and get familiar with the test format before taking the real certification test.",
+      "eyebrow": "Trust & Integrity",
+      "title": "Our Commitment to",
+      "subtitle": "Confidence begins with clear learning, fair exams, and certification practices designed around consistent professional standards.",
       "paragraphs": [
-        "Selecting a training provider is, in many respects, a matter of trust. You are placing confidence in the value of the material, the fairness of the test, and the credibility of the certificate in the eyes of an employer.",
-        "We regard that trust as a responsibility. Our content is carefully reviewed before publication, and our tests are maintained in alignment with the current Scrum framework."
+        "Choosing a training provider involves trust. You rely on the quality of the learning materials, the fairness of the exam, and the professional value represented by the certificate as you invest your time and effort in your development.",
+        "We take that trust seriously. Our learning content is carefully reviewed before publication, and our exams are maintained to remain aligned with the current Scrum framework."
       ],
       "titleHighlight": "Trust"
     },
     "trainingCta": {
       "title": "Training with",
-      "subtitle": "If you are ready to take the next step in your Agile career, we would be pleased to welcome you. Welcome to Institute of Scrum.",
-      "learnMore": "Learn more",
+      "subtitle": "Prepare with confidence by using the Mock Exam to assess your knowledge, become familiar with the exam format, and identify areas for further review before taking the Final Exam.",
+      "learnMore": "Learn More",
       "imageAlt": "Student preparing for a mock test",
-      "titleHighlight": "Mock Test"
+      "titleHighlight": "Mock Exam"
     },
     "faq": {
       "eyebrow": "FAQ",
@@ -897,30 +897,30 @@
       "subtitle": "Test your knowledge and get familiar with the test format before taking the real certification test.",
       "items": [
         {
-          "question": "How do I enroll in a certification program?",
-          "answer": "To enroll, create an account, select your certification, complete the payment process, and you'll gain immediate access to your course materials in your dashboard."
+          "question": "Which Scrum certification is right for me?",
+          "answer": "The right certification depends on your current experience, career goals, and the Scrum role you want to develop. The Institute of Scrum offers certification paths for Scrum Masters, Product Owners, and Scrum Facilitators at different competency levels, allowing you to choose the program that best matches your professional development needs."
         },
         {
-          "question": "What are the prerequisites for the certification?",
-          "answer": "There are no formal prerequisites. Any professional who wants to learn or formalize their Scrum knowledge can enroll. Our materials are written in clear, accessible English and are designed for working professionals at every level of experience."
+          "question": "Do I need previous Scrum experience to enroll?",
+          "answer": "No. Many Institute of Scrum certification programs are designed to be accessible to learners who are new to Scrum. You can review the details of each certification to choose the level that best matches your current knowledge and professional experience."
         },
         {
-          "question": "How long does the certification process take?",
-          "answer": "The pace is entirely up to you. All content is self-paced, and you can take the final test whenever you feel fully prepared. There is no fixed deadline, so you can balance your studies with your professional commitments."
+          "question": "Is there a final exam required to earn the certification?",
+          "answer": "Yes. Certification candidates are required to successfully complete the applicable final exam to demonstrate their understanding of the concepts and competencies covered by the certification program."
         },
         {
-          "question": "Are there any recertification requirements?",
-          "answer": "No. Once you earn your certificate, it remains valid. There are no renewal fees or ongoing requirements to maintain it."
+          "question": "Do Institute of Scrum certifications expire?",
+          "answer": "No. Once you successfully earn an Institute of Scrum certification, the certification does not expire. This means there are no ongoing renewal requirements or recurring certification renewal fees."
         }
       ],
       "titleHighlight": "Questions"
     },
     "ready": {
       "title": "Ready to",
-      "subtitle": "Test your knowledge and get familiar with the test format before taking the real certification test.",
-      "exploreCertificates": "Explore certificates",
-      "startNow": "Start now",
-      "titleHighlight": "join US?"
+      "subtitle": "Explore Scrum certification pathways and choose the program that best supports your professional goals and development.",
+      "exploreCertificates": "Explore Certifications",
+      "startNow": "Get Started",
+      "titleHighlight": "Take the Next Step?"
     }
   },
   "aboutAgile": {
@@ -1110,10 +1110,10 @@
     },
     "ready": {
       "title": "Ready to",
-      "titleHighlight": "join US?",
-      "subtitle": "Test your knowledge and get familiar with the test format before taking the real certification test.",
-      "exploreCertificates": "Explore certificates",
-      "startNow": "Start now"
+      "titleHighlight": "Take the Next Step?",
+      "subtitle": "Explore Scrum certification pathways and choose the program that best supports your professional goals and development.",
+      "exploreCertificates": "Explore Certifications",
+      "startNow": "Get Started"
     }
   },
   "aboutScrum": {
@@ -1237,11 +1237,11 @@
       "riskDesc": "By validating ideas early and adjusting direction based on real evidence."
     },
     "ready": {
-      "title": "Ready to ",
-      "titleHighlight": "join US?",
-      "subtitle": "Test your knowledge and get familiar with the test format before taking the real certification test.",
-      "exploreCertificates": "Explore certificates",
-      "startNow": "Start now"
+      "title": "Ready to",
+      "titleHighlight": "Take the Next Step?",
+      "subtitle": "Explore Scrum certification pathways and choose the program that best supports your professional goals and development.",
+      "exploreCertificates": "Explore Certifications",
+      "startNow": "Get Started"
     }
   },
   "mockExam": {
@@ -1257,19 +1257,14 @@
       "heading1": "What is a ",
       "heading2": "Mock test?",
       "description": "A mock test is a practice test that mirrors the real certification test. It helps candidates understand the test format, question types, and time constraints in advance.",
-      "passRate": "90% Pass Rate",
-      "passRateLocation": "Graduates across Canada",
+      "passRate": "98% Pass Rate",
       "imageAlt": "Professional preparing for certification exam"
     },
     "why": {
       "badge": "Benefits",
       "heading1": "Why Take a ",
       "heading2": "Mock test?",
-      "pills": {
-        "questions": "50-90 Questions",
-        "timer": "30-60 Min Timer",
-        "score": "Instant Score"
-      },
+      "formatNote": "Same format, timing, and number of questions as the final exam",
       "benefits": {
         "anxiety": "Helps reduce test anxiety",
         "gaps": "Identifies knowledge gaps before test day",

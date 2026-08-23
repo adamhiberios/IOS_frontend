@@ -5,7 +5,7 @@
  *   1. Navbar        — reuses ios-landing-navbar
  *   2. Hero banner   — dark-red bg, breadcrumb + "About Mock test" title
  *   3. What is a Mock test? — cream bg, descriptive copy + image with pass-rate badge
- *   4. Why Take a Mock test? — dark-red left panel (mock exam icon + pills) + benefits list on right
+ *   4. Why Take a Mock test? — dark-red left panel (mock exam icon + format note) + benefits list on right
  *   5. How Our Mock Exams Work — numbered steps on left + dark mock-exam preview card on right
  *   6. Training with Mock Exam CTA — image + white CTA card
  *   7. Footer        — reuses ios-landing-footer
@@ -156,7 +156,7 @@ interface AnswerOption {
             />
           </div>
 
-          <!-- 90% Pass Rate badge -->
+          <!-- Pass rate badge -->
           <div
             class="absolute bottom-[-8px] start-0
                    flex items-center gap-4
@@ -164,11 +164,7 @@ interface AnswerOption {
                    shadow-[0_20px_25px_0_rgba(0,0,0,0.1),0_8px_10px_0_rgba(0,0,0,0.1)]
                    px-5 py-4"
             role="img"
-            [attr.aria-label]="
-              lang.t('mockExam.whatIs.passRate') +
-              ' — ' +
-              lang.t('mockExam.whatIs.passRateLocation')
-            "
+            [attr.aria-label]="lang.t('mockExam.whatIs.passRate')"
           >
             <div
               class="flex items-center justify-center w-10 h-10 rounded-[10px] bg-ios-brand-primary shrink-0"
@@ -176,14 +172,11 @@ interface AnswerOption {
             >
               <ios-icon name="chart-bar" class="w-5 h-5 text-white" />
             </div>
-            <div class="flex flex-col whitespace-nowrap">
-              <span class="font-body font-black text-[24px] leading-8 text-ios-brand-primary">
-                {{ lang.t('mockExam.whatIs.passRate') }}
-              </span>
-              <span class="font-body font-normal text-[14px] leading-5 text-[#6a7282]">
-                {{ lang.t('mockExam.whatIs.passRateLocation') }}
-              </span>
-            </div>
+            <span
+              class="font-body font-black text-[24px] leading-8 text-ios-brand-primary whitespace-nowrap"
+            >
+              {{ lang.t('mockExam.whatIs.passRate') }}
+            </span>
           </div>
         </div>
       </div>
@@ -243,42 +236,15 @@ interface AnswerOption {
               ></div>
             </div>
 
-            <!-- Stat pills -->
-            <div class="flex gap-3" role="list" [attr.aria-label]="lang.t('mockExam.why.badge')">
-              <div
-                class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                       bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
-                role="listitem"
-              >
-                <span
-                  class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
-                >
-                  {{ lang.t('mockExam.why.pills.questions') }}
-                </span>
-              </div>
-              <div
-                class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                       bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
-                role="listitem"
-              >
-                <span
-                  class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
-                >
-                  {{ lang.t('mockExam.why.pills.timer') }}
-                </span>
-              </div>
-              <div
-                class="flex-1 flex items-center justify-center px-3 py-2 rounded-full
-                       bg-ios-brand-primary-mid border border-[#b65e5e] text-center"
-                role="listitem"
-              >
-                <span
-                  class="font-heading font-medium text-[14px] leading-[1.4] text-white whitespace-nowrap"
-                >
-                  {{ lang.t('mockExam.why.pills.score') }}
-                </span>
-              </div>
-            </div>
+            <!-- Format note — the mock exam mirrors the final exam exactly, so
+                 nothing here should read as a configurable option. -->
+            <p
+              class="px-4 py-2.5 rounded-2xl text-center
+                     bg-ios-brand-primary-mid border border-[#b65e5e]
+                     font-heading font-medium text-[14px] leading-[1.4] text-white text-balance"
+            >
+              {{ lang.t('mockExam.why.formatNote') }}
+            </p>
           </div>
 
           <!-- Right panel — benefits list -->
