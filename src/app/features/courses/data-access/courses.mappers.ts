@@ -27,6 +27,7 @@ import {
   type QuizCheckResult,
   type QuizQuestion,
 } from './courses.model';
+import { normalizeLessonHtml } from '../utils/lesson-html';
 
 function toLessonSummary(dto: LessonSummaryDto): LessonSummary {
   return {
@@ -64,7 +65,7 @@ export function toLesson(dto: LessonResponseDto): Lesson {
     id: dto.data.id,
     moduleId: dto.data.moduleId,
     title: dto.data.title,
-    contentHtml: dto.data.contentHtml,
+    contentHtml: normalizeLessonHtml(dto.data.contentHtml),
     videoUrl: dto.data.videoUrl,
     videoUrlExpiresInSeconds: dto.meta.videoUrlExpiresInSeconds,
     durationSeconds: dto.data.durationSeconds,

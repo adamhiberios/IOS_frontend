@@ -47,6 +47,61 @@ import { CertChapterNav, type CertNavItem } from '../components/cert-chapter-nav
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DashboardNavbar, CertChapterNav, RouterLink, IosIcon, CanadaFlag],
   providers: [provideIcons(LucideArrowLeft, LucideFileText, LucideArrowDown)],
+  styles: [
+    `
+      /* Layout rules for admin-authored lesson HTML injected via [innerHTML].
+         Typography stays on the article's Tailwind variants; this block only
+         keeps authored content inside its column.
+
+         The content itself is normalised first — normalizeLessonHtml() in the
+         courses feature strips the non-breaking spaces and fixed widths that
+         Word and Google Docs paste in (IDD-261). Because that happens upstream,
+         nothing here needs !important or a blanket selector to out-rank an
+         inline style, and break-word below only ever acts on genuinely long
+         tokens such as a pasted URL, never mid-sentence.
+
+         Scoped under .ios-lesson-prose; ::ng-deep is how the sibling blog
+         renderer reaches sanitized children too. */
+      .ios-lesson-prose {
+        overflow-wrap: break-word;
+      }
+      .ios-lesson-prose > * {
+        min-width: 0;
+      }
+      .ios-lesson-prose ::ng-deep img,
+      .ios-lesson-prose ::ng-deep video,
+      .ios-lesson-prose ::ng-deep iframe {
+        max-width: 100%;
+        height: auto;
+      }
+      /* Preformatted blocks keep their line breaks but wrap rather than running
+         off; anything genuinely unwrappable scrolls inside the block. */
+      .ios-lesson-prose ::ng-deep pre {
+        white-space: pre-wrap;
+        overflow-x: auto;
+      }
+      /* A table with more columns than the width allows scrolls within itself
+         instead of widening the lesson column. */
+      .ios-lesson-prose ::ng-deep table {
+        display: block;
+        width: max-content;
+        max-width: 100%;
+        overflow-x: auto;
+        border-collapse: collapse;
+      }
+      .ios-lesson-prose ::ng-deep td,
+      .ios-lesson-prose ::ng-deep th {
+        border: 1px solid var(--color-ios-border-light, #e5e7eb);
+        padding: 0.5rem 0.75rem;
+        text-align: start;
+        vertical-align: top;
+      }
+      .ios-lesson-prose ::ng-deep th {
+        font-weight: 700;
+        background: var(--color-ios-surface-muted, #f3f4f6);
+      }
+    `,
+  ],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
@@ -68,7 +123,9 @@ import { CertChapterNav, type CertNavItem } from '../components/cert-chapter-nav
                   class="flex items-center gap-3 text-[16px] font-medium leading-[1.4] text-ios-fg-8"
                   role="list"
                 >
-                  <li><span>{{ lang.t('dashboard.breadcrumb.dashboard') }}</span></li>
+                  <li>
+                    <span>{{ lang.t('dashboard.breadcrumb.dashboard') }}</span>
+                  </li>
                   <li aria-hidden="true">/</li>
                   <li>
                     <a
@@ -79,7 +136,9 @@ import { CertChapterNav, type CertNavItem } from '../components/cert-chapter-nav
                     </a>
                   </li>
                   <li aria-hidden="true">/</li>
-                  <li><span class="font-semibold text-ios-fg-13">{{ certCode() }}</span></li>
+                  <li>
+                    <span class="font-semibold text-ios-fg-13">{{ certCode() }}</span>
+                  </li>
                 </ol>
               </nav>
             </div>
@@ -154,7 +213,7 @@ import { CertChapterNav, type CertNavItem } from '../components/cert-chapter-nav
                 <!-- Lesson body — sanitised by Angular, never bypassed -->
                 @if (lesson.contentHtml; as html) {
                   <article
-                    class="flex flex-col gap-3 text-[16px] font-medium leading-[1.4] text-ios-fg [&_p]:mb-4 [&_h2]:text-[20px] [&_h2]:font-bold [&_h2]:text-ios-fg-13 [&_ul]:list-disc [&_ul]:ps-6"
+                    class="ios-lesson-prose flex flex-col gap-3 min-w-0 overflow-x-auto text-[16px] font-medium leading-[1.4] text-ios-fg [&_p]:mb-4 [&_h2]:text-[20px] [&_h2]:font-bold [&_h2]:text-ios-fg-13 [&_ul]:list-disc [&_ul]:ps-6"
                     dir="auto"
                     [innerHTML]="html"
                   ></article>
