@@ -260,7 +260,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
               [onlineLabel]="lang.t('scrumMaster.certPath.online')"
               [questions]="lang.t('scrumMaster.certPath.questions')"
               [totalFeeLabel]="lang.t('scrumMaster.certPath.totalFee')"
-              [price]="lang.t('scrumMaster.certPath.price')"
               [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
               detailLink="/certifications/esm"
             />
@@ -274,7 +273,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
               [onlineLabel]="lang.t('scrumMaster.certPath.online')"
               [questions]="lang.t('scrumMaster.certPath.questions')"
               [totalFeeLabel]="lang.t('scrumMaster.certPath.totalFee')"
-              [price]="lang.t('scrumMaster.certPath.price')"
               [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
               detailLink="/certifications/esm-p"
             />
@@ -288,7 +286,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
               [onlineLabel]="lang.t('scrumMaster.certPath.online')"
               [questions]="lang.t('scrumMaster.certPath.questions')"
               [totalFeeLabel]="lang.t('scrumMaster.certPath.totalFee')"
-              [price]="lang.t('scrumMaster.certPath.price')"
               [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
               detailLink="/certifications/esm-a"
             />

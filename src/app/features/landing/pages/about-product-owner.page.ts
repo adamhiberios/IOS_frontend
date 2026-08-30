@@ -260,7 +260,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
               [onlineLabel]="lang.t('productOwner.certPath.online')"
               [questions]="lang.t('productOwner.certPath.questions')"
               [totalFeeLabel]="lang.t('productOwner.certPath.totalFee')"
-              [price]="lang.t('productOwner.certPath.price')"
               [enrollLabel]="lang.t('productOwner.certPath.enroll')"
               detailLink="/certifications/epo"
             />
@@ -274,7 +273,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
               [onlineLabel]="lang.t('productOwner.certPath.online')"
               [questions]="lang.t('productOwner.certPath.questions')"
               [totalFeeLabel]="lang.t('productOwner.certPath.totalFee')"
-              [price]="lang.t('productOwner.certPath.price')"
               [enrollLabel]="lang.t('productOwner.certPath.enroll')"
               detailLink="/certifications/epo-p"
             />
@@ -288,7 +286,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
               [onlineLabel]="lang.t('productOwner.certPath.online')"
               [questions]="lang.t('productOwner.certPath.questions')"
               [totalFeeLabel]="lang.t('productOwner.certPath.totalFee')"
-              [price]="lang.t('productOwner.certPath.price')"
               [enrollLabel]="lang.t('productOwner.certPath.enroll')"
               detailLink="/certifications/epo-a"
             />

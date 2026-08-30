@@ -63,6 +63,7 @@ import { JsonLdService } from '@core/seo';
 import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
 
 import { PublicCatalogStore } from '../data-access/catalog.store';
+import { formatPrice } from '../data-access/catalog.mappers';
 
 /** Track palette used by the main page sections (hero, overview, stats, CTA). */
 export type CertTrack = 'blue' | 'green' | 'brown';
@@ -91,8 +92,6 @@ export interface RelatedCertCard {
   readonly badgeSvgPath: string;
   /** Description text (already translated). */
   readonly description: string;
-  /** Price string e.g. "USD $180". */
-  readonly price: string;
   /** "Learn More About …" button label. */
   readonly learnMoreLabel: string;
   /** Route or href the Learn More button navigates to. */
@@ -115,8 +114,6 @@ export interface CertDetailsConfig {
   readonly trackName: string;
   /** Level label, e.g. "Foundation Level". */
   readonly levelLabel: string;
-  /** Price string, e.g. "USD $130". */
-  readonly price: string;
   /** Hero photo (the "girls with sticky board" feature image). */
   readonly heroImageSrc: string;
   /** i18n namespace under which all copy lives, e.g. "certDetails.esm". */
@@ -225,7 +222,7 @@ export interface CertDetailsConfig {
               next to the title, at every screen size, regardless of how
               long the title is.
             -->
-                <div class="relative self-start">
+                <div class="relative self-start" [hidden]="!price()">
                   <div
                     class="h-[60px] lg:h-[68px] px-5 lg:px-6 pt-3 lg:pt-4 bg-track-mid"
                     [attr.aria-label]="lang.t('certDetails.startingPriceAriaLabel')"
@@ -238,7 +235,7 @@ export interface CertDetailsConfig {
                     <span
                       class="font-heading font-extrabold text-[18px] lg:text-[20px] leading-[1.2] whitespace-nowrap block text-track-soft"
                     >
-                      {{ cfg().price }}
+                      {{ price() }}
                     </span>
                   </div>
                 </div>
@@ -737,18 +734,20 @@ export interface CertDetailsConfig {
                       >
                         {{ rel.fullName }}
                       </span>
-                      <div class="flex flex-col mt-1">
-                        <span
-                          class="font-heading font-medium text-[13px] md:text-[14px] leading-[1.4] text-ios-brand-muted"
-                        >
-                          {{ lang.t(cfg().namespace + '.related.totalFee') }}
-                        </span>
-                        <span
-                          class="font-heading font-extrabold text-[18px] md:text-[20px] leading-[1.2] text-track-text"
-                        >
-                          {{ rel.price }}
-                        </span>
-                      </div>
+                      @if (priceFor(rel.code); as relPrice) {
+                        <div class="flex flex-col mt-1">
+                          <span
+                            class="font-heading font-medium text-[13px] md:text-[14px] leading-[1.4] text-ios-brand-muted"
+                          >
+                            {{ lang.t(cfg().namespace + '.related.totalFee') }}
+                          </span>
+                          <span
+                            class="font-heading font-extrabold text-[18px] md:text-[20px] leading-[1.2] text-track-text"
+                          >
+                            {{ relPrice }}
+                          </span>
+                        </div>
+                      }
                     </div>
                   </div>
 
@@ -811,6 +810,10 @@ export class CertDetailsTemplate implements OnDestroy {
   protected readonly enrollPending = signal(false);
 
   constructor() {
+    // Fees are read from the catalog, so the page needs the list loaded.
+    // Idempotent and shared with the SEO lookup below.
+    void this.catalogStore.load();
+
     // SEO only — page content stays static/authored. Resolves the marketing
     // `code` to the backend cert and fetches its `seo` block purely to feed
     // JsonLdService; nothing here touches what the template renders.
@@ -818,6 +821,23 @@ export class CertDetailsTemplate implements OnDestroy {
       void this.applySeo(this.cfg().code);
     });
   }
+
+  /**
+   * Fee for a certificate code, formatted in the backend's own currency, or an
+   * empty string while the catalog is loading and for a code with no live
+   * listing. Fees used to be authored per page in the i18n files, which let the
+   * displayed price drift from the price actually charged at checkout; the
+   * backend is now the only source (IDD-257). Callers hide the fee slot when
+   * this is empty rather than show a stale figure.
+   */
+  protected priceFor(programCode: string): string {
+    const cert = this.catalogStore.byCode(programCode);
+    if (cert === undefined) return '';
+    return formatPrice(cert.price, cert.currency, this.lang.locale());
+  }
+
+  /** Fee for the certificate this page is about. */
+  protected readonly price = computed<string>(() => this.priceFor(this.cfg().code));
 
   ngOnDestroy(): void {
     this.jsonLd.clear();

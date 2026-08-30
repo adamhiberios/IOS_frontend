@@ -1493,7 +1493,6 @@
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "totalFee": "À partir de",
-      "price": "180 $ USD",
       "download": "Télécharger",
       "enroll": "S'inscrire",
       "exploreOthers": "Explorer d'autres certifications"
@@ -1586,7 +1585,6 @@
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "totalFee": "À partir de",
-      "price": "180 $ USD",
       "download": "Télécharger",
       "enroll": "S inscrire",
       "exploreOthers": "Explorer d autres certifications"
@@ -1669,7 +1667,6 @@
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "totalFee": "À partir de",
-      "price": "180 $ USD",
       "download": "Télécharger",
       "enroll": "S'inscrire"
     },
@@ -1788,7 +1785,6 @@
       "online": "Entièrement en ligne",
       "questions": "Test de 45 questions",
       "totalFee": "À partir de",
-      "price": "180 $ USD",
       "download": "Télécharger",
       "enroll": "S inscrire",
       "exploreOthers": "Explorer d autres certifications"
@@ -1821,7 +1817,6 @@
       "fullName": "Maître Scrum Agréé",
       "trackName": "Scrum Master",
       "level": "Niveau Fondation",
-      "price": "USD $130",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -1898,14 +1893,12 @@
         "epo": {
           "fullName": "Propriétaire de Produit Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $130",
           "description": "Maîtrisez la vision produit, la gestion du backlog et la collaboration avec les parties prenantes. Un complément précieux aux compétences de Scrum Master pour les professionnels qui veulent comprendre la dynamique complète d'une équipe Scrum.",
           "learnMore": "En savoir plus sur l'EPO"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Autorité",
-          "price": "USD $175",
           "description": "Facilitateur Scrum Agréé (ESF) : Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
           "learnMore": "En savoir plus sur l'ESF"
         }
@@ -1915,7 +1908,6 @@
       "fullName": "Maître Scrum Agréé Praticien",
       "trackName": "Scrum Master",
       "level": "Niveau Praticien",
-      "price": "USD $150",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -1992,21 +1984,18 @@
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $130",
           "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement qui ouvre des portes vers des rôles de Scrum Master très demandés.",
           "learnMore": "En savoir plus sur l'ESM"
         },
         "esmA": {
           "fullName": "Maître Scrum Agréé Autorité",
           "level": "Niveau Autorité",
-          "price": "USD $185",
           "description": "Le plus haut niveau de certification pour les Scrum Masters prêts à mentorer d'autres, piloter la transformation organisationnelle et faire avancer la profession.",
           "learnMore": "En savoir plus sur l'ESM-A"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $180",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
           "learnMore": "En savoir plus sur l'ESF"
         }
@@ -2016,7 +2005,6 @@
       "fullName": "Maître Scrum Agréé Autorité",
       "trackName": "Scrum Master",
       "level": "Niveau Autorité",
-      "price": "USD $185",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -2093,14 +2081,12 @@
         "esmP": {
           "fullName": "Maître Scrum Agréé Praticien",
           "level": "Niveau Praticien",
-          "price": "USD $150",
           "description": "Élevez vos compétences de Scrum Master de la théorie à la pratique.",
           "learnMore": "En savoir plus sur l'ESM-P"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $180",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
           "learnMore": "En savoir plus sur l'ESF"
         }
@@ -2110,7 +2096,6 @@
       "fullName": "Propriétaire de Produit Agréé",
       "trackName": "Propriétaire de Produit",
       "level": "Niveau Fondation",
-      "price": "USD $130",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -2187,14 +2172,12 @@
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $130",
           "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement.",
           "learnMore": "En savoir plus sur l'ESM"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Autorité",
-          "price": "USD $175",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées pour les équipes Scrum.",
           "learnMore": "En savoir plus sur l'ESF"
         }
@@ -2204,7 +2187,6 @@
       "fullName": "Propriétaire de Produit Agréé Praticien",
       "trackName": "Product Owner",
       "level": "Niveau Praticien",
-      "price": "USD $150",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -2280,14 +2262,12 @@
         "epo": {
           "fullName": "Propriétaire de Produit Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $180",
           "description": "Commencez votre parcours vers la création de produits que les gens adorent avec une certification fondamentale.",
           "learnMore": "En savoir plus sur l'EPO"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $180",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées.",
           "learnMore": "En savoir plus sur l'ESF"
         }
@@ -2297,7 +2277,6 @@
       "fullName": "Facilitateur Scrum Agréé",
       "trackName": "Scrum Facilitateur",
       "level": "Niveau Autorité",
-      "price": "USD $175",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -2374,14 +2353,12 @@
         "esm": {
           "fullName": "Scrum Master Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $130",
           "description": "Lancez votre carrière Agile avec une certification fondamentale reconnue mondialement.",
           "learnMore": "En savoir plus sur l'ESM"
         },
         "epo": {
           "fullName": "Propriétaire de Produit Agréé",
           "level": "Niveau Fondation",
-          "price": "USD $130",
           "description": "Commencez votre parcours vers la création de produits que les gens adorent.",
           "learnMore": "En savoir plus sur l'EPO"
         }
@@ -2391,7 +2368,6 @@
       "fullName": "Propriétaire de Produit Agréé Autorité",
       "trackName": "Propriétaire de Produit",
       "level": "Niveau Autorité",
-      "price": "USD $275",
       "hero": {
         "back": "Retour aux certifications",
         "breadcrumb": {
@@ -2468,14 +2444,12 @@
         "epoP": {
           "fullName": "Propriétaire de Produit Agréé Praticien",
           "level": "Niveau Praticien",
-          "price": "USD $150",
           "description": "Élevez vos compétences de propriétaire de produit du fondamental à l'avancé et prouvez que vous pouvez piloter le succès produit dans des environnements Scrum complexes.",
           "learnMore": "En savoir plus sur l'EPO-P"
         },
         "esf": {
           "fullName": "Facilitateur Scrum Agréé",
           "level": "Niveau Autorité",
-          "price": "USD $175",
           "description": "Spécialisez-vous dans la conception d'ateliers, la dynamique de groupe et les techniques de facilitation avancées.",
           "learnMore": "En savoir plus sur l'ESF"
         }

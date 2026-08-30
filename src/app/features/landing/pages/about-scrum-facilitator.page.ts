@@ -245,7 +245,6 @@ import { CertFaqCta } from '../components/cert-faq-cta';
               [onlineLabel]="lang.t('scrumFacilitator.certPath.online')"
               [questions]="lang.t('scrumFacilitator.certPath.questions')"
               [totalFeeLabel]="lang.t('scrumFacilitator.certPath.totalFee')"
-              [price]="lang.t('scrumFacilitator.certPath.price')"
               [enrollLabel]="lang.t('scrumFacilitator.certPath.enroll')"
               detailLink="/certifications/esf"
             />

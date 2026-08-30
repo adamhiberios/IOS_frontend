@@ -21,13 +21,17 @@
  *     [onlineLabel]="lang.t('scrumMaster.certPath.online')"
  *     [questions]="lang.t('scrumMaster.certPath.questions')"
  *     [totalFeeLabel]="lang.t('scrumMaster.certPath.totalFee')"
- *     [price]="lang.t('scrumMaster.certPath.price')"
  *     [enrollLabel]="lang.t('scrumMaster.certPath.enroll')"
  *     detailLink="/certifications/esm"
  *   />
+ *
+ * The fee is not passed in: it is resolved from `code` against
+ * `PublicCatalogStore`, so every surface shows the one price the backend
+ * publishes (IDD-257). Nothing renders in the fee slot until the catalog
+ * resolves, or when the code has no live listing.
  */
 
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   LucideArrowRight,
@@ -36,7 +40,11 @@ import {
   LucideMonitor,
 } from '@lucide/angular';
 
+import { LanguageService } from '@core/i18n';
 import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
+
+import { PublicCatalogStore } from '../data-access/catalog.store';
+import { formatPrice } from '../data-access/catalog.mappers';
 
 @Component({
   selector: 'ios-certification-card',
@@ -79,7 +87,7 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
             </span>
           </div>
           <!-- Inline price shown directly under fullName when showTotalFeePrice is true -->
-          @if (showTotalFeePrice()) {
+          @if (showTotalFeePrice() && price()) {
             <div class="flex flex-col mt-1">
               <span class="font-heading font-medium text-[13px] leading-[1.4] text-ios-brand-muted">
                 {{ totalFeeLabel() }}
@@ -130,7 +138,7 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
         </div>
       </div>
 
-      @if (!showTotalFeePrice()) {
+      @if (!showTotalFeePrice() && price()) {
         <!-- Divider -->
         <div class="h-px w-full bg-ios-border-light" aria-hidden="true"></div>
 
@@ -191,9 +199,6 @@ export class CertificationCard {
   /** "Total Fee" label above the price. */
   readonly totalFeeLabel = input<string>('');
 
-  /** Price string, e.g. "USD $180". */
-  readonly price = input<string>('');
-
   /** Label for the enroll button. */
   readonly enrollLabel = input<string>('');
 
@@ -227,4 +232,24 @@ export class CertificationCard {
 
   /** Background colour of the Enroll button. Default: SM navy #184865. */
   readonly enrollBgColor = input<string>('#184865');
+
+  private readonly lang = inject(LanguageService);
+  private readonly catalog = inject(PublicCatalogStore);
+
+  constructor() {
+    // Idempotent and shared across every card on the page.
+    void this.catalog.load();
+  }
+
+  /**
+   * The fee for this card's `code`, formatted in the backend's own currency.
+   * Empty while the catalog is still loading and for a code with no live
+   * listing — the fee row is omitted rather than showing a stale or invented
+   * figure (IDD-257).
+   */
+  protected readonly price = computed<string>(() => {
+    const cert = this.catalog.byCode(this.code());
+    if (cert === undefined) return '';
+    return formatPrice(cert.price, cert.currency, this.lang.locale());
+  });
 }

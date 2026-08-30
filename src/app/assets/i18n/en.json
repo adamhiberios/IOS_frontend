@@ -1493,7 +1493,6 @@
       "online": "Fully Online",
       "questions": "45-question Test",
       "totalFee": "Total Fee",
-      "price": "USD $180",
       "download": "Download",
       "enroll": "Enroll Now",
       "exploreOthers": "Explore other Certifications"
@@ -1586,7 +1585,6 @@
       "online": "Fully Online",
       "questions": "45-question Test",
       "totalFee": "Total Fee",
-      "price": "USD $180",
       "download": "Download",
       "enroll": "Enroll Now",
       "exploreOthers": "Explore other Certifications"
@@ -1669,7 +1667,6 @@
       "online": "Fully Online",
       "questions": "45-question Test",
       "totalFee": "Total Fee",
-      "price": "USD $180",
       "download": "Download",
       "enroll": "Enroll Now"
     },
@@ -1788,7 +1785,6 @@
       "online": "Fully Online",
       "questions": "45-question Test",
       "totalFee": "Total Fee",
-      "price": "USD $180",
       "download": "Download",
       "enroll": "Enroll Now",
       "exploreOthers": "Explore other Certifications"
@@ -1821,7 +1817,6 @@
       "fullName": "Endorsed Scrum Master",
       "trackName": "Scrum Master",
       "level": "Foundation Level",
-      "price": "USD $130",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -1898,14 +1893,12 @@
         "epo": {
           "fullName": "Endorsed Product Owner",
           "level": "Foundation Level",
-          "price": "USD $130",
           "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
           "learnMore": "Learn More About EPO"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Authority Level",
-          "price": "USD $175",
           "description": "Endorsed Scrum Facilitator (ESF): Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }
@@ -1915,7 +1908,6 @@
       "fullName": "Endorsed Scrum Master Practitioner",
       "trackName": "Scrum Master",
       "level": "Practitioner Level",
-      "price": "USD $150",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -1992,21 +1984,18 @@
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
-          "price": "USD $130",
           "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
           "learnMore": "Learn More About ESM"
         },
         "esmA": {
           "fullName": "Endorsed Scrum Master Authority",
           "level": "Authority Level",
-          "price": "USD $180",
           "description": "The highest-level credential for Scrum Masters ready to mentor others, drive organizational transformation, and lead the profession forward.",
           "learnMore": "Learn More About ESM-A"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Foundation Level",
-          "price": "USD $180",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }
@@ -2016,7 +2005,6 @@
       "fullName": "Endorsed Scrum Master Authority",
       "trackName": "Scrum Master",
       "level": "Authority Level",
-      "price": "USD $185",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -2093,14 +2081,12 @@
         "esmP": {
           "fullName": "Endorsed Scrum Master Practitioner",
           "level": "Practitioner Level",
-          "price": "USD $150",
           "description": "Elevate your Scrum Master skills from theory to practice and prove you can lead real Agile teams to measurable success.",
           "learnMore": "Learn More About ESM-P"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Foundation Level",
-          "price": "USD $180",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }
@@ -2110,7 +2096,6 @@
       "fullName": "Endorsed Product Owner",
       "trackName": "Product Owner",
       "level": "Foundation Level",
-      "price": "USD $130",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -2187,14 +2172,12 @@
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
-          "price": "USD $130",
           "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
           "learnMore": "Learn More About ESM"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Authority Level",
-          "price": "USD $175",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }
@@ -2204,7 +2187,6 @@
       "fullName": "Endorsed Product Owner Practitioner",
       "trackName": "Product Owner",
       "level": "Practitioner Level",
-      "price": "USD $150",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -2280,14 +2262,12 @@
         "epo": {
           "fullName": "Endorsed Product Owner",
           "level": "Foundation Level",
-          "price": "USD $180",
           "description": "Start your journey toward building products people love with a foundation credential.",
           "learnMore": "Learn More About EPO"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Foundation Level",
-          "price": "USD $180",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques for Scrum teams.",
           "learnMore": "Learn More About ESF"
         }
@@ -2297,7 +2277,6 @@
       "fullName": "Endorsed Scrum Facilitator",
       "trackName": "Scrum Facilitator",
       "level": "Authority Level",
-      "price": "USD $175",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -2374,14 +2353,12 @@
         "esm": {
           "fullName": "Endorsed Scrum Master",
           "level": "Foundation Level",
-          "price": "USD $130",
           "description": "Launch your Agile career with a globally recognized foundation credential that opens doors to high-demand Scrum Master roles worldwide.",
           "learnMore": "Learn More About ESM"
         },
         "epo": {
           "fullName": "Endorsed Product Owner",
           "level": "Foundation Level",
-          "price": "USD $130",
           "description": "Master product vision, backlog management, and stakeholder collaboration. A valuable complement to Scrum Master skills for professionals who want to understand the full Scrum team dynamic.",
           "learnMore": "Learn More About EPO"
         }
@@ -2391,7 +2368,6 @@
       "fullName": "Endorsed Product Owner Authority",
       "trackName": "Product Owner",
       "level": "Authority Level",
-      "price": "USD $275",
       "hero": {
         "back": "Go back to certifications",
         "breadcrumb": {
@@ -2468,14 +2444,12 @@
         "epoP": {
           "fullName": "Endorsed Product Owner Practitioner",
           "level": "Practitioner Level",
-          "price": "USD $150",
           "description": "Elevate your Product Owner skills from foundation to advanced and prove you can drive product success in complex Scrum environments.",
           "learnMore": "Learn More About EPO-P"
         },
         "esf": {
           "fullName": "Endorsed Scrum Facilitator",
           "level": "Authority Level",
-          "price": "USD $175",
           "description": "Specialize in workshop design, group dynamics, and advanced facilitation techniques.",
           "learnMore": "Learn More About ESF"
         }
