@@ -19,6 +19,13 @@ export interface DropdownOption {
   disabled?: boolean;
 }
 
+function forSearch(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .toLowerCase();
+}
+
 @Component({
   selector: 'ios-dropdown',
   imports: [],
@@ -156,9 +163,9 @@ export class Dropdown {
   readonly listboxId = computed(() => `${this.id()}-listbox`);
 
   readonly filteredOptions = computed(() => {
-    const search = this.searchQuery().trim().toLowerCase();
+    const search = forSearch(this.searchQuery().trim());
     if (!search) return this.options();
-    return this.options().filter((o) => o.label.toLowerCase().includes(search));
+    return this.options().filter((o) => forSearch(o.label).startsWith(search));
   });
 
   readonly selectedLabel = computed(() => {
