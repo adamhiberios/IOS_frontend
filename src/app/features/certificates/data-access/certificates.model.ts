@@ -212,21 +212,3 @@ export interface MockTestStats {
   /** Total time spent in minutes across all attempts. */
   readonly totalTimeMinutes: number;
 }
-
-/**
- * Settings chosen in the pre-exam dialog before starting a mock test.
- * Figma: node 13116-52954 (settings dialog).
- *
- * NOTE: the real `POST /mock/start` takes only a `certId` — the backend
- * samples its own question count and duration; there is no server-side
- * knob for either. `questionCount`/`timeMinutes` are collected here but not
- * sent anywhere; the dialog still gates the "Start" click. See the fix note
- * in `cert-detail.page.ts` (`onStartTest`) for what actually launches the
- * real attempt.
- */
-export interface MockTestSettings {
-  /** Time limit in minutes; null = no time limit. */
-  readonly timeMinutes: number | null;
-  /** Number of questions drawn from the bank. */
-  readonly questionCount: number;
-}

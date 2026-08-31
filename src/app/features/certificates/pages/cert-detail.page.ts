@@ -18,7 +18,6 @@ import type {
   LearningMaterial,
   MaterialStatus,
   MockTestAttempt,
-  MockTestSettings,
   MockTestStats,
   MockTestStatus,
 } from '../data-access/certificates.model';
@@ -332,7 +331,7 @@ import { MockStore } from '../data-access/mock.store';
                     [cert]="card"
                     [stats]="realMockStats()"
                     [history]="realMockHistory()"
-                    (startTest)="onStartTest($event)"
+                    (startTest)="onStartTest()"
                     (viewAttempt)="onViewAttempt($event)"
                     class="flex flex-col gap-6"
                   />
@@ -580,16 +579,13 @@ export class CertDetailPage implements OnInit {
    * Navigate to the mock test runner when the user clicks "Start" in the
    * settings dialog.
    *
-   * Fix: this used to pass `{ count, time }` query params and no `certId`.
-   * The real runner (`mock-test.page.ts`) only ever reads `?certId=` to start
-   * a fresh attempt or `?attemptId=` to resume one — it has no `count`/`time`
-   * params to read, because `POST /mock/start` doesn't accept them (the
-   * backend samples its own question set and duration). Without `certId` the
-   * runner never called `store.start()` and sat on "no active attempt"
-   * forever, so the button silently did nothing. `settings` is still threaded
-   * through in case the backend grows real knobs for it later.
+   * A mock exam mirrors its Final Exam's duration and question count, and the
+   * backend samples both from the program's own bank, so there is nothing for
+   * the candidate to configure (IDD-342). The runner reads `?certId=` to start
+   * a fresh attempt or `?attemptId=` to resume one; `POST /mock/start` accepts
+   * only a certId.
    */
-  protected onStartTest(_settings: MockTestSettings): void {
+  protected onStartTest(): void {
     const certId = this.enrolled()?.certId;
     if (!certId) return;
     void this.router.navigate(['/dashboard/certificates', this.certCode, 'mock-test'], {
