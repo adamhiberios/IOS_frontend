@@ -583,8 +583,8 @@
   "dashboard": {
     "nav": {
       "overview": "نظرة عامة",
-      "myCertificates": "شهاداتي",
-      "myCredentials": "شهاداتي المعتمدة",
+      "myCertificates": "تعلّمي واختباراتي",
+      "myCredentials": "شهاداتي",
       "profile": "الملف الشخصي",
       "settings": "الإعدادات",
       "dashboardLabel": "معهد سكروم",
@@ -597,10 +597,10 @@
       "userMenuLabel": "قائمة المستخدم",
       "openUserMenu": "فتح قائمة المستخدم",
       "dashboard": "لوحة التحكم",
-      "certificates": "الشهادات",
-      "credentials": "شهاداتي المعتمدة",
+      "certificates": "تعلّمي واختباراتي",
+      "credentials": "شهاداتي",
       "insights": "الإحصاءات",
-      "log": "السجل",
+      "log": "نظرة عامة",
       "profile": "الملف الشخصي",
       "settings": "الإعدادات",
       "logout": "تسجيل الخروج"
@@ -3137,7 +3137,7 @@
     "linkedin": "المتابعة عبر LinkedIn"
   },
   "credentials": {
-    "title": "شهاداتي المعتمدة",
+    "title": "شهاداتي",
     "subtitle": "الشهادات التي حصلت عليها في معهد سكرم.",
     "backToDashboard": "العودة إلى لوحة التحكم",
     "breadcrumb": {

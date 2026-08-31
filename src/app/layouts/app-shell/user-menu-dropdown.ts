@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { LucideChevronRight } from '@lucide/angular';
 
 import { LanguageService, type AppLocale } from '@core/i18n';
-import { IosIcon, provideIcons } from '@ui';
 
 interface MenuItem {
   readonly labelKey: string;
@@ -27,21 +25,21 @@ const MENU_ITEMS: readonly MenuItem[] = [
  * │   Adam Adam                │
  * │   adam@example.com         │
  * ├────────────────────────────┤
- * │ Dashboard               >  │
- * │ Certificates            >  │
- * │ Log                     >  │
- * │ Profile                 >  │
- * │ Settings                >  │
+ * │ Dashboard                  │
+ * │ My Learning & Exams        │
+ * │ My Certificates            │
+ * │ Overview                   │
+ * │ Profile                    │
+ * │ Settings                   │
  * ├────────────────────────────┤
- * │  Logout                 >  │  (red, light red bg)
+ * │  Log Out                   │  (red, light red bg)
  * └────────────────────────────┘
  *
  * Positioned absolutely via the parent; parent listens for `closeMenu` output.
  */
 @Component({
   selector: 'ios-user-menu-dropdown',
-  imports: [RouterLink, IosIcon],
-  providers: [provideIcons(LucideChevronRight)],
+  imports: [RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -72,11 +70,10 @@ const MENU_ITEMS: readonly MenuItem[] = [
             <a
               [routerLink]="item.route"
               role="menuitem"
-              class="flex items-center justify-between px-5 py-3 text-sm text-ios-brand-dark hover:bg-ios-surface-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ios-brand-primary/50"
+              class="flex items-center px-5 py-3 text-sm text-ios-brand-dark hover:bg-ios-surface-muted transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ios-brand-primary/50"
               (click)="closeMenu.emit()"
             >
               <span>{{ lang.t(item.labelKey) }}</span>
-              <ios-icon name="chevron-right" class="w-4 h-4 text-ios-fg-7" aria-hidden="true" />
             </a>
           </li>
         }
@@ -115,11 +112,10 @@ const MENU_ITEMS: readonly MenuItem[] = [
         <button
           type="button"
           role="menuitem"
-          class="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-ios-brand-primary-soft text-ios-brand-primary font-medium text-sm hover:bg-ios-brand-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+          class="flex items-center w-full px-4 py-3 rounded-xl bg-ios-brand-primary-soft text-ios-brand-primary font-medium text-sm hover:bg-ios-brand-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
           (click)="logout.emit()"
         >
           <span>{{ lang.t('dashboard.menu.logout') }}</span>
-          <ios-icon name="chevron-right" class="w-4 h-4" aria-hidden="true" />
         </button>
       </div>
     </div>

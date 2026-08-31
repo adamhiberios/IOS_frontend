@@ -583,8 +583,8 @@
   "dashboard": {
     "nav": {
       "overview": "Aperçu",
-      "myCertificates": "Mes certificats",
-      "myCredentials": "Mes accréditations",
+      "myCertificates": "Mes formations et examens",
+      "myCredentials": "Mes certificats",
       "profile": "Profil",
       "settings": "Paramètres",
       "dashboardLabel": "Institut de Scrum",
@@ -597,13 +597,13 @@
       "userMenuLabel": "Menu utilisateur",
       "openUserMenu": "Ouvrir le menu utilisateur",
       "dashboard": "Tableau de bord",
-      "certificates": "Certificats",
-      "credentials": "Mes accréditations",
+      "certificates": "Mes formations et examens",
+      "credentials": "Mes certificats",
       "insights": "Analyses",
-      "log": "Journal",
+      "log": "Aperçu",
       "profile": "Profil",
       "settings": "Paramètres",
-      "logout": "Déconnexion"
+      "logout": "Se déconnecter"
     },
     "breadcrumb": {
       "dashboard": "Tableau de bord",
@@ -3137,7 +3137,7 @@
     "closeAriaLabel": "Fermer la boîte de dialogue"
   },
   "credentials": {
-    "title": "Mes accréditations",
+    "title": "Mes certificats",
     "subtitle": "Les certificats que vous avez obtenus à l'Institute of Scrum.",
     "backToDashboard": "Retour au tableau de bord",
     "breadcrumb": {

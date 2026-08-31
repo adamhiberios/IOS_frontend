@@ -583,8 +583,8 @@
   "dashboard": {
     "nav": {
       "overview": "Overview",
-      "myCertificates": "My certificates",
-      "myCredentials": "My credentials",
+      "myCertificates": "My Learning & Exams",
+      "myCredentials": "My Certificates",
       "profile": "Profile",
       "settings": "Settings",
       "dashboardLabel": "Institute of Scrum",
@@ -597,13 +597,13 @@
       "userMenuLabel": "User menu",
       "openUserMenu": "Open user menu",
       "dashboard": "Dashboard",
-      "certificates": "Certificates",
-      "credentials": "My credentials",
+      "certificates": "My Learning & Exams",
+      "credentials": "My Certificates",
       "insights": "Insights",
-      "log": "Log",
+      "log": "Overview",
       "profile": "Profile",
       "settings": "Settings",
-      "logout": "Logout"
+      "logout": "Log Out"
     },
     "breadcrumb": {
       "dashboard": "Dashboard",
@@ -3125,7 +3125,7 @@
     }
   },
   "credentials": {
-    "title": "My credentials",
+    "title": "My Certificates",
     "subtitle": "Certificates you've earned at the Institute of Scrum.",
     "backToDashboard": "Back to dashboard",
     "breadcrumb": {
