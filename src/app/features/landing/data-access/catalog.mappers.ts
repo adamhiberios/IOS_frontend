@@ -66,6 +66,7 @@ export function toPublicCertificate(dto: CatalogItemDto): PublicCertificate {
     fallbackUsed: dto.fallbackUsed,
     track: dto.track ?? null,
     level: dto.level ?? null,
+    durationHours: dto.durationHours ?? null,
     badgeImageUrl: dto.badgeImageUrl ?? null,
   };
 }

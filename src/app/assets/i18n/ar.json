@@ -1676,7 +1676,8 @@
       "practitionerLevel": "ممارس",
       "authorityLevel": "سلطة",
       "no": "لا",
-      "feeUnavailable": "—"
+      "feeUnavailable": "—",
+      "durationHours": "{count} ساعة"
     },
     "faq": {
       "badge": "الأسئلة الشائعة",

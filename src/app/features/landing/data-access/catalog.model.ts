@@ -25,6 +25,8 @@ export interface PublicCertificate {
   readonly track: string | null;
   /** Backend tier for this certificate, when set. */
   readonly level: 'foundation' | 'practitioner' | 'authority' | null;
+  /** Study hours as configured in the admin catalogue; null when unset. */
+  readonly durationHours: number | null;
   /** Certificate badge image URL, when the backend has one configured. */
   readonly badgeImageUrl: string | null;
 }

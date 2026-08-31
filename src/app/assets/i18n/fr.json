@@ -1676,7 +1676,8 @@
       "practitionerLevel": "Praticien",
       "authorityLevel": "Autorité",
       "no": "Non",
-      "feeUnavailable": "—"
+      "feeUnavailable": "—",
+      "durationHours": "{count} h"
     },
     "faq": {
       "badge": "FAQ",

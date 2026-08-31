@@ -531,12 +531,12 @@ interface CertDef {
                     {{ cert.levelLabel }}
                   </span>
                 </div>
-                <!-- Duration -->
+                <!-- Duration — admin-configured study hours (IDD-281) -->
                 <div
                   class="h-[48px] flex items-center justify-center px-2 border-b border-ios-border-light
                           font-heading text-[13px] text-ios-brand-muted"
                 >
-                  16 hrs
+                  {{ cert.duration }}
                 </div>
                 <!-- Fee — backend price, locale-formatted -->
                 <div
@@ -836,6 +836,15 @@ export class AllCertificationsPage {
         fee: api
           ? formatPrice(api.price, api.currency, locale)
           : this.lang.t('allCertifications.comparison.feeUnavailable'),
+        // Was a hardcoded "16 hrs" for every certificate, so the column never
+        // reflected what an admin had configured (IDD-281). `durationHours` was
+        // already on the wire and declared in the DTO — it just was not mapped.
+        duration:
+          api?.durationHours != null
+            ? this.lang.t('allCertifications.comparison.durationHours', {
+                count: api.durationHours,
+              })
+            : this.lang.t('allCertifications.comparison.feeUnavailable'),
       };
     });
   });
