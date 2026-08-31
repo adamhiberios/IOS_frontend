@@ -147,7 +147,7 @@ import { CertChapterNav, type CertNavItem } from '../components/cert-chapter-nav
               routerLink="/assessments/verify"
               class="inline-flex items-center justify-center h-11 px-4 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
             >
-              {{ lang.t('dashboard.certs.startFinalTest') }}
+              {{ lang.t('dashboard.certs.startFinalExam') }}
             </a>
           </div>
 

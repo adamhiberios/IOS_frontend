@@ -627,8 +627,7 @@
       "earned": "Earned",
       "notAttempted": "Not attempted",
       "badgeAlt": "{code} badge",
-      "startFinalTest": "Start Final Test",
-      "startTestExam": "Start test exam",
+      "startFinalExam": "Start Final Exam",
       "overallCompletion": "Overall Completion",
       "averageMockScore": "Average Mock Score",
       "timeSpent": "Time Spent",
@@ -644,7 +643,7 @@
       "questions": "Questions",
       "sessionChapters": "Session chapters",
       "tests": "{count} tests",
-      "mockTestAttemptLabel": "mock test {number}",
+      "mockTestAttemptLabel": "mock exam {number}",
       "hoursAbbr": "{count}h",
       "minutesAbbr": "{count}m",
       "materialOpen": "Open",
@@ -677,9 +676,9 @@
       "agileOverview": "Agile Methodologies Overview",
       "pagesCount": "{count} pages",
       "ctaStart": "Start learning",
-      "readyToPass": "We think you are ready to pass Test! ({code})",
+      "readyToPass": "We think you are ready to pass the Final Exam! ({code})",
       "amazingResults": "You achieved amazing results in the mock exam, and reviewed all the attached files.",
-      "ctaFinalTest": "Start Final Test",
+      "ctaFinalTest": "Start Final Exam",
       "ctaStartExam": "Start Exam",
       "continueHeading": "Pick up where you left off ({code})",
       "startHeading": "Start your {code} course",
@@ -687,7 +686,7 @@
       "ctaContinue": "Continue learning"
     },
     "charts": {
-      "mockTestScores": "Mock test scores",
+      "mockTestScores": "Mock Exam Scores",
       "thisYear": "This year",
       "lastYear": "Last year",
       "thisWeek": "This Week",
@@ -695,7 +694,7 @@
       "score": "Score",
       "noData": "No data",
       "filterLabel": "Filter: {label}",
-      "totalMockTests": "Total Mock Tests Taken",
+      "totalMockTests": "Total Mock Exams Taken",
       "passedExams": "Passed Exams",
       "failedExams": "Fail Exams"
     },
@@ -717,16 +716,15 @@
       "resultLabel": "Result:",
       "trueLabel": "True",
       "falseLabel": "False",
-      "historyOfMockTest": "History of mock test",
+      "historyOfMockTest": "History of Mock Exam",
       "examAttempts": "Exam attempts",
       "bestScore": "Best Score",
       "avgScore": "Avg Score",
       "timeSpent": "Time Spent",
       "failed": "Failed",
-      "startFinalTestCta": "Start final test",
       "readyCtaHeading1": "I guess you are ready! let's start",
-      "readyCtaHeading2": "Final test?",
-      "noResultsFound": "No mock test results found for this certificate.",
+      "readyCtaHeading2": "Final Exam?",
+      "noResultsFound": "No mock exam results found for this certificate.",
       "noResultsAction": "Complete a mock test to see your results here, or",
       "startNewMockTest": "start a new mock test",
       "filterLabel": "Filter:",
@@ -754,7 +752,7 @@
       "subtitle": "Empowering professionals and teams to build practical Scrum capabilities, strengthen collaboration, and deliver meaningful value in today’s evolving workplace.",
       "imageAlt": "Professional preparing for certification exam",
       "paragraph1": "Institute of Scrum is an independent training provider based in Ontario, Canada, specializing in Agile and Scrum training and certification. Our programs are delivered entirely online and structured to accommodate the learner's own pace.",
-      "paragraph2": "Our organization is founded on many years of professional experience in Agile and Scrum across North America. This experience shapes every aspect of our programs, from the structure of our learning tracks to the design of our practice and final tests. The outcome is training that is practical, current, and fully aligned with the way Scrum is applied in professional environments today.",
+      "paragraph2": "Our organization is founded on many years of professional experience in Agile and Scrum across North America. This experience shapes every aspect of our programs, from the structure of our learning tracks to the design of our practice and final exams. The outcome is training that is practical, current, and fully aligned with the way Scrum is applied in professional environments today.",
       "titleHighlight": "Institute of Scrum"
     },
     "mission": {
@@ -763,7 +761,7 @@
       "iconAlt": "Flag icon representing our mission",
       "body1": "Our mission is to help professionals learn Scrum correctly, reinforce that learning through realistic practice, and earn a certification that reflects genuine competence.",
       "body2": "To fulfill this mission, we are committed to:",
-      "body3": "Delivering clear and practical training materials designed for a global audience. Maintaining fair and transparent pricing, so that cost is never a barrier to professional growth. Designing tests that assess true understanding of Scrum, rather than memorization. Offering every learner a complete package — training, practice, final test, and digital certificate — within a single, straightforward subscription."
+      "body3": "Delivering clear and practical training materials designed for a global audience. Maintaining fair and transparent pricing, so that cost is never a barrier to professional growth. Designing tests that assess true understanding of Scrum, rather than memorization. Offering every learner a complete package — training, practice, final exam, and digital certificate — within a single, straightforward subscription."
     },
     "vision": {
       "title": "Our Vision",
@@ -1262,7 +1260,7 @@
         "gaps": "Identifies knowledge gaps before test day",
         "time": "Improves time management under pressure",
         "simulate": "Simulates the real test environment accurately",
-        "confidence": "Builds confidence before the final test",
+        "confidence": "Builds confidence before the final exam",
         "progress": "Tracks your progress with detailed performance reports"
       }
     },
@@ -1365,11 +1363,11 @@
       "bestScore": "Best score"
     },
     "examHistory": {
-      "title": "Real exam results",
+      "title": "Final Exam Results",
       "loading": "Loading your exam results…",
       "error": "We couldn't load your exam results. Please try again.",
       "retry": "Try again",
-      "empty": "You haven't taken any real exams yet.",
+      "empty": "You haven't taken any final exams yet.",
       "exam": "Exam",
       "score": "Score",
       "result": "Result",
@@ -2677,8 +2675,8 @@
   "mock": {
     "reveal": "Reveal answer",
     "submitting": "Submitting…",
-    "startError": "The mock test couldn't be started. Please try again.",
-    "noAttempt": "No mock test in progress. Start one from your courses.",
+    "startError": "The mock exam couldn't be started. Please try again.",
+    "noAttempt": "No mock exam in progress. Start one from your courses.",
     "goToCourses": "Go to my courses",
     "extensionsLeft": "{count} time extensions left",
     "readyHeading": "You're ready for the final exam!",
@@ -2726,12 +2724,12 @@
   },
   "assessments": {
     "result": {
-      "breadcrumbParent": "Final test",
+      "breadcrumbParent": "Final Exam",
       "breadcrumbCurrent": "Final exam",
-      "statusBadge": "Mock test result",
+      "statusBadge": "Final Exam Result",
       "congratsHeading": "Congrats 🎉 , you just Pass",
       "failHeading": "You didn't pass the",
-      "finalTestLabel": "Final test",
+      "finalTestLabel": "Final Exam",
       "certName": "Project Management Core Certificate",
       "shareCertOn": "Share Certificate on:",
       "shareLinkedin": "Share on Linkedin",

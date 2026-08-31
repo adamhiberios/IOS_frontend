@@ -43,9 +43,11 @@ import { MockStore } from '../data-access/mock.store';
                 role="list"
               >
                 <li>
-                  <a routerLink="/dashboard/certificates" class="hover:text-ios-fg-10 transition-colors">{{
-                    lang.t('courses.index.title')
-                  }}</a>
+                  <a
+                    routerLink="/dashboard/certificates"
+                    class="hover:text-ios-fg-10 transition-colors"
+                    >{{ lang.t('courses.index.title') }}</a
+                  >
                 </li>
                 <li aria-hidden="true">/</li>
                 <li>
@@ -209,7 +211,7 @@ import { MockStore } from '../data-access/mock.store';
                   routerLink="/assessments/verify"
                   class="inline-flex items-center gap-3 h-14 px-6 rounded-xl text-[18px] font-semibold leading-[1.4] text-ios-fg bg-white hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
                 >
-                  {{ lang.t('dashboard.examRunner.startFinalTestCta') }}
+                  {{ lang.t('dashboard.certs.startFinalExam') }}
                   <ios-icon
                     name="arrow-right"
                     class="size-6 shrink-0 rtl:rotate-180"

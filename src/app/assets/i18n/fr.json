@@ -627,8 +627,7 @@
       "earned": "Obtenu",
       "notAttempted": "Non tenté",
       "badgeAlt": "Badge {code}",
-      "startFinalTest": "Commencer l'examen final",
-      "startTestExam": "Commencer l'examen de certification",
+      "startFinalExam": "Commencer l'examen final",
       "overallCompletion": "Achèvement global",
       "averageMockScore": "Score moyen",
       "timeSpent": "Temps passé",
@@ -644,7 +643,7 @@
       "questions": "Questions",
       "sessionChapters": "Chapitres de la session",
       "tests": "{count} tests",
-      "mockTestAttemptLabel": "test blanc {number}",
+      "mockTestAttemptLabel": "examen blanc {number}",
       "hoursAbbr": "{count}h",
       "minutesAbbr": "{count}m",
       "materialOpen": "Ouvrir",
@@ -687,7 +686,7 @@
       "ctaContinue": "Continuer l'apprentissage"
     },
     "charts": {
-      "mockTestScores": "Scores des tests blancs",
+      "mockTestScores": "Scores des examens blancs",
       "thisYear": "Cette année",
       "lastYear": "L'année dernière",
       "thisWeek": "Cette semaine",
@@ -695,7 +694,7 @@
       "score": "Score",
       "noData": "Aucune donnée",
       "filterLabel": "Filtrer : {label}",
-      "totalMockTests": "Total des tests blancs",
+      "totalMockTests": "Total des examens blancs",
       "passedExams": "Tests réussis",
       "failedExams": "Tests échoués"
     },
@@ -723,7 +722,6 @@
       "avgScore": "Score moyen",
       "timeSpent": "Temps passé",
       "failed": "Échoué",
-      "startFinalTestCta": "Commencer l'examen final",
       "readyCtaHeading1": "Vous êtes prêt ! commençons le",
       "readyCtaHeading2": "Examen final ?",
       "noResultsFound": "Aucun résultat d'examen blanc trouvé pour ce certificat.",
@@ -763,7 +761,7 @@
       "iconAlt": "Icône de drapeau représentant notre mission",
       "body1": "Notre mission est d'aider les professionnels à apprendre Scrum correctement, à renforcer cet apprentissage par une pratique réaliste et à obtenir une certification qui reflète une compétence authentique.",
       "body2": "Pour accomplir cette mission, nous nous engageons à :",
-      "body3": "Fournir des supports de formation clairs et pratiques conçus pour un public mondial. Maintenir des prix justes et transparents, afin que le coût ne soit jamais un obstacle au développement professionnel. Concevoir des tests qui évaluent la véritable compréhension de Scrum, plutôt que la mémorisation. Offrir à chaque apprenant un ensemble complet — formation, pratique, test final et certificat numérique — dans un abonnement unique et simple."
+      "body3": "Fournir des supports de formation clairs et pratiques conçus pour un public mondial. Maintenir des prix justes et transparents, afin que le coût ne soit jamais un obstacle au développement professionnel. Concevoir des tests qui évaluent la véritable compréhension de Scrum, plutôt que la mémorisation. Offrir à chaque apprenant un ensemble complet — formation, pratique, examen final et certificat numérique — dans un abonnement unique et simple."
     },
     "vision": {
       "title": "Notre Vision",
@@ -1365,11 +1363,11 @@
       "bestScore": "Meilleur score"
     },
     "examHistory": {
-      "title": "Résultats des examens réels",
+      "title": "Résultats des examens finaux",
       "loading": "Chargement de vos résultats d'examen…",
       "error": "Impossible de charger vos résultats d'examen. Veuillez réessayer.",
       "retry": "Réessayer",
-      "empty": "Vous n'avez encore passé aucun examen réel.",
+      "empty": "Vous n'avez encore passé aucun examen final.",
       "exam": "Examen",
       "score": "Score",
       "result": "Résultat",
@@ -2677,8 +2675,8 @@
   "mock": {
     "reveal": "Révéler la réponse",
     "submitting": "Envoi…",
-    "startError": "Impossible de démarrer le test blanc. Veuillez réessayer.",
-    "noAttempt": "Aucun test blanc en cours. Démarrez-en un depuis vos cours.",
+    "startError": "Impossible de démarrer l'examen blanc. Veuillez réessayer.",
+    "noAttempt": "Aucun examen blanc en cours. Démarrez-en un depuis vos cours.",
     "goToCourses": "Aller à mes cours",
     "extensionsLeft": "{count} prolongations de temps restantes",
     "readyHeading": "Vous êtes prêt pour l'examen final !",
@@ -2728,7 +2726,7 @@
     "result": {
       "breadcrumbParent": "Examen final",
       "breadcrumbCurrent": "Examen final",
-      "statusBadge": "Résultat de l'examen blanc",
+      "statusBadge": "Résultat de l'examen final",
       "congratsHeading": "Félicitations 🎉 , vous venez de réussir",
       "failHeading": "Vous n'avez pas réussi",
       "finalTestLabel": "l'examen final",

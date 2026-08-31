@@ -120,7 +120,7 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
             [style.color]="buttonText()"
             (click)="startExam.emit()"
           >
-            {{ lang.t('dashboard.certs.startTestExam') }}
+            {{ lang.t('dashboard.certs.startFinalExam') }}
             <ios-icon
               name="arrow-right"
               class="w-5 h-5 shrink-0 rtl:rotate-180"
