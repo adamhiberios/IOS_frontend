@@ -100,7 +100,16 @@ import { MockStore } from '../data-access/mock.store';
                   <li>
                     <!-- The route's own code, not the fixture's: this used to
                          read detail()?.code and so showed "ESM-P" on /PSM. -->
-                    <span class="text-ios-fg-13 font-semibold">{{ certCode }}</span>
+                    <span>{{ certCode }}</span>
+                  </li>
+                  <li aria-hidden="true">/</li>
+                  <li>
+                    <!-- The section the side-nav is on. Without it the trail
+                         stopped at the cert code, so opening Mock Exam left the
+                         page with nothing naming where you were (IDD-340). -->
+                    <span class="text-ios-fg-13 font-semibold" aria-current="page">
+                      {{ lang.t(sectionLabelKey()) }}
+                    </span>
                   </li>
                 </ol>
               </nav>
@@ -570,6 +579,21 @@ export class CertDetailPage implements OnInit {
   protected onShowDetails(): void {
     // Navigate to cert list / trigger detail action — wired up when routing is finalised.
   }
+
+  /**
+   * i18n key for the active section, so the breadcrumb can name it. Same keys
+   * the side-nav renders, so the trail and the highlighted nav item always read
+   * identically.
+   */
+  private static readonly SECTION_LABEL_KEYS: Record<CertDetailSection, string> = {
+    overview: 'dashboard.breadcrumb.overview',
+    materials: 'dashboard.certs.learningMaterialsNav',
+    'mock-test': 'dashboard.certs.mockTestNav',
+  };
+
+  protected readonly sectionLabelKey = computed<string>(
+    () => CertDetailPage.SECTION_LABEL_KEYS[this.store.activeSection()],
+  );
 
   protected onSectionChange(section: CertDetailSection): void {
     this.store.setActiveSection(section);
