@@ -3131,8 +3131,8 @@
   },
   "logout": {
     "dialogTitle": "Êtes-vous sûr de vouloir vous déconnecter ?",
-    "dialogDescription": "Vous serez déconnecté de ce navigateur et pourrez vous reconnecter plus tard pour retrouver vos informations.",
-    "goBack": "Retour",
+    "dialogDescription": "Vous pouvez vous reconnecter à tout moment pour accéder à votre compte.",
+    "goBack": "Annuler",
     "confirm": "Se déconnecter",
     "closeAriaLabel": "Fermer la boîte de dialogue"
   },

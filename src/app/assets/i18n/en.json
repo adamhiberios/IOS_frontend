@@ -3175,10 +3175,10 @@
     }
   },
   "logout": {
-    "dialogTitle": "Are you sure to logout?",
-    "dialogDescription": "You will be logged out of this browser, and you can log back in later to get your information.",
-    "goBack": "Go back",
-    "confirm": "Logout",
+    "dialogTitle": "Are you sure you want to log out?",
+    "dialogDescription": "You can sign back in anytime to access your account.",
+    "goBack": "Cancel",
+    "confirm": "Log Out",
     "closeAriaLabel": "Close dialog"
   },
   "social": {

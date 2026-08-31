@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 
 /**
  * `ios-logout-dialog` — Confirmation modal for logging out.
@@ -9,11 +10,10 @@ import { ChangeDetectionStrategy, Component, inject, output } from '@angular/cor
  *  ┌──────────────────────────────────────────────────────────────┐
  *  │              [🚪 door icon — soft red circle]                │
  *  │                                                              │
- *  │                  Are you sure to logout?                    │
- *  │   You will be logged out of this browser, and you can log   │
- *  │   back in later to get your information.                    │
+ *  │             Are you sure you want to log out?               │
+ *  │      You can sign back in anytime to access your account.   │
  *  │                                                              │
- *  │                     [Go back]  [Logout]                     │
+ *  │                     [Cancel]  [Log Out]                     │
  *  └──────────────────────────────────────────────────────────────┘
  *
  * Accessibility:
@@ -26,6 +26,7 @@ import { LanguageService } from '@core/i18n';
 
 @Component({
   selector: 'ios-logout-dialog',
+  imports: [NgOptimizedImage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!-- ── Full-screen wrapper ─────────────────────────────────────────── -->
@@ -55,17 +56,19 @@ import { LanguageService } from '@core/i18n';
             aria-hidden="true"
           >
             <!--
-              Door icon — external Figma CDN asset, not an app image. NgOptimizedImage
-              would require a custom image loader for this host, so we keep <img>.
+              Shipped as a local asset rather than the Figma CDN URL this used to
+              point at: that host is outside the CSP allow-list (CLAUDE.md §8) and
+              the URL was a short-lived export link. Marked priority because the dialog
+              is only ever constructed at the moment it opens, so a lazy icon
+              would flash an empty circle at exactly the wrong time.
             -->
             <img
-              src="https://www.figma.com/api/mcp/asset/3c28513b-802d-4320-925b-3eef0758c943"
+              ngSrc="/assets/icons/logout.svg"
               alt=""
               class="w-20 h-20 object-contain"
-              loading="lazy"
-              decoding="async"
               width="80"
               height="80"
+              priority
             />
           </div>
 

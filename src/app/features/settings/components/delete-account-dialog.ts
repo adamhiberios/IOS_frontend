@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { toSignal } from '@angular/core/rxjs-interop';
 import { LanguageService } from '@core/i18n';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { NgOptimizedImage } from '@angular/common';
 
 /**
  * `ios-delete-account-dialog` — Confirmation modal for deleting an account.
@@ -39,7 +40,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 @Component({
   selector: 'ios-delete-account-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, NgOptimizedImage],
   template: `
     <!-- ── Full-screen wrapper ─────────────────────────────────────────── -->
     <div class="fixed inset-0 z-50">
@@ -68,17 +69,19 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
             aria-hidden="true"
           >
             <!--
-              Trash icon — external Figma CDN asset, not an app image. NgOptimizedImage
-              would require a custom image loader for this host, so we keep <img>.
+              Shipped as a local asset rather than the Figma CDN URL this used to
+              point at: that host is outside the CSP allow-list (CLAUDE.md §8) and
+              the URL was a short-lived export link. Marked priority because the
+              dialog is only ever constructed at the moment it opens, so a lazy
+              icon would flash an empty circle at exactly the wrong time.
             -->
             <img
-              src="https://www.figma.com/api/mcp/asset/10f932c1-7c56-4ba3-abf1-148e20165e9b"
+              ngSrc="/assets/icons/delete-account.svg"
               alt=""
               class="w-20 h-20 object-contain"
-              loading="lazy"
-              decoding="async"
               width="80"
               height="80"
+              priority
             />
           </div>
 
