@@ -28,7 +28,7 @@
  *   [heading1]="lang.t('scrumMaster.faq.headingPart1')"
  *   [heading2]="lang.t('scrumMaster.faq.headingPart2')"
  *   [description]="lang.t('scrumMaster.faq.description')"
- *   imageSrc="/assets/images/certification_1.png"
+ *   imageSrc="/assets/images/certification_1.svg"
  *   [imageAlt]="lang.t('scrumMaster.imageAlt.certificate')"
  * />
  * ```
@@ -131,7 +131,7 @@ export class CertFaqCta {
   readonly description = input<string>('');
 
   /** Path to the wide certificate image. */
-  readonly imageSrc = input<string>('/assets/images/certification_1.png');
+  readonly imageSrc = input<string>('/assets/images/certification_1.svg');
 
   /** Alt text for the wide image (pass an already-translated string). */
   readonly imageAlt = input<string>('');

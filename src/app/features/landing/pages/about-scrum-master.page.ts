@@ -133,7 +133,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
       headingId="sm-why-heading"
       [heading]="lang.t('scrumMaster.whyMatters.title')"
       [items]="whyItems()"
-      imageSrc="/assets/images/certification_1.png"
+      imageSrc="/assets/images/certification_1.svg"
       [imageAlt]="lang.t('scrumMaster.imageAlt.certificate')"
       [imageFirst]="true"
     />
@@ -146,7 +146,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
       headingId="sm-who-heading"
       [heading]="lang.t('scrumMaster.whoShouldLearn.title')"
       [items]="whoItems()"
-      imageSrc="/assets/images/certification_1.png"
+      imageSrc="/assets/images/certification_1.svg"
       [imageAlt]="lang.t('scrumMaster.imageAlt.certificate')"
       [imageFirst]="false"
     />
@@ -159,7 +159,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
       headingId="sm-career-heading"
       [heading]="lang.t('scrumMaster.careerOpportunities.title')"
       [items]="careerItems()"
-      imageSrc="/assets/images/certification_1.png"
+      imageSrc="/assets/images/certification_1.svg"
       [imageAlt]="lang.t('scrumMaster.imageAlt.certificate')"
       [imageFirst]="true"
     />
@@ -174,7 +174,7 @@ import { CertFaqCta } from '../components/cert-faq-cta';
       [heading1]="lang.t('scrumMaster.faq.headingPart1')"
       [heading2]="lang.t('scrumMaster.faq.headingPart2')"
       [description]="lang.t('scrumMaster.faq.description')"
-      imageSrc="/assets/images/certification_1.png"
+      imageSrc="/assets/images/certification_1.svg"
       [imageAlt]="lang.t('scrumMaster.imageAlt.certificate')"
     />
 

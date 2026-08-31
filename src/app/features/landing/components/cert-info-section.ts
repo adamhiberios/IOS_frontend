@@ -17,7 +17,7 @@
  *   headingId="sm-why-heading"
  *   [heading]="lang.t('scrumMaster.whyMatters.title')"
  *   [items]="whyItems()"
- *   imageSrc="/assets/images/certification_1.png"
+ *   imageSrc="/assets/images/certification_1.svg"
  *   [imageAlt]="lang.t('scrumMaster.imageAlt.certificate')"
  *   [imageFirst]="true"
  * />
@@ -106,8 +106,8 @@ export class CertInfoSection {
   /** Already-translated bullet strings passed to `ios-bullet-step-list`. */
   readonly items = input<readonly string[]>([]);
 
-  /** Absolute path to the certificate image, e.g. `/assets/images/certification_1.png`. */
-  readonly imageSrc = input<string>('/assets/images/certification_1.png');
+  /** Absolute path to the certificate image, e.g. `/assets/images/certification_1.svg`. */
+  readonly imageSrc = input<string>('/assets/images/certification_1.svg');
 
   /** Alt text for the image (pass an already-translated string). */
   readonly imageAlt = input<string>('');
