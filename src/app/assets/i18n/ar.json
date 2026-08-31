@@ -628,7 +628,6 @@
       "notAttempted": "لم يُحاول",
       "badgeAlt": "شارة {code}",
       "startFinalTest": "ابدأ الاختبار النهائي",
-      "startMockTest": "ابدأ الاختبار التجريبي",
       "startTestExam": "ابدأ اختبار الشهادة",
       "overallCompletion": "الإنجاز الكلي",
       "averageMockScore": "متوسط الدرجات",

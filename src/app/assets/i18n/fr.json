@@ -628,7 +628,6 @@
       "notAttempted": "Non tenté",
       "badgeAlt": "Badge {code}",
       "startFinalTest": "Commencer l'examen final",
-      "startMockTest": "Commencer l'examen blanc",
       "startTestExam": "Commencer l'examen de certification",
       "overallCompletion": "Achèvement global",
       "averageMockScore": "Score moyen",

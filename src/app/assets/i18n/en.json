@@ -628,7 +628,6 @@
       "notAttempted": "Not attempted",
       "badgeAlt": "{code} badge",
       "startFinalTest": "Start Final Test",
-      "startMockTest": "Start mock test",
       "startTestExam": "Start test exam",
       "overallCompletion": "Overall Completion",
       "averageMockScore": "Average Mock Score",
@@ -670,7 +669,7 @@
       "continueCta": "Continue learning",
       "noMockExamHeading": "No mock exam found",
       "noMockExamBody": "You have not previously performed any mock exam",
-      "startMockExamCta": "Start mock exam"
+      "startMockExamCta": "Start Mock Exam"
     },
     "learning": {
       "title": "Complete your learning",

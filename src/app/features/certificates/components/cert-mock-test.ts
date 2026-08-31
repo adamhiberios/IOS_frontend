@@ -93,7 +93,7 @@ import type {
         class="inline-flex items-center justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0"
         (click)="startTest.emit()"
       >
-        {{ lang.t('dashboard.certs.startMockTest') }}
+        {{ lang.t('dashboard.certs.startMockExamCta') }}
         <ios-icon
           name="arrow-right"
           class="w-[18px] h-[18px] shrink-0 rtl:rotate-180"
