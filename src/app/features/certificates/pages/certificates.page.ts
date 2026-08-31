@@ -90,7 +90,11 @@ import type { EnrolledCertHeader } from '../data-access/certificates.model';
           </div>
         } @else {
           @for (cert of enrolledCerts(); track cert.code) {
-            <ios-enrolled-cert-row [cert]="cert" (viewDetails)="onViewDetails($event)" />
+            <ios-enrolled-cert-row
+              [cert]="cert"
+              (viewDetails)="onViewDetails($event)"
+              (startExam)="onStartExam()"
+            />
           }
         }
       </main>
@@ -148,6 +152,14 @@ export class CertificatesPage implements OnInit {
 
   protected onViewDetails(code: string): void {
     void this.router.navigate(['/dashboard/certificates', code]);
+  }
+
+  /**
+   * Final exams are entered by access code, so this goes to the same verify
+   * page the other "start final exam" CTAs use (cert detail, cert session).
+   */
+  protected onStartExam(): void {
+    void this.router.navigate(['/assessments/verify']);
   }
 }
 

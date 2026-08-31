@@ -118,6 +118,7 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
             class="inline-flex items-center justify-center gap-2 h-11 rounded-xl text-[16px] font-semibold leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-[217px]"
             [style.background-color]="buttonBg()"
             [style.color]="buttonText()"
+            (click)="startExam.emit()"
           >
             {{ lang.t('dashboard.certs.startTestExam') }}
             <ios-icon
@@ -136,6 +137,17 @@ export class EnrolledCertRow {
   readonly cert = input.required<EnrolledCertHeader>();
 
   readonly viewDetails = output<string>();
+
+  /**
+   * Emitted when the user starts their final exam. The button was previously
+   * rendered with no click binding and no output at all, so it was inert —
+   * styled like a CTA but wired to nothing (IDD-324).
+   *
+   * Carries nothing: the exam is entered by access code on the verify page,
+   * which takes no parameters. The row does hold the certificate if a later
+   * flow needs it.
+   */
+  readonly startExam = output<void>();
 
   protected heroBg(): string {
     return FAMILY_HERO_BG[this.cert().family] ?? '#184865';
