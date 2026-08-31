@@ -85,11 +85,21 @@ const NAV_TABS: readonly NavTab[] = [
     <header class="bg-white w-full">
       <!-- ── Top strip: logo + icon actions ────────────────────────────── -->
       <div class="max-w-[1400px] mx-auto px-8 flex items-center justify-between h-16">
-        <!-- Logo -->
-        <a routerLink="/dashboard" [attr.aria-label]="lang.t('dashboard.nav.dashboardLabel')">
+        <!--
+          Logo is the Home button and points at the public landing page, not at
+          /dashboard. /dashboard is the Overview route, so linking there made the
+          logo navigate to the page you were already on while in Overview — which
+          read as "the logo isn't clickable" — and bounced you to Overview from
+          every other section (IDD-344). Router navigation, so the session is
+          untouched and the user stays signed in.
+
+          The image is decorative here: the link already carries the accessible
+          name, so alt="" avoids announcing it twice.
+        -->
+        <a routerLink="/" [attr.aria-label]="lang.t('dashboard.nav.logoAriaLabel')">
           <img
             ngSrc="assets/icons/logo_institute_of_scrum.png"
-            [alt]="lang.t('dashboard.nav.dashboardLabel')"
+            alt=""
             class="h-8 w-auto"
             width="120"
             height="32"
