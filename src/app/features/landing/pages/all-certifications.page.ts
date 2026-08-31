@@ -458,7 +458,7 @@ interface CertDef {
           aria-label="Certification comparison table"
         >
           <div
-            class="flex min-w-[680px] border border-ios-border-light rounded-[12px] overflow-clip"
+            class="flex w-max min-w-full border border-ios-border-light rounded-[12px] overflow-clip"
           >
             <!-- ── Feature labels column ───────────────────────── -->
             <div class="flex flex-col w-[150px] shrink-0">
