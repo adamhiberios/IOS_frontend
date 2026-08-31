@@ -1350,9 +1350,9 @@
     "enrolledPrograms": "Enrolled programs",
     "inProgressPrograms": "In-progress programs",
     "completedLessons": "Completed lessons",
-    "certificatesEarned": "Certificates earned",
+    "certificatesEarned": "My Certificates",
     "realExam": {
-      "title": "Real exam"
+      "title": "Final Exam"
     },
     "mockExam": {
       "title": "Mock exam"

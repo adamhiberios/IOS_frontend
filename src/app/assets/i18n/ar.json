@@ -1350,9 +1350,9 @@
     "enrolledPrograms": "البرامج المسجَّلة",
     "inProgressPrograms": "البرامج قيد التقدّم",
     "completedLessons": "الدروس المكتملة",
-    "certificatesEarned": "الشهادات المكتسبة",
+    "certificatesEarned": "شهاداتي",
     "realExam": {
-      "title": "الاختبار الرسمي"
+      "title": "الاختبار النهائي"
     },
     "mockExam": {
       "title": "الاختبار التجريبي"
