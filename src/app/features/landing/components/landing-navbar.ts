@@ -217,7 +217,11 @@ interface CertMenuGroup {
           <!-- About: a menu of links, not a destination of its own.
                Opens on hover (desktop mouse users); click still works for
                keyboard/touch users since mouseenter never fires for them. -->
-          <div class="relative" (mouseenter)="onAboutMouseEnter()" (mouseleave)="onAboutMouseLeave()">
+          <div
+            class="relative"
+            (mouseenter)="onAboutMouseEnter()"
+            (mouseleave)="onAboutMouseLeave()"
+          >
             <button
               type="button"
               (click)="toggleAbout($event)"
@@ -390,6 +394,26 @@ interface CertMenuGroup {
                   }
                 </div>
               }
+
+              <!-- Verify Certificate — the desktop mega-menu closes with this
+                   entry, but the mobile sheet stopped after the certificate
+                   groups, so it was unreachable on a phone (IDD-333). Same
+                   destination and label as desktop so the two stay in step. -->
+              <div class="border-t border-ios-border-light mx-4"></div>
+              <a
+                routerLink="/certifications"
+                (click)="closeMobileMenu()"
+                class="inline-flex items-center gap-2 w-full px-4 py-2 rounded-lg
+                       font-heading font-semibold text-[14px] text-ios-brand-primary
+                       hover:bg-ios-surface-strong transition-colors"
+              >
+                {{ lang.t('landing.nav.certMenu.verify') }}
+                <ios-icon
+                  name="arrow-up-right"
+                  class="w-4 h-4 shrink-0 rtl:rotate-180"
+                  aria-hidden="true"
+                />
+              </a>
             </div>
           }
           <!-- About expands in place rather than opening an overlay on top of
