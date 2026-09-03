@@ -1244,9 +1244,9 @@
     },
     "whatIs": {
       "badge": "About Mock Exam",
-      "heading1": "What is a ",
-      "heading2": "Mock test?",
-      "description": "A mock test is a practice test that mirrors the real certification test. It helps candidates understand the test format, question types, and time constraints in advance.",
+      "heading1": "What Is a ",
+      "heading2": "Mock Exam?",
+      "description": "A mock exam is a practice experience designed to reflect the format of the final certification exam. It helps candidates become familiar with the question types, exam structure, and time requirements before taking the final exam.",
       "passRate": "98% Pass Rate",
       "imageAlt": "Professional preparing for certification exam"
     },

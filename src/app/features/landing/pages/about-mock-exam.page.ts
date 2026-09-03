@@ -119,7 +119,7 @@ interface AnswerOption {
           <div class="flex flex-col gap-3 items-center w-full">
             <h2
               id="what-is-mock-heading"
-              class="font-heading font-extrabold text-[36px] leading-[1.2] text-ios-brand-dark"
+              class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-ios-brand-dark"
             >
               {{ lang.t('mockExam.whatIs.heading1')
               }}<span class="text-ios-brand-primary">{{ lang.t('mockExam.whatIs.heading2') }}</span>
@@ -187,11 +187,11 @@ interface AnswerOption {
     ═══════════════════════════════════════════════════════════ -->
     <section class="bg-white" aria-labelledby="why-mock-heading">
       <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
-        <div class="flex flex-col lg:flex-row gap-12 items-stretch">
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
           <!-- Left panel — dark red -->
           <div
             class="relative bg-ios-brand-primary-deep rounded-2xl overflow-hidden
-                   flex flex-col gap-5 p-8 flex-1 min-w-0"
+                   flex flex-col gap-5 p-6 md:p-8 flex-1 min-w-0"
           >
             <!-- Decorative circles -->
             <div
@@ -223,7 +223,7 @@ interface AnswerOption {
               </span>
               <h2
                 id="why-mock-heading"
-                class="font-heading font-extrabold text-[30px] leading-[1.2] text-white"
+                class="font-heading font-extrabold text-[24px] md:text-[30px] leading-[1.2] text-white"
               >
                 {{ lang.t('mockExam.why.heading1')
                 }}<span class="text-ios-brand-yellow-bright">{{
@@ -284,7 +284,7 @@ interface AnswerOption {
     ═══════════════════════════════════════════════════════════ -->
     <section class="bg-ios-surface-warm" aria-labelledby="how-it-works-heading">
       <div class="max-w-[1440px] mx-auto px-6 md:px-16 lg:px-[120px] py-[72px]">
-        <div class="flex flex-col lg:flex-row gap-12 items-stretch">
+        <div class="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch">
           <!-- Left — numbered steps -->
           <div class="flex flex-col gap-5 flex-1 min-w-0">
             <!-- Badge + heading + rule -->
@@ -299,7 +299,7 @@ interface AnswerOption {
               <div class="flex flex-col gap-3">
                 <h2
                   id="how-it-works-heading"
-                  class="font-heading font-extrabold text-[30px] leading-[1.2] text-ios-brand-dark"
+                  class="font-heading font-extrabold text-[24px] md:text-[30px] leading-[1.2] text-ios-brand-dark"
                 >
                   {{ lang.t('mockExam.howItWorks.heading1')
                   }}<span class="text-ios-brand-primary">{{
@@ -499,7 +499,7 @@ interface AnswerOption {
             <div class="flex flex-col gap-2">
               <h2
                 id="training-cta-heading"
-                class="font-heading font-extrabold text-[36px] leading-[1.2] text-ios-brand-dark"
+                class="font-heading font-extrabold text-[28px] md:text-[36px] leading-[1.2] text-ios-brand-dark"
               >
                 {{ lang.t('mockExam.training.heading1')
                 }}<span class="text-ios-brand-primary">{{
