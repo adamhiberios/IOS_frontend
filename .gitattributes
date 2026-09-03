@@ -1,0 +1,7 @@
+# PDFs are binary. Without this, a PDF whose bytes happen to contain no NUL in
+# the first 8k (an uncompressed one, for instance) is auto-detected as text and
+# gets CRLF line-ending conversion applied under core.autocrlf=true — which
+# rewrites bytes inside the file and invalidates its xref offsets, leaving a
+# PDF that no longer opens. Marking them binary disables both conversion and
+# textual diffing.
+*.pdf binary

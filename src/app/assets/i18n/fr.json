@@ -222,7 +222,7 @@
       "graduatesCount": "12 000+",
       "graduatesLabel": "Diplômés certifiés",
       "ctaPrimary": "Explorer les certifications",
-      "ctaSecondary": "Télécharger le guide gratuit",
+      "ctaSecondary": "Télécharger le guide Scrum",
       "sectionAriaLabel": "Section héros",
       "imageAlt": "Un professionnel obtenant sa certification Scrum"
     },
@@ -539,6 +539,33 @@
       "subtitle": "Une sélection de nos credentials les plus populaires — commencez votre parcours dès aujourd'hui.",
       "explore": "Découvrir",
       "viewAll": "Voir toutes les certifications"
+    }
+  },
+  "guide": {
+    "hero": {
+      "title": "Télécharger le guide Scrum",
+      "back": "Retour à l'accueil",
+      "breadcrumb": {
+        "home": "Accueil"
+      }
+    },
+    "badge": "Ressource gratuite",
+    "heading1": "Obtenez le ",
+    "heading2": "guide Scrum",
+    "description": "Indiquez-nous où l'envoyer et téléchargez le guide Scrum au format PDF — la base sur laquelle reposent toutes les certifications de l'Institute of Scrum.",
+    "privacyNote": "Nous utilisons vos coordonnées uniquement pour vous envoyer ce guide et les informations associées.",
+    "form": {
+      "name": "Nom complet",
+      "namePlaceholder": "Votre nom complet",
+      "nameError": "Veuillez saisir votre nom complet.",
+      "email": "Adresse e-mail",
+      "emailPlaceholder": "vous@exemple.com",
+      "emailError": "Veuillez saisir une adresse e-mail valide.",
+      "gateHint": "Saisissez votre nom et votre e-mail pour débloquer le téléchargement.",
+      "submit": "Télécharger le guide Scrum",
+      "sending": "Préparation du téléchargement…",
+      "success": "Votre téléchargement a commencé. Vérifiez votre dossier de téléchargements.",
+      "error": "Impossible de démarrer le téléchargement. Veuillez réessayer."
     }
   },
   "contact": {

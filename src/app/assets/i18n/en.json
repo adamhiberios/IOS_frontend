@@ -222,7 +222,7 @@
       "graduatesCount": "12,000+",
       "graduatesLabel": "Certified graduates",
       "ctaPrimary": "Explore Certifications",
-      "ctaSecondary": "Download Free Guide",
+      "ctaSecondary": "Download Scrum Guide",
       "sectionAriaLabel": "Hero",
       "imageAlt": "A professional earning their Scrum certification"
     },
@@ -539,6 +539,33 @@
       "subtitle": "A selection of our most popular endorsed credentials — start your path today.",
       "explore": "Explore",
       "viewAll": "View all certifications"
+    }
+  },
+  "guide": {
+    "hero": {
+      "title": "Download Scrum Guide",
+      "back": "Go back to home",
+      "breadcrumb": {
+        "home": "Home"
+      }
+    },
+    "badge": "Free Resource",
+    "heading1": "Get the ",
+    "heading2": "Scrum Guide",
+    "description": "Tell us where to send it and download the Scrum Guide as a PDF — the foundation every Institute of Scrum credential builds on.",
+    "privacyNote": "We use your details only to send you this guide and related updates.",
+    "form": {
+      "name": "Full name",
+      "namePlaceholder": "Your full name",
+      "nameError": "Please enter your full name.",
+      "email": "Email address",
+      "emailPlaceholder": "you@example.com",
+      "emailError": "Please enter a valid email address.",
+      "gateHint": "Enter your name and email to unlock the download.",
+      "submit": "Download Scrum Guide",
+      "sending": "Preparing your download…",
+      "success": "Your download has started. Check your downloads folder.",
+      "error": "We couldn't start your download. Please try again."
     }
   },
   "contact": {
