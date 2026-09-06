@@ -1267,7 +1267,7 @@
       "breadcrumb": {
         "home": "Home"
       },
-      "title": "About Mock test"
+      "title": "About Mock Exam"
     },
     "whatIs": {
       "badge": "About Mock Exam",
@@ -1280,13 +1280,13 @@
     "why": {
       "badge": "Benefits",
       "heading1": "Why Take a ",
-      "heading2": "Mock test?",
+      "heading2": "Mock Exam?",
       "formatNote": "Same format, timing, and number of questions as the final exam",
       "benefits": {
-        "anxiety": "Helps reduce test anxiety",
-        "gaps": "Identifies knowledge gaps before test day",
+        "anxiety": "Helps reduce exam anxiety",
+        "gaps": "Identifies knowledge gaps before exam day",
         "time": "Improves time management under pressure",
-        "simulate": "Simulates the real test environment accurately",
+        "simulate": "Simulates the real exam environment accurately",
         "confidence": "Builds confidence before the final exam",
         "progress": "Tracks your progress with detailed performance reports"
       }
@@ -1295,22 +1295,22 @@
       "badge": "How It Works",
       "heading1": "How Our Mock Exams ",
       "heading2": "Work",
-      "description": "Our mock exams are designed to reflect the actual certification test. Each test follows the same structure, timing, and level of difficulty to ensure a realistic experience.",
+      "description": "Our mock exams are designed to reflect the actual certification exam. Each exam follows the same structure, timing, and level of difficulty to ensure a realistic experience.",
       "steps": {
         "01": {
           "title": "Start the mock exam",
-          "body": "Select your certification and launch the timed practice test — structured exactly like the real thing."
+          "body": "Select your certification and launch the timed practice exam — structured exactly like the real thing."
         },
         "02": {
           "title": "Answer questions within the time limit",
-          "body": "Work through scenario-based questions under real test conditions, managing the countdown timer."
+          "body": "Work through scenario-based questions under real exam conditions, managing the countdown timer."
         },
         "03": {
           "title": "Review each question carefully",
-          "body": "Flag questions you're unsure about and revisit them before submitting — just like the real test."
+          "body": "Flag questions you're unsure about and revisit them before submitting — just like the real exam."
         },
         "04": {
-          "title": "Submit the test",
+          "title": "Submit the exam",
           "body": "When you're ready, submit your responses and receive your score instantly."
         },
         "05": {
@@ -1334,7 +1334,7 @@
     "training": {
       "heading1": "Training with ",
       "heading2": "Mock Exam",
-      "description": "Test your knowledge and get familiar with the test format before taking the real certification test.",
+      "description": "Test your knowledge and get familiar with the exam format before taking the real certification exam.",
       "cta": "Learn more"
     },
     "contact": {
