@@ -43,7 +43,8 @@ import { LucideDownload, LucideFileText, LucideShieldCheck } from '@lucide/angul
 
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
-import { IosIcon, ScrollToTop, provideIcons } from '@ui';
+import { Dropdown, IosIcon, ScrollToTop, provideIcons } from '@ui';
+import { countryName, countryOptions } from '@shared';
 
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
@@ -70,7 +71,15 @@ const PAGE_SLUG = 'guide';
 
 @Component({
   selector: 'ios-scrum-guide-page',
-  imports: [ReactiveFormsModule, LandingNavbar, LandingFooter, PageHero, IosIcon, ScrollToTop],
+  imports: [
+    ReactiveFormsModule,
+    LandingNavbar,
+    LandingFooter,
+    PageHero,
+    IosIcon,
+    ScrollToTop,
+    Dropdown,
+  ],
   providers: [provideIcons(LucideDownload, LucideFileText, LucideShieldCheck)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -186,23 +195,8 @@ const PAGE_SLUG = 'guide';
                     class="flex-1 bg-transparent font-body font-medium text-[16px]
                            text-ios-brand-dark placeholder:text-ios-brand-muted
                            focus:outline-none"
-                    [attr.aria-invalid]="
-                      guideForm.get('fullName')?.invalid && guideForm.get('fullName')?.touched
-                        ? 'true'
-                        : null
-                    "
-                    aria-describedby="guide-name-error"
                   />
                 </div>
-                @if (guideForm.get('fullName')?.invalid && guideForm.get('fullName')?.touched) {
-                  <p
-                    id="guide-name-error"
-                    class="text-ios-danger text-[13px] leading-[1.4] ps-1"
-                    aria-live="polite"
-                  >
-                    {{ lang.t('guide.form.nameError') }}
-                  </p>
-                }
               </div>
 
               <!-- Email -->
@@ -247,7 +241,22 @@ const PAGE_SLUG = 'guide';
                 }
               </div>
 
-              <!-- Download control — hidden until BOTH fields are satisfied
+              <!-- Country — optional. Searchable because the list runs to
+                   ~250 entries; the same shared, locale-sorted source the
+                   registration form uses. -->
+              <div class="flex flex-col gap-1">
+                <ios-dropdown
+                  id="guide-country"
+                  [label]="lang.t('guide.form.country')"
+                  [options]="countries()"
+                  [placeholder]="lang.t('guide.form.countryPlaceholder')"
+                  [searchable]="true"
+                  [value]="guideForm.controls.country.value"
+                  (valueChange)="guideForm.controls.country.setValue($event)"
+                />
+              </div>
+
+              <!-- Download control — hidden until the form is satisfied
                    (IDD-267 acceptance criterion). A polite live region
                    announces its arrival to screen-reader users, who would
                    otherwise get no signal that a new control appeared. -->
@@ -328,14 +337,21 @@ export class ScrumGuidePage {
   protected readonly errorMessage = signal<string | null>(null);
 
   protected readonly guideForm = this.fb.group({
-    fullName: this.fb.control('', [
-      (c) => Validators.required(c),
-      (c) => Validators.minLength(2)(c),
-    ]),
+    // Optional: a visitor may take the guide without naming themselves.
+    fullName: this.fb.control(''),
     email: this.fb.control('', [(c) => Validators.required(c), (c) => Validators.email(c)]),
+    // Optional. Holds the ISO code; the English name is what gets submitted.
+    country: this.fb.control(''),
     // Honeypot — real visitors never see or fill this (see template).
     company: this.fb.control(''),
   });
+
+  /**
+   * Countries for the dropdown, labelled in the active locale and sorted by
+   * that locale's collation. `countryOptions()` memoises per locale and hands
+   * back the same array instance, so this does not churn under OnPush.
+   */
+  protected readonly countries = computed(() => countryOptions(this.lang.locale()));
 
   /**
    * Form validity as a signal. `statusChanges` only fires on *subsequent*
@@ -347,9 +363,11 @@ export class ScrumGuidePage {
   });
 
   /**
-   * Gate for the download control: both name and email must be satisfied
-   * before it renders at all (IDD-267). Derived from {@link formStatus} so it
-   * tracks every edit; the honeypot has no validators and cannot affect it.
+   * Gate for the download control: it does not render until the form is valid
+   * (IDD-267). Email is the only validated field — name and country are
+   * optional — so in practice a valid email opens the gate. Derived from
+   * {@link formStatus} so it tracks every edit; the honeypot, name and country
+   * carry no validators and cannot affect it.
    */
   protected readonly canDownload = computed(() => this.formStatus() === 'VALID');
 
@@ -360,11 +378,15 @@ export class ScrumGuidePage {
     this.submitting.set(true);
     this.errorMessage.set(null);
 
-    const { fullName, email, company } = this.guideForm.getRawValue();
+    const { fullName, email, country, company } = this.guideForm.getRawValue();
     this.downloadApi
       .submit({
         email,
         fullName,
+        // Submit the English name ("Canada"), not the ISO code or the localised
+        // label: these rows are read by admins, and an Arabic visitor's lead
+        // should not arrive as كندا.
+        country: country ? countryName(country, 'en') : undefined,
         company,
         resourceSlug: RESOURCE_SLUG,
         pageSlug: PAGE_SLUG,
