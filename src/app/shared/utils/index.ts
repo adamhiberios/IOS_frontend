@@ -1,4 +1,5 @@
 export { assert, assertNever } from './assert';
+export { completeEmailValidator } from './complete-email.validator';
 export {
   COUNTRIES,
   countryFlag,

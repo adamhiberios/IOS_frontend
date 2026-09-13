@@ -10,8 +10,8 @@
  *
  * ## The gate
  * Per the ticket, the download control stays **hidden** until the visitor has
- * supplied both a name and a valid email; it appears only once both fields are
- * satisfied. That is `canDownload()` — a `computed()` over the form's status
+ * supplied a complete email address (`name@domain.tld`) — not merely one
+ * containing `@`. Name and country are optional. That is `canDownload()` — a `computed()` over the form's status
  * signal, so it re-evaluates on every keystroke without a manual subscription.
  *
  * ## Backend
@@ -44,7 +44,7 @@ import { LucideDownload, LucideFileText, LucideShieldCheck } from '@lucide/angul
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 import { Dropdown, IosIcon, ScrollToTop, provideIcons } from '@ui';
-import { countryName, countryOptions } from '@shared';
+import { completeEmailValidator, countryName, countryOptions } from '@shared';
 
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
@@ -339,7 +339,13 @@ export class ScrumGuidePage {
   protected readonly guideForm = this.fb.group({
     // Optional: a visitor may take the guide without naming themselves.
     fullName: this.fb.control(''),
-    email: this.fb.control('', [(c) => Validators.required(c), (c) => Validators.email(c)]),
+    // `completeEmailValidator` keeps the gate shut until the domain has a TLD —
+    // `Validators.email` alone accepts `user@x` (IDD-267 retest).
+    email: this.fb.control('', [
+      (c) => Validators.required(c),
+      (c) => Validators.email(c),
+      completeEmailValidator(),
+    ]),
     // Optional. Holds the ISO code; the English name is what gets submitted.
     country: this.fb.control(''),
     // Honeypot — real visitors never see or fill this (see template).
