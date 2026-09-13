@@ -26,7 +26,9 @@ import {
   type MockQuestionType,
   isMockQuestionType,
 } from '../data-access/mock.model';
+import { QuestionImportDialog } from '../components/question-import-dialog';
 import { AdminMockQuestionsStore } from '../data-access/mock.store';
+import { AdminQuestionImportStore } from '../data-access/question-import.store';
 
 /** One option row in the editor form. */
 type OptionGroup = FormGroup<{ optionText: FormControl<string> }>;
@@ -51,7 +53,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-mock-questions-page',
-  imports: [ReactiveFormsModule, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, IosInput, Select, Button, QuestionImportDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -63,9 +65,14 @@ const required: ValidatorFn = (control) => Validators.required(control);
           <p class="text-sm text-gray-500 mt-1">{{ lang.t('admin.mock.subtitle') }}</p>
         </div>
         @if (canManage() && store.certId()) {
-          <ios-button variant="primary" (clicked)="openCreate()">
-            {{ lang.t('admin.mock.new') }}
-          </ios-button>
+          <div class="flex shrink-0 items-center gap-2">
+            <ios-button variant="secondary" (clicked)="openImport()">
+              {{ lang.t('admin.questionImport.openButton') }}
+            </ios-button>
+            <ios-button variant="primary" (clicked)="openCreate()">
+              {{ lang.t('admin.mock.new') }}
+            </ios-button>
+          </div>
         }
       </header>
 
@@ -375,12 +382,26 @@ const required: ValidatorFn = (control) => Validators.required(control);
           </div>
         </div>
       }
+
+      <!--
+        Bulk import wizard. The mock bank is keyed by CERTIFICATE, so the
+        target id here is the selected cert — not an exam id.
+      -->
+      @if (importOpen()) {
+        <ios-question-import-dialog
+          target="mock"
+          [targetId]="store.certId() ?? ''"
+          (imported)="onImported()"
+          (closed)="importOpen.set(false)"
+        />
+      }
     </section>
   `,
 })
 export class AdminMockQuestionsPage implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthStore);
+  private readonly importStore = inject(AdminQuestionImportStore);
 
   protected readonly store = inject(AdminMockQuestionsStore);
   protected readonly lang = inject(LanguageService);
@@ -396,6 +417,7 @@ export class AdminMockQuestionsPage implements OnInit {
     () => this.auth.hasRole('super_admin') || this.auth.hasRole('learning_admin'),
   );
 
+  protected readonly importOpen = signal(false);
   protected readonly certControl = this.fb.control('');
   protected readonly certOptions = computed<SelectOption[]>(() =>
     this.store.certs().map((c) => ({ value: c.id, label: c.label })),
@@ -436,6 +458,26 @@ export class AdminMockQuestionsPage implements OnInit {
   }
 
   protected retry(): void {
+    void this.store.load();
+  }
+
+  /**
+   * Open the bulk-import wizard for the selected certificate's mock bank.
+   * The button is only rendered once a certificate is picked, so a null id
+   * here would be a template bug rather than a reachable state.
+   */
+  protected openImport(): void {
+    const certId = this.store.certId();
+    if (!certId) return;
+    this.importStore.open('mock', certId);
+    this.importOpen.set(true);
+  }
+
+  /**
+   * Questions landed — or were undone — so refetch rather than patching local
+   * state: the backend assigns the ids and positions.
+   */
+  protected onImported(): void {
     void this.store.load();
   }
 

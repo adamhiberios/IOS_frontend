@@ -27,7 +27,9 @@ import {
   type QuestionDraft,
   isExamQuestionType,
 } from '../data-access/exam-authoring.model';
+import { QuestionImportDialog } from '../components/question-import-dialog';
 import { AdminExamQuestionsStore } from '../data-access/exam-questions.store';
+import { AdminQuestionImportStore } from '../data-access/question-import.store';
 
 /** One option row in the editor form. */
 type OptionGroup = FormGroup<{ optionText: FormControl<string> }>;
@@ -50,7 +52,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-exam-questions-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button, QuestionImportDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -110,6 +112,9 @@ const required: ValidatorFn = (control) => Validators.required(control);
               </ios-button>
             }
             @if (canManage() && store.isDraft() && !preview()) {
+              <ios-button variant="secondary" (clicked)="openImport()">
+                {{ lang.t('admin.questionImport.openButton') }}
+              </ios-button>
               <ios-button variant="primary" (clicked)="openCreate()">
                 {{ lang.t('admin.examQuestions.new') }}
               </ios-button>
@@ -527,6 +532,16 @@ const required: ValidatorFn = (control) => Validators.required(control);
           </div>
         </div>
       }
+
+      <!-- Bulk import wizard — writes nothing until the admin confirms. -->
+      @if (importOpen()) {
+        <ios-question-import-dialog
+          target="exam"
+          [targetId]="examId()"
+          (imported)="onImported()"
+          (closed)="importOpen.set(false)"
+        />
+      }
     </section>
   `,
 })
@@ -534,6 +549,7 @@ export class AdminExamQuestionsPage implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthStore);
   private readonly route = inject(ActivatedRoute);
+  private readonly importStore = inject(AdminQuestionImportStore);
 
   protected readonly store = inject(AdminExamQuestionsStore);
   protected readonly lang = inject(LanguageService);
@@ -546,6 +562,9 @@ export class AdminExamQuestionsPage implements OnInit {
   );
 
   protected readonly preview = signal(false);
+  protected readonly importOpen = signal(false);
+  /** Route param, held as a signal so the template can bind it to the dialog. */
+  protected readonly examId = signal('');
   protected readonly dialogOpen = signal(false);
   protected readonly editingId = signal<string | null>(null);
   protected readonly correctIndex = signal(0);
@@ -582,10 +601,26 @@ export class AdminExamQuestionsPage implements OnInit {
 
   ngOnInit(): void {
     const examId = this.route.snapshot.paramMap.get('examId') ?? '';
+    this.examId.set(examId);
     void this.store.load(examId);
   }
 
   protected retry(): void {
+    void this.store.reload();
+  }
+
+  /** Open the bulk-import wizard for this exam. */
+  protected openImport(): void {
+    this.importStore.open('exam', this.examId());
+    this.importOpen.set(true);
+  }
+
+  /**
+   * Questions landed — or were undone — so refetch rather than patching local
+   * state: the backend assigns the ids and positions, and this keeps the list
+   * identical to what the server holds.
+   */
+  protected onImported(): void {
     void this.store.reload();
   }
 

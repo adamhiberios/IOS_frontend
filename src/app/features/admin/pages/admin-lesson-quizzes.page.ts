@@ -28,6 +28,8 @@ import {
   type QuizQuestion,
   isMcq,
 } from '../data-access/quiz.model';
+import { QuestionImportDialog } from '../components/question-import-dialog';
+import { AdminQuestionImportStore } from '../data-access/question-import.store';
 import { AdminQuizStore } from '../data-access/quiz.store';
 
 /** `Validators.required` wrapped as a call (FormArray + mixed controls, unbound-method rule). */
@@ -52,7 +54,7 @@ interface QuestionTarget {
  */
 @Component({
   selector: 'ios-admin-lesson-quizzes-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button, QuestionImportDialog],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -221,13 +223,26 @@ interface QuestionTarget {
               </ul>
 
               @if (canAuthor()) {
-                <button
-                  type="button"
-                  (click)="openAddQuestion(qz.id)"
-                  class="mt-3 text-sm text-ios-brand-primary hover:underline"
-                >
-                  {{ lang.t('admin.quiz.addQuestion') }}
-                </button>
+                <div class="mt-3 flex flex-wrap items-center gap-4">
+                  <button
+                    type="button"
+                    (click)="openAddQuestion(qz.id)"
+                    class="text-sm text-ios-brand-primary hover:underline"
+                  >
+                    {{ lang.t('admin.quiz.addQuestion') }}
+                  </button>
+                  <!--
+                    Import is per-quiz, not per-lesson: a lesson can hold several
+                    quizzes and the backend keys the import by quiz id.
+                  -->
+                  <button
+                    type="button"
+                    (click)="openImport(qz.id)"
+                    class="text-sm text-ios-brand-primary hover:underline"
+                  >
+                    {{ lang.t('admin.questionImport.openButton') }}
+                  </button>
+                </div>
               }
             </article>
           }
@@ -518,6 +533,16 @@ interface QuestionTarget {
           </div>
         </div>
       }
+
+      <!-- Bulk import wizard, scoped to the quiz whose button was clicked. -->
+      @if (importQuizId(); as quizId) {
+        <ios-question-import-dialog
+          target="quiz"
+          [targetId]="quizId"
+          (imported)="onImported()"
+          (closed)="importQuizId.set(null)"
+        />
+      }
     </section>
   `,
 })
@@ -525,6 +550,7 @@ export class AdminLessonQuizzesPage implements OnInit {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly auth = inject(AuthStore);
   private readonly route = inject(ActivatedRoute);
+  private readonly importStore = inject(AdminQuestionImportStore);
 
   protected readonly store = inject(AdminQuizStore);
   protected readonly lang = inject(LanguageService);
@@ -543,6 +569,8 @@ export class AdminLessonQuizzesPage implements OnInit {
   );
 
   // Quiz dialog
+  /** Quiz the import wizard is open for, or `null` when it is closed. */
+  protected readonly importQuizId = signal<string | null>(null);
   protected readonly quizDialogOpen = signal(false);
   protected readonly editingQuizId = signal<string | null>(null);
   protected readonly quizFormError = signal<string | null>(null);
@@ -603,6 +631,20 @@ export class AdminLessonQuizzesPage implements OnInit {
   }
 
   protected retry(): void {
+    void this.store.reload();
+  }
+
+  /** Open the bulk-import wizard for one quiz. */
+  protected openImport(quizId: string): void {
+    this.importStore.open('quiz', quizId);
+    this.importQuizId.set(quizId);
+  }
+
+  /**
+   * Questions landed — or were undone — so refetch rather than patching local
+   * state: the backend assigns the ids and positions.
+   */
+  protected onImported(): void {
     void this.store.reload();
   }
 
