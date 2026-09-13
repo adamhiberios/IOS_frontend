@@ -11,6 +11,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --configuration=development",
+    "start:local": "ng serve --configuration=local",
     "build": "ng build --configuration development",
     "build:dev": "ng build --configuration=development",
     "build:test": "ng build --configuration=test",
