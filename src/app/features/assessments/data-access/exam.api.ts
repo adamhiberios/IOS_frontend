@@ -8,8 +8,10 @@ import {
   type AnswersRequestDto,
   type AutosaveResponseDto,
   type ExamAttemptReviewResponseDto,
+  type ExamLinkResponseDto,
   type PreExamConfirmationRequestDto,
   type PreExamConfirmationResponseDto,
+  type ResolveExamLinkRequestDto,
   type ScoreResultDto,
   type SessionStatusResponseDto,
   type StartExamRequestDto,
@@ -21,6 +23,7 @@ import {
   toAnswersDto,
   toExamAccessPreview,
   toExamAttemptReview,
+  toExamLinkResolution,
   toExamScoreResult,
   toExamSessionSnapshot,
   toExamSessionStart,
@@ -29,6 +32,7 @@ import {
   type AnswerMap,
   type ExamAccessPreview,
   type ExamAttemptReview,
+  type ExamLinkResolution,
   type ExamScoreResult,
   type ExamSessionSnapshot,
   type ExamSessionStart,
@@ -72,6 +76,18 @@ export class ExamApi {
     return this.http
       .post<PreExamConfirmationResponseDto>(`${this.base}/pre-exam-confirmation`, body)
       .pipe(map((dto) => dto.message));
+  }
+
+  /**
+   * `POST /exam/access/resolve` — land a direct exam link (`?t=<token>`) WITHOUT
+   * consuming the code. Emits `null` for a response the UI can't route on;
+   * 403 for an unknown / foreign / expired token.
+   */
+  resolveLink(token: string): Observable<ExamLinkResolution | null> {
+    const body: ResolveExamLinkRequestDto = { token };
+    return this.http
+      .post<ExamLinkResponseDto>(`${this.base}/access/resolve`, body)
+      .pipe(map(toExamLinkResolution));
   }
 
   /**

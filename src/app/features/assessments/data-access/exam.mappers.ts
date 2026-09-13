@@ -6,6 +6,7 @@
 
 import {
   type ExamAttemptReviewDto,
+  type ExamLinkResponseDto,
   type ExamOptionDto,
   type ExamQuestionDto,
   type ReviewQuestionDto,
@@ -18,6 +19,7 @@ import {
   type AnswerMap,
   type ExamAccessPreview,
   type ExamAttemptReview,
+  type ExamLinkResolution,
   type ExamOption,
   type ExamQuestion,
   type ExamQuestionType,
@@ -90,6 +92,30 @@ export function toExamAccessPreview(dto: ValidateAccessResponseDto): ExamAccessP
       passingScore: dto.exam.passingScore,
     },
   };
+}
+
+/**
+ * Narrows the resolve response into the discriminated union. A state whose
+ * required id is missing (or an unknown state) returns `null` — the caller
+ * treats that like an invalid link rather than routing somewhere broken.
+ */
+export function toExamLinkResolution(dto: ExamLinkResponseDto): ExamLinkResolution | null {
+  switch (dto.state) {
+    case 'ready':
+      return {
+        state: 'ready',
+        examId: dto.exam.id,
+        examTitle: dto.exam.title,
+        durationMinutes: dto.exam.durationMinutes,
+        requiresConfirmation: dto.requiresConfirmation,
+      };
+    case 'resume':
+      return dto.sessionId ? { state: 'resume', sessionId: dto.sessionId } : null;
+    case 'completed':
+      return dto.attemptId ? { state: 'completed', attemptId: dto.attemptId } : null;
+    default:
+      return null;
+  }
 }
 
 export function toExamScoreResult(dto: ScoreResultDto): ExamScoreResult {

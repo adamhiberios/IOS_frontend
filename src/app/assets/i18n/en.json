@@ -2831,6 +2831,14 @@
       "invalidCode": "This access code is invalid or has expired.",
       "genericError": "Something went wrong. Please try again."
     },
+    "start": {
+      "title": "Opening your exam",
+      "resolving": "Checking your exam link…",
+      "missingToken": "This exam link is incomplete. Open the link from your exam email again, or enter your access code.",
+      "invalidLink": "This exam link is invalid or has expired.",
+      "genericError": "Something went wrong. Please try again.",
+      "enterCode": "Enter access code instead"
+    },
     "ready": {
       "heading": "Are you ready?",
       "instruction1Pre": "You have ",

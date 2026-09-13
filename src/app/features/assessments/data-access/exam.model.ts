@@ -110,6 +110,24 @@ export interface ExamAccessPreview {
   };
 }
 
+/**
+ * Where a direct exam link (`/assessments/start?t=<token>`) should take the
+ * student, from `POST /exam/access/resolve`. Resolving never consumes the code.
+ *   - `ready`     → the ready page, starting with the same token as `code`.
+ *   - `resume`    → the code was already spent on a still-open sitting.
+ *   - `completed` → the sitting is scored; show the attempt.
+ */
+export type ExamLinkResolution =
+  | {
+      readonly state: 'ready';
+      readonly examId: string;
+      readonly examTitle: string;
+      readonly durationMinutes: number;
+      readonly requiresConfirmation: boolean;
+    }
+  | { readonly state: 'resume'; readonly sessionId: string }
+  | { readonly state: 'completed'; readonly attemptId: string };
+
 /** Result of `POST /exam/start` — the session is now live and the clock is running. */
 export interface ExamSessionStart {
   readonly sessionId: string;

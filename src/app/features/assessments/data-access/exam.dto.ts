@@ -25,6 +25,14 @@ export interface ValidateAccessRequestDto {
   readonly examId?: string;
 }
 
+/**
+ * Body for `POST /exam/access/resolve`. The `t` query value from the emailed
+ * direct link — sent in the body so it never lands in an API access log.
+ */
+export interface ResolveExamLinkRequestDto {
+  readonly token: string;
+}
+
 /** Body for `POST /exam/start`. Same token as validate-access. */
 export interface StartExamRequestDto {
   readonly code: string;
@@ -72,6 +80,40 @@ export interface ValidateAccessResponseDto {
     readonly durationMinutes: number;
     readonly passingScore: number;
   };
+}
+
+/**
+ * `POST /exam/access/resolve` → 200 (`ExamLinkResponseDto`). Side-effect free:
+ * never consumes the code. `state` is the whole contract — `ready` (start with
+ * the same token), `resume` (re-enter `sessionId`), `completed` (show
+ * `attemptId`). Unknown / foreign / expired tokens are a flat 403.
+ */
+export interface ExamLinkResponseDto {
+  /** `ready` | `resume` | `completed`. */
+  readonly state: string;
+  readonly exam: {
+    readonly id: string;
+    readonly title: string;
+    readonly durationMinutes: number;
+    readonly passingScore: number;
+    readonly questionCount: number;
+  };
+  readonly cert: {
+    readonly id: string;
+    readonly title: string;
+  };
+  /** ISO-8601; null once the token has been spent. */
+  readonly expiresAt: string | null;
+  /** state=ready only — `start` will 409 until pre-exam confirmation is done. */
+  readonly requiresConfirmation: boolean;
+  /** state=resume only. */
+  readonly sessionId: string | null;
+  /** state=resume only — backend `TestSessionStatus`. */
+  readonly sessionStatus: string | null;
+  /** state=resume only. */
+  readonly remainingSeconds: number | null;
+  /** state=completed only. */
+  readonly attemptId: string | null;
 }
 
 /** `POST /exam/start` → 201. */

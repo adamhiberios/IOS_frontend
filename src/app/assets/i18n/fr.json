@@ -2831,6 +2831,14 @@
       "invalidCode": "Ce code d'accès est invalide ou a expiré.",
       "genericError": "Une erreur s'est produite. Veuillez réessayer."
     },
+    "start": {
+      "title": "Ouverture de votre examen",
+      "resolving": "Vérification de votre lien d’examen…",
+      "missingToken": "Ce lien d’examen est incomplet. Ouvrez à nouveau le lien de votre e-mail d’examen, ou saisissez votre code d’accès.",
+      "invalidLink": "Ce lien d’examen est invalide ou a expiré.",
+      "genericError": "Une erreur s’est produite. Veuillez réessayer.",
+      "enterCode": "Saisir le code d’accès"
+    },
     "ready": {
       "heading": "Bonjour Adam, êtes-vous prêt ?",
       "instruction1Pre": "Vous avez ",

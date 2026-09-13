@@ -11,7 +11,8 @@ import { examDraftSweepGuard } from './guards/exam-draft-sweep.guard';
  * routes; see CLAUDE.md §10 and /docs/08-exam-engine.md.
  *
  * Routes:
- *   /assessments/verify            → ExamVerifyPage  (validate-access + identity — Slice 5b)
+ *   /assessments/start?t=<token>   → ExamStartPage   (emailed direct link → resolve → ready/run/review)
+ *   /assessments/verify           → ExamVerifyPage  (validate-access + identity — Slice 5b)
  *   /assessments/ready             → ExamReadyPage   (start CTA — Slice 5b)
  *   /assessments/run/:sessionId    → ExamRunnerPage  (in-exam; route-scoped store + WS)
  *   /assessments/result/:sessionId → ExamResultPage  (score-only; review disabled, BE-I-22)
@@ -39,6 +40,12 @@ export const ASSESSMENTS_ROUTES: Routes = [
         pathMatch: 'full',
         title: 'Assessments',
         children: [],
+      },
+      {
+        // Direct link from the access-code email (`?t=<token>`).
+        path: 'start',
+        title: 'Opening Exam — Institute of Scrum',
+        loadComponent: () => import('./pages/exam-start.page').then((m) => m.ExamStartPage),
       },
       {
         path: 'verify',

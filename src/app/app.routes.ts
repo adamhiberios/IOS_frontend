@@ -1,6 +1,16 @@
-import { type Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, type Routes } from '@angular/router';
 
 import { authGuard, publicOnlyGuard } from '@core/auth';
+
+/**
+ * Redirect that carries the original query string (the `?token=`) along.
+ * A plain absolute `redirectTo` string drops it.
+ */
+function redirectKeepingQuery(target: string) {
+  return ({ queryParams }: { queryParams: Record<string, string> }) =>
+    inject(Router).createUrlTree([target], { queryParams });
+}
 
 /**
  * App-level routes — every feature is lazy-loaded. The shell (header/sidebar)
@@ -22,6 +32,18 @@ import { authGuard, publicOnlyGuard } from '@core/auth';
  *     through `core/event-bus` or a `core/` singleton.
  */
 export const routes: Routes = [
+  // Backend email links (IOS_Backend `MailService`) point at root-level paths;
+  // the pages live under `/auth`.
+  {
+    path: 'verify-email',
+    redirectTo: redirectKeepingQuery('/auth/verify-email'),
+    pathMatch: 'full',
+  },
+  {
+    path: 'reset-password',
+    redirectTo: redirectKeepingQuery('/auth/new-password'),
+    pathMatch: 'full',
+  },
   {
     // Public landing page — no guard, visible to everyone.
     // Authenticated users navigate to their dashboard from within the page;
