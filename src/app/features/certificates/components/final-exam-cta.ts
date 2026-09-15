@@ -6,7 +6,9 @@ import { FinalExamAccessStore } from '../data-access/final-exam.store';
 /**
  * `[iosFinalExamCta]` — turns a button into the "Start final exam" action:
  * asks the backend to email the one-time access code (`POST /exam/request-access`),
- * then routes to the code-entry page with a "code sent" notice.
+ * then routes to the code-entry page with a "code sent" notice — or, when the
+ * code was emailed earlier and is still valid, an "already sent" notice (the
+ * backend never issues a second code to a student).
  *
  * A directive (not a component) so every CTA keeps its own Figma styling. The
  * host page renders the failure itself via the exported reference:
@@ -43,8 +45,9 @@ export class FinalExamCta {
   protected async onClick(): Promise<void> {
     const certId = this.certId();
     if (!certId) return;
-    if (await this.store.request(certId)) {
-      void this.router.navigate(['/assessments/verify'], { queryParams: { codeSent: 1 } });
-    }
+    const result = await this.store.request(certId);
+    if (!result) return;
+    const queryParams = result.alreadySent ? { codeAlreadySent: 1 } : { codeSent: 1 };
+    void this.router.navigate(['/assessments/verify'], { queryParams });
   }
 }

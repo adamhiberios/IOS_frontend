@@ -2822,6 +2822,7 @@
       "instruction3Post": " to pass the test.",
       "continue": "Continue",
       "resendLink": "I lost link, Resend link",
+      "codeAlreadySentNotice": "Your access code was already emailed to you — use the code from that email. Lost it? Contact support to have it re-issued.",
       "codeSentNotice": "We've emailed you a one-time access code. Check your inbox (and spam folder) — the code is valid for 24 hours.",
       "codeIntro": "Enter the one-time access code from your exam email and confirm your identity to begin.",
       "codeLabel": "Access code",

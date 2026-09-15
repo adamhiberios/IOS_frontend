@@ -82,12 +82,16 @@ import { type ExamReadyNavState } from '../data-access/exam.model';
           <ios-accent-bars top="7rem" start="27.5%" end="27.5%" />
 
           <div class="relative z-10 w-full max-w-[606px]">
-            @if (codeSent) {
+            @if (codeSent || codeAlreadySent) {
               <p
                 class="mb-6 rounded-xl bg-ios-surface-muted px-4 py-3 text-base font-medium text-ios-fg-13"
                 role="status"
               >
-                {{ lang.t('assessments.verify.codeSentNotice') }}
+                {{
+                  codeAlreadySent
+                    ? lang.t('assessments.verify.codeAlreadySentNotice')
+                    : lang.t('assessments.verify.codeSentNotice')
+                }}
               </p>
             }
             <p class="text-lg font-medium text-ios-fg-8 leading-relaxed mb-8">
@@ -207,9 +211,13 @@ export class ExamVerifyPage {
   private readonly api = inject(ExamApi);
   private readonly router = inject(Router);
 
+  private readonly query = inject(ActivatedRoute).snapshot.queryParamMap;
+
   /** Arrived from a "Start final exam" CTA that just emailed the code. */
-  protected readonly codeSent =
-    inject(ActivatedRoute).snapshot.queryParamMap.get('codeSent') === '1';
+  protected readonly codeSent = this.query.get('codeSent') === '1';
+
+  /** Arrived from a repeat CTA click — the still-valid code was emailed earlier. */
+  protected readonly codeAlreadySent = this.query.get('codeAlreadySent') === '1';
   private readonly fb = inject(NonNullableFormBuilder);
 
   protected readonly form = this.fb.group({

@@ -4,7 +4,7 @@ import { firstValueFrom } from 'rxjs';
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 
-import { FinalExamApi } from './final-exam.api';
+import { FinalExamApi, type RequestExamAccessResponseDto } from './final-exam.api';
 
 /**
  * `FinalExamAccessStore` — state for one "Start final exam" CTA. Provided per
@@ -22,19 +22,18 @@ export class FinalExamAccessStore {
   readonly requesting = this._requesting.asReadonly();
   readonly error = this._error.asReadonly();
 
-  /** Ask the backend to email the access code. Resolves `true` on success. */
-  async request(certId: string): Promise<boolean> {
-    if (this._requesting()) return false;
+  /** Ask the backend to email the access code. Resolves the result, or `null` on failure. */
+  async request(certId: string): Promise<RequestExamAccessResponseDto | null> {
+    if (this._requesting()) return null;
     this._requesting.set(true);
     this._error.set(null);
     try {
-      await firstValueFrom(this.api.requestAccess(certId));
-      return true;
+      return await firstValueFrom(this.api.requestAccess(certId));
     } catch (err) {
       this._error.set(
         problemDetailMessage(err) ?? this.lang.t('dashboard.certs.examCodeRequestFailed'),
       );
-      return false;
+      return null;
     } finally {
       this._requesting.set(false);
     }

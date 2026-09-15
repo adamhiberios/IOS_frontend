@@ -2822,6 +2822,7 @@
       "instruction3Post": " pour réussir le test.",
       "continue": "Continuer",
       "resendLink": "J'ai perdu le lien, renvoyer",
+      "codeAlreadySentNotice": "Votre code d'accès vous a déjà été envoyé par e-mail — utilisez le code de cet e-mail. Vous l'avez perdu ? Contactez le support pour qu'il soit réémis.",
       "codeSentNotice": "Nous vous avons envoyé un code d'accès unique par e-mail. Vérifiez votre boîte de réception (et vos courriers indésirables) — le code est valable 24 heures.",
       "codeIntro": "Saisissez le code d'accès unique reçu par e-mail et confirmez votre identité pour commencer.",
       "codeLabel": "Code d'accès",
