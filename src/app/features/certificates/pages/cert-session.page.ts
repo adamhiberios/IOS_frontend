@@ -15,6 +15,7 @@ import { DashboardNavbar } from '@layouts';
 
 import { CoursesStore } from '@features/courses/data-access/courses.store';
 import { CertChapterNav, type CertNavItem } from '../components/cert-chapter-nav';
+import { FinalExamCta } from '../components/final-exam-cta';
 
 /**
  * `ios-cert-session-page` — the lesson viewer.
@@ -45,7 +46,7 @@ import { CertChapterNav, type CertNavItem } from '../components/cert-chapter-nav
 @Component({
   selector: 'ios-cert-session-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DashboardNavbar, CertChapterNav, RouterLink, IosIcon, CanadaFlag],
+  imports: [DashboardNavbar, CertChapterNav, FinalExamCta, RouterLink, IosIcon, CanadaFlag],
   providers: [provideIcons(LucideArrowLeft, LucideFileText, LucideArrowDown)],
   styles: [
     `
@@ -143,12 +144,25 @@ import { CertChapterNav, type CertNavItem } from '../components/cert-chapter-nav
               </nav>
             </div>
 
-            <a
-              routerLink="/assessments/verify"
-              class="inline-flex items-center justify-center h-11 px-4 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-            >
-              {{ lang.t('dashboard.certs.startFinalExam') }}
-            </a>
+            <div class="flex flex-col items-end gap-2">
+              <button
+                type="button"
+                class="inline-flex items-center justify-center h-11 px-4 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-60 disabled:pointer-events-none"
+                [iosFinalExamCta]="store.curriculum()?.certificate?.id"
+                #cta="iosFinalExamCta"
+              >
+                {{
+                  cta.requesting()
+                    ? lang.t('dashboard.certs.sendingExamCode')
+                    : lang.t('dashboard.certs.startFinalExam')
+                }}
+              </button>
+              @if (cta.error(); as message) {
+                <p class="max-w-sm text-end text-sm font-medium text-ios-danger-mid" role="alert">
+                  {{ message }}
+                </p>
+              }
+            </div>
           </div>
 
           @if (store.lessonError(); as message) {

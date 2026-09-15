@@ -8,6 +8,7 @@ import { IosIcon, provideIcons } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { MockStore } from '../data-access/mock.store';
+import { FinalExamCta } from '../components/final-exam-cta';
 
 /**
  * `ios-mock-exam-result-page` — mock-attempt review, wired to `MockStore`
@@ -20,7 +21,7 @@ import { MockStore } from '../data-access/mock.store';
 @Component({
   selector: 'ios-mock-exam-result-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DashboardNavbar, IosIcon, RouterLink],
+  imports: [DashboardNavbar, IosIcon, RouterLink, FinalExamCta],
   providers: [provideIcons(LucideCheck, LucideX, LucideArrowLeft, LucideArrowRight)],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -207,17 +208,28 @@ import { MockStore } from '../data-access/mock.store';
                     aria-hidden="true"
                   ></div>
                 </div>
-                <a
-                  routerLink="/assessments/verify"
-                  class="inline-flex items-center gap-3 h-14 px-6 rounded-xl text-[18px] font-semibold leading-[1.4] text-ios-fg bg-white hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                <button
+                  type="button"
+                  class="inline-flex items-center gap-3 h-14 px-6 rounded-xl text-[18px] font-semibold leading-[1.4] text-ios-fg bg-white hover:bg-neutral-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 disabled:opacity-60 disabled:pointer-events-none"
+                  [iosFinalExamCta]="review.certId"
+                  #cta="iosFinalExamCta"
                 >
-                  {{ lang.t('dashboard.certs.startFinalExam') }}
+                  {{
+                    cta.requesting()
+                      ? lang.t('dashboard.certs.sendingExamCode')
+                      : lang.t('dashboard.certs.startFinalExam')
+                  }}
                   <ios-icon
                     name="arrow-right"
                     class="size-6 shrink-0 rtl:rotate-180"
                     aria-hidden="true"
                   />
-                </a>
+                </button>
+                @if (cta.error(); as message) {
+                  <p class="max-w-md text-center text-sm font-medium text-white" role="alert">
+                    {{ message }}
+                  </p>
+                }
                 <a
                   routerLink="/dashboard/certificates/mock-test/history"
                   class="text-[15px] font-medium text-white/80 hover:text-white underline underline-offset-2 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"

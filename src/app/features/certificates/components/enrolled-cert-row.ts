@@ -6,6 +6,7 @@ import { LanguageService } from '@core/i18n';
 import { IosIcon, provideIcons } from '@ui';
 
 import type { EnrolledCertHeader } from '../data-access/certificates.model';
+import { FinalExamCta } from './final-exam-cta';
 
 const FAMILY_HERO_BG: Record<string, string> = {
   esm: '#184865',
@@ -33,7 +34,7 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
 
 @Component({
   selector: 'ios-enrolled-cert-row',
-  imports: [NgOptimizedImage, IosIcon],
+  imports: [NgOptimizedImage, IosIcon, FinalExamCta],
   providers: [provideIcons(LucideArrowRight, LucideCalendar)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -105,7 +106,7 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
         </div>
 
         <!-- Action buttons -->
-        <div class="flex items-start gap-6 shrink-0">
+        <div class="flex flex-wrap items-start gap-6 shrink-0">
           <button
             type="button"
             class="inline-flex items-center justify-center h-11 rounded-xl text-[16px] font-semibold leading-[1.4] text-white border border-white/30 hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-[177px]"
@@ -113,20 +114,32 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
           >
             {{ lang.t('dashboard.certs.showDetails') }}
           </button>
-          <button
-            type="button"
-            class="inline-flex items-center justify-center gap-2 h-11 rounded-xl text-[16px] font-semibold leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-[217px]"
-            [style.background-color]="buttonBg()"
-            [style.color]="buttonText()"
-            (click)="startExam.emit()"
-          >
-            {{ lang.t('dashboard.certs.startFinalExam') }}
-            <ios-icon
-              name="arrow-right"
-              class="w-5 h-5 shrink-0 rtl:rotate-180"
-              aria-hidden="true"
-            />
-          </button>
+          <div class="flex flex-col gap-2 w-[217px]">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center gap-2 h-11 rounded-xl text-[16px] font-semibold leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-full disabled:opacity-60 disabled:pointer-events-none"
+              [style.background-color]="buttonBg()"
+              [style.color]="buttonText()"
+              [iosFinalExamCta]="cert().certId"
+              #cta="iosFinalExamCta"
+            >
+              {{
+                cta.requesting()
+                  ? lang.t('dashboard.certs.sendingExamCode')
+                  : lang.t('dashboard.certs.startFinalExam')
+              }}
+              <ios-icon
+                name="arrow-right"
+                class="w-5 h-5 shrink-0 rtl:rotate-180"
+                aria-hidden="true"
+              />
+            </button>
+            @if (cta.error(); as message) {
+              <p class="text-[13px] font-medium leading-[1.4] text-white" role="alert">
+                {{ message }}
+              </p>
+            }
+          </div>
         </div>
       </div>
     </section>
@@ -137,17 +150,6 @@ export class EnrolledCertRow {
   readonly cert = input.required<EnrolledCertHeader>();
 
   readonly viewDetails = output<string>();
-
-  /**
-   * Emitted when the user starts their final exam. The button was previously
-   * rendered with no click binding and no output at all, so it was inert —
-   * styled like a CTA but wired to nothing (IDD-324).
-   *
-   * Carries nothing: the exam is entered by access code on the verify page,
-   * which takes no parameters. The row does hold the certificate if a later
-   * flow needs it.
-   */
-  readonly startExam = output<void>();
 
   protected heroBg(): string {
     return FAMILY_HERO_BG[this.cert().family] ?? '#184865';

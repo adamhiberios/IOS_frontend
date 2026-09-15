@@ -2,7 +2,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
@@ -82,6 +82,14 @@ import { type ExamReadyNavState } from '../data-access/exam.model';
           <ios-accent-bars top="7rem" start="27.5%" end="27.5%" />
 
           <div class="relative z-10 w-full max-w-[606px]">
+            @if (codeSent) {
+              <p
+                class="mb-6 rounded-xl bg-ios-surface-muted px-4 py-3 text-base font-medium text-ios-fg-13"
+                role="status"
+              >
+                {{ lang.t('assessments.verify.codeSentNotice') }}
+              </p>
+            }
             <p class="text-lg font-medium text-ios-fg-8 leading-relaxed mb-8">
               {{ lang.t('assessments.verify.codeIntro') }}
             </p>
@@ -198,6 +206,10 @@ export class ExamVerifyPage {
   protected readonly lang = inject(LanguageService);
   private readonly api = inject(ExamApi);
   private readonly router = inject(Router);
+
+  /** Arrived from a "Start final exam" CTA that just emailed the code. */
+  protected readonly codeSent =
+    inject(ActivatedRoute).snapshot.queryParamMap.get('codeSent') === '1';
   private readonly fb = inject(NonNullableFormBuilder);
 
   protected readonly form = this.fb.group({

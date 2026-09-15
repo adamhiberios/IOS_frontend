@@ -12,6 +12,7 @@ import { resolveBadgeAsset } from '@features/dashboard/data-access/dashboard.mod
 import { CertLearningMaterials } from '../components/cert-learning-materials';
 import { CertMockTest } from '../components/cert-mock-test';
 import { CertSideNav } from '../components/cert-side-nav';
+import { FinalExamCta } from '../components/final-exam-cta';
 import type {
   CertDetailSection,
   CertificationCard,
@@ -56,6 +57,7 @@ import { MockStore } from '../data-access/mock.store';
     CertSideNav,
     CertLearningMaterials,
     CertMockTest,
+    FinalExamCta,
     RouterLink,
     IosIcon,
     CanadaFlag,
@@ -117,12 +119,25 @@ import { MockStore } from '../data-access/mock.store';
 
             <!-- Start Final Test CTA — only shown at high completion -->
             @if (showFinalTestCta()) {
-              <a
-                routerLink="/assessments/verify"
-                class="inline-flex items-center justify-center h-11 px-6 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-              >
-                {{ lang.t('dashboard.certs.startFinalExam') }}
-              </a>
+              <div class="flex flex-col items-end gap-2">
+                <button
+                  type="button"
+                  class="inline-flex items-center justify-center h-11 px-6 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-60 disabled:pointer-events-none"
+                  [iosFinalExamCta]="enrolled()?.certId"
+                  #headerCta="iosFinalExamCta"
+                >
+                  {{
+                    headerCta.requesting()
+                      ? lang.t('dashboard.certs.sendingExamCode')
+                      : lang.t('dashboard.certs.startFinalExam')
+                  }}
+                </button>
+                @if (headerCta.error(); as message) {
+                  <p class="max-w-sm text-end text-sm font-medium text-ios-danger-mid" role="alert">
+                    {{ message }}
+                  </p>
+                }
+              </div>
             }
           </div>
 
@@ -264,12 +279,28 @@ import { MockStore } from '../data-access/mock.store';
                         {{ lang.t('dashboard.certs.continueCta') }}
                       </a>
                     } @else {
-                      <a
-                        routerLink="/assessments/verify"
-                        class="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-ios-brand-primary px-6 font-semibold text-ios-brand-primary-soft hover:bg-ios-brand-primary-deep transition-colors"
-                      >
-                        {{ lang.t('dashboard.certs.startFinalExam') }}
-                      </a>
+                      <div class="flex flex-col items-end gap-2">
+                        <button
+                          type="button"
+                          class="inline-flex h-12 shrink-0 items-center justify-center rounded-xl bg-ios-brand-primary px-6 font-semibold text-ios-brand-primary-soft hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-60 disabled:pointer-events-none"
+                          [iosFinalExamCta]="enrolled()?.certId"
+                          #overviewCta="iosFinalExamCta"
+                        >
+                          {{
+                            overviewCta.requesting()
+                              ? lang.t('dashboard.certs.sendingExamCode')
+                              : lang.t('dashboard.certs.startFinalExam')
+                          }}
+                        </button>
+                        @if (overviewCta.error(); as message) {
+                          <p
+                            class="max-w-sm text-end text-sm font-medium text-ios-danger-mid"
+                            role="alert"
+                          >
+                            {{ message }}
+                          </p>
+                        }
+                      </div>
                     }
                   </section>
                 }

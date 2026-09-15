@@ -67,6 +67,8 @@ export type CertFamily = 'esm' | 'epo' | 'esf';
  * Figma nodes 13227-10518 (1 cert) / 17669-39543 (2 certs).
  */
 export interface EnrolledCertHeader {
+  /** Backend certificate UUID — what the API calls take. */
+  readonly certId: string;
   /** Short cert code — e.g. "ESM-P". Also used as router param. */
   readonly code: string;
   /** Certification family abbreviation shown as tag — e.g. "ESM". */
