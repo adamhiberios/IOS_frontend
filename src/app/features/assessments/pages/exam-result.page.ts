@@ -1,12 +1,13 @@
-import { NgOptimizedImage } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { LucideCheck, LucideX, LucideDownload } from '@lucide/angular';
+import { LucideCheck, LucideDownload, LucideShieldCheck, LucideX } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { CanadaFlag, CertificatesBadge, IosIcon, provideIcons } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
+import { ExamCertificateStore } from '../data-access/exam-certificate.store';
 import { type ExamResultNavState, type ExamScoreResult } from '../data-access/exam.model';
 
 /**
@@ -33,13 +34,21 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
  * `null` for a terminal race (already-submitted / grace-closed auto-submit) —
  * then a neutral "submitted, see your history" state is shown.
  *
+ * On a pass it waits for the real certificate the backend generates
+ * (`ExamCertificateStore` polls `GET /me/certificates`) and offers its PDF and
+ * public verify link. It used to render a static sample certificate image
+ * and "download" that same PNG, which showed another person's name.
+ *
  * Design ref: Figma node 13172-56939.
  */
 @Component({
   selector: 'ios-exam-result-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgOptimizedImage, RouterLink, DashboardNavbar, CanadaFlag, CertificatesBadge, IosIcon],
-  providers: [provideIcons(LucideCheck, LucideX, LucideDownload)],
+  imports: [DatePipe, RouterLink, DashboardNavbar, CanadaFlag, CertificatesBadge, IosIcon],
+  providers: [
+    ExamCertificateStore,
+    provideIcons(LucideCheck, LucideX, LucideDownload, LucideShieldCheck),
+  ],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
@@ -101,16 +110,94 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
 
             <!-- Certificate + share — only when passed -->
             @if (result.passed) {
-              <div class="w-full">
-                <img
-                  ngSrc="/assets/images/certificate.png"
-                  [alt]="lang.t('assessments.result.epoCertCode') + ' Certificate'"
-                  class="w-full rounded-xl"
-                  width="984"
-                  height="700"
-                  priority
-                />
-              </div>
+              <section
+                class="w-full rounded-2xl border border-ios-surface-hover bg-ios-surface-soft px-6 py-8"
+                [attr.aria-label]="lang.t('assessments.result.certificateSectionAria')"
+                aria-live="polite"
+              >
+                @switch (certificates.status()) {
+                  @case ('ready') {
+                    @if (certificates.certificate(); as cert) {
+                      <div
+                        class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between"
+                      >
+                        <div class="flex flex-col gap-1 min-w-0">
+                          <p
+                            class="text-[13px] font-semibold uppercase tracking-wide text-ios-success-strong"
+                          >
+                            {{ lang.t('assessments.result.certificateReady') }}
+                          </p>
+                          <p class="text-[20px] font-bold text-ios-fg-13 leading-snug" dir="auto">
+                            {{ cert.program }}
+                          </p>
+                          <p class="text-[14px] font-medium text-ios-fg-8">
+                            {{ lang.t('assessments.result.certificateNumber') }}:
+                            <span class="font-semibold text-ios-fg-11" dir="ltr">{{
+                              cert.certId
+                            }}</span>
+                            · {{ lang.t('assessments.result.certificateIssued') }}:
+                            {{ cert.issuedAt | date: 'mediumDate' }}
+                          </p>
+                        </div>
+                        <div class="flex flex-wrap gap-3 shrink-0">
+                          @if (cert.certificateUrl; as url) {
+                            <a
+                              [href]="url"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-ios-fg-13 px-5
+                                     font-semibold text-white transition-colors hover:bg-ios-fg
+                                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+                                     focus-visible:ring-ios-fg-13/50"
+                            >
+                              <ios-icon name="download" class="size-[18px]" aria-hidden="true" />
+                              {{ lang.t('assessments.result.downloadPdf') }}
+                            </a>
+                          }
+                          @if (cert.verifyUrl; as url) {
+                            <a
+                              [href]="url"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              class="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-ios-surface-hover
+                                     bg-white px-5 font-semibold text-ios-fg-11 transition-colors hover:bg-[#f8f8f8]
+                                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+                                     focus-visible:ring-ios-fg-11/20"
+                            >
+                              <ios-icon
+                                name="shield-check"
+                                class="size-[18px]"
+                                aria-hidden="true"
+                              />
+                              {{ lang.t('assessments.result.verifyCertificate') }}
+                            </a>
+                          }
+                        </div>
+                      </div>
+                    }
+                  }
+                  @case ('delayed') {
+                    <div class="flex flex-col items-center gap-3 text-center">
+                      <p class="text-[15px] font-medium text-ios-fg-11 max-w-[560px]">
+                        {{ lang.t('assessments.result.certificateDelayed') }}
+                      </p>
+                      <a
+                        routerLink="/dashboard/credentials"
+                        class="inline-flex h-11 items-center justify-center rounded-xl bg-ios-fg-13 px-5
+                               font-semibold text-white transition-colors hover:bg-ios-fg
+                               focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
+                               focus-visible:ring-ios-fg-13/50"
+                        >{{ lang.t('assessments.result.viewCredentials') }}</a
+                      >
+                    </div>
+                  }
+                  @default {
+                    <p class="text-center text-[15px] font-medium text-ios-fg-8" role="status">
+                      {{ lang.t('assessments.result.certificateGenerating') }}
+                    </p>
+                  }
+                }
+              </section>
 
               <div class="flex flex-col gap-4">
                 <p class="text-[14px] font-medium text-ios-fg-11">
@@ -167,19 +254,33 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
                     {{ lang.t('assessments.result.shareX') }}
                   </button>
 
-                  <button
-                    type="button"
-                    (click)="onDownloadPdf()"
-                    class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
-                           border border-ios-surface-hover bg-white text-ios-fg-11
-                           font-medium text-[14px] transition-colors hover:bg-[#f8f8f8]
-                           focus-visible:outline-none focus-visible:ring-2
-                           focus-visible:ring-offset-2 focus-visible:ring-ios-fg-11/20"
-                    [attr.aria-label]="lang.t('assessments.result.downloadPdf')"
-                  >
-                    <ios-icon name="download" class="size-[18px]" aria-hidden="true" />
-                    {{ lang.t('assessments.result.downloadPdf') }}
-                  </button>
+                  @if (certificates.certificate()?.certificateUrl; as url) {
+                    <a
+                      [href]="url"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
+                             border border-ios-surface-hover bg-white text-ios-fg-11
+                             font-medium text-[14px] transition-colors hover:bg-[#f8f8f8]
+                             focus-visible:outline-none focus-visible:ring-2
+                             focus-visible:ring-offset-2 focus-visible:ring-ios-fg-11/20"
+                    >
+                      <ios-icon name="download" class="size-[18px]" aria-hidden="true" />
+                      {{ lang.t('assessments.result.downloadPdf') }}
+                    </a>
+                  } @else {
+                    <button
+                      type="button"
+                      disabled
+                      class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
+                             border border-ios-surface-hover bg-white text-ios-fg-11
+                             font-medium text-[14px] opacity-50 cursor-not-allowed"
+                      [attr.aria-label]="lang.t('assessments.result.downloadPdfPending')"
+                    >
+                      <ios-icon name="download" class="size-[18px]" aria-hidden="true" />
+                      {{ lang.t('assessments.result.downloadPdf') }}
+                    </button>
+                  }
                 </div>
               </div>
             }
@@ -292,6 +393,7 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
 })
 export class ExamResultPage {
   protected readonly lang = inject(LanguageService);
+  protected readonly certificates = inject(ExamCertificateStore);
   protected readonly currentYear = String(new Date().getFullYear());
 
   // Immutable snapshot from Router state — read once on entry.
@@ -304,6 +406,7 @@ export class ExamResultPage {
     const state = (nav?.extras?.state ?? {}) as Partial<ExamResultNavState>;
     this.score = state.score ?? null;
     this.examTitle = state.examTitle ?? '';
+    if (this.score?.passed) this.certificates.watch();
   }
 
   protected scorePercent(): number {
@@ -315,8 +418,13 @@ export class ExamResultPage {
     return s ? Math.max(0, s.totalCount - s.correctCount) : 0;
   }
 
+  /** Share the public verify page once the certificate exists, else the site. */
+  private shareUrl(): string {
+    return this.certificates.certificate()?.verifyUrl ?? window.location.origin;
+  }
+
   protected onShareLinkedIn(): void {
-    const url = encodeURIComponent(window.location.origin);
+    const url = encodeURIComponent(this.shareUrl());
     window.open(
       `https://www.linkedin.com/sharing/share-offsite/?url=${url}`,
       '_blank',
@@ -328,17 +436,12 @@ export class ExamResultPage {
     const text = encodeURIComponent(
       `I scored ${this.scorePercent()}% on my Institute of Scrum final exam 🎓`,
     );
-    const url = encodeURIComponent(window.location.origin);
+    const url = encodeURIComponent(this.shareUrl());
     window.open(
       `https://twitter.com/intent/tweet?text=${text}&url=${url}`,
       '_blank',
       'noopener,noreferrer',
     );
-  }
-
-  protected onDownloadPdf(): void {
-    // Deferred: replace with a signed certificate PDF URL from the backend.
-    window.open('/assets/images/certificate.png', '_blank', 'noopener,noreferrer');
   }
 }
 
