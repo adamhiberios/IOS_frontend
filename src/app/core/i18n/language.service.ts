@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
@@ -217,7 +217,11 @@ export class LanguageService {
     this._loading.set(true);
     try {
       const url = `${I18N_BASE}/${locale}.json`;
-      const tree = await firstValueFrom(this.http.get<TranslationTree>(url));
+      // `no-cache` = revalidate every load (a cheap 304 when unchanged). The files
+      // are not content-hashed, so without it a browser can keep serving the
+      // previous release's copy and new keys render as raw key paths.
+      const headers = new HttpHeaders({ 'Cache-Control': 'no-cache' });
+      const tree = await firstValueFrom(this.http.get<TranslationTree>(url, { headers }));
       this.cache.set(locale, tree);
       this._translations.set(tree);
     } catch (err) {

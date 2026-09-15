@@ -85,6 +85,7 @@ export function toExamAccessPreview(dto: ValidateAccessResponseDto): ExamAccessP
     valid: dto.valid,
     accessCodeId: dto.accessCodeId,
     expiresAt: dto.expiresAt,
+    certId: dto.certId,
     exam: {
       id: dto.exam.id,
       title: dto.exam.title,

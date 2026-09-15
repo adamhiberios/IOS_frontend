@@ -74,6 +74,11 @@ export interface ValidateAccessResponseDto {
   readonly accessCodeId: string;
   /** ISO-8601 (backend serialises a Date). */
   readonly expiresAt: string;
+  /**
+   * Certificate the exam belongs to — needed for pre-exam confirmation.
+   * Absent on API builds before backend `c0af771`.
+   */
+  readonly certId?: string;
   readonly exam: {
     readonly id: string;
     readonly title: string;

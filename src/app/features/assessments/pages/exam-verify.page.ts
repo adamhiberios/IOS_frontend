@@ -24,12 +24,12 @@ import { type ExamReadyNavState } from '../data-access/exam.model';
  * `POST /exam/validate-access` (does NOT consume the code) and, on success,
  * navigate to the ready page carrying the code + resolved exam metadata.
  *
- * Identity attestation (full name / ID) is collected per journeys p.4, but the
- * `POST /exam/pre-exam-confirmation` call is NOT made here — it needs a `certId`
- * the frontend cannot obtain at this point (validate-access does not return it;
- * the marketing cert pages use slugs, not the backend UUID — see BE-I-24). The
- * backend still enforces confirmation for purchase-enrolled students by rejecting
- * `start` with a 409, which the ready page surfaces.
+ * Identity attestation (full name / ID, journeys p.4) is recorded right after a
+ * successful validate via `POST /exam/pre-exam-confirmation`, using the `certId`
+ * validate-access returns. The backend rejects `start` with a 409 for a
+ * purchase-enrolled student until that flag is set, so skipping it blocks the
+ * exam. A 404 there means the code was admin-issued without a purchase — start
+ * does not gate those, so it is safe to continue.
  *
  * Design reference: Figma nodes 13271-13551 (kept shell/branding; body is now a form).
  */
@@ -233,12 +233,13 @@ export class ExamVerifyPage {
       this.form.markAllAsTouched();
       return;
     }
-    // `idNumber` is collected as an attestation but not sent — the
-    // pre-exam-confirmation call needs a certId the FE cannot obtain here (BE-I-24).
-    const { code, fullName } = this.form.getRawValue();
+    const { code, fullName, idNumber } = this.form.getRawValue();
     this.submitting.set(true);
     try {
       const preview = await firstValueFrom(this.api.validateAccess(code.trim()));
+      if (preview.certId) {
+        await this.confirmIdentity(preview.certId, fullName.trim(), idNumber.trim());
+      }
       const state: ExamReadyNavState = {
         code: code.trim(),
         examId: preview.exam.id,
@@ -257,6 +258,18 @@ export class ExamVerifyPage {
       }
     } finally {
       this.submitting.set(false);
+    }
+  }
+
+  /** Record the attestation; a 404 (no purchase row) is not an error — see class doc. */
+  private async confirmIdentity(certId: string, fullName: string, idNumber: string): Promise<void> {
+    try {
+      await firstValueFrom(
+        this.api.confirmPreExam({ certId, fullName, ...(idNumber ? { idNumber } : {}) }),
+      );
+    } catch (err) {
+      if (err instanceof HttpErrorResponse && err.status === 404) return;
+      throw err;
     }
   }
 }

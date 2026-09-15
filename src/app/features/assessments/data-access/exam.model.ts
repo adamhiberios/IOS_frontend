@@ -101,6 +101,8 @@ export interface ExamAccessPreview {
   readonly accessCodeId: string;
   /** ISO-8601 timestamp the access code expires. */
   readonly expiresAt: string;
+  /** Backend certificate UUID the exam belongs to (absent on older API builds). */
+  readonly certId?: string;
   readonly exam: {
     readonly id: string;
     readonly title: string;
