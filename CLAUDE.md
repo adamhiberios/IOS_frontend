@@ -245,6 +245,35 @@ Husky hooks: `pre-commit` runs `lint-staged` (Prettier + ESLint on staged files)
 
 ---
 
+## 14b. Deployment — how this app reaches production
+
+**No pipeline, and nothing deploys on push.** A release is built locally and
+uploaded to the Droplet:
+
+```bash
+npx ng build --configuration production           # from the commit you are shipping
+# then, from dist/ios-lms/browser:
+SHA=$(git rev-parse --short HEAD)
+tar -czf - . | ssh -i ~/.ssh/ios_lms_droplet deploy@<droplet>   "set -e; cd /opt/ios-lms/frontend/prod; rm -rf releases/$SHA; mkdir -p releases/$SHA;    tar -xzf - -C releases/$SHA; test -f releases/$SHA/index.html; ln -sfn releases/$SHA current"
+```
+
+Caddy serves `/opt/ios-lms/frontend/prod/current` (a symlink into
+`releases/<short-sha>/`) at `app.instituteofscrum.org`, so shipping and rolling
+back are both just moving that symlink — no restart, no downtime. Verify the
+live page references the `main-*.js` you just built.
+
+The API (`IOS_Backend`) ships separately via its manual GitHub Actions **Deploy**
+workflow, and its deploy also runs DB migrations. Ship an additive API change
+**before** the frontend that depends on it. Full runbook, including the API side:
+`IOS_Backend/docs/DEPLOY-RUNBOOK.md`.
+
+Cache note: `index.html` is served `no-cache` and bundles are content-hashed,
+but `/assets/i18n/*.json` are not — `LanguageService` requests them with
+`Cache-Control: no-cache` so a deploy's new keys do not render as raw key paths
+from a stale cached copy.
+
+---
+
 ## 15. Project context (one-glance summary)
 
 - **Client**: Institute of Scrum (IOS).
