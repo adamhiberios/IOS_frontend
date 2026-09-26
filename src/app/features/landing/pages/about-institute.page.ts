@@ -148,7 +148,7 @@ interface IconRow {
       <!-- Hero image -->
       <div class="relative mt-10 rounded-2xl overflow-hidden h-[300px] md:h-[440px]">
         <img
-          ngSrc="/assets/images/landing_hero.png"
+          ngSrc="/assets/images/landing_hero.webp"
           [attr.alt]="lang.t('aboutInstitute.intro.imageAlt')"
           fill
           class="object-cover object-top"
@@ -563,7 +563,7 @@ interface IconRow {
         <!-- Background image -->
         <div class="relative rounded-2xl overflow-hidden h-[420px] lg:h-[500px]">
           <img
-            [ngSrc]="'/assets/images/training_cta.png'"
+            [ngSrc]="'/assets/images/training_cta.webp'"
             alt=""
             aria-hidden="true"
             fill
@@ -788,7 +788,7 @@ export class AboutInstitutePage {
     }[]
   >([
     {
-      imageSrc: '/assets/images/esm.png',
+      imageSrc: '/assets/images/esm.webp',
       imageWidth: 1536,
       imageHeight: 1024,
       badges: ['ESM', 'ESM-P', 'ESM-A'],
@@ -798,7 +798,7 @@ export class AboutInstitutePage {
       index: 0,
     },
     {
-      imageSrc: '/assets/images/epo.png',
+      imageSrc: '/assets/images/epo.webp',
       imageWidth: 3072,
       imageHeight: 2048,
       badges: ['EPO', 'EPO-P', 'EPO-A'],
@@ -808,7 +808,7 @@ export class AboutInstitutePage {
       index: 1,
     },
     {
-      imageSrc: '/assets/images/esf.png',
+      imageSrc: '/assets/images/esf.webp',
       imageWidth: 2896,
       imageHeight: 2172,
       badges: ['ESF'],

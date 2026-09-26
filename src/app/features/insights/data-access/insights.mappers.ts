@@ -13,9 +13,9 @@ import { type InsightDetailPost, type InsightPost } from './insights.model';
 
 /** Bundled placeholder card images (backend supplies no featured image). */
 const PLACEHOLDER_IMAGES = [
-  '/assets/images/blog_1.png',
-  '/assets/images/blog_2.png',
-  '/assets/images/blog_3.png',
+  '/assets/images/blog_1.webp',
+  '/assets/images/blog_2.webp',
+  '/assets/images/blog_3.webp',
 ] as const;
 
 /** Average adult reading speed (words/minute) used for the read-time estimate. */

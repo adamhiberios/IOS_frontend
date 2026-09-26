@@ -84,7 +84,7 @@ import { IosIcon, SectionBadge, provideIcons } from '@ui';
 
         <div class="relative flex w-full lg:w-1/2 z-10">
           <img
-            ngSrc="/assets/images/hero_photo.png"
+            ngSrc="/assets/images/hero_photo.webp"
             [alt]="lang.t('landing.hero.imageAlt')"
             width="1800"
             height="994"

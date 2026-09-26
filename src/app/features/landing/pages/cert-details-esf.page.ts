@@ -36,7 +36,7 @@ export class CertDetailsEsmFPage {
     badgeSvgPath: '/assets/badge/endorsed_scrum_facilitator.svg',
     trackName: this.lang.t('certDetails.esf.trackName'),
     levelLabel: this.lang.t('certDetails.esf.level'),
-    heroImageSrc: '/assets/images/esf.png',
+    heroImageSrc: '/assets/images/esf.webp',
     namespace: 'certDetails.esf',
     track: 'brown',
 

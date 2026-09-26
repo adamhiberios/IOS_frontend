@@ -140,7 +140,7 @@ interface CertDef {
             style="inset-inline-start: 16.61%; top: 0%; width: 66.78%; height: 100%; z-index: 2;"
           >
             <img
-              ngSrc="/assets/images/certification.png"
+              ngSrc="/assets/images/certification.webp"
               [alt]="lang.t('allCertifications.intro.imageAlt')"
               class="object-cover"
               fill
@@ -154,7 +154,7 @@ interface CertDef {
             style="inset-inline-start: 6.34%; top: 11.43%; width: 51.54%; height: 77.13%; z-index: 1;"
           >
             <img
-              ngSrc="/assets/images/certification.png"
+              ngSrc="/assets/images/certification.webp"
               [alt]="lang.t('allCertifications.intro.imageAlt')"
               class="object-cover"
               fill
@@ -168,7 +168,7 @@ interface CertDef {
             style="inset-inline-start: 42.04%; top: 11.43%; width: 51.54%; height: 77.13%; z-index: 1;"
           >
             <img
-              ngSrc="/assets/images/certification.png"
+              ngSrc="/assets/images/certification.webp"
               [alt]="lang.t('allCertifications.intro.imageAlt')"
               class="object-cover"
               fill
@@ -211,7 +211,7 @@ interface CertDef {
         <div class="lg:hidden mt-10 flex flex-col items-center gap-6">
           <div class="relative w-full max-w-[480px] aspect-[4/3]">
             <img
-              ngSrc="/assets/images/certification.png"
+              ngSrc="/assets/images/certification.webp"
               [alt]="lang.t('allCertifications.intro.imageAlt')"
               class="absolute inset-0 w-full h-full object-cover rounded-2xl shadow-2xl ring-1 ring-black/5"
               fill

@@ -60,7 +60,7 @@ const FALLBACK_INSIGHT_POSTS: InsightCardPost[] = [
     excerpt:
       'Discover why certified Scrum professionals consistently land higher-paying roles and move up faster than their peers.',
     readTime: '5 min read',
-    imageUrl: '/assets/images/blog_1.png',
+    imageUrl: '/assets/images/blog_1.webp',
     link: '/insights/why-employers-require-scrum-certification',
   },
   {
@@ -70,7 +70,7 @@ const FALLBACK_INSIGHT_POSTS: InsightCardPost[] = [
     excerpt:
       'Not sure which certification level to start with? We break down each path so you can make a confident choice.',
     readTime: '4 min read',
-    imageUrl: '/assets/images/blog_2.png',
+    imageUrl: '/assets/images/blog_2.webp',
     link: '/insights/foundation-vs-practitioner',
   },
   {
@@ -80,7 +80,7 @@ const FALLBACK_INSIGHT_POSTS: InsightCardPost[] = [
     excerpt:
       'IOS exams go beyond definitions. Work through these five real-world scenarios to sharpen your exam readiness.',
     readTime: '6 min read',
-    imageUrl: '/assets/images/blog_3.png',
+    imageUrl: '/assets/images/blog_3.webp',
     link: '/insights/5-scenario-based-exam-questions',
   },
 ];

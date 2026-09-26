@@ -36,7 +36,7 @@ export class CertDetailsEpoPage {
     badgeSvgPath: '/assets/badge/endorsed_product_owner.svg',
     trackName: this.lang.t('certDetails.epo.trackName'),
     levelLabel: this.lang.t('certDetails.epo.level'),
-    heroImageSrc: '/assets/images/epo.png',
+    heroImageSrc: '/assets/images/epo.webp',
     namespace: 'certDetails.epo',
     track: 'green',
 

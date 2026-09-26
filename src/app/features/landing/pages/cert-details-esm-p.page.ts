@@ -36,7 +36,7 @@ export class CertDetailsEsmPPage {
     badgeSvgPath: '/assets/badge/endorsed_scrum_master_practitioner.svg',
     trackName: this.lang.t('certDetails.esmP.trackName'),
     levelLabel: this.lang.t('certDetails.esmP.level'),
-    heroImageSrc: '/assets/images/esm-p.png',
+    heroImageSrc: '/assets/images/esm-p.webp',
     namespace: 'certDetails.esmP',
     track: 'blue',
 

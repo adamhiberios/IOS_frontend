@@ -147,7 +147,7 @@ interface AnswerOption {
                CSS-driven, so there is no meaningful intrinsic size to declare. -->
           <div class="relative rounded-2xl overflow-hidden shadow-xl h-[440px]">
             <img
-              [ngSrc]="'/assets/images/mock_exam_page.png'"
+              [ngSrc]="'/assets/images/mock_exam_page.webp'"
               [attr.alt]="lang.t('mockExam.whatIs.imageAlt')"
               fill
               class="object-cover"
@@ -474,7 +474,7 @@ interface AnswerOption {
         <div class="relative rounded-2xl overflow-hidden h-[495px] max-w-[700px] mx-auto">
           <!-- Wrapper already sets the height, so fill needs no extra sizing. -->
           <img
-            [ngSrc]="'/assets/images/mock_exam_page.png'"
+            [ngSrc]="'/assets/images/mock_exam_page.webp'"
             alt=""
             aria-hidden="true"
             fill

@@ -161,7 +161,7 @@ interface LucideTextItem {
         class="relative w-full max-w-[1440px] mx-auto h-[220px] md:h-[360px] lg:h-[521px] mt-[56px] overflow-hidden"
       >
         <img
-          [ngSrc]="'/assets/images/about_scrum_hero.png'"
+          [ngSrc]="'/assets/images/about_scrum_hero.webp'"
           [alt]="lang.t('aboutScrum.intro.imageAlt')"
           class="object-cover"
           fill
@@ -571,7 +571,7 @@ interface LucideTextItem {
             style="min-height: 320px;"
           >
             <img
-              [ngSrc]="'/assets/images/about_scrum_why.png'"
+              [ngSrc]="'/assets/images/about_scrum_why.webp'"
               [alt]="lang.t('aboutScrum.why.imageAlt')"
               class="object-cover"
               fill
@@ -623,7 +623,7 @@ interface LucideTextItem {
             style="min-height: 320px;"
           >
             <img
-              [ngSrc]="'/assets/images/about_scrum_when.png'"
+              [ngSrc]="'/assets/images/about_scrum_when.webp'"
               [alt]="lang.t('aboutScrum.when.imageAlt')"
               class="object-cover"
               fill

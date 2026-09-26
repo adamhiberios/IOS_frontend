@@ -31,7 +31,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <img
-      ngSrc="/assets/images/flag_of_canada.png"
+      ngSrc="/assets/images/flag_of_canada.webp"
       [alt]="label()"
       [width]="height() * 1.8"
       [height]="height()"

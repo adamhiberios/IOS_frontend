@@ -30,7 +30,7 @@ import { LanguageService } from '@core/i18n';
       <div class="overflow-hidden" aria-hidden="true">
         <div class="flex w-max animate-marquee rtl:animate-marquee-rtl">
           <img
-            ngSrc="/assets/images/landing_worlds_best_teams.png"
+            ngSrc="/assets/images/landing_worlds_best_teams.webp"
             alt=""
             width="3456"
             height="138"
@@ -39,7 +39,7 @@ import { LanguageService } from '@core/i18n';
             class="h-16 w-auto flex-shrink-0"
           />
           <img
-            ngSrc="/assets/images/landing_worlds_best_teams.png"
+            ngSrc="/assets/images/landing_worlds_best_teams.webp"
             alt=""
             width="3456"
             height="138"

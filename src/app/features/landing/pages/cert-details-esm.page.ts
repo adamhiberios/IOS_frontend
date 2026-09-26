@@ -41,7 +41,7 @@ export class CertDetailsEsmPage {
     badgeSvgPath: '/assets/badge/endorsed_scrum_master.svg',
     trackName: this.lang.t('certDetails.esm.trackName'),
     levelLabel: this.lang.t('certDetails.esm.level'),
-    heroImageSrc: '/assets/images/esm.png',
+    heroImageSrc: '/assets/images/esm.webp',
     namespace: 'certDetails.esm',
     track: 'blue',
 

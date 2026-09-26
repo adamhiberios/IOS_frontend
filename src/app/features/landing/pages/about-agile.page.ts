@@ -160,7 +160,7 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
            page content so it doesn't blow up past the container on huge screens. -->
       <div class="relative mt-10 w-full max-w-[1440px] mx-auto h-[300px] md:h-[521px]">
         <img
-          ngSrc="/assets/images/about_agile_hero.png"
+          ngSrc="/assets/images/about_agile_hero.webp"
           [attr.alt]="lang.t('aboutAgile.intro.imageAlt')"
           fill
           class="object-cover object-top"
@@ -304,7 +304,7 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
 
           <div class="relative lg:w-[480px] min-h-[280px] lg:min-h-0 rounded-lg overflow-hidden">
             <img
-              [ngSrc]="'/assets/images/about_agile_1.png'"
+              [ngSrc]="'/assets/images/about_agile_1.webp'"
               [attr.alt]="lang.t('aboutAgile.why.imageAlt')"
               fill
               class="object-cover"
@@ -324,7 +324,7 @@ const GOLD_BAR_SM = 'w-[172px] h-1 rounded-full bg-ios-brand-gold';
         <div class="flex flex-col-reverse lg:flex-row items-stretch gap-8">
           <div class="relative lg:w-[480px] min-h-[280px] lg:min-h-0 rounded-lg overflow-hidden">
             <img
-              [ngSrc]="'/assets/images/about_agile_2.png'"
+              [ngSrc]="'/assets/images/about_agile_2.webp'"
               [attr.alt]="lang.t('aboutAgile.whenWhere.imageAlt')"
               fill
               class="object-cover"
