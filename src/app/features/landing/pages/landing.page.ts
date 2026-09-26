@@ -21,6 +21,8 @@
 
 import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
 
+import { ScrollToTop } from '@ui';
+
 import { LandingNavbar } from '../components/landing-navbar';
 import { LandingFooter } from '../components/landing-footer';
 import { HeroSection } from '../components/sections/hero-section';
@@ -50,6 +52,7 @@ import { LandingStore } from '../data-access/landing.store';
     HowItWorksSection,
     InsightsSection,
     AllCertsCtaSection,
+    ScrollToTop,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -94,6 +97,8 @@ import { LandingStore } from '../data-access/landing.store';
     </main>
 
     <ios-landing-footer />
+
+    <ios-scroll-to-top />
   `,
 })
 export class LandingPage implements OnInit {
