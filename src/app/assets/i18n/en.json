@@ -211,6 +211,32 @@
     }
   },
   "landing": {
+    "search": {
+      "open": "Search",
+      "dialogLabel": "Search the site",
+      "inputLabel": "Search",
+      "placeholder": "Search certifications, articles, pages…",
+      "close": "Close search",
+      "filterLabel": "Filter results by type",
+      "resultsLabel": "Search results",
+      "hint": "Type at least {min} characters to search.",
+      "noResults": "No results for “{query}”.",
+      "error": "Search is unavailable right now. Please try again.",
+      "searching": "Searching…",
+      "retry": "Try again",
+      "loadMore": "Show more results",
+      "kbdNavigate": "to navigate",
+      "kbdOpen": "to open",
+      "kbdClose": "to close",
+      "types": {
+        "all": "All",
+        "certificate": "Certification",
+        "cms_page": "Page",
+        "blog_article": "Article",
+        "learning_module": "Module",
+        "lesson": "Lesson"
+      }
+    },
     "hero": {
       "badge": "Certifications support your career path.",
       "headline": "Build Your Scrum Expertise",

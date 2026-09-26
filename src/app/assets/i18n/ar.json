@@ -211,6 +211,32 @@
     }
   },
   "landing": {
+    "search": {
+      "open": "بحث",
+      "dialogLabel": "البحث في الموقع",
+      "inputLabel": "بحث",
+      "placeholder": "ابحث في الشهادات والمقالات والصفحات…",
+      "close": "إغلاق البحث",
+      "filterLabel": "تصفية النتائج حسب النوع",
+      "resultsLabel": "نتائج البحث",
+      "hint": "اكتب {min} أحرف على الأقل للبحث.",
+      "noResults": "لا توجد نتائج لـ «{query}».",
+      "error": "البحث غير متاح حاليًا. يرجى المحاولة مرة أخرى.",
+      "searching": "جارٍ البحث…",
+      "retry": "إعادة المحاولة",
+      "loadMore": "عرض المزيد من النتائج",
+      "kbdNavigate": "للتنقل",
+      "kbdOpen": "للفتح",
+      "kbdClose": "للإغلاق",
+      "types": {
+        "all": "الكل",
+        "certificate": "شهادة",
+        "cms_page": "صفحة",
+        "blog_article": "مقالة",
+        "learning_module": "وحدة",
+        "lesson": "درس"
+      }
+    },
     "hero": {
       "badge": "الشهادات تدعم مسيرتك المهنية.",
       "headline": "وثيقة سكرم المعتمدة",

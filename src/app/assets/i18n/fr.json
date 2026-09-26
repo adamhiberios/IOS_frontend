@@ -211,6 +211,32 @@
     }
   },
   "landing": {
+    "search": {
+      "open": "Rechercher",
+      "dialogLabel": "Rechercher sur le site",
+      "inputLabel": "Rechercher",
+      "placeholder": "Rechercher des certifications, articles, pages…",
+      "close": "Fermer la recherche",
+      "filterLabel": "Filtrer les résultats par type",
+      "resultsLabel": "Résultats de recherche",
+      "hint": "Saisissez au moins {min} caractères pour lancer la recherche.",
+      "noResults": "Aucun résultat pour « {query} ».",
+      "error": "La recherche est indisponible pour le moment. Veuillez réessayer.",
+      "searching": "Recherche en cours…",
+      "retry": "Réessayer",
+      "loadMore": "Afficher plus de résultats",
+      "kbdNavigate": "pour naviguer",
+      "kbdOpen": "pour ouvrir",
+      "kbdClose": "pour fermer",
+      "types": {
+        "all": "Tout",
+        "certificate": "Certification",
+        "cms_page": "Page",
+        "blog_article": "Article",
+        "learning_module": "Module",
+        "lesson": "Leçon"
+      }
+    },
     "hero": {
       "badge": "Les certifications soutiennent votre parcours professionnel.",
       "headline": "La Certification Scrum",

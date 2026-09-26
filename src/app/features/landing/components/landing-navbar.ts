@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  type ElementRef,
+  computed,
+  inject,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {
@@ -6,6 +14,7 @@ import {
   LucideChevronDown,
   LucideChevronRight,
   LucideMenu,
+  LucideSearch,
   LucideX,
 } from '@lucide/angular';
 
@@ -15,6 +24,7 @@ import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
 import { PublicCatalogStore } from '../data-access/catalog.store';
 import { levelRank, normalizeTrack, TRACK_ORDER } from '../data-access/catalog.mappers';
 import type { PublicCertificate } from '../data-access/catalog.model';
+import { GlobalSearch } from './global-search';
 
 /** One certificate row rendered in the mega-menu (view model, never sent to the API). */
 interface CertMenuItem {
@@ -38,15 +48,22 @@ interface CertMenuGroup {
  *
  * Distinct from `ios-auth-header` (which is minimal, used on /auth/* pages).
  * This navbar includes full navigation links (Certifications, About, Insights, Contact)
- * plus Login / Register CTAs.
+ * plus a global-search trigger (also Ctrl/⌘+K) and Login / Register CTAs.
  *
  * Uses backdrop-blur and a border-bottom to float above page content.
  */
 @Component({
   selector: 'ios-landing-navbar',
-  imports: [RouterLink, IosIcon, NgOptimizedImage, CertificatesBadge],
+  imports: [RouterLink, IosIcon, NgOptimizedImage, CertificatesBadge, GlobalSearch],
   providers: [
-    provideIcons(LucideArrowUpRight, LucideChevronDown, LucideChevronRight, LucideMenu, LucideX),
+    provideIcons(
+      LucideArrowUpRight,
+      LucideChevronDown,
+      LucideChevronRight,
+      LucideMenu,
+      LucideSearch,
+      LucideX,
+    ),
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   // Dismiss the About / Certifications menus on an outside click or Escape.
@@ -54,6 +71,8 @@ interface CertMenuGroup {
   host: {
     '(document:click)': 'closeAbout(); closeCert()',
     '(document:keydown.escape)': 'closeAbout(); closeCert()',
+    '(document:keydown.control.k)': 'openSearch($event)',
+    '(document:keydown.meta.k)': 'openSearch($event)',
   },
   template: `
     <nav
@@ -281,8 +300,23 @@ interface CertMenuGroup {
           </a>
         </div>
 
-        <!-- Auth CTAs + language + hamburger -->
+        <!-- Search + auth CTAs + language + hamburger -->
         <div class="flex items-center gap-3">
+          <!-- Global search — visible at every width, before Login / Dashboard -->
+          <button
+            #searchTrigger
+            type="button"
+            class="inline-flex items-center justify-center w-11 h-11 rounded-lg
+                   text-ios-fg-10 hover:bg-ios-surface-strong transition-colors
+                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+            [attr.aria-label]="lang.t('landing.search.open')"
+            [attr.title]="lang.t('landing.search.open')"
+            aria-haspopup="dialog"
+            [attr.aria-expanded]="searchOpen()"
+            (click)="openSearch($event)"
+          >
+            <ios-icon name="search" class="w-5 h-5" aria-hidden="true" />
+          </button>
           @if (auth.isAuthenticated()) {
             <!-- Signed in — go to the app instead of login/register -->
             <a
@@ -503,6 +537,12 @@ interface CertMenuGroup {
         </div>
       }
     </nav>
+
+    <!-- Outside <nav>: its backdrop-filter would otherwise become the
+         containing block of the dialog's fixed overlay. -->
+    @if (searchOpen()) {
+      <ios-global-search (closed)="closeSearch()" />
+    }
   `,
 })
 export class LandingNavbar {
@@ -510,6 +550,9 @@ export class LandingNavbar {
   protected readonly auth = inject(AuthStore);
   private readonly catalogStore = inject(PublicCatalogStore);
   protected readonly mobileOpen = signal(false);
+  protected readonly searchOpen = signal(false);
+  private readonly searchTrigger =
+    viewChild.required<ElementRef<HTMLButtonElement>>('searchTrigger');
 
   /** Generic placeholder used when the backend has no `badgeImageUrl` set. */
   private static readonly FALLBACK_BADGE_IMAGE = '/assets/icons/certificate_budge.svg';
@@ -662,6 +705,22 @@ export class LandingNavbar {
       this.aboutOpen.set(false);
       this.aboutCloseTimer = null;
     }, LandingNavbar.HOVER_CLOSE_DELAY_MS);
+  }
+
+  /** Opens the global search dialog (button, Ctrl+K or ⌘+K). */
+  protected openSearch(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.closeAbout();
+    this.closeCert();
+    this.mobileOpen.set(false);
+    this.searchOpen.set(true);
+  }
+
+  /** Closes the dialog and hands focus back to its trigger (APG dialog pattern). */
+  protected closeSearch(): void {
+    this.searchOpen.set(false);
+    this.searchTrigger().nativeElement.focus();
   }
 
   /** Navigating from the mobile sheet dismisses the sheet and any open submenu. */
