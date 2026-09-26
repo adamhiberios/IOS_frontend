@@ -82,63 +82,6 @@ interface CertLevelDef {
     '(document:click)': 'closeAudience()',
     '(document:keydown.escape)': 'closeAudience()',
   },
-  // Mobile card-swipe feedback (IDD-300). The card enters from the side the
-  // user swiped from, so forward and backward steps are distinguishable.
-  // `:host-context` is needed because `dir` lives on <html>, outside this
-  // component's emulated encapsulation.
-  styles: `
-    .cert-swipe {
-      animation: cert-swipe-forward 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
-    }
-    .cert-swipe[data-dir='-1'] {
-      animation-name: cert-swipe-back;
-    }
-    :host-context([dir='rtl']) .cert-swipe {
-      animation-name: cert-swipe-back;
-    }
-    :host-context([dir='rtl']) .cert-swipe[data-dir='-1'] {
-      animation-name: cert-swipe-forward;
-    }
-
-    @keyframes cert-swipe-forward {
-      from {
-        opacity: 0;
-        transform: translateX(24px);
-      }
-      to {
-        opacity: 1;
-        transform: none;
-      }
-    }
-    @keyframes cert-swipe-back {
-      from {
-        opacity: 0;
-        transform: translateX(-24px);
-      }
-      to {
-        opacity: 1;
-        transform: none;
-      }
-    }
-
-    /* Motion-sensitive users still get a state-change cue, without travel. */
-    @media (prefers-reduced-motion: reduce) {
-      .cert-swipe,
-      .cert-swipe[data-dir='-1'],
-      :host-context([dir='rtl']) .cert-swipe,
-      :host-context([dir='rtl']) .cert-swipe[data-dir='-1'] {
-        animation: cert-swipe-fade 160ms ease-out both;
-      }
-      @keyframes cert-swipe-fade {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-    }
-  `,
   template: `
     <!-- Nothing published (or still loading / errored) — omit the section entirely. -->
     @if (levels().length > 0) {
@@ -259,35 +202,31 @@ interface CertLevelDef {
                   mirrored rtl: translate keep them on the correct sides in
                   Arabic.
 
-                  The touch-pan-y class lets the browser keep handling vertical
-                  page scroll while we read the horizontal component ourselves,
-                  so a swipe steps the card instead of being swallowed as a
-                  page scroll gesture.
+                  The cards sit in a native scroll-snap track, like the desktop
+                  carousel: the card follows the finger and snaps into place
+                  (IDD-300). A JS swipe + entry animation was tried first, but
+                  on a real phone the card stayed still under the finger and
+                  only faded in after release, which read as "only the text
+                  changed". The arrows scroll the same track.
                 -->
-                  <div
-                    class="relative w-full touch-pan-y"
-                    (touchstart)="onCardTouchStart($event)"
-                    (touchend)="onCardTouchEnd($event, level.id, cards.length)"
-                  >
-                    <!--
-                    Rendered through @for over a single-element window rather
-                    than @if: swapping the index under @if only rebinds the
-                    input on the existing node, so the card's text changed with
-                    no visible motion and a swipe read as "nothing happened"
-                    (IDD-300). Tracking by id destroys and recreates the node
-                    on every step, which restarts the entry animation below.
-                  -->
-                    @for (cert of visibleCards(cards, idx); track cert.id) {
-                      <div class="cert-swipe" [attr.data-dir]="cardDir(level.id)">
-                        <ios-cert-card [cert]="cert" />
-                      </div>
-                    }
+                  <div class="relative w-full">
+                    <div
+                      #track
+                      class="flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-smooth scrollbar-none"
+                      (scroll)="onTrackScroll(level.id, track)"
+                    >
+                      @for (cert of cards; track cert.id) {
+                        <div class="w-full flex-shrink-0 snap-center">
+                          <ios-cert-card [cert]="cert" />
+                        </div>
+                      }
+                    </div>
 
                     @if (cards.length > 1) {
                       @if (idx > 0) {
                         <button
                           type="button"
-                          (click)="stepCard(level.id, -1, cards.length)"
+                          (click)="stepCard(track, idx - 1)"
                           [attr.aria-label]="lang.t('common.previousCertification')"
                           class="absolute z-10 top-1/2 start-0
                                -translate-y-1/2 -translate-x-1/2 rtl:translate-x-1/2
@@ -306,7 +245,7 @@ interface CertLevelDef {
                       @if (idx < cards.length - 1) {
                         <button
                           type="button"
-                          (click)="stepCard(level.id, 1, cards.length)"
+                          (click)="stepCard(track, idx + 1)"
                           [attr.aria-label]="lang.t('common.nextCertification')"
                           class="absolute z-10 top-1/2 end-0
                                -translate-y-1/2 translate-x-1/2 rtl:-translate-x-1/2
@@ -479,13 +418,6 @@ export class CertLevelsSection {
    */
   private readonly cardIdxByLevel = signal<Record<string, number>>({});
 
-  /**
-   * Mobile only — direction of each level's most recent card step (`1` forward,
-   * `-1` back), so the entry animation can travel the way the user swiped.
-   * Missing keys read as `1`, matching the first-paint direction.
-   */
-  private readonly cardDirByLevel = signal<Record<string, 1 | -1>>({});
-
   /** Mobile only — id of the level whose audience popover is open, if any. */
   protected readonly audienceOpenFor = signal<string | null>(null);
 
@@ -537,61 +469,37 @@ export class CertLevelsSection {
   }
 
   /**
-   * Moves a level's card window by `delta`, clamped to `[0, total - 1]`.
-   * Clamped rather than wrapped: the arrows are hidden at the ends, so a wrap
-   * here would only ever be reachable through a stale click.
+   * Arrow buttons: scrolls the level's track to card `target`. The track's
+   * `scroll-smooth` + snap make it the same sliding motion as a swipe;
+   * `onTrackScroll` then records the new index, so the arrows stay in sync
+   * whichever way the user moved.
    */
-  protected stepCard(levelId: string, delta: number, total: number): void {
-    this.cardDirByLevel.update((map) => ({ ...map, [levelId]: delta < 0 ? -1 : 1 }));
-    this.cardIdxByLevel.update((map) => {
-      const next = Math.min(Math.max((map[levelId] ?? 0) + delta, 0), Math.max(total - 1, 0));
-      return { ...map, [levelId]: next };
+  protected stepCard(track: HTMLElement, target: number): void {
+    const card = track.children[target] as HTMLElement | undefined;
+    card?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  /**
+   * Keeps the level's card index in step with its track: the card whose centre
+   * is closest to the track's centre is the one showing. Measured from layout
+   * rather than `scrollLeft` so RTL (negative `scrollLeft`) needs no special case.
+   */
+  protected onTrackScroll(levelId: string, track: HTMLElement): void {
+    const box = track.getBoundingClientRect();
+    const mid = box.left + box.width / 2;
+    let nearest = 0;
+    let best = Infinity;
+    Array.from(track.children).forEach((child, i) => {
+      const r = child.getBoundingClientRect();
+      const dist = Math.abs(r.left + r.width / 2 - mid);
+      if (dist < best) {
+        best = dist;
+        nearest = i;
+      }
     });
-  }
-
-  /** Direction of `levelId`'s last card step — drives the entry animation. */
-  protected cardDir(levelId: string): 1 | -1 {
-    return this.cardDirByLevel()[levelId] ?? 1;
-  }
-
-  /**
-   * The single card currently visible for a level, as a one-element list so the
-   * template can render it through `@for` and get a fresh DOM node (and so a
-   * fresh animation) on every step. Empty when the index has no card, which
-   * keeps `@for`'s `track cert.id` off an undefined entry.
-   */
-  protected visibleCards(cards: readonly CertCardData[], idx: number): CertCardData[] {
-    const card = cards[idx];
-    return card ? [card] : [];
-  }
-
-  /** Horizontal start position of an in-flight swipe on the mobile card, if any. */
-  private swipeStartX: number | null = null;
-
-  /** Minimum horizontal travel (px) before a touch gesture counts as a swipe. */
-  private static readonly SWIPE_THRESHOLD_PX = 40;
-
-  /** Records the touch start X so `onCardTouchEnd` can measure swipe distance. */
-  protected onCardTouchStart(event: TouchEvent): void {
-    this.swipeStartX = event.touches[0]?.clientX ?? null;
-  }
-
-  /**
-   * Mobile swipe support for the single-card-at-a-time carousel: a left swipe
-   * steps to the next certificate, a right swipe steps back, mirroring what
-   * the prev/next arrow buttons already do. `stepCard` clamps at the ends, so
-   * a swipe past the last/first card is simply a no-op.
-   */
-  protected onCardTouchEnd(event: TouchEvent, levelId: string, total: number): void {
-    const startX = this.swipeStartX;
-    this.swipeStartX = null;
-    if (startX === null || total <= 1) return;
-
-    const endX = event.changedTouches[0]?.clientX ?? startX;
-    const deltaX = endX - startX;
-    if (Math.abs(deltaX) < CertLevelsSection.SWIPE_THRESHOLD_PX) return;
-
-    this.stepCard(levelId, deltaX < 0 ? 1 : -1, total);
+    if (nearest !== this.cardIdx(levelId)) {
+      this.cardIdxByLevel.update((map) => ({ ...map, [levelId]: nearest }));
+    }
   }
 
   /**
