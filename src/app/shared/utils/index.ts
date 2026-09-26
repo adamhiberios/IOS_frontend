@@ -11,6 +11,7 @@ export {
   type CountryOption,
   type PhoneCountry,
 } from './countries';
+export { formatFee } from './format-fee';
 export { matchFieldsValidator } from './match-fields.validator';
 export {
   STRONG_PASSWORD_MIN_LENGTH,

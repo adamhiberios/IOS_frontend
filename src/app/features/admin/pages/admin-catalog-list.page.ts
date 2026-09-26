@@ -12,6 +12,7 @@ import { RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
+import { formatFee } from '@shared';
 import { Button, Input as IosInput } from '@ui';
 
 import { type ActiveFilter, type AdminCertificate } from '../data-access/catalog.model';
@@ -151,7 +152,7 @@ const FILTERS: readonly FilterOption[] = [
                 <tr class="hover:bg-gray-50">
                   <td class="px-4 py-3 font-medium text-ios-brand-dark">{{ c.title }}</td>
                   <td class="px-4 py-3 text-gray-600">{{ c.programCode }}</td>
-                  <td class="px-4 py-3 text-gray-600">{{ c.currency }} {{ c.price }}</td>
+                  <td class="px-4 py-3 text-gray-600">{{ fee(c.price, c.currency) }}</td>
                   <td class="px-4 py-3">
                     <span
                       class="inline-block px-2 py-0.5 rounded-full text-xs font-medium"
@@ -258,6 +259,14 @@ export class AdminCatalogListPage implements OnInit {
 
   protected readonly store = inject(AdminCatalogStore);
   protected readonly lang = inject(LanguageService);
+
+  /** Price cell — same `$130 USD` format as the public site (IDD-356). */
+  protected fee(price: string, currency: string): string {
+    const amount = Number(price);
+    return Number.isFinite(amount)
+      ? formatFee(amount, currency, this.lang.locale())
+      : `${currency} ${price}`;
+  }
   protected readonly filters = FILTERS;
 
   /** Create/edit gate — backend allows content_creator + learning_admin. */

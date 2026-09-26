@@ -1,3 +1,5 @@
+import { formatFee } from '@shared';
+
 import {
   type CatalogDetailItemDto,
   type CatalogItemDto,
@@ -116,16 +118,12 @@ export function toCourseOutline(dto: OutlineResponseDto): CourseOutline {
 }
 
 /**
- * Format a raw backend price + ISO currency into a localized currency string
- * (e.g. "$149.00"). Falls back to `"<currency> <price>"` if `Intl` can't format
- * the currency (unknown code) so the UI never shows a raw number with no unit.
+ * Format a raw backend price + ISO currency for display — `$130 USD` (IDD-356,
+ * see {@link formatFee}). Falls back to `"<currency> <price>"` when the price
+ * is not a number, so the UI never shows a bare value with no unit.
  */
 export function formatPrice(price: string, currency: string, locale: string): string {
   const amount = Number(price);
   if (!Number.isFinite(amount)) return `${currency} ${price}`;
-  try {
-    return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(amount);
-  } catch {
-    return `${currency} ${amount.toFixed(2)}`;
-  }
+  return formatFee(amount, currency, locale);
 }

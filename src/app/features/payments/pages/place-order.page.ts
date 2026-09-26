@@ -5,6 +5,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { LucideArrowLeft, LucideCircleCheck } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
+import { formatFee } from '@shared';
 import {
   CanadaFlag,
   CertificatesBadge,
@@ -505,14 +506,7 @@ export class PlaceOrderPage {
   });
 
   protected formatMoney(amount: number): string {
-    const currency = this.order()?.currency ?? 'USD';
-    try {
-      return new Intl.NumberFormat(this.lang.locale(), { style: 'currency', currency }).format(
-        amount,
-      );
-    } catch {
-      return `${currency} ${amount.toFixed(2)}`;
-    }
+    return formatFee(amount, this.order()?.currency ?? 'USD', this.lang.locale());
   }
 
   private slugify(title: string): string {
