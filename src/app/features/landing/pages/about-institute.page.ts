@@ -368,8 +368,10 @@ interface IconRow {
               <p class="font-body text-[14px] leading-[1.4] text-ios-fg-mid flex-1">
                 {{ lang.t('aboutInstitute.offer.cards.' + card.index + '.body') }}
               </p>
+              <!-- Opens the whole track on All Certifications, not one cert (IDD-390). -->
               <a
-                [routerLink]="card.link"
+                routerLink="/certifications"
+                [fragment]="card.fragment"
                 class="self-start inline-flex items-center gap-2 mt-2 px-8 h-[52px] rounded-lg
                        font-heading font-semibold text-[16px] transition-colors
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
@@ -783,7 +785,8 @@ export class AboutInstitutePage {
       badges: string[];
       badgeClass: string;
       buttonClass: string;
-      link: string;
+      /** Heading id of this track's section on the All Certifications page. */
+      fragment: string;
       index: number;
     }[]
   >([
@@ -794,7 +797,7 @@ export class AboutInstitutePage {
       badges: ['ESM', 'ESM-P', 'ESM-A'],
       badgeClass: 'bg-cer-blue text-cer-blue-soft border-[#9cb0bd]',
       buttonClass: 'bg-cer-blue-soft text-cer-blue hover:bg-cer-blue hover:text-cer-blue-soft',
-      link: '/certifications/esm',
+      fragment: 'all-certs-sm-heading',
       index: 0,
     },
     {
@@ -804,7 +807,7 @@ export class AboutInstitutePage {
       badges: ['EPO', 'EPO-P', 'EPO-A'],
       badgeClass: 'bg-cer-green text-cer-green-soft border-[#b4bab2]',
       buttonClass: 'bg-cer-green-soft text-cer-green hover:bg-cer-green hover:text-cer-green-soft',
-      link: '/certifications/epo',
+      fragment: 'all-certs-po-heading',
       index: 1,
     },
     {
@@ -814,7 +817,7 @@ export class AboutInstitutePage {
       badges: ['ESF'],
       badgeClass: 'bg-[#79572e] text-cer-brown-soft border-[#cebda9]',
       buttonClass: 'bg-cer-brown-soft text-[#79572e] hover:bg-[#79572e] hover:text-cer-brown-soft',
-      link: '/certifications/esf',
+      fragment: 'all-certs-sf-heading',
       index: 2,
     },
   ]);
