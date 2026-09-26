@@ -100,6 +100,7 @@ import {
         <!-- eslint-disable @angular-eslint/template/prefer-ngsrc -->
         <img
           [src]="url"
+          loading="lazy"
           [alt]="lang.t('admin.catalog.form.imagePreviewAlt')"
           class="mt-2 h-20 w-auto rounded border border-gray-200 bg-gray-50 object-contain"
           (error)="onPreviewError()"

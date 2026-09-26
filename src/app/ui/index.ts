@@ -23,7 +23,9 @@ export { SectionBadge, type SectionBadgeVariant } from './section-badge/section-
 export { ScrollToTop } from './scroll-to-top/scroll-to-top';
 export { CertificatesBadge } from './certificates-badge/certificates-badge';
 export { BulletStepList } from './bullet-step-list/bullet-step-list';
-export { BarChart } from './bar-chart/bar-chart';
-export { LineChart } from './line-chart/line-chart';
-export { DonutChart } from './donut-chart/donut-chart';
-export { RichText } from './rich-text/rich-text';
+
+// Heavy primitives (ApexCharts, Quill) are deliberately NOT re-exported here:
+// the barrel is imported by the public landing pages, and a re-export drags the
+// library into their chunks. Import them by path instead:
+//   import { BarChart } from '@ui/bar-chart/bar-chart';
+//   import { RichText } from '@ui/rich-text';

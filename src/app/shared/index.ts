@@ -4,5 +4,6 @@
  * Anything stateful belongs in core/, anything feature-specific stays inside features/<feature>/.
  */
 
+export * from './directives';
 export * from './utils';
 export * from './types';

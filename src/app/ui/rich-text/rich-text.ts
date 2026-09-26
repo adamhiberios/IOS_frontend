@@ -6,9 +6,11 @@ import {
   type OnDestroy,
   ViewEncapsulation,
   computed,
+  inject,
   input,
   viewChild,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { type FormControl } from '@angular/forms';
 import { EMPTY, switchMap } from 'rxjs';
@@ -32,8 +34,9 @@ import Quill from 'quill';
  *  - editor → control: Quill's `text-change` writes the semantic HTML back.
  *
  * `ViewEncapsulation.None` lets the small sizing/brand rules below reach Quill's
- * dynamically-created `.ql-*` DOM; the base theme ships from `quill.snow.css`
- * (registered in `angular.json`). Rules are scoped under `.ios-rte` so they
+ * dynamically-created `.ql-*` DOM; the base theme ships from `quill.snow.css`,
+ * built as the non-injected `quill-snow.css` bundle (see `angular.json`) and
+ * linked on first use, so public pages never download it. Rules are scoped under `.ios-rte` so they
  * don't leak elsewhere.
  */
 @Component({
@@ -80,6 +83,8 @@ import Quill from 'quill';
   `,
 })
 export class RichText implements AfterViewInit, OnDestroy {
+  private readonly document = inject(DOCUMENT);
+
   readonly id = input.required<string>();
   readonly label = input.required<string>();
   readonly placeholder = input<string>('');
@@ -101,6 +106,10 @@ export class RichText implements AfterViewInit, OnDestroy {
     const c = this.control();
     return !!c && (c.touched || c.dirty) && c.invalid;
   });
+
+  constructor() {
+    this.loadThemeStylesheet();
+  }
 
   ngAfterViewInit(): void {
     const quill = new Quill(this.surface().nativeElement, {
@@ -140,5 +149,16 @@ export class RichText implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.quill = null;
+  }
+
+  /** Appends `<link href="quill-snow.css">` to `<head>` once per page load. */
+  private loadThemeStylesheet(): void {
+    const id = 'ios-quill-snow-css';
+    if (this.document.getElementById(id)) return;
+    const link = this.document.createElement('link');
+    link.id = id;
+    link.rel = 'stylesheet';
+    link.href = 'quill-snow.css';
+    this.document.head.appendChild(link);
   }
 }

@@ -12,7 +12,8 @@ import { LanguageService } from '@core/i18n';
 import { CanadaFlag, IosIcon } from '@ui';
 import { provideIcons } from '@ui';
 
-import { BarChart, DonutChart } from '@ui';
+import { BarChart } from '@ui/bar-chart/bar-chart';
+import { DonutChart } from '@ui/donut-chart/donut-chart';
 
 import { CertProgressCard } from '../components/cert-progress-card';
 import { DashboardNavbar } from '@layouts';

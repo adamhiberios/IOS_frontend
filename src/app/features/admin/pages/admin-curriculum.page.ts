@@ -17,7 +17,8 @@ import { RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, RichText, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { RichText } from '@ui/rich-text';
 
 import {
   type AdminLesson,

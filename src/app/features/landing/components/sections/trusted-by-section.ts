@@ -34,7 +34,7 @@ import { LanguageService } from '@core/i18n';
             alt=""
             width="3456"
             height="138"
-            loading="eager"
+            loading="lazy"
             decoding="async"
             class="h-16 w-auto flex-shrink-0"
           />
@@ -43,7 +43,7 @@ import { LanguageService } from '@core/i18n';
             alt=""
             width="3456"
             height="138"
-            loading="eager"
+            loading="lazy"
             decoding="async"
             class="h-16 w-auto flex-shrink-0"
           />

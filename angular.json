@@ -57,7 +57,14 @@
                 "output": "assets"
               }
             ],
-            "styles": ["node_modules/quill/dist/quill.snow.css", "src/styles.css"]
+            "styles": [
+              "src/styles.css",
+              {
+                "input": "node_modules/quill/dist/quill.snow.css",
+                "bundleName": "quill-snow",
+                "inject": false
+              }
+            ]
           },
           "configurations": {
             "production": {

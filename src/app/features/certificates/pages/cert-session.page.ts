@@ -10,6 +10,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { LucideArrowDown, LucideArrowLeft, LucideFileText } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
+import { SanitizedHtml } from '@shared';
 import { CanadaFlag, IosIcon, provideIcons } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
@@ -40,17 +41,26 @@ import { FinalExamCta } from '../components/final-exam-cta';
  *    is addressable, so each is its own route — which is what makes
  *    `/session/:lessonId` linkable at all.
  *
- * `contentHtml` is rendered through Angular's sanitizer via `[innerHTML]`.
+ * `contentHtml` is rendered through Angular's sanitizer via `[iosSanitizedHtml]`
+ * (which also lazy-loads its images).
  * **Never** `bypassSecurityTrust*` here — it is author-supplied HTML.
  */
 @Component({
   selector: 'ios-cert-session-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DashboardNavbar, CertChapterNav, FinalExamCta, RouterLink, IosIcon, CanadaFlag],
+  imports: [
+    DashboardNavbar,
+    CertChapterNav,
+    FinalExamCta,
+    RouterLink,
+    IosIcon,
+    CanadaFlag,
+    SanitizedHtml,
+  ],
   providers: [provideIcons(LucideArrowLeft, LucideFileText, LucideArrowDown)],
   styles: [
     `
-      /* Layout rules for admin-authored lesson HTML injected via [innerHTML].
+      /* Layout rules for admin-authored lesson HTML injected via [iosSanitizedHtml].
          Typography stays on the article's Tailwind variants; this block only
          keeps authored content inside its column.
 
@@ -229,7 +239,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
                   <article
                     class="ios-lesson-prose flex flex-col gap-3 min-w-0 overflow-x-auto text-[16px] font-medium leading-[1.4] text-ios-fg [&_p]:mb-4 [&_h2]:text-[20px] [&_h2]:font-bold [&_h2]:text-ios-fg-13 [&_ul]:list-disc [&_ul]:ps-6"
                     dir="auto"
-                    [innerHTML]="html"
+                    [iosSanitizedHtml]="html"
                   ></article>
                 } @else {
                   <p class="text-[15px] text-ios-fg-8">

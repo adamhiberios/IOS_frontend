@@ -4,8 +4,9 @@
  * Route: /insights/:slug  →  `GET /blog/:slug`.
  *
  * The body arrives as `contentHtml` (admin-authored) and is rendered through
- * Angular's built-in `[innerHTML]` sanitizer (`SecurityContext.HTML`) — the
- * allow-list required by CLAUDE.md §4. We never call `bypassSecurityTrust*`.
+ * `[iosSanitizedHtml]` — Angular's sanitizer (`SecurityContext.HTML`), the
+ * allow-list required by CLAUDE.md §4, plus lazy-loaded images. We never call
+ * `bypassSecurityTrust*`.
  * A 404 (draft / archived / unknown slug) shows the not-found state.
  *
  * Structure (top → bottom):
@@ -31,6 +32,7 @@ import { LucideArrowLeft, LucideClock, LucideUser } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 import { JsonLdService } from '@core/seo';
+import { SanitizedHtml } from '@shared';
 import { IosIcon, ScrollToTop, provideIcons } from '@ui';
 
 import { LandingNavbar } from '../../landing/components/landing-navbar';
@@ -48,12 +50,13 @@ import { InsightsStore } from '../data-access/insights.store';
     NgOptimizedImage,
     IosIcon,
     ScrollToTop,
+    SanitizedHtml,
   ],
   providers: [provideIcons(LucideArrowLeft, LucideClock, LucideUser)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   styles: [
     `
-      /* Prose styling for admin-authored article HTML injected via [innerHTML].
+      /* Prose styling for admin-authored article HTML injected via [iosSanitizedHtml].
          ::ng-deep pierces view encapsulation to reach the sanitized children;
          scoped under .ios-blog-prose so it never leaks to the rest of the app. */
       .ios-blog-prose {
@@ -244,15 +247,14 @@ import { InsightsStore } from '../data-access/insights.store';
               width="896"
               height="448"
               class="w-full aspect-[16/7] object-cover"
-              loading="eager"
-              decoding="async"
+              priority
             />
           </div>
         </div>
 
         <!-- Sanitized article body -->
         <div class="px-6 md:px-16 lg:px-[120px] pt-12">
-          <div class="ios-blog-prose max-w-4xl mx-auto" [innerHTML]="post.contentHtml"></div>
+          <div class="ios-blog-prose max-w-4xl mx-auto" [iosSanitizedHtml]="post.contentHtml"></div>
         </div>
       </article>
     }
