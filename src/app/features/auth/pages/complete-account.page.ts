@@ -298,7 +298,7 @@ const DEFAULT_PHONE_COUNTRY_CODE = 'CA';
                       (click)="togglePhoneDropdown()"
                       class="shrink-0 h-full flex items-center gap-1.5 ps-3 pe-2
                              border-e border-gray-200 bg-gray-50 text-ios-brand-dark
-                             text-sm font-bold focus:outline-none focus:bg-gray-100
+                             text-sm font-bold hover:bg-gray-100 focus:outline-none focus:bg-gray-100
                              transition-colors whitespace-nowrap"
                       [attr.aria-expanded]="phoneDropdownOpen()"
                       aria-haspopup="listbox"

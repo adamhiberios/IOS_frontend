@@ -216,7 +216,7 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
               <button
                 type="button"
                 (click)="openTranslations()"
-                class="text-sm text-ios-brand-primary underline"
+                class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
               >
                 {{ lang.t('admin.catalog.translations.button') }}
               </button>

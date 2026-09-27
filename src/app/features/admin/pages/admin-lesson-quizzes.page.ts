@@ -66,7 +66,10 @@ interface QuestionTarget {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
-      <a routerLink="/admin/curriculum" class="text-sm text-ios-brand-primary underline">
+      <a
+        routerLink="/admin/curriculum"
+        class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
+      >
         ← {{ lang.t('admin.quiz.back') }}
       </a>
       <header class="mt-2 mb-6 flex items-start justify-between gap-4">
@@ -129,7 +132,7 @@ interface QuestionTarget {
                     <button
                       type="button"
                       (click)="openRenameQuiz(qz)"
-                      class="text-sm text-ios-brand-primary underline"
+                      class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                     >
                       {{ lang.t('admin.quiz.editQuiz') }}
                     </button>
@@ -207,7 +210,7 @@ interface QuestionTarget {
                           <button
                             type="button"
                             (click)="openEditQuestion(qz.id, q)"
-                            class="text-sm text-ios-brand-primary underline"
+                            class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                           >
                             {{ lang.t('admin.quiz.edit') }}
                           </button>

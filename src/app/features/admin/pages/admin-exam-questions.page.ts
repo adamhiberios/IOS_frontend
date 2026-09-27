@@ -64,7 +64,10 @@ const required: ValidatorFn = (control) => Validators.required(control);
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
-      <a routerLink="/admin/exams" class="text-sm text-ios-brand-primary underline">
+      <a
+        routerLink="/admin/exams"
+        class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
+      >
         {{ lang.t('admin.examQuestions.back') }}
       </a>
 
@@ -250,7 +253,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                       <button
                         type="button"
                         (click)="openEdit(q)"
-                        class="text-sm text-ios-brand-primary underline"
+                        class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                       >
                         {{ lang.t('admin.examQuestions.edit') }}
                       </button>

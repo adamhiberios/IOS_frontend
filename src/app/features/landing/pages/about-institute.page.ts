@@ -658,8 +658,8 @@ interface IconRow {
             <h3>
               <button
                 type="button"
-                class="w-full flex items-center gap-4 px-6 py-5 text-start
-                       focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
+                class="w-full flex items-center gap-4 px-6 py-5 text-start hover:bg-black/5
+                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/50"
                 [attr.aria-expanded]="openFaq() === item"
                 [attr.aria-controls]="'faq-panel-' + item"
                 (click)="toggleFaq(item)"

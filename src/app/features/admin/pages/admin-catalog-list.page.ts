@@ -175,7 +175,7 @@ const FILTERS: readonly FilterOption[] = [
                       <div class="flex items-center justify-end gap-3">
                         <a
                           [routerLink]="['/admin/catalog', c.id, 'edit']"
-                          class="text-sm text-ios-brand-primary underline"
+                          class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                         >
                           {{ lang.t('admin.catalog.edit') }}
                         </a>

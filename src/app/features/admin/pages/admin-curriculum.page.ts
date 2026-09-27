@@ -151,7 +151,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                     <button
                       type="button"
                       (click)="openEditModule(m)"
-                      class="text-sm text-ios-brand-primary underline"
+                      class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                     >
                       {{ lang.t('admin.curriculum.edit') }}
                     </button>
@@ -224,14 +224,14 @@ const required: ValidatorFn = (control) => Validators.required(control);
                         <a
                           [routerLink]="['/admin/lessons', l.id, 'quizzes']"
                           [queryParams]="{ title: l.title }"
-                          class="text-sm text-ios-brand-primary underline"
+                          class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                         >
                           {{ lang.t('admin.curriculum.quizzes') }}
                         </a>
                         <button
                           type="button"
                           (click)="openEditLesson(m, l)"
-                          class="text-sm text-ios-brand-primary underline"
+                          class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                         >
                           {{ lang.t('admin.curriculum.edit') }}
                         </button>

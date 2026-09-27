@@ -126,7 +126,7 @@ import { InsightsStore } from '../data-access/insights.store';
                 [disabled]="store.isLoadingMore()"
                 class="inline-flex items-center justify-center gap-2 w-full h-12 rounded-lg
                      bg-white border-[1.5px] border-ios-brand-gold border-solid
-                     text-[#736428] font-heading font-semibold text-[15px] transition-colors
+                     text-[#736428] font-heading font-semibold text-[15px] transition-colors hover:bg-ios-brand-gold/10
                      disabled:opacity-60"
               >
                 @if (store.isLoadingMore()) {

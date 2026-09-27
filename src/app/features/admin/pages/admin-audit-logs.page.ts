@@ -164,7 +164,7 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
                     <button
                       type="button"
                       (click)="openDetails(e)"
-                      class="text-sm text-ios-brand-primary underline"
+                      class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                     >
                       {{ lang.t('admin.audit.view') }}
                     </button>

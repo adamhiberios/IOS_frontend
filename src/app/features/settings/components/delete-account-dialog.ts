@@ -147,7 +147,7 @@ import { NgOptimizedImage } from '@angular/common';
               <!-- Delete account — disabled until a password is entered -->
               <button
                 type="button"
-                class="flex items-center justify-center gap-2 h-14 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[18px] font-semibold leading-[1.4] transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50"
+                class="flex items-center justify-center gap-2 h-14 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[18px] font-semibold leading-[1.4] transition-opacity enabled:hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50"
                 [class.opacity-40]="!canDelete()"
                 [class.cursor-not-allowed]="!canDelete()"
                 [disabled]="!canDelete()"

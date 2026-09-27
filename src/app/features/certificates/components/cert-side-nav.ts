@@ -40,7 +40,7 @@ const NAV_ITEMS: readonly { id: CertDetailNavItem['id']; labelKey: string }[] = 
       @for (item of navItems; track item.id) {
         <button
           type="button"
-          class="flex items-center w-full px-6 py-4 text-start text-[16px] leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
+          class="flex items-center w-full px-6 py-4 text-start text-[16px] leading-[1.4] transition-colors hover:bg-cer-blue-soft/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
           [class.bg-cer-blue-soft]="activeSection() === item.id"
           [class.border-e-[6px]]="activeSection() === item.id"
           [class.border-cer-blue-text]="activeSection() === item.id"

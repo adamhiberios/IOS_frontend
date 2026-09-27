@@ -87,7 +87,7 @@ interface PreviewRow {
                 type="button"
                 [disabled]="store.templateBusy()"
                 (click)="downloadTemplate()"
-                class="text-sm text-ios-brand-primary underline disabled:opacity-50"
+                class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover disabled:opacity-50"
               >
                 {{
                   store.templateBusy()

@@ -164,7 +164,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                       <div class="flex items-center justify-end gap-3">
                         <a
                           [routerLink]="['/admin/exams', e.id]"
-                          class="text-sm text-ios-brand-primary underline"
+                          class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                         >
                           {{ lang.t('admin.examAuthoring.questions') }}
                         </a>
@@ -172,7 +172,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                           <button
                             type="button"
                             (click)="openEdit(e)"
-                            class="text-sm text-ios-brand-primary underline"
+                            class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                           >
                             {{ lang.t('admin.examAuthoring.edit') }}
                           </button>

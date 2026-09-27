@@ -156,7 +156,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                         <button
                           type="button"
                           (click)="openEdit(p)"
-                          class="text-sm text-ios-brand-primary underline"
+                          class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                         >
                           {{ lang.t('admin.promo.edit') }}
                         </button>

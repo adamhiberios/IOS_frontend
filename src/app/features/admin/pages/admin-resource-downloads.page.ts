@@ -147,7 +147,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
                         type="button"
                         [disabled]="busy()"
                         (click)="openDetail(d)"
-                        class="text-sm text-ios-brand-primary underline disabled:opacity-50"
+                        class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover disabled:opacity-50"
                       >
                         {{ lang.t('admin.downloads.manage') }}
                       </button>

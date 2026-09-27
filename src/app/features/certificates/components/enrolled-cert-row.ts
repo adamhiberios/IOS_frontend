@@ -117,7 +117,7 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
           <div class="flex flex-col gap-2 w-[217px]">
             <button
               type="button"
-              class="inline-flex items-center justify-center gap-2 h-11 rounded-xl text-[16px] font-semibold leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-full disabled:opacity-60 disabled:pointer-events-none"
+              class="inline-flex items-center justify-center gap-2 h-11 rounded-xl text-[16px] font-semibold leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-full hover:opacity-90 disabled:opacity-60 disabled:pointer-events-none"
               [style.background-color]="buttonBg()"
               [style.color]="buttonText()"
               [iosFinalExamCta]="cert().certId"

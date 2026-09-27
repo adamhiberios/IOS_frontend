@@ -44,7 +44,7 @@ import { NotificationCard } from '../components/notification-card';
             >
               <button
                 type="button"
-                class="h-9 px-4 rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+                class="h-9 px-4 rounded-xl text-sm font-semibold transition-colors hover:text-ios-fg-13 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
                 [class.bg-white]="!store.unreadOnly()"
                 [class.text-ios-fg-13]="!store.unreadOnly()"
                 [class.text-ios-fg-8]="store.unreadOnly()"
@@ -55,7 +55,7 @@ import { NotificationCard } from '../components/notification-card';
               </button>
               <button
                 type="button"
-                class="h-9 px-4 rounded-xl text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+                class="h-9 px-4 rounded-xl text-sm font-semibold transition-colors hover:text-ios-fg-13 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
                 [class.bg-white]="store.unreadOnly()"
                 [class.text-ios-fg-13]="store.unreadOnly()"
                 [class.text-ios-fg-8]="!store.unreadOnly()"

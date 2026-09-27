@@ -26,7 +26,7 @@ import { type StudentDetail } from '../data-access/users.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
-      <a routerLink="/admin/users" class="text-sm text-ios-brand-primary underline">
+      <a routerLink="/admin/users" class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover">
         {{ lang.t('admin.userDetail.back') }}
       </a>
 
@@ -158,7 +158,7 @@ import { type StudentDetail } from '../data-access/users.model';
                               [href]="c.certificateUrl"
                               target="_blank"
                               rel="noopener"
-                              class="text-sm text-ios-brand-primary underline"
+                              class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                             >
                               {{ lang.t('admin.userDetail.certView') }}
                             </a>
@@ -168,7 +168,7 @@ import { type StudentDetail } from '../data-access/users.model';
                               [href]="c.qrUrl"
                               target="_blank"
                               rel="noopener"
-                              class="text-sm text-ios-brand-primary underline"
+                              class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                             >
                               {{ lang.t('admin.userDetail.certQr') }}
                             </a>

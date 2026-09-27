@@ -81,7 +81,7 @@ import {
               @for (p of rangePresets; track p) {
                 <button
                   type="button"
-                  class="px-3 py-1.5 text-sm font-semibold rounded-md transition-colors cursor-pointer
+                  class="px-3 py-1.5 text-sm font-semibold rounded-md transition-colors cursor-pointer hover:text-ios-brand-primary
                          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50
                          disabled:cursor-not-allowed disabled:opacity-60"
                   [class.bg-ios-brand-amber-soft]="preset() === p"

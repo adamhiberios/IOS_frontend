@@ -168,7 +168,7 @@ interface CertLevelDef {
                       [attr.aria-expanded]="audienceOpenFor() === level.id"
                       [attr.aria-controls]="'audience-' + level.id"
                       [attr.aria-label]="lang.t('landing.levels.whoShouldPursueToggle')"
-                      class="w-9 h-9 rounded-full border border-ios-fg-7 bg-ios-surface-strong
+                      class="w-9 h-9 rounded-full border border-ios-fg-7 bg-ios-surface-strong hover:bg-ios-brand-gold/10
                            flex items-center justify-center cursor-pointer
                            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
                     >
@@ -287,7 +287,7 @@ interface CertLevelDef {
                     role="tab"
                     [attr.aria-selected]="activeLevelIdx() === idx"
                     (click)="selectLevel(idx)"
-                    class="px-2 py-2 text-[15px] text-start cursor-pointer
+                    class="px-2 py-2 text-[15px] text-start cursor-pointer hover:text-ios-brand-primary
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
                   >
                     <!-- inline-block so the underline sizes to the label text, not the button -->

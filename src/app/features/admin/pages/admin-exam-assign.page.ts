@@ -78,7 +78,7 @@ import { type StudentListItem } from '../data-access/users.model';
               <button
                 type="button"
                 (click)="changeStudent()"
-                class="shrink-0 text-sm text-ios-brand-primary underline"
+                class="shrink-0 text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
               >
                 {{ lang.t('admin.exam.changeStudent') }}
               </button>

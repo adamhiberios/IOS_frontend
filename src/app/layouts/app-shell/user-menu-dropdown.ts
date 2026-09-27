@@ -92,7 +92,7 @@ const MENU_ITEMS: readonly MenuItem[] = [
               role="menuitem"
               [attr.aria-pressed]="option.code === locale()"
               (click)="setLocale(option.code)"
-              class="flex-1 py-1.5 rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+              class="flex-1 py-1.5 rounded-lg text-sm font-medium transition-colors hover:opacity-85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
               [class.bg-ios-brand-primary]="option.code === locale()"
               [class.text-white]="option.code === locale()"
               [class.bg-ios-surface-soft]="option.code !== locale()"

@@ -157,7 +157,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
                         <button
                           type="button"
                           (click)="openEdit(m)"
-                          class="text-sm text-ios-brand-primary underline"
+                          class="text-sm text-ios-brand-primary underline hover:text-ios-brand-primary-hover"
                         >
                           {{ lang.t('admin.staff.edit') }}
                         </button>

@@ -43,7 +43,7 @@ export interface CertNavItem {
       @for (chapter of chapters(); track chapter.id) {
         <button
           type="button"
-          class="flex items-center w-full px-6 py-4 text-start text-[16px] font-semibold leading-[1.4] text-ios-fg-13 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
+          class="flex items-center w-full px-6 py-4 text-start text-[16px] font-semibold leading-[1.4] text-ios-fg-13 transition-colors hover:bg-[#f8fafc] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
           [class.border-s-2]="true"
           [class.border-cer-blue]="activeChapterId() === chapter.id"
           [class.border-ios-border-light]="activeChapterId() !== chapter.id"
