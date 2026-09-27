@@ -13,7 +13,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
-import { Button, Checkbox, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Checkbox, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 
 import { CertImageUpload } from '../components/cert-image-upload';
 import { AdminCatalogApi } from '../data-access/catalog.api';
@@ -52,6 +52,7 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
     Checkbox,
     Select,
     CertImageUpload,
+    DialogFooter,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -306,7 +307,7 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
                 </p>
               }
 
-              <div class="flex justify-end gap-3">
+              <ios-dialog-footer>
                 <button
                   type="button"
                   (click)="closeTranslations()"
@@ -317,7 +318,7 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
                 <ios-button type="submit" variant="primary" [loading]="translationsSaving()">
                   {{ lang.t('admin.catalog.translations.save') }}
                 </ios-button>
-              </div>
+              </ios-dialog-footer>
             </form>
           </div>
         </div>

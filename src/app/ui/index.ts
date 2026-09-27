@@ -21,6 +21,7 @@ export { provideIcons, type LucideIconClass } from './icon/icon-registry';
 export type { LucideIconName } from './icon/icon-names';
 export { SectionBadge, type SectionBadgeVariant } from './section-badge/section-badge';
 export { ScrollToTop } from './scroll-to-top/scroll-to-top';
+export { DialogFooter } from './dialog-footer/dialog-footer';
 export { CertificatesBadge } from './certificates-badge/certificates-badge';
 export { BulletStepList } from './bullet-step-list/bullet-step-list';
 

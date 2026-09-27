@@ -17,7 +17,7 @@ import { RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 import { RichText } from '@ui/rich-text';
 
 import {
@@ -48,7 +48,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-curriculum-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, RichText, Select, Button],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, RichText, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -352,7 +352,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
               }
 
-              <div class="flex justify-end gap-3 pt-2">
+              <ios-dialog-footer>
                 <button
                   type="button"
                   (click)="closeModuleDialog()"
@@ -367,7 +367,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 >
                   {{ lang.t('admin.curriculum.save') }}
                 </ios-button>
-              </div>
+              </ios-dialog-footer>
             </form>
           </div>
         </div>
@@ -455,7 +455,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
               }
 
-              <div class="flex justify-end gap-3 pt-2">
+              <ios-dialog-footer>
                 <button
                   type="button"
                   (click)="closeLessonDialog()"
@@ -470,7 +470,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 >
                   {{ lang.t('admin.curriculum.save') }}
                 </ios-button>
-              </div>
+              </ios-dialog-footer>
             </form>
           </div>
         </div>

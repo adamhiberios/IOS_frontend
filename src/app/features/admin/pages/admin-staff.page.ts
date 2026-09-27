@@ -14,7 +14,7 @@ import {
 } from '@angular/forms';
 
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 
 import {
   ASSIGNABLE_STAFF_ROLES,
@@ -45,7 +45,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
  */
 @Component({
   selector: 'ios-admin-staff-page',
-  imports: [ReactiveFormsModule, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -211,13 +211,15 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
       <!-- Create / edit dialog -->
       @if (dialogOpen()) {
         <div
-          class="fixed inset-0 z-50 overflow-y-auto bg-black/50"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="staff-dialog-title"
         >
-          <div class="min-h-full flex items-center justify-center p-4">
-            <div class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl">
+          <div class="flex w-full justify-center">
+            <div
+              class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            >
               <h2 id="staff-dialog-title" class="text-lg font-semibold text-ios-brand-dark mb-4">
                 {{
                   editingId() ? lang.t('admin.staff.editTitle') : lang.t('admin.staff.createTitle')
@@ -282,7 +284,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
                   <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
                 }
 
-                <div class="flex justify-end gap-3 pt-2">
+                <ios-dialog-footer>
                   <button
                     type="button"
                     (click)="closeDialog()"
@@ -297,7 +299,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
                   >
                     {{ lang.t('admin.staff.save') }}
                   </ios-button>
-                </div>
+                </ios-dialog-footer>
               </form>
             </div>
           </div>
@@ -312,7 +314,9 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
           aria-modal="true"
           aria-labelledby="staff-deactivate-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="staff-deactivate-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.staff.confirmTitle') }}
             </h2>
@@ -325,7 +329,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDeactivate()"
@@ -340,7 +344,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
               >
                 {{ lang.t('admin.staff.deactivate') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

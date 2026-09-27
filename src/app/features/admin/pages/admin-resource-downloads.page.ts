@@ -12,7 +12,7 @@ import { map } from 'rxjs';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Select, type SelectOption } from '@ui';
+import { Button, Select, type SelectOption, DialogFooter } from '@ui';
 
 import {
   ADMIN_NOTES_MAX_LENGTH,
@@ -41,7 +41,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
  */
 @Component({
   selector: 'ios-admin-resource-downloads-page',
-  imports: [ReactiveFormsModule, Select, Button],
+  imports: [ReactiveFormsModule, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -187,13 +187,15 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
       <!-- Detail + follow-up editor -->
       @if (detailOpen()) {
         <div
-          class="fixed inset-0 z-50 overflow-y-auto bg-black/50"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="download-detail-title"
         >
-          <div class="flex min-h-full items-start justify-center p-4">
-            <div class="my-8 w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl">
+          <div class="flex w-full justify-center">
+            <div
+              class="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            >
               @if (store.detailLoading()) {
                 <p class="py-10 text-center text-sm text-gray-500" role="status" aria-live="polite">
                   {{ lang.t('admin.downloads.loading') }}
@@ -202,7 +204,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
                 <p class="py-10 text-center text-sm text-red-600" role="alert">
                   {{ store.detailError() }}
                 </p>
-                <div class="flex justify-end">
+                <ios-dialog-footer>
                   <button
                     type="button"
                     (click)="closeDetail()"
@@ -210,7 +212,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
                   >
                     {{ lang.t('admin.downloads.close') }}
                   </button>
-                </div>
+                </ios-dialog-footer>
               } @else if (store.detail(); as d) {
                 <h2
                   id="download-detail-title"
@@ -347,7 +349,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
                     </p>
                   }
 
-                  <div class="flex flex-wrap justify-end gap-3">
+                  <ios-dialog-footer>
                     <button
                       type="button"
                       (click)="closeDetail()"
@@ -357,12 +359,13 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
                     </button>
                     <ios-button
                       type="submit"
+                      variant="primary"
                       [disabled]="!hasChanges()"
                       [loading]="store.actionPendingId() === d.id"
                     >
                       {{ lang.t('admin.downloads.save') }}
                     </ios-button>
-                  </div>
+                  </ios-dialog-footer>
                 </form>
               }
             </div>
@@ -378,7 +381,9 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
           aria-modal="true"
           aria-labelledby="download-del-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="download-del-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.downloads.deleteTitle') }}
             </h2>
@@ -398,7 +403,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDelete()"
@@ -413,7 +418,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
               >
                 {{ lang.t('admin.downloads.deleteConfirm') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

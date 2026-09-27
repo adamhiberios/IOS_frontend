@@ -10,7 +10,7 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 
 import { AdminExamAssignStore } from '../data-access/exam-assign.store';
 import { type StudentListItem } from '../data-access/users.model';
@@ -26,7 +26,7 @@ import { type StudentListItem } from '../data-access/users.model';
  */
 @Component({
   selector: 'ios-admin-exam-assign-page',
-  imports: [ReactiveFormsModule, DatePipe, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, DatePipe, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -175,7 +175,9 @@ import { type StudentListItem } from '../data-access/users.model';
           aria-modal="true"
           aria-labelledby="assign-code-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="assign-code-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.exam.codeTitle') }}
             </h2>
@@ -210,11 +212,11 @@ import { type StudentListItem } from '../data-access/users.model';
               </div>
             </dl>
 
-            <div class="mt-5 flex justify-end">
+            <ios-dialog-footer>
               <ios-button variant="primary" (clicked)="dismiss()">
                 {{ lang.t('admin.exam.done') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

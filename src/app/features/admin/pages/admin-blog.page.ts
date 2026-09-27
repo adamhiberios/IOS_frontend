@@ -20,7 +20,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 import { RichText } from '@ui/rich-text';
 
 import { BlogCoverUpload } from '../components/blog-cover-upload';
@@ -66,7 +66,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
  */
 @Component({
   selector: 'ios-admin-blog-page',
-  imports: [ReactiveFormsModule, IosInput, RichText, Select, Button, BlogCoverUpload],
+  imports: [ReactiveFormsModule, IosInput, RichText, Select, Button, BlogCoverUpload, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -247,13 +247,15 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
       <!-- Create / edit dialog -->
       @if (dialog() === 'form') {
         <div
-          class="fixed inset-0 z-50 overflow-y-auto bg-black/50"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="blog-dialog-title"
         >
-          <div class="min-h-full flex items-start justify-center p-4">
-            <div class="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl my-8">
+          <div class="flex w-full justify-center">
+            <div
+              class="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            >
               <h2 id="blog-dialog-title" class="text-lg font-semibold text-ios-brand-dark mb-4">
                 {{
                   editingId() ? lang.t('admin.blog.editTitle') : lang.t('admin.blog.createTitle')
@@ -328,7 +330,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                   <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
                 }
 
-                <div class="flex justify-end gap-3 pt-2">
+                <ios-dialog-footer>
                   <button
                     type="button"
                     (click)="closeDialog()"
@@ -343,7 +345,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                   >
                     {{ lang.t('admin.blog.save') }}
                   </ios-button>
-                </div>
+                </ios-dialog-footer>
               </form>
             </div>
           </div>
@@ -353,13 +355,15 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
       <!-- Translations dialog -->
       @if (dialog() === 'translations') {
         <div
-          class="fixed inset-0 z-50 overflow-y-auto bg-black/50"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="blog-tr-title"
         >
-          <div class="min-h-full flex items-start justify-center p-4">
-            <div class="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl my-8">
+          <div class="flex w-full justify-center">
+            <div
+              class="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            >
               <h2 id="blog-tr-title" class="text-lg font-semibold text-ios-brand-dark">
                 {{ lang.t('admin.blog.translations') }}
               </h2>
@@ -419,7 +423,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                   <p class="text-sm text-red-600 mt-4" role="alert">{{ store.actionError() }}</p>
                 }
 
-                <div class="flex justify-end gap-3 pt-4">
+                <ios-dialog-footer>
                   <button
                     type="button"
                     (click)="closeDialog()"
@@ -434,7 +438,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                   >
                     {{ lang.t('admin.blog.save') }}
                   </ios-button>
-                </div>
+                </ios-dialog-footer>
               </form>
             </div>
           </div>
@@ -449,7 +453,9 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
           aria-modal="true"
           aria-labelledby="blog-del-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="blog-del-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.blog.archiveTitle') }}
             </h2>
@@ -460,7 +466,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDelete()"
@@ -475,7 +481,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
               >
                 {{ lang.t('admin.blog.archive') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

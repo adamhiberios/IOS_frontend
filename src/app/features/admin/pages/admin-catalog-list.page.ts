@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { formatFee } from '@shared';
-import { Button, Input as IosInput } from '@ui';
+import { Button, Input as IosInput, DialogFooter } from '@ui';
 
 import { type ActiveFilter, type AdminCertificate } from '../data-access/catalog.model';
 import { AdminCatalogStore } from '../data-access/catalog.store';
@@ -41,7 +41,7 @@ const FILTERS: readonly FilterOption[] = [
  */
 @Component({
   selector: 'ios-admin-catalog-list-page',
-  imports: [ReactiveFormsModule, RouterLink, DatePipe, IosInput, Button],
+  imports: [ReactiveFormsModule, RouterLink, DatePipe, IosInput, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -218,7 +218,9 @@ const FILTERS: readonly FilterOption[] = [
           aria-modal="true"
           aria-labelledby="deactivate-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="deactivate-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.catalog.confirmTitle') }}
             </h2>
@@ -231,7 +233,7 @@ const FILTERS: readonly FilterOption[] = [
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
 
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDeactivate()"
@@ -246,7 +248,7 @@ const FILTERS: readonly FilterOption[] = [
               >
                 {{ lang.t('admin.catalog.confirmConfirm') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

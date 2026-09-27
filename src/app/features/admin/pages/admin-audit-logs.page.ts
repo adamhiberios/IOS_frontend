@@ -11,7 +11,7 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 
 import { type AuditLogEntry } from '../data-access/audit.model';
 import { AdminAuditLogsStore } from '../data-access/audit.store';
@@ -27,7 +27,7 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
  */
 @Component({
   selector: 'ios-admin-audit-logs-page',
-  imports: [ReactiveFormsModule, DatePipe, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, DatePipe, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -197,21 +197,11 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
           aria-labelledby="audit-detail-title"
         >
           <div
-            class="w-full max-w-5xl rounded-xl bg-white p-6 shadow-xl max-h-[85vh] overflow-y-auto"
+            class="w-full max-w-5xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
-            <div class="flex items-start justify-between gap-4">
-              <h2 id="audit-detail-title" class="text-lg font-semibold text-ios-brand-dark">
-                {{ actionLabel(entry.action) }} · {{ entry.tableName }}
-              </h2>
-              <button
-                type="button"
-                (click)="closeDetails()"
-                class="text-gray-400 hover:text-gray-700 text-xl leading-none"
-                [attr.aria-label]="lang.t('admin.audit.close')"
-              >
-                ×
-              </button>
-            </div>
+            <h2 id="audit-detail-title" class="text-lg font-semibold text-ios-brand-dark">
+              {{ actionLabel(entry.action) }} · {{ entry.tableName }}
+            </h2>
 
             <dl class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-sm">
               <div>
@@ -305,11 +295,15 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
               }
             </div>
 
-            <div class="mt-5 flex justify-end">
-              <ios-button variant="secondary" (clicked)="closeDetails()">
+            <ios-dialog-footer>
+              <button
+                type="button"
+                (click)="closeDetails()"
+                class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+              >
                 {{ lang.t('admin.audit.close') }}
-              </ios-button>
-            </div>
+              </button>
+            </ios-dialog-footer>
           </div>
         </div>
       }

@@ -19,7 +19,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 
 import {
   type ExamQuestion,
@@ -52,7 +52,15 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-exam-questions-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button, QuestionImportDialog],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    IosInput,
+    Select,
+    Button,
+    QuestionImportDialog,
+    DialogFooter,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -405,7 +413,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
               }
 
-              <div class="flex justify-end gap-3 pt-2">
+              <ios-dialog-footer>
                 <button
                   type="button"
                   (click)="closeDialog()"
@@ -420,7 +428,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 >
                   {{ lang.t('admin.examQuestions.save') }}
                 </ios-button>
-              </div>
+              </ios-dialog-footer>
             </form>
           </div>
         </div>
@@ -474,7 +482,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
               }
 
-              <div class="flex justify-end gap-3 pt-2">
+              <ios-dialog-footer>
                 <button
                   type="button"
                   (click)="closeTranslations()"
@@ -489,7 +497,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 >
                   {{ lang.t('admin.examQuestions.save') }}
                 </ios-button>
-              </div>
+              </ios-dialog-footer>
             </form>
           </div>
         </div>
@@ -503,7 +511,9 @@ const required: ValidatorFn = (control) => Validators.required(control);
           aria-modal="true"
           aria-labelledby="q-delete-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="q-delete-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.examQuestions.confirmTitle') }}
             </h2>
@@ -513,7 +523,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDelete()"
@@ -528,7 +538,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
               >
                 {{ lang.t('admin.examQuestions.delete') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

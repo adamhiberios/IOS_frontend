@@ -19,7 +19,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 
 import {
   QUIZ_MIN_OPTIONS,
@@ -54,7 +54,15 @@ interface QuestionTarget {
  */
 @Component({
   selector: 'ios-admin-lesson-quizzes-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button, QuestionImportDialog],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    IosInput,
+    Select,
+    Button,
+    QuestionImportDialog,
+    DialogFooter,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -269,7 +277,9 @@ interface QuestionTarget {
           aria-modal="true"
           aria-labelledby="quiz-dialog-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="quiz-dialog-title" class="text-lg font-semibold text-ios-brand-dark mb-4">
               {{
                 editingQuizId()
@@ -291,7 +301,7 @@ interface QuestionTarget {
               @if (store.actionError()) {
                 <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
               }
-              <div class="flex justify-end gap-3 pt-2">
+              <ios-dialog-footer>
                 <button
                   type="button"
                   (click)="closeQuizDialog()"
@@ -306,7 +316,7 @@ interface QuestionTarget {
                 >
                   {{ lang.t('admin.quiz.save') }}
                 </ios-button>
-              </div>
+              </ios-dialog-footer>
             </form>
           </div>
         </div>
@@ -442,7 +452,7 @@ interface QuestionTarget {
                 <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
               }
 
-              <div class="flex justify-end gap-3 pt-2">
+              <ios-dialog-footer>
                 <button
                   type="button"
                   (click)="closeQuestionDialog()"
@@ -453,7 +463,7 @@ interface QuestionTarget {
                 <ios-button type="submit" variant="primary" [loading]="questionSaving()">
                   {{ lang.t('admin.quiz.save') }}
                 </ios-button>
-              </div>
+              </ios-dialog-footer>
             </form>
           </div>
         </div>
@@ -467,7 +477,9 @@ interface QuestionTarget {
           aria-modal="true"
           aria-labelledby="quiz-deact-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="quiz-deact-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.quiz.confirmDeactivateTitle') }}
             </h2>
@@ -478,7 +490,7 @@ interface QuestionTarget {
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDeactivateQuiz()"
@@ -493,7 +505,7 @@ interface QuestionTarget {
               >
                 {{ lang.t('admin.quiz.deactivateQuiz') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }
@@ -506,7 +518,9 @@ interface QuestionTarget {
           aria-modal="true"
           aria-labelledby="q-del-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="q-del-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.quiz.confirmDeleteTitle') }}
             </h2>
@@ -514,7 +528,7 @@ interface QuestionTarget {
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDeleteQuestion()"
@@ -529,7 +543,7 @@ interface QuestionTarget {
               >
                 {{ lang.t('admin.quiz.delete') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

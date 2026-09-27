@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 
 import { LanguageService } from '@core/i18n';
-import { Button } from '@ui';
+import { Button, DialogFooter } from '@ui';
 
 import { AdminQuestionImportStore } from '../data-access/question-import.store';
 import {
@@ -38,7 +38,7 @@ interface PreviewRow {
  */
 @Component({
   selector: 'ios-question-import-dialog',
-  imports: [Button],
+  imports: [Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -290,7 +290,7 @@ interface PreviewRow {
         }
 
         <!-- ── Actions ─────────────────────────────────────────────────── -->
-        <div class="mt-6 flex flex-wrap justify-end gap-3">
+        <ios-dialog-footer>
           @if (store.phase() === 'committed') {
             <ios-button
               variant="secondary"
@@ -329,7 +329,7 @@ interface PreviewRow {
               </ios-button>
             }
           }
-        </div>
+        </ios-dialog-footer>
       </div>
     </div>
   `,

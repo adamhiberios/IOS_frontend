@@ -10,7 +10,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Select, type SelectOption } from '@ui';
+import { Button, Select, type SelectOption, DialogFooter } from '@ui';
 
 import { type IssuedCertificate } from '../data-access/issued-certs.model';
 import { AdminIssuedCertsStore } from '../data-access/issued-certs.store';
@@ -27,7 +27,7 @@ import { type StudentListItem } from '../data-access/users.model';
  */
 @Component({
   selector: 'ios-admin-issued-certs-page',
-  imports: [ReactiveFormsModule, Select, Button],
+  imports: [ReactiveFormsModule, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -230,7 +230,9 @@ import { type StudentListItem } from '../data-access/users.model';
           aria-modal="true"
           aria-labelledby="revoke-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="revoke-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.issuedCerts.confirmTitle') }}
             </h2>
@@ -247,7 +249,7 @@ import { type StudentListItem } from '../data-access/users.model';
             @if (store.revokeError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.revokeError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelRevoke()"
@@ -262,7 +264,7 @@ import { type StudentListItem } from '../data-access/users.model';
               >
                 {{ lang.t('admin.issuedCerts.revoke') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

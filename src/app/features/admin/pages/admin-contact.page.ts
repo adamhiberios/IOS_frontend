@@ -10,7 +10,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Select, type SelectOption } from '@ui';
+import { Button, Select, type SelectOption, DialogFooter } from '@ui';
 
 import {
   CONTACT_STATUSES,
@@ -38,7 +38,7 @@ import { AdminContactStore } from '../data-access/contact.store';
  */
 @Component({
   selector: 'ios-admin-contact-page',
-  imports: [ReactiveFormsModule, Select, Button],
+  imports: [ReactiveFormsModule, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -192,13 +192,15 @@ import { AdminContactStore } from '../data-access/contact.store';
       <!-- Detail -->
       @if (detailOpen()) {
         <div
-          class="fixed inset-0 z-50 overflow-y-auto bg-black/50"
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="contact-detail-title"
         >
-          <div class="flex min-h-full items-start justify-center p-4">
-            <div class="my-8 w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl">
+          <div class="flex w-full justify-center">
+            <div
+              class="w-full max-w-2xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+            >
               @if (store.detailLoading()) {
                 <p class="py-10 text-center text-sm text-gray-500" role="status" aria-live="polite">
                   {{ lang.t('admin.contact.loading') }}
@@ -255,7 +257,9 @@ import { AdminContactStore } from '../data-access/contact.store';
                   <p
                     class="whitespace-pre-wrap rounded-lg bg-gray-50 p-4 text-sm text-gray-800"
                     dir="auto"
-                  >{{ d.message }}</p>
+                  >
+                    {{ d.message }}
+                  </p>
                 </div>
 
                 @if (d.ipHash || d.userAgent) {
@@ -291,7 +295,7 @@ import { AdminContactStore } from '../data-access/contact.store';
                   <p class="mt-4 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
                 }
 
-                <div class="flex flex-wrap justify-end gap-3 pt-5">
+                <ios-dialog-footer>
                   @for (next of transitionsFor(d.status); track next) {
                     <ios-button
                       variant="secondary"
@@ -308,7 +312,7 @@ import { AdminContactStore } from '../data-access/contact.store';
                   >
                     {{ lang.t('admin.contact.close') }}
                   </button>
-                </div>
+                </ios-dialog-footer>
               }
             </div>
           </div>
@@ -323,7 +327,9 @@ import { AdminContactStore } from '../data-access/contact.store';
           aria-modal="true"
           aria-labelledby="contact-del-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="contact-del-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.contact.deleteTitle') }}
             </h2>
@@ -339,7 +345,7 @@ import { AdminContactStore } from '../data-access/contact.store';
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDelete()"
@@ -354,7 +360,7 @@ import { AdminContactStore } from '../data-access/contact.store';
               >
                 {{ lang.t('admin.contact.deleteConfirm') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }

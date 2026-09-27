@@ -13,7 +13,7 @@ import { firstValueFrom } from 'rxjs';
 import { AuthStore } from '@core/auth';
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
-import { Button } from '@ui';
+import { Button, DialogFooter } from '@ui';
 
 import { AdminUsersApi } from '../data-access/users.api';
 import { type AccessCode } from '../data-access/users.model';
@@ -29,7 +29,7 @@ const PAGE_LIMIT = 20;
  */
 @Component({
   selector: 'ios-student-access-codes',
-  imports: [DatePipe, Button],
+  imports: [DatePipe, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
@@ -130,7 +130,7 @@ const PAGE_LIMIT = 20;
         aria-modal="true"
         aria-labelledby="revoke-title"
       >
-        <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+        <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
           <h2 id="revoke-title" class="text-lg font-semibold text-ios-brand-dark">
             {{ lang.t('admin.userDetail.revokeTitle') }}
           </h2>
@@ -140,7 +140,7 @@ const PAGE_LIMIT = 20;
             <p class="mt-3 text-sm text-red-600" role="alert">{{ revokeError() }}</p>
           }
 
-          <div class="mt-5 flex justify-end gap-3">
+          <ios-dialog-footer>
             <button
               type="button"
               (click)="cancelRevoke()"
@@ -155,7 +155,7 @@ const PAGE_LIMIT = 20;
             >
               {{ lang.t('admin.userDetail.revoke') }}
             </ios-button>
-          </div>
+          </ios-dialog-footer>
         </div>
       </div>
     }

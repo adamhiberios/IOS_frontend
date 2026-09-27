@@ -16,7 +16,7 @@ import { RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
+import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
 
 import { type AdminExam, type ExamDraft } from '../data-access/exam-authoring.model';
 import { AdminExamAuthoringStore } from '../data-access/exam-authoring.store';
@@ -39,7 +39,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-exam-authoring-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -319,7 +319,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 <p class="text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
               }
 
-              <div class="flex justify-end gap-3 pt-2">
+              <ios-dialog-footer>
                 <button
                   type="button"
                   (click)="closeDialog()"
@@ -334,7 +334,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 >
                   {{ lang.t('admin.examAuthoring.save') }}
                 </ios-button>
-              </div>
+              </ios-dialog-footer>
             </form>
           </div>
         </div>
@@ -348,7 +348,9 @@ const required: ValidatorFn = (control) => Validators.required(control);
           aria-modal="true"
           aria-labelledby="exam-delete-title"
         >
-          <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
             <h2 id="exam-delete-title" class="text-lg font-semibold text-ios-brand-dark">
               {{ lang.t('admin.examAuthoring.confirmTitle') }}
             </h2>
@@ -359,7 +361,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
-            <div class="mt-5 flex justify-end gap-3">
+            <ios-dialog-footer>
               <button
                 type="button"
                 (click)="cancelDelete()"
@@ -374,7 +376,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
               >
                 {{ lang.t('admin.examAuthoring.delete') }}
               </ios-button>
-            </div>
+            </ios-dialog-footer>
           </div>
         </div>
       }
