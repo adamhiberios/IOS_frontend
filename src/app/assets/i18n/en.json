@@ -692,6 +692,7 @@
       "backToCertificates": "Back to My certificates",
       "backToCertDetail": "Back to certificate detail",
       "mockTestNav": "Mock Exam",
+      "mockResultNav": "Mock Exam Results",
       "learningMaterialsNav": "Learning Materials",
       "files": "Files",
       "pagesProgress": "{current}/{total} pages",

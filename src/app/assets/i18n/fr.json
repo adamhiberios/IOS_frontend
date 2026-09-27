@@ -692,6 +692,7 @@
       "backToCertificates": "Retour à Mes certificats",
       "backToCertDetail": "Retour aux détails du certificat",
       "mockTestNav": "Examen blanc",
+      "mockResultNav": "Résultats de l'examen blanc",
       "learningMaterialsNav": "Matériel pédagogique",
       "files": "Fichiers",
       "pagesProgress": "{current}/{total} pages",

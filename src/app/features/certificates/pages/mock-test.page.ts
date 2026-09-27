@@ -87,7 +87,7 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
               >
                 <li>
                   <a routerLink="/dashboard/certificates" class="hover:text-ios-fg-10 transition-colors">{{
-                    lang.t('courses.index.title')
+                    lang.t('dashboard.nav.myCertificates')
                   }}</a>
                 </li>
                 <li aria-hidden="true">/</li>

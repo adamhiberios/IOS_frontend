@@ -47,13 +47,13 @@ import { FinalExamCta } from '../components/final-exam-cta';
                   <a
                     routerLink="/dashboard/certificates"
                     class="hover:text-ios-fg-10 transition-colors"
-                    >{{ lang.t('courses.index.title') }}</a
+                    >{{ lang.t('dashboard.nav.myCertificates') }}</a
                   >
                 </li>
                 <li aria-hidden="true">/</li>
                 <li>
                   <span class="text-ios-fg-13 font-semibold">{{
-                    lang.t('dashboard.examRunner.resultLabel')
+                    lang.t('dashboard.certs.mockResultNav')
                   }}</span>
                 </li>
               </ol>
