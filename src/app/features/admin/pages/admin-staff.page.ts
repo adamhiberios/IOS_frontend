@@ -366,7 +366,8 @@ export class AdminStaffPage implements OnInit {
   protected readonly filterForm = this.fb.group({
     search: this.fb.control(''),
     role: this.fb.control(''),
-    active: this.fb.control(''),
+    // Mirrors the store's current filter (active-only by default).
+    active: this.fb.control(activeToOption(this.store.filters().active)),
   });
 
   protected readonly form = this.fb.group({
@@ -389,9 +390,9 @@ export class AdminStaffPage implements OnInit {
     ...STAFF_ROLES.map((r) => ({ value: r, label: this.roleLabel(r) })),
   ]);
   protected readonly activeFilterOptions = computed<SelectOption[]>(() => [
-    { value: '', label: this.lang.t('admin.staff.allStatuses') },
     { value: 'true', label: this.lang.t('admin.staff.active') },
     { value: 'false', label: this.lang.t('admin.staff.inactive') },
+    { value: '', label: this.lang.t('admin.staff.allStatuses') },
   ]);
 
   ngOnInit(): void {
@@ -526,3 +527,8 @@ export class AdminStaffPage implements OnInit {
 }
 
 export default AdminStaffPage;
+
+/** Tri-state boolean → filter select value (`undefined` → `''`, "all"). */
+function activeToOption(value: boolean | undefined): string {
+  return value === undefined ? '' : String(value);
+}

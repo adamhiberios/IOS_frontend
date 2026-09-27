@@ -45,7 +45,8 @@ export class AdminStaffStore {
   private readonly _error = signal<string | null>(null);
   private readonly _nextCursor = signal<string | null>(null);
   private readonly _hasMore = signal(false);
-  private readonly _filters = signal<StaffFilters>({});
+  /** Active-only by default; deactivated staff are one filter away. */
+  private readonly _filters = signal<StaffFilters>({ active: true });
   private readonly _loaded = signal(false);
   /** `${id}` (or `new`) of the in-flight write, for row/dialog spinners. */
   private readonly _actionPendingId = signal<string | null>(null);
@@ -160,7 +161,7 @@ export class AdminStaffStore {
     this._actionError.set(null);
     this._nextCursor.set(null);
     this._hasMore.set(false);
-    this._filters.set({});
+    this._filters.set({ active: true });
     this._loaded.set(false);
   }
 }

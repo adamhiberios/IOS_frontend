@@ -54,7 +54,8 @@ export class AdminPromoStore {
   private readonly _error = signal<string | null>(null);
   private readonly _nextCursor = signal<string | null>(null);
   private readonly _hasMore = signal(false);
-  private readonly _filters = signal<PromoFilters>({});
+  /** Active-only by default; retired promos are one filter away. */
+  private readonly _filters = signal<PromoFilters>({ active: true });
   private readonly _loaded = signal(false);
   private readonly _actionPendingId = signal<string | null>(null);
   private readonly _actionError = signal<string | null>(null);
@@ -189,7 +190,7 @@ export class AdminPromoStore {
     this._actionError.set(null);
     this._nextCursor.set(null);
     this._hasMore.set(false);
-    this._filters.set({});
+    this._filters.set({ active: true });
     this._loaded.set(false);
     this._certs.set([]);
   }

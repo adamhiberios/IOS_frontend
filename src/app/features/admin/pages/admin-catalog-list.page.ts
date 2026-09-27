@@ -24,10 +24,11 @@ interface FilterOption {
   readonly labelKey: string;
 }
 
+/** Active first — it is also the default (see `AdminCatalogStore`). */
 const FILTERS: readonly FilterOption[] = [
-  { key: 'all', value: undefined, labelKey: 'admin.catalog.filterAll' },
   { key: 'active', value: true, labelKey: 'admin.catalog.filterActive' },
   { key: 'inactive', value: false, labelKey: 'admin.catalog.filterInactive' },
+  { key: 'all', value: undefined, labelKey: 'admin.catalog.filterAll' },
 ];
 
 /**

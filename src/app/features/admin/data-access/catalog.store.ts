@@ -29,7 +29,8 @@ export class AdminCatalogStore {
   private readonly _nextCursor = signal<string | null>(null);
   private readonly _hasMore = signal(false);
   private readonly _search = signal('');
-  private readonly _active = signal<ActiveFilter>(undefined);
+  /** Active-only by default: test / retired certificates stay out of the way. */
+  private readonly _active = signal<ActiveFilter>(true);
   private readonly _actionPendingId = signal<string | null>(null);
   private readonly _actionError = signal<string | null>(null);
 

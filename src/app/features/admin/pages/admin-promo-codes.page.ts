@@ -401,7 +401,8 @@ export class AdminPromoCodesPage implements OnInit {
   protected readonly pendingRetire = signal<PromoCode | null>(null);
   protected readonly selectedCertIds = signal<ReadonlySet<string>>(new Set());
 
-  protected readonly activeControl = this.fb.control('');
+  // Mirrors the store's current filter (active-only by default).
+  protected readonly activeControl = this.fb.control(activeToOption(this.store.filters().active));
   protected readonly expiredControl = this.fb.control('');
 
   protected readonly form = this.fb.group({
@@ -421,9 +422,9 @@ export class AdminPromoCodesPage implements OnInit {
     DISCOUNT_TYPES.map((t) => ({ value: t, label: this.typeLabel(t) })),
   );
   protected readonly activeFilterOptions = computed<SelectOption[]>(() => [
-    { value: '', label: this.lang.t('admin.promo.allStatuses') },
     { value: 'true', label: this.lang.t('admin.promo.active') },
     { value: 'false', label: this.lang.t('admin.promo.inactive') },
+    { value: '', label: this.lang.t('admin.promo.allStatuses') },
   ]);
   protected readonly expiredFilterOptions = computed<SelectOption[]>(() => [
     { value: '', label: this.lang.t('admin.promo.allExpiry') },
@@ -632,6 +633,11 @@ export class AdminPromoCodesPage implements OnInit {
 /** Filter select value → tri-state boolean (`''` → undefined). */
 function toBool(value: string): boolean | undefined {
   return value === 'true' ? true : value === 'false' ? false : undefined;
+}
+
+/** Tri-state boolean → filter select value (`undefined` → `''`, "all"). */
+function activeToOption(value: boolean | undefined): string {
+  return value === undefined ? '' : String(value);
 }
 
 /** ISO timestamp → `datetime-local` input value (`YYYY-MM-DDTHH:mm`, local time). */
