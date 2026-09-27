@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, type OnInit, computed, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  type OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthStore } from '@core/auth';
@@ -9,9 +16,13 @@ import { AdminRevenueChart } from '../components/admin-revenue-chart';
 import { AdminDashboardStore } from '../data-access/dashboard.store';
 import {
   DASHBOARD_MONTH_OPTIONS,
+  DASHBOARD_RANGE_PRESETS,
   type DashboardMonths,
+  type DashboardRangePreset,
+  dateInputToIso,
   formatMoney,
   formatPassRate,
+  presetRangeStart,
 } from '../data-access/dashboard.model';
 
 /**
@@ -60,47 +71,67 @@ import {
             </h2>
           </div>
 
-          <!-- Date range filter -->
-          <div
-            class="rounded-lg border border-gray-200 bg-white p-4 mb-4"
-            [formGroup]="dateRangeForm"
-          >
-            <div class="flex items-end gap-4 flex-wrap">
-              <div class="flex-1 min-w-[200px]">
-                <label for="filter-from" class="block text-sm font-medium text-ios-brand-dark mb-1">
-                  {{ lang.t('admin.home.metrics.dateFromLabel') }}
-                </label>
-                <input
-                  id="filter-from"
-                  type="date"
-                  formControlName="from"
-                  (blur)="onDateRangeChange()"
-                  class="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm text-ios-brand-dark focus:outline-none focus:border-ios-fg"
-                />
-              </div>
-              <div class="flex-1 min-w-[200px]">
-                <label for="filter-to" class="block text-sm font-medium text-ios-brand-dark mb-1">
-                  {{ lang.t('admin.home.metrics.dateToLabel') }}
-                </label>
-                <input
-                  id="filter-to"
-                  type="date"
-                  formControlName="to"
-                  (blur)="onDateRangeChange()"
-                  class="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm text-ios-brand-dark focus:outline-none focus:border-ios-fg"
-                />
-              </div>
-              <div class="flex gap-2">
-                <ios-button
-                  variant="secondary"
-                  size="sm"
+          <!-- Date range filter: quick presets + custom from/to (IDD-391) -->
+          <div class="rounded-lg border border-gray-200 bg-white p-4 mb-4">
+            <div
+              class="inline-flex flex-wrap rounded-lg border border-gray-200 bg-white p-0.5"
+              role="group"
+              [attr.aria-label]="lang.t('admin.home.metrics.rangeLabel')"
+            >
+              @for (p of rangePresets; track p) {
+                <button
+                  type="button"
+                  class="px-3 py-1.5 text-sm font-semibold rounded-md transition-colors cursor-pointer
+                         focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50
+                         disabled:cursor-not-allowed disabled:opacity-60"
+                  [class.bg-ios-brand-amber-soft]="preset() === p"
+                  [class.text-ios-brand-primary]="preset() === p"
+                  [class.text-gray-500]="preset() !== p"
+                  [attr.aria-pressed]="preset() === p"
                   [disabled]="store.loading()"
-                  (clicked)="clearDateRange()"
+                  (click)="selectPreset(p)"
                 >
-                  {{ lang.t('admin.home.metrics.clearDateRange') }}
-                </ios-button>
-              </div>
+                  {{ lang.t('admin.home.metrics.range.' + p) }}
+                </button>
+              }
             </div>
+
+            @if (preset() === 'custom') {
+              <div class="mt-4 flex items-end gap-4 flex-wrap" [formGroup]="dateRangeForm">
+                <div class="flex-1 min-w-[200px]">
+                  <label
+                    for="filter-from"
+                    class="block text-sm font-medium text-ios-brand-dark mb-1"
+                  >
+                    {{ lang.t('admin.home.metrics.dateFromLabel') }}
+                  </label>
+                  <input
+                    id="filter-from"
+                    type="date"
+                    formControlName="from"
+                    [max]="dateRangeForm.controls.to.value || null"
+                    (change)="applyCustomRange()"
+                    class="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm text-ios-brand-dark focus:outline-none focus:border-ios-fg"
+                  />
+                </div>
+                <div class="flex-1 min-w-[200px]">
+                  <label for="filter-to" class="block text-sm font-medium text-ios-brand-dark mb-1">
+                    {{ lang.t('admin.home.metrics.dateToLabel') }}
+                  </label>
+                  <input
+                    id="filter-to"
+                    type="date"
+                    formControlName="to"
+                    [min]="dateRangeForm.controls.from.value || null"
+                    (change)="applyCustomRange()"
+                    class="w-full h-12 px-4 rounded-lg bg-gray-50 border border-gray-200 text-sm text-ios-brand-dark focus:outline-none focus:border-ios-fg"
+                  />
+                </div>
+              </div>
+              <p class="mt-2 text-xs text-gray-400">
+                {{ lang.t('admin.home.metrics.customHint') }}
+              </p>
+            }
           </div>
 
           <!-- Revenue-window control (shown when no date range is set) -->
@@ -151,23 +182,47 @@ import {
             <dl class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               <div class="rounded-xl border border-gray-200 bg-white p-4">
                 <dt class="text-xs uppercase tracking-wide text-gray-500">
-                  {{ lang.t('admin.home.metrics.revenueTotal') }}
+                  {{
+                    ranged()
+                      ? lang.t('admin.home.metrics.revenue')
+                      : lang.t('admin.home.metrics.revenueTotal')
+                  }}
+                  @if (ranged()) {
+                    <span
+                      class="ms-2 normal-case tracking-normal rounded bg-ios-brand-amber-soft px-1.5 py-0.5 text-[11px] font-semibold text-ios-brand-primary"
+                      >{{ rangeName() }}</span
+                    >
+                  }
                 </dt>
                 <dd class="mt-1 text-2xl font-bold text-ios-brand-dark">
-                  {{ money(o.revenue.total, o.revenue.currency) }}
+                  {{ money(ranged() ? o.revenue.last30Days : o.revenue.total, o.revenue.currency) }}
                 </dd>
                 <dd class="text-xs text-gray-500 mt-1">
-                  {{
-                    lang.t('admin.home.metrics.revenueLast30', {
-                      amount: money(o.revenue.last30Days, o.revenue.currency),
-                    })
-                  }}
+                  @if (ranged()) {
+                    {{
+                      lang.t('admin.home.metrics.allTimeValue', {
+                        value: money(o.revenue.total, o.revenue.currency),
+                      })
+                    }}
+                  } @else {
+                    {{
+                      lang.t('admin.home.metrics.revenueLast30', {
+                        amount: money(o.revenue.last30Days, o.revenue.currency),
+                      })
+                    }}
+                  }
                 </dd>
               </div>
 
               <div class="rounded-xl border border-gray-200 bg-white p-4">
                 <dt class="text-xs uppercase tracking-wide text-gray-500">
                   {{ lang.t('admin.home.metrics.transactions') }}
+                  @if (ranged()) {
+                    <span
+                      class="ms-2 normal-case tracking-normal rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-semibold text-gray-500"
+                      >{{ lang.t('admin.home.metrics.allTimeBadge') }}</span
+                    >
+                  }
                 </dt>
                 <dd class="mt-1 text-2xl font-bold text-ios-brand-dark">
                   {{ o.transactions.completed }}
@@ -189,30 +244,62 @@ import {
               <div class="rounded-xl border border-gray-200 bg-white p-4">
                 <dt class="text-xs uppercase tracking-wide text-gray-500">
                   {{ lang.t('admin.home.metrics.enrollments') }}
+                  @if (ranged()) {
+                    <span
+                      class="ms-2 normal-case tracking-normal rounded bg-ios-brand-amber-soft px-1.5 py-0.5 text-[11px] font-semibold text-ios-brand-primary"
+                      >{{ rangeName() }}</span
+                    >
+                  }
                 </dt>
                 <dd class="mt-1 text-2xl font-bold text-ios-brand-dark">
-                  {{ o.enrollments.total }}
+                  {{ ranged() ? o.enrollments.last30Days : o.enrollments.total }}
                 </dd>
                 <dd class="text-xs text-gray-500 mt-1">
-                  {{ lang.t('admin.home.metrics.last30', { count: o.enrollments.last30Days }) }}
+                  @if (ranged()) {
+                    {{ lang.t('admin.home.metrics.allTimeValue', { value: o.enrollments.total }) }}
+                  } @else {
+                    {{ lang.t('admin.home.metrics.last30', { count: o.enrollments.last30Days }) }}
+                  }
                 </dd>
               </div>
 
               <div class="rounded-xl border border-gray-200 bg-white p-4">
                 <dt class="text-xs uppercase tracking-wide text-gray-500">
-                  {{ lang.t('admin.home.metrics.students') }}
+                  {{
+                    ranged()
+                      ? lang.t('admin.home.metrics.newStudents')
+                      : lang.t('admin.home.metrics.students')
+                  }}
+                  @if (ranged()) {
+                    <span
+                      class="ms-2 normal-case tracking-normal rounded bg-ios-brand-amber-soft px-1.5 py-0.5 text-[11px] font-semibold text-ios-brand-primary"
+                      >{{ rangeName() }}</span
+                    >
+                  }
                 </dt>
                 <dd class="mt-1 text-2xl font-bold text-ios-brand-dark">
-                  {{ o.students.total }}
+                  {{ ranged() ? o.students.newLast30Days : o.students.total }}
                 </dd>
                 <dd class="text-xs text-gray-500 mt-1">
-                  {{ lang.t('admin.home.metrics.newLast30', { count: o.students.newLast30Days }) }}
+                  @if (ranged()) {
+                    {{ lang.t('admin.home.metrics.allTimeValue', { value: o.students.total }) }}
+                  } @else {
+                    {{
+                      lang.t('admin.home.metrics.newLast30', { count: o.students.newLast30Days })
+                    }}
+                  }
                 </dd>
               </div>
 
               <div class="rounded-xl border border-gray-200 bg-white p-4">
                 <dt class="text-xs uppercase tracking-wide text-gray-500">
                   {{ lang.t('admin.home.metrics.examAttempts') }}
+                  @if (ranged()) {
+                    <span
+                      class="ms-2 normal-case tracking-normal rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-semibold text-gray-500"
+                      >{{ lang.t('admin.home.metrics.allTimeBadge') }}</span
+                    >
+                  }
                 </dt>
                 <dd class="mt-1 text-2xl font-bold text-ios-brand-dark">
                   {{ o.exams.attempts }}
@@ -229,6 +316,12 @@ import {
               <div class="rounded-xl border border-gray-200 bg-white p-4">
                 <dt class="text-xs uppercase tracking-wide text-gray-500">
                   {{ lang.t('admin.home.metrics.certificatesIssued') }}
+                  @if (ranged()) {
+                    <span
+                      class="ms-2 normal-case tracking-normal rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-semibold text-gray-500"
+                      >{{ lang.t('admin.home.metrics.allTimeBadge') }}</span
+                    >
+                  }
                 </dt>
                 <dd class="mt-1 text-2xl font-bold text-ios-brand-dark">
                   {{ o.certificates.issued }}
@@ -239,7 +332,11 @@ import {
             <!-- Revenue time series -->
             <div class="mt-6">
               <h3 class="text-sm font-semibold text-gray-700 mb-2">
-                {{ lang.t('admin.home.metrics.revenueChartTitle') }}
+                {{
+                  ranged()
+                    ? lang.t('admin.home.metrics.revenueChartTitleRange', { range: rangeName() })
+                    : lang.t('admin.home.metrics.revenueChartTitle')
+                }}
               </h3>
               <ios-admin-revenue-chart
                 [points]="o.revenue.monthly"
@@ -251,6 +348,12 @@ import {
             <div class="mt-6">
               <h3 class="text-sm font-semibold text-gray-700 mb-2">
                 {{ lang.t('admin.home.metrics.topPrograms') }}
+                @if (ranged()) {
+                  <span
+                    class="ms-2 rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-semibold text-gray-500"
+                    >{{ lang.t('admin.home.metrics.allTimeBadge') }}</span
+                  >
+                }
               </h3>
               @if (o.topPrograms.length === 0) {
                 <p class="text-sm text-gray-500">
@@ -305,11 +408,25 @@ export class AdminHomePage implements OnInit {
     to: [''],
   });
 
-  protected readonly hasDateRange = computed(() => {
-    const from = this.dateRangeForm.get('from')?.value;
-    const to = this.dateRangeForm.get('to')?.value;
-    return !!(from || to);
-  });
+  protected readonly rangePresets = DASHBOARD_RANGE_PRESETS;
+  /** Selected quick range; `all` = no range (the backend's default window). */
+  protected readonly preset = signal<DashboardRangePreset>('all');
+
+  /**
+   * True once a range is actually applied (a custom range needs a start date).
+   * The backend scopes only revenue, enrollments, new students and the monthly
+   * series to the range; the other tiles stay all-time and are labelled so.
+   */
+  protected readonly ranged = computed(() => this.preset() !== 'all' && !!this.store.from());
+
+  /** Human label for the applied range, shown on the scoped tiles and chart. */
+  protected readonly rangeName = computed(() =>
+    this.lang.t(
+      this.preset() === 'custom'
+        ? 'admin.home.metrics.rangeSelected'
+        : `admin.home.metrics.range.${this.preset()}`,
+    ),
+  );
 
   protected readonly displayName = computed(() => this.auth.user()?.fullName ?? '');
   protected readonly email = computed(() => this.auth.user()?.email ?? '');
@@ -342,18 +459,32 @@ export class AdminHomePage implements OnInit {
     void this.store.setMonths(months);
   }
 
-  protected onDateRangeChange(): void {
-    const from = this.dateRangeForm.get('from')?.value;
-    const to = this.dateRangeForm.get('to')?.value;
-
-    if (!from && !to) return;
-
-    void this.store.setDateRange(from || undefined, to || undefined);
+  protected selectPreset(preset: DashboardRangePreset): void {
+    if (preset === this.preset() && preset !== 'custom') return;
+    this.preset.set(preset);
+    if (preset === 'all') {
+      this.dateRangeForm.reset();
+      void this.store.clearDateRange();
+    } else if (preset === 'custom') {
+      // Keep the current data until a start date is picked.
+      this.applyCustomRange();
+    } else {
+      void this.store.setDateRange(presetRangeStart(preset));
+    }
   }
 
-  protected clearDateRange(): void {
-    this.dateRangeForm.reset();
-    void this.store.clearDateRange();
+  /**
+   * Applies the custom from/to once a start date exists — the backend ignores a
+   * range with only an end. Dates are sent as the admin's local day bounds, so
+   * the chosen end day is included.
+   */
+  protected applyCustomRange(): void {
+    const { from, to } = this.dateRangeForm.getRawValue();
+    if (!from) return;
+    void this.store.setDateRange(
+      dateInputToIso(from, 'start'),
+      to ? dateInputToIso(to, 'end') : undefined,
+    );
   }
 
   protected retry(): void {

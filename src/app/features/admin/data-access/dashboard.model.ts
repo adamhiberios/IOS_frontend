@@ -78,6 +78,58 @@ export const MIXED_CURRENCY = 'MIXED';
 export const DASHBOARD_MONTH_OPTIONS = [6, 12, 24] as const;
 export type DashboardMonths = (typeof DASHBOARD_MONTH_OPTIONS)[number];
 
+/**
+ * Quick date ranges for the platform overview (IDD-391). `all` means no range
+ * (the backend's default trailing window); `custom` shows the from/to inputs.
+ */
+export const DASHBOARD_RANGE_PRESETS = ['all', 'today', '7d', '30d', '3m', 'custom'] as const;
+export type DashboardRangePreset = (typeof DASHBOARD_RANGE_PRESETS)[number];
+
+/** Local midnight `days` days before `now`, as an ISO instant. */
+function daysAgoStart(now: Date, days: number): string {
+  return new Date(now.getFullYear(), now.getMonth(), now.getDate() - days).toISOString();
+}
+
+/**
+ * Window start for a relative preset, or `undefined` for `all` / `custom`.
+ * Only a start is returned: the backend defaults `to` to "now", which keeps
+ * today's activity in every preset. Starts are local midnight so "Today" means
+ * the admin's today, not UTC's.
+ */
+export function presetRangeStart(
+  preset: DashboardRangePreset,
+  now: Date = new Date(),
+): string | undefined {
+  switch (preset) {
+    case 'today':
+      return daysAgoStart(now, 0);
+    case '7d':
+      return daysAgoStart(now, 6);
+    case '30d':
+      return daysAgoStart(now, 29);
+    case '3m': {
+      // Clamp to the target month's length: 31 May → 28 Feb, not 3 Mar.
+      const lastDay = new Date(now.getFullYear(), now.getMonth() - 2, 0).getDate();
+      const day = Math.min(now.getDate(), lastDay);
+      return new Date(now.getFullYear(), now.getMonth() - 3, day).toISOString();
+    }
+    default:
+      return undefined;
+  }
+}
+
+/**
+ * A `<input type="date">` value (`YYYY-MM-DD`) as an ISO instant at the start
+ * or end of that day in the admin's timezone. The backend reads a bare date as
+ * UTC midnight, so sending `to` unchanged silently dropped the whole end day.
+ */
+export function dateInputToIso(value: string, edge: 'start' | 'end'): string {
+  const [y, m, d] = value.split('-').map(Number);
+  return edge === 'start'
+    ? new Date(y, m - 1, d).toISOString()
+    : new Date(y, m - 1, d, 23, 59, 59, 999).toISOString();
+}
+
 /** Format a 0–1 pass-rate fraction as a whole-number percentage (`0.8125` → `81%`). */
 export function formatPassRate(fraction: number): string {
   const pct = Math.round(Math.max(0, Math.min(1, fraction)) * 100);

@@ -3328,6 +3328,22 @@
         "topProgramsEnrollments": "{count} تسجيلاً",
         "dateFromLabel": "من",
         "dateToLabel": "إلى",
+        "rangeLabel": "الفترة الزمنية",
+        "customHint": "اختر تاريخ البداية؛ تاريخ النهاية اختياري ويكون اليوم افتراضياً.",
+        "revenue": "الإيرادات",
+        "newStudents": "طلاب جدد",
+        "allTimeValue": "كل الفترات: {value}",
+        "allTimeBadge": "كل الفترات",
+        "revenueChartTitleRange": "الإيرادات — {range}",
+        "rangeSelected": "الفترة المحددة",
+        "range": {
+          "all": "كل الفترات",
+          "today": "اليوم",
+          "7d": "آخر 7 أيام",
+          "30d": "آخر 30 يوماً",
+          "3m": "آخر 3 أشهر",
+          "custom": "مخصص"
+        },
         "clearDateRange": "مسح التواريخ"
       }
     },

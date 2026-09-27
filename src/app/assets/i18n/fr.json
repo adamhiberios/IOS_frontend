@@ -3328,6 +3328,22 @@
         "topProgramsEnrollments": "{count} inscriptions",
         "dateFromLabel": "De",
         "dateToLabel": "À",
+        "rangeLabel": "Période",
+        "customHint": "Choisissez une date de début ; la date de fin est facultative (aujourd'hui par défaut).",
+        "revenue": "Revenus",
+        "newStudents": "Nouveaux étudiants",
+        "allTimeValue": "Toute la période : {value}",
+        "allTimeBadge": "Toute la période",
+        "revenueChartTitleRange": "Revenus — {range}",
+        "rangeSelected": "Période sélectionnée",
+        "range": {
+          "all": "Toute la période",
+          "today": "Aujourd'hui",
+          "7d": "7 derniers jours",
+          "30d": "30 derniers jours",
+          "3m": "3 derniers mois",
+          "custom": "Personnalisée"
+        },
         "clearDateRange": "Effacer les dates"
       }
     },

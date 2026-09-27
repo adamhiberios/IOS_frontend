@@ -3328,6 +3328,22 @@
         "topProgramsEnrollments": "{count} enrollments",
         "dateFromLabel": "From",
         "dateToLabel": "To",
+        "rangeLabel": "Date range",
+        "customHint": "Pick a start date; the end date is optional and defaults to today.",
+        "revenue": "Revenue",
+        "newStudents": "New students",
+        "allTimeValue": "All time: {value}",
+        "allTimeBadge": "All time",
+        "revenueChartTitleRange": "Revenue — {range}",
+        "rangeSelected": "Selected range",
+        "range": {
+          "all": "All time",
+          "today": "Today",
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "3m": "Last 3 months",
+          "custom": "Custom"
+        },
         "clearDateRange": "Clear dates"
       }
     },
