@@ -23,6 +23,9 @@ export interface BlogListItemDto {
   readonly metaDescription: string | null;
   readonly publishedAt: string | null;
   readonly authorName: string | null;
+  /** Admin-uploaded cover photo; `null` when the article has none. */
+  readonly coverImageUrl?: string | null;
+  readonly coverImageAlt?: string | null;
   readonly locale: string;
   readonly direction: 'ltr' | 'rtl';
   readonly fallbackUsed: boolean;
@@ -55,6 +58,9 @@ export interface BlogDetailDto {
   readonly metaDescription: string | null;
   readonly publishedAt: string | null;
   readonly authorName: string | null;
+  /** Admin-uploaded cover photo; `null` when the article has none. */
+  readonly coverImageUrl?: string | null;
+  readonly coverImageAlt?: string | null;
   readonly locale: string;
   readonly direction: 'ltr' | 'rtl';
   readonly fallbackUsed: boolean;

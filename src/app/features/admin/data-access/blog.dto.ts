@@ -9,6 +9,7 @@
  *   POST   /admin/blog/:id/publish      → { data } (409 BLOG_NOT_PUBLISHABLE, errors[])
  *   POST   /admin/blog/:id/unpublish    → { data }
  *   DELETE /admin/blog/:id              → { data } (soft-delete → archived)
+ *   POST   /admin/blog/:id/cover-upload-url → bare presigned PUT target (IDD-384)
  *
  * Read+create+update: content_creator / learning_admin. publish / unpublish /
  * delete: learning_admin (super_admin bypasses all). Envelopes vary per endpoint
@@ -51,6 +52,9 @@ export type BlogAdminListResponseDto = PagedResponse<BlogAdminItemDto, { locale:
 /** `GET /admin/blog/:id` — bare authoring detail (adds body + raw translations). */
 export interface BlogAdminDetailDto extends BlogAdminItemDto {
   readonly contentHtml: string;
+  /** Public cover-photo URL; `null` when the article has none. */
+  readonly coverImageUrl?: string | null;
+  readonly coverImageAlt?: string | null;
   /** Raw per-locale translations JSONB, e.g. `{ en: {...}, tr: {...} }`. */
   readonly translations: Readonly<Record<string, BlogLocaleDto>>;
 }
@@ -74,6 +78,26 @@ export interface UpdateBlogBody {
   readonly contentHtml?: string;
   readonly slug?: string;
   readonly metaDescription?: string;
+  /** `publicUrl` from the cover upload; empty string removes the cover. */
+  readonly coverImageUrl?: string;
+  /** Empty string clears it. */
+  readonly coverImageAlt?: string;
+}
+
+/** `POST /admin/blog/:id/cover-upload-url` request. */
+export interface BlogCoverUploadUrlRequestDto {
+  readonly contentType: string;
+}
+
+/** Presigned PUT target for a cover photo (bare response, no `{ data }`). */
+export interface BlogCoverUploadUrlResponseDto {
+  readonly uploadUrl: string;
+  /** Must all be sent verbatim on the PUT (`Content-Type`, `x-amz-acl`). */
+  readonly requiredHeaders: Readonly<Record<string, string>>;
+  readonly key: string;
+  /** Permanent public URL — PATCH the article with it as `coverImageUrl`. */
+  readonly publicUrl: string;
+  readonly expiresInSeconds: number;
 }
 
 /** `PATCH /admin/blog/:id/translations` body — per-locale replace-merge. */

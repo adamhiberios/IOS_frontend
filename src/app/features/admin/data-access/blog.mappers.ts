@@ -7,6 +7,7 @@
 import {
   type BlogAdminDetailDto,
   type BlogAdminItemDto,
+  type BlogCoverUploadUrlResponseDto,
   type BlogLocaleDto,
   type CreateBlogBody,
   type UpdateBlogBody,
@@ -15,6 +16,7 @@ import {
 import {
   type BlogAdminDetail,
   type BlogAdminItem,
+  type BlogCoverUploadTarget,
   type BlogLocaleContent,
   type BlogTranslationsPayload,
   type CreateBlogPayload,
@@ -54,6 +56,8 @@ export function toBlogAdminDetail(dto: BlogAdminDetailDto): BlogAdminDetail {
   return {
     ...toBlogAdminItem(dto),
     contentHtml: dto.contentHtml,
+    coverImageUrl: dto.coverImageUrl || null,
+    coverImageAlt: dto.coverImageAlt || null,
     translations,
   };
 }
@@ -71,8 +75,8 @@ export function toCreateBlogBody(payload: CreateBlogPayload): CreateBlogBody {
 }
 
 /**
- * Build the update body. Title + content are always sent; `metaDescription` is
- * sent as-is (empty string clears it); `slug` is sent only when non-blank so a
+ * Build the update body. Title + content are always sent; `metaDescription` and
+ * the cover fields are sent as-is (empty string clears them); `slug` is sent only when non-blank so a
  * published article's locked slug is never touched.
  */
 export function toUpdateBlogBody(payload: UpdateBlogPayload): UpdateBlogBody {
@@ -81,7 +85,20 @@ export function toUpdateBlogBody(payload: UpdateBlogPayload): UpdateBlogBody {
     title: payload.title.trim(),
     contentHtml: payload.contentHtml,
     metaDescription: payload.metaDescription?.trim() ?? '',
+    coverImageUrl: payload.coverImageUrl.trim(),
+    coverImageAlt: payload.coverImageAlt.trim(),
     ...(slug ? { slug } : {}),
+  };
+}
+
+/** Map the presigned cover-upload response to the domain target. */
+export function toBlogCoverUploadTarget(dto: BlogCoverUploadUrlResponseDto): BlogCoverUploadTarget {
+  return {
+    uploadUrl: dto.uploadUrl,
+    requiredHeaders: { ...(dto.requiredHeaders ?? {}) },
+    key: dto.key,
+    publicUrl: dto.publicUrl,
+    expiresInSeconds: dto.expiresInSeconds,
   };
 }
 

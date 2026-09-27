@@ -49,6 +49,9 @@ export interface BlogAdminItem {
 /** Full authoring detail — list row + body + per-locale translations. */
 export interface BlogAdminDetail extends BlogAdminItem {
   readonly contentHtml: string;
+  /** Public cover-photo URL, or `null` when the article has none. */
+  readonly coverImageUrl: string | null;
+  readonly coverImageAlt: string | null;
   /** Per-locale content keyed by locale code (`en`, `tr`, …); may be partial. */
   readonly translations: Readonly<Record<string, BlogLocaleContent>>;
 }
@@ -68,6 +71,34 @@ export interface UpdateBlogPayload {
   readonly contentHtml: string;
   readonly slug: string | null;
   readonly metaDescription: string | null;
+  /** Cover URL as it should be saved; empty string removes the cover. */
+  readonly coverImageUrl: string;
+  readonly coverImageAlt: string;
+}
+
+/** MIME types the backend signs for a cover photo (it 400s anything else). */
+export const BLOG_COVER_CONTENT_TYPES = ['image/png', 'image/jpeg', 'image/webp'] as const;
+export type BlogCoverContentType = (typeof BLOG_COVER_CONTENT_TYPES)[number];
+
+/** True when the browser-reported MIME type is one the backend will sign. */
+export function isBlogCoverContentType(value: string): value is BlogCoverContentType {
+  return (BLOG_COVER_CONTENT_TYPES as readonly string[]).includes(value);
+}
+
+/** `accept` attribute for the cover file input. */
+export const BLOG_COVER_ACCEPT = BLOG_COVER_CONTENT_TYPES.join(',');
+
+/**
+ * A signed upload target. `requiredHeaders` is echoed as returned — the
+ * signature covers `x-amz-acl` as well as `Content-Type`.
+ */
+export interface BlogCoverUploadTarget {
+  readonly uploadUrl: string;
+  readonly requiredHeaders: Readonly<Record<string, string>>;
+  readonly key: string;
+  /** Persist this on the article as `coverImageUrl`. */
+  readonly publicUrl: string;
+  readonly expiresInSeconds: number;
 }
 
 /** Per-locale translations to replace-merge (only supplied locales change). */

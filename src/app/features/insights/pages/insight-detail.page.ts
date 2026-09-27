@@ -22,11 +22,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   type OnDestroy,
-  type OnInit,
   effect,
   inject,
+  input,
+  untracked,
 } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 import { LucideArrowLeft, LucideClock, LucideUser } from '@lucide/angular';
 
@@ -243,7 +244,7 @@ import { InsightsStore } from '../data-access/insights.store';
           <div class="max-w-4xl mx-auto rounded-2xl overflow-hidden shadow-lg">
             <img
               [ngSrc]="post.imageUrl"
-              [alt]="post.title"
+              [alt]="post.imageAlt || post.title"
               width="896"
               height="448"
               class="w-full aspect-[16/7] object-cover"
@@ -290,11 +291,18 @@ import { InsightsStore } from '../data-access/insights.store';
     <ios-scroll-to-top />
   `,
 })
-export class InsightDetailPage implements OnInit, OnDestroy {
+export class InsightDetailPage implements OnDestroy {
   protected readonly store = inject(InsightsStore);
   protected readonly lang = inject(LanguageService);
-  private readonly route = inject(ActivatedRoute);
   private readonly jsonLd = inject(JsonLdService);
+
+  /**
+   * `:slug` route param, bound via `withComponentInputBinding`. The router
+   * reuses this component between articles (e.g. a "You Might Also Enjoy"
+   * card), so it must be read reactively: a one-off `snapshot` read in
+   * `ngOnInit` updated the URL but kept showing the previous article.
+   */
+  readonly slug = input('');
 
   constructor() {
     // Mirrors the loaded article's structured data into the shared JSON-LD
@@ -306,11 +314,12 @@ export class InsightDetailPage implements OnInit, OnDestroy {
         this.jsonLd.set(jsonLd);
       }
     });
-  }
 
-  ngOnInit(): void {
-    const slug = this.route.snapshot.paramMap.get('slug') ?? '';
-    void this.store.loadBySlug(slug);
+    // (Re)load whenever the slug changes, including article → article.
+    effect(() => {
+      const slug = this.slug();
+      untracked(() => void this.store.loadBySlug(slug));
+    });
   }
 
   ngOnDestroy(): void {

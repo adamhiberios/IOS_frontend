@@ -23,8 +23,10 @@ export interface InsightPost {
   excerpt: string;
   /** Author display name. */
   authorName: string;
-  /** Deterministic placeholder image derived from the slug. */
+  /** Admin-uploaded cover photo, or a deterministic placeholder keyed off the slug. */
   imageUrl: string;
+  /** Cover alt text from the admin; empty when there is none (use the title). */
+  imageAlt: string;
   /** Router link to the full post, e.g. "/insights/<slug>". */
   link: string;
   /** True when the backend served the English fallback (requested locale missing). */

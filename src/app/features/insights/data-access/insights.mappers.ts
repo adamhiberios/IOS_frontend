@@ -2,16 +2,16 @@
  * Insights mappers — wire `BlogListItemDto` / `BlogDetailDto` into the frontend
  * `InsightPost` / `InsightDetailPost` models.
  *
- * The backend owns text, author and dates but not a featured image or read-time,
- * so these are derived here: a deterministic placeholder image keyed off the
- * slug (so the same article always shows the same card image), a localized date
- * string, and a word-count read-time estimate from the article body.
+ * The backend owns text, author, dates and the cover photo. Derived here: a
+ * deterministic placeholder image keyed off the slug for articles without a
+ * cover (so the same article always shows the same card image), a localized
+ * date string, and a word-count read-time estimate from the article body.
  */
 
 import { type BlogDetailDto, type BlogListItemDto } from './insights.dto';
 import { type InsightDetailPost, type InsightPost } from './insights.model';
 
-/** Bundled placeholder card images (backend supplies no featured image). */
+/** Bundled placeholder card images, for articles with no uploaded cover. */
 const PLACEHOLDER_IMAGES = [
   '/assets/images/blog_1.webp',
   '/assets/images/blog_2.webp',
@@ -26,6 +26,11 @@ function hash(value: string): number {
   let h = 5381;
   for (let i = 0; i < value.length; i++) h = (h * 33) ^ value.charCodeAt(i);
   return h >>> 0;
+}
+
+/** The article's uploaded cover, or its placeholder when it has none. */
+function coverImage(dto: BlogListItemDto | BlogDetailDto): string {
+  return dto.coverImageUrl || placeholderImage(dto.slug);
 }
 
 /** Deterministic placeholder image for a slug (same slug → same image). */
@@ -61,7 +66,8 @@ export function toInsightPost(dto: BlogListItemDto, locale: string): InsightPost
     title: dto.title,
     excerpt: dto.metaDescription ?? '',
     authorName: dto.authorName ?? '',
-    imageUrl: placeholderImage(dto.slug),
+    imageUrl: coverImage(dto),
+    imageAlt: dto.coverImageAlt ?? '',
     link: `/insights/${dto.slug}`,
     fallbackUsed: dto.fallbackUsed,
   };
@@ -77,7 +83,8 @@ export function toInsightDetail(dto: BlogDetailDto, locale: string): InsightDeta
     title: dto.title,
     excerpt: dto.metaDescription ?? '',
     authorName: dto.authorName ?? '',
-    imageUrl: placeholderImage(dto.slug),
+    imageUrl: coverImage(dto),
+    imageAlt: dto.coverImageAlt ?? '',
     link: `/insights/${dto.slug}`,
     fallbackUsed: dto.fallbackUsed,
     contentHtml: dto.contentHtml,

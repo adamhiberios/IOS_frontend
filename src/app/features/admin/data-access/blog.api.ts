@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { type Observable, map } from 'rxjs';
 
@@ -9,12 +9,20 @@ import {
   type BlogAdminDetailDto,
   type BlogAdminDetailResponseDto,
   type BlogAdminListResponseDto,
+  type BlogCoverUploadUrlRequestDto,
+  type BlogCoverUploadUrlResponseDto,
   type CreateBlogBody,
   type UpdateBlogBody,
   type UpdateBlogTranslationsBody,
 } from './blog.dto';
-import { toBlogAdminDetail, toBlogAdminItem } from './blog.mappers';
-import { type BlogAdminDetail, type BlogAdminItem, type BlogFilters } from './blog.model';
+import { toBlogAdminDetail, toBlogAdminItem, toBlogCoverUploadTarget } from './blog.mappers';
+import {
+  type BlogAdminDetail,
+  type BlogAdminItem,
+  type BlogCoverContentType,
+  type BlogCoverUploadTarget,
+  type BlogFilters,
+} from './blog.model';
 
 /** Query for the admin blog list: backend filters + cursor paging. */
 export type BlogAdminQuery = BlogFilters & CursorQuery;
@@ -27,6 +35,11 @@ export type BlogAdminQuery = BlogFilters & CursorQuery;
 @Injectable({ providedIn: 'root' })
 export class AdminBlogApi {
   private readonly http = inject(HttpClient);
+  /**
+   * An interceptor-free client for the object-storage PUT only — see
+   * {@link uploadCoverBytes}. Same idiom as the catalog image upload.
+   */
+  private readonly rawHttp = new HttpClient(inject(HttpBackend));
   private readonly base = `${environment.apiBaseUrl}/admin/blog`;
 
   /** `GET /admin/blog` — one keyset page (all statuses). */
@@ -85,5 +98,38 @@ export class AdminBlogApi {
   /** `DELETE /admin/blog/:id` — soft-delete (archive). */
   remove(id: string): Observable<void> {
     return this.http.delete<unknown>(`${this.base}/${id}`).pipe(map(() => undefined));
+  }
+
+  /* ─── Cover photo upload (IDD-384 / IDD-387) ─── */
+
+  /**
+   * `POST /admin/blog/:id/cover-upload-url` — short-lived presigned PUT target.
+   * **Bare** response (no `{ data }`). 404 until the article exists, so a cover
+   * can only be added once the draft has been saved.
+   */
+  requestCoverUploadUrl(
+    id: string,
+    contentType: BlogCoverContentType,
+  ): Observable<BlogCoverUploadTarget> {
+    return this.http
+      .post<BlogCoverUploadUrlResponseDto>(`${this.base}/${id}/cover-upload-url`, {
+        contentType,
+      } satisfies BlogCoverUploadUrlRequestDto)
+      .pipe(map(toBlogCoverUploadTarget));
+  }
+
+  /**
+   * PUT the raw bytes to the presigned storage URL via {@link rawHttp}, so no
+   * `Authorization` / `X-Lang` / refresh cookie reaches the storage host and no
+   * extra header breaks the signature. Every `requiredHeaders` entry is echoed
+   * verbatim; `responseType: 'text'` avoids parsing the empty/XML reply.
+   */
+  uploadCoverBytes(target: BlogCoverUploadTarget, file: Blob): Observable<void> {
+    return this.rawHttp
+      .put(target.uploadUrl, file, {
+        headers: { ...target.requiredHeaders },
+        responseType: 'text',
+      })
+      .pipe(map(() => undefined));
   }
 }

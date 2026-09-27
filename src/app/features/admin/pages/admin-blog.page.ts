@@ -23,6 +23,7 @@ import { LanguageService } from '@core/i18n';
 import { Button, Input as IosInput, Select, type SelectOption } from '@ui';
 import { RichText } from '@ui/rich-text';
 
+import { BlogCoverUpload } from '../components/blog-cover-upload';
 import {
   BLOG_STATUSES,
   BLOG_TRANSLATION_LOCALES,
@@ -65,7 +66,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
  */
 @Component({
   selector: 'ios-admin-blog-page',
-  imports: [ReactiveFormsModule, IosInput, RichText, Select, Button],
+  imports: [ReactiveFormsModule, IosInput, RichText, Select, Button, BlogCoverUpload],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -295,6 +296,20 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                   [placeholder]="lang.t('admin.blog.metaPlaceholder')"
                 />
 
+                <ios-blog-cover-upload
+                  [control]="form.controls.coverImageUrl"
+                  [articleId]="editingId() ?? ''"
+                />
+                @if (form.controls.coverImageUrl.value) {
+                  <ios-input
+                    id="blog-cover-alt"
+                    [label]="lang.t('admin.blog.coverAltLabel')"
+                    type="text"
+                    [control]="form.controls.coverImageAlt"
+                    [placeholder]="lang.t('admin.blog.coverAltPlaceholder')"
+                  />
+                }
+
                 <div>
                   <ios-rich-text
                     id="blog-content"
@@ -501,6 +516,8 @@ export class AdminBlogPage implements OnInit {
     slug: this.fb.control('', { validators: [slugValidator, Validators.maxLength(255)] }),
     metaDescription: this.fb.control('', { validators: [Validators.maxLength(500)] }),
     contentHtml: this.fb.control('', { validators: [required] }),
+    coverImageUrl: this.fb.control('', { validators: [Validators.maxLength(500)] }),
+    coverImageAlt: this.fb.control('', { validators: [Validators.maxLength(255)] }),
   });
 
   /** One nested group per non-English locale: { tr: {title,metaDescription,contentHtml}, … }. */
@@ -568,7 +585,14 @@ export class AdminBlogPage implements OnInit {
     this.editingTitle.set('');
     this.slugLocked.set(false);
     this.formError.set(null);
-    this.form.reset({ title: '', slug: '', metaDescription: '', contentHtml: '' });
+    this.form.reset({
+      title: '',
+      slug: '',
+      metaDescription: '',
+      contentHtml: '',
+      coverImageUrl: '',
+      coverImageAlt: '',
+    });
     this.dialog.set('form');
   }
 
@@ -585,6 +609,8 @@ export class AdminBlogPage implements OnInit {
       slug: detail.slug,
       metaDescription: detail.metaDescription ?? '',
       contentHtml: detail.contentHtml,
+      coverImageUrl: detail.coverImageUrl ?? '',
+      coverImageAlt: detail.coverImageAlt ?? '',
     });
     this.dialog.set('form');
   }
@@ -609,6 +635,9 @@ export class AdminBlogPage implements OnInit {
           contentHtml: raw.contentHtml,
           slug: this.slugLocked() ? null : raw.slug.trim() || null,
           metaDescription: raw.metaDescription,
+          coverImageUrl: raw.coverImageUrl,
+          // No cover, no alt text — don't leave an orphan description behind.
+          coverImageAlt: raw.coverImageUrl ? raw.coverImageAlt : '',
         })
       : await this.store.create({
           title: raw.title,

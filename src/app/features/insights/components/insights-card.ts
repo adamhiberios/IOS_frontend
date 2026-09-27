@@ -26,6 +26,8 @@ export interface InsightCardPost {
   title: string;
   excerpt: string;
   imageUrl: string;
+  /** Cover alt text; falls back to the title when empty or absent. */
+  imageAlt?: string;
   link: string;
   readTime?: string;
   authorName?: string;
@@ -46,7 +48,7 @@ export interface InsightCardPost {
       <div class="w-full aspect-[16/9] overflow-hidden">
         <img
           [ngSrc]="post().imageUrl"
-          [alt]="post().title"
+          [alt]="post().imageAlt || post().title"
           width="394"
           height="206"
           class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"

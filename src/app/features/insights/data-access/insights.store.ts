@@ -40,6 +40,8 @@ export class InsightsStore {
 
   /** Guards against out-of-order responses when the search term changes fast. */
   private reqSeq = 0;
+  /** Sequence of the latest {@link loadBySlug} call; stale responses are dropped. */
+  private detailSeq = 0;
 
   private readonly _detail = signal<InsightDetailPost | null>(null);
   private readonly _detailStatus = signal<LoadStatus>('idle');
@@ -139,6 +141,9 @@ export class InsightsStore {
    * on a cold deep-link.
    */
   async loadBySlug(slug: string): Promise<void> {
+    // Only the latest request may write: moving between articles quickly must
+    // not let a slower, earlier response overwrite the article now in the URL.
+    const seq = ++this.detailSeq;
     this._detail.set(null);
     this._detailStatus.set('loading');
     this._detailError.set(null);
@@ -147,9 +152,11 @@ export class InsightsStore {
 
     try {
       const detail = await firstValueFrom(this.api.getBySlug(slug));
+      if (seq !== this.detailSeq) return;
       this._detail.set(detail);
       this._detailStatus.set('success');
     } catch (err) {
+      if (seq !== this.detailSeq) return;
       this._detail.set(null);
       this._detailStatus.set('error');
       this._detailError.set(problemDetailMessage(err) ?? this.lang.t('insights.loadError'));
