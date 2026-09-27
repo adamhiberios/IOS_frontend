@@ -693,6 +693,12 @@
       "backToCertDetail": "Retour aux détails du certificat",
       "mockTestNav": "Examen blanc",
       "mockResultNav": "Résultats de l'examen blanc",
+      "mockStartDialog": {
+        "title": "Examen d'entraînement",
+        "body": "Ceci est un examen d'entraînement, et non l'examen final. Il vous aide à évaluer et à renforcer vos connaissances avant de décider de passer l'examen de certification final.",
+        "confirm": "Commencer l'examen blanc",
+        "cancel": "Annuler"
+      },
       "learningMaterialsNav": "Matériel pédagogique",
       "files": "Fichiers",
       "pagesProgress": "{current}/{total} pages",

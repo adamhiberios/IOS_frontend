@@ -693,6 +693,12 @@
       "backToCertDetail": "Back to certificate detail",
       "mockTestNav": "Mock Exam",
       "mockResultNav": "Mock Exam Results",
+      "mockStartDialog": {
+        "title": "Practice exam",
+        "body": "This is a practice exam, not the final exam. It is designed to help you assess and strengthen your knowledge before you decide to take the final certification exam.",
+        "confirm": "Start Mock Exam",
+        "cancel": "Cancel"
+      },
       "learningMaterialsNav": "Learning Materials",
       "files": "Files",
       "pagesProgress": "{current}/{total} pages",

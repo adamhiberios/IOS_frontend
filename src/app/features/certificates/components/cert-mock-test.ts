@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, output, signal } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 
 import { LanguageService } from '@core/i18n';
@@ -13,6 +13,7 @@ import {
 } from '@lucide/angular';
 
 import { CertificatesBadge, IosIcon, provideIcons } from '@ui';
+import { CertMockStartDialog } from './cert-mock-start-dialog';
 
 import type {
   CertificationCard,
@@ -45,7 +46,7 @@ import type {
 @Component({
   selector: 'ios-cert-mock-test',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CertificatesBadge, IosIcon, NgOptimizedImage],
+  imports: [CertificatesBadge, IosIcon, NgOptimizedImage, CertMockStartDialog],
   providers: [
     provideIcons(
       LucideNewspaper,
@@ -87,11 +88,11 @@ import type {
         </p>
       </div>
 
-      <!-- Start Mock Exam CTA — starts immediately, no settings step -->
+      <!-- Start Mock Exam CTA — confirms it is a practice exam first (IDD-353) -->
       <button
         type="button"
         class="inline-flex items-center justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0"
-        (click)="startTest.emit()"
+        (click)="confirmOpen.set(true)"
       >
         {{ lang.t('dashboard.certs.startMockExamCta') }}
         <ios-icon
@@ -199,7 +200,7 @@ import type {
             <button
               type="button"
               class="inline-flex items-center justify-center gap-1 h-11 px-6 rounded-xl text-[15px] font-semibold leading-[1.4] text-white bg-ios-brand-primary hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-              (click)="startTest.emit()"
+              (click)="confirmOpen.set(true)"
             >
               {{ lang.t('dashboard.certs.startMockExamCta') }}
               <ios-icon
@@ -329,6 +330,13 @@ import type {
         }
       </div>
     </section>
+
+    @if (confirmOpen()) {
+      <ios-cert-mock-start-dialog
+        (dismissed)="confirmOpen.set(false)"
+        (confirmed)="confirmStart()"
+      />
+    }
   `,
 })
 export class CertMockTest {
@@ -353,6 +361,15 @@ export class CertMockTest {
    * dialog offered choices that never reached the attempt.
    */
   readonly startTest = output<void>();
+
+  /** Whether the "this is a practice exam" confirmation is open (IDD-353). */
+  protected readonly confirmOpen = signal(false);
+
+  /** Confirmed in the dialog: close it and let the host start the exam. */
+  protected confirmStart(): void {
+    this.confirmOpen.set(false);
+    this.startTest.emit();
+  }
 
   /**
    * Emitted when "Show details" is clicked on a history row, carrying that
