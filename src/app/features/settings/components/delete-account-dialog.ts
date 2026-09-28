@@ -3,6 +3,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { LanguageService } from '@core/i18n';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { NgOptimizedImage } from '@angular/common';
+import { DialogEscape } from '@ui';
 
 /**
  * `ios-delete-account-dialog` — Confirmation modal for deleting an account.
@@ -40,7 +41,7 @@ import { NgOptimizedImage } from '@angular/common';
 @Component({
   selector: 'ios-delete-account-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, NgOptimizedImage],
+  imports: [DialogEscape, ReactiveFormsModule, NgOptimizedImage],
   template: `
     <!-- ── Full-screen wrapper ─────────────────────────────────────────── -->
     <div class="fixed inset-0 z-50">
@@ -61,7 +62,7 @@ import { NgOptimizedImage } from '@angular/common';
           aria-modal="true"
           aria-labelledby="delete-dialog-title"
           tabindex="-1"
-          (keydown.escape)="cancelled.emit()"
+          (iosDialogEscape)="cancelled.emit()"
         >
           <!-- Icon -->
           <div

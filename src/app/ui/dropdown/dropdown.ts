@@ -264,6 +264,9 @@ export class Dropdown {
         this.focusedIndex.update((i) => Math.max(i - 1, 0));
         break;
       case 'Escape':
+        // Claim the keypress only when a list was open, so a surrounding
+        // dialog (`iosDialogEscape`) closes on the next Escape, not this one.
+        if (this.isOpen()) event.preventDefault();
         this.isOpen.set(false);
         break;
       case 'Tab':

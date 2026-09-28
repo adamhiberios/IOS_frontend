@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 
 import { LanguageService } from '@core/i18n';
+import { DialogEscape } from '@ui';
 
 /**
  * `ios-cert-mock-exit-dialog` — Confirmation dialog when exiting a mock exam.
@@ -28,7 +29,7 @@ import { LanguageService } from '@core/i18n';
 @Component({
   selector: 'ios-cert-mock-exit-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
+  imports: [DialogEscape],
   template: `
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div
@@ -36,6 +37,7 @@ import { LanguageService } from '@core/i18n';
         role="dialog"
         aria-modal="true"
         aria-labelledby="mock-exit-title"
+        (iosDialogEscape)="dismissed.emit()"
       >
         <!-- Icon circle -->
         <div

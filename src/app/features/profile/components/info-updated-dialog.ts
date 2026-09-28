@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { LanguageService } from '@core/i18n';
+import { DialogEscape } from '@ui';
 
 /**
  * `ios-profile-info-updated-dialog` — success dialog shown after profile
@@ -20,6 +21,7 @@ import { LanguageService } from '@core/i18n';
  */
 @Component({
   selector: 'ios-profile-info-updated-dialog',
+  imports: [DialogEscape],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -27,6 +29,7 @@ import { LanguageService } from '@core/i18n';
       role="dialog"
       aria-modal="true"
       aria-labelledby="info-updated-title"
+      (iosDialogEscape)="confirmed.emit()"
     >
       <div
         class="bg-white rounded-2xl w-full max-w-[724px] mx-4 p-6 sm:p-8 flex flex-col gap-6 sm:gap-9 items-center shadow-2xl"

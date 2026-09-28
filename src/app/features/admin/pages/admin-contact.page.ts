@@ -10,7 +10,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Select, type SelectOption, DialogFooter } from '@ui';
+import { Button, Select, type SelectOption, DialogFooter, DialogEscape } from '@ui';
 
 import {
   CONTACT_STATUSES,
@@ -38,7 +38,7 @@ import { AdminContactStore } from '../data-access/contact.store';
  */
 @Component({
   selector: 'ios-admin-contact-page',
-  imports: [ReactiveFormsModule, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -196,6 +196,7 @@ import { AdminContactStore } from '../data-access/contact.store';
           role="dialog"
           aria-modal="true"
           aria-labelledby="contact-detail-title"
+          (iosDialogEscape)="closeDetail()"
         >
           <div class="flex w-full justify-center">
             <div
@@ -326,6 +327,7 @@ import { AdminContactStore } from '../data-access/contact.store';
           role="dialog"
           aria-modal="true"
           aria-labelledby="contact-del-title"
+          (iosDialogEscape)="cancelDelete()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

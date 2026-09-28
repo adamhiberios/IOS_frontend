@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { formatFee } from '@shared';
-import { Button, Input as IosInput, DialogFooter } from '@ui';
+import { Button, Input as IosInput, DialogFooter, DialogEscape } from '@ui';
 
 import { type ActiveFilter, type AdminCertificate } from '../data-access/catalog.model';
 import { AdminCatalogStore } from '../data-access/catalog.store';
@@ -42,7 +42,15 @@ const FILTERS: readonly FilterOption[] = [
  */
 @Component({
   selector: 'ios-admin-catalog-list-page',
-  imports: [ReactiveFormsModule, RouterLink, DatePipe, IosInput, Button, DialogFooter],
+  imports: [
+    DialogEscape,
+    ReactiveFormsModule,
+    RouterLink,
+    DatePipe,
+    IosInput,
+    Button,
+    DialogFooter,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -218,6 +226,7 @@ const FILTERS: readonly FilterOption[] = [
           role="dialog"
           aria-modal="true"
           aria-labelledby="deactivate-title"
+          (iosDialogEscape)="cancelDeactivate()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

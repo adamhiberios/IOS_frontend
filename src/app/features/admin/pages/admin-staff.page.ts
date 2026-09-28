@@ -14,7 +14,14 @@ import {
 } from '@angular/forms';
 
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import {
   ASSIGNABLE_STAFF_ROLES,
@@ -45,7 +52,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
  */
 @Component({
   selector: 'ios-admin-staff-page',
-  imports: [ReactiveFormsModule, IosInput, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -215,6 +222,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="staff-dialog-title"
+          (iosDialogEscape)="closeDialog()"
         >
           <div class="flex w-full justify-center">
             <div
@@ -313,6 +321,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="staff-deactivate-title"
+          (iosDialogEscape)="cancelDeactivate()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

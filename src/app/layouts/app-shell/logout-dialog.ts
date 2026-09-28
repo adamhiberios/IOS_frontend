@@ -23,10 +23,11 @@ import { NgOptimizedImage } from '@angular/common';
  */
 
 import { LanguageService } from '@core/i18n';
+import { DialogEscape } from '@ui';
 
 @Component({
   selector: 'ios-logout-dialog',
-  imports: [NgOptimizedImage],
+  imports: [DialogEscape, NgOptimizedImage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <!-- ── Full-screen wrapper ─────────────────────────────────────────── -->
@@ -48,7 +49,7 @@ import { LanguageService } from '@core/i18n';
           aria-modal="true"
           aria-labelledby="logout-dialog-title"
           tabindex="-1"
-          (keydown.escape)="cancelled.emit()"
+          (iosDialogEscape)="cancelled.emit()"
         >
           <!-- Icon — door in soft danger background circle -->
           <div

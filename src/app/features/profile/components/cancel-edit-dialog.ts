@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { LanguageService } from '@core/i18n';
+import { DialogEscape } from '@ui';
 
 /**
  * `ios-profile-cancel-edit-dialog` — confirmation dialog when the user
@@ -20,6 +21,7 @@ import { LanguageService } from '@core/i18n';
  */
 @Component({
   selector: 'ios-profile-cancel-edit-dialog',
+  imports: [DialogEscape],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -28,6 +30,7 @@ import { LanguageService } from '@core/i18n';
       aria-modal="true"
       aria-labelledby="cancel-edit-title"
       aria-describedby="cancel-edit-desc"
+      (iosDialogEscape)="dismissed.emit()"
     >
       <div
         class="bg-white rounded-2xl w-full max-w-[724px] mx-4 p-6 sm:p-8 flex flex-col gap-6 sm:gap-9 items-center shadow-2xl"

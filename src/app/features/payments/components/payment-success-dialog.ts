@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 
 import { LanguageService } from '@core/i18n';
+import { DialogEscape } from '@ui';
 
 /**
  * `ios-payment-success-dialog` — shown after `PaymentsStore.checkout()` /
@@ -30,7 +31,7 @@ import { LanguageService } from '@core/i18n';
 @Component({
   selector: 'ios-payment-success-dialog',
   standalone: true,
-  imports: [RouterLink, NgOptimizedImage],
+  imports: [DialogEscape, RouterLink, NgOptimizedImage],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -39,6 +40,7 @@ import { LanguageService } from '@core/i18n';
         role="dialog"
         aria-modal="true"
         aria-labelledby="payment-success-title"
+        (iosDialogEscape)="dismissed.emit()"
       >
         <!-- Checkmark badge -->
         <div

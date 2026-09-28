@@ -10,7 +10,7 @@ import {
 import { LucideClipboardCheck } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, DialogEscape } from '@ui';
 
 /**
  * `ios-cert-mock-start-dialog` — "this is a practice exam" confirmation shown
@@ -26,9 +26,8 @@ import { IosIcon, provideIcons } from '@ui';
 @Component({
   selector: 'ios-cert-mock-start-dialog',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [IosIcon],
+  imports: [DialogEscape, IosIcon],
   providers: [provideIcons(LucideClipboardCheck)],
-  host: { '(document:keydown.escape)': 'dismissed.emit()' },
   template: `
     <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <!-- Backdrop: a click outside the card cancels, like the Cancel button. -->
@@ -46,6 +45,7 @@ import { IosIcon, provideIcons } from '@ui';
         aria-modal="true"
         aria-labelledby="mock-start-title"
         aria-describedby="mock-start-body"
+        (iosDialogEscape)="dismissed.emit()"
       >
         <!-- Icon circle -->
         <div

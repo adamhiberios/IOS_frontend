@@ -13,7 +13,15 @@ import { firstValueFrom } from 'rxjs';
 
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
-import { Button, Checkbox, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Checkbox,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import { CertImageUpload } from '../components/cert-image-upload';
 import { AdminCatalogApi } from '../data-access/catalog.api';
@@ -45,6 +53,7 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
 @Component({
   selector: 'ios-admin-catalog-form-page',
   imports: [
+    DialogEscape,
     ReactiveFormsModule,
     RouterLink,
     IosInput,
@@ -235,6 +244,7 @@ const PRICE_PATTERN = /^\d+(\.\d{1,2})?$/;
           role="dialog"
           aria-modal="true"
           aria-labelledby="cat-tr-title"
+          (iosDialogEscape)="closeTranslations()"
         >
           <div
             class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

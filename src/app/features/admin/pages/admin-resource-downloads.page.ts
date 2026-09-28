@@ -12,7 +12,7 @@ import { map } from 'rxjs';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Select, type SelectOption, DialogFooter } from '@ui';
+import { Button, Select, type SelectOption, DialogFooter, DialogEscape } from '@ui';
 
 import {
   ADMIN_NOTES_MAX_LENGTH,
@@ -41,7 +41,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
  */
 @Component({
   selector: 'ios-admin-resource-downloads-page',
-  imports: [ReactiveFormsModule, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -191,6 +191,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
           role="dialog"
           aria-modal="true"
           aria-labelledby="download-detail-title"
+          (iosDialogEscape)="closeDetail()"
         >
           <div class="flex w-full justify-center">
             <div
@@ -380,6 +381,7 @@ import { AdminResourceDownloadStore } from '../data-access/resource-download.sto
           role="dialog"
           aria-modal="true"
           aria-labelledby="download-del-title"
+          (iosDialogEscape)="cancelDelete()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

@@ -11,7 +11,14 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import { type AuditLogEntry } from '../data-access/audit.model';
 import { AdminAuditLogsStore } from '../data-access/audit.store';
@@ -27,7 +34,7 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
  */
 @Component({
   selector: 'ios-admin-audit-logs-page',
-  imports: [ReactiveFormsModule, DatePipe, IosInput, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, DatePipe, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -195,6 +202,7 @@ import { AdminAuditLogsStore } from '../data-access/audit.store';
           role="dialog"
           aria-modal="true"
           aria-labelledby="audit-detail-title"
+          (iosDialogEscape)="closeDetails()"
         >
           <div
             class="w-full max-w-5xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

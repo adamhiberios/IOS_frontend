@@ -10,7 +10,7 @@ import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Select, type SelectOption, DialogFooter } from '@ui';
+import { Button, Select, type SelectOption, DialogFooter, DialogEscape } from '@ui';
 
 import { type IssuedCertificate } from '../data-access/issued-certs.model';
 import { AdminIssuedCertsStore } from '../data-access/issued-certs.store';
@@ -27,7 +27,7 @@ import { type StudentListItem } from '../data-access/users.model';
  */
 @Component({
   selector: 'ios-admin-issued-certs-page',
-  imports: [ReactiveFormsModule, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -229,6 +229,7 @@ import { type StudentListItem } from '../data-access/users.model';
           role="dialog"
           aria-modal="true"
           aria-labelledby="revoke-title"
+          (iosDialogEscape)="cancelRevoke()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

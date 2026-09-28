@@ -16,7 +16,14 @@ import {
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import {
   type CreatePromoPayload,
@@ -42,7 +49,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-promo-codes-page',
-  imports: [ReactiveFormsModule, IosInput, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -210,6 +217,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="promo-dialog-title"
+          (iosDialogEscape)="closeDialog()"
         >
           <div class="flex w-full justify-center">
             <div
@@ -345,6 +353,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="promo-retire-title"
+          (iosDialogEscape)="cancelRetire()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

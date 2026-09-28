@@ -18,7 +18,14 @@ import {
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import {
   type MockQuestion,
@@ -53,7 +60,15 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-mock-questions-page',
-  imports: [ReactiveFormsModule, IosInput, Select, Button, QuestionImportDialog, DialogFooter],
+  imports: [
+    DialogEscape,
+    ReactiveFormsModule,
+    IosInput,
+    Select,
+    Button,
+    QuestionImportDialog,
+    DialogFooter,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -217,6 +232,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="mq-dialog-title"
+          (iosDialogEscape)="closeDialog()"
         >
           <div
             class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
@@ -354,6 +370,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="mq-deactivate-title"
+          (iosDialogEscape)="cancelDeactivate()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

@@ -19,7 +19,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import {
   QUIZ_MIN_OPTIONS,
@@ -55,6 +62,7 @@ interface QuestionTarget {
 @Component({
   selector: 'ios-admin-lesson-quizzes-page',
   imports: [
+    DialogEscape,
     ReactiveFormsModule,
     RouterLink,
     IosInput,
@@ -279,6 +287,7 @@ interface QuestionTarget {
           role="dialog"
           aria-modal="true"
           aria-labelledby="quiz-dialog-title"
+          (iosDialogEscape)="closeQuizDialog()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
@@ -332,6 +341,7 @@ interface QuestionTarget {
           role="dialog"
           aria-modal="true"
           aria-labelledby="q-dialog-title"
+          (iosDialogEscape)="closeQuestionDialog()"
         >
           <div
             class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
@@ -479,6 +489,7 @@ interface QuestionTarget {
           role="dialog"
           aria-modal="true"
           aria-labelledby="quiz-deact-title"
+          (iosDialogEscape)="cancelDeactivateQuiz()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
@@ -520,6 +531,7 @@ interface QuestionTarget {
           role="dialog"
           aria-modal="true"
           aria-labelledby="q-del-title"
+          (iosDialogEscape)="cancelDeleteQuestion()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

@@ -197,7 +197,7 @@ const STATE_CLASSES: Record<SelectState, string> = {
   `,
   host: {
     '(document:click)': 'onOutsideClick($event)',
-    '(document:keydown.escape)': 'close()',
+    '(document:keydown.escape)': 'onEscape($event)',
   },
 })
 export class Select {
@@ -319,6 +319,16 @@ export class Select {
   close(): void {
     this.isOpen.set(false);
     this.filterQuery.set('');
+  }
+
+  /**
+   * Escape closes an open list and claims the keypress, so a dialog around the
+   * select (`iosDialogEscape`) stays open. A closed select lets it through.
+   */
+  protected onEscape(event: Event): void {
+    if (!this.isOpen()) return;
+    event.preventDefault();
+    this.close();
   }
 
   clearFilter(): void {

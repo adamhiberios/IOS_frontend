@@ -9,7 +9,14 @@ import { AuthApi } from '@core/auth';
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
-import { AccentBars, Button, IconButton, Input as IosInput, PasswordStrength } from '@ui';
+import {
+  AccentBars,
+  Button,
+  IconButton,
+  Input as IosInput,
+  PasswordStrength,
+  DialogEscape,
+} from '@ui';
 
 import { matchFieldsValidator } from '../utils/match-fields.validator';
 import {
@@ -30,6 +37,7 @@ import {
 @Component({
   selector: 'ios-new-password-page',
   imports: [
+    DialogEscape,
     ReactiveFormsModule,
     RouterLink,
     AuthHeader,
@@ -156,6 +164,7 @@ import {
           role="dialog"
           aria-modal="true"
           aria-labelledby="popup-title"
+          (iosDialogEscape)="goToLogin()"
         >
           <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 shadow-xl">
             <div class="flex flex-col items-center gap-6">

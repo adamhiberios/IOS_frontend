@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, output } from '@angular/core';
 import { LanguageService } from '@core/i18n';
-import { Button } from '@ui';
+import { Button, DialogEscape } from '@ui';
 
 /**
  * `ios-profile-password-updated-dialog` — success dialog shown after a
@@ -22,7 +22,7 @@ import { Button } from '@ui';
  */
 @Component({
   selector: 'ios-profile-password-updated-dialog',
-  imports: [Button],
+  imports: [DialogEscape, Button],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -30,6 +30,7 @@ import { Button } from '@ui';
       role="dialog"
       aria-modal="true"
       aria-labelledby="pwd-updated-title"
+      (iosDialogEscape)="confirmed.emit()"
     >
       <div class="bg-white rounded-xl p-6 sm:p-8 max-w-md w-full mx-4 shadow-xl">
         <div class="flex flex-col items-center gap-6">

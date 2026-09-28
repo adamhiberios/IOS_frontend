@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 
 import { LanguageService } from '@core/i18n';
-import { Button, DialogFooter } from '@ui';
+import { Button, DialogFooter, DialogEscape } from '@ui';
 
 import { AdminQuestionImportStore } from '../data-access/question-import.store';
 import {
@@ -38,7 +38,7 @@ interface PreviewRow {
  */
 @Component({
   selector: 'ios-question-import-dialog',
-  imports: [Button, DialogFooter],
+  imports: [DialogEscape, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -46,6 +46,7 @@ interface PreviewRow {
       role="dialog"
       aria-modal="true"
       aria-labelledby="qi-title"
+      (iosDialogEscape)="!store.busy() && close()"
     >
       <div class="w-full max-w-3xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto">
         <h2 id="qi-title" class="text-lg font-semibold text-ios-brand-dark">

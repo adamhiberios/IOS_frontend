@@ -16,7 +16,14 @@ import { RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import { type AdminExam, type ExamDraft } from '../data-access/exam-authoring.model';
 import { AdminExamAuthoringStore } from '../data-access/exam-authoring.store';
@@ -39,7 +46,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-exam-authoring-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, RouterLink, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -238,6 +245,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="exam-dialog-title"
+          (iosDialogEscape)="closeDialog()"
         >
           <div
             class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
@@ -347,6 +355,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="exam-delete-title"
+          (iosDialogEscape)="cancelDelete()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

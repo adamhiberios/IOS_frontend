@@ -10,7 +10,14 @@ import {
 import { NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import { AdminExamAssignStore } from '../data-access/exam-assign.store';
 import { type StudentListItem } from '../data-access/users.model';
@@ -26,7 +33,7 @@ import { type StudentListItem } from '../data-access/users.model';
  */
 @Component({
   selector: 'ios-admin-exam-assign-page',
-  imports: [ReactiveFormsModule, DatePipe, IosInput, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, DatePipe, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -174,6 +181,7 @@ import { type StudentListItem } from '../data-access/users.model';
           role="dialog"
           aria-modal="true"
           aria-labelledby="assign-code-title"
+          (iosDialogEscape)="dismiss()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

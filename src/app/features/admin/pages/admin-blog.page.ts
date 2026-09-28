@@ -20,7 +20,14 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 import { RichText } from '@ui/rich-text';
 
 import { BlogCoverUpload } from '../components/blog-cover-upload';
@@ -66,7 +73,16 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
  */
 @Component({
   selector: 'ios-admin-blog-page',
-  imports: [ReactiveFormsModule, IosInput, RichText, Select, Button, BlogCoverUpload, DialogFooter],
+  imports: [
+    DialogEscape,
+    ReactiveFormsModule,
+    IosInput,
+    RichText,
+    Select,
+    Button,
+    BlogCoverUpload,
+    DialogFooter,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -251,6 +267,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
           role="dialog"
           aria-modal="true"
           aria-labelledby="blog-dialog-title"
+          (iosDialogEscape)="closeDialog()"
         >
           <div class="flex w-full justify-center">
             <div
@@ -359,6 +376,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
           role="dialog"
           aria-modal="true"
           aria-labelledby="blog-tr-title"
+          (iosDialogEscape)="closeDialog()"
         >
           <div class="flex w-full justify-center">
             <div
@@ -452,6 +470,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
           role="dialog"
           aria-modal="true"
           aria-labelledby="blog-del-title"
+          (iosDialogEscape)="cancelDelete()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"

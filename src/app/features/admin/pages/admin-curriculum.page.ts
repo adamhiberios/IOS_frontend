@@ -17,7 +17,14 @@ import { RouterLink } from '@angular/router';
 
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
-import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
+import {
+  Button,
+  Input as IosInput,
+  Select,
+  type SelectOption,
+  DialogFooter,
+  DialogEscape,
+} from '@ui';
 
 import {
   type AdminLesson,
@@ -57,7 +64,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  */
 @Component({
   selector: 'ios-admin-curriculum-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button, DialogFooter],
+  imports: [DialogEscape, ReactiveFormsModule, RouterLink, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -327,6 +334,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="module-dialog-title"
+          (iosDialogEscape)="closeModuleDialog()"
         >
           <div
             class="w-full max-w-lg rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
@@ -412,6 +420,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           role="dialog"
           aria-modal="true"
           aria-labelledby="lesson-dialog-title"
+          (iosDialogEscape)="closeLessonDialog()"
         >
           <div
             class="w-full max-w-3xl rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
