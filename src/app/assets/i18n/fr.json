@@ -727,7 +727,7 @@
       "lessonsRemaining": "Leçons restantes",
       "notEnrolled": "Vous n’êtes pas inscrit à cette certification.",
       "continueHeading": "Reprendre où vous vous êtes arrêté",
-      "allLessonsDone": "Vous avez terminé toutes les leçons",
+      "allLessonsDone": "Vous avez terminé toutes les leçons requises de {title} - {code}",
       "continueCta": "Continuer l’apprentissage",
       "noMockExamHeading": "Aucun examen blanc trouvé",
       "noMockExamBody": "Vous n'avez encore passé aucun examen blanc",

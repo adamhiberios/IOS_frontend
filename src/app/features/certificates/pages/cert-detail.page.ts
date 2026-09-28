@@ -257,7 +257,10 @@ import { MockStore } from '../data-access/mock.store';
                         {{
                           nextLesson()
                             ? lang.t('dashboard.certs.continueHeading')
-                            : lang.t('dashboard.certs.allLessonsDone')
+                            : lang.t('dashboard.certs.allLessonsDone', {
+                                title: enrolled()?.title ?? '',
+                                code: certCode,
+                              })
                         }}
                       </h2>
                       @if (nextLesson(); as next) {

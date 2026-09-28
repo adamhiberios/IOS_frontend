@@ -727,7 +727,7 @@
       "lessonsRemaining": "Lessons remaining",
       "notEnrolled": "You are not enrolled in this certification.",
       "continueHeading": "Continue where you left off",
-      "allLessonsDone": "You have finished every lesson",
+      "allLessonsDone": "You have completed all required lessons of {title} - {code}",
       "continueCta": "Continue learning",
       "noMockExamHeading": "No mock exam found",
       "noMockExamBody": "You have not previously performed any mock exam",

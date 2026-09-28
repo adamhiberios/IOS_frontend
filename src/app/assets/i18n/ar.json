@@ -727,7 +727,7 @@
       "lessonsRemaining": "الدروس المتبقية",
       "notEnrolled": "أنت غير مسجّل في هذه الشهادة.",
       "continueHeading": "تابع من حيث توقفت",
-      "allLessonsDone": "لقد أنهيت جميع الدروس",
+      "allLessonsDone": "لقد أكملت جميع الدروس المطلوبة في {title} - {code}",
       "continueCta": "متابعة التعلّم",
       "noMockExamHeading": "لا يوجد اختبار تجريبي",
       "noMockExamBody": "لم تقم بإجراء أي اختبار تجريبي من قبل",
