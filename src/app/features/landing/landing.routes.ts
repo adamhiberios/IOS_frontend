@@ -13,6 +13,14 @@ const routes: Routes = [
     title: 'Institute of Scrum — Learn, Certify, Advance',
   },
   {
+    // Public certificate check (IDD-258) — linked from the navbar's
+    // Certifications menu. No auth: employers verify candidates here.
+    path: 'verify-certificate',
+    loadComponent: () =>
+      import('./pages/verify-certificate.page').then((m) => m.VerifyCertificatePage),
+    title: 'Verify Certificate — Institute of Scrum',
+  },
+  {
     path: 'contact',
     loadComponent: () => import('./pages/contact.page').then((m) => m.ContactPage),
     title: 'Contact — Institute of Scrum',

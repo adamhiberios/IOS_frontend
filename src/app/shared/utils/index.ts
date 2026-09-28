@@ -11,6 +11,7 @@ export {
   type CountryOption,
   type PhoneCountry,
 } from './countries';
+export { type CertFamily, resolveBadgeAsset, resolveCertFamily } from './cert-badge';
 export { formatFee } from './format-fee';
 export { matchFieldsValidator } from './match-fields.validator';
 export {

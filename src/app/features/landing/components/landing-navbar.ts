@@ -216,7 +216,7 @@ interface CertMenuGroup {
                 <div class="border-t border-ios-border-light"></div>
 
                 <a
-                  routerLink="/certifications"
+                  routerLink="/verify-certificate"
                   (click)="closeCert()"
                   class="inline-flex items-center gap-2
                          font-heading font-semibold text-[15px] text-ios-brand-primary
@@ -435,7 +435,7 @@ interface CertMenuGroup {
                    destination and label as desktop so the two stay in step. -->
               <div class="border-t border-ios-border-light mx-4"></div>
               <a
-                routerLink="/certifications"
+                routerLink="/verify-certificate"
                 (click)="closeMobileMenu()"
                 class="inline-flex items-center gap-2 w-full px-4 py-2 rounded-lg
                        font-heading font-semibold text-[14px] text-ios-brand-primary

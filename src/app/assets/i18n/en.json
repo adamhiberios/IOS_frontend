@@ -3225,6 +3225,24 @@
       "verifyAria": "Verify the {program} certificate"
     }
   },
+  "verifyCertificate": {
+    "title": "Verify Certificate",
+    "back": "Back to home",
+    "example": "Example:",
+    "exampleAlt": "Where to find the reference number: bottom right of the certificate, after \"Certificate Number\".",
+    "subtitle": "Enter the Reference number found on the certificate to get the result.",
+    "fieldLabel": "Reference number",
+    "placeholder": "Enter Reference number",
+    "submit": "Verify",
+    "checking": "Verifying…",
+    "resultLabel": "Certificate details",
+    "fullName": "Full Name",
+    "referenceNumber": "Reference Number",
+    "valid": "Certificate is valid!",
+    "revoked": "This certificate has been revoked and is no longer valid.",
+    "notFound": "No certificate was found with this reference number. Check it and try again.",
+    "error": "We couldn't verify the certificate right now. Please try again."
+  },
   "certificates": {
     "certDetail": {
       "aria": {

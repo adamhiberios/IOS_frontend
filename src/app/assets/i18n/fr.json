@@ -3237,6 +3237,24 @@
       "verifyAria": "Vérifier le certificat {program}"
     }
   },
+  "verifyCertificate": {
+    "title": "Vérifier un certificat",
+    "back": "Retour à l'accueil",
+    "example": "Exemple :",
+    "exampleAlt": "Où trouver le numéro de référence : en bas à droite du certificat, après « Certificate Number ».",
+    "subtitle": "Saisissez le numéro de référence figurant sur le certificat pour obtenir le résultat.",
+    "fieldLabel": "Numéro de référence",
+    "placeholder": "Saisissez le numéro de référence",
+    "submit": "Vérifier",
+    "checking": "Vérification…",
+    "resultLabel": "Détails du certificat",
+    "fullName": "Nom complet",
+    "referenceNumber": "Numéro de référence",
+    "valid": "Le certificat est valide !",
+    "revoked": "Ce certificat a été révoqué et n'est plus valide.",
+    "notFound": "Aucun certificat ne correspond à ce numéro de référence. Vérifiez-le et réessayez.",
+    "error": "Impossible de vérifier le certificat pour le moment. Veuillez réessayer."
+  },
   "certificates": {
     "certDetail": {
       "aria": {
