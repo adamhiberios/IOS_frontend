@@ -336,6 +336,7 @@ import { MockStore } from '../data-access/mock.store';
                     [cert]="card"
                     [materials]="realMaterials()"
                     (open)="onMaterialOpen($event)"
+                    (showDetails)="store.setActiveSection('overview')"
                   />
                 }
               }

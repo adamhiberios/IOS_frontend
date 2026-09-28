@@ -73,6 +73,7 @@ import type { CertificationCard, LearningMaterial } from '../data-access/certifi
         type="button"
         class="inline-flex items-center justify-end sm:justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0 basis-full sm:basis-auto -mb-1 sm:mb-0"
         [attr.aria-label]="lang.t('dashboard.certs.showDetails')"
+        (click)="showDetails.emit()"
       >
         {{ lang.t('dashboard.certs.showDetails') }}
         <ios-icon
@@ -219,6 +220,8 @@ export class CertLearningMaterials {
    * ("Open", "Continue", etc.). Parent page handles router navigation.
    */
   readonly open = output<string>();
+  /** "Show details" on the banner — the parent opens the Overview tab (IDD-349). */
+  readonly showDetails = output<void>();
 
   /**
    * SVG circle circumference for r = 9.
