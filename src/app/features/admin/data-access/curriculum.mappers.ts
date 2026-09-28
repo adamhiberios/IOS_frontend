@@ -80,23 +80,35 @@ export function toUpdateModuleBody(draft: ModuleDraft): UpdateModuleBody {
   };
 }
 
+/**
+ * Body for the placeholder row a new lesson starts as. The Word import needs
+ * an existing lesson id, and the backend requires a non-empty body on create,
+ * so the lesson is created **inactive** with a stub body — learners never see
+ * it — and is activated by the same PATCH that saves the converted content.
+ */
+export const NEW_LESSON_PLACEHOLDER_HTML = '<p></p>';
+
 export function toCreateLessonBody(draft: LessonDraft, moduleId: string): CreateLessonBody {
   const videoUrl = draft.videoUrl.trim();
   return {
     moduleId,
     title: draft.title.trim(),
-    // Required and non-empty on the backend — never omitted, unlike videoUrl.
-    contentText: draft.contentText.trim(),
+    contentText: NEW_LESSON_PLACEHOLDER_HTML,
     ...(videoUrl ? { videoUrl } : {}),
     position: draft.position,
     durationSeconds: draft.durationSeconds,
+    active: false,
   };
 }
 
-export function toUpdateLessonBody(draft: LessonDraft): UpdateLessonBody {
+/**
+ * `contentText` is only sent when a new Word document was converted —
+ * otherwise the stored body is left exactly as it is.
+ */
+export function toUpdateLessonBody(draft: LessonDraft, contentHtml?: string): UpdateLessonBody {
   return {
     title: draft.title.trim(),
-    contentText: draft.contentText.trim(),
+    ...(contentHtml !== undefined ? { contentText: contentHtml } : {}),
     videoUrl: draft.videoUrl.trim(),
     position: draft.position,
     durationSeconds: draft.durationSeconds,

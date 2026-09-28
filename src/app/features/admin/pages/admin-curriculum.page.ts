@@ -18,7 +18,6 @@ import { RouterLink } from '@angular/router';
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { Button, Input as IosInput, Select, type SelectOption, DialogFooter } from '@ui';
-import { RichText } from '@ui/rich-text';
 
 import {
   type AdminLesson,
@@ -28,6 +27,10 @@ import {
   translatedLocales,
 } from '../data-access/curriculum.model';
 import { AdminCurriculumStore } from '../data-access/curriculum.store';
+import {
+  LESSON_IMPORT_FILE_ACCEPT,
+  LESSON_IMPORT_MAX_FILE_BYTES,
+} from '../data-access/lesson-import.model';
 
 /**
  * `Validators.required` wrapped as a call — the mixed string/number control set
@@ -45,10 +48,16 @@ const required: ValidatorFn = (control) => Validators.required(control);
  * reactivate are gated to content_creator + learning_admin, deactivate to
  * learning_admin (the backend still enforces). Lesson-quiz authoring (B5) and a
  * per-locale translation editor are follow-up increments.
+ *
+ * Lesson content is a Word document, not typed in (IDD-317 / IDD-318): the
+ * admin picks the lesson's .docx, the backend converts it to HTML (headings,
+ * lists, tables, images, the handbook's shaded boxes) and the store saves that
+ * HTML to the lesson. Required on create; on edit, picking a file replaces the
+ * content and leaving it empty keeps the current one.
  */
 @Component({
   selector: 'ios-admin-curriculum-page',
-  imports: [ReactiveFormsModule, RouterLink, IosInput, RichText, Select, Button, DialogFooter],
+  imports: [ReactiveFormsModule, RouterLink, IosInput, Select, Button, DialogFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section>
@@ -281,6 +290,29 @@ const required: ValidatorFn = (control) => Validators.required(control);
           }
         </div>
 
+        @if (store.importWarnings().length > 0 && !lessonDialogOpen()) {
+          <div
+            class="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"
+            role="status"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <p class="font-medium">{{ lang.t('admin.lessonImport.savedWithWarnings') }}</p>
+              <button
+                type="button"
+                (click)="store.clearImportWarnings()"
+                class="text-xs underline hover:text-amber-950"
+              >
+                {{ lang.t('admin.lessonImport.dismiss') }}
+              </button>
+            </div>
+            <ul class="mt-1 list-disc space-y-1 ps-5 text-xs">
+              @for (w of store.importWarnings(); track $index) {
+                <li>{{ w }}</li>
+              }
+            </ul>
+          </div>
+        }
+
         @if (store.actionError() && !moduleDialogOpen() && !lessonDialogOpen()) {
           <p class="text-sm text-red-600 mt-3 text-center" role="alert">
             {{ store.actionError() }}
@@ -401,13 +433,71 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 [control]="lessonForm.controls.title"
                 [placeholder]="lang.t('admin.curriculum.lessonTitlePlaceholder')"
               />
-              <ios-rich-text
-                id="lesson-content"
-                [label]="lang.t('admin.curriculum.contentLabel')"
-                [control]="lessonForm.controls.contentText"
-                [placeholder]="lang.t('admin.curriculum.contentPlaceholder')"
-                [errorText]="lang.t('admin.curriculum.contentError')"
-              />
+              <!-- Content: a Word document, converted and saved by the backend -->
+              <div>
+                <span class="block text-sm font-heading font-medium text-ios-brand-dark mb-1">
+                  {{ lang.t('admin.lessonImport.fileLabel') }}
+                </span>
+                <div
+                  class="rounded-lg border border-dashed bg-gray-50 p-4"
+                  [class.border-gray-300]="!fileError()"
+                  [class.border-ios-brand-primary]="fileError()"
+                >
+                  <div class="flex flex-wrap items-center gap-3">
+                    <label
+                      for="lesson-docx"
+                      class="cursor-pointer rounded-lg border border-ios-brand-primary bg-white px-4 py-2 text-sm font-semibold text-ios-brand-primary hover:bg-ios-brand-primary-soft focus-within:ring-2 focus-within:ring-ios-brand-primary focus-within:ring-offset-2"
+                    >
+                      {{
+                        lessonFile()
+                          ? lang.t('admin.lessonImport.chooseAnother')
+                          : lang.t('admin.lessonImport.chooseFile')
+                      }}
+                    </label>
+                    <input
+                      id="lesson-docx"
+                      type="file"
+                      class="sr-only"
+                      [accept]="docxAccept"
+                      aria-describedby="lesson-docx-hint"
+                      (change)="onDocxSelected($event)"
+                    />
+                    @if (lessonFile(); as f) {
+                      <span class="text-sm text-ios-brand-dark truncate max-w-full">{{
+                        f.name
+                      }}</span>
+                      <button
+                        type="button"
+                        (click)="lessonFile.set(null)"
+                        class="text-xs text-gray-500 underline hover:text-gray-800"
+                      >
+                        {{ lang.t('admin.lessonImport.removeFile') }}
+                      </button>
+                    }
+                  </div>
+                  <p id="lesson-docx-hint" class="mt-2 text-xs text-gray-500">
+                    {{
+                      editingLessonId()
+                        ? lang.t('admin.lessonImport.editHint')
+                        : lang.t('admin.lessonImport.createHint')
+                    }}
+                  </p>
+                  <details class="mt-2 text-xs text-gray-600">
+                    <summary class="cursor-pointer text-ios-brand-primary">
+                      {{ lang.t('admin.lessonImport.tipsToggle') }}
+                    </summary>
+                    <ul class="mt-2 list-disc space-y-1 ps-5">
+                      <li>{{ lang.t('admin.lessonImport.tipSaveAs') }}</li>
+                      <li>{{ lang.t('admin.lessonImport.tipHeadings') }}</li>
+                      <li>{{ lang.t('admin.lessonImport.tipCallouts') }}</li>
+                      <li>{{ lang.t('admin.lessonImport.tipImages') }}</li>
+                    </ul>
+                  </details>
+                </div>
+                @if (fileError(); as msg) {
+                  <p class="mt-1 text-xs text-ios-brand-primary" role="alert">{{ msg }}</p>
+                }
+              </div>
               <ios-input
                 id="lesson-video"
                 [label]="lang.t('admin.curriculum.videoLabel')"
@@ -463,11 +553,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                 >
                   {{ lang.t('admin.curriculum.cancel') }}
                 </button>
-                <ios-button
-                  type="submit"
-                  variant="primary"
-                  [loading]="isPending('lesson', editingLessonId() ?? 'new')"
-                >
+                <ios-button type="submit" variant="primary" [loading]="lessonSaving()">
                   {{ lang.t('admin.curriculum.save') }}
                 </ios-button>
               </ios-dialog-footer>
@@ -509,6 +595,23 @@ export class AdminCurriculumPage implements OnInit {
   protected readonly lessonModuleTitle = signal('');
   protected readonly formError = signal<string | null>(null);
 
+  protected readonly docxAccept = LESSON_IMPORT_FILE_ACCEPT;
+  /** The Word document the lesson body is taken from (required on create). */
+  protected readonly lessonFile = signal<File | null>(null);
+  protected readonly fileError = signal<string | null>(null);
+  /**
+   * The lesson was created but its document was rejected: it exists inactive,
+   * and the retry (now an edit) must activate it once the content is saved.
+   */
+  private readonly activateOnSave = signal(false);
+  /**
+   * The dialog's save is in flight. Not keyed on {@link editingLessonId}: a
+   * create switches that to the new id mid-save.
+   */
+  protected readonly lessonSaving = computed(
+    () => this.store.actionPendingId()?.startsWith('lesson:') ?? false,
+  );
+
   protected readonly moduleForm = this.fb.group({
     title: this.fb.control('', { validators: [required] }),
     description: this.fb.control('', { validators: [required] }),
@@ -517,7 +620,6 @@ export class AdminCurriculumPage implements OnInit {
 
   protected readonly lessonForm = this.fb.group({
     title: this.fb.control('', { validators: [required] }),
-    contentText: this.fb.control('', { validators: [required] }),
     videoUrl: this.fb.control(''),
     position: this.fb.control(0, { validators: [required, Validators.min(0)] }),
     durationSeconds: this.fb.control(0, { validators: [required, Validators.min(0)] }),
@@ -604,9 +706,9 @@ export class AdminCurriculumPage implements OnInit {
     this.lessonModuleId.set(module.id);
     this.lessonModuleTitle.set(module.title);
     this.formError.set(null);
+    this.resetLessonFile();
     this.lessonForm.reset({
       title: '',
-      contentText: '',
       videoUrl: '',
       position: this.nextLessonPosition(module),
       durationSeconds: 0,
@@ -620,9 +722,9 @@ export class AdminCurriculumPage implements OnInit {
     this.lessonModuleId.set(module.id);
     this.lessonModuleTitle.set(module.title);
     this.formError.set(null);
+    this.resetLessonFile();
     this.lessonForm.reset({
       title: lesson.title,
-      contentText: lesson.contentText ?? '',
       videoUrl: lesson.videoUrl ?? '',
       position: lesson.position,
       durationSeconds: lesson.durationSeconds ?? 0,
@@ -640,13 +742,52 @@ export class AdminCurriculumPage implements OnInit {
     if (!moduleId) return;
     this.lessonForm.markAllAsTouched();
     this.formError.set(null);
-    if (this.lessonForm.invalid) {
+    const needsFile = !this.editingLessonId() && !this.lessonFile();
+    if (needsFile) this.fileError.set(this.lang.t('admin.lessonImport.fileRequired'));
+    if (this.lessonForm.invalid || needsFile) {
       this.formError.set(this.lang.t('admin.curriculum.formError'));
       return;
     }
     const draft: LessonDraft = this.lessonForm.getRawValue();
-    const ok = await this.store.saveLesson(draft, moduleId, this.editingLessonId() ?? undefined);
+    const ok = await this.store.saveLesson(draft, moduleId, {
+      id: this.editingLessonId() ?? undefined,
+      file: this.lessonFile(),
+      activate: this.activateOnSave(),
+      onCreated: (id) => {
+        // From here on the dialog edits this lesson, so a retry after a
+        // rejected document doesn't create a second one.
+        this.editingLessonId.set(id);
+        this.activateOnSave.set(true);
+      },
+    });
     if (ok) this.lessonDialogOpen.set(false);
+  }
+
+  protected onDocxSelected(event: Event): void {
+    const el = event.target as HTMLInputElement;
+    const file = el.files?.[0] ?? null;
+    // Clear so picking the same file again (after fixing it in Word) re-fires.
+    el.value = '';
+    if (!file) return;
+    this.store.clearActionError();
+    // The backend checks these too; catching them here saves a 20 MB round trip.
+    if (!file.name.toLowerCase().endsWith('.docx')) {
+      this.fileError.set(this.lang.t('admin.lessonImport.issues.NOT_A_DOCX'));
+      return;
+    }
+    if (file.size > LESSON_IMPORT_MAX_FILE_BYTES) {
+      this.fileError.set(this.lang.t('admin.lessonImport.issues.FILE_TOO_LARGE'));
+      return;
+    }
+    this.fileError.set(null);
+    this.lessonFile.set(file);
+  }
+
+  private resetLessonFile(): void {
+    this.lessonFile.set(null);
+    this.fileError.set(null);
+    this.activateOnSave.set(false);
+    this.store.clearImportWarnings();
   }
 
   // ── Row actions ────────────────────────────────────────────────────────────

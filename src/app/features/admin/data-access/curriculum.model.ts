@@ -58,10 +58,13 @@ export interface ModuleDraft {
   readonly position: number;
 }
 
-/** Editable lesson fields (create + edit share this shape; `active` is toggled separately). */
+/**
+ * Editable lesson fields (create + edit share this shape; `active` is toggled
+ * separately). The body is not here: it comes from a Word document, converted
+ * by the backend (see `lesson-import.api.ts`).
+ */
 export interface LessonDraft {
   readonly title: string;
-  readonly contentText: string;
   readonly videoUrl: string;
   readonly position: number;
   readonly durationSeconds: number;

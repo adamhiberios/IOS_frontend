@@ -6,6 +6,7 @@ import { environment } from '@env/environment';
 
 import {
   type CreateLessonBody,
+  type CreateLessonResponseDto,
   type CreateModuleBody,
   type CurriculumResponseDto,
   type UpdateLessonBody,
@@ -27,7 +28,7 @@ import { type AdminCurriculum } from './curriculum.model';
  *
  * Every write is wrapped in a `{ data }` envelope by the backend; we don't need
  * the echoed row (the store refetches the whole curriculum), so writes resolve
- * to `void`.
+ * to `void` — except lesson create, whose id the Word import needs.
  */
 @Injectable({ providedIn: 'root' })
 export class AdminCurriculumApi {
@@ -54,8 +55,11 @@ export class AdminCurriculumApi {
     return this.http.delete<void>(`${this.base}/modules/${id}`).pipe(map(() => undefined));
   }
 
-  createLesson(body: CreateLessonBody): Observable<void> {
-    return this.http.post<void>(`${this.base}/lessons`, body).pipe(map(() => undefined));
+  /** Resolves with the new lesson's id — its content is imported into it next. */
+  createLesson(body: CreateLessonBody): Observable<string> {
+    return this.http
+      .post<CreateLessonResponseDto>(`${this.base}/lessons`, body)
+      .pipe(map((res) => res.data.id));
   }
 
   updateLesson(id: string, body: UpdateLessonBody): Observable<void> {

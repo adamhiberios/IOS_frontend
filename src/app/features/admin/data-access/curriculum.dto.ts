@@ -61,6 +61,11 @@ export interface CurriculumResponseDto {
   readonly data: AdminCurriculumDto;
 }
 
+/** `{ data }` envelope returned by `POST /admin/lessons` — the created row. */
+export interface CreateLessonResponseDto {
+  readonly data: AdminLessonDto;
+}
+
 // ── Write bodies (module/lesson CRUD) ────────────────────────────────────────
 
 /** `POST /admin/modules`. */
@@ -87,6 +92,7 @@ export interface CreateLessonBody {
   readonly videoUrl?: string;
   readonly position?: number;
   readonly durationSeconds?: number;
+  readonly active?: boolean;
 }
 
 /** `PATCH /admin/lessons/:id` (partial). `active` toggles soft-delete state. */
