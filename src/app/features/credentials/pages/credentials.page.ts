@@ -10,7 +10,7 @@ import {
   LucideShieldCheck,
 } from '@lucide/angular';
 
-import { CanadaFlag, IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageBreadcrumbBar, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { LanguageService } from '@core/i18n';
 
@@ -30,7 +30,7 @@ import { CredentialsStore } from '../data-access/credentials.store';
  */
 @Component({
   selector: 'ios-credentials-page',
-  imports: [DashboardNavbar, RouterLink, DatePipe, IosIcon, CanadaFlag],
+  imports: [DashboardNavbar, RouterLink, DatePipe, IosIcon, PageBreadcrumbBar, PageFooter],
   providers: [
     provideIcons(
       LucideArrowLeft,
@@ -47,39 +47,24 @@ import { CredentialsStore } from '../data-access/credentials.store';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
-          <div class="flex items-center gap-4">
-            <a
-              routerLink="/dashboard"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
-              [attr.aria-label]="lang.t('credentials.backToDashboard')"
-            >
-              <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
-            </a>
-            <nav aria-label="Breadcrumb">
-              <ol
-                class="flex items-center gap-3 text-base leading-[1.4] whitespace-nowrap"
-                role="list"
-              >
-                <li>
-                  <a
-                    routerLink="/dashboard"
-                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
-                    >{{ lang.t('credentials.breadcrumb.dashboard') }}</a
-                  >
-                </li>
-                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
-                <li>
-                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
-                    lang.t('credentials.title')
-                  }}</span>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-      </div>
+      <ios-page-breadcrumb-bar
+        backLink="/dashboard"
+        [backLabel]="lang.t('credentials.backToDashboard')"
+      >
+        <li>
+          <a
+            routerLink="/dashboard"
+            class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+            >{{ lang.t('credentials.breadcrumb.dashboard') }}</a
+          >
+        </li>
+        <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
+        <li>
+          <span class="font-semibold text-ios-fg-13" aria-current="page">{{
+            lang.t('credentials.title')
+          }}</span>
+        </li>
+      </ios-page-breadcrumb-bar>
 
       <!-- ── Main content ───────────────────────────────────────────────── -->
       <main class="flex-1 bg-white" id="main-content">
@@ -222,21 +207,13 @@ import { CredentialsStore } from '../data-access/credentials.store';
       </main>
 
       <!-- ── Footer ────────────────────────────────────────────────────── -->
-      <footer class="bg-ios-fg w-full py-4 shrink-0">
-        <div
-          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer variant="neutral" class="shrink-0" />
     </div>
   `,
 })
 export class CredentialsPage implements OnInit {
   protected readonly store = inject(CredentialsStore);
   protected readonly lang = inject(LanguageService);
-  protected readonly year = new Date().getFullYear();
 
   ngOnInit(): void {
     void this.store.load();

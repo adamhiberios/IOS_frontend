@@ -122,9 +122,7 @@ export class DashboardStore {
     if (!inProgress) return null;
     const started = inProgress.completedLessons > 0;
     return {
-      illustration: started
-        ? 'assets/illustrations/ready-to-test.svg'
-        : 'assets/illustrations/file-ready.svg',
+      illustration: started ? 'assets/icons/test.svg' : 'assets/icons/files.svg',
       heading: started
         ? this.lang.t('dashboard.learning.continueHeading', { code: inProgress.programCode })
         : this.lang.t('dashboard.learning.startHeading', { code: inProgress.programCode }),
@@ -166,11 +164,7 @@ export class DashboardStore {
 
   /** Kick off the underlying stores' fetches (idempotent-ish; safe to call on init). */
   async loadAll(): Promise<void> {
-    await Promise.all([
-      this.courses.loadProgress(),
-      this.mock.loadHistory(),
-      this.catalog.load(),
-    ]);
+    await Promise.all([this.courses.loadProgress(), this.mock.loadHistory(), this.catalog.load()]);
   }
 
   private yearTarget(): number {

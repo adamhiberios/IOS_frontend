@@ -3,7 +3,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { LucideArrowLeft, LucideArrowRight } from '@lucide/angular';
 
-import { CanadaFlag, Checkbox, IosIcon, provideIcons } from '@ui';
+import { Checkbox, IosIcon, provideIcons, PageBreadcrumbBar, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
@@ -37,10 +37,11 @@ import { AccountStore } from '../data-access/account.store';
     DashboardNavbar,
     RouterLink,
     IosIcon,
-    CanadaFlag,
     Checkbox,
     ReactiveFormsModule,
     DeleteAccountDialog,
+    PageBreadcrumbBar,
+    PageFooter,
   ],
   providers: [provideIcons(LucideArrowLeft, LucideArrowRight), AccountStore],
   template: `
@@ -48,40 +49,25 @@ import { AccountStore } from '../data-access/account.store';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
-          <div class="flex items-center gap-4">
-            <a
-              routerLink="/dashboard"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
-              [attr.aria-label]="lang.t('settings.breadcrumb.backToDashboard')"
-            >
-              <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
-            </a>
-            <nav aria-label="Breadcrumb">
-              <ol
-                class="flex items-center gap-3 text-base leading-[1.4] whitespace-nowrap"
-                role="list"
-              >
-                <li>
-                  <a
-                    routerLink="/dashboard"
-                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
-                  >
-                    {{ lang.t('settings.breadcrumb.dashboard') }}
-                  </a>
-                </li>
-                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
-                <li>
-                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
-                    lang.t('settings.breadcrumb.settings')
-                  }}</span>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-      </div>
+      <ios-page-breadcrumb-bar
+        backLink="/dashboard"
+        [backLabel]="lang.t('settings.breadcrumb.backToDashboard')"
+      >
+        <li>
+          <a
+            routerLink="/dashboard"
+            class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+          >
+            {{ lang.t('settings.breadcrumb.dashboard') }}
+          </a>
+        </li>
+        <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
+        <li>
+          <span class="font-semibold text-ios-fg-13" aria-current="page">{{
+            lang.t('settings.breadcrumb.settings')
+          }}</span>
+        </li>
+      </ios-page-breadcrumb-bar>
 
       <!-- ── Main content ───────────────────────────────────────────────── -->
       <main class="flex-1 bg-white" id="main-content">
@@ -96,7 +82,9 @@ import { AccountStore } from '../data-access/account.store';
                 {{ lang.t('settings.notifications.heading') }}
               </h2>
 
-              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex flex-col gap-8">
+              <div
+                class="flex-1 w-full min-w-0 bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col gap-5 md:gap-8"
+              >
                 <ios-checkbox id="notif-all" [formControl]="notifAllCtrl">
                   {{ lang.t('settings.notifications.all') }}
                 </ios-checkbox>
@@ -130,7 +118,9 @@ import { AccountStore } from '../data-access/account.store';
                 {{ lang.t('settings.newsletter.heading') }}
               </h2>
 
-              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex flex-col gap-4">
+              <div
+                class="flex-1 w-full min-w-0 bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col gap-4"
+              >
                 <!-- Newsletter subscription checkbox -->
                 <ios-checkbox id="newsletter-check" [formControl]="newsletterEnabledCtrl">
                   {{ lang.t('settings.newsletter.checkbox') }}
@@ -141,7 +131,7 @@ import { AccountStore } from '../data-access/account.store';
                   <div class="flex items-stretch">
                     <!-- Email display field -->
                     <div
-                      class="flex-1 bg-ios-surface-mid border border-ios-line border-e-0 rounded-s-lg px-4 py-4 flex items-center"
+                      class="flex-1 min-w-0 bg-ios-surface-mid border border-ios-line border-e-0 rounded-s-lg px-3 md:px-4 py-4 flex items-center"
                     >
                       <span class="font-bold text-[16px] text-ios-fg-10 leading-[1.3] truncate">
                         {{ newsletterEmail() }}
@@ -150,7 +140,7 @@ import { AccountStore } from '../data-access/account.store';
 
                     <!-- Enabled badge -->
                     <div
-                      class="flex items-center gap-3 bg-ios-surface-soft px-6 py-4 rounded-e-xl shrink-0"
+                      class="flex items-center gap-2 md:gap-3 bg-ios-surface-soft px-4 md:px-6 py-4 rounded-e-xl shrink-0"
                       [attr.aria-label]="lang.t('settings.newsletter.enabledAriaLabel')"
                     >
                       <svg
@@ -241,7 +231,7 @@ import { AccountStore } from '../data-access/account.store';
                   </span>
                   <ios-icon
                     name="arrow-right"
-                    class="w-6 h-6 text-ios-danger-strong"
+                    class="w-6 h-6 text-ios-danger-strong rtl:rotate-180"
                     aria-hidden="true"
                   />
                 </button>
@@ -252,14 +242,7 @@ import { AccountStore } from '../data-access/account.store';
       </main>
 
       <!-- ── Footer ────────────────────────────────────────────────────────── -->
-      <footer class="bg-ios-brand-dark w-full py-4">
-        <div
-          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: year }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
 
     <!-- ── Delete account dialog ─────────────────────────────────────────── -->
@@ -277,8 +260,6 @@ export class SettingsPage {
   private readonly auth = inject(AuthStore);
   protected readonly lang = inject(LanguageService);
   protected readonly account = inject(AccountStore);
-
-  protected readonly year = new Date().getFullYear().toString();
 
   protected readonly showDeleteDialog = signal(false);
 

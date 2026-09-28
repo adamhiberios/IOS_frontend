@@ -4,7 +4,7 @@ import { LucideCheck, LucideX, LucideArrowLeft, LucideArrowRight } from '@lucide
 
 import { LanguageService } from '@core/i18n';
 
-import { IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { MockStore } from '../data-access/mock.store';
@@ -21,14 +21,14 @@ import { FinalExamCta } from '../components/final-exam-cta';
 @Component({
   selector: 'ios-mock-exam-result-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DashboardNavbar, IosIcon, RouterLink, FinalExamCta],
+  imports: [DashboardNavbar, IosIcon, RouterLink, FinalExamCta, PageFooter],
   providers: [provideIcons(LucideCheck, LucideX, LucideArrowLeft, LucideArrowRight)],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
 
       <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-6 flex flex-col gap-6">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6 flex flex-col gap-6">
           <!-- ── Breadcrumb row ─────────────────────────────────────── -->
           <div class="flex items-center gap-3">
             <a
@@ -40,7 +40,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
             </a>
             <nav aria-label="Breadcrumb">
               <ol
-                class="flex items-center gap-3 text-[16px] font-medium leading-[1.4] text-ios-fg-8"
+                class="flex flex-wrap items-center gap-x-1.5 md:gap-x-3 gap-y-1 text-[14px] md:text-[16px] font-medium leading-[1.4] text-ios-fg-8 [&>li]:whitespace-nowrap"
                 role="list"
               >
                 <li>
@@ -72,8 +72,60 @@ import { FinalExamCta } from '../components/final-exam-cta';
               {{ store.reviewError() }}
             </p>
           } @else if (store.review(); as review) {
-            <div class="flex gap-6 items-start">
-              <!-- ── Left column: per-question review ─────────────────── -->
+            <!-- Summary is first in the DOM so it leads on phones (and for keyboard /
+                 screen-reader order); lg:order-last puts it beside the list. -->
+            <div class="flex flex-col lg:flex-row gap-6 items-stretch lg:items-start">
+              <!-- ── Result summary (right on lg) ─────────────────────── -->
+              <aside
+                class="w-full lg:w-[354px] lg:order-last shrink-0 bg-ios-brand-dark rounded-2xl flex flex-col gap-5 md:gap-6 p-5 md:p-8 lg:sticky lg:top-6"
+                aria-label="Mock result summary"
+              >
+                <div
+                  class="inline-flex items-center gap-2 bg-ios-fg-10 rounded-xl px-3 py-1.5 self-start text-[16px] whitespace-nowrap"
+                >
+                  <span class="font-semibold leading-[1.4] text-ios-brand-yellow-bright">{{
+                    lang.t('dashboard.examRunner.resultLabel')
+                  }}</span>
+                  <span class="font-bold leading-[1.3] text-ios-brand-yellow-bright"
+                    >({{ scorePercent() }}%)</span
+                  >
+                </div>
+
+                <div class="h-1 rounded-full bg-[#917f33]" aria-hidden="true"></div>
+
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                  <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1">
+                      <ios-icon name="check" class="size-7 text-[#a7d43e]" aria-hidden="true" />
+                      <span class="text-[18px] font-medium leading-[1.4] text-[#a7d43e]">{{
+                        review.correctCount
+                      }}</span>
+                    </div>
+                    <span class="text-[18px] font-bold leading-[1.2] text-[#a7d43e]">{{
+                      lang.t('dashboard.examRunner.trueLabel')
+                    }}</span>
+                  </div>
+                  <span class="text-[18px] font-medium leading-[1.4] text-ios-fg-7">/</span>
+                  <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-1">
+                      <ios-icon name="x" class="size-7 text-[#ff715d]" aria-hidden="true" />
+                      <span class="text-[18px] font-medium leading-[1.4] text-[#ff715d]">{{
+                        review.falseCount
+                      }}</span>
+                    </div>
+                    <span class="text-[18px] font-bold leading-[1.2] text-[#ff715d]">{{
+                      lang.t('dashboard.examRunner.falseLabel')
+                    }}</span>
+                  </div>
+                </div>
+
+                <!-- Advisory readiness message -->
+                <p class="text-[14px] font-medium leading-[1.5] text-ios-border-light">
+                  {{ review.readiness.message }}
+                </p>
+              </aside>
+
+              <!-- ── Per-question review (left on lg) ──────────────── -->
               <div class="flex flex-col gap-4 flex-1 min-w-0">
                 <div class="flex items-center gap-3">
                   <h2 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13">
@@ -85,7 +137,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
                 </div>
 
                 @for (q of review.questions; track q.questionId; let idx = $index) {
-                  <div class="bg-ios-surface-soft flex flex-col gap-3 p-6 rounded-xl w-full">
+                  <div class="bg-ios-surface-soft flex flex-col gap-3 p-4 md:p-6 rounded-xl w-full">
                     <div
                       class="flex gap-1.5 items-start text-[16px] font-medium leading-[1.4] text-ios-fg-11"
                     >
@@ -137,61 +189,11 @@ import { FinalExamCta } from '../components/final-exam-cta';
                   </div>
                 }
               </div>
-
-              <!-- ── Right column: result summary ─────────────────────── -->
-              <aside
-                class="w-[354px] shrink-0 bg-ios-brand-dark rounded-2xl flex flex-col gap-6 p-8 sticky top-6"
-                aria-label="Mock result summary"
-              >
-                <div
-                  class="inline-flex items-center gap-2 bg-ios-fg-10 rounded-xl px-3 py-1.5 self-start text-[16px] whitespace-nowrap"
-                >
-                  <span class="font-semibold leading-[1.4] text-ios-brand-yellow-bright">{{
-                    lang.t('dashboard.examRunner.resultLabel')
-                  }}</span>
-                  <span class="font-bold leading-[1.3] text-ios-brand-yellow-bright"
-                    >({{ scorePercent() }}%)</span
-                  >
-                </div>
-
-                <div class="h-1 rounded-full bg-[#917f33]" aria-hidden="true"></div>
-
-                <div class="flex items-center gap-4">
-                  <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-1">
-                      <ios-icon name="check" class="size-7 text-[#a7d43e]" aria-hidden="true" />
-                      <span class="text-[18px] font-medium leading-[1.4] text-[#a7d43e]">{{
-                        review.correctCount
-                      }}</span>
-                    </div>
-                    <span class="text-[18px] font-bold leading-[1.2] text-[#a7d43e]">{{
-                      lang.t('dashboard.examRunner.trueLabel')
-                    }}</span>
-                  </div>
-                  <span class="text-[18px] font-medium leading-[1.4] text-ios-fg-7">/</span>
-                  <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-1">
-                      <ios-icon name="x" class="size-7 text-[#ff715d]" aria-hidden="true" />
-                      <span class="text-[18px] font-medium leading-[1.4] text-[#ff715d]">{{
-                        review.falseCount
-                      }}</span>
-                    </div>
-                    <span class="text-[18px] font-bold leading-[1.2] text-[#ff715d]">{{
-                      lang.t('dashboard.examRunner.falseLabel')
-                    }}</span>
-                  </div>
-                </div>
-
-                <!-- Advisory readiness message -->
-                <p class="text-[14px] font-medium leading-[1.5] text-ios-border-light">
-                  {{ review.readiness.message }}
-                </p>
-              </aside>
             </div>
 
             <!-- ── "Ready for the final?" CTA ─────────────────────────── -->
             <section
-              class="bg-ios-fg-13 w-full py-16 -mx-8 mt-2 px-8"
+              class="bg-ios-fg-13 py-10 md:py-16 -mx-4 md:-mx-8 mt-2 -mb-6 px-4 md:px-8"
               aria-label="Final test call to action"
             >
               <div class="max-w-[1400px] mx-auto flex flex-col items-center gap-10">
@@ -204,7 +206,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
                     }}
                   </h2>
                   <div
-                    class="h-1 rounded-full bg-ios-brand-gold w-[274px]"
+                    class="h-1 rounded-full bg-ios-brand-gold w-[200px] md:w-[274px]"
                     aria-hidden="true"
                   ></div>
                 </div>
@@ -255,13 +257,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
         </div>
       </main>
 
-      <footer class="bg-ios-brand-dark w-full py-4">
-        <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
-        >
-          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
   `,
 })
@@ -269,8 +265,6 @@ export class MockExamResultPage {
   protected readonly lang = inject(LanguageService);
   protected readonly store = inject(MockStore);
   private readonly route = inject(ActivatedRoute);
-
-  protected readonly yearStr = String(new Date().getFullYear());
 
   protected readonly scorePercent = computed(() => Math.round(this.store.review()?.score ?? 0));
 

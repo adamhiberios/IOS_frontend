@@ -36,17 +36,16 @@ import type { CertificationCard, LearningMaterial } from '../data-access/certifi
   template: `
     <!-- ── Certificate banner card ── -->
     <div
-      class="flex items-center gap-3 bg-cer-blue-soft rounded-2xl px-6 py-4"
+      class="flex flex-wrap sm:flex-nowrap items-center gap-3 bg-cer-blue-soft rounded-2xl px-4 md:px-6 py-4"
       aria-label="{{ cert().code }} certification summary"
     >
       <!-- Badge + active dot -->
-      <div class="relative shrink-0" style="width:98px;">
+      <div class="relative shrink-0 w-[72px] md:w-[98px]">
         <ios-certificates-badge
           [svgPath]="cert().imageAsset"
           [code]="cert().code"
           [fullName]="cert().title"
-          class="block"
-          style="height:122px;"
+          class="block h-[90px] md:h-[122px]"
         />
         <span
           class="absolute top-2 -end-1.5 w-3 h-3 rounded-full bg-ios-success-mid border-2 border-white"
@@ -56,7 +55,7 @@ import type { CertificationCard, LearningMaterial } from '../data-access/certifi
 
       <!-- Info -->
       <div class="flex flex-col gap-2 flex-1 min-w-0">
-        <p class="text-[14px] font-semibold leading-[1.4] text-ios-fg-10 whitespace-nowrap">
+        <p class="text-[14px] font-semibold leading-[1.4] text-ios-fg-10">
           {{ cert().progressPercent }}{{ lang.t('dashboard.certs.percentCompleted') }}
         </p>
         <div class="flex flex-col">
@@ -72,7 +71,7 @@ import type { CertificationCard, LearningMaterial } from '../data-access/certifi
       <!-- Show details -->
       <button
         type="button"
-        class="inline-flex items-center justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0"
+        class="inline-flex items-center justify-end sm:justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0 basis-full sm:basis-auto -mb-1 sm:mb-0"
         [attr.aria-label]="lang.t('dashboard.certs.showDetails')"
       >
         {{ lang.t('dashboard.certs.showDetails') }}
@@ -110,11 +109,11 @@ import type { CertificationCard, LearningMaterial } from '../data-access/certifi
             </div>
 
             <!-- Title + pages + progress -->
-            <div class="flex flex-1 min-w-0 items-center gap-2">
+            <div class="flex flex-1 min-w-0 flex-col md:flex-row md:items-center gap-1 md:gap-2">
               <!-- Name + page count -->
-              <div class="flex flex-1 min-w-0 items-center gap-4">
+              <div class="flex flex-1 min-w-0 flex-col sm:flex-row sm:items-center gap-x-4">
                 <span
-                  class="text-[18px] font-semibold leading-[1.4] text-ios-fg whitespace-nowrap"
+                  class="text-[16px] md:text-[18px] font-semibold leading-[1.4] text-ios-fg"
                   [attr.aria-label]="material.title"
                 >
                   {{ material.title }}
@@ -130,12 +129,12 @@ import type { CertificationCard, LearningMaterial } from '../data-access/certifi
               </div>
 
               <!-- Progress indicator + percentage text -->
-              <div class="flex items-center gap-2 w-[242px] shrink-0">
+              <div class="flex items-center gap-2 md:w-[242px] shrink-0">
                 @if (material.completionPercent === 100) {
                   <!-- Completed: filled circle-check icon -->
                   <ios-icon
                     name="circle-check-big"
-                    class="w-6 h-6 text-ios-success-mid shrink-0"
+                    class="w-5 h-5 md:w-6 md:h-6 text-ios-success-mid shrink-0"
                     [attr.aria-label]="lang.t('dashboard.certs.completed')"
                   />
                 } @else {
@@ -186,7 +185,7 @@ import type { CertificationCard, LearningMaterial } from '../data-access/certifi
             </div>
 
             <!-- CTA label -->
-            <div class="w-[93px] flex items-center justify-end shrink-0">
+            <div class="md:w-[93px] flex items-center justify-end shrink-0">
               <button
                 type="button"
                 class="text-[16px] font-semibold leading-[1.4] text-ios-fg hover:text-cer-blue-text transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 rounded"

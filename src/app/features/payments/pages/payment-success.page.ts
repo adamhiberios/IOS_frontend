@@ -3,7 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 
 import { LanguageService } from '@core/i18n';
-import { CanadaFlag } from '@ui';
+import { PageFooter } from '@ui';
 
 import { PaymentsStore } from '../data-access/payments.store';
 
@@ -31,11 +31,11 @@ import { PaymentsStore } from '../data-access/payments.store';
  */
 @Component({
   selector: 'ios-payment-success-page',
-  imports: [RouterLink, NgOptimizedImage, CanadaFlag],
+  imports: [RouterLink, NgOptimizedImage, PageFooter],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex min-h-screen flex-col bg-white">
-      <div class="w-full px-8 py-6">
+      <div class="w-full px-4 md:px-8 py-6">
         <a routerLink="/dashboard" [attr.aria-label]="lang.t('dashboard.nav.dashboardLabel')">
           <img
             ngSrc="assets/icons/logo_institute_of_scrum.png"
@@ -87,14 +87,7 @@ import { PaymentsStore } from '../data-access/payments.store';
         </div>
       </main>
 
-      <footer class="w-full bg-ios-brand-dark py-4">
-        <div
-          class="mx-auto flex max-w-[1400px] items-center justify-center gap-2 px-4 text-xs text-ios-brand-muted md:px-8"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
   `,
 })
@@ -102,8 +95,6 @@ export class PaymentSuccessPage implements OnInit {
   protected readonly lang = inject(LanguageService);
   private readonly route = inject(ActivatedRoute);
   private readonly payments = inject(PaymentsStore);
-
-  protected readonly yearStr = String(new Date().getFullYear());
 
   /**
    * Stripe's `{CHECKOUT_SESSION_ID}` placeholder, present for logging/support

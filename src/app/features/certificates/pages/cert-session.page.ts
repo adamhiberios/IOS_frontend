@@ -11,7 +11,7 @@ import { LucideArrowDown, LucideArrowLeft, LucideFileText } from '@lucide/angula
 
 import { LanguageService } from '@core/i18n';
 import { SanitizedHtml } from '@shared';
-import { CanadaFlag, IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { CoursesStore } from '@features/courses/data-access/courses.store';
@@ -54,8 +54,8 @@ import { FinalExamCta } from '../components/final-exam-cta';
     FinalExamCta,
     RouterLink,
     IosIcon,
-    CanadaFlag,
     SanitizedHtml,
+    PageFooter,
   ],
   providers: [provideIcons(LucideArrowLeft, LucideFileText, LucideArrowDown)],
   styles: [
@@ -120,8 +120,8 @@ import { FinalExamCta } from '../components/final-exam-cta';
       <main class="flex-1 bg-white" id="main-content">
         <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
           <!-- ── Breadcrumb row ── -->
-          <div class="flex items-center justify-between mb-6">
-            <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+            <div class="flex items-center gap-3 min-w-0">
               <a
                 [routerLink]="['/dashboard/certificates', certCode()]"
                 class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
@@ -131,7 +131,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
               </a>
               <nav aria-label="Breadcrumb">
                 <ol
-                  class="flex items-center gap-3 text-[16px] font-medium leading-[1.4] text-ios-fg-8"
+                  class="flex flex-wrap items-center gap-x-1.5 gap-y-1 md:gap-3 text-[14px] md:text-[16px] font-medium leading-[1.4] text-ios-fg-8 [&>li]:whitespace-nowrap"
                   role="list"
                 >
                   <li>
@@ -154,7 +154,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
               </nav>
             </div>
 
-            <div class="flex flex-col items-end gap-2">
+            <div class="flex flex-col items-stretch sm:items-end gap-2 w-full sm:w-auto">
               <button
                 type="button"
                 class="inline-flex items-center justify-center h-11 px-4 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-60 disabled:pointer-events-none"
@@ -190,7 +190,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
               {{ lang.t('dashboard.certs.lessonLoading') }}
             </p>
           } @else if (store.lesson(); as lesson) {
-            <div class="flex gap-6 items-start">
+            <div class="flex flex-col lg:flex-row gap-4 lg:gap-6 items-stretch lg:items-start">
               <!-- Sibling lessons in this module -->
               @if (siblingLessons().length > 0) {
                 <ios-cert-chapter-nav
@@ -203,23 +203,23 @@ import { FinalExamCta } from '../components/final-exam-cta';
               <div class="flex flex-col gap-6 flex-1 min-w-0">
                 <!-- Lesson header card -->
                 <div
-                  class="flex items-center justify-between bg-cer-blue-soft rounded-2xl ps-6 overflow-hidden"
+                  class="flex items-center justify-between bg-cer-blue-soft rounded-2xl ps-4 md:ps-6 overflow-hidden"
                 >
-                  <div class="flex items-center gap-3 py-8">
+                  <div class="flex items-center gap-3 py-6 md:py-8 min-w-0">
                     <ios-icon
                       name="file-text"
                       class="w-8 h-8 text-cer-blue-text shrink-0"
                       aria-hidden="true"
                     />
                     <h1
-                      class="text-[28px] font-semibold leading-[1.2] text-cer-blue-text"
+                      class="text-[22px] md:text-[28px] font-semibold leading-[1.2] text-cer-blue-text min-w-0"
                       dir="auto"
                     >
                       {{ lesson.title }}
                     </h1>
                   </div>
                   <div
-                    class="h-[8px] w-[145px] bg-ios-brand-gold shrink-0 self-end mb-0"
+                    class="h-[8px] w-16 md:w-[145px] bg-ios-brand-gold shrink-0 self-end mb-0"
                     aria-hidden="true"
                   ></div>
                 </div>
@@ -248,24 +248,26 @@ import { FinalExamCta } from '../components/final-exam-cta';
                 }
 
                 <!-- Back / Next across lessons, + mark complete -->
-                <div class="flex flex-wrap items-center justify-end gap-4 pt-4 pb-8">
+                <div class="flex flex-wrap items-center justify-end gap-3 md:gap-4 pt-4 pb-8">
                   @if (!lesson.completed) {
                     <button
                       type="button"
-                      class="inline-flex items-center justify-center h-14 px-6 rounded-xl text-[18px] font-semibold text-ios-fg-10 bg-ios-surface-soft hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
+                      class="basis-full sm:basis-auto inline-flex items-center justify-center h-12 md:h-14 px-6 rounded-xl text-[16px] md:text-[18px] font-semibold text-ios-fg-10 bg-ios-surface-soft hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
                       (click)="onMarkComplete()"
                     >
                       {{ lang.t('dashboard.certs.markComplete') }}
                     </button>
                   } @else {
-                    <span class="text-[15px] font-semibold text-green-700">
+                    <span
+                      class="basis-full sm:basis-auto text-end text-[15px] font-semibold text-green-700"
+                    >
                       {{ lang.t('dashboard.certs.completed') }}
                     </span>
                   }
 
                   <button
                     type="button"
-                    class="inline-flex items-center justify-center h-14 px-6 rounded-xl text-[18px] font-semibold text-ios-fg-10 bg-ios-surface-soft hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
+                    class="flex-1 sm:flex-none inline-flex items-center justify-center h-12 md:h-14 px-6 rounded-xl text-[16px] md:text-[18px] font-semibold text-ios-fg-10 bg-ios-surface-soft hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
                     [class.opacity-40]="isFirstLesson()"
                     [attr.aria-disabled]="isFirstLesson() ? 'true' : null"
                     (click)="onBack()"
@@ -274,7 +276,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
                   </button>
                   <button
                     type="button"
-                    class="inline-flex items-center justify-center gap-3 h-14 px-6 rounded-xl text-[18px] font-semibold text-white bg-ios-fg-13 hover:bg-ios-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg-13/50 min-w-[158px]"
+                    class="flex-1 sm:flex-none inline-flex items-center justify-center gap-3 h-12 md:h-14 px-6 rounded-xl text-[16px] md:text-[18px] font-semibold text-white bg-ios-fg-13 hover:bg-ios-fg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg-13/50 sm:min-w-[158px]"
                     (click)="onNext()"
                   >
                     {{
@@ -293,14 +295,7 @@ import { FinalExamCta } from '../components/final-exam-cta';
         </div>
       </main>
 
-      <footer class="bg-ios-brand-dark w-full py-4">
-        <div
-          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
   `,
 })
@@ -309,9 +304,6 @@ export class CertSessionPage implements OnInit {
   protected readonly store = inject(CoursesStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-
-  protected readonly currentYear = new Date().getFullYear();
-  protected readonly yearStr = String(this.currentYear);
 
   /** Program code — display only; the lesson is addressed by its own UUID. */
   protected readonly certCode = signal(this.route.snapshot.params['code'] as string);

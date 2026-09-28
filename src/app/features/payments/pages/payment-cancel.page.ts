@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import { NgOptimizedImage } from '@angular/common';
 
 import { LanguageService } from '@core/i18n';
-import { CanadaFlag, IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageFooter } from '@ui';
 import { LucideCircleX } from '@lucide/angular';
 
 /**
@@ -18,12 +18,12 @@ import { LucideCircleX } from '@lucide/angular';
  */
 @Component({
   selector: 'ios-payment-cancel-page',
-  imports: [RouterLink, NgOptimizedImage, CanadaFlag, IosIcon],
+  imports: [RouterLink, NgOptimizedImage, IosIcon, PageFooter],
   providers: [provideIcons(LucideCircleX)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex min-h-screen flex-col bg-white">
-      <div class="w-full px-8 py-6">
+      <div class="w-full px-4 md:px-8 py-6">
         <a routerLink="/dashboard" [attr.aria-label]="lang.t('dashboard.nav.dashboardLabel')">
           <img
             ngSrc="assets/icons/logo_institute_of_scrum.png"
@@ -65,20 +65,12 @@ import { LucideCircleX } from '@lucide/angular';
         </div>
       </main>
 
-      <footer class="w-full bg-ios-brand-dark py-4">
-        <div
-          class="mx-auto flex max-w-[1400px] items-center justify-center gap-2 px-4 text-xs text-ios-brand-muted md:px-8"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
   `,
 })
 export class PaymentCancelPage {
   protected readonly lang = inject(LanguageService);
-  protected readonly yearStr = String(new Date().getFullYear());
 }
 
 export default PaymentCancelPage;

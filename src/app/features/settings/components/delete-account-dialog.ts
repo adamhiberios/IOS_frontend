@@ -56,7 +56,7 @@ import { NgOptimizedImage } from '@angular/common';
       <!-- ── Centered dialog panel ────────────────────────────────────── -->
       <div class="relative flex items-center justify-center min-h-full px-4">
         <div
-          class="relative bg-white rounded-2xl w-full max-w-[624px] p-8 flex flex-col gap-9 items-center"
+          class="relative bg-white rounded-2xl w-full max-w-[624px] p-6 sm:p-8 flex flex-col gap-6 sm:gap-9 items-center"
           role="dialog"
           aria-modal="true"
           aria-labelledby="delete-dialog-title"
@@ -91,7 +91,7 @@ import { NgOptimizedImage } from '@angular/common';
             <div class="flex flex-col gap-1 items-start w-full text-center">
               <h2
                 id="delete-dialog-title"
-                class="font-semibold leading-[1.2] text-ios-fg-11 text-[24px] w-full"
+                class="font-semibold leading-[1.2] text-ios-fg-11 text-[22px] sm:text-[24px] w-full"
               >
                 {{ lang.t('settings.deleteDialog.heading') }}
               </h2>
@@ -134,11 +134,13 @@ import { NgOptimizedImage } from '@angular/common';
             </div>
 
             <!-- Buttons -->
-            <div class="flex flex-col sm:flex-row gap-3 sm:gap-6 items-end justify-end w-full">
+            <div
+              class="flex flex-col-reverse sm:flex-row gap-3 sm:gap-6 items-stretch sm:items-end justify-end w-full"
+            >
               <!-- Go back -->
               <button
                 type="button"
-                class="flex items-center justify-center h-14 w-full sm:w-[139px] rounded-xl bg-ios-surface-soft text-ios-fg text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30"
+                class="flex items-center justify-center h-12 sm:h-14 w-full sm:w-[139px] rounded-xl bg-ios-surface-soft text-ios-fg text-[16px] sm:text-[18px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30"
                 (click)="cancelled.emit()"
               >
                 {{ lang.t('settings.deleteDialog.goBack') }}
@@ -147,7 +149,7 @@ import { NgOptimizedImage } from '@angular/common';
               <!-- Delete account — disabled until a password is entered -->
               <button
                 type="button"
-                class="flex items-center justify-center gap-2 h-14 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[18px] font-semibold leading-[1.4] transition-opacity enabled:hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50"
+                class="flex items-center justify-center gap-2 h-12 sm:h-14 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[16px] sm:text-[18px] font-semibold leading-[1.4] transition-opacity enabled:hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50"
                 [class.opacity-40]="!canDelete()"
                 [class.cursor-not-allowed]="!canDelete()"
                 [disabled]="!canDelete()"

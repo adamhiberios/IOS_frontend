@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
 import { LucideCheckCheck } from '@lucide/angular';
 
-import { IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { LanguageService } from '@core/i18n';
 
@@ -19,7 +19,7 @@ import { NotificationCard } from '../components/notification-card';
  */
 @Component({
   selector: 'ios-notifications-page',
-  imports: [DashboardNavbar, IosIcon, NotificationCard],
+  imports: [DashboardNavbar, IosIcon, NotificationCard, PageFooter],
   providers: [NotificationsStore, provideIcons(LucideCheckCheck)],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -152,13 +152,7 @@ import { NotificationCard } from '../components/notification-card';
       </main>
 
       <!-- ── Footer ─────────────────────────────────────────────────────── -->
-      <footer class="bg-ios-fg w-full py-4 shrink-0">
-        <div
-          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
-        >
-          <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer variant="neutral" class="shrink-0" />
     </div>
   `,
 })
@@ -166,7 +160,6 @@ export class NotificationsPage implements OnInit {
   protected readonly store = inject(NotificationsStore);
   protected readonly lang = inject(LanguageService);
 
-  protected readonly year = new Date().getFullYear();
   protected readonly skeletonRows = [1, 2, 3];
 
   ngOnInit(): void {

@@ -4,7 +4,7 @@ import { LucideArrowLeft, LucideChartBar, LucideClock, LucidePercent } from '@lu
 
 import { LanguageService } from '@core/i18n';
 
-import { CanadaFlag, IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageFooter } from '@ui';
 
 import { DashboardNavbar } from '@layouts';
 import { CoursesStore } from '@features/courses/data-access/courses.store';
@@ -60,7 +60,7 @@ import { MockStore } from '../data-access/mock.store';
     FinalExamCta,
     RouterLink,
     IosIcon,
-    CanadaFlag,
+    PageFooter,
   ],
   providers: [provideIcons(LucideArrowLeft, LucidePercent, LucideClock, LucideChartBar)],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -71,9 +71,9 @@ import { MockStore } from '../data-access/mock.store';
       <main class="flex-1 bg-white" id="main-content">
         <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
           <!-- ── Breadcrumb row ── -->
-          <div class="flex items-center justify-between mb-6">
+          <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
             <!-- Back arrow + breadcrumb -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-3 min-w-0">
               <a
                 routerLink="/dashboard/certificates"
                 class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
@@ -83,7 +83,7 @@ import { MockStore } from '../data-access/mock.store';
               </a>
               <nav aria-label="Breadcrumb">
                 <ol
-                  class="flex items-center gap-1.5 md:gap-3 text-[14px] md:text-[16px] font-medium leading-[1.4] text-ios-fg-8"
+                  class="flex flex-wrap items-center gap-x-1.5 gap-y-1 md:gap-3 text-[14px] md:text-[16px] font-medium leading-[1.4] text-ios-fg-8 [&>li]:whitespace-nowrap"
                   role="list"
                 >
                   <li>
@@ -119,7 +119,7 @@ import { MockStore } from '../data-access/mock.store';
 
             <!-- Start Final Test CTA — only shown at high completion -->
             @if (showFinalTestCta()) {
-              <div class="flex flex-col items-end gap-2">
+              <div class="flex flex-col items-stretch sm:items-end gap-2 w-full sm:w-auto">
                 <button
                   type="button"
                   class="inline-flex items-center justify-center h-11 px-6 rounded-2xl text-[16px] font-semibold text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-60 disabled:pointer-events-none"
@@ -142,7 +142,7 @@ import { MockStore } from '../data-access/mock.store';
           </div>
 
           <!-- ── Side nav + content grid ── -->
-          <div class="flex gap-6 items-start">
+          <div class="flex flex-col lg:flex-row gap-6 items-stretch lg:items-start">
             <!-- Left side nav -->
             <ios-cert-side-nav
               [activeSection]="store.activeSection()"
@@ -384,14 +384,7 @@ import { MockStore } from '../data-access/mock.store';
         </div>
       </main>
 
-      <footer class="bg-ios-brand-dark w-full py-4">
-        <div
-          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
   `,
 })
@@ -402,9 +395,6 @@ export class CertDetailPage implements OnInit {
   protected readonly mock = inject(MockStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-
-  protected readonly currentYear = new Date().getFullYear();
-  protected readonly yearStr = String(this.currentYear);
 
   /** Route `:code` — a **program code** (e.g. `ESM`), not a UUID. */
   protected readonly certCode = this.route.snapshot.params['code'] as string;

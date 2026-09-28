@@ -32,7 +32,33 @@ const NAV_ITEMS: readonly { id: CertDetailNavItem['id']; labelKey: string }[] = 
 @Component({
   selector: 'ios-cert-side-nav',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'block w-full lg:w-auto shrink-0' },
   template: `
+    <!-- Below lg the vertical side-nav is hidden, so the same sections render
+         as a horizontal tab strip — otherwise mobile has no way to reach
+         Learning materials or Mock exam from this page. -->
+    <nav
+      class="lg:hidden flex gap-2 overflow-x-auto scrollbar-none -mx-4 px-4 md:mx-0 md:px-0"
+      [attr.aria-label]="lang.t('dashboard.certs.certification')"
+    >
+      @for (item of navItems; track item.id) {
+        <button
+          type="button"
+          class="flex-1 shrink-0 h-10 px-3 rounded-xl text-[14px] leading-[1.4] whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
+          [class.bg-cer-blue-soft]="activeSection() === item.id"
+          [class.font-bold]="activeSection() === item.id"
+          [class.text-cer-blue-text]="activeSection() === item.id"
+          [class.bg-ios-surface-muted]="activeSection() !== item.id"
+          [class.font-medium]="activeSection() !== item.id"
+          [class.text-ios-fg]="activeSection() !== item.id"
+          [attr.aria-current]="activeSection() === item.id ? 'true' : null"
+          (click)="sectionChange.emit(item.id)"
+        >
+          {{ lang.t(item.labelKey) }}
+        </button>
+      }
+    </nav>
+
     <nav
       class="hidden lg:flex flex-col w-[228px] shrink-0"
       [attr.aria-label]="lang.t('dashboard.certs.certification')"
@@ -50,7 +76,7 @@ const NAV_ITEMS: readonly { id: CertDetailNavItem['id']; labelKey: string }[] = 
           [class.font-medium]="activeSection() !== item.id"
           [class.text-ios-fg]="activeSection() !== item.id"
           [class.hover:bg-ios-surface-muted]="activeSection() !== item.id"
-          [attr.aria-current]="activeSection() === item.id ? 'page' : null"
+          [attr.aria-current]="activeSection() === item.id ? 'true' : null"
           (click)="sectionChange.emit(item.id)"
         >
           {{ lang.t(item.labelKey) }}

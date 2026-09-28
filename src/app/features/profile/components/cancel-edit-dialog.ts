@@ -30,7 +30,7 @@ import { LanguageService } from '@core/i18n';
       aria-describedby="cancel-edit-desc"
     >
       <div
-        class="bg-white rounded-2xl w-full max-w-[724px] mx-4 p-8 flex flex-col gap-9 items-center shadow-2xl"
+        class="bg-white rounded-2xl w-full max-w-[724px] mx-4 p-6 sm:p-8 flex flex-col gap-6 sm:gap-9 items-center shadow-2xl"
       >
         <!-- Icon (danger/warning palette from Figma: #FBECE7) -->
         <div
@@ -89,7 +89,7 @@ import { LanguageService } from '@core/i18n';
         <div class="flex flex-col gap-1 items-start text-center w-full">
           <h2
             id="cancel-edit-title"
-            class="text-[24px] font-semibold leading-[1.2] text-ios-fg-11 w-full"
+            class="text-[22px] sm:text-[24px] font-semibold leading-[1.2] text-ios-fg-11 w-full"
           >
             {{ lang.t('profile.cancelDialog.title') }}
           </h2>
@@ -102,11 +102,13 @@ import { LanguageService } from '@core/i18n';
         </div>
 
         <!-- Buttons -->
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-6 items-center justify-center w-full">
+        <div
+          class="flex flex-col-reverse sm:flex-row gap-3 sm:gap-6 items-stretch sm:items-center justify-center w-full"
+        >
           <!-- Back -->
           <button
             type="button"
-            class="inline-flex items-center justify-center h-11 w-full sm:w-[126px] rounded-xl bg-ios-surface-soft text-ios-fg text-[16px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none"
+            class="inline-flex items-center justify-center h-11 w-full sm:w-[126px] rounded-xl bg-ios-surface-soft text-ios-fg text-[16px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-fg/30"
             (click)="dismissed.emit()"
           >
             {{ lang.t('profile.cancelDialog.back') }}
@@ -114,7 +116,7 @@ import { LanguageService } from '@core/i18n';
           <!-- Cancel and exit (danger) -->
           <button
             type="button"
-            class="inline-flex items-center justify-center h-11 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[16px] font-semibold leading-[1.4] hover:bg-[#b8340f] transition-colors focus-visible:outline-none whitespace-nowrap"
+            class="inline-flex items-center justify-center h-11 w-full sm:w-[230px] rounded-xl bg-ios-danger-mid text-white text-[16px] font-semibold leading-[1.4] hover:bg-[#b8340f] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-danger-mid/50 whitespace-nowrap"
             (click)="confirmed.emit()"
           >
             {{ lang.t('profile.cancelDialog.confirm') }}

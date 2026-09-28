@@ -31,7 +31,7 @@ import { Button } from '@ui';
       aria-modal="true"
       aria-labelledby="pwd-updated-title"
     >
-      <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 shadow-xl">
+      <div class="bg-white rounded-xl p-6 sm:p-8 max-w-md w-full mx-4 shadow-xl">
         <div class="flex flex-col items-center gap-6">
           <!-- Success Icon -->
           <div class="w-32 h-32 bg-green-50 rounded-full flex items-center justify-center">

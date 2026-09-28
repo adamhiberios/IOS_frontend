@@ -159,7 +159,11 @@ import { InsightsStore } from '../data-access/insights.store';
             class="flex items-center justify-center w-10 h-10 rounded-lg bg-white/10 hover:bg-white/20 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 shrink-0 mt-1"
             [attr.aria-label]="lang.t('insight.detail.back')"
           >
-            <ios-icon name="arrow-left" class="w-5 h-5 text-white" />
+            <ios-icon
+              name="arrow-left"
+              class="w-5 h-5 text-white rtl:rotate-180"
+              aria-hidden="true"
+            />
           </a>
 
           <div class="flex flex-col gap-1 min-w-0">
@@ -233,7 +237,7 @@ import { InsightsStore } from '../data-access/insights.store';
           routerLink="/insights"
           class="inline-flex items-center gap-2 text-ios-brand-primary font-heading font-medium hover:underline"
         >
-          <ios-icon name="arrow-left" class="w-4 h-4" />
+          <ios-icon name="arrow-left" class="w-4 h-4 rtl:rotate-180" aria-hidden="true" />
           {{ lang.t('insight.detail.backToInsights') }}
         </a>
       </section>

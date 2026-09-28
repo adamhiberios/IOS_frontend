@@ -24,6 +24,8 @@ export { ScrollToTop } from './scroll-to-top/scroll-to-top';
 export { DialogFooter } from './dialog-footer/dialog-footer';
 export { CertificatesBadge } from './certificates-badge/certificates-badge';
 export { BulletStepList } from './bullet-step-list/bullet-step-list';
+export { PageFooter, type PageFooterVariant } from './page-footer/page-footer';
+export { PageBreadcrumbBar } from './page-breadcrumb-bar/page-breadcrumb-bar';
 
 // Heavy primitives (ApexCharts, Quill) are deliberately NOT re-exported here:
 // the barrel is imported by the public landing pages, and a re-export drags the

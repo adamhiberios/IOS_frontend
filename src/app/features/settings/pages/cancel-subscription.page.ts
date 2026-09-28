@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { LucideArrowLeft, LucideCheck } from '@lucide/angular';
 
-import { CanadaFlag, IosIcon, provideIcons } from '@ui';
+import { provideIcons, PageBreadcrumbBar, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { LanguageService } from '@core/i18n';
 
@@ -30,42 +30,27 @@ import { LanguageService } from '@core/i18n';
 @Component({
   selector: 'ios-cancel-subscription-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DashboardNavbar, RouterLink, IosIcon, CanadaFlag],
+  imports: [DashboardNavbar, PageBreadcrumbBar, PageFooter],
   providers: [provideIcons(LucideArrowLeft, LucideCheck)],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
-          <div class="flex items-center gap-4">
-            <a
-              routerLink="/dashboard/settings"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
-              [attr.aria-label]="lang.t('settings.cancelSubscription.backAriaLabel')"
-            >
-              <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
-            </a>
-            <nav aria-label="Breadcrumb">
-              <ol
-                class="flex items-center gap-3 text-base leading-[1.4] whitespace-nowrap"
-                role="list"
-              >
-                <li>
-                  <span class="font-semibold text-ios-fg-13" aria-current="page">
-                    {{ lang.t('settings.breadcrumb.cancelSubscription') }}
-                  </span>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-      </div>
+      <ios-page-breadcrumb-bar
+        backLink="/dashboard/settings"
+        [backLabel]="lang.t('settings.cancelSubscription.backAriaLabel')"
+      >
+        <li>
+          <span class="font-semibold text-ios-fg-13" aria-current="page">
+            {{ lang.t('settings.breadcrumb.cancelSubscription') }}
+          </span>
+        </li>
+      </ios-page-breadcrumb-bar>
 
       <!-- ── Main content ───────────────────────────────────────────────── -->
       <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-8 flex flex-col gap-8">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 flex flex-col gap-8">
           <!-- Question -->
           <h1 class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13">
             {{ lang.t('settings.cancelSubscription.title') }}
@@ -83,7 +68,7 @@ import { LanguageService } from '@core/i18n';
 
             @for (option of cancelReasons(); track option.id) {
               <label
-                class="flex items-center gap-4 p-2 rounded-[72px] bg-ios-surface-soft cursor-pointer hover:bg-[#e8e8e8] transition-colors focus-within:ring-2 focus-within:ring-ios-brand-primary/30"
+                class="flex items-center gap-3 md:gap-4 p-2 pe-4 rounded-3xl md:rounded-[72px] bg-ios-surface-soft cursor-pointer hover:bg-[#e8e8e8] transition-colors focus-within:ring-2 focus-within:ring-ios-brand-primary/30"
                 [for]="option.id"
               >
                 <input
@@ -120,7 +105,7 @@ import { LanguageService } from '@core/i18n';
                   }
                 </span>
 
-                <span class="font-medium text-[18px] text-ios-fg leading-[1.4]">
+                <span class="font-medium text-[16px] md:text-[18px] text-ios-fg leading-[1.4]">
                   {{ option.label }}
                 </span>
               </label>
@@ -131,7 +116,7 @@ import { LanguageService } from '@core/i18n';
           <div class="max-w-[732px]">
             <button
               type="button"
-              class="w-[378px] flex items-center justify-center h-14 rounded-xl bg-ios-brand-primary text-ios-brand-primary-soft text-[18px] font-semibold leading-[1.4] hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
+              class="w-full sm:w-[378px] flex items-center justify-center h-14 rounded-xl bg-ios-brand-primary text-ios-brand-primary-soft text-[18px] font-semibold leading-[1.4] hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
               (click)="onSubmit()"
             >
               {{ lang.t('settings.cancelSubscription.submit') }}
@@ -141,22 +126,13 @@ import { LanguageService } from '@core/i18n';
       </main>
 
       <!-- ── Footer ─────────────────────────────────────────────────────── -->
-      <footer class="bg-ios-brand-dark w-full py-4">
-        <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: year }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
   `,
 })
 export class CancelSubscriptionPage {
   private readonly router = inject(Router);
   protected readonly lang = inject(LanguageService);
-
-  protected readonly year = new Date().getFullYear().toString();
 
   protected readonly cancelReasons = computed(() => [
     { id: 'once-a-week', label: this.lang.t('settings.cancelSubscription.reason1') },

@@ -59,16 +59,16 @@ import {
   host: { class: 'block w-full' },
   template: `
     <article
-      class="flex items-center gap-3 px-4 py-2 rounded-3xl w-full"
+      class="flex items-start sm:items-center gap-3 px-3 sm:px-4 py-2 rounded-2xl sm:rounded-3xl w-full"
       [class.bg-ios-surface-mid]="notification().read"
       [class.bg-ios-brand-primary-soft]="!notification().read"
     >
       <!-- ── Icon ────────────────────────────────────────────────────────── -->
       <div
-        class="flex items-center justify-center p-2 rounded-2xl shrink-0 bg-white"
+        class="flex items-center justify-center p-2 rounded-2xl shrink-0 bg-white mt-2 sm:mt-0"
         aria-hidden="true"
       >
-        <ios-icon [name]="icon()" class="w-8 h-8 text-ios-fg" />
+        <ios-icon [name]="icon()" class="w-6 h-6 sm:w-8 sm:h-8 text-ios-fg" />
       </div>
 
       <!-- ── Text content ────────────────────────────────────────────────── -->
@@ -81,15 +81,20 @@ import {
             ></span>
           }
           <p
-            class="text-[18px] leading-[1.4] text-ios-fg w-full"
+            class="text-[16px] sm:text-[18px] leading-[1.4] text-ios-fg w-full"
             [class.font-bold]="!notification().read"
             [class.font-semibold]="notification().read"
           >
             {{ notification().title }}
           </p>
         </div>
-        <p class="text-[16px] font-medium leading-[1.4] text-ios-fg-8 w-full">
+        <p class="text-[15px] sm:text-[16px] font-medium leading-[1.4] text-ios-fg-8 w-full">
           {{ notification().body }}
+        </p>
+        <!-- Phones: the timestamp sits under the text instead of taking a
+             column of its own, which squeezed the text to a few words a line. -->
+        <p class="sm:hidden text-[13px] font-medium leading-[1.4] text-ios-fg-7" dir="auto">
+          {{ notification().createdAt | date: 'MMM d, h:mm a' }}
         </p>
 
         <!-- Actions -->
@@ -121,7 +126,7 @@ import {
 
       <!-- ── Timestamp ───────────────────────────────────────────────────── -->
       <p
-        class="text-[14px] font-medium leading-[1.4] text-ios-fg-7 whitespace-nowrap shrink-0 self-start pt-2"
+        class="hidden sm:block text-[14px] font-medium leading-[1.4] text-ios-fg-7 whitespace-nowrap shrink-0 self-start pt-2"
         dir="auto"
       >
         {{ notification().createdAt | date: 'MMM d, h:mm a' }}

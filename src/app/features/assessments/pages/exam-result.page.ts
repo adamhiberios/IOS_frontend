@@ -4,7 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { LucideCheck, LucideDownload, LucideShieldCheck, LucideX } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { CanadaFlag, CertificatesBadge, IosIcon, provideIcons } from '@ui';
+import { CertificatesBadge, IosIcon, provideIcons, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { ExamCertificateStore } from '../data-access/exam-certificate.store';
@@ -44,7 +44,7 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
 @Component({
   selector: 'ios-exam-result-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DatePipe, RouterLink, DashboardNavbar, CanadaFlag, CertificatesBadge, IosIcon],
+  imports: [DatePipe, RouterLink, DashboardNavbar, CertificatesBadge, IosIcon, PageFooter],
   providers: [
     ExamCertificateStore,
     provideIcons(LucideCheck, LucideX, LucideDownload, LucideShieldCheck),
@@ -56,7 +56,10 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
       <!-- ── Breadcrumb ──────────────────────────────────────────────────── -->
       <div class="w-full px-4 md:px-20 pt-5 pb-3">
         <nav class="max-w-[1400px] mx-auto" aria-label="Breadcrumb">
-          <ol class="flex items-center gap-2 text-[14px] font-medium leading-[1.4]" role="list">
+          <ol
+            class="flex flex-wrap items-center gap-2 text-[14px] font-medium leading-[1.4]"
+            role="list"
+          >
             <li>
               <a
                 routerLink="/dashboard"
@@ -87,7 +90,9 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
                 {{ lang.t('assessments.result.statusBadge') }}
               </span>
 
-              <h1 class="text-[38px] md:text-[42px] font-bold text-ios-fg-13 leading-snug">
+              <h1
+                class="text-[28px] sm:text-[38px] md:text-[42px] font-bold text-ios-fg-13 leading-snug"
+              >
                 @if (result.passed) {
                   {{ lang.t('assessments.result.congratsHeading') }}
                 } @else {
@@ -203,11 +208,11 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
                 <p class="text-[14px] font-medium text-ios-fg-11">
                   {{ lang.t('assessments.result.shareCertOn') }}
                 </p>
-                <div class="grid grid-cols-3 gap-3">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <button
                     type="button"
                     (click)="onShareLinkedIn()"
-                    class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
+                    class="flex items-center justify-center gap-2 h-12 sm:h-14 px-4 rounded-xl
                            border border-ios-surface-hover bg-white text-ios-fg-11
                            font-medium text-[14px] transition-colors hover:bg-[#f8f8f8]
                            focus-visible:outline-none focus-visible:ring-2
@@ -233,7 +238,7 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
                   <button
                     type="button"
                     (click)="onShareX()"
-                    class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
+                    class="flex items-center justify-center gap-2 h-12 sm:h-14 px-4 rounded-xl
                            border border-ios-surface-hover bg-white text-ios-fg-11
                            font-medium text-[14px] transition-colors hover:bg-[#f8f8f8]
                            focus-visible:outline-none focus-visible:ring-2
@@ -259,7 +264,7 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
                       [href]="url"
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
+                      class="flex items-center justify-center gap-2 h-12 sm:h-14 px-4 rounded-xl
                              border border-ios-surface-hover bg-white text-ios-fg-11
                              font-medium text-[14px] transition-colors hover:bg-[#f8f8f8]
                              focus-visible:outline-none focus-visible:ring-2
@@ -272,7 +277,7 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
                     <button
                       type="button"
                       disabled
-                      class="flex items-center justify-center gap-2 h-14 px-4 rounded-xl
+                      class="flex items-center justify-center gap-2 h-12 sm:h-14 px-4 rounded-xl
                              border border-ios-surface-hover bg-white text-ios-fg-11
                              font-medium text-[14px] opacity-50 cursor-not-allowed"
                       [attr.aria-label]="lang.t('assessments.result.downloadPdfPending')"
@@ -287,7 +292,7 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
 
             <!-- ── Result summary card ──────────────────────────────────────── -->
             <div
-              class="rounded-2xl bg-ios-surface-soft px-6 py-5 flex items-center gap-5 flex-wrap"
+              class="rounded-2xl bg-ios-surface-soft px-4 sm:px-6 py-5 flex items-center gap-4 sm:gap-5 flex-wrap"
               aria-label="Exam result summary"
             >
               <div class="w-[72px] shrink-0">
@@ -360,7 +365,9 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
           } @else {
             <!-- Terminal race (already submitted / grace-closed auto-submit): no score body. -->
             <div class="flex flex-col items-center gap-4 pt-10 text-center" role="status">
-              <h1 class="text-[30px] md:text-[34px] font-bold text-ios-fg-13 leading-snug">
+              <h1
+                class="text-[26px] sm:text-[30px] md:text-[34px] font-bold text-ios-fg-13 leading-snug"
+              >
                 {{ lang.t('assessments.result.submittedNeutralTitle') }}
               </h1>
               <p class="text-[15px] font-medium text-ios-fg-8 leading-relaxed max-w-[520px]">
@@ -379,22 +386,13 @@ import { type ExamResultNavState, type ExamScoreResult } from '../data-access/ex
         </div>
       </main>
 
-      <footer class="bg-ios-fg w-full py-4 mt-4">
-        <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2
-                 text-ios-fg-7 text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: currentYear }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer variant="neutral" class="mt-4" />
     </div>
   `,
 })
 export class ExamResultPage {
   protected readonly lang = inject(LanguageService);
   protected readonly certificates = inject(ExamCertificateStore);
-  protected readonly currentYear = String(new Date().getFullYear());
 
   // Immutable snapshot from Router state — read once on entry.
   protected readonly score: ExamScoreResult | null;

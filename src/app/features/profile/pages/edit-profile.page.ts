@@ -14,7 +14,15 @@ import { Router, RouterLink } from '@angular/router';
 import { startWith } from 'rxjs/operators';
 import { LucideArrowLeft, LucidePencil } from '@lucide/angular';
 
-import { CanadaFlag, Input, IosIcon, Select, provideIcons, type SelectOption } from '@ui';
+import {
+  Input,
+  IosIcon,
+  Select,
+  provideIcons,
+  type SelectOption,
+  PageBreadcrumbBar,
+  PageFooter,
+} from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { LanguageService } from '@core/i18n';
 
@@ -103,12 +111,13 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
     ReactiveFormsModule,
     RouterLink,
     IosIcon,
-    CanadaFlag,
     Input,
     Select,
     NgOptimizedImage,
     ProfileCancelEditDialog,
     ProfileInfoUpdatedDialog,
+    PageBreadcrumbBar,
+    PageFooter,
   ],
   providers: [provideIcons(LucideArrowLeft, LucidePencil)],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,47 +126,32 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
-          <div class="flex items-center gap-4">
-            <a
-              routerLink="/dashboard/profile"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none"
-              [attr.aria-label]="lang.t('profile.breadcrumb.backToProfile')"
-            >
-              <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
-            </a>
-            <nav aria-label="Breadcrumb">
-              <ol
-                class="flex items-center gap-3 text-base leading-[1.4] whitespace-nowrap"
-                role="list"
-              >
-                <li>
-                  <a
-                    routerLink="/dashboard"
-                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
-                    >{{ lang.t('profile.breadcrumb.dashboard') }}</a
-                  >
-                </li>
-                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
-                <li>
-                  <a
-                    routerLink="/dashboard/profile"
-                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
-                    >{{ lang.t('profile.breadcrumb.profile') }}</a
-                  >
-                </li>
-                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
-                <li>
-                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
-                    lang.t('profile.breadcrumb.updateInformation')
-                  }}</span>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-      </div>
+      <ios-page-breadcrumb-bar
+        backLink="/dashboard/profile"
+        [backLabel]="lang.t('profile.breadcrumb.backToProfile')"
+      >
+        <li>
+          <a
+            routerLink="/dashboard"
+            class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+            >{{ lang.t('profile.breadcrumb.dashboard') }}</a
+          >
+        </li>
+        <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
+        <li>
+          <a
+            routerLink="/dashboard/profile"
+            class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+            >{{ lang.t('profile.breadcrumb.profile') }}</a
+          >
+        </li>
+        <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
+        <li>
+          <span class="font-semibold text-ios-fg-13" aria-current="page">{{
+            lang.t('profile.breadcrumb.updateInformation')
+          }}</span>
+        </li>
+      </ios-page-breadcrumb-bar>
 
       <!-- ── Main content ───────────────────────────────────────────────── -->
       <main class="flex-1 bg-white" id="main-content">
@@ -179,7 +173,7 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
               </h2>
 
               <div
-                class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col md:flex-row gap-6 md:gap-8 items-start"
+                class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col md:flex-row gap-6 md:gap-8 items-stretch md:items-start"
               >
                 <!-- Avatar + change image (presigned upload — A1 / BE-I-08) -->
                 <div class="flex flex-col gap-4 items-center shrink-0">
@@ -244,13 +238,16 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
                 </div>
 
                 <!-- Vertical divider -->
-                <div class="self-stretch w-px bg-ios-line shrink-0" aria-hidden="true"></div>
+                <div
+                  class="hidden md:block self-stretch w-px bg-ios-line shrink-0"
+                  aria-hidden="true"
+                ></div>
 
                 <!-- Fields — first/last name + email are display-only (locked) -->
-                <div class="flex-1 flex flex-col gap-6">
+                <div class="flex-1 min-w-0 flex flex-col gap-4 sm:gap-6">
                   <!-- First Name + Last Name (locked; opacity-40) -->
                   <div
-                    class="flex flex-col sm:flex-row gap-4 items-start opacity-40 pointer-events-none"
+                    class="flex flex-col sm:flex-row gap-4 sm:items-start opacity-40 pointer-events-none"
                   >
                     <div class="flex-1 flex flex-col gap-1">
                       <label
@@ -291,7 +288,7 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
                   </div>
 
                   <!-- Email (locked) + Phone (editable) -->
-                  <div class="flex flex-col sm:flex-row gap-4 items-start">
+                  <div class="flex flex-col sm:flex-row gap-4 sm:items-start">
                     <div class="flex-1 flex flex-col gap-1 opacity-40 pointer-events-none">
                       <label
                         for="email"
@@ -336,10 +333,10 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
               </h2>
 
               <div
-                class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col gap-8"
+                class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col gap-4 sm:gap-8"
               >
                 <!-- Country + City row -->
-                <div class="flex flex-col sm:flex-row gap-4 items-start">
+                <div class="flex flex-col sm:flex-row gap-4 sm:items-start">
                   <div class="flex-1">
                     <ios-select
                       id="country"
@@ -361,7 +358,7 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
                 </div>
 
                 <!-- Street + Address + Postal row -->
-                <div class="flex flex-col sm:flex-row gap-2.5 items-start">
+                <div class="flex flex-col sm:flex-row gap-2.5 sm:items-start">
                   <ios-input
                     class="flex-1"
                     id="street"
@@ -399,7 +396,7 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
               </h2>
 
               <div class="flex-1 w-full bg-ios-surface-mid rounded-2xl p-4 md:p-6">
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 items-start">
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 sm:items-start">
                   <div class="flex-1">
                     <ios-select
                       id="occupation"
@@ -438,11 +435,13 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
           }
 
           <!-- ── Action buttons ──────────────────────────────────────────── -->
-          <div class="flex items-center justify-end gap-4 mt-2 pb-2">
+          <div
+            class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 sm:gap-4 mt-2 pb-2"
+          >
             <!-- Cancel -->
             <button
               type="button"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-surface-soft text-ios-fg-10 text-[16px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none whitespace-nowrap"
+              class="w-full sm:w-auto inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-surface-soft text-ios-fg-10 text-[16px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none whitespace-nowrap"
               (click)="showCancelDialog.set(true)"
             >
               {{ lang.t('profile.edit.cancel') }}
@@ -450,7 +449,7 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
             <!-- Save information -->
             <button
               type="submit"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg-13 text-white text-[16px] font-semibold leading-[1.4] hover:bg-ios-fg transition-colors focus-visible:outline-none whitespace-nowrap disabled:opacity-50 disabled:pointer-events-none"
+              class="w-full sm:w-auto inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg-13 text-white text-[16px] font-semibold leading-[1.4] hover:bg-ios-fg transition-colors focus-visible:outline-none whitespace-nowrap disabled:opacity-50 disabled:pointer-events-none"
               [disabled]="store.submitStatus() === 'pending'"
             >
               @if (store.submitStatus() === 'pending') {
@@ -466,14 +465,7 @@ function withValue(options: SelectOption[], value: string): SelectOption[] {
       </main>
 
       <!-- ── Footer ────────────────────────────────────────────────────── -->
-      <footer class="bg-ios-fg w-full py-4 shrink-0">
-        <div
-          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer variant="neutral" class="shrink-0" />
     </div>
 
     <!-- ── Dialogs ────────────────────────────────────────────────────── -->
@@ -497,7 +489,6 @@ export class EditProfilePage implements OnInit {
   protected readonly lang = inject(LanguageService);
 
   protected readonly showCancelDialog = signal(false);
-  protected readonly year = new Date().getFullYear();
   /** `accept` list for the avatar file picker (png/jpeg/webp). */
   protected readonly avatarAccept = AVATAR_ACCEPT;
 

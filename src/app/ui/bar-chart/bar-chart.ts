@@ -10,6 +10,7 @@ import type {
   ApexGrid,
   ApexNoData,
   ApexPlotOptions,
+  ApexResponsive,
   ApexStroke,
   ApexTooltip,
   ApexXAxis,
@@ -32,6 +33,7 @@ export interface ChartOptions {
   tooltip: ApexTooltip;
   noData: ApexNoData;
   colors: string[];
+  responsive: ApexResponsive[];
 }
 
 /**
@@ -81,6 +83,7 @@ export interface ChartOptions {
           [tooltip]="chartOptions().tooltip"
           [noData]="chartOptions().noData"
           [colors]="chartOptions().colors"
+          [responsive]="chartOptions().responsive"
         />
       </div>
     </div>
@@ -170,6 +173,14 @@ export class BarChart {
       text: this.lang.t('dashboard.charts.noData'),
       style: { color: '#9ca3af', fontSize: '12px', fontFamily: 'inherit' },
     },
+    // Twelve month labels run into each other on a phone-width card
+    // ("JanFebMar…"), so tilt them below the sm breakpoint.
+    responsive: [
+      {
+        breakpoint: 640,
+        options: { xaxis: { labels: { rotate: -45, rotateAlways: true } } },
+      },
+    ],
   }));
 
   protected cycleFilter(): void {

@@ -55,7 +55,72 @@ import { formatDuration, formatScore } from '../data-access/exam-attempts.model'
           <p class="text-sm text-ios-fg-8">{{ lang.t('studentInsights.examHistory.empty') }}</p>
         </div>
       } @else {
-        <div class="overflow-x-auto rounded-2xl bg-ios-surface-muted">
+        <!-- Phones: one card per attempt — the six-column table below would
+             either squeeze each cell to a word per line or scroll sideways. -->
+        <ul class="md:hidden flex flex-col gap-3" role="list">
+          @for (a of store.attempts(); track a.id) {
+            <li class="bg-ios-surface-muted rounded-2xl p-4 flex flex-col gap-3 text-sm">
+              <div class="flex items-start justify-between gap-3">
+                <div class="min-w-0">
+                  <span class="block font-medium text-ios-fg-13">{{ a.examTitle }}</span>
+                  <span class="block text-xs text-ios-fg-8">{{ a.program }}</span>
+                </div>
+                <div class="shrink-0 text-end">
+                  <span
+                    class="inline-block px-2 py-0.5 rounded-full text-xs font-medium"
+                    [class.bg-green-50]="a.passed"
+                    [class.text-green-700]="a.passed"
+                    [class.bg-red-50]="!a.passed"
+                    [class.text-red-700]="!a.passed"
+                  >
+                    {{
+                      a.passed
+                        ? lang.t('studentInsights.examHistory.passed')
+                        : lang.t('studentInsights.examHistory.failed')
+                    }}
+                  </span>
+                  @if (a.lateFlag) {
+                    <span class="block mt-1 text-xs text-amber-600">
+                      {{ lang.t('studentInsights.examHistory.late') }}
+                    </span>
+                  }
+                </div>
+              </div>
+              <dl class="grid grid-cols-2 gap-x-4 gap-y-2">
+                <div>
+                  <dt class="text-xs uppercase tracking-wide text-ios-fg-8">
+                    {{ lang.t('studentInsights.examHistory.score') }}
+                  </dt>
+                  <dd class="tabular-nums font-semibold text-ios-fg-13">
+                    {{ formatScore(a.score) }}%
+                  </dd>
+                </div>
+                <div>
+                  <dt class="text-xs uppercase tracking-wide text-ios-fg-8">
+                    {{ lang.t('studentInsights.examHistory.duration') }}
+                  </dt>
+                  <dd class="tabular-nums text-ios-fg-8">
+                    {{ formatDuration(a.durationSeconds) ?? '—' }}
+                  </dd>
+                </div>
+                <div class="col-span-2">
+                  <dt class="text-xs uppercase tracking-wide text-ios-fg-8">
+                    {{ lang.t('studentInsights.examHistory.submitted') }}
+                  </dt>
+                  <dd class="text-ios-fg-8">{{ a.submittedAt | date: 'medium' }}</dd>
+                </div>
+              </dl>
+              <a
+                [routerLink]="['/assessments/review', a.id]"
+                class="self-end text-sm font-medium text-ios-brand-primary underline whitespace-nowrap"
+              >
+                {{ lang.t('studentInsights.examHistory.review') }}
+              </a>
+            </li>
+          }
+        </ul>
+
+        <div class="hidden md:block relative overflow-x-auto rounded-2xl bg-ios-surface-muted">
           <table class="w-full text-sm">
             <thead class="text-ios-fg-8 text-xs uppercase tracking-wide">
               <tr>

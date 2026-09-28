@@ -60,14 +60,16 @@ import type {
   ],
   template: `
     <!-- ── Cert card (ESM/esm-1 bg) ─────────────────────────────────── -->
-    <div class="flex items-center gap-3 bg-cer-blue-soft rounded-2xl px-6 py-4">
+    <div
+      class="flex flex-wrap sm:flex-nowrap items-center gap-3 bg-cer-blue-soft rounded-2xl px-4 md:px-6 py-4"
+    >
       <!-- Badge + active dot -->
       <div class="relative shrink-0">
         <ios-certificates-badge
           [svgPath]="cert().imageAsset"
           [code]="cert().code"
           [fullName]="cert().title"
-          class="block w-[98px]"
+          class="block w-[72px] md:w-[98px]"
         />
         <span
           class="absolute top-2 -end-1.5 w-3 h-3 rounded-full bg-ios-success-mid border-2 border-white"
@@ -91,7 +93,7 @@ import type {
       <!-- Start Mock Exam CTA — confirms it is a practice exam first (IDD-353) -->
       <button
         type="button"
-        class="inline-flex items-center justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0"
+        class="inline-flex items-center justify-end sm:justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0 basis-full sm:basis-auto -mb-1 sm:mb-0"
         (click)="confirmOpen.set(true)"
       >
         {{ lang.t('dashboard.certs.startMockExamCta') }}
@@ -106,10 +108,10 @@ import type {
     <!-- ── 4 KPI stat cards ───────────────────────────────────────────── -->
     <section
       [attr.aria-label]="lang.t('dashboard.examRunner.examAttempts')"
-      class="grid grid-cols-4 gap-4"
+      class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4"
     >
       <!-- Exam attempts -->
-      <div class="flex flex-col gap-3 bg-ios-surface-muted rounded-2xl px-6 py-3">
+      <div class="flex flex-col gap-3 bg-ios-surface-muted rounded-2xl px-4 md:px-6 py-3">
         <ios-icon name="newspaper" class="w-8 h-8 text-ios-fg shrink-0" aria-hidden="true" />
         <div class="flex flex-col">
           <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
@@ -122,7 +124,7 @@ import type {
       </div>
 
       <!-- Best Score -->
-      <div class="flex flex-col gap-3 bg-ios-surface-muted rounded-2xl px-6 py-3">
+      <div class="flex flex-col gap-3 bg-ios-surface-muted rounded-2xl px-4 md:px-6 py-3">
         <ios-icon name="star" class="w-8 h-8 text-ios-fg shrink-0" aria-hidden="true" />
         <div class="flex flex-col">
           <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
@@ -135,7 +137,7 @@ import type {
       </div>
 
       <!-- Avg Score -->
-      <div class="flex flex-col gap-3 bg-ios-surface-muted rounded-2xl px-6 py-3">
+      <div class="flex flex-col gap-3 bg-ios-surface-muted rounded-2xl px-4 md:px-6 py-3">
         <ios-icon name="medal" class="w-8 h-8 text-ios-fg shrink-0" aria-hidden="true" />
         <div class="flex flex-col">
           <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
@@ -148,7 +150,7 @@ import type {
       </div>
 
       <!-- Time Spent -->
-      <div class="flex flex-col gap-3 bg-ios-surface-muted rounded-2xl px-6 py-3">
+      <div class="flex flex-col gap-3 bg-ios-surface-muted rounded-2xl px-4 md:px-6 py-3">
         <ios-icon name="clock" class="w-8 h-8 text-ios-fg shrink-0" aria-hidden="true" />
         <div class="flex flex-col">
           <span class="text-[18px] font-bold leading-[1.2] text-ios-fg tabular-nums">
@@ -174,7 +176,7 @@ import type {
       </div>
 
       <!-- List container -->
-      <div class="bg-ios-surface-muted rounded-2xl px-6 py-4 flex flex-col">
+      <div class="bg-ios-surface-muted rounded-2xl px-4 md:px-6 py-4 flex flex-col">
         @if (history().length === 0) {
           <!-- Empty state — no mock exam attempts yet -->
           <div
@@ -213,17 +215,17 @@ import type {
         } @else {
           @for (attempt of history(); track attempt.attemptId; let last = $last) {
             <!-- Row -->
-            <div class="flex items-center gap-9 py-4">
+            <div class="flex flex-wrap xl:flex-nowrap items-center gap-x-4 xl:gap-x-9 gap-y-2 py-4">
               <!-- Left: icon + name + questions -->
-              <div class="flex items-center gap-3 flex-1 min-w-0">
+              <div class="flex items-center gap-3 flex-1 min-w-0 basis-full xl:basis-auto">
                 <ios-icon
                   name="newspaper"
                   class="w-8 h-8 shrink-0 text-ios-fg-10"
                   aria-hidden="true"
                 />
-                <div class="flex items-center gap-4">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-x-4 min-w-0">
                   <span
-                    class="text-[18px] font-semibold leading-[1.4] text-ios-fg-10 whitespace-nowrap"
+                    class="text-[16px] md:text-[18px] font-semibold leading-[1.4] text-ios-fg-10"
                   >
                     {{ attempt.title }}
                   </span>
@@ -236,15 +238,17 @@ import type {
               </div>
 
               <!-- Right: date • correct • incorrect • result -->
-              <div class="flex items-center gap-3 shrink-0">
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-1 xl:shrink-0 ps-11 xl:ps-0">
                 <!-- Date -->
-                <span class="text-[16px] font-medium leading-[1.4] text-ios-fg-8 whitespace-nowrap">
+                <span
+                  class="basis-full sm:basis-auto text-[14px] md:text-[16px] font-medium leading-[1.4] text-ios-fg-8 whitespace-nowrap"
+                >
                   {{ attempt.date }}
                 </span>
 
                 <!-- Bullet -->
                 <span
-                  class="w-[7px] h-[7px] rounded-full bg-ios-fg-7 shrink-0"
+                  class="hidden sm:block w-[7px] h-[7px] rounded-full bg-ios-fg-7 shrink-0"
                   aria-hidden="true"
                 ></span>
 
@@ -287,9 +291,9 @@ import type {
                 <!-- Pass/Fail status -->
                 @if (attempt.status === 'passed') {
                   <div class="flex items-center gap-1 min-w-[89px]">
-                    <span class="text-[14px] font-semibold leading-[1.4] text-[#84b70d]"
-                      >{{ lang.t('dashboard.certs.passed') }}:</span
-                    >
+                    <span class="text-[14px] font-semibold leading-[1.4] text-[#84b70d]">{{
+                      lang.t('dashboard.certs.passed')
+                    }}</span>
                     <span class="text-[14px] font-bold leading-[1.3] text-[#84b70d]"
                       >{{ attempt.scorePercent }}%</span
                     >
@@ -309,7 +313,7 @@ import type {
               <!-- Show details CTA — opens the real review for THIS attempt. -->
               <button
                 type="button"
-                class="inline-flex items-center justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0"
+                class="inline-flex items-center justify-center gap-1 h-9 px-6 rounded-xl text-[14px] font-semibold leading-[1.4] text-ios-fg-8 hover:bg-black/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 whitespace-nowrap shrink-0 ms-auto xl:ms-0"
                 [attr.aria-label]="lang.t('dashboard.certs.showDetails')"
                 (click)="viewAttempt.emit(attempt.attemptId)"
               >

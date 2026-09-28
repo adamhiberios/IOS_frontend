@@ -13,7 +13,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { startWith } from 'rxjs/operators';
 import { LucideArrowLeft, LucideEye, LucideEyeOff } from '@lucide/angular';
 
-import { CanadaFlag, IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageBreadcrumbBar, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 import { LanguageService } from '@core/i18n';
 import { AuthStore } from '@core/auth';
@@ -52,9 +52,10 @@ import { ProfileStore } from '../data-access/profile.store';
     ReactiveFormsModule,
     RouterLink,
     IosIcon,
-    CanadaFlag,
     ProfileCancelEditDialog,
     ProfilePasswordUpdatedDialog,
+    PageBreadcrumbBar,
+    PageFooter,
   ],
   providers: [provideIcons(LucideArrowLeft, LucideEye, LucideEyeOff)],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,47 +64,32 @@ import { ProfileStore } from '../data-access/profile.store';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-8 h-[70px] flex items-center">
-          <div class="flex items-center gap-4">
-            <a
-              routerLink="/dashboard/profile"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none"
-              [attr.aria-label]="lang.t('profile.breadcrumb.backToProfile')"
-            >
-              <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
-            </a>
-            <nav aria-label="Breadcrumb">
-              <ol
-                class="flex items-center gap-3 text-base leading-[1.4] whitespace-nowrap"
-                role="list"
-              >
-                <li>
-                  <a
-                    routerLink="/dashboard"
-                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
-                    >{{ lang.t('profile.breadcrumb.dashboard') }}</a
-                  >
-                </li>
-                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
-                <li>
-                  <a
-                    routerLink="/dashboard/profile"
-                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
-                    >{{ lang.t('profile.breadcrumb.profile') }}</a
-                  >
-                </li>
-                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
-                <li>
-                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
-                    lang.t('profile.breadcrumb.changePassword')
-                  }}</span>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-      </div>
+      <ios-page-breadcrumb-bar
+        backLink="/dashboard/profile"
+        [backLabel]="lang.t('profile.breadcrumb.backToProfile')"
+      >
+        <li>
+          <a
+            routerLink="/dashboard"
+            class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+            >{{ lang.t('profile.breadcrumb.dashboard') }}</a
+          >
+        </li>
+        <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
+        <li>
+          <a
+            routerLink="/dashboard/profile"
+            class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+            >{{ lang.t('profile.breadcrumb.profile') }}</a
+          >
+        </li>
+        <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
+        <li>
+          <span class="font-semibold text-ios-fg-13" aria-current="page">{{
+            lang.t('profile.breadcrumb.changePassword')
+          }}</span>
+        </li>
+      </ios-page-breadcrumb-bar>
 
       <!-- ── Main content ───────────────────────────────────────────────── -->
       <main class="flex-1 bg-white" id="main-content">
@@ -111,22 +97,24 @@ import { ProfileStore } from '../data-access/profile.store';
           [formGroup]="form"
           (ngSubmit)="onSubmit()"
           novalidate
-          class="max-w-[1400px] mx-auto px-8 py-8 flex flex-col gap-6"
+          class="max-w-[1400px] mx-auto px-4 md:px-8 py-8 flex flex-col gap-6"
           [attr.aria-label]="lang.t('profile.changePassword.formLabel')"
         >
           <!-- ── Password informations ──────────────────────────────────── -->
           <section aria-labelledby="pwd-section-heading">
-            <div class="flex gap-6 items-start">
+            <div class="flex flex-col lg:flex-row gap-4 lg:gap-6 items-start">
               <h2
                 id="pwd-section-heading"
-                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-[228px] shrink-0"
+                class="text-[18px] font-semibold leading-[1.4] text-ios-fg-13 w-full lg:w-[228px] shrink-0"
               >
                 {{ lang.t('profile.changePassword.sectionHeading') }}
               </h2>
 
-              <div class="flex-1 bg-ios-surface-mid rounded-2xl p-6 flex flex-col gap-6">
+              <div
+                class="flex-1 w-full min-w-0 bg-ios-surface-mid rounded-2xl p-4 md:p-6 flex flex-col gap-6"
+              >
                 <!-- Old Password -->
-                <div class="flex flex-col gap-1 h-[86px]">
+                <div class="flex flex-col gap-1 min-h-[86px]">
                   <div class="flex items-center px-2">
                     <label
                       for="oldPassword"
@@ -148,7 +136,7 @@ import { ProfileStore } from '../data-access/profile.store';
                         [type]="showOld() ? 'text' : 'password'"
                         formControlName="oldPassword"
                         [placeholder]="lang.t('profile.changePassword.oldPasswordPlaceholder')"
-                        class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
+                        class="flex-1 min-w-0 bg-transparent text-[16px] md:text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
                         [attr.aria-describedby]="
                           hasError('oldPassword', 'required') ? 'oldPassword-error' : null
                         "
@@ -220,7 +208,7 @@ import { ProfileStore } from '../data-access/profile.store';
                           [type]="showNew() ? 'text' : 'password'"
                           formControlName="newPassword"
                           [placeholder]="lang.t('profile.changePassword.newPasswordPlaceholder')"
-                          class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
+                          class="flex-1 min-w-0 bg-transparent text-[16px] md:text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
                           [attr.aria-describedby]="'pwd-hint newPassword-error'"
                           [attr.aria-invalid]="
                             hasError('newPassword', 'weakPassword') ? 'true' : null
@@ -265,7 +253,7 @@ import { ProfileStore } from '../data-access/profile.store';
                 </div>
 
                 <!-- Confirm New Password -->
-                <div class="flex flex-col gap-1 h-[86px]">
+                <div class="flex flex-col gap-1 min-h-[86px]">
                   <div class="flex items-center px-2">
                     <label
                       for="confirmPassword"
@@ -284,7 +272,7 @@ import { ProfileStore } from '../data-access/profile.store';
                         [type]="showConfirm() ? 'text' : 'password'"
                         formControlName="confirmPassword"
                         [placeholder]="lang.t('profile.changePassword.confirmPasswordPlaceholder')"
-                        class="flex-1 min-w-0 bg-transparent text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
+                        class="flex-1 min-w-0 bg-transparent text-[16px] md:text-[18px] font-medium leading-[1.4] text-ios-fg placeholder:text-ios-fg-7 outline-none focus:outline-none focus:shadow-none"
                         [attr.aria-describedby]="
                           hasError('confirmPassword', 'mismatch') ? 'confirmPassword-error' : null
                         "
@@ -334,11 +322,13 @@ import { ProfileStore } from '../data-access/profile.store';
           }
 
           <!-- ── Action buttons ──────────────────────────────────────────── -->
-          <div class="flex items-center justify-end gap-4 mt-2 pb-2">
+          <div
+            class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-end gap-3 sm:gap-4 mt-2 pb-2"
+          >
             <!-- Cancel -->
             <button
               type="button"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-surface-soft text-ios-fg-10 text-[16px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none whitespace-nowrap"
+              class="w-full sm:w-auto inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-surface-soft text-ios-fg-10 text-[16px] font-semibold leading-[1.4] hover:bg-ios-surface-hover transition-colors focus-visible:outline-none whitespace-nowrap"
               (click)="showCancelDialog.set(true)"
             >
               {{ lang.t('profile.changePassword.cancel') }}
@@ -346,7 +336,7 @@ import { ProfileStore } from '../data-access/profile.store';
             <!-- Save information -->
             <button
               type="submit"
-              class="inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg-13 text-white text-[16px] font-semibold leading-[1.4] hover:bg-ios-fg transition-colors focus-visible:outline-none whitespace-nowrap disabled:opacity-50 disabled:pointer-events-none"
+              class="w-full sm:w-auto inline-flex items-center justify-center h-11 px-6 rounded-xl bg-ios-fg-13 text-white text-[16px] font-semibold leading-[1.4] hover:bg-ios-fg transition-colors focus-visible:outline-none whitespace-nowrap disabled:opacity-50 disabled:pointer-events-none"
               [disabled]="store.passwordSubmitStatus() === 'pending'"
             >
               @if (store.passwordSubmitStatus() === 'pending') {
@@ -362,14 +352,7 @@ import { ProfileStore } from '../data-access/profile.store';
       </main>
 
       <!-- ── Footer ────────────────────────────────────────────────────── -->
-      <footer class="bg-ios-fg w-full py-4 shrink-0">
-        <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-sm"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: year.toString() }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer variant="neutral" class="shrink-0" />
     </div>
 
     <!-- ── Dialogs ────────────────────────────────────────────────────── -->
@@ -397,7 +380,6 @@ export class ChangePasswordPage implements OnInit {
   protected readonly showOld = signal(false);
   protected readonly showNew = signal(false);
   protected readonly showConfirm = signal(false);
-  protected readonly year = new Date().getFullYear();
 
   protected readonly form = this.fb.group(
     {

@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { LucideChevronDown } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
+import { IosIcon, provideIcons } from '@ui';
 
 /**
  * The minimum an item needs to appear in this nav. Widened from the old
@@ -35,7 +37,32 @@ export interface CertNavItem {
 @Component({
   selector: 'ios-cert-chapter-nav',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [IosIcon],
+  providers: [provideIcons(LucideChevronDown)],
+  host: { class: 'block shrink-0' },
   template: `
+    <!-- Below lg there is no room for the 354px list, so the same lessons are
+         offered as a native select — otherwise phones could only step through
+         lessons one at a time with Back / Next. -->
+    <div class="lg:hidden relative">
+      <select
+        class="w-full h-12 appearance-none rounded-xl bg-cer-blue-soft ps-4 pe-10 text-[16px] font-semibold leading-[1.4] text-ios-fg-13 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50"
+        [attr.aria-label]="lang.t('dashboard.certs.sessionChapters')"
+        (change)="onSelect($event)"
+      >
+        @for (chapter of chapters(); track chapter.id) {
+          <option [value]="chapter.id" [selected]="activeChapterId() === chapter.id">
+            {{ chapter.title }}
+          </option>
+        }
+      </select>
+      <ios-icon
+        name="chevron-down"
+        class="pointer-events-none absolute end-4 top-1/2 -translate-y-1/2 w-5 h-5 text-ios-fg-13"
+        aria-hidden="true"
+      />
+    </div>
+
     <nav
       class="hidden lg:flex flex-col w-[354px] shrink-0"
       [attr.aria-label]="lang.t('dashboard.certs.sessionChapters')"
@@ -65,4 +92,8 @@ export class CertChapterNav {
   readonly activeChapterId = input.required<string>();
   /** Emits the chapter ID when the user clicks a sidebar item. */
   readonly chapterChange = output<string>();
+
+  protected onSelect(event: Event): void {
+    this.chapterChange.emit((event.target as HTMLSelectElement).value);
+  }
 }

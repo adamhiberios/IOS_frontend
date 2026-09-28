@@ -7,12 +7,12 @@ import { LucideArrowLeft, LucideCircleCheck } from '@lucide/angular';
 import { LanguageService } from '@core/i18n';
 import { formatFee } from '@shared';
 import {
-  CanadaFlag,
   CertificatesBadge,
   IosIcon,
   Select,
   type SelectOption,
   provideIcons,
+  PageFooter,
 } from '@ui';
 
 import { PaymentsStore } from '../data-access/payments.store';
@@ -65,10 +65,10 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
     RouterLink,
     NgOptimizedImage,
     IosIcon,
-    CanadaFlag,
     CertificatesBadge,
     PaymentSuccessDialog,
     Select,
+    PageFooter,
   ],
   providers: [provideIcons(LucideArrowLeft, LucideCircleCheck)],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -76,7 +76,7 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
     <div class="flex min-h-screen flex-col bg-white">
       @if (!hasOrder()) {
         <!-- ── Focused-checkout logo bar (empty-order case only) ── -->
-        <div class="w-full px-8 py-6 self-start">
+        <div class="w-full px-4 md:px-8 py-6 self-start">
           <a routerLink="/dashboard" [attr.aria-label]="lang.t('dashboard.nav.dashboardLabel')">
             <img
               ngSrc="assets/icons/logo_institute_of_scrum.png"
@@ -92,7 +92,7 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
 
         <!-- ── Empty-cart notice: no certId / item was passed in ── -->
         <main class="flex-1" id="main-content">
-          <div class="mx-auto max-w-[1400px] px-8 py-16 text-center">
+          <div class="mx-auto max-w-[1400px] px-4 md:px-8 py-16 text-center">
             <p class="text-[18px] font-medium text-ios-fg-8">
               {{ lang.t('payments.checkout.emptyOrder') }}
             </p>
@@ -107,8 +107,8 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
       } @else {
         <main class="flex flex-1 flex-col lg:flex-row" id="main-content">
           <!-- ── Left: logo + form column (white) ── -->
-          <div class="flex flex-1 flex-col items-center px-6 py-6 lg:px-16 lg:py-8">
-            <div class="px-8 py-6 self-start">
+          <div class="flex flex-1 flex-col items-center px-4 md:px-6 py-6 lg:px-16 lg:py-8">
+            <div class="pb-6 md:px-8 md:py-6 self-start">
               <a routerLink="/dashboard" [attr.aria-label]="lang.t('dashboard.nav.dashboardLabel')">
                 <img
                   ngSrc="assets/icons/logo_institute_of_scrum.png"
@@ -122,7 +122,7 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
               </a>
             </div>
 
-            <div class="mb-6 flex items-center gap-3">
+            <div class="mb-6 flex w-full lg:w-auto items-center gap-3">
               <button
                 type="button"
                 class="flex h-11 w-11 shrink-0 items-center justify-center overflow-clip rounded-xl bg-ios-surface-soft text-ios-fg transition-colors hover:bg-ios-surface-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50"
@@ -289,7 +289,7 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
                 [alt]="lang.t('payments.checkout.acceptedMethods')"
                 width="503"
                 height="25"
-                class="h-6 w-auto"
+                class="h-auto w-full max-w-[503px]"
                 loading="lazy"
                 decoding="async"
               />
@@ -298,7 +298,7 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
 
           <!-- ── Right: order summary panel, track-themed, full-bleed from the top ── -->
           <div [class]="summaryPanelClass()">
-            <div class="mx-auto flex w-full max-w-[440px] flex-col gap-16 py-8 lg:py-10">
+            <div class="mx-auto flex w-full max-w-[440px] flex-col gap-8 lg:gap-16 py-8 lg:py-10">
               <p
                 class="w-full font-heading text-[20px] font-semibold leading-[1.2] text-ios-fg-13"
                 dir="auto"
@@ -307,7 +307,7 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
               </p>
 
               <div class="flex w-full flex-col items-start gap-2">
-                <div class="flex w-full items-center gap-6 py-3">
+                <div class="flex w-full items-center gap-4 md:gap-6 py-3">
                   <ios-certificates-badge
                     [svgPath]="order()!.badgeSvgPath"
                     [code]="order()!.code"
@@ -334,56 +334,58 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
 
                 <div class="flex w-full flex-col items-start">
                   <div class="flex w-full flex-col items-start py-1">
-                    <div class="flex w-full items-center px-6 py-2">
+                    <div class="flex w-full items-center gap-4 px-3 md:px-6 py-2">
                       <p
-                        class="w-[275px] font-body text-[16px] font-medium leading-[1.4] text-ios-fg"
+                        class="min-w-0 flex-1 md:flex-none md:w-[275px] font-body text-[16px] font-medium leading-[1.4] text-ios-fg"
                         dir="auto"
                       >
                         {{ lang.t('payments.checkout.itemsAmount') }}
                       </p>
                       <p
-                        class="flex-1 text-end font-body text-[18px] font-bold leading-[1.2] text-ios-fg-11"
+                        class="shrink-0 md:shrink md:flex-1 whitespace-nowrap text-end font-body text-[18px] font-bold leading-[1.2] text-ios-fg-11"
                       >
                         {{ formatMoney(order()!.itemAmount) }}
                       </p>
                     </div>
-                    <div class="flex w-full items-center px-6 py-2">
+                    <div class="flex w-full items-center gap-4 px-3 md:px-6 py-2">
                       <p
-                        class="w-[275px] font-body text-[16px] font-medium leading-[1.4] text-ios-fg"
+                        class="min-w-0 flex-1 md:flex-none md:w-[275px] font-body text-[16px] font-medium leading-[1.4] text-ios-fg"
                         dir="auto"
                       >
                         {{ lang.t('payments.checkout.tax') }}
                       </p>
                       <p
-                        class="flex-1 text-end font-body text-[18px] font-bold leading-[1.2] text-ios-fg-11"
+                        class="shrink-0 md:shrink md:flex-1 whitespace-nowrap text-end font-body text-[18px] font-bold leading-[1.2] text-ios-fg-11"
                       >
                         {{ formatMoney(order()!.tax) }}
                       </p>
                     </div>
-                    <div class="flex w-full items-center px-6 py-2">
+                    <div class="flex w-full items-center gap-4 px-3 md:px-6 py-2">
                       <p
-                        class="w-[275px] font-body text-[16px] font-medium leading-[1.4] text-ios-fg"
+                        class="min-w-0 flex-1 md:flex-none md:w-[275px] font-body text-[16px] font-medium leading-[1.4] text-ios-fg"
                         dir="auto"
                       >
                         {{ lang.t('payments.checkout.discount') }}
                       </p>
                       <p
-                        class="flex-1 text-end font-body text-[18px] font-bold leading-[1.2] text-ios-fg-11"
+                        class="shrink-0 md:shrink md:flex-1 whitespace-nowrap text-end font-body text-[18px] font-bold leading-[1.2] text-ios-fg-11"
                       >
                         {{ formatMoney(-order()!.discount) }}
                       </p>
                     </div>
                   </div>
                   <div
-                    class="flex w-full items-center justify-between bg-track-soft px-6 py-3 text-track-strong"
+                    class="flex w-full items-center justify-between gap-4 bg-track-soft px-3 md:px-6 py-3 text-track-strong"
                   >
                     <p
-                      class="w-[275px] font-body text-[18px] font-semibold leading-[1.4]"
+                      class="min-w-0 md:w-[275px] font-body text-[18px] font-semibold leading-[1.4]"
                       dir="auto"
                     >
                       {{ lang.t('payments.checkout.total') }}
                     </p>
-                    <p class="font-heading text-[20px] font-bold leading-[1.2]">
+                    <p
+                      class="shrink-0 whitespace-nowrap font-heading text-[20px] font-bold leading-[1.2]"
+                    >
                       {{ formatMoney(total()) }}
                     </p>
                   </div>
@@ -410,14 +412,7 @@ const PAYMENT_METHODS = ['visa', 'mastercard', 'amex'] as const;
         </main>
       }
 
-      <footer class="w-full bg-ios-brand-dark py-4">
-        <div
-          class="mx-auto flex max-w-[1400px] items-center justify-center gap-2 px-4 text-xs text-ios-brand-muted md:px-8"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
 
     @if (successDialogOpen()) {
@@ -444,8 +439,6 @@ export class PlaceOrderPage {
     })),
   );
 
-  protected readonly currentYear = new Date().getFullYear();
-  protected readonly yearStr = String(this.currentYear);
   protected readonly successDialogOpen = signal(false);
 
   /**
@@ -493,7 +486,7 @@ export class PlaceOrderPage {
 
   protected readonly summaryPanelClass = computed(
     () =>
-      `${resolveTrackClass(this.order()?.code)} flex flex-1 items-center bg-track-softer px-6 lg:px-8`,
+      `${resolveTrackClass(this.order()?.code)} flex flex-1 items-center bg-track-softer px-4 md:px-6 lg:px-8`,
   );
 
   protected readonly form = this.fb.group({

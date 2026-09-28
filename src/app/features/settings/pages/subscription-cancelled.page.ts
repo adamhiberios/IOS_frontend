@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { CanadaFlag } from '@ui';
+import { PageFooter } from '@ui';
 import { LanguageService } from '@core/i18n';
 import { DashboardNavbar } from '@layouts';
 
@@ -28,18 +28,16 @@ import { DashboardNavbar } from '@layouts';
 @Component({
   selector: 'ios-subscription-cancelled-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DashboardNavbar, RouterLink, CanadaFlag],
+  imports: [DashboardNavbar, RouterLink, PageFooter],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
 
       <!-- ── Main content ───────────────────────────────────────────────── -->
       <main class="flex-1 bg-white flex flex-col" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-12 flex flex-col gap-6 w-full">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-12 flex flex-col gap-6 w-full">
           <!-- ":(" emoji heading -->
-          <p class="font-semibold text-[46px] leading-[1.2] text-ios-fg-7" aria-hidden="true">
-            :(
-          </p>
+          <p class="font-semibold text-[46px] leading-[1.2] text-ios-fg-7" aria-hidden="true">:(</p>
 
           <!-- Message block -->
           <div class="flex flex-col gap-1 max-w-[608px]">
@@ -76,20 +74,12 @@ import { DashboardNavbar } from '@layouts';
       </main>
 
       <!-- ── Footer ─────────────────────────────────────────────────────── -->
-      <footer class="bg-ios-brand-dark w-full py-4">
-        <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: year }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
   `,
 })
 export class SubscriptionCancelledPage {
   protected readonly lang = inject(LanguageService);
-  protected readonly year = new Date().getFullYear().toString();
 }
 
 export default SubscriptionCancelledPage;

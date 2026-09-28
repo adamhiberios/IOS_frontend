@@ -22,7 +22,7 @@ import {
 
 import { LanguageService } from '@core/i18n';
 
-import { CanadaFlag, IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { MockStore } from '../data-access/mock.store';
@@ -50,9 +50,9 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
     DashboardNavbar,
     IosIcon,
     RouterLink,
-    CanadaFlag,
     CertMockExitDialog,
     CertMockTimeupDialog,
+    PageFooter,
   ],
   providers: [
     provideIcons(
@@ -69,7 +69,7 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
       <ios-dashboard-navbar />
 
       <main class="flex-1 bg-white" id="main-content">
-        <div class="max-w-[1400px] mx-auto px-8 py-6 flex flex-col gap-6">
+        <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6 flex flex-col gap-6">
           <!-- ── Breadcrumb row ─────────────────────────────────────── -->
           <div class="flex items-center gap-3">
             <button
@@ -82,13 +82,15 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
             </button>
             <nav aria-label="Breadcrumb">
               <ol
-                class="flex items-center gap-3 text-[16px] font-medium leading-[1.4] text-ios-fg-8"
+                class="flex flex-wrap items-center gap-x-1.5 md:gap-x-3 gap-y-1 text-[14px] md:text-[16px] font-medium leading-[1.4] text-ios-fg-8 [&>li]:whitespace-nowrap"
                 role="list"
               >
                 <li>
-                  <a routerLink="/dashboard/certificates" class="hover:text-ios-fg-10 transition-colors">{{
-                    lang.t('dashboard.nav.myCertificates')
-                  }}</a>
+                  <a
+                    routerLink="/dashboard/certificates"
+                    class="hover:text-ios-fg-10 transition-colors"
+                    >{{ lang.t('dashboard.nav.myCertificates') }}</a
+                  >
                 </li>
                 <li aria-hidden="true">/</li>
                 <li>
@@ -137,118 +139,12 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
               </div>
             }
             @default {
-              <div class="flex gap-6 items-start">
-                <!-- ── Left: Question panel ─────────────────────────────── -->
-                <div class="flex flex-col flex-1 min-w-0">
-                  <p class="text-[14px] font-semibold leading-[1.4] text-ios-fg-8 mb-1">
-                    {{ lang.t('dashboard.examRunner.question', { number: currentIndex() + 1 }) }}
-                  </p>
-                  <h1 class="text-[20px] font-bold leading-[1.3] text-ios-fg-13 mb-6" dir="auto">
-                    {{ currentQuestion()?.text }}
-                  </h1>
-
-                  <div
-                    class="flex flex-col gap-3"
-                    role="radiogroup"
-                    [attr.aria-label]="lang.t('assessments.runner.answerOptionsAriaLabel')"
-                  >
-                    @for (opt of currentQuestion()?.options ?? []; track opt.id; let i = $index) {
-                      <button
-                        type="button"
-                        role="radio"
-                        [attr.aria-checked]="selectedOptionId() === opt.id"
-                        [class]="optionClass(opt.id)"
-                        (click)="onSelectOption(opt.id)"
-                      >
-                        <span [class]="letterBadgeClass(opt.id)" aria-hidden="true">{{
-                          letterFor(i)
-                        }}</span>
-                        <span
-                          class="text-[16px] font-medium leading-[1.5] text-start flex-1"
-                          dir="auto"
-                          >{{ opt.text }}</span
-                        >
-                        @if (revealed(); as rev) {
-                          @if (opt.id === rev.correctOptionId) {
-                            <ios-icon
-                              name="check"
-                              class="w-5 h-5 text-ios-success-strong shrink-0"
-                              aria-hidden="true"
-                            />
-                          } @else if (opt.id === selectedOptionId()) {
-                            <ios-icon
-                              name="x"
-                              class="w-5 h-5 text-ios-danger-mid shrink-0"
-                              aria-hidden="true"
-                            />
-                          }
-                        }
-                      </button>
-                    }
-                  </div>
-
-                  <div class="mt-6 flex items-center justify-between gap-4">
-                    <!-- Reveal correct answer (mock-only) -->
-                    <button
-                      type="button"
-                      [disabled]="selectedOptionId() === null || revealed() !== null"
-                      class="inline-flex items-center gap-2 h-11 px-5 rounded-xl text-[15px] font-semibold text-ios-fg-mid bg-ios-surface-soft hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 disabled:opacity-40 disabled:pointer-events-none"
-                      (click)="onReveal()"
-                    >
-                      <ios-icon name="lightbulb" class="w-5 h-5" aria-hidden="true" />
-                      {{ lang.t('mock.reveal') }}
-                    </button>
-
-                    <div class="flex items-center gap-3">
-                      <button
-                        type="button"
-                        [disabled]="currentIndex() === 0"
-                        class="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-2xl text-[15px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-40 disabled:pointer-events-none text-ios-fg bg-ios-surface-soft hover:bg-ios-surface-hover"
-                        (click)="onBack()"
-                      >
-                        <ios-icon
-                          name="arrow-left"
-                          class="w-5 h-5 rtl:rotate-180"
-                          aria-hidden="true"
-                        />
-                        {{ lang.t('dashboard.examRunner.back') }}
-                      </button>
-
-                      @if (isLastQuestion()) {
-                        <button
-                          type="button"
-                          [disabled]="store.runnerStatus() === 'submitting'"
-                          class="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-2xl text-[15px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-40 disabled:pointer-events-none text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep"
-                          (click)="onFinish()"
-                        >
-                          {{
-                            store.runnerStatus() === 'submitting'
-                              ? lang.t('mock.submitting')
-                              : lang.t('dashboard.examRunner.finish')
-                          }}
-                          <ios-icon name="check" class="w-5 h-5" aria-hidden="true" />
-                        </button>
-                      } @else {
-                        <button
-                          type="button"
-                          class="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-2xl text-[15px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 text-ios-brand-primary-soft bg-ios-fg-13 hover:bg-ios-fg"
-                          (click)="onNext()"
-                        >
-                          {{ lang.t('dashboard.examRunner.next') }}
-                          <ios-icon
-                            name="arrow-right"
-                            class="w-5 h-5 rtl:rotate-180"
-                            aria-hidden="true"
-                          />
-                        </button>
-                      }
-                    </div>
-                  </div>
-                </div>
-
-                <!-- ── Right: dark progress sidebar ─────────────────────── -->
+              <!-- Progress panel is first in the DOM so it leads on phones (and for
+                   keyboard / screen-reader order); lg:order-last puts it on the right. -->
+              <div class="flex flex-col lg:flex-row gap-6 items-stretch lg:items-start">
+                <!-- ── Progress sidebar (right on lg) ───────────────────── -->
                 <aside
-                  class="w-[354px] shrink-0 bg-ios-brand-dark rounded-2xl p-8 flex flex-col gap-5"
+                  class="w-full lg:w-[354px] lg:order-last shrink-0 bg-ios-brand-dark rounded-2xl p-5 md:p-8 flex flex-col gap-5"
                   [attr.aria-label]="lang.t('assessments.runner.examProgressAriaLabel')"
                 >
                   <div class="flex items-center justify-between gap-3">
@@ -304,20 +200,121 @@ import { CertMockTimeupDialog } from '../components/cert-mock-timeup-dialog';
                     </p>
                   }
                 </aside>
+
+                <!-- ── Question panel (left on lg) ─────────────────────── -->
+                <div class="flex flex-col flex-1 min-w-0">
+                  <p class="text-[14px] font-semibold leading-[1.4] text-ios-fg-8 mb-1">
+                    {{ lang.t('dashboard.examRunner.question', { number: currentIndex() + 1 }) }}
+                  </p>
+                  <h1 class="text-[20px] font-bold leading-[1.3] text-ios-fg-13 mb-6" dir="auto">
+                    {{ currentQuestion()?.text }}
+                  </h1>
+
+                  <div
+                    class="flex flex-col gap-3"
+                    role="radiogroup"
+                    [attr.aria-label]="lang.t('assessments.runner.answerOptionsAriaLabel')"
+                  >
+                    @for (opt of currentQuestion()?.options ?? []; track opt.id; let i = $index) {
+                      <button
+                        type="button"
+                        role="radio"
+                        [attr.aria-checked]="selectedOptionId() === opt.id"
+                        [class]="optionClass(opt.id)"
+                        (click)="onSelectOption(opt.id)"
+                      >
+                        <span [class]="letterBadgeClass(opt.id)" aria-hidden="true">{{
+                          letterFor(i)
+                        }}</span>
+                        <span
+                          class="text-[16px] font-medium leading-[1.5] text-start flex-1"
+                          dir="auto"
+                          >{{ opt.text }}</span
+                        >
+                        @if (revealed(); as rev) {
+                          @if (opt.id === rev.correctOptionId) {
+                            <ios-icon
+                              name="check"
+                              class="w-5 h-5 text-ios-success-strong shrink-0"
+                              aria-hidden="true"
+                            />
+                          } @else if (opt.id === selectedOptionId()) {
+                            <ios-icon
+                              name="x"
+                              class="w-5 h-5 text-ios-danger-mid shrink-0"
+                              aria-hidden="true"
+                            />
+                          }
+                        }
+                      </button>
+                    }
+                  </div>
+
+                  <div class="mt-6 flex flex-wrap items-center justify-between gap-3 md:gap-4">
+                    <!-- Reveal correct answer (mock-only) -->
+                    <button
+                      type="button"
+                      [disabled]="selectedOptionId() === null || revealed() !== null"
+                      class="inline-flex items-center gap-2 h-11 px-5 rounded-xl text-[15px] font-semibold text-ios-fg-mid bg-ios-surface-soft hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cer-blue-text/50 disabled:opacity-40 disabled:pointer-events-none"
+                      (click)="onReveal()"
+                    >
+                      <ios-icon name="lightbulb" class="w-5 h-5" aria-hidden="true" />
+                      {{ lang.t('mock.reveal') }}
+                    </button>
+
+                    <div class="flex items-center gap-3 ms-auto">
+                      <button
+                        type="button"
+                        [disabled]="currentIndex() === 0"
+                        class="inline-flex items-center justify-center gap-2 h-11 px-4 md:px-6 rounded-2xl text-[15px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-40 disabled:pointer-events-none text-ios-fg bg-ios-surface-soft hover:bg-ios-surface-hover"
+                        (click)="onBack()"
+                      >
+                        <ios-icon
+                          name="arrow-left"
+                          class="w-5 h-5 rtl:rotate-180"
+                          aria-hidden="true"
+                        />
+                        {{ lang.t('dashboard.examRunner.back') }}
+                      </button>
+
+                      @if (isLastQuestion()) {
+                        <button
+                          type="button"
+                          [disabled]="store.runnerStatus() === 'submitting'"
+                          class="inline-flex items-center justify-center gap-2 h-11 px-4 md:px-6 rounded-2xl text-[15px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 disabled:opacity-40 disabled:pointer-events-none text-ios-brand-primary-soft bg-ios-brand-primary hover:bg-ios-brand-primary-deep"
+                          (click)="onFinish()"
+                        >
+                          {{
+                            store.runnerStatus() === 'submitting'
+                              ? lang.t('mock.submitting')
+                              : lang.t('dashboard.examRunner.finish')
+                          }}
+                          <ios-icon name="check" class="w-5 h-5" aria-hidden="true" />
+                        </button>
+                      } @else {
+                        <button
+                          type="button"
+                          class="inline-flex items-center justify-center gap-2 h-11 px-4 md:px-6 rounded-2xl text-[15px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 text-ios-brand-primary-soft bg-ios-fg-13 hover:bg-ios-fg"
+                          (click)="onNext()"
+                        >
+                          {{ lang.t('dashboard.examRunner.next') }}
+                          <ios-icon
+                            name="arrow-right"
+                            class="w-5 h-5 rtl:rotate-180"
+                            aria-hidden="true"
+                          />
+                        </button>
+                      }
+                    </div>
+                  </div>
+                </div>
               </div>
             }
           }
         </div>
       </main>
 
-      <footer class="bg-ios-brand-dark w-full py-4">
-        <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer />
     </div>
   `,
 })
@@ -328,8 +325,6 @@ export class MockTestPage {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
-
-  protected readonly yearStr = String(new Date().getFullYear());
 
   protected readonly currentIndex = signal(0);
   protected readonly questions = this.store.questions;

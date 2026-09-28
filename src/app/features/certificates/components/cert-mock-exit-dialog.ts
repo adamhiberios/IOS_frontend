@@ -30,9 +30,9 @@ import { LanguageService } from '@core/i18n';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
   template: `
-    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40" aria-hidden="true">
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
       <div
-        class="relative bg-white rounded-2xl w-[724px] p-8 flex flex-col gap-9 items-center"
+        class="relative bg-white rounded-2xl w-full max-w-[724px] max-h-full overflow-y-auto p-6 sm:p-8 flex flex-col gap-6 sm:gap-9 items-center"
         role="dialog"
         aria-modal="true"
         aria-labelledby="mock-exit-title"
@@ -42,7 +42,7 @@ import { LanguageService } from '@core/i18n';
           class="bg-ios-surface-soft flex items-center p-4 rounded-full shrink-0"
           aria-hidden="true"
         >
-          <div class="size-[148px] shrink-0">
+          <div class="size-[96px] sm:size-[148px] shrink-0">
             <svg
               viewBox="0 0 84 128"
               fill="none"
@@ -72,27 +72,29 @@ import { LanguageService } from '@core/i18n';
         <div class="flex flex-col gap-[4px] items-center text-center w-full">
           <h2
             id="mock-exit-title"
-            class="text-[24px] font-semibold leading-[1.2] text-ios-fg-11 w-full"
+            class="text-[22px] sm:text-[24px] font-semibold leading-[1.2] text-ios-fg-11 w-full"
           >
             {{ lang.t('dashboard.examRunner.exitDialogTitle') }}
           </h2>
-          <p class="text-[18px] font-medium leading-[1.4] text-ios-fg-10 w-full">
+          <p class="text-[16px] sm:text-[18px] font-medium leading-[1.4] text-ios-fg-10 w-full">
             {{ lang.t('dashboard.examRunner.exitDialogBody') }}
           </p>
         </div>
 
         <!-- Buttons -->
-        <div class="flex gap-6 items-start justify-center w-full">
+        <div
+          class="flex flex-col-reverse sm:flex-row gap-3 sm:gap-6 items-stretch sm:items-start justify-center w-full"
+        >
           <button
             type="button"
-            class="inline-flex items-center justify-center h-14 px-6 rounded-xl text-[18px] font-semibold leading-[1.4] text-ios-fg bg-ios-surface-soft hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 w-[165px] whitespace-nowrap"
+            class="inline-flex items-center justify-center h-12 sm:h-14 px-6 rounded-xl text-[16px] sm:text-[18px] font-semibold leading-[1.4] text-ios-fg bg-ios-surface-soft hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 w-full sm:w-[165px] whitespace-nowrap"
             (click)="dismissed.emit()"
           >
             {{ lang.t('dashboard.examRunner.goBack') }}
           </button>
           <button
             type="button"
-            class="inline-flex items-center justify-center h-14 px-6 rounded-xl text-[18px] font-semibold leading-[1.4] text-white bg-ios-brand-primary hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 w-[203px] whitespace-nowrap"
+            class="inline-flex items-center justify-center h-12 sm:h-14 px-6 rounded-xl text-[16px] sm:text-[18px] font-semibold leading-[1.4] text-white bg-ios-brand-primary hover:bg-ios-brand-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/50 w-full sm:w-[203px] whitespace-nowrap"
             (click)="confirmed.emit()"
           >
             {{ lang.t('dashboard.examRunner.exit') }}

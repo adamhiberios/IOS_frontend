@@ -14,6 +14,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
  *   `display: contents` so it doesn't add a box to the layout — drop it
  *   anywhere inside a `relative` container (e.g. the page root).
  *
+ *   Hidden below `md`: on a phone the framed content spans the full width,
+ *   so the bars would cut straight through its text instead of framing it.
+ *
  * Why CSS length strings (not Tailwind fractions) for `start` / `end`:
  *   Tailwind's purger only keeps classes it can find as literal strings in
  *   templates. Building class names dynamically (e.g. `w-{{ start() }}`)
@@ -31,7 +34,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   template: `
     @if (showStart()) {
       <span
-        class="absolute start-0 bg-ios-brand-yellow"
+        class="hidden md:block absolute start-0 bg-ios-brand-yellow"
         [style.top]="top()"
         [style.width]="start()"
         [style.height]="height()"
@@ -39,7 +42,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     }
     @if (showEnd()) {
       <span
-        class="absolute end-0 bg-ios-brand-yellow"
+        class="hidden md:block absolute end-0 bg-ios-brand-yellow"
         [style.top]="top()"
         [style.width]="end()"
         [style.height]="height()"

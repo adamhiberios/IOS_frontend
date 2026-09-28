@@ -43,9 +43,11 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
       [style.background-color]="heroBg()"
       [attr.aria-label]="lang.t('dashboard.certs.badgeAlt', { code: cert().code })"
     >
-      <div class="max-w-[1400px] mx-auto px-8 py-8 flex items-center gap-6">
+      <div
+        class="max-w-[1400px] mx-auto px-4 md:px-8 py-6 md:py-8 flex flex-wrap lg:flex-nowrap items-center gap-4 md:gap-6"
+      >
         <!-- Badge + green dot -->
-        <div class="relative shrink-0" style="width:88.8px; height:111px;">
+        <div class="relative shrink-0 w-16 h-20 md:w-[88.8px] md:h-[111px]">
           <img
             [ngSrc]="cert().badgeAsset"
             [alt]="lang.t('dashboard.certs.badgeAlt', { code: cert().code })"
@@ -65,16 +67,16 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
         </div>
 
         <!-- Cert info -->
-        <div class="flex flex-col gap-3 flex-1 min-w-0">
+        <div class="flex flex-col gap-2 md:gap-3 flex-1 min-w-0">
           <!-- Status row -->
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
             <span
               class="inline-flex items-center justify-center px-3 py-1 rounded text-[16px] font-bold leading-[1.3] text-ios-success-strong bg-[#b5db5e] whitespace-nowrap"
             >
               {{ lang.t('dashboard.certs.active') }}
             </span>
             <span
-              class="w-[7px] h-[7px] rounded-full bg-ios-line shrink-0"
+              class="hidden sm:block w-[7px] h-[7px] rounded-full bg-ios-line shrink-0"
               aria-hidden="true"
             ></span>
             <div class="flex items-center gap-2">
@@ -94,27 +96,31 @@ const FAMILY_PROGRESS_TEXT: Record<string, string> = {
           </div>
 
           <!-- Cert name -->
-          <div class="flex items-center gap-3 text-white">
-            <span class="text-[28px] font-bold leading-[1.2] whitespace-nowrap font-heading">
+          <div
+            class="flex flex-wrap md:flex-nowrap items-center gap-x-3 text-white text-[22px] md:text-[28px] leading-[1.2] font-heading"
+          >
+            <span class="font-bold whitespace-nowrap">
               {{ cert().familyLabel }}
             </span>
-            <span class="text-[28px] font-semibold leading-[1.2] font-heading">-</span>
-            <span class="text-[28px] font-semibold leading-[1.2] truncate font-heading">
+            <span class="font-semibold">-</span>
+            <span class="font-semibold min-w-0 md:truncate">
               {{ cert().fullName }}
             </span>
           </div>
         </div>
 
         <!-- Action buttons -->
-        <div class="flex flex-wrap items-start gap-6 shrink-0">
+        <div
+          class="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-start gap-3 md:gap-6 w-full lg:w-auto shrink-0"
+        >
           <button
             type="button"
-            class="inline-flex items-center justify-center h-11 rounded-xl text-[16px] font-semibold leading-[1.4] text-white border border-white/30 hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-[177px]"
+            class="inline-flex items-center justify-center h-11 rounded-xl text-[16px] font-semibold leading-[1.4] text-white border border-white/30 hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-full sm:w-[177px]"
             (click)="viewDetails.emit(cert().code)"
           >
             {{ lang.t('dashboard.certs.showDetails') }}
           </button>
-          <div class="flex flex-col gap-2 w-[217px]">
+          <div class="flex flex-col gap-2 w-full sm:w-[217px]">
             <button
               type="button"
               class="inline-flex items-center justify-center gap-2 h-11 rounded-xl text-[16px] font-semibold leading-[1.4] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50 whitespace-nowrap ps-6 pe-4 w-full hover:opacity-90 disabled:opacity-60 disabled:pointer-events-none"

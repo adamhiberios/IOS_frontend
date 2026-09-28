@@ -5,7 +5,7 @@ import { firstValueFrom } from 'rxjs';
 
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
-import { CanadaFlag } from '@ui';
+import { PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { ExamApi } from '../data-access/exam.api';
@@ -38,14 +38,17 @@ type ReviewFailure = 'notFound' | 'forbidden' | 'notTerminal' | 'unknown';
 @Component({
   selector: 'ios-exam-review-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, DashboardNavbar, CanadaFlag],
+  imports: [RouterLink, DashboardNavbar, PageFooter],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
       <ios-dashboard-navbar />
 
       <div class="w-full px-4 md:px-20 pt-5 pb-3">
         <nav class="max-w-[1400px] mx-auto" aria-label="Breadcrumb">
-          <ol class="flex items-center gap-2 text-[14px] font-medium leading-[1.4]" role="list">
+          <ol
+            class="flex flex-wrap items-center gap-2 text-[14px] font-medium leading-[1.4]"
+            role="list"
+          >
             <li>
               <a
                 routerLink="/dashboard"
@@ -201,15 +204,7 @@ type ReviewFailure = 'notFound' | 'forbidden' | 'notTerminal' | 'unknown';
         </div>
       </main>
 
-      <footer class="bg-ios-fg w-full py-4 mt-4">
-        <div
-          class="max-w-[1400px] mx-auto px-8 flex items-center justify-center gap-2
-                 text-ios-fg-7 text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: currentYear }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer variant="neutral" class="mt-4" />
     </div>
   `,
 })
@@ -218,7 +213,6 @@ export class ExamReviewPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   protected readonly lang = inject(LanguageService);
-  protected readonly currentYear = String(new Date().getFullYear());
 
   private readonly attemptId = this.route.snapshot.paramMap.get('attemptId') ?? '';
 

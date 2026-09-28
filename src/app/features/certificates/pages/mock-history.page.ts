@@ -4,7 +4,7 @@ import { LucideArrowLeft, LucideChevronRight } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
 
-import { CanadaFlag, IosIcon, provideIcons } from '@ui';
+import { IosIcon, provideIcons, PageFooter } from '@ui';
 import { DashboardNavbar } from '@layouts';
 
 import { MockStore } from '../data-access/mock.store';
@@ -18,7 +18,7 @@ import { type MockHistoryItem } from '../data-access/mock.model';
 @Component({
   selector: 'ios-mock-history-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, DashboardNavbar, CanadaFlag, IosIcon],
+  imports: [RouterLink, DashboardNavbar, IosIcon, PageFooter],
   providers: [provideIcons(LucideArrowLeft, LucideChevronRight)],
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -128,21 +128,13 @@ import { type MockHistoryItem } from '../data-access/mock.model';
         </div>
       </main>
 
-      <footer class="bg-ios-fg w-full py-4">
-        <div
-          class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-fg-7 text-xs"
-        >
-          <ios-canada-flag aria-hidden="true" />
-          <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-        </div>
-      </footer>
+      <ios-page-footer variant="neutral" />
     </div>
   `,
 })
 export class MockHistoryPage {
   protected readonly lang = inject(LanguageService);
   protected readonly store = inject(MockStore);
-  protected readonly yearStr = String(new Date().getFullYear());
 
   constructor() {
     void this.store.loadHistory();

@@ -9,7 +9,7 @@ import {
 } from '@lucide/angular';
 
 import { LanguageService } from '@core/i18n';
-import { CanadaFlag, IosIcon } from '@ui';
+import { PageBreadcrumbBar, PageFooter } from '@ui';
 import { provideIcons } from '@ui';
 
 import { BarChart } from '@ui/bar-chart/bar-chart';
@@ -52,9 +52,9 @@ import { formatPassRate } from '../data-access/insights.model';
     CertProgressCard,
     ExamHistory,
     LearningCard,
-    CanadaFlag,
     RouterLink,
-    IosIcon,
+    PageBreadcrumbBar,
+    PageFooter,
   ],
   providers: [
     provideIcons(LucideArrowLeft, LucideAward, LucideCircleCheck, LucideClock, LucideGraduationCap),
@@ -65,39 +65,24 @@ import { formatPassRate } from '../data-access/insights.model';
       <ios-dashboard-navbar />
 
       <!-- ── Breadcrumb bar ─────────────────────────────────────────────── -->
-      <div class="w-full bg-white border-b border-ios-surface-soft">
-        <div class="max-w-[1400px] mx-auto px-4 md:px-8 h-[70px] flex items-center">
-          <div class="flex items-center gap-4">
-            <a
-              routerLink="/dashboard"
-              class="flex items-center justify-center w-11 h-11 rounded-xl bg-ios-surface-soft text-ios-fg hover:bg-ios-surface-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
-              [attr.aria-label]="lang.t('dashboard.breadcrumb.backToDashboard')"
-            >
-              <ios-icon name="arrow-left" class="w-5 h-5" aria-hidden="true" />
-            </a>
-            <nav aria-label="Breadcrumb">
-              <ol
-                class="flex items-center gap-3 text-base leading-[1.4] whitespace-nowrap"
-                role="list"
-              >
-                <li>
-                  <a
-                    routerLink="/dashboard"
-                    class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
-                    >{{ lang.t('dashboard.breadcrumb.dashboard') }}</a
-                  >
-                </li>
-                <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
-                <li>
-                  <span class="font-semibold text-ios-fg-13" aria-current="page">{{
-                    lang.t('dashboard.breadcrumb.overview')
-                  }}</span>
-                </li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-      </div>
+      <ios-page-breadcrumb-bar
+        backLink="/dashboard"
+        [backLabel]="lang.t('dashboard.breadcrumb.backToDashboard')"
+      >
+        <li>
+          <a
+            routerLink="/dashboard"
+            class="font-medium text-ios-fg-8 hover:text-ios-fg-13 transition-colors"
+            >{{ lang.t('dashboard.breadcrumb.dashboard') }}</a
+          >
+        </li>
+        <li class="font-medium text-ios-fg-8" aria-hidden="true">/</li>
+        <li>
+          <span class="font-semibold text-ios-fg-13" aria-current="page">{{
+            lang.t('dashboard.breadcrumb.overview')
+          }}</span>
+        </li>
+      </ios-page-breadcrumb-bar>
 
       <main class="flex-1 bg-white" id="main-content">
         <div class="max-w-[1400px] mx-auto px-4 md:px-8 py-6">
@@ -291,14 +276,7 @@ import { formatPassRate } from '../data-access/insights.model';
       </main>
 
       @if (store.hasActivity()) {
-        <footer class="bg-ios-brand-dark w-full py-4">
-          <div
-            class="max-w-[1400px] mx-auto px-4 md:px-8 flex items-center justify-center gap-2 text-ios-brand-muted text-xs"
-          >
-            <ios-canada-flag aria-hidden="true" />
-            <span>{{ lang.t('common.copyright', { year: yearStr }) }}</span>
-          </div>
-        </footer>
+        <ios-page-footer />
       }
     </div>
   `,
@@ -310,9 +288,6 @@ export class DashboardOverviewPage implements OnInit {
 
   /** Exposed for the template to format the 0–1 pass-rate as a percentage. */
   protected readonly formatPassRate = formatPassRate;
-
-  protected readonly currentYear = new Date().getFullYear();
-  protected readonly yearStr = String(this.currentYear);
 
   protected readonly learningCard = computed(() => this.store.learningCard());
   protected readonly certs = computed(() => this.store.validCertifications());
