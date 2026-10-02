@@ -12,8 +12,7 @@ import { examDraftSweepGuard } from './guards/exam-draft-sweep.guard';
  *
  * Routes:
  *   /assessments/start?t=<token>   → ExamStartPage   (emailed direct link → resolve → ready/run/review)
- *   /assessments/verify           → ExamVerifyPage  (validate-access + identity — Slice 5b)
- *   /assessments/ready             → ExamReadyPage   (start CTA — Slice 5b)
+ *   /assessments/ready             → ExamReadyPage   (name for the certificate + start — IDD-343)
  *   /assessments/run/:sessionId    → ExamRunnerPage  (in-exam; route-scoped store + WS)
  *   /assessments/result/:sessionId → ExamResultPage  (score-only; review disabled, BE-I-22)
  *
@@ -46,11 +45,6 @@ export const ASSESSMENTS_ROUTES: Routes = [
         path: 'start',
         title: 'Opening Exam — Institute of Scrum',
         loadComponent: () => import('./pages/exam-start.page').then((m) => m.ExamStartPage),
-      },
-      {
-        path: 'verify',
-        title: 'Verify Exam — Institute of Scrum',
-        loadComponent: () => import('./pages/exam-verify.page').then((m) => m.ExamVerifyPage),
       },
       {
         path: 'ready',

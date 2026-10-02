@@ -13,16 +13,8 @@
 /** Body for `POST /exam/pre-exam-confirmation`. */
 export interface PreExamConfirmationRequestDto {
   readonly certId: string;
-  /** Attestation only — NOT persisted by the backend. */
+  /** Name for the certificate. (Backend currently treats it as attestation only — see IDD-343.) */
   readonly fullName: string;
-  /** Attestation only — NOT persisted by the backend. */
-  readonly idNumber?: string;
-}
-
-/** Body for `POST /exam/validate-access`. `examId` is optional (resolved from the code). */
-export interface ValidateAccessRequestDto {
-  readonly code: string;
-  readonly examId?: string;
 }
 
 /**
@@ -66,25 +58,6 @@ export interface ExamQuestionDto {
   readonly questionType: string;
   readonly position: number;
   readonly options?: readonly ExamOptionDto[];
-}
-
-/** `POST /exam/validate-access` → 200. */
-export interface ValidateAccessResponseDto {
-  readonly valid: boolean;
-  readonly accessCodeId: string;
-  /** ISO-8601 (backend serialises a Date). */
-  readonly expiresAt: string;
-  /**
-   * Certificate the exam belongs to — needed for pre-exam confirmation.
-   * Absent on API builds before backend `c0af771`.
-   */
-  readonly certId?: string;
-  readonly exam: {
-    readonly id: string;
-    readonly title: string;
-    readonly durationMinutes: number;
-    readonly passingScore: number;
-  };
 }
 
 /**

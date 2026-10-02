@@ -91,28 +91,6 @@ export type SyncStatus = 'idle' | 'syncing' | 'synced' | 'queued' | 'error';
 export type TestSessionStatus = 'active' | 'submitted' | 'expired' | 'auto_submitted';
 
 /**
- * Pre-start preview from `POST /exam/validate-access` — validates the one-time
- * access code WITHOUT consuming it and returns exam metadata + code expiry.
- * Note: the backend does NOT return `certId` here; the caller must carry it from
- * the originating page (dashboard / exam-history card) via navigation state.
- */
-export interface ExamAccessPreview {
-  readonly valid: boolean;
-  readonly accessCodeId: string;
-  /** ISO-8601 timestamp the access code expires. */
-  readonly expiresAt: string;
-  /** Backend certificate UUID the exam belongs to (absent on older API builds). */
-  readonly certId?: string;
-  readonly exam: {
-    readonly id: string;
-    readonly title: string;
-    readonly durationMinutes: number;
-    /** Passing threshold as a percentage (0–100). */
-    readonly passingScore: number;
-  };
-}
-
-/**
  * Where a direct exam link (`/assessments/start?t=<token>`) should take the
  * student, from `POST /exam/access/resolve`. Resolving never consumes the code.
  *   - `ready`     → the ready page, starting with the same token as `code`.
@@ -125,6 +103,9 @@ export type ExamLinkResolution =
       readonly examId: string;
       readonly examTitle: string;
       readonly durationMinutes: number;
+      /** Certificate the exam belongs to — for the pre-exam confirmation and the start button. */
+      readonly certId: string;
+      readonly certTitle: string;
       readonly requiresConfirmation: boolean;
     }
   | { readonly state: 'resume'; readonly sessionId: string }
@@ -174,8 +155,10 @@ export interface ExamReadyNavState {
   readonly examId: string;
   readonly examTitle: string;
   readonly durationMinutes: number;
-  /** Attestation captured on verify (journeys p.4); display/context only. */
-  readonly fullName?: string;
+  readonly certId: string;
+  readonly certTitle: string;
+  /** `start` 409s until `POST /exam/pre-exam-confirmation` is done for this purchase. */
+  readonly requiresConfirmation: boolean;
 }
 
 /**
@@ -190,15 +173,13 @@ export interface ExamResultNavState {
 }
 
 /**
- * Attestation payload for `POST /exam/pre-exam-confirmation`. `fullName` /
- * `idNumber` are validated client-side and NOT persisted by the backend — only
- * the purchase's `pre_exam_confirmed` flag is flipped. Required before starting
- * an exam when the student enrolled via purchase.
+ * Payload for `POST /exam/pre-exam-confirmation`: the name the student wants on
+ * the certificate. Required before starting an exam when the student enrolled
+ * via purchase. (IDD-343: the backend does not store the name yet.)
  */
 export interface PreExamConfirmation {
   readonly certId: string;
   readonly fullName: string;
-  readonly idNumber?: string;
 }
 
 /**

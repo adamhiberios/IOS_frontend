@@ -681,8 +681,8 @@
       "earned": "Obtenu",
       "notAttempted": "Non tenté",
       "badgeAlt": "Badge {code}",
-      "sendingExamCode": "Envoi du code…",
-      "examCodeRequestFailed": "Impossible d'envoyer votre code d'accès à l'examen. Veuillez réessayer.",
+      "sendingExamCode": "Envoi du lien…",
+      "examCodeRequestFailed": "Impossible d'envoyer le lien de votre examen final. Veuillez réessayer.",
       "startFinalExam": "Commencer l'examen final",
       "overallCompletion": "Achèvement global",
       "averageMockScore": "Score moyen",
@@ -731,7 +731,20 @@
       "continueCta": "Continuer l’apprentissage",
       "noMockExamHeading": "Aucun examen blanc trouvé",
       "noMockExamBody": "Vous n'avez encore passé aucun examen blanc",
-      "startMockExamCta": "Commencer l'examen blanc"
+      "startMockExamCta": "Commencer l'examen blanc",
+      "finalExamDialog": {
+        "close": "Fermer",
+        "confirmTitle": "Commencer votre examen final",
+        "confirmBody": "Nous enverrons le lien de l'examen final à votre adresse e-mail enregistrée. Ouvrez ce lien pour commencer l'examen.",
+        "confirm": "Confirmer",
+        "cancel": "Annuler",
+        "sending": "Envoi…",
+        "sentTitle": "Consultez vos e-mails",
+        "sentBody": "Le lien de l'examen final a été envoyé à votre adresse e-mail enregistrée. Ouvrez l'e-mail et commencez l'examen à l'aide du lien fourni.",
+        "alreadySentTitle": "Lien déjà envoyé",
+        "alreadySentBody": "Nous avons déjà envoyé le lien de l'examen final à votre adresse e-mail enregistrée et il est toujours valide. Consultez votre boîte de réception (et vos indésirables) et commencez l'examen à l'aide de ce lien.",
+        "ok": "OK"
+      }
     },
     "learning": {
       "title": "Complétez votre apprentissage",
@@ -2846,44 +2859,13 @@
       "warn10": "10 minutes restantes",
       "warn5": "5 minutes restantes"
     },
-    "verify": {
-      "pageNavAriaLabel": "Navigation de la page",
-      "backAriaLabel": "Retour au tableau de bord",
-      "title": "Vérifier pour passer l'examen",
-      "emailNotice": "Nous vous enverrons un lien pour vous diriger vers votre examen, veuillez vérifier votre e-mail :",
-      "instruction1Pre": "Le système envoie un ",
-      "instruction1Link": "lien",
-      "instruction1Post": " sécurisé et personnalisé à votre adresse e-mail enregistrée.",
-      "instruction2Pre": "Si vous ",
-      "instruction2Loses": "perdez ou manquez",
-      "instruction2Post": " le code, vous serez tenu de ",
-      "instruction2Repurchase": "racheter",
-      "instruction2End": " l'accès pour en obtenir un nouveau.",
-      "instruction3Pre": "Le lien n'est actif que pendant ",
-      "instruction3Hours": "24 heures",
-      "instruction3Post": " pour réussir le test.",
-      "continue": "Continuer",
-      "resendLink": "J'ai perdu le lien, renvoyer",
-      "codeAlreadySentNotice": "Votre code d'accès vous a déjà été envoyé par e-mail — utilisez le code de cet e-mail. Vous l'avez perdu ? Contactez le support pour qu'il soit réémis.",
-      "codeSentNotice": "Nous vous avons envoyé un code d'accès unique par e-mail. Vérifiez votre boîte de réception (et vos courriers indésirables) — le code est valable 24 heures.",
-      "codeIntro": "Saisissez le code d'accès unique reçu par e-mail et confirmez votre identité pour commencer.",
-      "codeLabel": "Code d'accès",
-      "codePlaceholder": "Collez le code reçu dans votre e-mail d'examen",
-      "codeRequired": "Saisissez votre code d'accès.",
-      "nameLabel": "Nom complet (tel qu'il doit apparaître sur votre certificat)",
-      "nameRequired": "Saisissez votre nom complet.",
-      "idLabel": "Pièce d'identité / numéro d'étudiant (facultatif)",
-      "validating": "Vérification…",
-      "invalidCode": "Ce code d'accès est invalide ou a expiré.",
-      "genericError": "Une erreur s'est produite. Veuillez réessayer."
-    },
     "start": {
       "title": "Ouverture de votre examen",
       "resolving": "Vérification de votre lien d’examen…",
-      "missingToken": "Ce lien d’examen est incomplet. Ouvrez à nouveau le lien de votre e-mail d’examen, ou saisissez votre code d’accès.",
+      "missingToken": "Ce lien d’examen est incomplet. Ouvrez à nouveau le lien de votre e-mail d’examen.",
       "invalidLink": "Ce lien d’examen est invalide ou a expiré.",
       "genericError": "Une erreur s’est produite. Veuillez réessayer.",
-      "enterCode": "Saisir le code d’accès"
+      "backToCertificates": "Retour à Mes formations et examens"
     },
     "ready": {
       "heading": "Bonjour Adam, êtes-vous prêt ?",
@@ -2893,7 +2875,6 @@
       "instruction2Pre": "Après cette période, vous devrez ",
       "instruction2Repurchase": "racheter l'accès",
       "instruction2Post": " pour en obtenir un nouveau.",
-      "letsStart": "C'est parti",
       "certAriaLabelPrefix": "Certification d'examen :",
       "durationLine": "{minutes} minutes",
       "durationBullet": "Vous disposez de {minutes} minutes pour terminer cet examen une fois commencé.",
@@ -2903,7 +2884,11 @@
       "startError": "Impossible de démarrer l'examen. Veuillez réessayer.",
       "noSessionTitle": "Aucun examen à démarrer",
       "noSessionBody": "Démarrez votre examen depuis votre page de certificat ou le lien de votre e-mail d'examen.",
-      "goToDashboard": "Aller au tableau de bord"
+      "goToDashboard": "Aller au tableau de bord",
+      "nameLabel": "Nom complet",
+      "nameRequired": "Saisissez votre nom complet.",
+      "nameNotice": "Le nom saisi figurera sur le certificat et ne pourra plus être modifié une fois le certificat délivré.",
+      "startNow": "Commencer l'examen final {cert} maintenant"
     },
     "confirmDialog": {
       "title": "Êtes-vous sûr de vouloir procéder à l'examen ?",

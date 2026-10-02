@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, type OnInit, inject, input, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  type OnInit,
+  inject,
+  input,
+  signal,
+} from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
@@ -18,14 +25,15 @@ import { type ExamReadyNavState } from '../data-access/exam.model';
  *
  * Calls `POST /exam/access/resolve`, which never consumes the code (mail
  * scanners prefetch links), and routes on the returned state:
- *   - `ready`     → the ready page with the token as `code`, same nav state the
- *                   verify page hands over, so `start` works unchanged.
+ *   - `ready`     → the ready page (name for the certificate + start), with
+ *                   the token as `code` and the exam's certificate.
  *   - `resume`    → straight back into the open sitting (the runner restores it).
  *   - `completed` → the scored attempt's review.
  * Every hop uses `replaceUrl` so the token doesn't stay in browser history.
  *
- * A missing or rejected token shows an error with a way to enter the code by
- * hand on the verify page. Unauthenticated visitors never get here — the
+ * This is the only way into an exam — there is no code-entry page (IDD-343).
+ * A missing or rejected token shows an error and a way back to My Learning &
+ * Exams, where "Start Final Exam" can email a link. Unauthenticated visitors never get here — the
  * `assessments` `authGuard` sends them to login with this URL as `returnUrl`.
  */
 @Component({
@@ -53,14 +61,14 @@ import { type ExamReadyNavState } from '../data-access/exam.model';
                 {{ message }}
               </p>
               <a
-                routerLink="/assessments/verify"
+                routerLink="/dashboard/certificates"
                 class="flex h-14 w-full items-center justify-center rounded-xl
                        bg-ios-brand-primary text-ios-brand-primary-soft font-semibold text-lg
                        transition-colors hover:bg-ios-brand-primary-hover
                        focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2
                        focus-visible:ring-ios-brand-primary/50"
               >
-                {{ lang.t('assessments.start.enterCode') }}
+                {{ lang.t('assessments.start.backToCertificates') }}
               </a>
             } @else {
               <p class="text-lg font-medium text-ios-fg-8 leading-relaxed" aria-live="polite">
@@ -109,6 +117,9 @@ export class ExamStartPage implements OnInit {
             examId: link.examId,
             examTitle: link.examTitle,
             durationMinutes: link.durationMinutes,
+            certId: link.certId,
+            certTitle: link.certTitle,
+            requiresConfirmation: link.requiresConfirmation,
           };
           await this.router.navigate(['/assessments/ready'], { state, replaceUrl: true });
           return;

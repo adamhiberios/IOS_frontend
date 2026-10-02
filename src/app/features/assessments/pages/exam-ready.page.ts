@@ -1,32 +1,47 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
 import { firstValueFrom } from 'rxjs';
 
+import { AuthStore } from '@core/auth';
 import { LanguageService } from '@core/i18n';
 import { problemDetailMessage } from '@core/http';
 
 import { AuthFooter, AuthHeader } from '@layouts/auth-shell';
-import { CertificatesBadge } from '@ui';
+import { CertificatesBadge, WarningCard } from '@ui';
 
 import { ExamApi } from '../data-access/exam.api';
 import { type StartContext } from '../data-access/exam-session.store';
 import { type ExamReadyNavState } from '../data-access/exam.model';
 
 /**
- * `ios-exam-ready-page` — final pre-start screen. Receives the validated access
- * code + exam metadata from the verify page (router nav state), shows the exam
- * details, and on "Let's start" consumes the code via `POST /exam/start` and
- * hands the live session to the runner.
+ * `ios-exam-ready-page` — the Final Exam information page (IDD-343). Reached
+ * from the emailed exam link via {@link ExamStartPage}, which hands over the
+ * link token (as `code`), the exam and its certificate in router nav state.
  *
- * If reached without nav state (e.g. a direct link / refresh), there is no code
- * to start with — a "start from your dashboard" fallback is shown instead.
+ * Asks for the full name as it should appear on the certificate — with a notice
+ * that it cannot be changed once issued — then "Start Final Exam of … Now"
+ * sends it with the pre-exam confirmation (when the purchase still needs one),
+ * consumes the code via `POST /exam/start`, and hands the session to the runner.
+ * The name is pre-filled from the profile.
+ *
+ * If reached without nav state (e.g. a refresh), there is no code to start
+ * with — a "start from your dashboard" fallback is shown instead.
  *
  * Design reference: Figma node 13271-14042.
  */
 @Component({
   selector: 'ios-exam-ready-page',
-  imports: [RouterLink, AuthHeader, AuthFooter, CertificatesBadge],
+  imports: [
+    RouterLink,
+    ReactiveFormsModule,
+    AuthHeader,
+    AuthFooter,
+    CertificatesBadge,
+    WarningCard,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-h-screen flex flex-col bg-white">
@@ -78,6 +93,41 @@ import { type ExamReadyNavState } from '../data-access/exam.model';
                   </li>
                 </ul>
 
+                <!-- Name for the certificate -->
+                <div class="flex flex-col gap-3">
+                  <div class="flex flex-col gap-1">
+                    <label
+                      for="exam-ready-full-name"
+                      class="px-2 text-base font-semibold leading-[1.4] text-ios-fg"
+                    >
+                      {{ lang.t('assessments.ready.nameLabel') }}
+                    </label>
+                    <input
+                      id="exam-ready-full-name"
+                      type="text"
+                      autocomplete="name"
+                      dir="auto"
+                      [formControl]="fullName"
+                      [attr.aria-invalid]="nameInvalid() ? 'true' : null"
+                      aria-describedby="exam-ready-name-notice exam-ready-name-error"
+                      class="w-full rounded-lg border border-ios-line bg-ios-surface-mid p-3 text-base font-bold leading-[1.3] text-ios-fg focus:outline-none focus:border-ios-fg-8 focus-visible:ring-2 focus-visible:ring-ios-brand-primary/30"
+                      [class.border-ios-danger]="nameInvalid()"
+                    />
+                    @if (nameInvalid()) {
+                      <p
+                        id="exam-ready-name-error"
+                        class="px-2 text-sm text-ios-danger"
+                        aria-live="polite"
+                      >
+                        {{ lang.t('assessments.ready.nameRequired') }}
+                      </p>
+                    }
+                  </div>
+                  <div id="exam-ready-name-notice">
+                    <ios-warning-card [text]="lang.t('assessments.ready.nameNotice')" />
+                  </div>
+                </div>
+
                 @if (errorMessage()) {
                   <p
                     class="rounded-xl bg-ios-danger-soft px-4 py-3 text-base font-medium text-ios-danger-mid"
@@ -102,7 +152,7 @@ import { type ExamReadyNavState } from '../data-access/exam.model';
                 {{
                   starting()
                     ? lang.t('assessments.ready.starting')
-                    : lang.t('assessments.ready.letsStart')
+                    : lang.t('assessments.ready.startNow', { cert: exam.certTitle })
                 }}
               </button>
             </div>
@@ -136,6 +186,21 @@ export class ExamReadyPage {
   protected readonly lang = inject(LanguageService);
   private readonly api = inject(ExamApi);
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthStore);
+
+  /** Name for the certificate — pre-filled from the profile. */
+  protected readonly fullName = inject(NonNullableFormBuilder).control(
+    this.auth.user()?.fullName ?? '',
+    { validators: [(c) => Validators.required(c), Validators.maxLength(120)] },
+  );
+  private readonly nameValue = toSignal(this.fullName.valueChanges, {
+    initialValue: this.fullName.value,
+  });
+  /** Set on the first start attempt, so an empty field isn't flagged before then. */
+  private readonly nameTouched = signal(false);
+  protected readonly nameInvalid = computed(
+    () => this.nameTouched() && this.nameValue().trim() === '',
+  );
 
   private readonly _navState = signal<ExamReadyNavState | null>(null);
   protected readonly navState = this._navState.asReadonly();
@@ -151,14 +216,18 @@ export class ExamReadyPage {
       state.code &&
       state.examId &&
       state.examTitle &&
-      typeof state.durationMinutes === 'number'
+      typeof state.durationMinutes === 'number' &&
+      state.certId &&
+      state.certTitle
     ) {
       this._navState.set({
         code: state.code,
         examId: state.examId,
         examTitle: state.examTitle,
         durationMinutes: state.durationMinutes,
-        fullName: state.fullName,
+        certId: state.certId,
+        certTitle: state.certTitle,
+        requiresConfirmation: state.requiresConfirmation === true,
       });
     }
   }
@@ -166,9 +235,16 @@ export class ExamReadyPage {
   protected async onStart(): Promise<void> {
     const exam = this._navState();
     if (!exam || this.starting()) return;
+    this.nameTouched.set(true);
+    const fullName = this.fullName.value.trim();
+    if (!fullName) return;
+
     this._error.set(null);
     this.starting.set(true);
     try {
+      if (exam.requiresConfirmation) {
+        await firstValueFrom(this.api.confirmPreExam({ certId: exam.certId, fullName }));
+      }
       const start = await firstValueFrom(this.api.start(exam.code, exam.examId));
       const ctx: StartContext = { examTitle: exam.examTitle, examId: exam.examId };
       await this.router.navigate(['/assessments/run', start.sessionId], {

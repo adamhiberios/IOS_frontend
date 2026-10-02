@@ -681,8 +681,8 @@
       "earned": "Earned",
       "notAttempted": "Not attempted",
       "badgeAlt": "{code} badge",
-      "sendingExamCode": "Sending code…",
-      "examCodeRequestFailed": "We couldn't send your exam access code. Please try again.",
+      "sendingExamCode": "Sending link…",
+      "examCodeRequestFailed": "We couldn't send your Final Exam link. Please try again.",
       "startFinalExam": "Start Final Exam",
       "overallCompletion": "Overall Completion",
       "averageMockScore": "Average Mock Score",
@@ -731,7 +731,20 @@
       "continueCta": "Continue learning",
       "noMockExamHeading": "No mock exam found",
       "noMockExamBody": "You have not previously performed any mock exam",
-      "startMockExamCta": "Start Mock Exam"
+      "startMockExamCta": "Start Mock Exam",
+      "finalExamDialog": {
+        "close": "Close",
+        "confirmTitle": "Start your Final Exam",
+        "confirmBody": "We'll send the Final Exam link to your registered email address. Open that link to start the exam.",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "sending": "Sending…",
+        "sentTitle": "Check your email",
+        "sentBody": "The Final Exam link has been sent to your registered email address. Open the email and start the exam using the link provided.",
+        "alreadySentTitle": "Link already sent",
+        "alreadySentBody": "We've already sent the Final Exam link to your registered email address and it's still valid. Check your inbox (and spam folder) and start the exam using that link.",
+        "ok": "OK"
+      }
     },
     "learning": {
       "title": "Complete your learning",
@@ -2846,44 +2859,13 @@
       "warn10": "10 minutes remaining",
       "warn5": "5 minutes remaining"
     },
-    "verify": {
-      "pageNavAriaLabel": "Page navigation",
-      "backAriaLabel": "Go back to dashboard",
-      "title": "Verify to go through exam",
-      "emailNotice": "We will send you a link to direct you to your exam, please check your Email:",
-      "instruction1Pre": "The system send a secure, personalized ",
-      "instruction1Link": "link",
-      "instruction1Post": " to you registered email address.",
-      "instruction2Pre": "If you ",
-      "instruction2Loses": "loses or misses",
-      "instruction2Post": " the code, they will be required to ",
-      "instruction2Repurchase": "repurchase",
-      "instruction2End": " access to obtain a new one.",
-      "instruction3Pre": "The link is only active for ",
-      "instruction3Hours": "24 hours",
-      "instruction3Post": " to pass the test.",
-      "continue": "Continue",
-      "resendLink": "I lost link, Resend link",
-      "codeAlreadySentNotice": "Your access code was already emailed to you — use the code from that email. Lost it? Contact support to have it re-issued.",
-      "codeSentNotice": "We've emailed you a one-time access code. Check your inbox (and spam folder) — the code is valid for 24 hours.",
-      "codeIntro": "Enter the one-time access code from your exam email and confirm your identity to begin.",
-      "codeLabel": "Access code",
-      "codePlaceholder": "Paste the code from your exam email",
-      "codeRequired": "Enter your access code.",
-      "nameLabel": "Full name (as it should appear on your certificate)",
-      "nameRequired": "Enter your full name.",
-      "idLabel": "Government / student ID (optional)",
-      "validating": "Checking…",
-      "invalidCode": "This access code is invalid or has expired.",
-      "genericError": "Something went wrong. Please try again."
-    },
     "start": {
       "title": "Opening your exam",
       "resolving": "Checking your exam link…",
-      "missingToken": "This exam link is incomplete. Open the link from your exam email again, or enter your access code.",
+      "missingToken": "This exam link is incomplete. Open the link from your exam email again.",
       "invalidLink": "This exam link is invalid or has expired.",
       "genericError": "Something went wrong. Please try again.",
-      "enterCode": "Enter access code instead"
+      "backToCertificates": "Back to My Learning & Exams"
     },
     "ready": {
       "heading": "Are you ready?",
@@ -2893,7 +2875,6 @@
       "instruction2Pre": "After this period, you will need to ",
       "instruction2Repurchase": "repurchase access",
       "instruction2Post": " to get a new one.",
-      "letsStart": "Let's start",
       "certAriaLabelPrefix": "Exam certification:",
       "durationLine": "{minutes} minutes",
       "durationBullet": "You have {minutes} minutes to complete this exam once you start.",
@@ -2903,7 +2884,11 @@
       "startError": "The exam couldn't be started. Please try again.",
       "noSessionTitle": "No exam to start",
       "noSessionBody": "Start your exam from your certificate page or the link in your exam email.",
-      "goToDashboard": "Go to dashboard"
+      "goToDashboard": "Go to dashboard",
+      "nameLabel": "Full Name",
+      "nameRequired": "Enter your full name.",
+      "nameNotice": "The name entered will appear on the certificate and cannot be changed once the certificate has been issued.",
+      "startNow": "Start Final Exam of {cert} Now"
     },
     "confirmDialog": {
       "title": "Are you sure you will proceed with the exam?",

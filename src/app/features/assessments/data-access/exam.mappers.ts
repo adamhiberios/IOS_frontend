@@ -13,11 +13,9 @@ import {
   type ScoreResultDto,
   type SessionStatusResponseDto,
   type StartExamResponseDto,
-  type ValidateAccessResponseDto,
 } from './exam.dto';
 import {
   type AnswerMap,
-  type ExamAccessPreview,
   type ExamAttemptReview,
   type ExamLinkResolution,
   type ExamOption,
@@ -80,21 +78,6 @@ export function toExamSessionSnapshot(dto: SessionStatusResponseDto): ExamSessio
   };
 }
 
-export function toExamAccessPreview(dto: ValidateAccessResponseDto): ExamAccessPreview {
-  return {
-    valid: dto.valid,
-    accessCodeId: dto.accessCodeId,
-    expiresAt: dto.expiresAt,
-    certId: dto.certId,
-    exam: {
-      id: dto.exam.id,
-      title: dto.exam.title,
-      durationMinutes: dto.exam.durationMinutes,
-      passingScore: dto.exam.passingScore,
-    },
-  };
-}
-
 /**
  * Narrows the resolve response into the discriminated union. A state whose
  * required id is missing (or an unknown state) returns `null` — the caller
@@ -108,6 +91,8 @@ export function toExamLinkResolution(dto: ExamLinkResponseDto): ExamLinkResoluti
         examId: dto.exam.id,
         examTitle: dto.exam.title,
         durationMinutes: dto.exam.durationMinutes,
+        certId: dto.cert.id,
+        certTitle: dto.cert.title,
         requiresConfirmation: dto.requiresConfirmation,
       };
     case 'resume':

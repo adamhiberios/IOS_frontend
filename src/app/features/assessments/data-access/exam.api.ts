@@ -16,12 +16,9 @@ import {
   type SessionStatusResponseDto,
   type StartExamRequestDto,
   type StartExamResponseDto,
-  type ValidateAccessRequestDto,
-  type ValidateAccessResponseDto,
 } from './exam.dto';
 import {
   toAnswersDto,
-  toExamAccessPreview,
   toExamAttemptReview,
   toExamLinkResolution,
   toExamScoreResult,
@@ -30,7 +27,6 @@ import {
 } from './exam.mappers';
 import {
   type AnswerMap,
-  type ExamAccessPreview,
   type ExamAttemptReview,
   type ExamLinkResolution,
   type ExamScoreResult,
@@ -52,7 +48,6 @@ import {
  * Error contract (RFC-7807; branch on `code` via `problemDetailCode`):
  *   • start        — 409 when an active session exists, the code is spent, or
  *                    pre-exam confirmation is still required.
- *   • validate     — 403 invalid/expired code.
  *   • autosave     — 409 when the session has expired.
  *   • submit       — 409 when the session is already submitted (terminal).
  *   • late-submit  — 403 when the 2-minute grace window has closed.
@@ -64,14 +59,13 @@ export class ExamApi {
   private readonly base = `${environment.apiBaseUrl}/exam`;
 
   /**
-   * `POST /exam/pre-exam-confirmation` — flip the purchase's identity-confirmed
-   * flag before starting. The name/ID are attestation only and are not persisted.
+   * `POST /exam/pre-exam-confirmation` — send the name for the certificate and
+   * flip the purchase's confirmed flag before starting.
    */
   confirmPreExam(payload: PreExamConfirmation): Observable<string> {
     const body: PreExamConfirmationRequestDto = {
       certId: payload.certId,
       fullName: payload.fullName,
-      ...(payload.idNumber ? { idNumber: payload.idNumber } : {}),
     };
     return this.http
       .post<PreExamConfirmationResponseDto>(`${this.base}/pre-exam-confirmation`, body)
@@ -88,18 +82,6 @@ export class ExamApi {
     return this.http
       .post<ExamLinkResponseDto>(`${this.base}/access/resolve`, body)
       .pipe(map(toExamLinkResolution));
-  }
-
-  /**
-   * `POST /exam/validate-access` — validate the one-time code WITHOUT consuming
-   * it; returns exam metadata + the code expiry. `examId` is optional (the
-   * backend resolves it from the code when omitted).
-   */
-  validateAccess(code: string, examId?: string): Observable<ExamAccessPreview> {
-    const body: ValidateAccessRequestDto = { code, ...(examId ? { examId } : {}) };
-    return this.http
-      .post<ValidateAccessResponseDto>(`${this.base}/validate-access`, body)
-      .pipe(map(toExamAccessPreview));
   }
 
   /**
