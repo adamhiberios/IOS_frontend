@@ -52,7 +52,6 @@ export interface RegisterPayload {
   readonly firstName: string;
   readonly lastName: string;
   readonly country: string;
-  readonly username: string;
   readonly email: string;
   readonly password: string;
   readonly newsletter: boolean;

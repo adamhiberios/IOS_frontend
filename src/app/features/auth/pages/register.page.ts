@@ -125,16 +125,6 @@ import {
             </div>
 
             <ios-input
-              id="username"
-              [label]="lang.t('auth.register.usernameLabel')"
-              [placeholder]="lang.t('auth.register.usernamePlaceholder')"
-              autocomplete="username"
-              [required]="true"
-              [control]="form.controls.username"
-              [errorText]="usernameErrorText()"
-            />
-
-            <ios-input
               id="email"
               [label]="lang.t('auth.register.emailLabel')"
               type="email"
@@ -243,9 +233,6 @@ export class RegisterPage {
       firstName: this.fb.control('', { validators: [Validators.required] }),
       lastName: this.fb.control('', { validators: [Validators.required] }),
       country: this.fb.control('', { validators: [Validators.required] }),
-      username: this.fb.control('', {
-        validators: [Validators.required, Validators.minLength(3)],
-      }),
       email: this.fb.control('', {
         validators: [Validators.required, Validators.email],
       }),
@@ -295,13 +282,6 @@ export class RegisterPage {
    * reactive to locale changes.
    * ---------------------------------------------------------------------- */
 
-  protected readonly usernameErrorText = computed(() => {
-    const c = this.form.controls.username;
-    if (c.hasError('required')) return this.lang.t('auth.register.usernameRequired');
-    if (c.hasError('minlength')) return this.lang.t('auth.register.usernameMinLength');
-    return '';
-  });
-
   protected readonly emailErrorText = computed(() => {
     const c = this.form.controls.email;
     if (c.hasError('required')) return this.lang.t('auth.register.emailRequired');
@@ -342,7 +322,6 @@ export class RegisterPage {
         firstName: v.firstName,
         lastName: v.lastName,
         country: v.country,
-        username: v.username,
         email: v.email,
         password: v.password,
         newsletter: v.newsletter,

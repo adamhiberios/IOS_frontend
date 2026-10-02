@@ -48,11 +48,12 @@ import { AccentBars, Button, Input as IosInput } from '@ui';
               {{ lang.t('auth.login.title') }}
             </h2>
 
-            <!-- Email or Username -->
+            <!-- Email (the backend authenticates by email only — IDD-398) -->
             <ios-input
               id="identifier"
               [label]="lang.t('auth.login.emailLabel')"
-              type="text"
+              type="email"
+              autocomplete="email"
               [control]="form.controls.identifier"
               [placeholder]="lang.t('auth.login.emailPlaceholder')"
               [errorText]="hasError('identifier') ? lang.t('auth.login.emailError') : ''"
@@ -142,7 +143,7 @@ export class LoginPage {
 
   protected readonly form = this.fb.group({
     identifier: this.fb.control('', {
-      validators: [Validators.required],
+      validators: [Validators.required, Validators.email],
     }),
     password: this.fb.control('', {
       validators: [Validators.required],
