@@ -58,3 +58,20 @@ export interface LessonImportPreviewDto {
 export interface LessonImportPreviewResponseDto {
   readonly data: LessonImportPreviewDto;
 }
+
+/**
+ * `POST /admin/blog/:id/content/import` — the same report as a lesson, keyed by
+ * `articleId`. Blog images are public: `html` carries a permanent `<img src>`,
+ * `previewHtml` is identical and `urlExpiresInSeconds` is `null`.
+ */
+export interface BlogImportPreviewDto extends Omit<
+  LessonImportPreviewDto,
+  'lessonId' | 'urlExpiresInSeconds'
+> {
+  readonly articleId: string;
+  readonly urlExpiresInSeconds: null;
+}
+
+export interface BlogImportPreviewResponseDto {
+  readonly data: BlogImportPreviewDto;
+}

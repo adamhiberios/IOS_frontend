@@ -1,8 +1,7 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
-import { type ProblemDetails, problemDetailMessage } from '@core/http';
+import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
 
 import { AdminCatalogApi } from './catalog.api';
@@ -21,13 +20,7 @@ import {
   activeFirstByPosition,
 } from './curriculum.model';
 import { AdminLessonImportApi } from './lesson-import.api';
-import { type LessonImportIssue, isKnownIssueCode } from './lesson-import.model';
-
-/**
- * A Word document that could not become lesson content. Its message is already
- * translated and shown as the dialog's error; nothing was saved to the body.
- */
-class LessonContentError extends Error {}
+import { ContentImportError, importErrorText, importIssueText } from './content-import.messages';
 
 /** Certs offered in the picker (backend max page size). */
 const CERT_PICKER_LIMIT = 100;
@@ -217,7 +210,7 @@ export class AdminCurriculumStore {
         return;
       }
 
-      if (!file) throw new LessonContentError(this.lang.t('admin.lessonImport.fileRequired'));
+      if (!file) throw new ContentImportError(this.lang.t('admin.lessonImport.fileRequired'));
       const newId = await firstValueFrom(
         this.api.createLesson(toCreateLessonBody(draft, moduleId)),
       );
@@ -237,7 +230,7 @@ export class AdminCurriculumStore {
   }
 
   /**
-   * Convert a .docx to lesson HTML. Throws {@link LessonContentError} with a
+   * Convert a .docx to lesson HTML. Throws {@link ContentImportError} with a
    * translated message when the document cannot be used.
    */
   private async convertDocx(lessonId: string, file: File): Promise<string> {
@@ -245,42 +238,22 @@ export class AdminCurriculumStore {
     try {
       result = await firstValueFrom(this.lessonImport.convert(lessonId, file));
     } catch (err) {
-      throw new LessonContentError(this.convertErrorText(err));
+      throw new ContentImportError(importErrorText(this.t, err));
     }
     if (!result.canSave) {
-      throw new LessonContentError(
+      throw new ContentImportError(
         [
           this.lang.t('admin.lessonImport.errorsIntro'),
-          ...result.errors.map((i) => this.issueText(i)),
+          ...result.errors.map((i) => importIssueText(this.t, i)),
         ].join(' '),
       );
     }
-    this._importWarnings.set(result.warnings.map((i) => this.issueText(i)));
+    this._importWarnings.set(result.warnings.map((i) => importIssueText(this.t, i)));
     return result.html;
   }
 
-  /**
-   * Localised text for an import issue. Codes are stable API; the server's
-   * English `message` is only the fallback for a code this build doesn't know.
-   */
-  issueText(issue: LessonImportIssue): string {
-    if (!isKnownIssueCode(issue.code)) return issue.message;
-    // The converter's own wording is the only useful content of this one.
-    if (issue.code === 'CONVERTER_WARNING' && issue.message) return issue.message;
-    return this.lang.t(`admin.lessonImport.issues.${issue.code}`, issue.detail);
-  }
-
-  /** An unreadable file is a 400 whose `errors[0].code` says why. */
-  private convertErrorText(err: unknown): string {
-    if (err instanceof HttpErrorResponse) {
-      const first = (err.error as ProblemDetails | null)?.errors?.[0];
-      if (first && isKnownIssueCode(first.code)) {
-        return this.issueText({ code: first.code, message: first.message, detail: {} });
-      }
-      if (err.status === 503) return this.lang.t('admin.lessonImport.storageUnavailable');
-    }
-    return problemDetailMessage(err) ?? this.lang.t('admin.lessonImport.uploadError');
-  }
+  private readonly t = (key: string, params?: Record<string, string | number>): string =>
+    this.lang.t(key, params);
 
   clearImportWarnings(): void {
     this._importWarnings.set([]);
@@ -323,7 +296,7 @@ export class AdminCurriculumStore {
       return true;
     } catch (err) {
       this._actionError.set(
-        err instanceof LessonContentError
+        err instanceof ContentImportError
           ? err.message
           : (problemDetailMessage(err) ?? this.lang.t('admin.curriculum.saveError')),
       );

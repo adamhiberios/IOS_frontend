@@ -56,19 +56,24 @@ export interface BlogAdminDetail extends BlogAdminItem {
   readonly translations: Readonly<Record<string, BlogLocaleContent>>;
 }
 
-/** Editable canonical English fields when creating an article. */
+/**
+ * Editable canonical English fields when creating an article. The body is not
+ * here: it comes from a Word document, converted by the backend (see
+ * `blog-import.api.ts`).
+ */
 export interface CreateBlogPayload {
   readonly title: string;
-  readonly contentHtml: string;
   /** Optional explicit slug; when blank the backend derives one from the title. */
   readonly slug: string | null;
   readonly metaDescription: string | null;
 }
 
-/** Editable canonical English fields when updating (slug immutable once published). */
+/**
+ * Editable canonical English fields when updating (slug immutable once
+ * published). The body only changes when a new Word document is converted.
+ */
 export interface UpdateBlogPayload {
   readonly title: string;
-  readonly contentHtml: string;
   readonly slug: string | null;
   readonly metaDescription: string | null;
   /** Cover URL as it should be saved; empty string removes the cover. */

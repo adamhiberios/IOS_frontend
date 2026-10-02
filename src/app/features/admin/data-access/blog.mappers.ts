@@ -62,28 +62,38 @@ export function toBlogAdminDetail(dto: BlogAdminDetailDto): BlogAdminDetail {
   };
 }
 
+/**
+ * Body for the placeholder an article starts as. The Word import needs an
+ * existing article id, and the backend requires a non-empty body on create, so
+ * the draft is created with a stub body — drafts are never public — and the
+ * converted content replaces it straight away.
+ */
+export const NEW_ARTICLE_PLACEHOLDER_HTML = '<p></p>';
+
 /** Build the create body: English fields; blank slug/meta omitted (backend derives). */
 export function toCreateBlogBody(payload: CreateBlogPayload): CreateBlogBody {
   const slug = payload.slug?.trim();
   const metaDescription = payload.metaDescription?.trim();
   return {
     title: payload.title.trim(),
-    contentHtml: payload.contentHtml,
+    contentHtml: NEW_ARTICLE_PLACEHOLDER_HTML,
     ...(slug ? { slug } : {}),
     ...(metaDescription ? { metaDescription } : {}),
   };
 }
 
 /**
- * Build the update body. Title + content are always sent; `metaDescription` and
- * the cover fields are sent as-is (empty string clears them); `slug` is sent only when non-blank so a
- * published article's locked slug is never touched.
+ * Build the update body. Title is always sent; `contentHtml` only when a new
+ * Word document was converted — otherwise the stored body is left exactly as it
+ * is. `metaDescription` and the cover fields are sent as-is (empty string clears
+ * them); `slug` is sent only when non-blank so a published article's locked
+ * slug is never touched.
  */
-export function toUpdateBlogBody(payload: UpdateBlogPayload): UpdateBlogBody {
+export function toUpdateBlogBody(payload: UpdateBlogPayload, contentHtml?: string): UpdateBlogBody {
   const slug = payload.slug?.trim();
   return {
     title: payload.title.trim(),
-    contentHtml: payload.contentHtml,
+    ...(contentHtml !== undefined ? { contentHtml } : {}),
     metaDescription: payload.metaDescription?.trim() ?? '',
     coverImageUrl: payload.coverImageUrl.trim(),
     coverImageAlt: payload.coverImageAlt.trim(),

@@ -5,7 +5,10 @@ function toIssue(dto: LessonImportIssueDto): LessonImportIssue {
   return { code: dto.code, message: dto.message, detail: dto.detail ?? {} };
 }
 
-export function toLessonImportResult(dto: LessonImportPreviewDto): LessonImportResult {
+/** Shared by the lesson and blog imports — only the fields both reports carry. */
+export function toLessonImportResult(
+  dto: Pick<LessonImportPreviewDto, 'canSave' | 'html' | 'errors' | 'warnings'>,
+): LessonImportResult {
   return {
     canSave: dto.canSave,
     html: dto.html,

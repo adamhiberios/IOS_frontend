@@ -28,7 +28,6 @@ import {
   DialogFooter,
   DialogEscape,
 } from '@ui';
-import { RichText } from '@ui/rich-text';
 
 import { BlogCoverUpload } from '../components/blog-cover-upload';
 import {
@@ -41,6 +40,10 @@ import {
   isBlogStatus,
 } from '../data-access/blog.model';
 import { AdminBlogStore } from '../data-access/blog.store';
+import {
+  LESSON_IMPORT_FILE_ACCEPT,
+  LESSON_IMPORT_MAX_FILE_BYTES,
+} from '../data-access/lesson-import.model';
 
 /** `Validators.required` wrapped as a call (unbound-method rule). */
 const required: ValidatorFn = (control) => Validators.required(control);
@@ -70,6 +73,11 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
  * runs the lifecycle actions; `super_admin` does everything (the backend
  * enforces the split — the UI only hides what the current staff member can't
  * do). Server state + actions live in {@link AdminBlogStore}.
+ *
+ * Article content is a Word document, not typed in — the same flow as lessons:
+ * the admin picks the article's .docx (and one per translation), the backend
+ * converts it to HTML and the store saves it. Required on create; on edit,
+ * picking a file replaces the content and leaving it empty keeps the current one.
  */
 @Component({
   selector: 'ios-admin-blog-page',
@@ -77,7 +85,6 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
     DialogEscape,
     ReactiveFormsModule,
     IosInput,
-    RichText,
     Select,
     Button,
     BlogCoverUpload,
@@ -248,6 +255,29 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
           </table>
         </div>
 
+        @if (store.importWarnings().length > 0 && !dialog()) {
+          <div
+            class="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900"
+            role="status"
+          >
+            <div class="flex items-start justify-between gap-3">
+              <p class="font-medium">{{ lang.t('admin.blogImport.savedWithWarnings') }}</p>
+              <button
+                type="button"
+                (click)="store.clearImportWarnings()"
+                class="text-xs underline hover:text-amber-950"
+              >
+                {{ lang.t('admin.lessonImport.dismiss') }}
+              </button>
+            </div>
+            <ul class="mt-1 list-disc space-y-1 ps-5 text-xs">
+              @for (w of store.importWarnings(); track $index) {
+                <li>{{ w }}</li>
+              }
+            </ul>
+          </div>
+        }
+
         @if (store.actionError() && !dialog() && !pendingAction()) {
           <div class="mt-3 text-center" role="alert">
             <p class="text-sm text-red-600">{{ store.actionError() }}</p>
@@ -339,15 +369,69 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                   />
                 }
 
+                <!-- Content: a Word document, converted and saved by the backend -->
                 <div>
-                  <ios-rich-text
-                    id="blog-content"
-                    [label]="lang.t('admin.blog.contentLabel')"
-                    [control]="form.controls.contentHtml"
-                    [placeholder]="lang.t('admin.blog.contentPlaceholder')"
-                    [errorText]="lang.t('admin.blog.contentError')"
-                  />
-                  <p class="text-xs text-gray-400 mt-1">{{ lang.t('admin.blog.contentHint') }}</p>
+                  <span class="block text-sm font-heading font-medium text-ios-brand-dark mb-1">
+                    {{ lang.t('admin.blogImport.fileLabel') }}
+                  </span>
+                  <div
+                    class="rounded-lg border border-dashed bg-gray-50 p-4"
+                    [class.border-gray-300]="!fileError()"
+                    [class.border-ios-brand-primary]="fileError()"
+                  >
+                    <div class="flex flex-wrap items-center gap-3">
+                      <label
+                        for="blog-docx"
+                        class="cursor-pointer rounded-lg border border-ios-brand-primary bg-white px-4 py-2 text-sm font-semibold text-ios-brand-primary hover:bg-ios-brand-primary-soft focus-within:ring-2 focus-within:ring-ios-brand-primary focus-within:ring-offset-2"
+                      >
+                        {{
+                          articleFile()
+                            ? lang.t('admin.lessonImport.chooseAnother')
+                            : lang.t('admin.lessonImport.chooseFile')
+                        }}
+                      </label>
+                      <input
+                        id="blog-docx"
+                        type="file"
+                        class="sr-only"
+                        [accept]="docxAccept"
+                        aria-describedby="blog-docx-hint"
+                        (change)="onDocxSelected($event)"
+                      />
+                      @if (articleFile(); as f) {
+                        <span class="text-sm text-ios-brand-dark truncate max-w-full">{{
+                          f.name
+                        }}</span>
+                        <button
+                          type="button"
+                          (click)="articleFile.set(null)"
+                          class="text-xs text-gray-500 underline hover:text-gray-800"
+                        >
+                          {{ lang.t('admin.lessonImport.removeFile') }}
+                        </button>
+                      }
+                    </div>
+                    <p id="blog-docx-hint" class="mt-2 text-xs text-gray-500">
+                      {{
+                        editingId()
+                          ? lang.t('admin.blogImport.editHint')
+                          : lang.t('admin.blogImport.createHint')
+                      }}
+                    </p>
+                    <details class="mt-2 text-xs text-gray-600">
+                      <summary class="cursor-pointer text-ios-brand-primary">
+                        {{ lang.t('admin.lessonImport.tipsToggle') }}
+                      </summary>
+                      <ul class="mt-2 list-disc space-y-1 ps-5">
+                        <li>{{ lang.t('admin.lessonImport.tipHeadings') }}</li>
+                        <li>{{ lang.t('admin.lessonImport.tipCallouts') }}</li>
+                        <li>{{ lang.t('admin.lessonImport.tipImages') }}</li>
+                      </ul>
+                    </details>
+                  </div>
+                  @if (fileError(); as msg) {
+                    <p class="mt-1 text-xs text-ios-brand-primary" role="alert">{{ msg }}</p>
+                  }
                 </div>
 
                 @if (formError()) {
@@ -365,11 +449,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                   >
                     {{ lang.t('admin.blog.cancel') }}
                   </button>
-                  <ios-button
-                    type="submit"
-                    variant="primary"
-                    [loading]="store.actionPendingId() === (editingId() ?? 'new')"
-                  >
+                  <ios-button type="submit" variant="primary" [loading]="saving()">
                     {{ lang.t('admin.blog.save') }}
                   </ios-button>
                 </ios-dialog-footer>
@@ -437,11 +517,56 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                             class="w-full h-11 px-3 rounded-lg bg-gray-50 border border-gray-200 text-sm text-ios-brand-dark focus:outline-none focus:border-ios-fg"
                           />
                         </div>
-                        <ios-rich-text
-                          [id]="'tr-content-' + loc"
-                          [label]="lang.t('admin.blog.trContentLabel')"
-                          [control]="translationsForm.controls[loc].controls.contentHtml"
-                        />
+                        <!-- This language's content: its own Word document -->
+                        <div>
+                          <span class="block text-xs font-medium text-gray-600 mb-1">
+                            {{ lang.t('admin.blogImport.trFileLabel') }}
+                          </span>
+                          <div class="flex flex-wrap items-center gap-3">
+                            <label
+                              [for]="'tr-docx-' + loc"
+                              class="cursor-pointer rounded-lg border border-ios-brand-primary bg-white px-3 py-1.5 text-sm font-semibold text-ios-brand-primary hover:bg-ios-brand-primary-soft focus-within:ring-2 focus-within:ring-ios-brand-primary focus-within:ring-offset-2"
+                            >
+                              {{
+                                trFiles()[loc]
+                                  ? lang.t('admin.lessonImport.chooseAnother')
+                                  : lang.t('admin.lessonImport.chooseFile')
+                              }}
+                            </label>
+                            <input
+                              [id]="'tr-docx-' + loc"
+                              type="file"
+                              class="sr-only"
+                              [accept]="docxAccept"
+                              [attr.aria-describedby]="'tr-docx-hint-' + loc"
+                              (change)="onTranslationDocxSelected(loc, $event)"
+                            />
+                            @if (trFiles()[loc]; as f) {
+                              <span class="text-sm text-ios-brand-dark truncate max-w-full">{{
+                                f.name
+                              }}</span>
+                              <button
+                                type="button"
+                                (click)="clearTranslationFile(loc)"
+                                class="text-xs text-gray-500 underline hover:text-gray-800"
+                              >
+                                {{ lang.t('admin.lessonImport.removeFile') }}
+                              </button>
+                            }
+                          </div>
+                          <p [id]="'tr-docx-hint-' + loc" class="mt-1 text-xs text-gray-500">
+                            {{
+                              translationsForm.controls[loc].controls.contentHtml.value
+                                ? lang.t('admin.blogImport.trHasContent')
+                                : lang.t('admin.blogImport.trNoContent')
+                            }}
+                          </p>
+                          @if (trFileErrors()[loc]; as msg) {
+                            <p class="mt-1 text-xs text-ios-brand-primary" role="alert">
+                              {{ msg }}
+                            </p>
+                          }
+                        </div>
                       </div>
                     </fieldset>
                   }
@@ -459,11 +584,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                   >
                     {{ lang.t('admin.blog.cancel') }}
                   </button>
-                  <ios-button
-                    type="submit"
-                    variant="primary"
-                    [loading]="store.actionPendingId() === editingId()"
-                  >
+                  <ios-button type="submit" variant="primary" [loading]="saving()">
                     {{ lang.t('admin.blog.save') }}
                   </ios-button>
                 </ios-dialog-footer>
@@ -553,6 +674,19 @@ export class AdminBlogPage implements OnInit {
   protected readonly editingTitle = signal('');
   protected readonly slugLocked = signal(false);
   protected readonly formError = signal<string | null>(null);
+
+  protected readonly docxAccept = LESSON_IMPORT_FILE_ACCEPT;
+  /** The Word document the article body is taken from (required on create). */
+  protected readonly articleFile = signal<File | null>(null);
+  protected readonly fileError = signal<string | null>(null);
+  /** Per-translation Word documents; a locale without one keeps its body. */
+  protected readonly trFiles = signal<Partial<Record<BlogTranslationLocale, File>>>({});
+  protected readonly trFileErrors = signal<Partial<Record<BlogTranslationLocale, string>>>({});
+  /**
+   * A dialog save is in flight. Not keyed on {@link editingId}: a create
+   * switches that to the new id mid-save.
+   */
+  protected readonly saving = computed(() => this.store.actionPendingId() !== null);
   protected readonly pendingAction = signal<{
     readonly item: BlogAdminItem;
     readonly kind: 'archive' | 'delete';
@@ -565,7 +699,6 @@ export class AdminBlogPage implements OnInit {
     title: this.fb.control('', { validators: [required, Validators.maxLength(255)] }),
     slug: this.fb.control('', { validators: [slugValidator, Validators.maxLength(255)] }),
     metaDescription: this.fb.control('', { validators: [Validators.maxLength(500)] }),
-    contentHtml: this.fb.control('', { validators: [required] }),
     coverImageUrl: this.fb.control('', { validators: [Validators.maxLength(500)] }),
     coverImageAlt: this.fb.control('', { validators: [Validators.maxLength(255)] }),
   });
@@ -635,11 +768,11 @@ export class AdminBlogPage implements OnInit {
     this.editingTitle.set('');
     this.slugLocked.set(false);
     this.formError.set(null);
+    this.resetArticleFile();
     this.form.reset({
       title: '',
       slug: '',
       metaDescription: '',
-      contentHtml: '',
       coverImageUrl: '',
       coverImageAlt: '',
     });
@@ -654,11 +787,11 @@ export class AdminBlogPage implements OnInit {
     this.editingTitle.set(detail.title);
     this.slugLocked.set(detail.status === 'published');
     this.formError.set(null);
+    this.resetArticleFile();
     this.form.reset({
       title: detail.title,
       slug: detail.slug,
       metaDescription: detail.metaDescription ?? '',
-      contentHtml: detail.contentHtml,
       coverImageUrl: detail.coverImageUrl ?? '',
       coverImageAlt: detail.coverImageAlt ?? '',
     });
@@ -673,28 +806,38 @@ export class AdminBlogPage implements OnInit {
   protected async submit(): Promise<void> {
     this.form.markAllAsTouched();
     this.formError.set(null);
-    if (this.form.invalid) {
+    const needsFile = !this.editingId() && !this.articleFile();
+    if (needsFile) this.fileError.set(this.lang.t('admin.blogImport.fileRequired'));
+    if (this.form.invalid || needsFile) {
       this.formError.set(this.lang.t('admin.blog.formError'));
       return;
     }
     const raw = this.form.getRawValue();
     const id = this.editingId();
     const ok = id
-      ? await this.store.update(id, {
-          title: raw.title,
-          contentHtml: raw.contentHtml,
-          slug: this.slugLocked() ? null : raw.slug.trim() || null,
-          metaDescription: raw.metaDescription,
-          coverImageUrl: raw.coverImageUrl,
-          // No cover, no alt text — don't leave an orphan description behind.
-          coverImageAlt: raw.coverImageUrl ? raw.coverImageAlt : '',
-        })
-      : await this.store.create({
-          title: raw.title,
-          contentHtml: raw.contentHtml,
-          slug: raw.slug.trim() || null,
-          metaDescription: raw.metaDescription.trim() || null,
-        });
+      ? await this.store.update(
+          id,
+          {
+            title: raw.title,
+            slug: this.slugLocked() ? null : raw.slug.trim() || null,
+            metaDescription: raw.metaDescription,
+            coverImageUrl: raw.coverImageUrl,
+            // No cover, no alt text — don't leave an orphan description behind.
+            coverImageAlt: raw.coverImageUrl ? raw.coverImageAlt : '',
+          },
+          this.articleFile(),
+        )
+      : await this.store.create(
+          {
+            title: raw.title,
+            slug: raw.slug.trim() || null,
+            metaDescription: raw.metaDescription.trim() || null,
+          },
+          this.articleFile(),
+          // From here on the dialog edits this draft, so a retry after a
+          // rejected document doesn't create a second one.
+          (newId) => this.editingId.set(newId),
+        );
     if (ok) this.dialog.set(null);
   }
 
@@ -714,6 +857,9 @@ export class AdminBlogPage implements OnInit {
         contentHtml: block?.contentHtml ?? '',
       });
     }
+    this.trFiles.set({});
+    this.trFileErrors.set({});
+    this.store.clearImportWarnings();
     this.dialog.set('translations');
   }
 
@@ -725,8 +871,61 @@ export class AdminBlogPage implements OnInit {
     for (const loc of BLOG_TRANSLATION_LOCALES) {
       payload[loc] = raw[loc];
     }
-    const ok = await this.store.updateTranslations(id, payload);
+    const ok = await this.store.updateTranslations(id, payload, this.trFiles());
     if (ok) this.dialog.set(null);
+  }
+
+  // ── Word documents ─────────────────────────────────────────────────────────
+
+  protected onDocxSelected(event: Event): void {
+    const file = this.takeFile(event);
+    if (!file) return;
+    this.store.clearActionError();
+    const error = this.docxError(file);
+    this.fileError.set(error);
+    if (!error) this.articleFile.set(file);
+  }
+
+  protected onTranslationDocxSelected(loc: BlogTranslationLocale, event: Event): void {
+    const file = this.takeFile(event);
+    if (!file) return;
+    this.store.clearActionError();
+    const error = this.docxError(file);
+    this.trFileErrors.update((m) => ({ ...m, [loc]: error ?? undefined }));
+    if (!error) this.trFiles.update((m) => ({ ...m, [loc]: file }));
+  }
+
+  protected clearTranslationFile(loc: BlogTranslationLocale): void {
+    this.trFiles.update((m) => {
+      const next = { ...m };
+      delete next[loc];
+      return next;
+    });
+  }
+
+  /** Read the picked file and clear the input so re-picking the same file re-fires. */
+  private takeFile(event: Event): File | null {
+    const el = event.target as HTMLInputElement;
+    const file = el.files?.[0] ?? null;
+    el.value = '';
+    return file;
+  }
+
+  /** The backend checks these too; catching them here saves a 20 MB round trip. */
+  private docxError(file: File): string | null {
+    if (!file.name.toLowerCase().endsWith('.docx')) {
+      return this.lang.t('admin.lessonImport.issues.NOT_A_DOCX');
+    }
+    if (file.size > LESSON_IMPORT_MAX_FILE_BYTES) {
+      return this.lang.t('admin.lessonImport.issues.FILE_TOO_LARGE');
+    }
+    return null;
+  }
+
+  private resetArticleFile(): void {
+    this.articleFile.set(null);
+    this.fileError.set(null);
+    this.store.clearImportWarnings();
   }
 
   // ── Lifecycle actions ──────────────────────────────────────────────────────

@@ -3440,6 +3440,23 @@
         "CONVERTER_WARNING": "Le convertisseur a signalé un problème dans une partie du document."
       }
     },
+    "blogImport": {
+      "fileLabel": "Contenu de l'article (document Word)",
+      "createHint": "Importez le .docx de l'article. Les titres, listes, tableaux, images et encadrés sont convertis et enregistrés comme contenu de l'article.",
+      "editHint": "Importez un nouveau .docx pour remplacer le contenu actuel, ou laissez vide pour le conserver.",
+      "fileRequired": "Choisissez le document Word de l'article (.docx).",
+      "errorsIntro": "Le contenu n'a pas été enregistré. Corrigez les points suivants dans Word et importez-le à nouveau :",
+      "savedWithWarnings": "Article enregistré. Quelques remarques sur le document Word :",
+      "trFileLabel": "Contenu (document Word)",
+      "trHasContent": "Contenu présent. Importez un .docx pour le remplacer, ou laissez-le pour le conserver.",
+      "trNoContent": "Pas encore de contenu. Importez le .docx de cette langue.",
+      "issues": {
+        "CONTENT_EMPTY": "Le document ne contient aucun contenu d'article après conversion.",
+        "CONTENT_TOO_LONG": "Ce document est trop long pour un seul article. Raccourcissez-le ou compressez ses images et importez-le à nouveau.",
+        "TITLE_HEADING_REMOVED": "Le titre « {heading} » en haut a été supprimé : la page de l'article affiche déjà le titre.",
+        "HEADING_1_IN_CONTENT": "Le document utilise Titre 1. Utilisez Titre 2 pour les sections d'un article."
+      }
+    },
     "issuedCerts": {
       "title": "Révocation de certificat",
       "subtitle": "Consultez les certificats délivrés et révoquez-les ou rétablissez-les si nécessaire.",
@@ -4081,9 +4098,6 @@
       "slugLocked": "Le slug est verrouillé une fois l'article publié (les URL SEO ne doivent pas changer).",
       "metaLabel": "Méta-description (anglais)",
       "metaPlaceholder": "Court extrait utilisé sur les cartes et pour le SEO",
-      "contentLabel": "Contenu (anglais)",
-      "contentPlaceholder": "<h2>Titre</h2><p>Paragraphe…</p>",
-      "contentHint": "Le HTML est nettoyé avant d'être montré aux lecteurs.",
       "coverLabel": "Image de couverture",
       "coverUpload": "Téléverser une image",
       "coverReplace": "Remplacer l'image",
@@ -4108,10 +4122,8 @@
       "deleteBody": "L'article et ses traductions seront supprimés définitivement. Cette action est irréversible. Article :",
       "deleteConfirm": "Supprimer définitivement",
       "slugError": "Utilisez uniquement des minuscules, des chiffres et des traits d’union (ex. what-is-scrum).",
-      "contentError": "Le contenu est obligatoire.",
       "trTitleLabel": "Titre",
-      "trMetaLabel": "Méta-description",
-      "trContentLabel": "Contenu"
+      "trMetaLabel": "Méta-description"
     },
     "contact": {
       "title": "Messages de contact",
