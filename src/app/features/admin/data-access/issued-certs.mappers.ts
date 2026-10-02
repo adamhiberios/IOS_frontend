@@ -1,6 +1,11 @@
-import { type IssuedCertificateItemDto, type RevokeResultDto } from './issued-certs.dto';
+import {
+  type IssuedCertificateItemDto,
+  type ReinstateResultDto,
+  type RevokeResultDto,
+} from './issued-certs.dto';
 import {
   type IssuedCertificate,
+  type ReinstateResult,
   type RevokeResult,
   isIssuedCertStatus,
 } from './issued-certs.model';
@@ -27,5 +32,13 @@ export function toRevokeResult(dto: RevokeResultDto): RevokeResult {
     certId: dto.certId,
     isActive: dto.isActive,
     revoked: dto.revoked,
+  };
+}
+
+export function toReinstateResult(dto: ReinstateResultDto): ReinstateResult {
+  return {
+    certId: dto.certId,
+    isActive: dto.isActive,
+    reinstated: dto.reinstated,
   };
 }

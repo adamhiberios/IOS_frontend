@@ -3440,7 +3440,7 @@
     },
     "issuedCerts": {
       "title": "Certificate revocation",
-      "subtitle": "Review issued certificates and revoke when needed.",
+      "subtitle": "Review issued certificates and revoke or reinstate them when needed.",
       "filterCert": "Certificate",
       "allCerts": "All certificates",
       "certsLoading": "Loading certificates…",
@@ -3467,7 +3467,11 @@
       "revoke": "Revoke",
       "loadMore": "Load more",
       "confirmTitle": "Revoke this certificate?",
-      "confirmBody": "This marks the certificate invalid. Public verification will report it as revoked. This can't be undone from here.",
+      "confirmBody": "This marks the certificate invalid. Public verification will report it as revoked. You can reinstate it later.",
+      "reinstate": "Reinstate",
+      "reinstateError": "Couldn't reinstate the certificate.",
+      "confirmReinstateTitle": "Reinstate this certificate?",
+      "confirmReinstateBody": "This marks the certificate valid again. Public verification may keep reporting it as revoked for up to a minute.",
       "cancel": "Cancel"
     },
     "staff": {

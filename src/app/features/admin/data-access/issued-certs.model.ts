@@ -37,3 +37,11 @@ export interface RevokeResult {
   /** `true` when this call performed the revoke; `false` when already revoked. */
   readonly revoked: boolean;
 }
+
+/** Outcome of a reinstate call (the undo of a revoke). */
+export interface ReinstateResult {
+  readonly certId: string;
+  readonly isActive: boolean;
+  /** `true` when this call performed the reinstate; `false` when already valid. */
+  readonly reinstated: boolean;
+}

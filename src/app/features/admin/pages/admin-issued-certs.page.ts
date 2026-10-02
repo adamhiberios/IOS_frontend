@@ -16,14 +16,22 @@ import { type IssuedCertificate } from '../data-access/issued-certs.model';
 import { AdminIssuedCertsStore } from '../data-access/issued-certs.store';
 import { type StudentListItem } from '../data-access/users.model';
 
+type StatusActionKind = 'revoke' | 'reinstate';
+
+/** The row + action awaiting confirmation in the dialog. */
+interface PendingStatusAction {
+  readonly cert: IssuedCertificate;
+  readonly kind: StatusActionKind;
+}
+
 /**
- * Admin certificate revocation (`/admin/issued-certs`, BE-I-15 / B2).
+ * Admin certificate revocation (`/admin/issued-certs`, BE-I-15 / B2, IDD-388).
  *
  * Lists issued certificates (cursor-paginated, newest-first) with the internal
- * id needed to revoke. Filters via pickers (a certificate select + a student
- * search-and-pick) rather than raw UUIDs. Revoke is idempotent server-side and
- * gated to super_admin / learning_admin (the backend still enforces); a confirm
- * dialog guards the action.
+ * id needed to revoke / reinstate. Filters via pickers (a certificate select +
+ * a student search-and-pick) rather than raw UUIDs. Revoke and reinstate are
+ * idempotent server-side and gated to super_admin / learning_admin (the backend
+ * still enforces); a confirm dialog guards both actions.
  */
 @Component({
   selector: 'ios-admin-issued-certs-page',
@@ -187,16 +195,21 @@ import { type StudentListItem } from '../data-access/users.model';
                         @if (c.status === 'valid') {
                           <button
                             type="button"
-                            [disabled]="store.revokePendingId() === c.id"
-                            (click)="askRevoke(c)"
+                            [disabled]="store.statusPendingId() === c.id"
+                            (click)="askAction(c, 'revoke')"
                             class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
                           >
                             {{ lang.t('admin.issuedCerts.revoke') }}
                           </button>
                         } @else {
-                          <span class="text-xs text-gray-400">
-                            {{ lang.t('admin.issuedCerts.revoked') }}
-                          </span>
+                          <button
+                            type="button"
+                            [disabled]="store.statusPendingId() === c.id"
+                            (click)="askAction(c, 'reinstate')"
+                            class="text-sm text-ios-brand-dark hover:text-ios-fg disabled:opacity-50"
+                          >
+                            {{ lang.t('admin.issuedCerts.reinstate') }}
+                          </button>
                         }
                       </div>
                     </td>
@@ -207,9 +220,9 @@ import { type StudentListItem } from '../data-access/users.model';
           </table>
         </div>
 
-        @if (store.revokeError() && !pendingRevoke()) {
+        @if (store.statusError() && !pendingAction()) {
           <p class="text-sm text-red-600 mt-3 text-center" role="alert">
-            {{ store.revokeError() }}
+            {{ store.statusError() }}
           </p>
         }
 
@@ -222,48 +235,68 @@ import { type StudentListItem } from '../data-access/users.model';
         }
       }
 
-      <!-- Revoke confirmation -->
-      @if (pendingRevoke(); as pending) {
+      <!-- Revoke / reinstate confirmation -->
+      @if (pendingAction(); as pending) {
         <div
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
-          aria-labelledby="revoke-title"
-          (iosDialogEscape)="cancelRevoke()"
+          aria-labelledby="status-action-title"
+          (iosDialogEscape)="cancelAction()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
-            <h2 id="revoke-title" class="text-lg font-semibold text-ios-brand-dark">
-              {{ lang.t('admin.issuedCerts.confirmTitle') }}
+            <h2 id="status-action-title" class="text-lg font-semibold text-ios-brand-dark">
+              {{
+                lang.t(
+                  pending.kind === 'revoke'
+                    ? 'admin.issuedCerts.confirmTitle'
+                    : 'admin.issuedCerts.confirmReinstateTitle'
+                )
+              }}
             </h2>
             <p class="mt-2 text-sm text-gray-600">
-              {{ lang.t('admin.issuedCerts.confirmBody') }}
+              {{
+                lang.t(
+                  pending.kind === 'revoke'
+                    ? 'admin.issuedCerts.confirmBody'
+                    : 'admin.issuedCerts.confirmReinstateBody'
+                )
+              }}
             </p>
             <p class="mt-2 text-sm">
-              <span class="font-medium text-ios-brand-dark">{{ pending.studentName }}</span>
-              <span class="text-gray-500"> — {{ pending.program }}</span>
-              @if (pending.certId) {
-                <span class="block font-mono text-xs text-gray-400 mt-1">{{ pending.certId }}</span>
+              <span class="font-medium text-ios-brand-dark">{{ pending.cert.studentName }}</span>
+              <span class="text-gray-500"> — {{ pending.cert.program }}</span>
+              @if (pending.cert.certId) {
+                <span class="block font-mono text-xs text-gray-400 mt-1">{{
+                  pending.cert.certId
+                }}</span>
               }
             </p>
-            @if (store.revokeError()) {
-              <p class="mt-3 text-sm text-red-600" role="alert">{{ store.revokeError() }}</p>
+            @if (store.statusError()) {
+              <p class="mt-3 text-sm text-red-600" role="alert">{{ store.statusError() }}</p>
             }
             <ios-dialog-footer>
               <button
                 type="button"
-                (click)="cancelRevoke()"
+                (click)="cancelAction()"
                 class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
               >
                 {{ lang.t('admin.issuedCerts.cancel') }}
               </button>
               <ios-button
-                variant="danger"
-                [loading]="store.revokePendingId() === pending.id"
-                (clicked)="confirmRevoke()"
+                [variant]="pending.kind === 'revoke' ? 'danger' : 'primary'"
+                [loading]="store.statusPendingId() === pending.cert.id"
+                (clicked)="confirmAction()"
               >
-                {{ lang.t('admin.issuedCerts.revoke') }}
+                {{
+                  lang.t(
+                    pending.kind === 'revoke'
+                      ? 'admin.issuedCerts.revoke'
+                      : 'admin.issuedCerts.reinstate'
+                  )
+                }}
               </ios-button>
             </ios-dialog-footer>
           </div>
@@ -279,12 +312,12 @@ export class AdminIssuedCertsPage implements OnInit {
   protected readonly store = inject(AdminIssuedCertsStore);
   protected readonly lang = inject(LanguageService);
 
-  /** Revoke gate — backend restricts to super_admin / learning_admin. */
+  /** Revoke / reinstate gate — backend restricts to super_admin / learning_admin. */
   protected readonly canRevoke = computed(
     () => this.auth.hasRole('super_admin') || this.auth.hasRole('learning_admin'),
   );
 
-  protected readonly pendingRevoke = signal<IssuedCertificate | null>(null);
+  protected readonly pendingAction = signal<PendingStatusAction | null>(null);
 
   protected readonly certControl = this.fb.control('');
   protected readonly studentForm = this.fb.group({ search: this.fb.control('') });
@@ -332,21 +365,24 @@ export class AdminIssuedCertsPage implements OnInit {
       : this.lang.t('admin.issuedCerts.valid');
   }
 
-  protected askRevoke(cert: IssuedCertificate): void {
-    this.store.clearRevokeError();
-    this.pendingRevoke.set(cert);
+  protected askAction(cert: IssuedCertificate, kind: StatusActionKind): void {
+    this.store.clearStatusError();
+    this.pendingAction.set({ cert, kind });
   }
 
-  protected cancelRevoke(): void {
-    this.store.clearRevokeError();
-    this.pendingRevoke.set(null);
+  protected cancelAction(): void {
+    this.store.clearStatusError();
+    this.pendingAction.set(null);
   }
 
-  protected async confirmRevoke(): Promise<void> {
-    const pending = this.pendingRevoke();
+  protected async confirmAction(): Promise<void> {
+    const pending = this.pendingAction();
     if (!pending) return;
-    const ok = await this.store.revoke(pending.id);
-    if (ok) this.pendingRevoke.set(null);
+    const ok =
+      pending.kind === 'revoke'
+        ? await this.store.revoke(pending.cert.id)
+        : await this.store.reinstate(pending.cert.id);
+    if (ok) this.pendingAction.set(null);
   }
 }
 

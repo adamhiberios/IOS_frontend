@@ -3,6 +3,7 @@
  *
  *   GET   /admin/certs/issued?userId&certId&cursor&limit → { data, meta.pagination }
  *   PATCH /admin/certs/issued/:id/revoke                  → bare RevokeResult
+ *   PATCH /admin/certs/issued/:id/reinstate               → bare ReinstateResult
  *
  * super_admin / learning_admin only (backend-enforced). The list — unlike the
  * student view — exposes the internal `id` needed for the revoke call.
@@ -34,4 +35,12 @@ export interface RevokeResultDto {
   readonly isActive: boolean;
   /** `true` when this call performed the revoke; `false` when already revoked. */
   readonly revoked: boolean;
+}
+
+/** Bare result of `PATCH …/reinstate` (idempotent; the undo of a revoke). */
+export interface ReinstateResultDto {
+  readonly certId: string;
+  readonly isActive: boolean;
+  /** `true` when this call performed the reinstate; `false` when already valid. */
+  readonly reinstated: boolean;
 }

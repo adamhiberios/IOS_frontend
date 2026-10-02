@@ -3440,7 +3440,7 @@
     },
     "issuedCerts": {
       "title": "Révocation de certificat",
-      "subtitle": "Consultez les certificats délivrés et révoquez-les si nécessaire.",
+      "subtitle": "Consultez les certificats délivrés et révoquez-les ou rétablissez-les si nécessaire.",
       "filterCert": "Certificat",
       "allCerts": "Tous les certificats",
       "certsLoading": "Chargement des certificats…",
@@ -3467,7 +3467,11 @@
       "revoke": "Révoquer",
       "loadMore": "Charger plus",
       "confirmTitle": "Révoquer ce certificat ?",
-      "confirmBody": "Cela rend le certificat invalide. La vérification publique le signalera comme révoqué. Cette action est irréversible depuis cet écran.",
+      "confirmBody": "Cela rend le certificat invalide. La vérification publique le signalera comme révoqué. Vous pourrez le rétablir plus tard.",
+      "reinstate": "Rétablir",
+      "reinstateError": "Impossible de rétablir le certificat.",
+      "confirmReinstateTitle": "Rétablir ce certificat ?",
+      "confirmReinstateBody": "Cela rend le certificat de nouveau valide. La vérification publique peut encore le signaler comme révoqué pendant une minute au plus.",
       "cancel": "Annuler"
     },
     "staff": {

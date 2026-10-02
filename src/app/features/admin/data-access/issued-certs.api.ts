@@ -5,11 +5,16 @@ import { type Observable, map } from 'rxjs';
 import { type CursorQuery, type Page, toHttpParams, toPage } from '@core/http';
 import { environment } from '@env/environment';
 
-import { type IssuedCertificatesResponseDto, type RevokeResultDto } from './issued-certs.dto';
-import { toIssuedCertificate, toRevokeResult } from './issued-certs.mappers';
+import {
+  type IssuedCertificatesResponseDto,
+  type ReinstateResultDto,
+  type RevokeResultDto,
+} from './issued-certs.dto';
+import { toIssuedCertificate, toReinstateResult, toRevokeResult } from './issued-certs.mappers';
 import {
   type IssuedCertFilters,
   type IssuedCertificate,
+  type ReinstateResult,
   type RevokeResult,
 } from './issued-certs.model';
 
@@ -21,6 +26,7 @@ export type IssuedCertsQuery = IssuedCertFilters & CursorQuery;
  *
  *   GET   /admin/certs/issued  — cursor-paginated, newest-first (super/learning admin)
  *   PATCH /admin/certs/issued/:id/revoke — idempotent soft-revoke (404 if unknown)
+ *   PATCH /admin/certs/issued/:id/reinstate — idempotent undo of a revoke (404 if unknown)
  */
 @Injectable({ providedIn: 'root' })
 export class AdminIssuedCertsApi {
@@ -45,5 +51,12 @@ export class AdminIssuedCertsApi {
     return this.http
       .patch<RevokeResultDto>(`${this.base}/${id}/revoke`, {})
       .pipe(map(toRevokeResult));
+  }
+
+  /** `PATCH /admin/certs/issued/:id/reinstate` — undo a revoke. */
+  reinstate(id: string): Observable<ReinstateResult> {
+    return this.http
+      .patch<ReinstateResultDto>(`${this.base}/${id}/reinstate`, {})
+      .pipe(map(toReinstateResult));
   }
 }

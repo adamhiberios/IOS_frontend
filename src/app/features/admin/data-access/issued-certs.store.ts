@@ -8,7 +8,11 @@ import { LanguageService } from '@core/i18n';
 
 import { AdminCatalogApi } from './catalog.api';
 import { AdminIssuedCertsApi } from './issued-certs.api';
-import { type IssuedCertFilters, type IssuedCertificate } from './issued-certs.model';
+import {
+  type IssuedCertFilters,
+  type IssuedCertStatus,
+  type IssuedCertificate,
+} from './issued-certs.model';
 import { AdminUsersApi } from './users.api';
 import { type StudentListItem } from './users.model';
 
@@ -26,13 +30,14 @@ export interface CertOption {
 }
 
 /**
- * Signal store for the admin issued-certificates list + revoke (BE-I-15 / B2).
+ * Signal store for the admin issued-certificates list + revoke / reinstate
+ * (BE-I-15 / B2, IDD-388).
  *
  * Cursor-paginated, newest-first. Filters are driven by pickers rather than raw
  * UUIDs: a **certificate select** (options from the catalog) and a **student
  * search-and-pick** (via {@link AdminUsersApi}) — both map to the backend
- * `certId` / `userId` query params. `revoke(id)` calls the idempotent revoke
- * endpoint and flips the row's status in place. Cleared on `user.logged-out`
+ * `certId` / `userId` query params. `revoke(id)` / `reinstate(id)` call the
+ * idempotent status endpoints and flip the row's status in place. Cleared on `user.logged-out`
  * (rows carry student PII).
  */
 @Injectable({ providedIn: 'root' })
@@ -60,9 +65,9 @@ export class AdminIssuedCertsStore {
   private readonly _filters = signal<IssuedCertFilters>({});
   private readonly _loaded = signal(false);
 
-  // Revoke
-  private readonly _revokePendingId = signal<string | null>(null);
-  private readonly _revokeError = signal<string | null>(null);
+  // Revoke / reinstate (one status change at a time)
+  private readonly _statusPendingId = signal<string | null>(null);
+  private readonly _statusError = signal<string | null>(null);
 
   // Certificate picker
   private readonly _certs = signal<readonly CertOption[]>([]);
@@ -81,8 +86,8 @@ export class AdminIssuedCertsStore {
   readonly error = this._error.asReadonly();
   readonly hasMore = this._hasMore.asReadonly();
   readonly filters = this._filters.asReadonly();
-  readonly revokePendingId = this._revokePendingId.asReadonly();
-  readonly revokeError = this._revokeError.asReadonly();
+  readonly statusPendingId = this._statusPendingId.asReadonly();
+  readonly statusError = this._statusError.asReadonly();
   readonly isEmpty = computed(
     () => !this._loading() && this._error() === null && this._items().length === 0,
   );
@@ -194,37 +199,51 @@ export class AdminIssuedCertsStore {
     await this.fetch(false);
   }
 
-  // ── Revoke ─────────────────────────────────────────────────────────────────
+  // ── Revoke / reinstate ───────────────────────────────────────────────────
 
   /**
    * Revoke an issued certificate. Idempotent server-side; on success the row's
    * status flips to `revoked` in place. Returns `true` when the call succeeded
    * (including an already-revoked no-op); the reason is exposed via
-   * {@link revokeError} otherwise.
+   * {@link statusError} otherwise.
    */
-  async revoke(id: string): Promise<boolean> {
-    if (this._revokePendingId() !== null) return false;
-    this._revokePendingId.set(id);
-    this._revokeError.set(null);
-    try {
-      await firstValueFrom(this.api.revoke(id));
-      this._items.update((rows) =>
-        rows.map((r) => (r.id === id ? { ...r, status: 'revoked' as const } : r)),
-      );
-      return true;
-    } catch (err) {
-      this._revokeError.set(
-        problemDetailMessage(err) ?? this.lang.t('admin.issuedCerts.revokeError'),
-      );
-      return false;
-    } finally {
-      this._revokePendingId.set(null);
-    }
+  revoke(id: string): Promise<boolean> {
+    return this.changeStatus(id, 'revoked');
   }
 
-  /** Clear a lingering revoke error (e.g. when the confirm dialog closes). */
-  clearRevokeError(): void {
-    this._revokeError.set(null);
+  /**
+   * Reinstate a revoked certificate (IDD-388) — the undo of {@link revoke}.
+   * Same contract: idempotent, flips the row to `valid` in place on success.
+   */
+  reinstate(id: string): Promise<boolean> {
+    return this.changeStatus(id, 'valid');
+  }
+
+  /** Clear a lingering status error (e.g. when the confirm dialog closes). */
+  clearStatusError(): void {
+    this._statusError.set(null);
+  }
+
+  private async changeStatus(id: string, next: IssuedCertStatus): Promise<boolean> {
+    if (this._statusPendingId() !== null) return false;
+    this._statusPendingId.set(id);
+    this._statusError.set(null);
+    try {
+      if (next === 'revoked') {
+        await firstValueFrom(this.api.revoke(id));
+      } else {
+        await firstValueFrom(this.api.reinstate(id));
+      }
+      this._items.update((rows) => rows.map((r) => (r.id === id ? { ...r, status: next } : r)));
+      return true;
+    } catch (err) {
+      const fallback =
+        next === 'revoked' ? 'admin.issuedCerts.revokeError' : 'admin.issuedCerts.reinstateError';
+      this._statusError.set(problemDetailMessage(err) ?? this.lang.t(fallback));
+      return false;
+    } finally {
+      this._statusPendingId.set(null);
+    }
   }
 
   private async fetch(append: boolean): Promise<void> {
@@ -258,7 +277,7 @@ export class AdminIssuedCertsStore {
   private clear(): void {
     this._items.set([]);
     this._error.set(null);
-    this._revokeError.set(null);
+    this._statusError.set(null);
     this._nextCursor.set(null);
     this._hasMore.set(false);
     this._filters.set({});
