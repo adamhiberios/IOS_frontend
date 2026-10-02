@@ -68,4 +68,13 @@ export class AdminStaffApi {
       .post<StaffDetailResponseDto>(`${this.base}/${id}/deactivate`, {})
       .pipe(map((res) => toStaffMember(res.data)));
   }
+
+  /**
+   * `DELETE /admin/staff/:id/permanent` — hard delete. 409 `RESOURCE_STILL_ACTIVE`
+   * until deactivated; 409 `RESOURCE_HAS_HISTORY` once the account has audit-log
+   * entries; 403 for a super_admin target.
+   */
+  permanentDelete(id: string): Observable<void> {
+    return this.http.delete(`${this.base}/${id}/permanent`).pipe(map(() => undefined));
+  }
 }

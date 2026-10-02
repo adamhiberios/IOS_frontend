@@ -54,6 +54,16 @@ export class AdminQuizApi {
     return this.http.delete<unknown>(`${this.base}/quizzes/${quizId}`).pipe(map(() => undefined));
   }
 
+  /**
+   * `DELETE /admin/quizzes/:quizId/permanent` — hard delete with its questions
+   * (learning_admin). 409 `RESOURCE_STILL_ACTIVE` until deactivated.
+   */
+  permanentDeleteQuiz(quizId: string): Observable<void> {
+    return this.http
+      .delete<unknown>(`${this.base}/quizzes/${quizId}/permanent`)
+      .pipe(map(() => undefined));
+  }
+
   /** `POST /admin/quizzes/:quizId/questions` — add a question. */
   addQuestion(quizId: string, body: CreateQuestionBody): Observable<QuizQuestion> {
     return this.http

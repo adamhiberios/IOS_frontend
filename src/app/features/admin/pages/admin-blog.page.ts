@@ -65,11 +65,11 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
  * Admin blog authoring (`/admin/blog`, BE-I-11 / BLOG-ADMIN).
  *
  * List / filter articles across all statuses and (per role) create, edit,
- * translate, publish, unpublish, and archive them. `content_creator` and
- * `learning_admin` author content; only `learning_admin` runs the lifecycle
- * actions; `super_admin` does everything (the backend enforces the split — the
- * UI only hides what the current staff member can't do). Server state + actions
- * live in {@link AdminBlogStore}.
+ * translate, publish, unpublish, archive and permanently delete (IDD-389) them.
+ * `content_creator` and `learning_admin` author content; only `learning_admin`
+ * runs the lifecycle actions; `super_admin` does everything (the backend
+ * enforces the split — the UI only hides what the current staff member can't
+ * do). Server state + actions live in {@link AdminBlogStore}.
  */
 @Component({
   selector: 'ios-admin-blog-page',
@@ -222,10 +222,20 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
                             <button
                               type="button"
                               [disabled]="store.actionPendingId() === a.id"
-                              (click)="askDelete(a)"
+                              (click)="askAction(a, 'archive')"
                               class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
                             >
                               {{ lang.t('admin.blog.archive') }}
+                            </button>
+                          }
+                          @if (a.status !== 'published') {
+                            <button
+                              type="button"
+                              [disabled]="store.actionPendingId() === a.id"
+                              (click)="askAction(a, 'delete')"
+                              class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                            >
+                              {{ lang.t('admin.blog.delete') }}
                             </button>
                           }
                         }
@@ -238,7 +248,7 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
           </table>
         </div>
 
-        @if (store.actionError() && !dialog() && !pendingDelete()) {
+        @if (store.actionError() && !dialog() && !pendingAction()) {
           <div class="mt-3 text-center" role="alert">
             <p class="text-sm text-red-600">{{ store.actionError() }}</p>
             @if (store.publishReasons().length > 0) {
@@ -463,24 +473,32 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
         </div>
       }
 
-      <!-- Archive confirmation -->
-      @if (pendingDelete(); as pending) {
+      <!-- Archive / permanent delete confirmation -->
+      @if (pendingAction(); as pending) {
         <div
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="blog-del-title"
-          (iosDialogEscape)="cancelDelete()"
+          (iosDialogEscape)="cancelAction()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
             <h2 id="blog-del-title" class="text-lg font-semibold text-ios-brand-dark">
-              {{ lang.t('admin.blog.archiveTitle') }}
+              {{
+                lang.t(
+                  pending.kind === 'delete' ? 'admin.blog.deleteTitle' : 'admin.blog.archiveTitle'
+                )
+              }}
             </h2>
             <p class="mt-2 text-sm text-gray-600">
-              {{ lang.t('admin.blog.archiveBody') }}
-              <span class="font-medium text-ios-brand-dark">{{ pending.title }}</span>
+              {{
+                lang.t(
+                  pending.kind === 'delete' ? 'admin.blog.deleteBody' : 'admin.blog.archiveBody'
+                )
+              }}
+              <span class="font-medium text-ios-brand-dark">{{ pending.item.title }}</span>
             </p>
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
@@ -488,17 +506,21 @@ const LOCALE_NAMES: Readonly<Record<BlogTranslationLocale, string>> = {
             <ios-dialog-footer>
               <button
                 type="button"
-                (click)="cancelDelete()"
+                (click)="cancelAction()"
                 class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
               >
                 {{ lang.t('admin.blog.cancel') }}
               </button>
               <ios-button
                 variant="danger"
-                [loading]="store.actionPendingId() === pending.id"
-                (clicked)="confirmDelete()"
+                [loading]="store.actionPendingId() === pending.item.id"
+                (clicked)="confirmAction()"
               >
-                {{ lang.t('admin.blog.archive') }}
+                {{
+                  lang.t(
+                    pending.kind === 'delete' ? 'admin.blog.deleteConfirm' : 'admin.blog.archive'
+                  )
+                }}
               </ios-button>
             </ios-dialog-footer>
           </div>
@@ -521,7 +543,7 @@ export class AdminBlogPage implements OnInit {
       this.auth.hasRole('super_admin') ||
       this.auth.hasAnyRole(['content_creator', 'learning_admin']),
   );
-  /** Lifecycle (publish / unpublish / archive) — super_admin, learning_admin. */
+  /** Lifecycle (publish / unpublish / archive / delete) — super_admin, learning_admin. */
   protected readonly canManageLifecycle = computed(
     () => this.auth.hasRole('super_admin') || this.auth.hasRole('learning_admin'),
   );
@@ -531,7 +553,10 @@ export class AdminBlogPage implements OnInit {
   protected readonly editingTitle = signal('');
   protected readonly slugLocked = signal(false);
   protected readonly formError = signal<string | null>(null);
-  protected readonly pendingDelete = signal<BlogAdminItem | null>(null);
+  protected readonly pendingAction = signal<{
+    readonly item: BlogAdminItem;
+    readonly kind: 'archive' | 'delete';
+  } | null>(null);
 
   protected readonly statusControl = this.fb.control('');
   protected readonly searchControl = this.fb.control('');
@@ -714,21 +739,24 @@ export class AdminBlogPage implements OnInit {
     void this.store.unpublish(item.id);
   }
 
-  protected askDelete(item: BlogAdminItem): void {
+  protected askAction(item: BlogAdminItem, kind: 'archive' | 'delete'): void {
     this.store.clearActionError();
-    this.pendingDelete.set(item);
+    this.pendingAction.set({ item, kind });
   }
 
-  protected cancelDelete(): void {
+  protected cancelAction(): void {
     this.store.clearActionError();
-    this.pendingDelete.set(null);
+    this.pendingAction.set(null);
   }
 
-  protected async confirmDelete(): Promise<void> {
-    const pending = this.pendingDelete();
+  protected async confirmAction(): Promise<void> {
+    const pending = this.pendingAction();
     if (!pending) return;
-    const ok = await this.store.remove(pending.id);
-    if (ok) this.pendingDelete.set(null);
+    const ok =
+      pending.kind === 'delete'
+        ? await this.store.permanentDelete(pending.item.id)
+        : await this.store.remove(pending.item.id);
+    if (ok) this.pendingAction.set(null);
   }
 
   private buildTranslationsForm(): FormGroup<

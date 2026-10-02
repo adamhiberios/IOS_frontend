@@ -57,7 +57,8 @@ interface QuestionTarget {
  * Styled to match the admin mock-question authoring page.
  *
  * Create/edit quiz + add/edit question: content_creator / learning_admin.
- * Deactivate quiz + delete question: learning_admin only (backend-enforced).
+ * Deactivate / permanently delete quiz (IDD-389) + delete question: learning_admin
+ * only (backend-enforced).
  */
 @Component({
   selector: 'ios-admin-lesson-quizzes-page',
@@ -148,7 +149,7 @@ interface QuestionTarget {
                       @if (canDelete()) {
                         <button
                           type="button"
-                          (click)="askDeactivateQuiz(qz)"
+                          (click)="askQuizAction(qz, 'deactivate')"
                           class="text-sm text-red-600 hover:text-red-700"
                         >
                           {{ lang.t('admin.quiz.deactivateQuiz') }}
@@ -163,6 +164,16 @@ interface QuestionTarget {
                       >
                         {{ lang.t('admin.quiz.reactivateQuiz') }}
                       </button>
+                      @if (canDelete()) {
+                        <button
+                          type="button"
+                          [disabled]="store.actionPendingId() === qz.id"
+                          (click)="askQuizAction(qz, 'delete')"
+                          class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                        >
+                          {{ lang.t('admin.quiz.deleteQuiz') }}
+                        </button>
+                      }
                     }
                   </div>
                 }
@@ -271,7 +282,7 @@ interface QuestionTarget {
           store.actionError() &&
           !quizDialogOpen() &&
           !questionDialogOpen() &&
-          !pendingQuizDeactivate() &&
+          !pendingQuizAction() &&
           !pendingQuestionDelete()
         ) {
           <p class="text-sm text-red-600 mt-3 text-center" role="alert">
@@ -482,24 +493,36 @@ interface QuestionTarget {
         </div>
       }
 
-      <!-- Quiz deactivate confirm -->
-      @if (pendingQuizDeactivate(); as pending) {
+      <!-- Quiz deactivate / permanent delete confirm -->
+      @if (pendingQuizAction(); as pending) {
         <div
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="quiz-deact-title"
-          (iosDialogEscape)="cancelDeactivateQuiz()"
+          (iosDialogEscape)="cancelQuizAction()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
             <h2 id="quiz-deact-title" class="text-lg font-semibold text-ios-brand-dark">
-              {{ lang.t('admin.quiz.confirmDeactivateTitle') }}
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.quiz.confirmDeleteQuizTitle'
+                    : 'admin.quiz.confirmDeactivateTitle'
+                )
+              }}
             </h2>
             <p class="mt-2 text-sm text-gray-600">
-              {{ lang.t('admin.quiz.confirmDeactivateBody') }}
-              <span class="font-medium text-ios-brand-dark">{{ pending.title }}</span>
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.quiz.confirmDeleteQuizBody'
+                    : 'admin.quiz.confirmDeactivateBody'
+                )
+              }}
+              <span class="font-medium text-ios-brand-dark">{{ pending.quiz.title }}</span>
             </p>
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
@@ -507,17 +530,23 @@ interface QuestionTarget {
             <ios-dialog-footer>
               <button
                 type="button"
-                (click)="cancelDeactivateQuiz()"
+                (click)="cancelQuizAction()"
                 class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
               >
                 {{ lang.t('admin.quiz.cancel') }}
               </button>
               <ios-button
                 variant="danger"
-                [loading]="store.actionPendingId() === pending.id"
-                (clicked)="confirmDeactivateQuiz()"
+                [loading]="store.actionPendingId() === pending.quiz.id"
+                (clicked)="confirmQuizAction()"
               >
-                {{ lang.t('admin.quiz.deactivateQuiz') }}
+                {{
+                  lang.t(
+                    pending.kind === 'delete'
+                      ? 'admin.quiz.deleteQuizConfirm'
+                      : 'admin.quiz.deactivateQuiz'
+                  )
+                }}
               </ios-button>
             </ios-dialog-footer>
           </div>
@@ -625,7 +654,10 @@ export class AdminLessonQuizzesPage implements OnInit {
   });
 
   // Confirmations
-  protected readonly pendingQuizDeactivate = signal<Quiz | null>(null);
+  protected readonly pendingQuizAction = signal<{
+    readonly quiz: Quiz;
+    readonly kind: 'deactivate' | 'delete';
+  } | null>(null);
   protected readonly pendingQuestionDelete = signal<{
     readonly quizId: string;
     readonly question: QuizQuestion;
@@ -821,21 +853,24 @@ export class AdminLessonQuizzesPage implements OnInit {
 
   // ── Confirmations ──────────────────────────────────────────────────────────
 
-  protected askDeactivateQuiz(quiz: Quiz): void {
+  protected askQuizAction(quiz: Quiz, kind: 'deactivate' | 'delete'): void {
     this.store.clearActionError();
-    this.pendingQuizDeactivate.set(quiz);
+    this.pendingQuizAction.set({ quiz, kind });
   }
 
-  protected cancelDeactivateQuiz(): void {
+  protected cancelQuizAction(): void {
     this.store.clearActionError();
-    this.pendingQuizDeactivate.set(null);
+    this.pendingQuizAction.set(null);
   }
 
-  protected async confirmDeactivateQuiz(): Promise<void> {
-    const pending = this.pendingQuizDeactivate();
+  protected async confirmQuizAction(): Promise<void> {
+    const pending = this.pendingQuizAction();
     if (!pending) return;
-    const ok = await this.store.deactivateQuiz(pending.id);
-    if (ok) this.pendingQuizDeactivate.set(null);
+    const ok =
+      pending.kind === 'delete'
+        ? await this.store.permanentDeleteQuiz(pending.quiz.id)
+        : await this.store.deactivateQuiz(pending.quiz.id);
+    if (ok) this.pendingQuizAction.set(null);
   }
 
   protected reactivateQuiz(quiz: Quiz): void {

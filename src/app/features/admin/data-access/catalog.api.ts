@@ -93,6 +93,16 @@ export class AdminCatalogApi {
     return this.http.delete<void>(`${this.base}/${id}`);
   }
 
+  /**
+   * `DELETE /admin/catalog/:id/permanent` — hard delete (learning_admin only).
+   * Removes the certificate and everything authored under it. 409
+   * `RESOURCE_STILL_ACTIVE` until it is deactivated; 409 `RESOURCE_HAS_HISTORY`
+   * when learner or payment records reference it (translated `detail`).
+   */
+  permanentDelete(id: string): Observable<void> {
+    return this.http.delete(`${this.base}/${id}/permanent`).pipe(map(() => undefined));
+  }
+
   /* ─── Image upload (BE-I-27, narrowed by backend `66a7632`) ─── */
 
   /**

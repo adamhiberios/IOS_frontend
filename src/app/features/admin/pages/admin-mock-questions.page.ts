@@ -54,7 +54,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
  *
  * Pick a certificate, then manage its (unpaginated) question bank: create /
  * edit (an inline dialog with a dynamic option set — ≥2 options, exactly one
- * correct), deactivate (soft-delete) and reactivate. All server state + actions
+ * correct), deactivate (soft-delete), reactivate and permanent delete (IDD-389). All server state + actions
  * live in {@link AdminMockQuestionsStore}; this component owns only the forms
  * and dialog state. Row actions are role-gated (the backend still enforces).
  */
@@ -195,7 +195,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                       @if (canDeactivate()) {
                         <button
                           type="button"
-                          (click)="askDeactivate(q)"
+                          (click)="askAction(q, 'deactivate')"
                           class="text-sm text-red-600 hover:text-red-700"
                         >
                           {{ lang.t('admin.mock.deactivate') }}
@@ -210,6 +210,16 @@ const required: ValidatorFn = (control) => Validators.required(control);
                       >
                         {{ lang.t('admin.mock.reactivate') }}
                       </button>
+                      @if (canDeactivate()) {
+                        <button
+                          type="button"
+                          [disabled]="store.actionPendingId() === q.id"
+                          (click)="askAction(q, 'delete')"
+                          class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                        >
+                          {{ lang.t('admin.mock.delete') }}
+                        </button>
+                      }
                     }
                   </div>
                 }
@@ -218,7 +228,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           }
         </ul>
 
-        @if (store.actionError() && !dialogOpen() && !pendingDeactivate()) {
+        @if (store.actionError() && !dialogOpen() && !pendingAction()) {
           <p class="text-sm text-red-600 mt-3 text-center" role="alert">
             {{ store.actionError() }}
           </p>
@@ -363,39 +373,57 @@ const required: ValidatorFn = (control) => Validators.required(control);
         </div>
       }
 
-      <!-- Deactivate confirmation -->
-      @if (pendingDeactivate(); as pending) {
+      <!-- Deactivate / permanent delete confirmation -->
+      @if (pendingAction(); as pending) {
         <div
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="mq-deactivate-title"
-          (iosDialogEscape)="cancelDeactivate()"
+          (iosDialogEscape)="cancelAction()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
             <h2 id="mq-deactivate-title" class="text-lg font-semibold text-ios-brand-dark">
-              {{ lang.t('admin.mock.confirmTitle') }}
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.mock.confirmDeleteTitle'
+                    : 'admin.mock.confirmTitle'
+                )
+              }}
             </h2>
-            <p class="mt-2 text-sm text-gray-600">{{ lang.t('admin.mock.confirmBody') }}</p>
+            <p class="mt-2 text-sm text-gray-600">
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.mock.confirmDeleteBody'
+                    : 'admin.mock.confirmBody'
+                )
+              }}
+            </p>
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
             }
             <ios-dialog-footer>
               <button
                 type="button"
-                (click)="cancelDeactivate()"
+                (click)="cancelAction()"
                 class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
               >
                 {{ lang.t('admin.mock.cancel') }}
               </button>
               <ios-button
                 variant="danger"
-                [loading]="store.actionPendingId() === pending.id"
-                (clicked)="confirmDeactivate()"
+                [loading]="store.actionPendingId() === pending.question.id"
+                (clicked)="confirmAction()"
               >
-                {{ lang.t('admin.mock.deactivate') }}
+                {{
+                  lang.t(
+                    pending.kind === 'delete' ? 'admin.mock.deleteConfirm' : 'admin.mock.deactivate'
+                  )
+                }}
               </ios-button>
             </ios-dialog-footer>
           </div>
@@ -446,7 +474,10 @@ export class AdminMockQuestionsPage implements OnInit {
   protected readonly editingId = signal<string | null>(null);
   protected readonly correctIndex = signal(0);
   protected readonly optionsError = signal<string | null>(null);
-  protected readonly pendingDeactivate = signal<MockQuestion | null>(null);
+  protected readonly pendingAction = signal<{
+    readonly question: MockQuestion;
+    readonly kind: 'deactivate' | 'delete';
+  } | null>(null);
 
   protected readonly form = this.fb.group({
     questionText: this.fb.control('', { validators: [required] }),
@@ -585,23 +616,26 @@ export class AdminMockQuestionsPage implements OnInit {
     if (ok) this.dialogOpen.set(false);
   }
 
-  // ── Deactivate / reactivate ──────────────────────────────────────────────
+  // ── Deactivate / reactivate / permanent delete ──────────────────────────────────────────────
 
-  protected askDeactivate(q: MockQuestion): void {
+  protected askAction(q: MockQuestion, kind: 'deactivate' | 'delete'): void {
     this.store.clearActionError();
-    this.pendingDeactivate.set(q);
+    this.pendingAction.set({ question: q, kind });
   }
 
-  protected cancelDeactivate(): void {
+  protected cancelAction(): void {
     this.store.clearActionError();
-    this.pendingDeactivate.set(null);
+    this.pendingAction.set(null);
   }
 
-  protected async confirmDeactivate(): Promise<void> {
-    const pending = this.pendingDeactivate();
+  protected async confirmAction(): Promise<void> {
+    const pending = this.pendingAction();
     if (!pending) return;
-    const ok = await this.store.deactivate(pending.id);
-    if (ok) this.pendingDeactivate.set(null);
+    const ok =
+      pending.kind === 'delete'
+        ? await this.store.permanentDelete(pending.question.id)
+        : await this.store.deactivate(pending.question.id);
+    if (ok) this.pendingAction.set(null);
   }
 
   protected reactivate(q: MockQuestion): void {

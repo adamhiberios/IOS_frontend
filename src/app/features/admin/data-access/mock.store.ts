@@ -155,6 +155,11 @@ export class AdminMockQuestionsStore {
     return this.runRowAction(id, () => firstValueFrom(this.api.softDelete(id)));
   }
 
+  /** Permanently delete an inactive question (IDD-389), then refresh. Requires `learning_admin`. */
+  async permanentDelete(id: string): Promise<boolean> {
+    return this.runRowAction(id, () => firstValueFrom(this.api.permanentDelete(id)));
+  }
+
   /** Re-activate a soft-deleted question, then refresh. */
   async reactivate(id: string): Promise<boolean> {
     return this.runRowAction(id, () => firstValueFrom(this.api.update(id, { active: true })));

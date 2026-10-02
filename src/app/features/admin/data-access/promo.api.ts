@@ -24,6 +24,7 @@ export type PromoQuery = PromoFilters & CursorQuery;
  *   POST   /admin/promo-codes  — create (super/finance admin; 409 dup code)
  *   PATCH  /admin/promo-codes/:id — update (super/finance; code immutable)
  *   DELETE /admin/promo-codes/:id — soft-delete → active=false (super/finance)
+ *   DELETE /admin/promo-codes/:id/permanent — hard delete of a never-used, retired code
  */
 @Injectable({ providedIn: 'root' })
 export class AdminPromoApi {
@@ -62,5 +63,14 @@ export class AdminPromoApi {
     return this.http
       .delete<PromoDetailResponseDto>(`${this.base}/${id}`)
       .pipe(map((res) => toPromoCode(res.data)));
+  }
+
+  /**
+   * `DELETE /admin/promo-codes/:id/permanent` — hard delete (super/finance). 409
+   * `RESOURCE_STILL_ACTIVE` until retired; 409 `RESOURCE_HAS_HISTORY` once any
+   * sale used the code.
+   */
+  permanentDelete(id: string): Observable<void> {
+    return this.http.delete(`${this.base}/${id}/permanent`).pipe(map(() => undefined));
   }
 }

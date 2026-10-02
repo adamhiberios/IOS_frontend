@@ -24,6 +24,14 @@ interface FilterOption {
   readonly labelKey: string;
 }
 
+/** Row action awaiting confirmation: deactivate an active row, delete an inactive one. */
+type CatalogActionKind = 'deactivate' | 'delete';
+
+interface PendingCatalogAction {
+  readonly cert: AdminCertificate;
+  readonly kind: CatalogActionKind;
+}
+
 /** Active first — it is also the default (see `AdminCatalogStore`). */
 const FILTERS: readonly FilterOption[] = [
   { key: 'active', value: true, labelKey: 'admin.catalog.filterActive' },
@@ -35,8 +43,8 @@ const FILTERS: readonly FilterOption[] = [
  * Admin catalog — certificates list (`GET /admin/catalog`, includes inactive).
  *
  * Listing with free-text search, active-state filter and cursor "load more"
- * pagination, plus New / Edit links and a role-gated Deactivate action (confirm
- * dialog). All server state + actions live in {@link AdminCatalogStore}; this
+ * pagination, plus New / Edit links and role-gated Deactivate (active rows) and
+ * permanent Delete (inactive rows, IDD-348) actions behind a confirm dialog. All server state + actions live in {@link AdminCatalogStore}; this
  * component only binds signals. Row actions are hidden for roles the backend
  * would reject (frontend RBAC hides UI; the backend still enforces).
  */
@@ -187,13 +195,15 @@ const FILTERS: readonly FilterOption[] = [
                         >
                           {{ lang.t('admin.catalog.edit') }}
                         </a>
-                        @if (canDeactivate() && c.active) {
+                        @if (canDeactivate()) {
                           <button
                             type="button"
-                            (click)="askDeactivate(c)"
+                            (click)="askAction(c, c.active ? 'deactivate' : 'delete')"
                             class="text-sm text-red-600 hover:text-red-700"
                           >
-                            {{ lang.t('admin.catalog.deactivate') }}
+                            {{
+                              lang.t(c.active ? 'admin.catalog.deactivate' : 'admin.catalog.delete')
+                            }}
                           </button>
                         }
                       </div>
@@ -219,24 +229,36 @@ const FILTERS: readonly FilterOption[] = [
         }
       }
 
-      <!-- Deactivate confirmation -->
-      @if (pendingDeactivate(); as pending) {
+      <!-- Deactivate / delete confirmation -->
+      @if (pendingAction(); as pending) {
         <div
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="deactivate-title"
-          (iosDialogEscape)="cancelDeactivate()"
+          (iosDialogEscape)="cancelAction()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
             <h2 id="deactivate-title" class="text-lg font-semibold text-ios-brand-dark">
-              {{ lang.t('admin.catalog.confirmTitle') }}
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.catalog.confirmDeleteTitle'
+                    : 'admin.catalog.confirmTitle'
+                )
+              }}
             </h2>
             <p class="mt-2 text-sm text-gray-600">
-              {{ lang.t('admin.catalog.confirmBody') }}
-              <span class="font-medium text-ios-brand-dark">{{ pending.title }}</span>
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.catalog.confirmDeleteBody'
+                    : 'admin.catalog.confirmBody'
+                )
+              }}
+              <span class="font-medium text-ios-brand-dark">{{ pending.cert.title }}</span>
             </p>
 
             @if (store.actionError()) {
@@ -246,17 +268,23 @@ const FILTERS: readonly FilterOption[] = [
             <ios-dialog-footer>
               <button
                 type="button"
-                (click)="cancelDeactivate()"
+                (click)="cancelAction()"
                 class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
               >
                 {{ lang.t('admin.catalog.confirmCancel') }}
               </button>
               <ios-button
                 variant="danger"
-                [loading]="store.actionPendingId() === pending.id"
-                (clicked)="confirmDeactivate()"
+                [loading]="store.actionPendingId() === pending.cert.id"
+                (clicked)="confirmAction()"
               >
-                {{ lang.t('admin.catalog.confirmConfirm') }}
+                {{
+                  lang.t(
+                    pending.kind === 'delete'
+                      ? 'admin.catalog.confirmDeleteConfirm'
+                      : 'admin.catalog.confirmConfirm'
+                  )
+                }}
               </ios-button>
             </ios-dialog-footer>
           </div>
@@ -287,13 +315,13 @@ export class AdminCatalogListPage implements OnInit {
       this.auth.hasRole('super_admin') ||
       this.auth.hasAnyRole(['content_creator', 'learning_admin']),
   );
-  /** Deactivate gate — backend restricts DELETE to learning_admin. */
+  /** Deactivate / delete gate — backend restricts both DELETEs to learning_admin. */
   protected readonly canDeactivate = computed(
     () => this.auth.hasRole('super_admin') || this.auth.hasRole('learning_admin'),
   );
 
-  /** The certificate awaiting deactivate confirmation, or `null`. */
-  protected readonly pendingDeactivate = signal<AdminCertificate | null>(null);
+  /** The certificate + action awaiting confirmation, or `null`. */
+  protected readonly pendingAction = signal<PendingCatalogAction | null>(null);
 
   protected readonly form = this.fb.group({
     search: this.fb.control(''),
@@ -304,21 +332,24 @@ export class AdminCatalogListPage implements OnInit {
     void this.store.load();
   }
 
-  protected askDeactivate(cert: AdminCertificate): void {
+  protected askAction(cert: AdminCertificate, kind: CatalogActionKind): void {
     this.store.clearActionError();
-    this.pendingDeactivate.set(cert);
+    this.pendingAction.set({ cert, kind });
   }
 
-  protected cancelDeactivate(): void {
+  protected cancelAction(): void {
     this.store.clearActionError();
-    this.pendingDeactivate.set(null);
+    this.pendingAction.set(null);
   }
 
-  protected async confirmDeactivate(): Promise<void> {
-    const pending = this.pendingDeactivate();
+  protected async confirmAction(): Promise<void> {
+    const pending = this.pendingAction();
     if (!pending) return;
-    const ok = await this.store.deactivate(pending.id);
-    if (ok) this.pendingDeactivate.set(null);
+    const ok =
+      pending.kind === 'delete'
+        ? await this.store.permanentDelete(pending.cert.id)
+        : await this.store.deactivate(pending.cert.id);
+    if (ok) this.pendingAction.set(null);
   }
 
   protected onSearch(): void {

@@ -45,8 +45,9 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
  * Admin staff management (`/admin/staff`, BE-I-03 / B3) — **super_admin only**.
  *
  * List / search staff, create accounts, edit (name / role / locale), and
- * deactivate / reactivate. `super_admin` accounts are protected: they can't be
- * created, assigned, edited, or deactivated (the backend 400s/403s), so those
+ * deactivate / reactivate / permanently delete (IDD-389). `super_admin` accounts
+ * are protected: they can't be created, assigned, edited, deactivated or deleted
+ * (the backend 400s/403s), so those
  * roles/actions are hidden. All server state + actions live in
  * {@link AdminStaffStore}.
  */
@@ -172,7 +173,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
                           <button
                             type="button"
                             [disabled]="store.actionPendingId() === m.id"
-                            (click)="askDeactivate(m)"
+                            (click)="askAction(m, 'deactivate')"
                             class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
                           >
                             {{ lang.t('admin.staff.deactivate') }}
@@ -185,6 +186,14 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
                             class="text-sm text-green-700 hover:text-green-800 disabled:opacity-50"
                           >
                             {{ lang.t('admin.staff.reactivate') }}
+                          </button>
+                          <button
+                            type="button"
+                            [disabled]="store.actionPendingId() === m.id"
+                            (click)="askAction(m, 'delete')"
+                            class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                          >
+                            {{ lang.t('admin.staff.delete') }}
                           </button>
                         }
                       } @else {
@@ -200,7 +209,7 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
           </table>
         </div>
 
-        @if (store.actionError() && !dialogOpen() && !pendingDeactivate()) {
+        @if (store.actionError() && !dialogOpen() && !pendingAction()) {
           <p class="text-sm text-red-600 mt-3 text-center" role="alert">
             {{ store.actionError() }}
           </p>
@@ -314,25 +323,37 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
         </div>
       }
 
-      <!-- Deactivate confirmation -->
-      @if (pendingDeactivate(); as pending) {
+      <!-- Deactivate / permanent delete confirmation -->
+      @if (pendingAction(); as pending) {
         <div
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="staff-deactivate-title"
-          (iosDialogEscape)="cancelDeactivate()"
+          (iosDialogEscape)="cancelAction()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
             <h2 id="staff-deactivate-title" class="text-lg font-semibold text-ios-brand-dark">
-              {{ lang.t('admin.staff.confirmTitle') }}
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.staff.confirmDeleteTitle'
+                    : 'admin.staff.confirmTitle'
+                )
+              }}
             </h2>
             <p class="mt-2 text-sm text-gray-600">
-              {{ lang.t('admin.staff.confirmBody') }}
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.staff.confirmDeleteBody'
+                    : 'admin.staff.confirmBody'
+                )
+              }}
               <span class="font-medium text-ios-brand-dark">
-                {{ pending.firstName }} {{ pending.lastName }}
+                {{ pending.member.firstName }} {{ pending.member.lastName }}
               </span>
             </p>
             @if (store.actionError()) {
@@ -341,17 +362,23 @@ const emailValidator: ValidatorFn = (control) => Validators.email(control);
             <ios-dialog-footer>
               <button
                 type="button"
-                (click)="cancelDeactivate()"
+                (click)="cancelAction()"
                 class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
               >
                 {{ lang.t('admin.staff.cancel') }}
               </button>
               <ios-button
                 variant="danger"
-                [loading]="store.actionPendingId() === pending.id"
-                (clicked)="confirmDeactivate()"
+                [loading]="store.actionPendingId() === pending.member.id"
+                (clicked)="confirmAction()"
               >
-                {{ lang.t('admin.staff.deactivate') }}
+                {{
+                  lang.t(
+                    pending.kind === 'delete'
+                      ? 'admin.staff.deleteConfirm'
+                      : 'admin.staff.deactivate'
+                  )
+                }}
               </ios-button>
             </ios-dialog-footer>
           </div>
@@ -370,7 +397,10 @@ export class AdminStaffPage implements OnInit {
   protected readonly dialogOpen = signal(false);
   protected readonly editingId = signal<string | null>(null);
   protected readonly formError = signal<string | null>(null);
-  protected readonly pendingDeactivate = signal<StaffMember | null>(null);
+  protected readonly pendingAction = signal<{
+    readonly member: StaffMember;
+    readonly kind: 'deactivate' | 'delete';
+  } | null>(null);
 
   protected readonly filterForm = this.fb.group({
     search: this.fb.control(''),
@@ -511,23 +541,26 @@ export class AdminStaffPage implements OnInit {
     if (ok) this.dialogOpen.set(false);
   }
 
-  // ── Deactivate / reactivate ──────────────────────────────────────────────
+  // ── Deactivate / reactivate / permanent delete ───────────────────────────
 
-  protected askDeactivate(member: StaffMember): void {
+  protected askAction(member: StaffMember, kind: 'deactivate' | 'delete'): void {
     this.store.clearActionError();
-    this.pendingDeactivate.set(member);
+    this.pendingAction.set({ member, kind });
   }
 
-  protected cancelDeactivate(): void {
+  protected cancelAction(): void {
     this.store.clearActionError();
-    this.pendingDeactivate.set(null);
+    this.pendingAction.set(null);
   }
 
-  protected async confirmDeactivate(): Promise<void> {
-    const pending = this.pendingDeactivate();
+  protected async confirmAction(): Promise<void> {
+    const pending = this.pendingAction();
     if (!pending) return;
-    const ok = await this.store.deactivate(pending.id);
-    if (ok) this.pendingDeactivate.set(null);
+    const ok =
+      pending.kind === 'delete'
+        ? await this.store.permanentDelete(pending.member.id)
+        : await this.store.deactivate(pending.member.id);
+    if (ok) this.pendingAction.set(null);
   }
 
   protected reactivate(member: StaffMember): void {

@@ -44,8 +44,9 @@ const required: ValidatorFn = (control) => Validators.required(control);
  * Admin promo-code management (`/admin/promo-codes`, BE-I-05 / B4).
  *
  * List / filter promo codes and (for super_admin / finance_admin) create, edit,
- * retire, and reactivate them. support_admin gets read-only access (the backend
- * enforces the split). All server state + actions live in {@link AdminPromoStore}.
+ * retire, reactivate and permanently delete (IDD-389) them. support_admin gets
+ * read-only access (the backend enforces the split). All server state + actions
+ * live in {@link AdminPromoStore}.
  */
 @Component({
   selector: 'ios-admin-promo-codes-page',
@@ -171,7 +172,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
                           <button
                             type="button"
                             [disabled]="store.actionPendingId() === p.id"
-                            (click)="askRetire(p)"
+                            (click)="askAction(p, 'retire')"
                             class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
                           >
                             {{ lang.t('admin.promo.retire') }}
@@ -185,6 +186,14 @@ const required: ValidatorFn = (control) => Validators.required(control);
                           >
                             {{ lang.t('admin.promo.reactivate') }}
                           </button>
+                          <button
+                            type="button"
+                            [disabled]="store.actionPendingId() === p.id"
+                            (click)="askAction(p, 'delete')"
+                            class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                          >
+                            {{ lang.t('admin.promo.delete') }}
+                          </button>
                         }
                       </div>
                     </td>
@@ -195,7 +204,7 @@ const required: ValidatorFn = (control) => Validators.required(control);
           </table>
         </div>
 
-        @if (store.actionError() && !dialogOpen() && !pendingRetire()) {
+        @if (store.actionError() && !dialogOpen() && !pendingAction()) {
           <p class="text-sm text-red-600 mt-3 text-center" role="alert">
             {{ store.actionError() }}
           </p>
@@ -346,24 +355,38 @@ const required: ValidatorFn = (control) => Validators.required(control);
         </div>
       }
 
-      <!-- Retire confirmation -->
-      @if (pendingRetire(); as pending) {
+      <!-- Retire / permanent delete confirmation -->
+      @if (pendingAction(); as pending) {
         <div
           class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="promo-retire-title"
-          (iosDialogEscape)="cancelRetire()"
+          (iosDialogEscape)="cancelAction()"
         >
           <div
             class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
           >
             <h2 id="promo-retire-title" class="text-lg font-semibold text-ios-brand-dark">
-              {{ lang.t('admin.promo.confirmTitle') }}
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.promo.confirmDeleteTitle'
+                    : 'admin.promo.confirmTitle'
+                )
+              }}
             </h2>
             <p class="mt-2 text-sm text-gray-600">
-              {{ lang.t('admin.promo.confirmBody') }}
-              <span class="font-mono font-medium text-ios-brand-dark">{{ pending.code }}</span>
+              {{
+                lang.t(
+                  pending.kind === 'delete'
+                    ? 'admin.promo.confirmDeleteBody'
+                    : 'admin.promo.confirmBody'
+                )
+              }}
+              <span class="font-mono font-medium text-ios-brand-dark">{{
+                pending.promo.code
+              }}</span>
             </p>
             @if (store.actionError()) {
               <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
@@ -371,17 +394,21 @@ const required: ValidatorFn = (control) => Validators.required(control);
             <ios-dialog-footer>
               <button
                 type="button"
-                (click)="cancelRetire()"
+                (click)="cancelAction()"
                 class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
               >
                 {{ lang.t('admin.promo.cancel') }}
               </button>
               <ios-button
                 variant="danger"
-                [loading]="store.actionPendingId() === pending.id"
-                (clicked)="confirmRetire()"
+                [loading]="store.actionPendingId() === pending.promo.id"
+                (clicked)="confirmAction()"
               >
-                {{ lang.t('admin.promo.retire') }}
+                {{
+                  lang.t(
+                    pending.kind === 'delete' ? 'admin.promo.deleteConfirm' : 'admin.promo.retire'
+                  )
+                }}
               </ios-button>
             </ios-dialog-footer>
           </div>
@@ -407,7 +434,10 @@ export class AdminPromoCodesPage implements OnInit {
   protected readonly editingId = signal<string | null>(null);
   protected readonly editingCode = signal('');
   protected readonly formError = signal<string | null>(null);
-  protected readonly pendingRetire = signal<PromoCode | null>(null);
+  protected readonly pendingAction = signal<{
+    readonly promo: PromoCode;
+    readonly kind: 'retire' | 'delete';
+  } | null>(null);
   protected readonly selectedCertIds = signal<ReadonlySet<string>>(new Set());
 
   // Mirrors the store's current filter (active-only by default).
@@ -615,23 +645,26 @@ export class AdminPromoCodesPage implements OnInit {
     if (ok) this.dialogOpen.set(false);
   }
 
-  // ── Retire / reactivate ──────────────────────────────────────────────────
+  // ── Retire / reactivate / permanent delete ───────────────────────────────
 
-  protected askRetire(promo: PromoCode): void {
+  protected askAction(promo: PromoCode, kind: 'retire' | 'delete'): void {
     this.store.clearActionError();
-    this.pendingRetire.set(promo);
+    this.pendingAction.set({ promo, kind });
   }
 
-  protected cancelRetire(): void {
+  protected cancelAction(): void {
     this.store.clearActionError();
-    this.pendingRetire.set(null);
+    this.pendingAction.set(null);
   }
 
-  protected async confirmRetire(): Promise<void> {
-    const pending = this.pendingRetire();
+  protected async confirmAction(): Promise<void> {
+    const pending = this.pendingAction();
     if (!pending) return;
-    const ok = await this.store.retire(pending.id);
-    if (ok) this.pendingRetire.set(null);
+    const ok =
+      pending.kind === 'delete'
+        ? await this.store.permanentDelete(pending.promo.id)
+        : await this.store.retire(pending.promo.id);
+    if (ok) this.pendingAction.set(null);
   }
 
   protected reactivate(promo: PromoCode): void {

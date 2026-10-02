@@ -162,6 +162,11 @@ export class AdminBlogStore {
     return this.runAction(id, () => firstValueFrom(this.api.remove(id)));
   }
 
+  /** Permanently delete a draft or archived article (IDD-389). */
+  async permanentDelete(id: string): Promise<boolean> {
+    return this.runAction(id, () => firstValueFrom(this.api.permanentDelete(id)));
+  }
+
   clearActionError(): void {
     this._actionError.set(null);
     this._publishReasons.set([]);

@@ -100,6 +100,14 @@ export class AdminBlogApi {
     return this.http.delete<unknown>(`${this.base}/${id}`).pipe(map(() => undefined));
   }
 
+  /**
+   * `DELETE /admin/blog/:id/permanent` — hard delete of a draft or archived
+   * article (learning_admin). 409 `RESOURCE_STILL_ACTIVE` while published.
+   */
+  permanentDelete(id: string): Observable<void> {
+    return this.http.delete<unknown>(`${this.base}/${id}/permanent`).pipe(map(() => undefined));
+  }
+
   /* ─── Cover photo upload (IDD-384 / IDD-387) ─── */
 
   /**

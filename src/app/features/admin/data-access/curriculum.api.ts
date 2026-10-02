@@ -55,6 +55,14 @@ export class AdminCurriculumApi {
     return this.http.delete<void>(`${this.base}/modules/${id}`).pipe(map(() => undefined));
   }
 
+  /**
+   * `DELETE /admin/modules/:id/permanent` — hard delete with its lessons
+   * (learning_admin). 409 while active or once a student completed a lesson.
+   */
+  permanentDeleteModule(id: string): Observable<void> {
+    return this.http.delete(`${this.base}/modules/${id}/permanent`).pipe(map(() => undefined));
+  }
+
   /** Resolves with the new lesson's id — its content is imported into it next. */
   createLesson(body: CreateLessonBody): Observable<string> {
     return this.http
@@ -69,5 +77,13 @@ export class AdminCurriculumApi {
   /** `DELETE /admin/lessons/:id` — soft-delete (sets active=false). learning_admin. */
   deactivateLesson(id: string): Observable<void> {
     return this.http.delete<void>(`${this.base}/lessons/${id}`).pipe(map(() => undefined));
+  }
+
+  /**
+   * `DELETE /admin/lessons/:id/permanent` — hard delete (learning_admin). 409
+   * while active or once a student completed it.
+   */
+  permanentDeleteLesson(id: string): Observable<void> {
+    return this.http.delete(`${this.base}/lessons/${id}/permanent`).pipe(map(() => undefined));
   }
 }

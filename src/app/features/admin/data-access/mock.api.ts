@@ -50,4 +50,12 @@ export class AdminMockQuestionsApi {
   softDelete(id: string): Observable<void> {
     return this.http.delete<void>(`${this.base}/questions/${id}`).pipe(map(() => undefined));
   }
+
+  /**
+   * `DELETE /admin/mock/questions/:id/permanent` — hard delete with its options
+   * (learning_admin). 409 `RESOURCE_STILL_ACTIVE` until deactivated.
+   */
+  permanentDelete(id: string): Observable<void> {
+    return this.http.delete(`${this.base}/questions/${id}/permanent`).pipe(map(() => undefined));
+  }
 }

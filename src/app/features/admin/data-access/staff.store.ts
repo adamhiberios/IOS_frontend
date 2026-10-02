@@ -101,6 +101,11 @@ export class AdminStaffStore {
     return this.runAction(id, () => firstValueFrom(this.api.deactivate(id)));
   }
 
+  /** Permanently delete a deactivated account that never acted (IDD-389). */
+  async permanentDelete(id: string): Promise<boolean> {
+    return this.runAction(id, () => firstValueFrom(this.api.permanentDelete(id)));
+  }
+
   /** Reactivate a deactivated account (`PATCH { active: true }`). */
   async reactivate(id: string): Promise<boolean> {
     return this.runAction(id, () => firstValueFrom(this.api.update(id, { active: true })));

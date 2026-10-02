@@ -131,6 +131,11 @@ export class AdminPromoStore {
     return this.runAction(id, () => firstValueFrom(this.api.retire(id)));
   }
 
+  /** Permanently delete a retired, never-used promo (IDD-389). */
+  async permanentDelete(id: string): Promise<boolean> {
+    return this.runAction(id, () => firstValueFrom(this.api.permanentDelete(id)));
+  }
+
   /** Reactivate a retired promo (`PATCH { active: true }`). */
   async reactivate(id: string): Promise<boolean> {
     return this.runAction(id, () => firstValueFrom(this.api.update(id, { active: true })));

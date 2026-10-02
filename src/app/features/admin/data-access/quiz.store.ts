@@ -80,6 +80,11 @@ export class AdminQuizStore {
     return this.runAction(quizId, () => firstValueFrom(this.api.deleteQuiz(quizId)));
   }
 
+  /** Permanently delete an inactive quiz and its questions (IDD-389). */
+  async permanentDeleteQuiz(quizId: string): Promise<boolean> {
+    return this.runAction(quizId, () => firstValueFrom(this.api.permanentDeleteQuiz(quizId)));
+  }
+
   /** Reactivate a quiz (`PATCH { active: true }`). */
   async reactivateQuiz(quizId: string): Promise<boolean> {
     return this.runAction(quizId, () =>

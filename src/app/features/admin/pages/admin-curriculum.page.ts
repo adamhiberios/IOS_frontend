@@ -46,11 +46,19 @@ import {
  */
 const required: ValidatorFn = (control) => Validators.required(control);
 
+/** An inactive module / lesson awaiting permanent-delete confirmation. */
+interface PendingDelete {
+  readonly kind: 'module' | 'lesson';
+  readonly id: string;
+  readonly title: string;
+}
+
 /**
  * Admin curriculum management (`/admin/curriculum`, BE-I-13 / B1).
  *
  * Pick a certificate, then manage its modules and lessons (all statuses):
- * create / edit, reorder via position, and reactivate / deactivate (soft-delete).
+ * create / edit, reorder via position, reactivate / deactivate (soft-delete), and
+ * permanent delete of inactive rows (IDD-389, confirm dialog).
  * All server state + actions live in {@link AdminCurriculumStore}; create/edit/
  * reactivate are gated to content_creator + learning_admin, deactivate to
  * learning_admin (the backend still enforces). Lesson-quiz authoring (B5) and a
@@ -191,6 +199,16 @@ const required: ValidatorFn = (control) => Validators.required(control);
                       >
                         {{ lang.t('admin.curriculum.reactivate') }}
                       </button>
+                      @if (canDelete()) {
+                        <button
+                          type="button"
+                          [disabled]="isPending('module', m.id)"
+                          (click)="askDelete('module', m)"
+                          class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                        >
+                          {{ lang.t('admin.curriculum.delete') }}
+                        </button>
+                      }
                     }
                   </div>
                 }
@@ -271,6 +289,16 @@ const required: ValidatorFn = (control) => Validators.required(control);
                           >
                             {{ lang.t('admin.curriculum.reactivate') }}
                           </button>
+                          @if (canDelete()) {
+                            <button
+                              type="button"
+                              [disabled]="isPending('lesson', l.id)"
+                              (click)="askDelete('lesson', l)"
+                              class="text-sm text-red-600 hover:text-red-700 disabled:opacity-50"
+                            >
+                              {{ lang.t('admin.curriculum.delete') }}
+                            </button>
+                          }
                         }
                       </div>
                     }
@@ -320,11 +348,67 @@ const required: ValidatorFn = (control) => Validators.required(control);
           </div>
         }
 
-        @if (store.actionError() && !moduleDialogOpen() && !lessonDialogOpen()) {
+        @if (
+          store.actionError() && !moduleDialogOpen() && !lessonDialogOpen() && !pendingDelete()
+        ) {
           <p class="text-sm text-red-600 mt-3 text-center" role="alert">
             {{ store.actionError() }}
           </p>
         }
+      }
+
+      <!-- Permanent delete confirmation (inactive module / lesson, IDD-389) -->
+      @if (pendingDelete(); as pending) {
+        <div
+          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="delete-dialog-title"
+          (iosDialogEscape)="cancelDelete()"
+        >
+          <div
+            class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl max-h-[90vh] overflow-y-auto"
+          >
+            <h2 id="delete-dialog-title" class="text-lg font-semibold text-ios-brand-dark">
+              {{
+                lang.t(
+                  pending.kind === 'module'
+                    ? 'admin.curriculum.deleteModuleTitle'
+                    : 'admin.curriculum.deleteLessonTitle'
+                )
+              }}
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+              {{
+                lang.t(
+                  pending.kind === 'module'
+                    ? 'admin.curriculum.deleteModuleBody'
+                    : 'admin.curriculum.deleteLessonBody'
+                )
+              }}
+              <span class="font-medium text-ios-brand-dark">{{ pending.title }}</span>
+            </p>
+            @if (store.actionError()) {
+              <p class="mt-3 text-sm text-red-600" role="alert">{{ store.actionError() }}</p>
+            }
+            <ios-dialog-footer>
+              <button
+                type="button"
+                (click)="cancelDelete()"
+                class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+              >
+                {{ lang.t('admin.curriculum.cancel') }}
+              </button>
+              <ios-button
+                variant="danger"
+                [loading]="isPending(pending.kind, pending.id)"
+                (clicked)="confirmDelete()"
+              >
+                {{ lang.t('admin.curriculum.deleteConfirm') }}
+              </ios-button>
+            </ios-dialog-footer>
+          </div>
+        </div>
       }
 
       <!-- Module create / edit dialog -->
@@ -596,6 +680,9 @@ export class AdminCurriculumPage implements OnInit {
     this.store.certs().map((c) => ({ value: c.id, label: c.label })),
   );
 
+  /** The inactive module / lesson awaiting permanent-delete confirmation. */
+  protected readonly pendingDelete = signal<PendingDelete | null>(null);
+
   protected readonly moduleDialogOpen = signal(false);
   protected readonly editingModuleId = signal<string | null>(null);
   protected readonly lessonDialogOpen = signal(false);
@@ -815,6 +902,26 @@ export class AdminCurriculumPage implements OnInit {
 
   protected reactivateLesson(lesson: AdminLesson): void {
     void this.store.reactivateLesson(lesson.id);
+  }
+
+  protected askDelete(kind: PendingDelete['kind'], row: AdminModule | AdminLesson): void {
+    this.store.clearActionError();
+    this.pendingDelete.set({ kind, id: row.id, title: row.title });
+  }
+
+  protected cancelDelete(): void {
+    this.store.clearActionError();
+    this.pendingDelete.set(null);
+  }
+
+  protected async confirmDelete(): Promise<void> {
+    const pending = this.pendingDelete();
+    if (!pending) return;
+    const ok =
+      pending.kind === 'module'
+        ? await this.store.permanentDeleteModule(pending.id)
+        : await this.store.permanentDeleteLesson(pending.id);
+    if (ok) this.pendingDelete.set(null);
   }
 
   /** Suggest the next module position (max existing + 1) for a new module. */

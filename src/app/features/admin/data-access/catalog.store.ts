@@ -1,5 +1,5 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { firstValueFrom } from 'rxjs';
+import { type Observable, firstValueFrom } from 'rxjs';
 
 import { problemDetailMessage } from '@core/http';
 import { LanguageService } from '@core/i18n';
@@ -88,18 +88,33 @@ export class AdminCatalogStore {
    * reason is exposed via {@link actionError}. Requires `learning_admin`
    * (backend-enforced — a 403 surfaces here as an action error).
    */
-  async deactivate(id: string): Promise<boolean> {
+  deactivate(id: string): Promise<boolean> {
+    return this.runAction(id, () => this.api.softDelete(id), 'admin.catalog.deactivateError');
+  }
+
+  /**
+   * Permanently delete an inactive certificate (IDD-348), then refresh. Same
+   * contract as {@link deactivate}; the backend's 409 `detail` (still active /
+   * has learner history) is shown as-is via {@link actionError}.
+   */
+  permanentDelete(id: string): Promise<boolean> {
+    return this.runAction(id, () => this.api.permanentDelete(id), 'admin.catalog.deleteError');
+  }
+
+  private async runAction(
+    id: string,
+    call: () => Observable<void>,
+    fallbackKey: string,
+  ): Promise<boolean> {
     if (this._actionPendingId() !== null) return false;
     this._actionPendingId.set(id);
     this._actionError.set(null);
     try {
-      await firstValueFrom(this.api.softDelete(id));
+      await firstValueFrom(call());
       await this.fetch(false);
       return true;
     } catch (err) {
-      this._actionError.set(
-        problemDetailMessage(err) ?? this.lang.t('admin.catalog.deactivateError'),
-      );
+      this._actionError.set(problemDetailMessage(err) ?? this.lang.t(fallbackKey));
       return false;
     } finally {
       this._actionPendingId.set(null);

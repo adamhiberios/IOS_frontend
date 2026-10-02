@@ -170,6 +170,11 @@ export class AdminCurriculumStore {
     return this.runAction(`module:${id}`, () => firstValueFrom(this.api.deactivateModule(id)));
   }
 
+  /** Permanently delete an inactive module (IDD-389, learning_admin). */
+  async permanentDeleteModule(id: string): Promise<boolean> {
+    return this.runAction(`module:${id}`, () => firstValueFrom(this.api.permanentDeleteModule(id)));
+  }
+
   // ── Lesson actions ─────────────────────────────────────────────────────────
 
   /**
@@ -291,6 +296,11 @@ export class AdminCurriculumStore {
   /** Soft-delete a lesson (`DELETE`, learning_admin). */
   async deactivateLesson(id: string): Promise<boolean> {
     return this.runAction(`lesson:${id}`, () => firstValueFrom(this.api.deactivateLesson(id)));
+  }
+
+  /** Permanently delete an inactive lesson (IDD-389, learning_admin). */
+  async permanentDeleteLesson(id: string): Promise<boolean> {
+    return this.runAction(`lesson:${id}`, () => firstValueFrom(this.api.permanentDeleteLesson(id)));
   }
 
   /** Clear a lingering row/form-action error (e.g. when a dialog closes). */
