@@ -247,24 +247,26 @@ Husky hooks: `pre-commit` runs `lint-staged` (Prettier + ESLint on staged files)
 
 ## 14b. Deployment — how this app reaches production
 
-**No pipeline, and nothing deploys on push.** A release is built locally and
-uploaded to the Droplet:
+**Every push to `feat/real-backend-integration` deploys to both environments:**
 
-```bash
-npx ng build --configuration production           # from the commit you are shipping
-# then, from dist/ios-lms/browser:
-SHA=$(git rev-parse --short HEAD)
-tar -czf - . | ssh -i ~/.ssh/ios_lms_droplet deploy@<droplet>   "set -e; cd /opt/ios-lms/frontend/prod; rm -rf releases/$SHA; mkdir -p releases/$SHA;    tar -xzf - -C releases/$SHA; test -f releases/$SHA/index.html; ln -sfn releases/$SHA current"
-```
+| Env | URL | Built by | Config |
+| --- | --- | --- | --- |
+| Dev | `ios-7tzsu.ondigitalocean.app` | DigitalOcean App Platform app `ios` (deploy_on_push) | `npm run build` (development) |
+| Prod | `app.instituteofscrum.org` | `.github/workflows/deploy-prod.yml` → the Droplet | `ng build --configuration production` |
 
-Caddy serves `/opt/ios-lms/frontend/prod/current` (a symlink into
-`releases/<short-sha>/`) at `app.instituteofscrum.org`, so shipping and rolling
-back are both just moving that symlink — no restart, no downtime. Verify the
-live page references the `main-*.js` you just built.
+The release branch is set in both places; change it in both together.
+
+Caddy on the Droplet serves `/opt/ios-lms/frontend/prod/current` (a symlink
+into `releases/<short-sha>/`), so shipping and rolling back are both just
+moving that symlink — no restart, no downtime. The workflow uploads the build,
+flips the symlink, keeps the last 10 releases, and fails unless the live page
+references the `main-*.js` it just built. To roll back, run the workflow by
+hand with an older `ref`, or flip the symlink over SSH (see the runbook).
 
 The API (`IOS_Backend`) ships separately via its manual GitHub Actions **Deploy**
-workflow, and its deploy also runs DB migrations. Ship an additive API change
-**before** the frontend that depends on it. Full runbook, including the API side:
+workflow, and its deploy also runs DB migrations. Because the frontend now
+reaches prod on push, ship an additive API change **before** pushing the
+frontend that depends on it. Full runbook, including the API side:
 `IOS_Backend/docs/DEPLOY-RUNBOOK.md`.
 
 Cache note: `index.html` is served `no-cache` and bundles are content-hashed,

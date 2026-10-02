@@ -1,0 +1,165 @@
+# =============================================================================
+# IOS LMS frontend — deploy to production (https://app.instituteofscrum.org)
+#
+# Every push to the release branch builds the app with the `production`
+# configuration and ships it to the shared Droplet. Caddy there serves
+# /opt/ios-lms/frontend/prod/current, a relative symlink into
+# releases/<short-sha>/, so a release is "upload a dir, flip the symlink":
+# no restart, no downtime, and every previous release is an instant rollback.
+#
+# Dev (https://ios-7tzsu.ondigitalocean.app) is NOT deployed from here: the
+# DigitalOcean App Platform app `ios` builds the same branch itself
+# (deploy_on_push). One push therefore reaches both environments. If the
+# release branch changes, change it in BOTH places.
+#
+# Manual run (Actions → "Deploy frontend (prod)" → Run workflow) takes an
+# optional ref, to redeploy or roll back to an older commit. GitHub only shows
+# that button once this file is on the default branch (main).
+#
+# Required repo secrets — same values as in IOS_Backend:
+#   DROPLET_HOST, DROPLET_USER, DROPLET_SSH_KEY
+# =============================================================================
+
+name: Deploy frontend (prod)
+
+on:
+  push:
+    branches:
+      - feat/real-backend-integration
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Branch, tag, or SHA to deploy (defaults to the branch selected above)'
+        type: string
+        required: false
+
+# One prod deploy at a time; a newer push waits instead of cutting one off
+# mid-upload.
+concurrency:
+  group: deploy-frontend-prod
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  SITE_URL: https://app.instituteofscrum.org
+  FRONTEND_ROOT: /opt/ios-lms/frontend/prod
+  DIST_DIR: dist/ios-lms/browser
+  RELEASES_TO_KEEP: 10
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: production
+      url: https://app.instituteofscrum.org
+    env:
+      DROPLET_HOST: ${{ secrets.DROPLET_HOST }}
+      DROPLET_USER: ${{ secrets.DROPLET_USER }}
+    steps:
+      - name: Check secrets
+        env:
+          DROPLET_SSH_KEY: ${{ secrets.DROPLET_SSH_KEY }}
+        run: |
+          missing=""
+          [ -n "$DROPLET_HOST" ]    || missing="$missing DROPLET_HOST"
+          [ -n "$DROPLET_USER" ]    || missing="$missing DROPLET_USER"
+          [ -n "$DROPLET_SSH_KEY" ] || missing="$missing DROPLET_SSH_KEY"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing repo secrets:$missing (Settings → Secrets and variables → Actions)"
+            exit 1
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        env:
+          HUSKY: '0'
+        run: npm ci --no-audit --no-fund
+
+      - name: Build (production)
+        run: npx ng build --configuration production
+
+      - name: Compute release id
+        id: release
+        run: |
+          echo "sha=$(git rev-parse --short HEAD)" >> "$GITHUB_OUTPUT"
+          echo "main=$(grep -o 'main-[A-Z0-9]*\.js' "$DIST_DIR/index.html" | head -1)" >> "$GITHUB_OUTPUT"
+
+      - name: Add SSH key
+        env:
+          DROPLET_SSH_KEY: ${{ secrets.DROPLET_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$DROPLET_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "$DROPLET_HOST" >> ~/.ssh/known_hosts
+
+      # Extracts into a hidden staging dir first, so a dropped connection never
+      # leaves a half-written releases/<sha>/ behind.
+      - name: Upload release
+        env:
+          SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          tar -C "$DIST_DIR" -czf - . | ssh -i ~/.ssh/id_ed25519 "$DROPLET_USER@$DROPLET_HOST" \
+            "set -e; cd '$FRONTEND_ROOT'; mkdir -p releases; \
+             rm -rf 'releases/.incoming-$SHA'; mkdir 'releases/.incoming-$SHA'; \
+             tar -xzf - -C 'releases/.incoming-$SHA'; \
+             test -f 'releases/.incoming-$SHA/index.html'"
+
+      - name: Activate release
+        env:
+          SHA: ${{ steps.release.outputs.sha }}
+        run: |
+          ssh -i ~/.ssh/id_ed25519 "$DROPLET_USER@$DROPLET_HOST" \
+            bash -s -- "$FRONTEND_ROOT" "$SHA" "$RELEASES_TO_KEEP" <<'REMOTE'
+          set -euo pipefail
+          root=$1 sha=$2 keep=$3
+          cd "$root"
+
+          if [ "$(readlink current 2>/dev/null || true)" = "releases/$sha" ]; then
+            echo "releases/$sha is already live; nothing to switch."
+            rm -rf "releases/.incoming-$sha"
+          else
+            rm -rf "releases/$sha"
+            mv "releases/.incoming-$sha" "releases/$sha"
+            # Relative target so it also resolves inside the Caddy container;
+            # rename over the old link so the switch is atomic.
+            ln -sfn "releases/$sha" current.next
+            mv -Tf current.next current
+            echo "current -> releases/$sha"
+          fi
+
+          live=$(basename "$(readlink current)")
+          ls -1t releases | tail -n +"$((keep + 1))" | while read -r old; do
+            [ "$old" = "$live" ] || rm -rf "releases/$old"
+          done
+          echo "Releases on disk:"; ls -1t releases
+          REMOTE
+
+      - name: Verify live bundle
+        env:
+          EXPECTED: ${{ steps.release.outputs.main }}
+        run: |
+          for i in 1 2 3 4 5 6; do
+            live=$(curl -fsS --max-time 10 "$SITE_URL/?v=$(date +%s)" | grep -o 'main-[A-Z0-9]*\.js' | head -1 || true)
+            if [ "$live" = "$EXPECTED" ]; then
+              echo "$SITE_URL is serving $live"
+              exit 0
+            fi
+            echo "Attempt $i: live='$live' expected='$EXPECTED'; retrying in 5s..."
+            sleep 5
+          done
+          echo "::error::$SITE_URL is not serving the bundle that was just deployed."
+          exit 1
