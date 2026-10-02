@@ -208,11 +208,11 @@
 }
 
 @utility animate-marquee {
-  animation: marquee 40s linear infinite;
+  animation: marquee 120s linear infinite;
 }
 
 @utility animate-marquee-rtl {
-  animation: marquee-rtl 40s linear infinite;
+  animation: marquee-rtl 120s linear infinite;
 }
 
 @keyframes slideInRight {
